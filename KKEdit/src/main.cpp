@@ -21,6 +21,115 @@ void shutdown(GtkWidget* widget,gpointer data)
 	gtk_main_quit();
 }
 
+bool open_file(GtkSourceBuffer *sBuf, const gchar *filename)
+{
+	GtkSourceLanguageManager *lm;
+	GtkSourceLanguage *language = NULL;
+	GError *err = NULL;
+	gboolean reading;
+	GtkTextIter iter;
+	GIOChannel *io;
+	gchar *buffer;
+
+	g_return_val_if_fail (sBuf != NULL, FALSE);
+	g_return_val_if_fail (filename != NULL, FALSE);
+	g_return_val_if_fail (GTK_IS_SOURCE_BUFFER (sBuf), FALSE);
+
+    /* get the Language for C source mimetype */
+	lm = (GtkSourceLanguageManager*)g_object_get_data (G_OBJECT (sBuf), "languages-manager");
+    
+    // 改用下面 gtk_source_language_manager_get_language(GtkSourceLanguageManager*, const gchar*)這個method
+    //language = gtk_source_languages_manager_get_language_from_mime_type (lm, "text/x-csrc");
+	language = gtk_source_language_manager_get_language(lm, "c");
+								
+	g_print("Language: [%s]\n", gtk_source_language_get_name(language));
+
+	if (language == NULL)
+		{
+			g_print ("No language found for mime type `%s'\n", "text/x-csrc");
+        // 我用的版本好像沒這個attribute
+        //g_object_set (G_OBJECT (sBuf), "highlight", FALSE, NULL);
+		}
+	else
+		{
+			gtk_source_buffer_set_language (sBuf, language);
+        // 我用的版本好像沒這個attribute
+        //g_object_set (G_OBJECT (sBuf), "highlight", TRUE, NULL);
+		}
+
+    /* Now load the file from Disk */
+    io = g_io_channel_new_file (filename, "r", &err);
+	if (!io)
+		{
+			g_print("error: %s %s\n", (err)->message, filename);
+			return FALSE;
+		}
+
+	if (g_io_channel_set_encoding (io, "utf-8", &err) != G_IO_STATUS_NORMAL)
+		{
+			g_print("err: Failed to set encoding:\n%s\n%s", filename, (err)->message);
+			return FALSE;
+		}
+
+	gtk_source_buffer_begin_not_undoable_action (sBuf);
+
+    //gtk_text_buffer_set_text (GTK_TEXT_BUFFER (sBuf), "", 0);
+	buffer = (gchar*)g_malloc (4096);
+	reading = TRUE;
+	while (reading)
+		{
+			gsize bytes_read;
+			GIOStatus status;
+
+			status = g_io_channel_read_chars (io, buffer, 4096, &bytes_read, &err);
+			switch (status)
+				{
+					case G_IO_STATUS_EOF:
+						reading = FALSE;
+
+					case G_IO_STATUS_NORMAL:
+						if (bytes_read == 0)
+							continue;		
+						gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (sBuf), &iter);
+						gtk_text_buffer_insert (GTK_TEXT_BUFFER(sBuf),&iter,buffer,bytes_read);
+						break;
+
+					case G_IO_STATUS_AGAIN:
+						continue;
+
+					case G_IO_STATUS_ERROR:
+
+					default:
+						g_print("err (%s): %s", filename, (err)->message);
+                /* because of error in input we clear already loaded text */
+						gtk_text_buffer_set_text (GTK_TEXT_BUFFER (sBuf), "", 0);
+
+						reading = FALSE;
+						break;
+			}
+		}
+	g_free (buffer);
+
+	gtk_source_buffer_end_not_undoable_action (sBuf);
+	g_io_channel_unref (io);
+
+	if (err)
+		{
+			g_error_free (err);
+			return FALSE;
+		}
+
+	gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (sBuf), FALSE);
+
+    /* move cursor to the beginning */
+	gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (sBuf), &iter);
+	gtk_text_buffer_place_cursor (GTK_TEXT_BUFFER (sBuf), &iter);
+
+	g_object_set_data_full (G_OBJECT (sBuf),"filename", g_strdup (filename), (GDestroyNotify) g_free);
+
+	return TRUE;
+}
+
 int main(int argc,char **argv)
 {
 	GtkWidget*		vbox;
@@ -53,7 +162,7 @@ int main(int argc,char **argv)
 
 	sourceview=gtk_source_view_new_with_buffer(buffer);
     
-	font_desc = pango_font_description_from_string("mono 8");
+	font_desc=pango_font_description_from_string("mono 12");
 	gtk_widget_modify_font(sourceview, font_desc);
 	pango_font_description_free(font_desc);
 
@@ -140,5 +249,8 @@ int main(int argc,char **argv)
 	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)vbox);
 	
 	gtk_widget_show_all(window);
+	
+	open_file(buffer, "/media/LinuxData/Development/Projects/KKEdit/KKEdit/src/main.cpp");
+	
 	gtk_main();
 }
