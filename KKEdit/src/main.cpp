@@ -39,6 +39,30 @@ void getMimeType(char* filepath,void* ptr)
 		}
 }
 
+void closeTab(GtkWidget* widget,gpointer data)
+{
+	printf("close tab\n");
+}
+
+GtkWidget* makeNewTab(char* name,char* tooltip)
+{
+	GtkWidget*	evbox=gtk_event_box_new();
+	GtkWidget*	hbox=gtk_hbox_new(false,0);
+	GtkWidget*	label=gtk_label_new(name);
+	GtkWidget*	close=gtk_image_new_from_stock(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
+	GtkWidget*	button=gtk_button_new();
+
+	gtk_button_set_relief ((GtkButton*)button,GTK_RELIEF_NONE);
+	gtk_widget_set_tooltip_text(evbox,tooltip);
+	gtk_box_pack_start(GTK_BOX(hbox),label,false,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),button,false,true,0);
+	gtk_container_add(GTK_CONTAINER (button),close);
+	gtk_container_add(GTK_CONTAINER(evbox),hbox);
+	gtk_signal_connect(GTK_OBJECT(button),"clicked",G_CALLBACK(closeTab),NULL);
+	gtk_widget_show_all( evbox );
+	return(evbox);
+}
+
 bool openFile(const gchar *filepath)
 {
 	GtkSourceLanguage*			lang=NULL;
@@ -56,10 +80,10 @@ bool openFile(const gchar *filepath)
 	gchar*							filename=g_path_get_basename(filepath);
 	GtkWidget*						vbox;
 	char*								mimetype;
-	gboolean								result_uncertain;
+	gboolean							result_uncertain;
 
 	scrolled_win=gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_win),GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_win),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	lm=gtk_source_language_manager_new();
    
 	buffers[currentBuffer]=GTK_SOURCE_BUFFER(gtk_source_buffer_new(NULL));
@@ -67,14 +91,17 @@ bool openFile(const gchar *filepath)
 	g_object_set_data_full(G_OBJECT(buffers[currentBuffer]),"languages-manager",lm,(GDestroyNotify)g_object_unref);
 
 	sourceview=gtk_source_view_new_with_buffer(buffers[currentBuffer]);
-    
+	gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_WORD);
+
 	font_desc=pango_font_description_from_string("mono 12");
 	gtk_widget_modify_font(sourceview, font_desc);
 	pango_font_description_free(font_desc);
 
 	gtk_container_add(GTK_CONTAINER(scrolled_win),GTK_WIDGET(sourceview));
-	label=gtk_label_new(filename);
-	vbox=gtk_vbox_new(true,4);;
+
+	//label=gtk_label_new(filename);
+	label=makeNewTab((char*)filename,(char*)filepath);
+	vbox=gtk_vbox_new(true,4);
 	gtk_notebook_append_page(notebook,vbox,label);
 	gtk_container_add(GTK_CONTAINER(vbox),GTK_WIDGET(scrolled_win));
 
