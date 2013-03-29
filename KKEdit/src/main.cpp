@@ -59,7 +59,7 @@ bool openFile(const gchar *filepath)
 	gboolean								result_uncertain;
 
 	scrolled_win=gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_win),GTK_POLICY_ALWAYS, GTK_POLICY_ALWAYS);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_win),GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
 	lm=gtk_source_language_manager_new();
    
 	buffers[currentBuffer]=GTK_SOURCE_BUFFER(gtk_source_buffer_new(NULL));
