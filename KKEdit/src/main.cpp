@@ -42,6 +42,7 @@ void getMimeType(char* filepath,void* ptr)
 void closeTab(GtkWidget* widget,gpointer data)
 {
 	printf("close tab\n");
+	printf("XXX%i\n",GPOINTER_TO_INT(data));
 }
 
 GtkWidget* makeNewTab(char* name,char* tooltip)
@@ -54,12 +55,12 @@ GtkWidget* makeNewTab(char* name,char* tooltip)
 
 	gtk_button_set_relief ((GtkButton*)button,GTK_RELIEF_NONE);
 	gtk_widget_set_tooltip_text(evbox,tooltip);
-	gtk_box_pack_start(GTK_BOX(hbox),label,false,true,0);
-	gtk_box_pack_start(GTK_BOX(hbox),button,false,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),label,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
 	gtk_container_add(GTK_CONTAINER (button),close);
 	gtk_container_add(GTK_CONTAINER(evbox),hbox);
-	gtk_signal_connect(GTK_OBJECT(button),"clicked",G_CALLBACK(closeTab),NULL);
-	gtk_widget_show_all( evbox );
+	gtk_signal_connect(GTK_OBJECT(button),"clicked",G_CALLBACK(closeTab),(void*)currentBuffer);
+	gtk_widget_show_all(evbox);
 	return(evbox);
 }
 
@@ -177,7 +178,7 @@ int main(int argc,char **argv)
 
 	gtk_init(&argc,&argv);
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_widget_set_size_request(window,400,400);
+	gtk_widget_set_size_request(window,800,600);
 	g_signal_connect(G_OBJECT(window),"delete-event",G_CALLBACK(shutdown),NULL);
 
 	notebook=(GtkNotebook*)gtk_notebook_new();
