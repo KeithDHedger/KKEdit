@@ -21,22 +21,78 @@ void shutdown(GtkWidget* widget,gpointer data)
 	gtk_main_quit();
 }
 
+/*
+void setValue(const char* command,dataType type,void* ptr)
+{
+	gchar	*stdout=NULL;
+	gchar	*stderr=NULL;
+	gint   retval=0;
+
+	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
+	if (retval==0)
+		{
+			switch(type)
+				{
+					case INT:
+						stdout[strlen(stdout)-1]=0;
+						*(int*)ptr=atoi(stdout);
+						break;
+
+					case STRING:
+						stdout[strlen(stdout)-1]=0;
+						asprintf((char**)ptr,"%s",stdout);
+						break;
+
+					case FLOAT:
+						stdout[strlen(stdout)-1]=0;
+						*(double*)ptr=atof(stdout);
+						break;
+				}
+		}
+	freeAndNull(&stdout);
+	freeAndNull(&stderr);
+}
+*/
+
+void getMimeType(char* filepath,void* ptr)
+{
+	gchar	*stdout=NULL;
+	gchar	*stderr=NULL;
+	gint   retval=0;
+
+	char*	command;
+	asprintf(&command,"file -b --mime-type %s",filepath);
+	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
+	if (retval==0)
+		{
+			stdout[strlen(stdout)-1]=0;
+			asprintf((char**)ptr,"%s",stdout);
+			g_free(stdout);
+			g_free(stderr);
+		}
+}
+
+
+
 bool open_file(const gchar *filepath)
 {
 	GtkSourceLanguageManager*	lm;
 	GtkSourceLanguage*			language=NULL;
 	GError*							err=NULL;
-	gboolean reading;
-	GtkTextIter iter;
-	GIOChannel *io;
-	gchar *buffer;
-	long	filelen;
-	PangoFontDescription *font_desc;
+	//gboolean			reading;
+	GtkTextIter						iter;
+//	GIOChannel *io;
+	gchar*							buffer;
+	long								filelen;
+	PangoFontDescription*		font_desc;
 
-	GtkWidget*		scrolled_win;
-	GtkWidget*		sourceview;
-	GtkWidget*		label;
-	gchar*			filename=g_path_get_basename(filepath);
+	GtkWidget*						scrolled_win;
+	GtkWidget*						sourceview;
+	GtkWidget*						label;
+	gchar*							filename=g_path_get_basename(filepath);
+	GtkWidget*						vbox;
+
+	char*								mime;
 
 	scrolled_win=gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_win),GTK_POLICY_ALWAYS, GTK_POLICY_ALWAYS);
@@ -54,33 +110,52 @@ bool open_file(const gchar *filepath)
 
 	gtk_container_add(GTK_CONTAINER(scrolled_win),GTK_WIDGET(sourceview));
 	label=gtk_label_new(filename);
-GtkWidget*		vbox=gtk_vbox_new(true,4);;
+	vbox=gtk_vbox_new(true,4);;
 
-gtk_notebook_append_page(notebook,vbox,label);
+	gtk_notebook_append_page(notebook,vbox,label);
 
-gtk_container_add(GTK_CONTAINER(vbox),GTK_WIDGET(scrolled_win));
+	gtk_container_add(GTK_CONTAINER(vbox),GTK_WIDGET(scrolled_win));
 
-
-
-//	g_return_val_if_fail (sBuf != NULL, FALSE);
-	g_return_val_if_fail(filepath!=NULL,FALSE);
-//	g_return_val_if_fail (GTK_IS_SOURCE_BUFFER (sBuf), FALSE);
+//	g_return_val_if_fail(filepath!=NULL,FALSE);
 
     /* get the Language for C source mimetype */
-	lm=(GtkSourceLanguageManager*)g_object_get_data(G_OBJECT(buffers[currentBuffer]),"languages-manager");
-    
-    //language = gtk_source_languages_manager_get_language_from_mime_type (lm, "text/x-csrc");
-	language=gtk_source_language_manager_get_language(lm,"c");
+//	lm=(GtkSourceLanguageManager*)g_object_get_data(G_OBJECT(buffers[currentBuffer]),"languages-manager");
 
-	g_print("Language: [%s]\n",gtk_source_language_get_name(language));
+	//getMimeType((char*)filepath,&mime);
 
-	if (language==NULL)
+ //   language = gtk_source_languages_manager_get_language_from_mime_type (lm,mime);
+	//language=gtk_source_language_manager_get_language(lm,"c");
+//language=gtk_source_language_manager_guess_language (filepath, NULL);
+//	g_print("Language: [%s]\n",gtk_source_language_get_name(language));
+GtkSourceLanguage *lang = NULL;
+gboolean result_uncertain;
+gchar *content_type;
+
+lm=gtk_source_language_manager_get_default();
+content_type = g_content_type_guess (filepath, NULL, 0, &result_uncertain);
+//if (result_uncertain)
+//  {
+//    g_free (content_type);
+//    content_type = NULL;
+//  }
+
+lang = gtk_source_language_manager_guess_language (lm, filepath, content_type);
+//gtk_source_buffer_set_language (buffer, lang);
+g_free (content_type);
+
+	if (lang==NULL)
 		{
 			g_print("No language found for mime type `%s'\n","text/x-csrc");
+			getMimeType((char*)filepath,&mime);
+			content_type=g_content_type_from_mime_type((const gchar *)mime);
+			lang = gtk_source_language_manager_guess_language (lm, filepath, content_type);
+			g_print("Language: [%s]\n", gtk_source_language_get_name(lang));
+			gtk_source_buffer_set_language(buffers[currentBuffer],lang);
 		}
 	else
 		{
-			gtk_source_buffer_set_language(buffers[currentBuffer],language);
+			g_print("Language: [%s]\n", gtk_source_language_get_name(lang));
+			gtk_source_buffer_set_language(buffers[currentBuffer],lang);
 		}
 
 //    /* Now load the file from Disk */
@@ -167,7 +242,14 @@ int main(int argc,char **argv)
 	GtkSourceLanguageManager *lm;
 	GtkSourceBuffer *buffer;
 	PangoFontDescription *font_desc;
-	
+
+//GBookmarkFile *bm=     g_bookmark_file_new                 ();
+//gchar* xx=g_bookmark_file_get_mime_type(bm,"/home/keithhedger/Scripts/MountOSX",NULL);
+//printf("\n%s\n",xx);
+//return 0;
+
+
+
 	gtk_init(&argc,&argv);
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_widget_set_size_request(window,400,400);
@@ -259,6 +341,8 @@ int main(int argc,char **argv)
 	for (int j=1;j<argc;j++)
 		{
 			open_file(argv[j]);
+			printf("\n%s\n",argv[j]);
+			currentBuffer++;
 		}
 
 	gtk_widget_show_all(window);
