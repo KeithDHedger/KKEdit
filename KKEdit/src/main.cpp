@@ -21,130 +21,22 @@ void shutdown(GtkWidget* widget,gpointer data)
 	gtk_main_quit();
 }
 
-
-static gboolean open_filexx(GtkSourceBuffer *sBuf, const gchar *filename) {
-    GtkSourceLanguageManager *lm;
-    GtkSourceLanguage *language = NULL;
-    GError *err = NULL;
-    gboolean reading;
-    GtkTextIter iter;
-    GIOChannel *io;
-    gchar *buffer;
-
-    g_return_val_if_fail (sBuf != NULL, FALSE);
-    g_return_val_if_fail (filename != NULL, FALSE);
-    g_return_val_if_fail (GTK_IS_SOURCE_BUFFER (sBuf), FALSE);
-
-
-	GtkWidget*		scrolled_win;
-	GtkWidget*		sourceview;
-	GtkWidget*		label;
-
-	scrolled_win=gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_win),GTK_POLICY_ALWAYS, GTK_POLICY_ALWAYS);
-
-
-    /* get the Language for C source mimetype */
-    lm = (GtkSourceLanguageManager*)g_object_get_data (G_OBJECT (sBuf), "languages-manager");
-    
-    // 改用下面 gtk_source_language_manager_get_language(GtkSourceLanguageManager*, const gchar*)這個method
-    //language = gtk_source_languages_manager_get_language_from_mime_type (lm, "text/x-csrc");
-    language = gtk_source_language_manager_get_language(lm, "c");
-								
-    g_print("Language: [%s]\n", gtk_source_language_get_name(language));
-
-    if (language == NULL) {
-        g_print ("No language found for mime type `%s'\n", "text/x-csrc");
-        // 我用的版本好像沒這個attribute
-        //g_object_set (G_OBJECT (sBuf), "highlight", FALSE, NULL);
-    } else {
-        gtk_source_buffer_set_language (sBuf, language);
-        // 我用的版本好像沒這個attribute
-        //g_object_set (G_OBJECT (sBuf), "highlight", TRUE, NULL);
-    }
-
-    /* Now load the file from Disk */
-    io = g_io_channel_new_file (filename, "r", &err);
-    if (!io) {
-        g_print("error: %s %s\n", (err)->message, filename);
-        return FALSE;
-    }
-
-    if (g_io_channel_set_encoding (io, "utf-8", &err) != G_IO_STATUS_NORMAL) {
-        g_print("err: Failed to set encoding:\n%s\n%s", filename, (err)->message);
-        return FALSE;
-    }
-
-    gtk_source_buffer_begin_not_undoable_action (sBuf);
-
-    //gtk_text_buffer_set_text (GTK_TEXT_BUFFER (sBuf), "", 0);
-    buffer = (gchar*)g_malloc (4096);
-    reading = TRUE;
-    while (reading) {
-        gsize bytes_read;
-        GIOStatus status;
-
-        status = g_io_channel_read_chars (io, buffer, 4096, &bytes_read, &err);
-        switch (status) {
-            case G_IO_STATUS_EOF: reading = FALSE;
-            
-            case G_IO_STATUS_NORMAL:
-                if (bytes_read == 0) continue;		
-                gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (sBuf), &iter);
-                gtk_text_buffer_insert (GTK_TEXT_BUFFER(sBuf),&iter,buffer,bytes_read);
-                break;
-
-            case G_IO_STATUS_AGAIN: continue;
-
-            case G_IO_STATUS_ERROR:
-
-            default:
-                 g_print("err (%s): %s", filename, (err)->message);
-                /* because of error in input we clear already loaded text */
-                gtk_text_buffer_set_text (GTK_TEXT_BUFFER (sBuf), "", 0);
-
-                reading = FALSE;
-                break;
-        }
-    }
-    g_free (buffer);
-
-    gtk_source_buffer_end_not_undoable_action (sBuf);
-    g_io_channel_unref (io);
-
-    if (err) {
-        g_error_free (err);
-        return FALSE;
-    }
-
-    gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (sBuf), FALSE);
-
-    /* move cursor to the beginning */
-    gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (sBuf), &iter);
-    gtk_text_buffer_place_cursor (GTK_TEXT_BUFFER (sBuf), &iter);
-
-    g_object_set_data_full (G_OBJECT (sBuf),"filename", g_strdup (filename), (GDestroyNotify) g_free);
-
-    return TRUE;
-}
-
-
-bool open_file(const gchar *filename)
+bool open_file(const gchar *filepath)
 {
-	GtkSourceLanguageManager *lm;
-	GtkSourceLanguage *language = NULL;
-	GError *err = NULL;
+	GtkSourceLanguageManager*	lm;
+	GtkSourceLanguage*			language=NULL;
+	GError*							err=NULL;
 	gboolean reading;
 	GtkTextIter iter;
 	GIOChannel *io;
 	gchar *buffer;
-
+	long	filelen;
 	PangoFontDescription *font_desc;
 
 	GtkWidget*		scrolled_win;
 	GtkWidget*		sourceview;
 	GtkWidget*		label;
-	gchar*			file=g_path_get_basename(filename);
+	gchar*			filename=g_path_get_basename(filepath);
 
 	scrolled_win=gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_win),GTK_POLICY_ALWAYS, GTK_POLICY_ALWAYS);
@@ -161,7 +53,7 @@ bool open_file(const gchar *filename)
 	pango_font_description_free(font_desc);
 
 	gtk_container_add(GTK_CONTAINER(scrolled_win),GTK_WIDGET(sourceview));
-	label=gtk_label_new(file);
+	label=gtk_label_new(filename);
 GtkWidget*		vbox=gtk_vbox_new(true,4);;
 
 gtk_notebook_append_page(notebook,vbox,label);
@@ -171,7 +63,7 @@ gtk_container_add(GTK_CONTAINER(vbox),GTK_WIDGET(scrolled_win));
 
 
 //	g_return_val_if_fail (sBuf != NULL, FALSE);
-	g_return_val_if_fail(filename!=NULL,FALSE);
+	g_return_val_if_fail(filepath!=NULL,FALSE);
 //	g_return_val_if_fail (GTK_IS_SOURCE_BUFFER (sBuf), FALSE);
 
     /* get the Language for C source mimetype */
@@ -191,66 +83,68 @@ gtk_container_add(GTK_CONTAINER(vbox),GTK_WIDGET(scrolled_win));
 			gtk_source_buffer_set_language(buffers[currentBuffer],language);
 		}
 
-    /* Now load the file from Disk */
-	io = g_io_channel_new_file (filename, "r",&err);
-	if (!io)
-		{
-			g_print("error: %s %s\n",(err)->message,filename);
-			return FALSE;
-		}
+//    /* Now load the file from Disk */
+//	io = g_io_channel_new_file (filepath, "r",&err);
+//	if (!io)
+//		{
+//			g_print("error: %s %s\n",(err)->message,filepath);
+//			return FALSE;
+//		}
+//
+//	if (g_io_channel_set_encoding (io, "utf-8", &err) != G_IO_STATUS_NORMAL)
+//		{
+//			g_print("err: Failed to set encoding:\n%s\n%s", filepath, (err)->message);
+//			return FALSE;
+//		}
+//
 
-	if (g_io_channel_set_encoding (io, "utf-8", &err) != G_IO_STATUS_NORMAL)
-		{
-			g_print("err: Failed to set encoding:\n%s\n%s", filename, (err)->message);
-			return FALSE;
-		}
-
+g_file_get_contents(filepath,&buffer,(gsize*)&filelen,NULL);
 	gtk_source_buffer_begin_not_undoable_action(buffers[currentBuffer]);
 
-	buffer = (gchar*)g_malloc(4096);
-	reading = TRUE;
-	while (reading)
-		{
-			gsize bytes_read;
-			GIOStatus status;
-
-			status = g_io_channel_read_chars (io, buffer, 4096, &bytes_read, &err);
-			switch (status)
-				{
-					case G_IO_STATUS_EOF:
-						reading = FALSE;
-
-					case G_IO_STATUS_NORMAL:
-						if (bytes_read == 0)
-							continue;		
+//	buffer = (gchar*)g_malloc(4096);
+//	reading = TRUE;
+//	while (reading)
+//		{
+//			gsize bytes_read;
+//			GIOStatus status;
+//
+//			status = g_io_channel_read_chars (io, buffer, 4096, &bytes_read, &err);
+//			switch (status)
+//				{
+//					case G_IO_STATUS_EOF:
+//						reading = FALSE;
+//
+//					case G_IO_STATUS_NORMAL:
+//						if (bytes_read == 0)
+//							continue;		
 						gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (buffers[currentBuffer]), &iter);
-						gtk_text_buffer_insert (GTK_TEXT_BUFFER(buffers[currentBuffer]),&iter,buffer,bytes_read);
-						break;
-
-					case G_IO_STATUS_AGAIN:
-						continue;
-
-					case G_IO_STATUS_ERROR:
-
-					default:
-						g_print("err (%s): %s", filename, (err)->message);
-                /* because of error in input we clear already loaded text */
-						gtk_text_buffer_set_text (GTK_TEXT_BUFFER (buffers[currentBuffer]), "", 0);
-
-						reading = FALSE;
-						break;
-			}
-		}
-	g_free (buffer);
+						gtk_text_buffer_insert (GTK_TEXT_BUFFER(buffers[currentBuffer]),&iter,buffer,filelen);
+//						break;
+//
+//					case G_IO_STATUS_AGAIN:
+//						continue;
+//
+//					case G_IO_STATUS_ERROR:
+//
+//					default:
+//						g_print("err (%s): %s", filepath, (err)->message);
+//               /* because of error in input we clear already loaded text */
+//						gtk_text_buffer_set_text (GTK_TEXT_BUFFER (buffers[currentBuffer]), "", 0);
+//
+//						reading = FALSE;
+//						break;
+//			}
+//		}
+//	g_free (buffer);
 
 	gtk_source_buffer_end_not_undoable_action (buffers[currentBuffer]);
-	g_io_channel_unref (io);
-
-	if (err)
-		{
-			g_error_free (err);
-			return FALSE;
-		}
+//	g_io_channel_unref (io);
+//
+//	if (err)
+//		{
+//			g_error_free (err);
+//			return FALSE;
+//		}
 
 	gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (buffers[currentBuffer]), FALSE);
 
@@ -258,7 +152,7 @@ gtk_container_add(GTK_CONTAINER(vbox),GTK_WIDGET(scrolled_win));
 	gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (buffers[currentBuffer]), &iter);
 	gtk_text_buffer_place_cursor (GTK_TEXT_BUFFER (buffers[currentBuffer]), &iter);
 
-	g_object_set_data_full (G_OBJECT (buffers[currentBuffer]),"filename", g_strdup (filename), (GDestroyNotify) g_free);
+	g_object_set_data_full (G_OBJECT (buffers[currentBuffer]),"filename", g_strdup (filepath), (GDestroyNotify) g_free);
 
 	return TRUE;
 }
@@ -276,6 +170,7 @@ int main(int argc,char **argv)
 	
 	gtk_init(&argc,&argv);
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_widget_set_size_request(window,400,400);
 	g_signal_connect(G_OBJECT(window),"delete-event",G_CALLBACK(shutdown),NULL);
 
 	notebook=(GtkNotebook*)gtk_notebook_new();
@@ -284,24 +179,6 @@ int main(int argc,char **argv)
 
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)menubar,false,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)notebook,true,true,0);
-
-//	scrolled_win=gtk_scrolled_window_new(NULL, NULL);
-//	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_win),GTK_POLICY_ALWAYS, GTK_POLICY_ALWAYS);
-//	lm=gtk_source_language_manager_new();
-//   
-//	buffer=GTK_SOURCE_BUFFER(gtk_source_buffer_new(NULL));
-//	g_object_ref(lm);
-//	g_object_set_data_full(G_OBJECT(buffer),"languages-manager",lm,(GDestroyNotify) g_object_unref);
-//
-//	sourceview=gtk_source_view_new_with_buffer(buffer);
-//    
-//	font_desc=pango_font_description_from_string("mono 12");
-//	gtk_widget_modify_font(sourceview, font_desc);
-//	pango_font_description_free(font_desc);
-//
-//	gtk_container_add(GTK_CONTAINER(scrolled_win),GTK_WIDGET(sourceview));
-//	gtk_container_add(GTK_CONTAINER(notebook),scrolled_win);
-
 
 	menunav=gtk_menu_item_new_with_label("Navigation");
 	menu=gtk_menu_new();
@@ -376,21 +253,15 @@ int main(int argc,char **argv)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menubookmark);
 
 	currentBuffer=0;
-//GtkStockItem* xx;
-//gtk_stock_lookup(GTK_STOCK_NEW,xx);
-//printf("\n%s\n",xx);
 
 	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)vbox);
 
 	for (int j=1;j<argc;j++)
 		{
-			printf("XXXXXXXXXXXXXXXXX\n");
 			open_file(argv[j]);
 		}
 
-	
 	gtk_widget_show_all(window);
-	
-	
+
 	gtk_main();
 }
