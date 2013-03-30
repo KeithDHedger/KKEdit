@@ -24,6 +24,25 @@ void getMimeType(char* filepath,void* ptr)
 		}
 }
 
+GtkWidget* makeNewTab(char* name,char* tooltip)
+{
+	GtkWidget*	evbox=gtk_event_box_new();
+	GtkWidget*	hbox=gtk_hbox_new(false,0);
+	GtkWidget*	label=gtk_label_new(name);
+	GtkWidget*	close=gtk_image_new_from_stock(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
+	GtkWidget*	button=gtk_button_new();
+
+	gtk_button_set_relief ((GtkButton*)button,GTK_RELIEF_NONE);
+	gtk_widget_set_tooltip_text(evbox,tooltip);
+	gtk_box_pack_start(GTK_BOX(hbox),label,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
+	gtk_container_add(GTK_CONTAINER (button),close);
+	gtk_container_add(GTK_CONTAINER(evbox),hbox);
+	gtk_signal_connect(GTK_OBJECT(button),"clicked",G_CALLBACK(closeTab),(void*)currentBuffer);
+	gtk_widget_show_all(evbox);
+	return(evbox);
+}
+
 bool openFile(const gchar *filepath)
 {
 	GtkSourceLanguage*			lang=NULL;

@@ -8,4 +8,7 @@
 
 #ifndef _CALLBACKS_
 #define _CALLBACKS_
+
+void doOpenFile(GtkWidget* widget,gpointer data);
+
 #endif
