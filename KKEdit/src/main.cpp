@@ -93,6 +93,8 @@ bool openFile(const gchar *filepath)
 
 	sourceview=gtk_source_view_new_with_buffer(buffers[currentBuffer]);
 	gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_WORD);
+	gtk_source_view_set_show_line_numbers((GtkSourceView*)sourceview,true);
+	gtk_source_view_set_auto_indent((GtkSourceView*)sourceview,true);
 
 	font_desc=pango_font_description_from_string("mono 12");
 	gtk_widget_modify_font(sourceview, font_desc);
