@@ -23,12 +23,6 @@ void shutdown(GtkWidget* widget,gpointer data)
 	gtk_main_quit();
 }
 
-void closeTab(GtkWidget* widget,gpointer data)
-{
-	printf("close tab\n");
-	printf("XXX%i\n",GPOINTER_TO_INT(data));
-}
-
 int main(int argc,char **argv)
 {
 	GtkWidget*		vbox;

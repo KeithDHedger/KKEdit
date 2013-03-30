@@ -6,6 +6,11 @@
  *
 */
 
+#include <gtk/gtk.h>
+
+#include "globals.h"
+#include "files.h"
+
 void doOpenFile(GtkWidget* widget,gpointer data)
 {
 	GtkWidget *dialog;
@@ -21,5 +26,11 @@ void doOpenFile(GtkWidget* widget,gpointer data)
 	}
 	gtk_widget_destroy (dialog);
 	gtk_widget_show_all(window);
+}
+
+void closeTab(GtkWidget* widget,gpointer data)
+{
+	printf("close tab\n");
+	printf("XXX%i\n",GPOINTER_TO_INT(data));
 }
 

@@ -6,6 +6,19 @@
  *
 */
 
+#include <stdlib.h>
+#include <gtk/gtk.h>
+#include <string.h>
+#include <sys/stat.h>
+
+#include <gtksourceview/gtksourceview.h>
+#include <gtksourceview/gtksourcebuffer.h>
+#include <gtksourceview/gtksourcelanguage.h>
+#include <gtksourceview/gtksourcelanguagemanager.h>
+
+#include "globals.h"
+#include "callbacks.h"
+
 void getMimeType(char* filepath,void* ptr)
 {
 	gchar	*stdout=NULL;
