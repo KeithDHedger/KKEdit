@@ -23,6 +23,14 @@ void shutdown(GtkWidget* widget,gpointer data)
 	gtk_main_quit();
 }
 
+void init(void)
+{
+	indent=true;
+	lineNumbers=true;
+	lineWrap=true;
+	asprintf(&fontAndSize,"%s","mono 10");
+}
+
 int main(int argc,char **argv)
 {
 	GtkWidget*		vbox;
@@ -35,6 +43,8 @@ int main(int argc,char **argv)
 	PangoFontDescription *font_desc;
 
 	gtk_init(&argc,&argv);
+	init();
+
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_widget_set_size_request(window,800,600);
 	g_signal_connect(G_OBJECT(window),"delete-event",G_CALLBACK(shutdown),NULL);

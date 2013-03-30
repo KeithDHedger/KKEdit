@@ -56,6 +56,26 @@ GtkWidget* makeNewTab(char* name,char* tooltip)
 	return(evbox);
 }
 
+void setFilePrefs(GtkWidget* sourceview)
+{
+	PangoFontDescription*		font_desc;
+
+	if(indent==true)
+		gtk_source_view_set_auto_indent((GtkSourceView*)sourceview,true);
+
+	if(lineNumbers==true)
+		gtk_source_view_set_show_line_numbers((GtkSourceView*)sourceview,true);
+
+	if(lineWrap==true)
+		gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_WORD);
+
+	font_desc=pango_font_description_from_string(fontAndSize);
+	gtk_widget_modify_font(sourceview,font_desc);
+	pango_font_description_free(font_desc);
+
+
+}
+
 bool openFile(const gchar *filepath)
 {
 	GtkSourceLanguage*			lang=NULL;
@@ -65,7 +85,7 @@ bool openFile(const gchar *filepath)
 
 	gchar*							buffer;
 	long								filelen;
-	PangoFontDescription*		font_desc;
+//	PangoFontDescription*		font_desc;
 
 	GtkWidget*						scrolled_win;
 	GtkWidget*						sourceview;
@@ -84,13 +104,15 @@ bool openFile(const gchar *filepath)
 	g_object_set_data_full(G_OBJECT(buffers[currentBuffer]),"languages-manager",lm,(GDestroyNotify)g_object_unref);
 
 	sourceview=gtk_source_view_new_with_buffer(buffers[currentBuffer]);
-	gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_WORD);
-	gtk_source_view_set_show_line_numbers((GtkSourceView*)sourceview,true);
-	gtk_source_view_set_auto_indent((GtkSourceView*)sourceview,true);
 
-	font_desc=pango_font_description_from_string("mono 12");
-	gtk_widget_modify_font(sourceview, font_desc);
-	pango_font_description_free(font_desc);
+	setFilePrefs(sourceview);
+//	gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_WORD);
+//	gtk_source_view_set_show_line_numbers((GtkSourceView*)sourceview,true);
+//	gtk_source_view_set_auto_indent((GtkSourceView*)sourceview,true);
+
+//	font_desc=pango_font_description_from_string("mono 12");
+//	gtk_widget_modify_font(sourceview, font_desc);
+//	pango_font_description_free(font_desc);
 
 	gtk_container_add(GTK_CONTAINER(scrolled_win),GTK_WIDGET(sourceview));
 
