@@ -72,8 +72,11 @@ int main(int argc,char **argv)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doOpenFile),NULL);
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(saveFile),NULL);
+
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE_AS,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	menuitem=gtk_separator_menu_item_new();
@@ -126,16 +129,10 @@ int main(int argc,char **argv)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menunav);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menubookmark);
 
-	currentBuffer=0;
-
 	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)vbox);
 
 	for (int j=1;j<argc;j++)
-		{
-			openFile(argv[j]);
-			//printf("\n%s\n",argv[j]);
-			currentBuffer++;
-		}
+		openFile(argv[j]);
 
 	gtk_widget_show_all(window);
 

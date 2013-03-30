@@ -21,7 +21,6 @@ void doOpenFile(GtkWidget* widget,gpointer data)
 		{
 			filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 			openFile(filename);
-			currentBuffer++;
 			g_free (filename);
 	}
 	gtk_widget_destroy (dialog);
@@ -30,7 +29,9 @@ void doOpenFile(GtkWidget* widget,gpointer data)
 
 void closeTab(GtkWidget* widget,gpointer data)
 {
-	printf("close tab\n");
-	printf("XXX%i\n",GPOINTER_TO_INT(data));
+	int thispage=gtk_notebook_page_num(notebook,(GtkWidget *)data);
+
+//	g_object_unref(buffers[thispage]);
+	gtk_notebook_remove_page(notebook,thispage);
 }
 

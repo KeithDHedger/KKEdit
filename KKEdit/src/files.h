@@ -9,5 +9,6 @@
 #define _FILES_
 
 bool openFile(const gchar *filepath);
+bool saveFile(GtkWidget* widget,gpointer data);
 
 #endif
