@@ -16,5 +16,6 @@
 
 void doOpenFile(GtkWidget* widget,gpointer data);
 void closeTab(GtkWidget* widget,gpointer data);
+void tabChanged(GtkWidget* widget,gpointer data);
 
 #endif

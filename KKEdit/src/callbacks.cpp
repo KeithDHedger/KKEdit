@@ -11,6 +11,11 @@
 #include "globals.h"
 #include "files.h"
 
+void tabChanged(GtkWidget* widget,gpointer data)
+{
+	printf("XXXXXXXXXXX\n here");
+}
+
 void doOpenFile(GtkWidget* widget,gpointer data)
 {
 	GtkWidget *dialog;
