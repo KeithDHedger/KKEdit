@@ -86,45 +86,33 @@ bool openFile(const gchar *filepath)
 	gchar*							buffer;
 	long								filelen;
 
-	GtkWidget*						scrolled_win;
-	GtkWidget*						sourceview;
 	GtkWidget*						label;
 	gchar*							filename=g_path_get_basename(filepath);
 	char*								mimetype;
 	gboolean							result_uncertain;
-	GtkSourceBuffer*				tempbuffer;
 
 	pageStruct*						page=(pageStruct*)malloc(sizeof(pageStruct));
 
-//	scrolled_win=gtk_scrolled_window_new(NULL, NULL);
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
-//	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_win),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	lm=gtk_source_language_manager_new();
 
-//	buffers[currentPage]=GTK_SOURCE_BUFFER(gtk_source_buffer_new(NULL));
-//	tempbuffer=gtk_source_buffer_new(NULL);
+	asprintf(&page->filePath,"%s",filepath);
 	page->buffer=gtk_source_buffer_new(NULL);
 	pageList=g_list_insert(pageList,(gpointer)page,currentPage);
 
 	g_object_ref(lm);
-//	g_object_set_data_full(G_OBJECT(buffers[currentPage]),"languages-manager",lm,(GDestroyNotify)g_object_unref);
 	g_object_set_data_full(G_OBJECT(page->buffer),"languages-manager",lm,(GDestroyNotify)g_object_unref);
 
-////	sourceview=gtk_source_view_new_with_buffer(buffers[currentPage]);
-//	sourceview=gtk_source_view_new_with_buffer(tempbuffer);
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
-//tbuffer=buffers[currentPage];
-//	setFilePrefs(sourceview);
+
 	setFilePrefs(page->view);
 
-//	gtk_container_add(GTK_CONTAINER(scrolled_win),GTK_WIDGET(sourceview));
 	gtk_container_add(GTK_CONTAINER(page->pageWindow),GTK_WIDGET(page->view));
 
 	vbox=gtk_vbox_new(true,4);
 	label=makeNewTab((char*)filename,(char*)filepath);
 	gtk_notebook_append_page(notebook,vbox,label);
-//	gtk_container_add(GTK_CONTAINER(vbox),GTK_WIDGET(scrolled_win));
 	gtk_container_add(GTK_CONTAINER(vbox),GTK_WIDGET(page->pageWindow));
 
 	lm=gtk_source_language_manager_get_default();
@@ -144,20 +132,15 @@ bool openFile(const gchar *filepath)
 			//g_print("Language: [%s]\n", gtk_source_language_get_name(lang));
 			if (lang!=NULL)
 				gtk_source_buffer_set_language(page->buffer,lang);
-//				gtk_source_buffer_set_language(tempbuffer,lang);
-//				gtk_source_buffer_set_language(buffers[currentPage],lang);
 		}
 	else
 		{
 			//g_print("Language: [%s]\n", gtk_source_language_get_name(lang));
 			gtk_source_buffer_set_language(page->buffer,lang);
-//			gtk_source_buffer_set_language(tempbuffer,lang);
-//			gtk_source_buffer_set_language(buffers[currentPage],lang);
 		}
 
 	g_file_get_contents(filepath,&buffer,(gsize*)&filelen,NULL);
 
-////////////
 	gtk_source_buffer_begin_not_undoable_action(page->buffer);
 		gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
 		gtk_text_buffer_insert (GTK_TEXT_BUFFER(page->buffer),&iter,buffer,filelen);
@@ -170,8 +153,6 @@ bool openFile(const gchar *filepath)
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER (page->buffer),&iter);
 
 	g_object_set_data_full (G_OBJECT(page->buffer),"filename",g_strdup(filepath),(GDestroyNotify) g_free);
-//	g_object_set_data_full (G_OBJECT(tempbuffer),"filename",g_strdup(filepath),(GDestroyNotify) g_free);
-//	g_object_set_data_full (G_OBJECT(buffers[currentPage]),"filename",g_strdup(filepath),(GDestroyNotify) g_free);
 	currentPage++;
 
 	return TRUE;
@@ -179,45 +160,20 @@ bool openFile(const gchar *filepath)
 
 bool saveFile(GtkWidget* widget,gpointer data)
 {
-	/*
-//	widg=gtk_notebook_get_tab_label          (GtkNotebook *notebook,GtkWidget *child);
-	int thispage=gtk_notebook_get_current_page(notebook);
-	printf("\n%i\n",thispage);
-		
-	GtkWidget*	page=gtk_notebook_get_nth_page(notebook,thispage);
-	GtkWidget*	widg=gtk_notebook_get_tab_label(notebook,page);
-	printf("%s\n",gtk_widget_get_tooltip_text(widg));
+	int			thispage=gtk_notebook_get_current_page(notebook);
+	pageStruct* page=(pageStruct*)g_list_nth_data(pageList,thispage);
+	GtkTextIter	start,end;
+	gchar*		text;
 	
-	GtkTextIter						start,end;
-	gchar*	text;
+	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+	gtk_text_buffer_get_end_iter ((GtkTextBuffer*)page->buffer,&end);
+	text=gtk_text_buffer_get_text ((GtkTextBuffer*)page->buffer, &start, &end, FALSE);
 
+	gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer, FALSE);
+	g_file_set_contents(page->filePath,text,-1,NULL);
 
-//GList *        list=     gtk_container_get_children          ((GtkContainer *)widg);
-//printf ("\nev box%i\n",g_list_length                       (list));
-//GtkWidget* evbox=(GtkWidget*)g_list_nth_data(list,0);
-
-//GList *        evlist=     gtk_container_get_children          ((GtkContainer *)evbox);
-//printf ("\nevlist box%i\n",g_list_length                       (evlist));
-
-GtkSourceBuffer* buffer=(GtkSourceBuffer*)g_list_nth_data(bufferList,thispage);
-
-//GtkWidget* datax=(GtkWidget*)g_list_nth_data  (list,1);
-//GtkWidget *        child= gtk_bin_get_child                   ((GtkBin *)datax);
-
-	gtk_text_buffer_get_start_iter((GtkTextBuffer*)buffer,&start);
-	gtk_text_buffer_get_end_iter ((GtkTextBuffer*)buffer,&end);
-	text=gtk_text_buffer_get_text ((GtkTextBuffer*)buffer, &start, &end, FALSE);       
-printf("\n%s",text);
-
-//	gtk_text_buffer_get_start_iter((GtkTextBuffer*)buffers[thispage],&start);
-//	/gtk_text_buffer_get_end_iter ((GtkTextBuffer*)buffers[thispage],&end);
-//	text=gtk_text_buffer_get_text ((GtkTextBuffer*)buffers[thispage], &start, &end, FALSE);       
-//	gtk_text_buffer_set_modified ((GtkTextBuffer*)buffers[thispage], FALSE);
-// /  g_file_set_contents (gtk_widget_get_tooltip_text(widg), text, -1,NULL);
-*/
+	return(true);
 }
-
-
 
 
 

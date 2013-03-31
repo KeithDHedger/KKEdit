@@ -35,8 +35,11 @@ void doOpenFile(GtkWidget* widget,gpointer data)
 void closeTab(GtkWidget* widget,gpointer data)
 {
 	int thispage=gtk_notebook_page_num(notebook,(GtkWidget *)data);
+	pageStruct* page=(pageStruct*)g_list_nth_data(pageList,thispage);
 
-//	g_object_unref(buffers[thispage]);
 	gtk_notebook_remove_page(notebook,thispage);
+	g_free(page->filePath);
+	pageList=g_list_remove(pageList,(gconstpointer)page);
+	g_free(page);
 }
 

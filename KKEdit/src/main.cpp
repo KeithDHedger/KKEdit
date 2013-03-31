@@ -36,11 +36,6 @@ int main(int argc,char **argv)
 	GtkWidget*		vbox;
 	GtkWidget*		menuitem;
 	GtkWidget*		menu;
-	GtkWidget*		scrolled_win;
-	GtkWidget*		sourceview;
-	GtkSourceLanguageManager *lm;
-	GtkSourceBuffer *buffer;
-	PangoFontDescription *font_desc;
 
 	gtk_init(&argc,&argv);
 	init();
