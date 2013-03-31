@@ -131,6 +131,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	long	subPtr=NULL;
 	int	loop;
 	char*	ptr;
+	char*	number="      ";
 
 	ptr=strstr(startPtr," function ");
 	//subPtr=subPtr+10;
@@ -142,7 +143,17 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 				break;
 		}
 	ptr=ptr+loop;
-	printf("%s\n",(char*)ptr);
+
+	for (loop=0;loop<20;loop++)
+		{
+			if(ptr[loop]=' ')
+				break;
+			else
+				number[loop]=ptr[loop];
+		}
+	ptr=ptr+loop;
+	number[loop]=0;
+	printf("%i\n",number);
 	
 }
 
