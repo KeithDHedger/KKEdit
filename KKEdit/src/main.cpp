@@ -78,6 +78,8 @@ int main(int argc,char **argv)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(closeTab),NULL);
+
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 

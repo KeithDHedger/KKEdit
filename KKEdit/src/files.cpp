@@ -119,7 +119,7 @@ bool openFile(const gchar *filepath)
 	mimetype=g_content_type_guess (filepath,NULL,0,&result_uncertain);
 	if (result_uncertain)
 		{
-			g_free (mimetype);
+			g_free(mimetype);
 			mimetype=NULL;
 		}
 
