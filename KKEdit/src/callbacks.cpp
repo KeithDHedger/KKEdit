@@ -85,7 +85,7 @@ void getTagList(char* filepath,void* ptr)
 	gint   retval=0;
 
 	char*	command;
-	asprintf(&command,"ctags -xR %s",filepath);
+	asprintf(&command,"ctags -x %s",filepath);
 	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
 	if (retval==0)
 		{
@@ -98,8 +98,9 @@ void getTagList(char* filepath,void* ptr)
 
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
 {
-	pageStruct* page=(pageStruct*)g_list_nth_data(pageList,thispage);
-	char*			functions;
+	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,thispage);
+	char*		functions;
+	GtkWidget*	menu;
 
 	printf("XXXXXXXX -pagenum - %i\n",thispage);
 	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menunav);
@@ -110,12 +111,43 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	else
 		{
 			printf("gt some\n");
-			gtk_menu_item_set_submenu((GtkMenuItem*)menunav,submenu);
+			gtk_menu_item_set_submenu((GtkMenuItem*)menunav,NULL);
 		}
 
 	getTagList(page->filePath,&functions);
-	printf("%s\n",functions);
+	//printf("%s\n",functions);
+
+	page->navSubMenu=(GtkMenuItem*)gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),(GtkWidget*)page->navSubMenu);
+
+	menu=gtk_image_menu_item_new_with_label("menu 1");
+	gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menu);
+	
+	menu=gtk_image_menu_item_new_with_label("menu 12");
+	gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menu);
+
+
+	char*	startPtr=functions;
+	long	subPtr=NULL;
+	int	loop;
+	char*	ptr;
+
+	ptr=strstr(startPtr," function ");
+	//subPtr=subPtr+10;
+	ptr=(char*)ptr+10;
+	//ptr=(char*)subPtr;
+	for (loop=0;loop<20;loop++)
+		{
+			if(ptr[loop]!=' ')
+				break;
+		}
+	ptr=ptr+loop;
+	printf("%s\n",(char*)ptr);
+	
 }
+
+
+
 
 
 
