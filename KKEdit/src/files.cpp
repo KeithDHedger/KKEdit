@@ -38,8 +38,7 @@ void getMimeType(char* filepath,void* ptr)
 			g_free(stderr);
 		}
 }
-	GtkWidget*						sourceview;
-GtkSourceBuffer* tbuffer;
+
 GtkWidget* makeNewTab(char* name,char* tooltip)
 {
 	GtkWidget*	evbox=gtk_event_box_new();
@@ -59,21 +58,21 @@ GtkWidget* makeNewTab(char* name,char* tooltip)
 	return(evbox);
 }
 
-void setFilePrefs(GtkWidget* sourceview)
+void setFilePrefs(GtkSourceView* sourceview)
 {
 	PangoFontDescription*		font_desc;
 
 	if(indent==true)
-		gtk_source_view_set_auto_indent((GtkSourceView*)sourceview,true);
+		gtk_source_view_set_auto_indent(sourceview,true);
 
 	if(lineNumbers==true)
-		gtk_source_view_set_show_line_numbers((GtkSourceView*)sourceview,true);
+		gtk_source_view_set_show_line_numbers(sourceview,true);
 
 	if(lineWrap==true)
 		gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_WORD);
 
 	font_desc=pango_font_description_from_string(fontAndSize);
-	gtk_widget_modify_font(sourceview,font_desc);
+	gtk_widget_modify_font((GtkWidget*)sourceview,font_desc);
 	pango_font_description_free(font_desc);
 }
 
@@ -88,35 +87,45 @@ bool openFile(const gchar *filepath)
 	long								filelen;
 
 	GtkWidget*						scrolled_win;
-//	GtkWidget*						sourceview;
+	GtkWidget*						sourceview;
 	GtkWidget*						label;
 	gchar*							filename=g_path_get_basename(filepath);
 	char*								mimetype;
 	gboolean							result_uncertain;
 	GtkSourceBuffer*				tempbuffer;
 
-	scrolled_win=gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_win),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	pageStruct*						page=(pageStruct*)malloc(sizeof(pageStruct));
+
+//	scrolled_win=gtk_scrolled_window_new(NULL, NULL);
+	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
+//	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_win),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	lm=gtk_source_language_manager_new();
 
 //	buffers[currentPage]=GTK_SOURCE_BUFFER(gtk_source_buffer_new(NULL));
-	tempbuffer=gtk_source_buffer_new(NULL);
-	bufferList=g_list_insert(bufferList,(gpointer)tempbuffer,currentPage);
+//	tempbuffer=gtk_source_buffer_new(NULL);
+	page->buffer=gtk_source_buffer_new(NULL);
+	pageList=g_list_insert(pageList,(gpointer)page,currentPage);
 
 	g_object_ref(lm);
-	g_object_set_data_full(G_OBJECT(buffers[currentPage]),"languages-manager",lm,(GDestroyNotify)g_object_unref);
+//	g_object_set_data_full(G_OBJECT(buffers[currentPage]),"languages-manager",lm,(GDestroyNotify)g_object_unref);
+	g_object_set_data_full(G_OBJECT(page->buffer),"languages-manager",lm,(GDestroyNotify)g_object_unref);
 
 ////	sourceview=gtk_source_view_new_with_buffer(buffers[currentPage]);
-	sourceview=gtk_source_view_new_with_buffer(tempbuffer);
+//	sourceview=gtk_source_view_new_with_buffer(tempbuffer);
+	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 //tbuffer=buffers[currentPage];
-	setFilePrefs(sourceview);
+//	setFilePrefs(sourceview);
+	setFilePrefs(page->view);
 
-	gtk_container_add(GTK_CONTAINER(scrolled_win),GTK_WIDGET(sourceview));
+//	gtk_container_add(GTK_CONTAINER(scrolled_win),GTK_WIDGET(sourceview));
+	gtk_container_add(GTK_CONTAINER(page->pageWindow),GTK_WIDGET(page->view));
 
 	vbox=gtk_vbox_new(true,4);
 	label=makeNewTab((char*)filename,(char*)filepath);
 	gtk_notebook_append_page(notebook,vbox,label);
-	gtk_container_add(GTK_CONTAINER(vbox),GTK_WIDGET(scrolled_win));
+//	gtk_container_add(GTK_CONTAINER(vbox),GTK_WIDGET(scrolled_win));
+	gtk_container_add(GTK_CONTAINER(vbox),GTK_WIDGET(page->pageWindow));
 
 	lm=gtk_source_language_manager_get_default();
 	mimetype=g_content_type_guess (filepath,NULL,0,&result_uncertain);
@@ -134,31 +143,34 @@ bool openFile(const gchar *filepath)
 			lang=gtk_source_language_manager_guess_language(lm,filepath,mimetype);
 			//g_print("Language: [%s]\n", gtk_source_language_get_name(lang));
 			if (lang!=NULL)
-				gtk_source_buffer_set_language(tempbuffer,lang);
+				gtk_source_buffer_set_language(page->buffer,lang);
+//				gtk_source_buffer_set_language(tempbuffer,lang);
 //				gtk_source_buffer_set_language(buffers[currentPage],lang);
 		}
 	else
 		{
 			//g_print("Language: [%s]\n", gtk_source_language_get_name(lang));
-			gtk_source_buffer_set_language(tempbuffer,lang);
+			gtk_source_buffer_set_language(page->buffer,lang);
+//			gtk_source_buffer_set_language(tempbuffer,lang);
 //			gtk_source_buffer_set_language(buffers[currentPage],lang);
 		}
 
 	g_file_get_contents(filepath,&buffer,(gsize*)&filelen,NULL);
 
 ////////////
-	gtk_source_buffer_begin_not_undoable_action(tempbuffer);
-		gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (tempbuffer), &iter);
-		gtk_text_buffer_insert (GTK_TEXT_BUFFER(tempbuffer),&iter,buffer,filelen);
+	gtk_source_buffer_begin_not_undoable_action(page->buffer);
+		gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
+		gtk_text_buffer_insert (GTK_TEXT_BUFFER(page->buffer),&iter,buffer,filelen);
 		g_free (buffer);
-	gtk_source_buffer_end_not_undoable_action (tempbuffer);
-	gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (tempbuffer),FALSE);
+	gtk_source_buffer_end_not_undoable_action (page->buffer);
+	gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (page->buffer),FALSE);
 
     /* move cursor to the beginning */
-	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER (tempbuffer),&iter);
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER (tempbuffer),&iter);
+	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER (page->buffer),&iter);
+	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER (page->buffer),&iter);
 
-	g_object_set_data_full (G_OBJECT(tempbuffer),"filename",g_strdup(filepath),(GDestroyNotify) g_free);
+	g_object_set_data_full (G_OBJECT(page->buffer),"filename",g_strdup(filepath),(GDestroyNotify) g_free);
+//	g_object_set_data_full (G_OBJECT(tempbuffer),"filename",g_strdup(filepath),(GDestroyNotify) g_free);
 //	g_object_set_data_full (G_OBJECT(buffers[currentPage]),"filename",g_strdup(filepath),(GDestroyNotify) g_free);
 	currentPage++;
 
@@ -167,6 +179,7 @@ bool openFile(const gchar *filepath)
 
 bool saveFile(GtkWidget* widget,gpointer data)
 {
+	/*
 //	widg=gtk_notebook_get_tab_label          (GtkNotebook *notebook,GtkWidget *child);
 	int thispage=gtk_notebook_get_current_page(notebook);
 	printf("\n%i\n",thispage);
@@ -201,6 +214,7 @@ printf("\n%s",text);
 //	text=gtk_text_buffer_get_text ((GtkTextBuffer*)buffers[thispage], &start, &end, FALSE);       
 //	gtk_text_buffer_set_modified ((GtkTextBuffer*)buffers[thispage], FALSE);
 // /  g_file_set_contents (gtk_widget_get_tooltip_text(widg), text, -1,NULL);
+*/
 }
 
 
