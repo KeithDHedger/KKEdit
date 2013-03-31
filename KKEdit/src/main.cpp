@@ -45,15 +45,14 @@ int main(int argc,char **argv)
 	g_signal_connect(G_OBJECT(window),"delete-event",G_CALLBACK(shutdown),NULL);
 
 	notebook=(GtkNotebook*)gtk_notebook_new();
+	gtk_signal_connect(GTK_OBJECT(notebook),"switch-page",G_CALLBACK(switchPage),NULL);
+
 	vbox=gtk_vbox_new(FALSE,0);
 	menubar=gtk_menu_bar_new();
 
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)menubar,false,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)notebook,true,true,0);
 
-	menunav=gtk_menu_item_new_with_label("Navigation");
-	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),menu);
   
 //file menu
 	menufile=gtk_menu_item_new_with_label("File");
@@ -111,6 +110,11 @@ int main(int argc,char **argv)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_FIND_AND_REPLACE,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+//nav menu
+	menunav=gtk_menu_item_new_with_label("Navigation");
+//	menu=gtk_menu_new();
+//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),menu);
 
 //bookmarks
 	menubookmark=gtk_menu_item_new_with_label("Bookmarks");

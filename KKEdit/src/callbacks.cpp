@@ -11,11 +11,6 @@
 #include "globals.h"
 #include "files.h"
 
-void tabChanged(GtkWidget* widget,gpointer data)
-{
-	printf("XXXXXXXXXXX\n here");
-}
-
 void doOpenFile(GtkWidget* widget,gpointer data)
 {
 	GtkWidget *dialog;
@@ -82,4 +77,51 @@ void closeTab(GtkWidget* widget,gpointer data)
 	g_free(page);
 	currentPage--;
 }
+
+void getTagList(char* filepath,void* ptr)
+{
+	gchar	*stdout=NULL;
+	gchar	*stderr=NULL;
+	gint   retval=0;
+
+	char*	command;
+	asprintf(&command,"ctags -xR %s",filepath);
+	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
+	if (retval==0)
+		{
+			stdout[strlen(stdout)-1]=0;
+			asprintf((char**)ptr,"%s",stdout);
+			g_free(stdout);
+			g_free(stderr);
+		}
+}
+
+void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
+{
+	pageStruct* page=(pageStruct*)g_list_nth_data(pageList,thispage);
+	char*			functions;
+
+	printf("XXXXXXXX -pagenum - %i\n",thispage);
+	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menunav);
+	if (submenu==NULL)
+		{
+			printf("none\n");
+		}
+	else
+		{
+			printf("gt some\n");
+			gtk_menu_item_set_submenu((GtkMenuItem*)menunav,submenu);
+		}
+
+	getTagList(page->filePath,&functions);
+	printf("%s\n",functions);
+}
+
+
+
+
+
+
+
+
 
