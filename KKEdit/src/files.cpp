@@ -153,6 +153,8 @@ bool openFile(const gchar *filepath)
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER (page->buffer),&iter);
 
 	g_object_set_data_full (G_OBJECT(page->buffer),"filename",g_strdup(filepath),(GDestroyNotify) g_free);
+	gtk_widget_show_all((GtkWidget*)window);
+	gtk_notebook_set_current_page(notebook,currentPage);
 	currentPage++;
 
 	return TRUE;
@@ -169,7 +171,7 @@ bool saveFile(GtkWidget* widget,gpointer data)
 	gtk_text_buffer_get_end_iter ((GtkTextBuffer*)page->buffer,&end);
 	text=gtk_text_buffer_get_text ((GtkTextBuffer*)page->buffer, &start, &end, FALSE);
 
-	gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer, FALSE);
+	gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,FALSE);
 	g_file_set_contents(page->filePath,text,-1,NULL);
 
 	return(true);
