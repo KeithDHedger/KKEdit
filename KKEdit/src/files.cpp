@@ -157,7 +157,7 @@ bool openFile(const gchar *filepath)
 	gtk_notebook_set_current_page(notebook,currentPage);
 	currentPage++;
 	page->rebuildMenu=true;
-
+	gtk_widget_grab_focus((GtkWidget*)page->view);
 	return TRUE;
 }
 

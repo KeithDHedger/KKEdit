@@ -104,7 +104,7 @@ void gotoLine(GtkWidget* widget,gpointer data)
 
 	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,line-1,0);
 	gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
-	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,0,0,0);
+	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
 }
 
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
@@ -125,7 +125,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 
 //	if(page->rebuildMenu==true)
 //		{
-			printf("rebuilding menu for tab %i\n",thispage);
+//			printf("rebuilding menu for tab %i\n",thispage);
 			page->rebuildMenu=false;
 
 			getTagList(page->filePath,&functions);
