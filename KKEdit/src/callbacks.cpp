@@ -102,7 +102,6 @@ void gotoLine(GtkWidget* widget,gpointer data)
 	GtkTextIter iter;
 	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
 
-//	printf("goto line %i\n",line);
 	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,line-1,0);
 	gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
 	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,0,0,0);
