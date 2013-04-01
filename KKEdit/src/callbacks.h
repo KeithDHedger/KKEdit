@@ -21,5 +21,7 @@ void setSensitive(void);
 void copyToClip(GtkWidget* widget,gpointer data);
 void cutToClip(GtkWidget* widget,gpointer data);
 void pasteFromClip(GtkWidget* widget,gpointer data);
+void undo(GtkWidget* widget,gpointer data);
+void redo(GtkWidget* widget,gpointer data);
 
 #endif

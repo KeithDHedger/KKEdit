@@ -10,5 +10,6 @@
 
 bool openFile(const gchar *filepath);
 bool saveFile(GtkWidget* widget,gpointer data);
+void newFile(GtkWidget* widget,gpointer data);
 
 #endif

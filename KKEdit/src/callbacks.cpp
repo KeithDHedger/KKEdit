@@ -114,12 +114,24 @@ void setSensitive(void)
 	char*				newlabel;
 	int				offset=0;
 
+//toolbar
+	gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
+	gtk_widget_set_sensitive((GtkWidget*)redoButton,gtk_source_buffer_can_redo(page->buffer));
+	gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
+
+//menu
+	gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));
+	gtk_widget_set_sensitive((GtkWidget*)redoMenu,gtk_source_buffer_can_redo(page->buffer));
+
+//tab
 	gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
 	if(text[0]=='*')
 		offset=1;
 
 	if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer))==true)
-				asprintf(&newlabel,"*%s",&text[offset]);
+		{
+			asprintf(&newlabel,"*%s",&text[offset]);
+		}
 	else
 		asprintf(&newlabel,"%s",&text[offset]);
 
@@ -202,7 +214,19 @@ void pasteFromClip(GtkWidget* widget,gpointer data)
 	gtk_text_buffer_paste_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),NULL,true);
 }
 
+void undo(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+	gtk_source_buffer_undo(page->buffer);
+	setSensitive();
+}
 
+void redo(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+	gtk_source_buffer_redo(page->buffer);
+	setSensitive();
+}
 
 
 

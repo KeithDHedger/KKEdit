@@ -37,7 +37,7 @@ int main(int argc,char **argv)
 	GtkWidget*		menuitem;
 	GtkWidget*		menu;
 	GtkWidget*		toolbar;
-//	GtkToolItem*	toolbutton;
+	GtkToolItem*	toolbutton;
 
 	gtk_init(&argc,&argv);
 	init();
@@ -79,6 +79,35 @@ int main(int argc,char **argv)
 	gtk_toolbar_insert((GtkToolbar*)toolbar,closeButton,-1);
 	gtk_signal_connect(GTK_OBJECT(closeButton),"clicked",G_CALLBACK(closeTab),NULL);
 
+	gtk_toolbar_insert((GtkToolbar*)toolbar,gtk_separator_tool_item_new(),-1);
+
+//edit buttons
+//cut
+	toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_CUT);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(cutToClip),NULL);
+//copy
+	toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_COPY);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(copyToClip),NULL);
+//paste
+	toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_PASTE);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(pasteFromClip),NULL);
+
+	gtk_toolbar_insert((GtkToolbar*)toolbar,gtk_separator_tool_item_new(),-1);
+
+//undo
+	undoButton=gtk_tool_button_new_from_stock(GTK_STOCK_UNDO);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,undoButton,-1);
+	gtk_signal_connect(GTK_OBJECT(undoButton),"clicked",G_CALLBACK(undo),NULL);
+//redo
+	redoButton=gtk_tool_button_new_from_stock(GTK_STOCK_REDO);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,redoButton,-1);
+	gtk_signal_connect(GTK_OBJECT(redoButton),"clicked",G_CALLBACK(redo),NULL);
+
+
+//menus
 //file menu
 	menufile=gtk_menu_item_new_with_label("File");
 	menu=gtk_menu_new();
@@ -86,6 +115,8 @@ int main(int argc,char **argv)
 //new
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newFile),NULL);
+
 //open
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_OPEN,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -119,10 +150,16 @@ int main(int argc,char **argv)
 	menuedit=gtk_menu_item_new_with_label("Edit");
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuedit),menu);
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_UNDO,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_REDO,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//undo
+	undoMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_UNDO,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),undoMenu);
+	gtk_signal_connect(GTK_OBJECT(undoMenu),"activate",G_CALLBACK(undo),NULL);
+
+//redo
+	redoMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_REDO,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),redoMenu);
+	gtk_signal_connect(GTK_OBJECT(redoMenu),"activate",G_CALLBACK(redo),NULL);
+
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
