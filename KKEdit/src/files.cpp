@@ -149,13 +149,14 @@ bool openFile(const gchar *filepath)
 	gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (page->buffer),FALSE);
 
     /* move cursor to the beginning */
-	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER (page->buffer),&iter);
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER (page->buffer),&iter);
+	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
+	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 
 	g_object_set_data_full (G_OBJECT(page->buffer),"filename",g_strdup(filepath),(GDestroyNotify) g_free);
 	gtk_widget_show_all((GtkWidget*)window);
 	gtk_notebook_set_current_page(notebook,currentPage);
 	currentPage++;
+	page->rebuildMenu=true;
 
 	return TRUE;
 }

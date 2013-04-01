@@ -96,65 +96,68 @@ void getTagList(char* filepath,void* ptr)
 		}
 }
 
+void gotoLine(GtkWidget* widget,gpointer data)
+{
+	int	line=(long)data;
+	GtkTextIter iter;
+	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+
+//	printf("goto line %i\n",line);
+	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,line-1,0);
+	gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
+	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,0,0,0);
+}
+
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
 {
 	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,thispage);
-	char*		functions;
+	char*			functions;
 	GtkWidget*	menu;
+	GtkWidget*	menuitem;
+	int			linenum;
+	char			tmpstr[1024];
+	char*			lineptr;
 
-	printf("XXXXXXXX -pagenum - %i\n",thispage);
 	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menunav);
-	if (submenu==NULL)
-		{
-			printf("none\n");
-		}
-	else
-		{
-			printf("gt some\n");
-			gtk_menu_item_set_submenu((GtkMenuItem*)menunav,NULL);
-		}
+	if (submenu!=NULL)
+		gtk_menu_item_set_submenu((GtkMenuItem*)menunav,NULL);
 
-	getTagList(page->filePath,&functions);
-	//printf("%s\n",functions);
+	currentTabNumber=thispage;
 
-	page->navSubMenu=(GtkMenuItem*)gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),(GtkWidget*)page->navSubMenu);
+//	if(page->rebuildMenu==true)
+//		{
+			printf("rebuilding menu for tab %i\n",thispage);
+			page->rebuildMenu=false;
 
-	menu=gtk_image_menu_item_new_with_label("menu 1");
-	gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menu);
-	
-	menu=gtk_image_menu_item_new_with_label("menu 12");
-	gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menu);
+			getTagList(page->filePath,&functions);
+			lineptr=functions;
 
+			page->navSubMenu=(GtkMenuItem*)gtk_menu_new();
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),(GtkWidget*)page->navSubMenu);
 
-	char*	startPtr=functions;
-	long	subPtr=NULL;
-	int	loop;
-	char*	ptr;
-	char*	number="      ";
+			while (lineptr!=NULL)
+				{
+					sscanf (lineptr,"%*s %*s %i %*s %[\]a-zA-Z0-9 ()_-,.*;\[\"]s",&linenum,tmpstr);
+					lineptr=strchr(lineptr,'\n');
+					if (lineptr!=NULL)
+						lineptr++;
+//	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
-	ptr=strstr(startPtr," function ");
-	//subPtr=subPtr+10;
-	ptr=(char*)ptr+10;
-	//ptr=(char*)subPtr;
-	for (loop=0;loop<20;loop++)
-		{
-			if(ptr[loop]!=' ')
-				break;
-		}
-	ptr=ptr+loop;
-
-	for (loop=0;loop<20;loop++)
-		{
-			if(ptr[loop]=' ')
-				break;
-			else
-				number[loop]=ptr[loop];
-		}
-	ptr=ptr+loop;
-	number[loop]=0;
-	printf("%i\n",number);
-	
+					menuitem=gtk_image_menu_item_new_with_label(tmpstr);
+					gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
+					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)linenum);
+				}
+			gtk_widget_show_all(window);
+			g_free(functions);
+//		}
+//	else
+//		{
+//			menu=gtk_menu_new();
+//			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),(GtkWidget*)menu);
+//			gtk_menu_shell_append(GTK_MENU_SHELL(menu),(GtkWidget*)page->navSubMenu);
+//			gtk_widget_show_all(window);
+//		}
 }
 
 
