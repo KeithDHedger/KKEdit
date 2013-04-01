@@ -39,21 +39,32 @@ void getMimeType(char* filepath,void* ptr)
 		}
 }
 
-GtkWidget* makeNewTab(char* name,char* tooltip)
+GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
 	GtkWidget*	evbox=gtk_event_box_new();
 	GtkWidget*	hbox=gtk_hbox_new(false,0);
 	GtkWidget*	label=gtk_label_new(name);
 	GtkWidget*	close=gtk_image_new_from_stock(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
 	GtkWidget*	button=gtk_button_new();
+	GtkRcStyle*	style=gtk_rc_style_new();
 
-	gtk_button_set_relief ((GtkButton*)button,GTK_RELIEF_NONE);
+	gtk_button_set_relief((GtkButton*)button,GTK_RELIEF_NONE);
 	gtk_widget_set_tooltip_text(evbox,tooltip);
-	gtk_box_pack_start(GTK_BOX(hbox),label,true,true,0);
-	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
-	gtk_container_add(GTK_CONTAINER (button),close);
+	gtk_box_pack_start(GTK_BOX(hbox),label,false,false,0);
+
+//	gtk_widget_set_size_request(button,20,20);
+	gtk_button_set_focus_on_click(GTK_BUTTON(button),FALSE);
+	gtk_container_add(GTK_CONTAINER(button),close);
+
+	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
 	gtk_container_add(GTK_CONTAINER(evbox),hbox);
 	gtk_signal_connect(GTK_OBJECT(button),"clicked",G_CALLBACK(closeTab),(void*)vbox);
+	page->tabName=label;
+
+	style->xthickness=style->ythickness=0;
+	gtk_widget_modify_style (button, style);
+	g_object_unref(G_OBJECT(style));
+  
 	gtk_widget_show_all(evbox);
 	return(evbox);
 }
@@ -111,7 +122,7 @@ bool openFile(const gchar *filepath)
 	gtk_container_add(GTK_CONTAINER(page->pageWindow),GTK_WIDGET(page->view));
 
 	vbox=gtk_vbox_new(true,4);
-	label=makeNewTab((char*)filename,(char*)filepath);
+	label=makeNewTab((char*)filename,(char*)filepath,page);
 	gtk_notebook_append_page(notebook,vbox,label);
 	gtk_container_add(GTK_CONTAINER(vbox),GTK_WIDGET(page->pageWindow));
 
@@ -146,7 +157,9 @@ bool openFile(const gchar *filepath)
 		gtk_text_buffer_insert (GTK_TEXT_BUFFER(page->buffer),&iter,buffer,filelen);
 		g_free (buffer);
 	gtk_source_buffer_end_not_undoable_action (page->buffer);
-	gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (page->buffer),FALSE);
+	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
+	//gtk_signal_connect(GTK_OBJECT(GTK_TEXT_BUFFER(page->buffer)),"modified-changed",G_CALLBACK(setSensitive),NULL);
+	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive), NULL);
 
     /* move cursor to the beginning */
 	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&iter);

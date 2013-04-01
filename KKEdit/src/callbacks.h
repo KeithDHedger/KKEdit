@@ -17,5 +17,6 @@
 void doOpenFile(GtkWidget* widget,gpointer data);
 void closeTab(GtkWidget* widget,gpointer data);
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint arg2,gpointer user_data);
+void setSensitive(void);
 
 #endif

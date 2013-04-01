@@ -37,7 +37,7 @@ int main(int argc,char **argv)
 	GtkWidget*		menuitem;
 	GtkWidget*		menu;
 	GtkWidget*		toolbar;
-	GtkToolItem*	toolbutton;
+//	GtkToolItem*	toolbutton;
 
 	gtk_init(&argc,&argv);
 	init();
@@ -59,25 +59,25 @@ int main(int argc,char **argv)
 
 //	toolbar
 //new
-	toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_NEW);
-	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+	newButton=gtk_tool_button_new_from_stock(GTK_STOCK_NEW);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,newButton,-1);
 //	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(doOpenFile),NULL);
 //open
-	toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_OPEN);
-	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
-	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(doOpenFile),NULL);
+	openButton=gtk_tool_button_new_from_stock(GTK_STOCK_OPEN);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,openButton,-1);
+	gtk_signal_connect(GTK_OBJECT(openButton),"clicked",G_CALLBACK(doOpenFile),NULL);
 //save
-	toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE);
-	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
-	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(saveFile),NULL);
+	saveButton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,saveButton,-1);
+	gtk_signal_connect(GTK_OBJECT(saveButton),"clicked",G_CALLBACK(saveFile),NULL);
 //saveas
-	toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE_AS);
-	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+	saveasButton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE_AS);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,saveasButton,-1);
 //	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(saveFile),NULL);
 //close
-	toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_CLOSE);
-	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
-	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(closeTab),NULL);
+	closeButton=gtk_tool_button_new_from_stock(GTK_STOCK_CLOSE);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,closeButton,-1);
+	gtk_signal_connect(GTK_OBJECT(closeButton),"clicked",G_CALLBACK(closeTab),NULL);
 
 //file menu
 	menufile=gtk_menu_item_new_with_label("File");

@@ -107,6 +107,27 @@ void gotoLine(GtkWidget* widget,gpointer data)
 	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
 }
 
+void setSensitive(void)
+{
+	pageStruct*		page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+	const gchar*	text=gtk_label_get_text((GtkLabel*)page->tabName);
+	char*				newlabel;
+	int				offset=0;
+
+	gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
+	if(text[0]=='*')
+		offset=1;
+
+	if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer))==true)
+				asprintf(&newlabel,"*%s",&text[offset]);
+	else
+		asprintf(&newlabel,"%s",&text[offset]);
+
+
+	gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)newlabel);
+	g_free(newlabel);
+}
+
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
 {
 	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,thispage);
@@ -140,8 +161,6 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 					lineptr=strchr(lineptr,'\n');
 					if (lineptr!=NULL)
 						lineptr++;
-//	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW,NULL);
-//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 					menuitem=gtk_image_menu_item_new_with_label(tmpstr);
 					gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
@@ -159,7 +178,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 //			gtk_menu_shell_append(GTK_MENU_SHELL(menu),(GtkWidget*)page->navSubMenu);
 //			gtk_widget_show_all(window);
 //		}
-
+	setSensitive();
 }
 
 
