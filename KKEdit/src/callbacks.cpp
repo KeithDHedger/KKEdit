@@ -181,7 +181,26 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	setSensitive();
 }
 
+void copyToClip(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
 
+	gtk_text_buffer_copy_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD));
+}
+
+void cutToClip(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+
+	gtk_text_buffer_cut_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),true);
+}
+
+void pasteFromClip(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+
+	gtk_text_buffer_paste_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),NULL,true);
+}
 
 
 
