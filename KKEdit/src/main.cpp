@@ -36,6 +36,8 @@ int main(int argc,char **argv)
 	GtkWidget*		vbox;
 	GtkWidget*		menuitem;
 	GtkWidget*		menu;
+	GtkWidget*		toolbar;
+	GtkToolItem*	toolbutton;
 
 	gtk_init(&argc,&argv);
 	init();
@@ -49,32 +51,59 @@ int main(int argc,char **argv)
 
 	vbox=gtk_vbox_new(FALSE,0);
 	menubar=gtk_menu_bar_new();
+	toolbar=gtk_toolbar_new();
 
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)menubar,false,true,0);
+	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)toolbar,false,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)notebook,true,true,0);
 
-  
+//	toolbar
+//new
+	toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_NEW);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+//	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(doOpenFile),NULL);
+//open
+	toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_OPEN);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(doOpenFile),NULL);
+//save
+	toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(saveFile),NULL);
+//saveas
+	toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE_AS);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+//	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(saveFile),NULL);
+//close
+	toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_CLOSE);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(closeTab),NULL);
+
 //file menu
 	menufile=gtk_menu_item_new_with_label("File");
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufile),menu);
-
+//new
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//open
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_OPEN,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doOpenFile),NULL);
+
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
+//save
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(saveFile),NULL);
-
+//savas
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE_AS,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//close
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(closeTab),NULL);
