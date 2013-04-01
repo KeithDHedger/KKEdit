@@ -152,11 +152,14 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 //		}
 //	else
 //		{
+//				printf("just switch neu\n");)
 //			menu=gtk_menu_new();
-//			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),(GtkWidget*)menu);
+//			gtk_menu_item_set_submenu((GtkMenuItem*)menunav,NULL);
+//			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),(GtkWidget*)page->navSubMenu);
 //			gtk_menu_shell_append(GTK_MENU_SHELL(menu),(GtkWidget*)page->navSubMenu);
 //			gtk_widget_show_all(window);
 //		}
+
 }
 
 
