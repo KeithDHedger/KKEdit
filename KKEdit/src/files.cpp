@@ -49,7 +49,8 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	GtkRcStyle*	style=gtk_rc_style_new();
 
 	gtk_button_set_relief((GtkButton*)button,GTK_RELIEF_NONE);
-	gtk_widget_set_tooltip_text(evbox,tooltip);
+//	gtk_widget_set_tooltip_text(evbox,tooltip);
+	gtk_widget_set_tooltip_text(label,tooltip);
 	gtk_box_pack_start(GTK_BOX(hbox),label,false,false,0);
 
 	gtk_button_set_focus_on_click(GTK_BUTTON(button),FALSE);
@@ -177,34 +178,37 @@ bool openFile(const gchar *filepath)
 }
 
 char*	saveFileName;
+char*	saveFilePath;
+
 bool getSaveFile(void)
 {
-	GtkWidget *dialog;
-	char *filename;
+	GtkWidget*	dialog;
+	//char *filename;
+	gchar*		filename;
+//	GtkWidget	dialog;
 
-GtkWidget *dialog;
-dialog = gtk_file_chooser_dialog_new ("Save File",
-				      parent_window,
-				      GTK_FILE_CHOOSER_ACTION_SAVE,
-				      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-				      GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-				      NULL);
-gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-if (user_edited_a_new_document)
-  {
-    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), default_folder_for_saving);
-    gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "Untitled document");
-  }
-else
-  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (dialog), filename_for_existing_document);
-if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
-  {
-    char *filename;
-    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-    save_to_file (filename);
-    g_free (filename);
-  }
-gtk_widget_destroy (dialog);	gtk_widget_show_all(window);
+	dialog=gtk_file_chooser_dialog_new("Save File",(GtkWindow*)window, GTK_FILE_CHOOSER_ACTION_SAVE,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_SAVE,GTK_RESPONSE_ACCEPT,NULL);
+
+	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER (dialog),TRUE);
+//	if (user_edited_a_new_document)
+ // {
+ //   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), default_folder_for_saving);
+	gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER (dialog),"Untitled");
+//  }
+//else
+//  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (dialog), filename_for_existing_document);
+	if(gtk_dialog_run (GTK_DIALOG (dialog))==GTK_RESPONSE_ACCEPT)
+		{
+	//		char *filename;
+			saveFilePath=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+			saveFileName=g_path_get_basename(saveFilePath);
+
+
+ //   save_to_file (filename);
+ //   g_free (filename);
+		}
+	gtk_widget_destroy (dialog);
+	gtk_widget_show_all(window);
 }
 
 bool saveFile(GtkWidget* widget,gpointer data)
@@ -212,6 +216,7 @@ bool saveFile(GtkWidget* widget,gpointer data)
 	pageStruct* page=getPageStructPtr(-1);
 	GtkTextIter	start,end;
 	gchar*		text;
+	char*			newlabel;
 
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 	gtk_text_buffer_get_end_iter ((GtkTextBuffer*)page->buffer,&end);
@@ -223,6 +228,16 @@ bool saveFile(GtkWidget* widget,gpointer data)
 	else
 		{
 			getSaveFile();
+			asprintf(&page->filePath,"%s",saveFilePath);
+			//g_file_set_contents(page->filePath,text,-1,NULL);
+		//	printf("XXXX%s\n",page->filePath);
+		//	asprintf(&page->tabName,"%s",saveFileName);
+
+			gtk_widget_set_tooltip_text(page->tabName,page->filePath);
+
+			gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)saveFileName);
+			g_free(newlabel);
+
 		}
 
 	return(true);
