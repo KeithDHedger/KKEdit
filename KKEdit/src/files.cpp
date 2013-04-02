@@ -124,6 +124,11 @@ bool openFile(const gchar *filepath)
 	vbox=gtk_vbox_new(true,4);
 	label=makeNewTab((char*)filename,(char*)filepath,page);
 	gtk_notebook_append_page(notebook,vbox,label);
+
+
+//	gtk_notebook_set_tab_reorderable(notebook,vbox,true);
+g_object_set_data(G_OBJECT(vbox),"p1 data",(gpointer)currentPage);
+
 	gtk_container_add(GTK_CONTAINER(vbox),GTK_WIDGET(page->pageWindow));
 
 	lm=gtk_source_language_manager_get_default();

@@ -149,12 +149,16 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	int			linenum;
 	char			tmpstr[1024];
 	char*			lineptr;
+long result;
 
 	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menunav);
 	if (submenu!=NULL)
 		gtk_menu_item_set_submenu((GtkMenuItem*)menunav,NULL);
 
 	currentTabNumber=thispage;
+GtkWidget *         data=gtk_notebook_get_nth_page(notebook,thispage);
+result = (long)g_object_get_data(G_OBJECT(data),"p1 data");
+printf("xxxx%izzz\n",result);
 
 //	if(page->rebuildMenu==true)
 //		{
