@@ -61,7 +61,7 @@ int main(int argc,char **argv)
 //new
 	newButton=gtk_tool_button_new_from_stock(GTK_STOCK_NEW);
 	gtk_toolbar_insert((GtkToolbar*)toolbar,newButton,-1);
-//	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(doOpenFile),NULL);
+	gtk_signal_connect(GTK_OBJECT(newButton),"clicked",G_CALLBACK(newFile),NULL);
 //open
 	openButton=gtk_tool_button_new_from_stock(GTK_STOCK_OPEN);
 	gtk_toolbar_insert((GtkToolbar*)toolbar,openButton,-1);

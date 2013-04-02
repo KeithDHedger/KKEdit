@@ -176,25 +176,60 @@ bool openFile(const gchar *filepath)
 	return TRUE;
 }
 
+char*	saveFileName;
+bool getSaveFile(void)
+{
+	GtkWidget *dialog;
+	char *filename;
+
+GtkWidget *dialog;
+dialog = gtk_file_chooser_dialog_new ("Save File",
+				      parent_window,
+				      GTK_FILE_CHOOSER_ACTION_SAVE,
+				      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				      GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+				      NULL);
+gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+if (user_edited_a_new_document)
+  {
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), default_folder_for_saving);
+    gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "Untitled document");
+  }
+else
+  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (dialog), filename_for_existing_document);
+if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+  {
+    char *filename;
+    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+    save_to_file (filename);
+    g_free (filename);
+  }
+gtk_widget_destroy (dialog);	gtk_widget_show_all(window);
+}
+
 bool saveFile(GtkWidget* widget,gpointer data)
 {
 	pageStruct* page=getPageStructPtr(-1);
 	GtkTextIter	start,end;
 	gchar*		text;
-	
+
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 	gtk_text_buffer_get_end_iter ((GtkTextBuffer*)page->buffer,&end);
 	text=gtk_text_buffer_get_text ((GtkTextBuffer*)page->buffer, &start, &end, FALSE);
 
 	gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,FALSE);
-	g_file_set_contents(page->filePath,text,-1,NULL);
+	if(page->filePath!=NULL)
+		g_file_set_contents(page->filePath,text,-1,NULL);
+	else
+		{
+			getSaveFile();
+		}
 
 	return(true);
 }
 
 void newFile(GtkWidget* widget,gpointer data)
 {
-#if false
 	GtkSourceLanguage*			lang=NULL;
 	GtkSourceLanguageManager*	lm=NULL;
 	GError*							err=NULL;
@@ -214,9 +249,7 @@ void newFile(GtkWidget* widget,gpointer data)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	lm=gtk_source_language_manager_new();
 	page->filePath=NULL;
-//	asprintf(&page->filePath,"%s",filepath);
 	page->buffer=gtk_source_buffer_new(NULL);
-	pageList=g_list_insert(pageList,(gpointer)page,currentPage);
 
 	g_object_ref(lm);
 	g_object_set_data_full(G_OBJECT(page->buffer),"languages-manager",lm,(GDestroyNotify)g_object_unref);
@@ -224,47 +257,18 @@ void newFile(GtkWidget* widget,gpointer data)
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
 	setFilePrefs(page->view);
-
 	gtk_container_add(GTK_CONTAINER(page->pageWindow),GTK_WIDGET(page->view));
 
 	vbox=gtk_vbox_new(true,4);
 	label=makeNewTab((char*)filename,NULL,page);
-	gtk_notebook_append_page(notebook,vbox,label);
+
+	g_object_set_data(G_OBJECT(vbox),"pagedata",(gpointer)page);
+
 	gtk_container_add(GTK_CONTAINER(vbox),GTK_WIDGET(page->pageWindow));
 
-	//lm=gtk_source_language_manager_get_default();
-	//mimetype=g_content_type_guess (filepath,NULL,0,&result_uncertain);
-	//if (result_uncertain)
-	//	{
-	//		g_free(mimetype);
-	//		mimetype=NULL;
-	//	}
+	gtk_notebook_append_page(notebook,vbox,label);
+	gtk_notebook_set_tab_reorderable(notebook,vbox,true);
 
-	//lang=gtk_source_language_manager_guess_language(lm,filepath,mimetype);
-
-	//if (lang==NULL)
-	//	{
-	//		getMimeType((char*)filepath,&mimetype);
-	//		lang=gtk_source_language_manager_guess_language(lm,filepath,mimetype);
-			//g_print("Language: [%s]\n", gtk_source_language_get_name(lang));
-	//if (lang!=NULL)
-	//	gtk_source_buffer_set_language(page->buffer,lang);
-		//}
-	//else
-	//	{
-			//g_print("Language: [%s]\n", gtk_source_language_get_name(lang));
-	//		gtk_source_buffer_set_language(page->buffer,lang);
-		//}
-
-//	g_file_get_contents(filepath,&buffer,(gsize*)&filelen,NULL);
-
-//	gtk_source_buffer_begin_not_undoable_action(page->buffer);
-//		gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
-//		gtk_text_buffer_insert (GTK_TEXT_BUFFER(page->buffer),&iter,buffer,filelen);
-//		g_free (buffer);
-//	gtk_source_buffer_end_not_undoable_action (page->buffer);
-//	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
-	//gtk_signal_connect(GTK_OBJECT(GTK_TEXT_BUFFER(page->buffer)),"modified-changed",G_CALLBACK(setSensitive),NULL);
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive), NULL);
 
     /* move cursor to the beginning */
@@ -277,7 +281,5 @@ void newFile(GtkWidget* widget,gpointer data)
 	currentPage++;
 	page->rebuildMenu=true;
 	gtk_widget_grab_focus((GtkWidget*)page->view);
-	//return TRUE;
-#endif
 }
 
