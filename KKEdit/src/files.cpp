@@ -52,7 +52,6 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	gtk_widget_set_tooltip_text(evbox,tooltip);
 	gtk_box_pack_start(GTK_BOX(hbox),label,false,false,0);
 
-//	gtk_widget_set_size_request(button,20,20);
 	gtk_button_set_focus_on_click(GTK_BUTTON(button),FALSE);
 	gtk_container_add(GTK_CONTAINER(button),close);
 
@@ -86,7 +85,6 @@ void setFilePrefs(GtkSourceView* sourceview)
 	gtk_widget_modify_font((GtkWidget*)sourceview,font_desc);
 	pango_font_description_free(font_desc);
 }
-char* tstr;
 
 bool openFile(const gchar *filepath)
 {
@@ -111,7 +109,6 @@ bool openFile(const gchar *filepath)
 
 	asprintf(&page->filePath,"%s",filepath);
 	page->buffer=gtk_source_buffer_new(NULL);
-	//pageList=g_list_insert(pageList,(gpointer)page,currentPage);
 
 	g_object_ref(lm);
 	g_object_set_data_full(G_OBJECT(page->buffer),"languages-manager",lm,(GDestroyNotify)g_object_unref);
@@ -164,14 +161,12 @@ bool openFile(const gchar *filepath)
 		g_free (buffer);
 	gtk_source_buffer_end_not_undoable_action (page->buffer);
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
-	//gtk_signal_connect(GTK_OBJECT(GTK_TEXT_BUFFER(page->buffer)),"modified-changed",G_CALLBACK(setSensitive),NULL);
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive), NULL);
 
     /* move cursor to the beginning */
 	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 
-//	g_object_set_data_full (G_OBJECT(page->buffer),"filename",g_strdup(filepath),(GDestroyNotify) g_free);
 	gtk_widget_show_all((GtkWidget*)window);
 	gtk_notebook_set_current_page(notebook,currentPage);
 	currentPage++;
@@ -183,9 +178,7 @@ bool openFile(const gchar *filepath)
 
 bool saveFile(GtkWidget* widget,gpointer data)
 {
-	/*
-	int			thispage=gtk_notebook_get_current_page(notebook);
-	pageStruct* page=(pageStruct*)g_list_nth_data(pageList,thispage);
+	pageStruct* page=getPageStructPtr(-1);
 	GtkTextIter	start,end;
 	gchar*		text;
 	
@@ -195,7 +188,7 @@ bool saveFile(GtkWidget* widget,gpointer data)
 
 	gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,FALSE);
 	g_file_set_contents(page->filePath,text,-1,NULL);
-*/
+
 	return(true);
 }
 
