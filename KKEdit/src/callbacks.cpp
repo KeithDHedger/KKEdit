@@ -11,6 +11,26 @@
 #include "globals.h"
 #include "files.h"
 
+pageStruct* getPageStructPtr(int pagenum)
+{
+	int			thispage;
+	GtkWidget*	pageBox;
+
+	if(pagenum==-1)
+		thispage=gtk_notebook_get_current_page(notebook);
+	else
+		thispage=pagenum;
+
+	pageBox=gtk_notebook_get_nth_page(notebook,thispage);
+
+//long test=(long)g_object_get_data(G_OBJECT(pageBox),"pagedata");
+char* teststr=(char*)g_object_get_data(G_OBJECT(pageBox),"pagedata");
+
+printf("QQQQQQQ%s\n",teststr);
+	return((pageStruct*)g_object_get_data(G_OBJECT(pageBox),"pagedata"));
+
+}
+
 void doOpenFile(GtkWidget* widget,gpointer data)
 {
 	GtkWidget *dialog;
@@ -45,15 +65,23 @@ int show_question(void)
 
 void closeTab(GtkWidget* widget,gpointer data)
 {
-	int	thispage;
-	int	result;
+	int			thispage;
+	int			result;
+	GtkWidget*	pageBox=widget;
 
+//	data=gtk_notebook_get_nth_page(notebook,thispage);
+//result = (long)g_object_get_data(G_OBJECT(data),"p1 data");
 	if(data==NULL)
-		thispage=gtk_notebook_get_current_page(notebook);
-	else
-		thispage=gtk_notebook_page_num(notebook,(GtkWidget *)data);
+		{
+			thispage=gtk_notebook_get_current_page(notebook);
+			pageBox=gtk_notebook_get_nth_page(notebook,thispage);
+		}
+		
+//	else
+//		thispage=gtk_notebook_page_num(notebook,(GtkWidget *)data);
 
-	pageStruct* page=(pageStruct*)g_list_nth_data(pageList,thispage);
+	//pageStruct* page=(pageStruct*)g_list_nth_data(pageList,thispage);
+	pageStruct* page=(pageStruct*)g_object_get_data(G_OBJECT(pageBox),"pagedata");
 
 	if(gtk_text_buffer_get_modified((GtkTextBuffer*)page->buffer))
 		{
@@ -71,11 +99,11 @@ void closeTab(GtkWidget* widget,gpointer data)
 				}
 		}
 		
-	gtk_notebook_remove_page(notebook,thispage);
 	g_free(page->filePath);
-	pageList=g_list_remove(pageList,(gconstpointer)page);
+//pageList=g_list_remove(pageList,(gconstpointer)page);
 	g_free(page);
 	currentPage--;
+	gtk_notebook_remove_page(notebook,thispage);
 }
 
 void getTagList(char* filepath,void* ptr)
@@ -100,7 +128,8 @@ void gotoLine(GtkWidget* widget,gpointer data)
 {
 	int	line=(long)data;
 	GtkTextIter iter;
-	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+	pageStruct*	page=getPageStructPtr(-1);
+	//=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
 
 	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,line-1,0);
 	gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
@@ -109,7 +138,8 @@ void gotoLine(GtkWidget* widget,gpointer data)
 
 void setSensitive(void)
 {
-	pageStruct*		page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+//	pageStruct*		page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+	pageStruct*		page=getPageStructPtr(-1);
 	const gchar*	text=gtk_label_get_text((GtkLabel*)page->tabName);
 	char*				newlabel;
 	int				offset=0;
@@ -142,7 +172,8 @@ void setSensitive(void)
 
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
 {
-	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,thispage);
+	pageStruct*	page=getPageStructPtr(thispage);
+//	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,thispage);
 	char*			functions;
 	GtkWidget*	menu;
 	GtkWidget*	menuitem;
@@ -156,15 +187,15 @@ long result;
 		gtk_menu_item_set_submenu((GtkMenuItem*)menunav,NULL);
 
 	currentTabNumber=thispage;
-GtkWidget *         data=gtk_notebook_get_nth_page(notebook,thispage);
-result = (long)g_object_get_data(G_OBJECT(data),"p1 data");
-printf("xxxx%izzz\n",result);
+//GtkWidget *         data=gtk_notebook_get_nth_page(notebook,thispage);
+//result = (long)g_object_get_data(G_OBJECT(data),"p1 data");
+//printf("xxxx%izzz\n",result);
 
 //	if(page->rebuildMenu==true)
 //		{
 //			printf("rebuilding menu for tab %i\n",thispage);
-			page->rebuildMenu=false;
 
+			page->rebuildMenu=false;
 			getTagList(page->filePath,&functions);
 			lineptr=functions;
 
@@ -199,35 +230,41 @@ printf("xxxx%izzz\n",result);
 
 void copyToClip(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+//	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+	pageStruct*	page=getPageStructPtr(-1);
 
 	gtk_text_buffer_copy_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD));
 }
 
 void cutToClip(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+//	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+//	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+	pageStruct*	page=getPageStructPtr(-1);
 
 	gtk_text_buffer_cut_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),true);
 }
 
 void pasteFromClip(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+//	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+	pageStruct*	page=getPageStructPtr(-1);
 
 	gtk_text_buffer_paste_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),NULL,true);
 }
 
 void undo(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+//	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+	pageStruct*	page=getPageStructPtr(-1);
 	gtk_source_buffer_undo(page->buffer);
 	setSensitive();
 }
 
 void redo(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+//	pageStruct*	page=(pageStruct*)g_list_nth_data(pageList,currentTabNumber);
+	pageStruct*	page=getPageStructPtr(-1);
 	gtk_source_buffer_redo(page->buffer);
 	setSensitive();
 }

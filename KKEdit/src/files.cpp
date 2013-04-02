@@ -86,6 +86,7 @@ void setFilePrefs(GtkSourceView* sourceview)
 	gtk_widget_modify_font((GtkWidget*)sourceview,font_desc);
 	pango_font_description_free(font_desc);
 }
+char* tstr;
 
 bool openFile(const gchar *filepath)
 {
@@ -110,7 +111,7 @@ bool openFile(const gchar *filepath)
 
 	asprintf(&page->filePath,"%s",filepath);
 	page->buffer=gtk_source_buffer_new(NULL);
-	pageList=g_list_insert(pageList,(gpointer)page,currentPage);
+	//pageList=g_list_insert(pageList,(gpointer)page,currentPage);
 
 	g_object_ref(lm);
 	g_object_set_data_full(G_OBJECT(page->buffer),"languages-manager",lm,(GDestroyNotify)g_object_unref);
@@ -123,13 +124,13 @@ bool openFile(const gchar *filepath)
 
 	vbox=gtk_vbox_new(true,4);
 	label=makeNewTab((char*)filename,(char*)filepath,page);
-	gtk_notebook_append_page(notebook,vbox,label);
 
-
-//	gtk_notebook_set_tab_reorderable(notebook,vbox,true);
-g_object_set_data(G_OBJECT(vbox),"p1 data",(gpointer)currentPage);
+	g_object_set_data(G_OBJECT(vbox),"pagedata",(gpointer)page);
 
 	gtk_container_add(GTK_CONTAINER(vbox),GTK_WIDGET(page->pageWindow));
+
+	gtk_notebook_append_page(notebook,vbox,label);
+	gtk_notebook_set_tab_reorderable(notebook,vbox,true);
 
 	lm=gtk_source_language_manager_get_default();
 	mimetype=g_content_type_guess (filepath,NULL,0,&result_uncertain);
@@ -170,17 +171,19 @@ g_object_set_data(G_OBJECT(vbox),"p1 data",(gpointer)currentPage);
 	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 
-	g_object_set_data_full (G_OBJECT(page->buffer),"filename",g_strdup(filepath),(GDestroyNotify) g_free);
+//	g_object_set_data_full (G_OBJECT(page->buffer),"filename",g_strdup(filepath),(GDestroyNotify) g_free);
 	gtk_widget_show_all((GtkWidget*)window);
 	gtk_notebook_set_current_page(notebook,currentPage);
 	currentPage++;
 	page->rebuildMenu=true;
 	gtk_widget_grab_focus((GtkWidget*)page->view);
+
 	return TRUE;
 }
 
 bool saveFile(GtkWidget* widget,gpointer data)
 {
+	/*
 	int			thispage=gtk_notebook_get_current_page(notebook);
 	pageStruct* page=(pageStruct*)g_list_nth_data(pageList,thispage);
 	GtkTextIter	start,end;
@@ -192,12 +195,13 @@ bool saveFile(GtkWidget* widget,gpointer data)
 
 	gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,FALSE);
 	g_file_set_contents(page->filePath,text,-1,NULL);
-
+*/
 	return(true);
 }
 
 void newFile(GtkWidget* widget,gpointer data)
 {
+#if false
 	GtkSourceLanguage*			lang=NULL;
 	GtkSourceLanguageManager*	lm=NULL;
 	GError*							err=NULL;
@@ -281,5 +285,6 @@ void newFile(GtkWidget* widget,gpointer data)
 	page->rebuildMenu=true;
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 	//return TRUE;
+#endif
 }
 
