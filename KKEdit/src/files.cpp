@@ -49,7 +49,6 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	GtkRcStyle*	style=gtk_rc_style_new();
 
 	gtk_button_set_relief((GtkButton*)button,GTK_RELIEF_NONE);
-//	gtk_widget_set_tooltip_text(evbox,tooltip);
 	gtk_widget_set_tooltip_text(label,tooltip);
 	gtk_box_pack_start(GTK_BOX(hbox),label,false,false,0);
 
@@ -91,17 +90,13 @@ bool openFile(const gchar *filepath)
 {
 	GtkSourceLanguage*			lang=NULL;
 	GtkSourceLanguageManager*	lm=NULL;
-	GError*							err=NULL;
 	GtkTextIter						iter;
-
 	gchar*							buffer;
 	long								filelen;
-
 	GtkWidget*						label;
 	gchar*							filename=g_path_get_basename(filepath);
 	char*								mimetype;
 	gboolean							result_uncertain;
-
 	pageStruct*						page=(pageStruct*)malloc(sizeof(pageStruct));
 
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
@@ -177,36 +172,30 @@ bool openFile(const gchar *filepath)
 	return TRUE;
 }
 
-char*	saveFileName;
-char*	saveFilePath;
+char*	saveFileName=NULL;
+char*	saveFilePath=NULL;
 
-bool getSaveFile(void)
+void getSaveFile(void)
 {
 	GtkWidget*	dialog;
-	//char *filename;
-	gchar*		filename;
-//	GtkWidget	dialog;
 
 	dialog=gtk_file_chooser_dialog_new("Save File",(GtkWindow*)window, GTK_FILE_CHOOSER_ACTION_SAVE,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_SAVE,GTK_RESPONSE_ACCEPT,NULL);
 
 	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER (dialog),TRUE);
-//	if (user_edited_a_new_document)
- // {
- //   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), default_folder_for_saving);
-	gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER (dialog),"Untitled");
-//  }
-//else
-//  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (dialog), filename_for_existing_document);
+	if(saveFileName!=NULL)
+		{
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),g_path_get_dirname(saveFilePath));
+			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),saveFileName);
+		}
+ 	else
+		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER (dialog),"Untitled");
+
 	if(gtk_dialog_run (GTK_DIALOG (dialog))==GTK_RESPONSE_ACCEPT)
 		{
-	//		char *filename;
 			saveFilePath=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 			saveFileName=g_path_get_basename(saveFilePath);
-
-
- //   save_to_file (filename);
- //   g_free (filename);
 		}
+
 	gtk_widget_destroy (dialog);
 	gtk_widget_show_all(window);
 }
@@ -219,25 +208,30 @@ bool saveFile(GtkWidget* widget,gpointer data)
 	char*			newlabel;
 
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
-	gtk_text_buffer_get_end_iter ((GtkTextBuffer*)page->buffer,&end);
-	text=gtk_text_buffer_get_text ((GtkTextBuffer*)page->buffer, &start, &end, FALSE);
+	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer, &start, &end, FALSE);
 
 	gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,FALSE);
-	if(page->filePath!=NULL)
+	if(page->filePath!=NULL && data==NULL)
 		g_file_set_contents(page->filePath,text,-1,NULL);
 	else
 		{
+			if(data!=NULL)
+				{
+					saveFilePath=page->filePath;
+					saveFileName=(char*)gtk_label_get_text((GtkLabel*)page->tabName);
+				}
 			getSaveFile();
-			asprintf(&page->filePath,"%s",saveFilePath);
-			//g_file_set_contents(page->filePath,text,-1,NULL);
-		//	printf("XXXX%s\n",page->filePath);
-		//	asprintf(&page->tabName,"%s",saveFileName);
+			page->filePath=saveFilePath;
 
 			gtk_widget_set_tooltip_text(page->tabName,page->filePath);
-
 			gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)saveFileName);
+			g_file_set_contents(page->filePath,text,-1,NULL);
+
 			g_free(newlabel);
 
+			saveFileName=NULL;
+			saveFilePath=NULL;
 		}
 
 	return(true);
@@ -245,29 +239,15 @@ bool saveFile(GtkWidget* widget,gpointer data)
 
 void newFile(GtkWidget* widget,gpointer data)
 {
-	GtkSourceLanguage*			lang=NULL;
-	GtkSourceLanguageManager*	lm=NULL;
-	GError*							err=NULL;
 	GtkTextIter						iter;
-
-	gchar*							buffer;
-	long								filelen;
-
 	GtkWidget*						label;
 	const char*						filename="Untitled";
-	const char*						mimetype="text/plain";
-
-
 	pageStruct*						page=(pageStruct*)malloc(sizeof(pageStruct));
 
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	lm=gtk_source_language_manager_new();
 	page->filePath=NULL;
 	page->buffer=gtk_source_buffer_new(NULL);
-
-	g_object_ref(lm);
-	g_object_set_data_full(G_OBJECT(page->buffer),"languages-manager",lm,(GDestroyNotify)g_object_unref);
 
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
@@ -290,7 +270,6 @@ void newFile(GtkWidget* widget,gpointer data)
 	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 
-	//g_object_set_data_full (G_OBJECT(page->buffer),"filename",g_strdup(filepath),(GDestroyNotify) g_free);
 	gtk_widget_show_all((GtkWidget*)window);
 	gtk_notebook_set_current_page(notebook,currentPage);
 	currentPage++;

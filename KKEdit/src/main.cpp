@@ -73,7 +73,7 @@ int main(int argc,char **argv)
 //saveas
 	saveasButton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE_AS);
 	gtk_toolbar_insert((GtkToolbar*)toolbar,saveasButton,-1);
-//	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(saveFile),NULL);
+	gtk_signal_connect(GTK_OBJECT(saveasButton),"clicked",G_CALLBACK(saveFile),(void*)1);
 //close
 	closeButton=gtk_tool_button_new_from_stock(GTK_STOCK_CLOSE);
 	gtk_toolbar_insert((GtkToolbar*)toolbar,closeButton,-1);
@@ -125,12 +125,13 @@ int main(int argc,char **argv)
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //save
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(saveFile),NULL);
+	saveMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),saveMenu);
+	gtk_signal_connect(GTK_OBJECT(saveMenu),"activate",G_CALLBACK(saveFile),NULL);
 //savas
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE_AS,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(saveFile),(void*)1);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);

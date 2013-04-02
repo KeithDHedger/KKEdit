@@ -109,7 +109,7 @@ void gotoLine(GtkWidget* widget,gpointer data)
 
 void setSensitive(void)
 {
-	pageStruct*		page=getPageStructPtr(-1);
+	pageStruct*		page=getPageStructPtr(currentTabNumber);
 	const gchar*	text=gtk_label_get_text((GtkLabel*)page->tabName);
 	char*				newlabel;
 	int				offset=0;
@@ -122,6 +122,7 @@ void setSensitive(void)
 //menu
 	gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));
 	gtk_widget_set_sensitive((GtkWidget*)redoMenu,gtk_source_buffer_can_redo(page->buffer));
+	gtk_widget_set_sensitive((GtkWidget*)saveMenu,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
 
 //tab
 	gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
