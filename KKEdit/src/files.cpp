@@ -70,27 +70,18 @@ void setFilePrefs(GtkSourceView* sourceview)
 
 bool openFile(const gchar *filepath)
 {
-//	GtkSourceLanguage*			lang=NULL;
-//	GtkSourceLanguageManager*	lm=NULL;
 	GtkTextIter						iter;
 	gchar*							buffer;
 	long								filelen;
 	GtkWidget*						label;
 	gchar*							filename=g_path_get_basename(filepath);
-//	char*								mimetype;
-//	gboolean							result_uncertain;
 	pageStruct*						page=(pageStruct*)malloc(sizeof(pageStruct));
 
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-//	lm=gtk_source_language_manager_new();
 
 	asprintf(&page->filePath,"%s",filepath);
 	page->buffer=gtk_source_buffer_new(NULL);
-
-//	g_object_ref(lm);
-//	g_object_set_data_full(G_OBJECT(page->buffer),"languages-manager",lm,(GDestroyNotify)g_object_unref);
-
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
 	setFilePrefs(page->view);
@@ -106,30 +97,6 @@ bool openFile(const gchar *filepath)
 
 	gtk_notebook_append_page(notebook,vbox,label);
 	gtk_notebook_set_tab_reorderable(notebook,vbox,true);
-
-//	lm=gtk_source_language_manager_get_default();
-//	mimetype=g_content_type_guess (filepath,NULL,0,&result_uncertain);
-//	if (result_uncertain)
-//		{
-///			g_free(mimetype);
-//			mimetype=NULL;
-//		}
-
-//	lang=gtk_source_language_manager_guess_language(lm,filepath,mimetype);
-
-//	if (lang==NULL)
-//		{
-//			getMimeType((char*)filepath,&mimetype);
-//			lang=gtk_source_language_manager_guess_language(lm,filepath,mimetype);
-//			//g_print("Language: [%s]\n", gtk_source_language_get_name(lang));
-//			if (lang!=NULL)
-//				gtk_source_buffer_set_language(page->buffer,lang);
-//		}
-//	else
-//		{
-//			//g_print("Language: [%s]\n", gtk_source_language_get_name(lang));
-//			gtk_source_buffer_set_language(page->buffer,lang);
-//		}
 
 	setLanguage(page);
 

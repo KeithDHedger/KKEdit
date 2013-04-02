@@ -1,6 +1,6 @@
 /*
  *
- * K.D.Hedger 2012 <kdhedger68713@gmail.com>
+ * K.D.Hedger 2013 <kdhedger68713@gmail.com>
  *
 */
  
@@ -57,7 +57,12 @@ int main(int argc,char **argv)
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)toolbar,false,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)notebook,true,true,0);
 
-//	toolbar
+//dnd
+		gtk_drag_dest_set(vbox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
+		gtk_drag_dest_add_uri_targets(vbox);
+		g_signal_connect (G_OBJECT(vbox),"drag_data_received",G_CALLBACK(dropUri),NULL);
+
+//toolbar
 //new
 	newButton=gtk_tool_button_new_from_stock(GTK_STOCK_NEW);
 	gtk_toolbar_insert((GtkToolbar*)toolbar,newButton,-1);
@@ -188,7 +193,7 @@ int main(int argc,char **argv)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //nav menu
-	menunav=gtk_menu_item_new_with_label("Navigation");
+	menunav=gtk_menu_item_new_with_label("Functions");
 //	menu=gtk_menu_new();
 //	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),menu);
 

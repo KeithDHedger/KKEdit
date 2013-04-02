@@ -23,5 +23,5 @@ void cutToClip(GtkWidget* widget,gpointer data);
 void pasteFromClip(GtkWidget* widget,gpointer data);
 void undo(GtkWidget* widget,gpointer data);
 void redo(GtkWidget* widget,gpointer data);
-
+void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data);
 #endif
