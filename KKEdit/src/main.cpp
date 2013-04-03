@@ -32,15 +32,33 @@ void init(void)
 	lineWrap=true;
 	asprintf(&fontAndSize,"%s","mono 10");
 }
+		GtkTextIter iter;
+		GtkTextIter match_start,match_end;
 
 void response(GtkDialog *dialog,gint response_id,gpointer user_data)
 {
+//		GtkTextBuffer *buffer = gtk_text_view_get_buffer (view);
+		pageStruct* page=getPageStructPtr(-1);
+
 	switch (response_id)
 		{
 			case GTK_RESPONSE_YES:
 				//asprintf(&filename,"%s",gtk_entry_get_text((GtkEntry*)entryBox));
 				printf("ok\n");
 				printf("%s\n",gtk_entry_get_text((GtkEntry*)entryBox));
+				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+				if(gtk_text_iter_forward_search(&iter,gtk_entry_get_text((GtkEntry*)entryBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&match_start,&match_end,NULL))
+					{
+						gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&match_start,&match_end);
+						
+					}
+				else
+					{
+						GtkTextIter insert = iter;
+						gtk_text_buffer_get_start_iter ((GtkTextBuffer*)page->buffer, &iter);
+						if (gtk_text_iter_forward_search (&iter, gtk_entry_get_text((GtkEntry*)entryBox), GTK_TEXT_SEARCH_VISIBLE_ONLY, &match_start, &match_end, &insert))
+							gtk_text_buffer_select_range ((GtkTextBuffer*)page->buffer, &match_start, &match_end);
+					}
 				break;
 //			case DELETETHEME:
 //				printf("ok\n");
