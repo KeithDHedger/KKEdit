@@ -18,6 +18,8 @@
 #include "files.h"
 #include "callbacks.h"
 
+GtkWidget*	entryBox;
+
 void shutdown(GtkWidget* widget,gpointer data)
 {
 	gtk_main_quit();
@@ -29,6 +31,61 @@ void init(void)
 	lineNumbers=true;
 	lineWrap=true;
 	asprintf(&fontAndSize,"%s","mono 10");
+}
+
+void response(GtkDialog *dialog,gint response_id,gpointer user_data)
+{
+	switch (response_id)
+		{
+			case GTK_RESPONSE_YES:
+				//asprintf(&filename,"%s",gtk_entry_get_text((GtkEntry*)entryBox));
+				printf("ok\n");
+				printf("%s\n",gtk_entry_get_text((GtkEntry*)entryBox));
+				break;
+//			case DELETETHEME:
+//				printf("ok\n");
+//				asprintf(&filename,"%s",gtk_entry_get_text((GtkEntry*)entryBox));
+//				if (filename!=NULL && strlen(filename)>0)
+//					{
+//						sprintf(generalBuffer,"%s/%s.db",customFolder,filename);
+//						remove(generalBuffer);
+//						sprintf(generalBuffer,"%s/%s.png",customFolder,filename);
+//						remove(generalBuffer);
+//						freeAndNull(&filename);
+//						rerunAndUpdate(true,true);
+//					}
+			default :
+				printf("zzz%i\n",response_id);
+				break;
+		}
+//	gtk_widget_hide((GtkWidget*)dialog);
+}
+
+
+void buildFindReplace(void)
+{
+	GtkWidget*	content_area;
+	GtkWidget*	replace;
+	GtkWidget*	image;
+
+	findReplaceDialog=gtk_dialog_new_with_buttons("Find/Replace",(GtkWindow*)window,GTK_DIALOG_MODAL,GTK_STOCK_FIND,GTK_RESPONSE_YES,"Replace",100,GTK_STOCK_GO_FORWARD,200,GTK_STOCK_GO_BACK,300,NULL);
+	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,GTK_RESPONSE_OK);
+	g_signal_connect(G_OBJECT(findReplaceDialog),"response",G_CALLBACK(response),NULL);
+	content_area=gtk_dialog_get_content_area(GTK_DIALOG(findReplaceDialog));
+
+	entryBox=gtk_entry_new();
+	gtk_entry_set_text((GtkEntry*)entryBox,"");
+	gtk_entry_set_activates_default((GtkEntry*)entryBox,true);
+	gtk_container_add(GTK_CONTAINER(content_area),entryBox);
+
+	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,100);
+	image=gtk_image_new_from_stock(GTK_STOCK_FIND_AND_REPLACE,GTK_ICON_SIZE_BUTTON);
+	gtk_button_set_image((GtkButton*)replace,image);
+
+	gtk_widget_show  (entryBox);
+
+	gtk_signal_connect_object(GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(findReplaceDialog));
+	gtk_signal_connect (GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
 }
 
 int main(int argc,char **argv)
@@ -111,6 +168,14 @@ int main(int argc,char **argv)
 	gtk_toolbar_insert((GtkToolbar*)toolbar,redoButton,-1);
 	gtk_signal_connect(GTK_OBJECT(redoButton),"clicked",G_CALLBACK(redo),NULL);
 
+	gtk_toolbar_insert((GtkToolbar*)toolbar,gtk_separator_tool_item_new(),-1);
+
+//find
+	toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_FIND);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(find),NULL);
+
+//replace
 
 //menus
 //file menu
@@ -217,6 +282,6 @@ int main(int argc,char **argv)
 		openFile(argv[j]);
 
 	gtk_widget_show_all(window);
-
+	buildFindReplace();
 	gtk_main();
 }
