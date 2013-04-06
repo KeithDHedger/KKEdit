@@ -118,6 +118,8 @@ bool openFile(const gchar *filepath)
 	gtk_notebook_set_current_page(notebook,currentPage);
 	currentPage++;
 	page->rebuildMenu=true;
+	page->isFirst=true;
+
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 
 	return TRUE;
@@ -225,6 +227,8 @@ void newFile(GtkWidget* widget,gpointer data)
 	gtk_notebook_set_current_page(notebook,currentPage);
 	currentPage++;
 	page->rebuildMenu=true;
+	page->isFirst=true;
+
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 }
 

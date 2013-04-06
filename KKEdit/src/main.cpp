@@ -34,11 +34,6 @@ void init(void)
 	asprintf(&fontAndSize,"%s","mono 10");
 }
 
-//GtkTextIter iter;
-//GtkTextIter match_start;
-//GtkTextIter match_end;
-//bool			isFirst=true;
-
 void response(GtkDialog *dialog,gint response_id,gpointer user_data)
 {
 	pageStruct* page=getPageStructPtr(-1);
@@ -104,7 +99,7 @@ void response(GtkDialog *dialog,gint response_id,gpointer user_data)
 				page->isFirst=true;
 				break;
 
-			default :
+			default:
 				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 				page->isFirst=true;
 				page->match_start=page->iter;
