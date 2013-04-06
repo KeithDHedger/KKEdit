@@ -32,53 +32,43 @@ void init(void)
 	lineWrap=true;
 	asprintf(&fontAndSize,"%s","mono 10");
 }
-		GtkTextIter iter;
-		GtkTextIter match_start,match_end;
+
+GtkTextIter iter;
+GtkTextIter match_start;
+GtkTextIter match_end;
+bool			isFirst=true;
 
 void response(GtkDialog *dialog,gint response_id,gpointer user_data)
 {
-//		GtkTextBuffer *buffer = gtk_text_view_get_buffer (view);
-		pageStruct* page=getPageStructPtr(-1);
+	pageStruct* page=getPageStructPtr(-1);
 
 	switch (response_id)
 		{
 			case GTK_RESPONSE_YES:
-				//asprintf(&filename,"%s",gtk_entry_get_text((GtkEntry*)entryBox));
-				printf("ok\n");
-				printf("%s\n",gtk_entry_get_text((GtkEntry*)entryBox));
-				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-				if(gtk_text_iter_forward_search(&iter,gtk_entry_get_text((GtkEntry*)entryBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&match_start,&match_end,NULL))
+				if(isFirst==true)
 					{
-						gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&match_start,&match_end);
-						
+						gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+						isFirst=false;
 					}
 				else
 					{
-						GtkTextIter insert = iter;
-						gtk_text_buffer_get_start_iter ((GtkTextBuffer*)page->buffer, &iter);
-						if (gtk_text_iter_forward_search (&iter, gtk_entry_get_text((GtkEntry*)entryBox), GTK_TEXT_SEARCH_VISIBLE_ONLY, &match_start, &match_end, &insert))
-							gtk_text_buffer_select_range ((GtkTextBuffer*)page->buffer, &match_start, &match_end);
+						iter=match_end;
 					}
+
+				if(gtk_text_iter_forward_search(&iter,gtk_entry_get_text((GtkEntry*)entryBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&match_start,&match_end,NULL))
+					{
+						gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&match_start,&match_end);
+						gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&match_start,0,true,0,0.5);
+					}
+
 				break;
-//			case DELETETHEME:
-//				printf("ok\n");
-//				asprintf(&filename,"%s",gtk_entry_get_text((GtkEntry*)entryBox));
-//				if (filename!=NULL && strlen(filename)>0)
-//					{
-//						sprintf(generalBuffer,"%s/%s.db",customFolder,filename);
-//						remove(generalBuffer);
-//						sprintf(generalBuffer,"%s/%s.png",customFolder,filename);
-//						remove(generalBuffer);
-//						freeAndNull(&filename);
-//						rerunAndUpdate(true,true);
-//					}
+
 			default :
 				printf("zzz%i\n",response_id);
+				isFirst=true;
 				break;
 		}
-//	gtk_widget_hide((GtkWidget*)dialog);
 }
-
 
 void buildFindReplace(void)
 {
@@ -86,7 +76,7 @@ void buildFindReplace(void)
 	GtkWidget*	replace;
 	GtkWidget*	image;
 
-	findReplaceDialog=gtk_dialog_new_with_buttons("Find/Replace",(GtkWindow*)window,GTK_DIALOG_MODAL,GTK_STOCK_FIND,GTK_RESPONSE_YES,"Replace",100,GTK_STOCK_GO_FORWARD,200,GTK_STOCK_GO_BACK,300,NULL);
+	findReplaceDialog=gtk_dialog_new_with_buttons("Find/Replace",(GtkWindow*)window, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_FIND,GTK_RESPONSE_YES,"Replace",100,GTK_STOCK_GO_FORWARD,200,GTK_STOCK_GO_BACK,300,NULL);
 	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,GTK_RESPONSE_OK);
 	g_signal_connect(G_OBJECT(findReplaceDialog),"response",G_CALLBACK(response),NULL);
 	content_area=gtk_dialog_get_content_area(GTK_DIALOG(findReplaceDialog));
