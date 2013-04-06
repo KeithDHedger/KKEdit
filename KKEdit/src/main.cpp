@@ -38,7 +38,7 @@ void buildFindReplace(void)
 	GtkWidget*	image;
 	GtkWidget*	label;
 
-	findReplaceDialog=gtk_dialog_new_with_buttons("Find/Replace",(GtkWindow*)window, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_FIND,GTK_RESPONSE_YES,"Replace",100,GTK_STOCK_GO_FORWARD,200,GTK_STOCK_GO_BACK,300,NULL);
+	findReplaceDialog=gtk_dialog_new_with_buttons("Find/Replace",(GtkWindow*)window, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_FIND_AND_REPLACE,400,"Replace",100,GTK_STOCK_GO_FORWARD,200,GTK_STOCK_GO_BACK,300,NULL);
 	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,GTK_RESPONSE_OK);
 	g_signal_connect(G_OBJECT(findReplaceDialog),"response",G_CALLBACK(doFindReplace),NULL);
 	content_area=gtk_dialog_get_content_area(GTK_DIALOG(findReplaceDialog));
