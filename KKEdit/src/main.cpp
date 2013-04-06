@@ -45,15 +45,8 @@ void response(GtkDialog *dialog,gint response_id,gpointer user_data)
 	switch (response_id)
 		{
 			case GTK_RESPONSE_YES:
-				if(isFirst==true)
-					{
-						gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-						isFirst=false;
-					}
-				else
-					{
-						iter=match_end;
-					}
+				isFirst=false;
+				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 
 				if(gtk_text_iter_forward_search(&iter,gtk_entry_get_text((GtkEntry*)entryBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&match_start,&match_end,NULL))
 					{
@@ -63,8 +56,26 @@ void response(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 				break;
 
+			case FINDNEXT:
+					if(isFirst==true)
+						{
+							gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+							isFirst=false;
+						}
+					else
+						{
+							iter=match_end;
+						}
+
+					if(gtk_text_iter_forward_search(&iter,gtk_entry_get_text((GtkEntry*)entryBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&match_start,&match_end,NULL))
+						{
+							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&match_start,&match_end);
+							gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&match_start,0,true,0,0.5);
+						}
+
+					break;
+
 			default :
-				printf("zzz%i\n",response_id);
 				isFirst=true;
 				break;
 		}
