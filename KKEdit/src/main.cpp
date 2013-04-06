@@ -18,7 +18,8 @@
 #include "files.h"
 #include "callbacks.h"
 
-GtkWidget*	entryBox;
+GtkWidget*	findBox;
+GtkWidget*	replaceBox;
 
 void shutdown(GtkWidget* widget,gpointer data)
 {
@@ -48,7 +49,7 @@ void response(GtkDialog *dialog,gint response_id,gpointer user_data)
 				isFirst=false;
 				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 
-				if(gtk_text_iter_forward_search(&iter,gtk_entry_get_text((GtkEntry*)entryBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&match_start,&match_end,NULL))
+				if(gtk_text_iter_forward_search(&iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&match_start,&match_end,NULL))
 					{
 						gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&match_start,&match_end);
 						gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&match_start,0,true,0,0.5);
@@ -63,11 +64,9 @@ void response(GtkDialog *dialog,gint response_id,gpointer user_data)
 							isFirst=false;
 						}
 					else
-						{
-							iter=match_end;
-						}
+						iter=match_end;
 
-					if(gtk_text_iter_forward_search(&iter,gtk_entry_get_text((GtkEntry*)entryBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&match_start,&match_end,NULL))
+					if(gtk_text_iter_forward_search(&iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&match_start,&match_end,NULL))
 						{
 							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&match_start,&match_end);
 							gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&match_start,0,true,0,0.5);
@@ -75,8 +74,37 @@ void response(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 					break;
 
-			default :
+			case FINDPREV:
+					if(isFirst==true)
+						{
+							gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+							isFirst=false;
+						}
+					else
+						iter=match_start;
+
+					if(gtk_text_iter_backward_search(&iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&match_start,&match_end,NULL))
+						{
+							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&match_start,&match_end);
+							gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&match_start,0,true,0,0.5);
+						}
+
+					break;
+
+			case REPLACE:
+				gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&match_start,&match_end);
+				gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&match_start,gtk_entry_get_text((GtkEntry*)replaceBox),-1);
+				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+				match_start=iter;
+				match_end=iter;
 				isFirst=true;
+				break;
+
+			default :
+				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+				isFirst=true;
+				match_start=iter;
+				match_end=iter;
 				break;
 		}
 }
@@ -86,22 +114,37 @@ void buildFindReplace(void)
 	GtkWidget*	content_area;
 	GtkWidget*	replace;
 	GtkWidget*	image;
+	GtkWidget*	label;
 
 	findReplaceDialog=gtk_dialog_new_with_buttons("Find/Replace",(GtkWindow*)window, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_FIND,GTK_RESPONSE_YES,"Replace",100,GTK_STOCK_GO_FORWARD,200,GTK_STOCK_GO_BACK,300,NULL);
 	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,GTK_RESPONSE_OK);
 	g_signal_connect(G_OBJECT(findReplaceDialog),"response",G_CALLBACK(response),NULL);
 	content_area=gtk_dialog_get_content_area(GTK_DIALOG(findReplaceDialog));
 
-	entryBox=gtk_entry_new();
-	gtk_entry_set_text((GtkEntry*)entryBox,"");
-	gtk_entry_set_activates_default((GtkEntry*)entryBox,true);
-	gtk_container_add(GTK_CONTAINER(content_area),entryBox);
+	label=gtk_label_new("Find");
+	gtk_container_add(GTK_CONTAINER(content_area),label);
+	gtk_widget_show(label);
+
+	findBox=gtk_entry_new();
+	gtk_entry_set_text((GtkEntry*)findBox,"");
+	gtk_entry_set_activates_default((GtkEntry*)findBox,true);
+	gtk_container_add(GTK_CONTAINER(content_area),findBox);
+
+	label=gtk_label_new("Replace With");
+	gtk_container_add(GTK_CONTAINER(content_area),label);
+	gtk_widget_show(label);
+
+	replaceBox=gtk_entry_new();
+	gtk_entry_set_text((GtkEntry*)replaceBox,"");
+	gtk_entry_set_activates_default((GtkEntry*)replaceBox,true);
+	gtk_container_add(GTK_CONTAINER(content_area),replaceBox);
 
 	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,100);
 	image=gtk_image_new_from_stock(GTK_STOCK_FIND_AND_REPLACE,GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image((GtkButton*)replace,image);
 
-	gtk_widget_show  (entryBox);
+	gtk_widget_show(findBox);
+	gtk_widget_show(replaceBox);
 
 	gtk_signal_connect_object(GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(findReplaceDialog));
 	gtk_signal_connect (GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
