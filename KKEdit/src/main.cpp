@@ -18,9 +18,6 @@
 #include "files.h"
 #include "callbacks.h"
 
-GtkWidget*	findBox;
-GtkWidget*	replaceBox;
-
 void shutdown(GtkWidget* widget,gpointer data)
 {
 	gtk_main_quit();
@@ -34,82 +31,6 @@ void init(void)
 	asprintf(&fontAndSize,"%s","mono 10");
 }
 
-void response(GtkDialog *dialog,gint response_id,gpointer user_data)
-{
-	pageStruct* page=getPageStructPtr(-1);
-
-	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
-	switch (response_id)
-		{
-			case GTK_RESPONSE_YES:
-				page->isFirst=false;
-				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-
-				if(gtk_text_iter_forward_search(&page->iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&page->match_start,&page->match_end,NULL))
-					{
-						gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-						gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
-					}
-
-				break;
-
-			case FINDNEXT:
-					if(page->isFirst==true)
-						{
-							gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-							page->isFirst=false;
-						}
-					else
-						page->iter=page->match_end;
-
-					if(gtk_text_iter_forward_search(&page->iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&page->match_start,&page->match_end,NULL))
-						{
-							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-							gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
-						}
-
-					break;
-
-			case FINDPREV:
-					if(page->isFirst==true)
-						{
-							gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-							page->isFirst=false;
-						}
-					else
-						page->iter=page->match_start;
-
-					if(gtk_text_iter_backward_search(&page->iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&page->match_start,&page->match_end,NULL))
-						{
-							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-							gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
-						}
-
-					break;
-
-			case REPLACE:
-				if(page->isFirst==false)
-					{
-						gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-						gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,gtk_entry_get_text((GtkEntry*)replaceBox),-1);
-						gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-						page->match_start=page->iter;
-						page->match_end=page->iter;
-					}
-				page->isFirst=true;
-				break;
-
-			default:
-				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-				page->isFirst=true;
-				page->match_start=page->iter;
-				page->match_end=page->iter;
-				break;
-		}
-	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
-
-}
-
 void buildFindReplace(void)
 {
 	GtkWidget*	content_area;
@@ -119,7 +40,7 @@ void buildFindReplace(void)
 
 	findReplaceDialog=gtk_dialog_new_with_buttons("Find/Replace",(GtkWindow*)window, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_FIND,GTK_RESPONSE_YES,"Replace",100,GTK_STOCK_GO_FORWARD,200,GTK_STOCK_GO_BACK,300,NULL);
 	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,GTK_RESPONSE_OK);
-	g_signal_connect(G_OBJECT(findReplaceDialog),"response",G_CALLBACK(response),NULL);
+	g_signal_connect(G_OBJECT(findReplaceDialog),"response",G_CALLBACK(doFindReplace),NULL);
 	content_area=gtk_dialog_get_content_area(GTK_DIALOG(findReplaceDialog));
 
 	label=gtk_label_new("Find");

@@ -20,6 +20,17 @@
 #include "callbacks.h"
 
 GtkWidget*	vbox;
+void newCursor (GtkTextBuffer *textbuffer,GtkTextIter *location,GtkTextMark *mark,gpointer user_data)
+{
+	pageStruct*	page=(pageStruct*)user_data;
+
+	const gchar* name=gtk_text_mark_get_name(mark);
+	if((name!=NULL) && (strcasecmp(name,"insert")==0))
+		{
+			page->isFirst=false;
+			printf("XXXX\n");
+		}
+}
 
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
@@ -108,7 +119,8 @@ bool openFile(const gchar *filepath)
 		g_free (buffer);
 	gtk_source_buffer_end_not_undoable_action (page->buffer);
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
-	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive), NULL);
+	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
+//	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(newCursor),(void*)page);
 
     /* move cursor to the beginning */
 	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
@@ -218,6 +230,7 @@ void newFile(GtkWidget* widget,gpointer data)
 	gtk_notebook_set_tab_reorderable(notebook,vbox,true);
 
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive), NULL);
+	g_signal_connect(G_OBJECT(page->buffer),"source-mark-updated",G_CALLBACK(newCursor), NULL);
 
     /* move cursor to the beginning */
 	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
