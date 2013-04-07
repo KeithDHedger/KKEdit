@@ -74,10 +74,10 @@ void buildFindReplace(void)
 
 int main(int argc,char **argv)
 {
-	GtkWidget*		vbox;
-	GtkWidget*		menuitem;
-	GtkWidget*		menu;
-	GtkWidget*		toolbar;
+	GtkWidget*	vbox;
+	GtkWidget*	menuitem;
+	GtkWidget*	menu;
+	GtkWidget*	toolbar;
 	GtkToolItem*	toolbutton;
 
 	gtk_init(&argc,&argv);
@@ -99,9 +99,9 @@ int main(int argc,char **argv)
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)notebook,true,true,0);
 
 //dnd
-		gtk_drag_dest_set(vbox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
-		gtk_drag_dest_add_uri_targets(vbox);
-		g_signal_connect (G_OBJECT(vbox),"drag_data_received",G_CALLBACK(dropUri),NULL);
+	gtk_drag_dest_set(vbox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
+	gtk_drag_dest_add_uri_targets(vbox);
+	g_signal_connect (G_OBJECT(vbox),"drag_data_received",G_CALLBACK(dropUri),NULL);
 
 //toolbar
 //new

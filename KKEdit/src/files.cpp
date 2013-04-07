@@ -20,17 +20,6 @@
 #include "callbacks.h"
 
 GtkWidget*	vbox;
-void newCursor (GtkTextBuffer *textbuffer,GtkTextIter *location,GtkTextMark *mark,gpointer user_data)
-{
-	pageStruct*	page=(pageStruct*)user_data;
-
-	const gchar* name=gtk_text_mark_get_name(mark);
-	if((name!=NULL) && (strcasecmp(name,"insert")==0))
-		{
-			page->isFirst=false;
-			printf("XXXX\n");
-		}
-}
 
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
@@ -63,7 +52,7 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 
 void setFilePrefs(GtkSourceView* sourceview)
 {
-	PangoFontDescription*		font_desc;
+	PangoFontDescription*	font_desc;
 
 	if(indent==true)
 		gtk_source_view_set_auto_indent(sourceview,true);
@@ -81,12 +70,12 @@ void setFilePrefs(GtkSourceView* sourceview)
 
 bool openFile(const gchar *filepath)
 {
-	GtkTextIter						iter;
-	gchar*							buffer;
-	long								filelen;
-	GtkWidget*						label;
-	gchar*							filename=g_path_get_basename(filepath);
-	pageStruct*						page=(pageStruct*)malloc(sizeof(pageStruct));
+	GtkTextIter	iter;
+	gchar*		buffer;
+	long		filelen;
+	GtkWidget*	label;
+	gchar*		filename=g_path_get_basename(filepath);
+	pageStruct*	page=(pageStruct*)malloc(sizeof(pageStruct));
 
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -120,7 +109,6 @@ bool openFile(const gchar *filepath)
 	gtk_source_buffer_end_not_undoable_action (page->buffer);
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
-//	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(newCursor),(void*)page);
 
     /* move cursor to the beginning */
 	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
@@ -167,10 +155,9 @@ void getSaveFile(void)
 
 bool saveFile(GtkWidget* widget,gpointer data)
 {
-	pageStruct* page=getPageStructPtr(-1);
+	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start,end;
 	gchar*		text;
-	char*			newlabel;
 
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
@@ -193,8 +180,6 @@ bool saveFile(GtkWidget* widget,gpointer data)
 			gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)saveFileName);
 			g_file_set_contents(page->filePath,text,-1,NULL);
 
-			g_free(newlabel);
-
 			saveFileName=NULL;
 			saveFilePath=NULL;
 		}
@@ -204,10 +189,10 @@ bool saveFile(GtkWidget* widget,gpointer data)
 
 void newFile(GtkWidget* widget,gpointer data)
 {
-	GtkTextIter						iter;
-	GtkWidget*						label;
-	const char*						filename="Untitled";
-	pageStruct*						page=(pageStruct*)malloc(sizeof(pageStruct));
+	GtkTextIter	iter;
+	GtkWidget*	label;
+	const char*	filename="Untitled";
+	pageStruct*	page=(pageStruct*)malloc(sizeof(pageStruct));
 
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -230,7 +215,6 @@ void newFile(GtkWidget* widget,gpointer data)
 	gtk_notebook_set_tab_reorderable(notebook,vbox,true);
 
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive), NULL);
-	g_signal_connect(G_OBJECT(page->buffer),"source-mark-updated",G_CALLBACK(newCursor), NULL);
 
     /* move cursor to the beginning */
 	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
