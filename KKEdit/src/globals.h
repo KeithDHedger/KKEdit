@@ -53,6 +53,8 @@ extern int			currentPage;
 extern bool			indent;
 extern bool			lineNumbers;
 extern bool			lineWrap;
+extern bool			highLight;
+extern int			tabWidth;
 extern char*			fontAndSize;
 
 extern int			currentTabNumber;

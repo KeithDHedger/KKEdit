@@ -42,7 +42,6 @@ void shutdown(GtkWidget* widget,gpointer data)
 								return;
 								break;
 						}
-
 				}
 		}
 	gtk_main_quit();
@@ -53,6 +52,8 @@ void init(void)
 	indent=true;
 	lineNumbers=true;
 	lineWrap=true;
+	highLight=true;
+	tabWidth=4;
 	asprintf(&fontAndSize,"%s","mono 10");
 }
 
@@ -184,7 +185,10 @@ int main(int argc,char **argv)
 	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
 	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(find),NULL);
 
-//replace
+//navigation
+	toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_DIALOG_QUESTION);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(goToDefinition),NULL);
 
 //menus
 //file menu

@@ -54,14 +54,17 @@ void setFilePrefs(GtkSourceView* sourceview)
 {
 	PangoFontDescription*	font_desc;
 
-	if(indent==true)
-		gtk_source_view_set_auto_indent(sourceview,true);
+	//if(indent==true)
+	gtk_source_view_set_auto_indent(sourceview,indent);
 
-	if(lineNumbers==true)
-		gtk_source_view_set_show_line_numbers(sourceview,true);
+	//if(lineNumbers==true)
+	gtk_source_view_set_show_line_numbers(sourceview,lineNumbers);
 
-	if(lineWrap==true)
-		gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_WORD);
+	//if(lineWrap==true)
+	gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_WORD);
+
+	gtk_source_view_set_highlight_current_line(sourceview,highLight);
+	gtk_source_view_set_tab_width(sourceview,tabWidth);
 
 	font_desc=pango_font_description_from_string(fontAndSize);
 	gtk_widget_modify_font((GtkWidget*)sourceview,font_desc);

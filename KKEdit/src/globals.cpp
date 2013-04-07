@@ -34,6 +34,8 @@ int		currentPage=0;
 bool		indent;
 bool		lineNumbers;
 bool		lineWrap;
+bool		highLight;
+int		tabWidth;
 char*		fontAndSize;
 
 int		currentTabNumber;
