@@ -120,8 +120,6 @@ void setLanguage(pageStruct* page)
 
 }
 
-
-
 int getTabFormPath(char* filepath)
 {
 }
