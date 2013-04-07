@@ -3,7 +3,7 @@
  * K.D.Hedger 2013 <kdhedger68713@gmail.com>
  *
 */
- 
+
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <string.h>
@@ -33,6 +33,7 @@ void shutdown(GtkWidget* widget,gpointer data)
 					switch(result)
 						{
 							case GTK_RESPONSE_YES:
+								gtk_notebook_set_current_page(notebook,loop);
 								saveFile(NULL,NULL);
 								break;
 							case GTK_RESPONSE_NO:
@@ -265,10 +266,18 @@ int main(int argc,char **argv)
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_FIND_AND_REPLACE,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
-//nav menu
-	menunav=gtk_menu_item_new_with_label("Functions");
+//navigaion menu
+	menunav=gtk_menu_item_new_with_label("Navigation");
+	menu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),menu);
+	menuitem=gtk_menu_item_new_with_label("Go To Definition");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
+
+//function menu
+	menufunc=gtk_menu_item_new_with_label("Functions");
 //	menu=gtk_menu_new();
-//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),menu);
+//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufunc),menu);
 
 //bookmarks
 	menubookmark=gtk_menu_item_new_with_label("Bookmarks");
@@ -282,6 +291,7 @@ int main(int argc,char **argv)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufile);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuedit);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menunav);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufunc);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menubookmark);
 
 	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)vbox);

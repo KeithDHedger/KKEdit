@@ -154,9 +154,9 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	char		tmpstr[1024];
 	char*		lineptr;
 
-	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menunav);
+	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menufunc);
 	if (submenu!=NULL)
-		gtk_menu_item_set_submenu((GtkMenuItem*)menunav,NULL);
+		gtk_menu_item_set_submenu((GtkMenuItem*)menufunc,NULL);
 
 	currentTabNumber=thispage;
 
@@ -171,7 +171,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 			page->isFirst=true;
 
 			page->navSubMenu=(GtkMenuItem*)gtk_menu_new();
-			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),(GtkWidget*)page->navSubMenu);
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufunc),(GtkWidget*)page->navSubMenu);
 
 			while (lineptr!=NULL)
 				{
@@ -191,8 +191,8 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 //		{
 //				printf("just switch neu\n");)
 //			menu=gtk_menu_new();
-//			gtk_menu_item_set_submenu((GtkMenuItem*)menunav,NULL);
-//			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),(GtkWidget*)page->navSubMenu);
+//			gtk_menu_item_set_submenu((GtkMenuItem*)menufunc,NULL);
+//			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufunc),(GtkWidget*)page->navSubMenu);
 //			gtk_menu_shell_append(GTK_MENU_SHELL(menu),(GtkWidget*)page->navSubMenu);
 //			gtk_widget_show_all(window);
 //		}
@@ -279,7 +279,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 							gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 					}
 
-				if(gtk_text_iter_forward_search(&page->iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&page->match_start,&page->match_end,NULL))
+				if(gtk_text_iter_forward_search(&page->iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_TEXT_ONLY,&page->match_start,&page->match_end,NULL))
 					{
 						gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 						gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
@@ -362,8 +362,21 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 }
 
 
+void goToDefinition(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=getPageStructPtr(-1);
+	GtkTextIter	start;
+	GtkTextIter	end;
+	char*		selection;
 
-
+	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+		{
+			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+			printf("XXX%s\n",selection);
+		}
+	//gtk_text_buffer_copy_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD));
+	
+}
 
 
 
