@@ -18,6 +18,7 @@
 #include "files.h"
 #include "callbacks.h"
 
+
 void shutdown(GtkWidget* widget,gpointer data)
 {
 	int		numpages=gtk_notebook_get_n_pages(notebook);
