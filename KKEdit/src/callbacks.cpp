@@ -361,21 +361,51 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 }
 
-
 void goToDefinition(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
-	char*		selection;
+	char*		selection=NULL;
+	int		numpages=gtk_notebook_get_n_pages(notebook);
+	char*		functions;
+	char		name[1024];
+	int		line;
+	char*		file;
+	char*		lineptr;
+	GtkTextIter	iter;
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
-			printf("XXX%s\n",selection);
+			if(selection==NULL)
+				return;
 		}
-	//gtk_text_buffer_copy_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD));
-	
+	else
+		return;
+
+	for(int loop=0;loop<numpages;loop++)
+		{
+			page=getPageStructPtr(loop);
+			getTagList(page->filePath,&functions);
+			lineptr=functions;
+			while (lineptr!=NULL)
+				{
+					sscanf (lineptr,"%s %*s %i",name,&line);
+					lineptr=strchr(lineptr,'\n');
+					if (lineptr!=NULL)
+						lineptr++;
+
+					if((strcasecmp(name,selection)==0))
+						{
+							gtk_notebook_set_current_page(notebook,loop);
+							gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,line-1,0);
+							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
+							gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
+							return;
+						}
+				}
+		}
 }
 
 
