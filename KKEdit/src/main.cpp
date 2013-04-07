@@ -20,6 +20,30 @@
 
 void shutdown(GtkWidget* widget,gpointer data)
 {
+	int		numpages=gtk_notebook_get_n_pages(notebook);
+	int		result;
+	pageStruct*	page;
+
+	for(int loop=0;loop<numpages;loop++)
+		{
+			page=getPageStructPtr(loop);
+			if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)))
+				{
+					result=show_question(g_path_get_basename(page->filePath));
+					switch(result)
+						{
+							case GTK_RESPONSE_YES:
+								saveFile(NULL,NULL);
+								break;
+							case GTK_RESPONSE_NO:
+								break;
+							default:
+								return;
+								break;
+						}
+
+				}
+		}
 	gtk_main_quit();
 }
 
