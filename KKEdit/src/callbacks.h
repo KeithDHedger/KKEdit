@@ -28,6 +28,5 @@ void find(GtkWidget* widget,gpointer data);
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data);
 int show_question(char* filename);
 void goToDefinition(GtkWidget* widget,gpointer data);
-void findDefinition(GtkWidget* widget,gpointer data);
 
 #endif

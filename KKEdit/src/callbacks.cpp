@@ -371,9 +371,17 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 	char*		functions;
 	char		name[1024];
 	int		line;
-	char*		file;
+	char		file[4096];
 	char*		lineptr;
 	GtkTextIter	iter;
+
+	char*	command;
+	gchar*	stdout=NULL;
+	gchar*	stderr=NULL;
+	gint	retval=0;
+
+	int	intab=-1;
+
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
@@ -406,30 +414,8 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 						}
 				}
 		}
-}
-
-void findDefinition(GtkWidget* widget,gpointer data)
-{
-	pageStruct*	page=getPageStructPtr(-1);
-	GtkTextIter	start;
-	GtkTextIter	end;
-	char*		selection=NULL;
-	int		numpages=gtk_notebook_get_n_pages(notebook);
-	char*		functions;
-	char		name[1024];
-	int		line;
-	char*		file[4096];
-	char*		lineptr;
-	GtkTextIter	iter;
-
-
-	char*	command;
-	gchar*	stdout=NULL;
-	gchar*	stderr=NULL;
-	gint	retval=0;
-
-	int	intab=-1;
-
+//not in any open files
+//check ./
 	asprintf(&command,"ctags -xR .");
 	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
 	if (retval==0)
@@ -437,17 +423,6 @@ void findDefinition(GtkWidget* widget,gpointer data)
 			stdout[strlen(stdout)-1]=0;
 			g_free(stderr);
 		}
-
-
-	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
-		{
-			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
-			if(selection==NULL)
-				return;
-		}
-	else
-		return;
-
 
 	lineptr=stdout;
 	while (lineptr!=NULL)
@@ -459,24 +434,9 @@ void findDefinition(GtkWidget* widget,gpointer data)
 
 			if((strcasecmp(name,selection)==0))
 				{
-					intab=getTabFromPath((char*)&file);
-					printf("function %s, line %i, file %s tab %i\n",name,line,file,intab);
-					if(intab!=-1)
-						{
-							gtk_notebook_set_current_page(notebook,intab);
-							page=getPageStructPtr(intab);
-							gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,line-1,0);
-							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
-							gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
-							g_free(stdout);
-							return;
-						}
-					else
-						{
-							openFile((char*)&file,line-1);
-							g_free(stdout);
-							return;
-						}
+					openFile((char*)&file,line-1);
+					g_free(stdout);
+					return;
 				}
 		}
 }
