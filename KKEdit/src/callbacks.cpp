@@ -375,13 +375,11 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 	char*		lineptr;
 	GtkTextIter	iter;
 
-	char*	command;
-	gchar*	stdout=NULL;
-	gchar*	stderr=NULL;
-	gint	retval=0;
-
-	int	intab=-1;
-
+	char*		command;
+	gchar*		stdout=NULL;
+	gchar*		stderr=NULL;
+	gint		retval=0;
+	int		intab=-1;
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
