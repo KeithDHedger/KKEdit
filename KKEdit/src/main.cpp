@@ -18,7 +18,6 @@
 #include "files.h"
 #include "callbacks.h"
 
-
 void shutdown(GtkWidget* widget,gpointer data)
 {
 	int		numpages=gtk_notebook_get_n_pages(notebook);
@@ -274,6 +273,9 @@ int main(int argc,char **argv)
 	menuitem=gtk_menu_item_new_with_label("Go To Definition");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
+	menuitem=gtk_menu_item_new_with_label("Find And Open");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(findDefinition),NULL);
 
 //function menu
 	menufunc=gtk_menu_item_new_with_label("Functions");

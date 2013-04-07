@@ -408,5 +408,66 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 		}
 }
 
+void findDefinition(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=getPageStructPtr(-1);
+	GtkTextIter	start;
+	GtkTextIter	end;
+	char*		selection=NULL;
+	int		numpages=gtk_notebook_get_n_pages(notebook);
+	char*		functions;
+	char		name[1024];
+	int		line;
+	char*		file[4096];
+	char*		lineptr;
+	GtkTextIter	iter;
+
+
+	char*	command;
+	gchar*	stdout=NULL;
+	gchar*	stderr=NULL;
+	gint	retval=0;
+
+	asprintf(&command,"ctags -xR .");
+	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
+	if (retval==0)
+		{
+			stdout[strlen(stdout)-1]=0;
+			//asprintf((char**)ptr,"%s",stdout);
+			//g_free(stdout);
+			g_free(stderr);
+		}
+
+
+	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+		{
+			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+			if(selection==NULL)
+				return;
+		}
+	else
+		return;
+
+
+	lineptr=stdout;
+	while (lineptr!=NULL)
+		{
+			sscanf (lineptr,"%s %*s %i %s",name,&line,file);
+			lineptr=strchr(lineptr,'\n');
+			if (lineptr!=NULL)
+				lineptr++;
+
+			if((strcasecmp(name,selection)==0))
+				{
+					printf("function %s, line %i, file %s\n",name,line,file);
+					//gtk_notebook_set_current_page(notebook,loop);
+					//gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,line-1,0);
+					//gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
+					//gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
+					g_free(stdout);
+					return;
+				}
+		}
+}
 
 
