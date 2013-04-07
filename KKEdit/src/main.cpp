@@ -300,7 +300,7 @@ int main(int argc,char **argv)
 	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)vbox);
 
 	for (int j=1;j<argc;j++)
-		openFile(argv[j]);
+		openFile(argv[j],0);
 
 	gtk_widget_show_all(window);
 	buildFindReplace();

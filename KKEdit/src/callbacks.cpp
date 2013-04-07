@@ -20,7 +20,7 @@ void doOpenFile(GtkWidget* widget,gpointer data)
 	if (gtk_dialog_run(GTK_DIALOG (dialog))==GTK_RESPONSE_ACCEPT)
 		{
 			filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-			openFile(filename);
+			openFile(filename,0);
 			g_free (filename);
 		}
 	gtk_widget_destroy (dialog);
@@ -244,7 +244,7 @@ void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectio
 	for(int j=0;j<cnt;j++)
 		{
 			filename=g_filename_from_uri(array[j],NULL,NULL);
-			openFile(filename);
+			openFile(filename,0);
 		}
 
 	g_strfreev(array);
@@ -428,13 +428,13 @@ void findDefinition(GtkWidget* widget,gpointer data)
 	gchar*	stderr=NULL;
 	gint	retval=0;
 
+	int	intab=-1;
+
 	asprintf(&command,"ctags -xR .");
 	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
 	if (retval==0)
 		{
 			stdout[strlen(stdout)-1]=0;
-			//asprintf((char**)ptr,"%s",stdout);
-			//g_free(stdout);
 			g_free(stderr);
 		}
 
@@ -459,13 +459,24 @@ void findDefinition(GtkWidget* widget,gpointer data)
 
 			if((strcasecmp(name,selection)==0))
 				{
-					printf("function %s, line %i, file %s\n",name,line,file);
-					//gtk_notebook_set_current_page(notebook,loop);
-					//gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,line-1,0);
-					//gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
-					//gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
-					g_free(stdout);
-					return;
+					intab=getTabFromPath((char*)&file);
+					printf("function %s, line %i, file %s tab %i\n",name,line,file,intab);
+					if(intab!=-1)
+						{
+							gtk_notebook_set_current_page(notebook,intab);
+							page=getPageStructPtr(intab);
+							gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,line-1,0);
+							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
+							gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
+							g_free(stdout);
+							return;
+						}
+					else
+						{
+							openFile((char*)&file,line-1);
+							g_free(stdout);
+							return;
+						}
 				}
 		}
 }

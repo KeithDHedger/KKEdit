@@ -68,7 +68,7 @@ void setFilePrefs(GtkSourceView* sourceview)
 	pango_font_description_free(font_desc);
 }
 
-bool openFile(const gchar *filepath)
+bool openFile(const gchar *filepath,int linenumber)
 {
 	GtkTextIter	iter;
 	gchar*		buffer;
@@ -76,6 +76,7 @@ bool openFile(const gchar *filepath)
 	GtkWidget*	label;
 	gchar*		filename=g_path_get_basename(filepath);
 	pageStruct*	page=(pageStruct*)malloc(sizeof(pageStruct));
+	GtkTextMark*	scroll2mark=gtk_text_mark_new(NULL,true);
 
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -110,10 +111,7 @@ bool openFile(const gchar *filepath)
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
 
-    /* move cursor to the beginning */
-	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-
+ 
 	gtk_widget_show_all((GtkWidget*)window);
 	gtk_notebook_set_current_page(notebook,currentPage);
 	currentPage++;
@@ -121,6 +119,15 @@ bool openFile(const gchar *filepath)
 	page->isFirst=true;
 
 	gtk_widget_grab_focus((GtkWidget*)page->view);
+	
+   /* move cursor to the linenumber */
+	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,linenumber,0);
+	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
+	gtk_text_iter_set_line(&iter,linenumber);
+	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark,&iter);  
+	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
+	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
 
 	return TRUE;
 }

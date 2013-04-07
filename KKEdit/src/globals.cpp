@@ -120,8 +120,18 @@ void setLanguage(pageStruct* page)
 
 }
 
-int getTabFormPath(char* filepath)
+int getTabFromPath(char* filepath)
 {
+	pageStruct*	page;
+	int		numpages=gtk_notebook_get_n_pages(notebook);
+
+	for(int loop=0;loop<numpages;loop++)
+		{
+			page=getPageStructPtr(loop);
+			if(strstr(page->filePath,filepath)!=NULL)
+				return(loop);
+		}
+	return(-1);
 }
 
 

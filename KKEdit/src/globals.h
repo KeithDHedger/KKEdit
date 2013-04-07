@@ -72,7 +72,7 @@ extern GtkWidget*		replaceBox;
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
-int getTabFormPath(char* filepath);
+int getTabFromPath(char* filepath);
 
 #endif
 
