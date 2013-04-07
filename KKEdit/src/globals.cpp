@@ -16,29 +16,29 @@
 
 #include "globals.h"
 
-GtkWidget*	window=NULL;
+GtkWidget*		window=NULL;
 GtkNotebook*	notebook=NULL;
-GtkWidget*	menubar=NULL;
-GtkWidget*	menufile;
-GtkWidget*	menuedit;
-GtkWidget*	menufunc;
-GtkWidget*	menunav;
+GtkWidget*		menubar=NULL;
+GtkWidget*		menufile;
+GtkWidget*		menuedit;
+GtkWidget*		menufunc;
+GtkWidget*		menunav;
 
-GtkWidget*	menubookmark;
-GtkWidget*	redoMenu;
-GtkWidget*	undoMenu;
-GtkWidget*	saveMenu;
+GtkWidget*		menubookmark;
+GtkWidget*		redoMenu;
+GtkWidget*		undoMenu;
+GtkWidget*		saveMenu;
 
-int		currentPage=0;
+int				currentPage=0;
 
-bool		indent;
-bool		lineNumbers;
-bool		lineWrap;
-bool		highLight;
-int		tabWidth;
-char*		fontAndSize;
+bool			indent;
+bool			lineNumbers;
+bool			lineWrap;
+bool			highLight;
+int				tabWidth;
+char*			fontAndSize;
 
-int		currentTabNumber;
+int				currentTabNumber;
 
 GtkToolItem*	newButton;
 GtkToolItem*	openButton;
@@ -48,13 +48,13 @@ GtkToolItem*	closeButton;
 GtkToolItem*	redoButton;
 GtkToolItem*	undoButton;
 
-GtkWidget*	findReplaceDialog;
-GtkWidget*	findBox;
-GtkWidget*	replaceBox;
+GtkWidget*		findReplaceDialog;
+GtkWidget*		findBox;
+GtkWidget*		replaceBox;
 
 pageStruct* getPageStructPtr(int pagenum)
 {
-	int		thispage;
+	int			thispage;
 	GtkWidget*	pageBox;
 
 	if(pagenum==-1)
@@ -87,10 +87,10 @@ void getMimeType(char* filepath,void* ptr)
 
 void setLanguage(pageStruct* page)
 {
-	GtkSourceLanguage*		lang=NULL;
+	GtkSourceLanguage*			lang=NULL;
 	GtkSourceLanguageManager*	lm=NULL;
-	char*				mimetype;
-	gboolean			result_uncertain;
+	char*						mimetype;
+	gboolean					result_uncertain;
 
 	lm=gtk_source_language_manager_new();
 
@@ -125,7 +125,7 @@ void setLanguage(pageStruct* page)
 int getTabFromPath(char* filepath)
 {
 	pageStruct*	page;
-	int		numpages=gtk_notebook_get_n_pages(notebook);
+	int			numpages=gtk_notebook_get_n_pages(notebook);
 
 	for(int loop=0;loop<numpages;loop++)
 		{

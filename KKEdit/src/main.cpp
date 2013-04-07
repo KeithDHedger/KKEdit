@@ -20,8 +20,8 @@
 
 void shutdown(GtkWidget* widget,gpointer data)
 {
-	int		numpages=gtk_notebook_get_n_pages(notebook);
-	int		result;
+	int			numpages=gtk_notebook_get_n_pages(notebook);
+	int			result;
 	pageStruct*	page;
 
 	for(int loop=0;loop<numpages;loop++)
@@ -100,10 +100,10 @@ void buildFindReplace(void)
 
 int main(int argc,char **argv)
 {
-	GtkWidget*	vbox;
-	GtkWidget*	menuitem;
-	GtkWidget*	menu;
-	GtkWidget*	toolbar;
+	GtkWidget*		vbox;
+	GtkWidget*		menuitem;
+	GtkWidget*		menu;
+	GtkWidget*		toolbar;
 	GtkToolItem*	toolbutton;
 
 	gtk_init(&argc,&argv);

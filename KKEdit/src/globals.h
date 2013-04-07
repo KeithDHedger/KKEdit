@@ -24,15 +24,14 @@ struct pageStruct
 	GtkScrolledWindow*	pageWindow;
 	GtkSourceBuffer*	buffer;
 	GtkSourceView*		view;
-	char*			filePath;
+	char*				filePath;
 	GtkMenuItem*		navSubMenu;
-	bool			rebuildMenu;
-	GtkWidget*		tabName;
-	GtkTextIter		iter;
-	GtkTextIter		match_start;
-	GtkTextIter		match_end;
-	bool			isFirst;
-
+	bool				rebuildMenu;
+	GtkWidget*			tabName;
+	GtkTextIter			iter;
+	GtkTextIter			match_start;
+	GtkTextIter			match_end;
+	bool				isFirst;
 };
 
 extern GtkWidget*		window;
@@ -48,16 +47,16 @@ extern GtkWidget*		redoMenu;
 extern GtkWidget*		undoMenu;
 extern GtkWidget*		saveMenu;
 
-extern int			currentPage;
+extern int				currentPage;
 
-extern bool			indent;
-extern bool			lineNumbers;
-extern bool			lineWrap;
-extern bool			highLight;
-extern int			tabWidth;
+extern bool				indent;
+extern bool				lineNumbers;
+extern bool				lineWrap;
+extern bool				highLight;
+extern int				tabWidth;
 extern char*			fontAndSize;
 
-extern int			currentTabNumber;
+extern int				currentTabNumber;
 
 extern GtkToolItem*		newButton;
 extern GtkToolItem*		openButton;

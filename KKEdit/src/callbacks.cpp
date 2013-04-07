@@ -49,7 +49,7 @@ int show_question(char* filename)
 void closeTab(GtkWidget* widget,gpointer data)
 {
 	long		thispage;
-	int		result;
+	int			result;
 	pageStruct*	page;
 
 	if(data==NULL)
@@ -101,7 +101,7 @@ void getTagList(char* filepath,void* ptr)
 
 void gotoLine(GtkWidget* widget,gpointer data)
 {
-	int		line=(long)data;
+	int			line=(long)data;
 	GtkTextIter	iter;
 	pageStruct*	page=getPageStructPtr(-1);
 
@@ -112,10 +112,10 @@ void gotoLine(GtkWidget* widget,gpointer data)
 
 void setSensitive(void)
 {
-	pageStruct*	page=getPageStructPtr(currentTabNumber);
+	pageStruct*		page=getPageStructPtr(currentTabNumber);
 	const gchar*	text=gtk_label_get_text((GtkLabel*)page->tabName);
-	char*		newlabel;
-	int		offset=0;
+	char*			newlabel;
+	int				offset=0;
 
 //toolbar
 	gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
@@ -150,7 +150,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	char*		functions;
 //	GtkWidget*	menu;
 	GtkWidget*	menuitem;
-	int		linenum;
+	int			linenum;
 	char		tmpstr[1024];
 	char*		lineptr;
 
@@ -222,23 +222,31 @@ void pasteFromClip(GtkWidget* widget,gpointer data)
 void undo(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
-	gtk_source_buffer_undo(page->buffer);
-	page->isFirst=true;
-	setSensitive();
+
+	if(gtk_source_buffer_can_undo(page->buffer));
+		{
+			gtk_source_buffer_undo(page->buffer);
+			page->isFirst=true;
+			setSensitive();
+		}
 }
 
 void redo(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
-	gtk_source_buffer_redo(page->buffer);
-	page->isFirst=true;
-	setSensitive();
+
+	if(gtk_source_buffer_can_redo(page->buffer));
+		{
+			gtk_source_buffer_redo(page->buffer);
+			page->isFirst=true;
+			setSensitive();
+		}
 }
 
 void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
 {
 	gchar**	array=gtk_selection_data_get_uris(selection_data);
-	int	cnt=g_strv_length(array);
+	int		cnt=g_strv_length(array);
 	char*	filename;
 
 	for(int j=0;j<cnt;j++)
@@ -367,10 +375,10 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
-	int		numpages=gtk_notebook_get_n_pages(notebook);
+	int			numpages=gtk_notebook_get_n_pages(notebook);
 	char*		functions;
 	char		name[1024];
-	int		line;
+	int			line;
 	char		file[4096];
 	char*		lineptr;
 	GtkTextIter	iter;
@@ -379,7 +387,7 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 	gchar*		stdout=NULL;
 	gchar*		stderr=NULL;
 	gint		retval=0;
-	int		intab=-1;
+	int			intab=-1;
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{

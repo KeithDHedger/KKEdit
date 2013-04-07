@@ -20,6 +20,9 @@
 #include "callbacks.h"
 
 GtkWidget*	vbox;
+char*		saveFileName=NULL;
+char*		saveFilePath=NULL;
+
 
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
@@ -54,16 +57,12 @@ void setFilePrefs(GtkSourceView* sourceview)
 {
 	PangoFontDescription*	font_desc;
 
-	//if(indent==true)
 	gtk_source_view_set_auto_indent(sourceview,indent);
-
-	//if(lineNumbers==true)
 	gtk_source_view_set_show_line_numbers(sourceview,lineNumbers);
+	gtk_source_view_set_highlight_current_line(sourceview,highLight);
 
-	//if(lineWrap==true)
 	gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_WORD);
 
-	gtk_source_view_set_highlight_current_line(sourceview,highLight);
 	gtk_source_view_set_tab_width(sourceview,tabWidth);
 
 	font_desc=pango_font_description_from_string(fontAndSize);
@@ -73,12 +72,12 @@ void setFilePrefs(GtkSourceView* sourceview)
 
 bool openFile(const gchar *filepath,int linenumber)
 {
-	GtkTextIter	iter;
-	gchar*		buffer;
-	long		filelen;
-	GtkWidget*	label;
-	gchar*		filename=g_path_get_basename(filepath);
-	pageStruct*	page=(pageStruct*)malloc(sizeof(pageStruct));
+	GtkTextIter		iter;
+	gchar*			buffer;
+	long			filelen;
+	GtkWidget*		label;
+	gchar*			filename=g_path_get_basename(filepath);
+	pageStruct*		page=(pageStruct*)malloc(sizeof(pageStruct));
 	GtkTextMark*	scroll2mark=gtk_text_mark_new(NULL,true);
 
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
@@ -135,9 +134,6 @@ bool openFile(const gchar *filepath,int linenumber)
 	return TRUE;
 }
 
-char*	saveFileName=NULL;
-char*	saveFilePath=NULL;
-
 void getSaveFile(void)
 {
 	GtkWidget*	dialog;
@@ -151,15 +147,15 @@ void getSaveFile(void)
 			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),saveFileName);
 		}
  	else
-		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER (dialog),"Untitled");
+		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),"Untitled");
 
-	if(gtk_dialog_run (GTK_DIALOG (dialog))==GTK_RESPONSE_ACCEPT)
+	if(gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_ACCEPT)
 		{
 			saveFilePath=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 			saveFileName=g_path_get_basename(saveFilePath);
 		}
 
-	gtk_widget_destroy (dialog);
+	gtk_widget_destroy(dialog);
 	gtk_widget_show_all(window);
 }
 
