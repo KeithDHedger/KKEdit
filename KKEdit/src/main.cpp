@@ -47,6 +47,19 @@ void shutdown(GtkWidget* widget,gpointer data)
 	gtk_main_quit();
 }
 
+void readConfig(void)
+{
+	FILE*	fd;
+	char*	filename;
+
+	asprintf(&filename,"%s/.config/kkedit.rc",getenv("HOME"));
+	fd=fopen(filename,"r");
+	if (fd!=NULL)
+		{
+			fscanf(fd
+		}
+}
+
 void init(void)
 {
 	indent=true;

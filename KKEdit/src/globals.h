@@ -32,6 +32,7 @@ struct pageStruct
 	GtkTextIter			match_start;
 	GtkTextIter			match_end;
 	bool				isFirst;
+	char*				fileName;
 };
 
 extern GtkWidget*		window;

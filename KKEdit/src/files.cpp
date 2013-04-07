@@ -84,6 +84,8 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
 	asprintf(&page->filePath,"%s",filepath);
+	asprintf(&page->fileName,"%s",filename);
+	
 	page->buffer=gtk_source_buffer_new(NULL);
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
@@ -92,7 +94,7 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_container_add(GTK_CONTAINER(page->pageWindow),GTK_WIDGET(page->view));
 
 	vbox=gtk_vbox_new(true,4);
-	label=makeNewTab((char*)filename,(char*)filepath,page);
+	label=makeNewTab(page->fileName,page->filePath,page);
 
 	g_object_set_data(G_OBJECT(vbox),"pagedata",(gpointer)page);
 
@@ -131,6 +133,8 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
 	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
 
+	g_free(filename);
+//	g_free(filepath);
 	return TRUE;
 }
 
@@ -177,10 +181,11 @@ bool saveFile(GtkWidget* widget,gpointer data)
 			if(data!=NULL)
 				{
 					saveFilePath=page->filePath;
-					saveFileName=(char*)gtk_label_get_text((GtkLabel*)page->tabName);
+					saveFileName=page->fileName;
 				}
 			getSaveFile();
 			page->filePath=saveFilePath;
+			page->fileName=saveFileName;
 
 			gtk_widget_set_tooltip_text(page->tabName,page->filePath);
 			gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)saveFileName);
@@ -197,21 +202,21 @@ void newFile(GtkWidget* widget,gpointer data)
 {
 	GtkTextIter	iter;
 	GtkWidget*	label;
-	const char*	filename="Untitled";
+	//const char*	filename="Untitled";
 	pageStruct*	page=(pageStruct*)malloc(sizeof(pageStruct));
 
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	page->filePath=NULL;
 	page->buffer=gtk_source_buffer_new(NULL);
-
+	asprintf(&page->fileName,"Untitled");
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
 	setFilePrefs(page->view);
 	gtk_container_add(GTK_CONTAINER(page->pageWindow),GTK_WIDGET(page->view));
 
 	vbox=gtk_vbox_new(true,4);
-	label=makeNewTab((char*)filename,NULL,page);
+	label=makeNewTab(page->fileName,NULL,page);
 
 	g_object_set_data(G_OBJECT(vbox),"pagedata",(gpointer)page);
 

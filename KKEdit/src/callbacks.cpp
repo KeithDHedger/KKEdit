@@ -184,6 +184,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 					gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
 					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
 				}
+			gtk_window_set_title((GtkWindow*)window,page->fileName);
 			gtk_widget_show_all(window);
 			g_free(functions);
 //		}
