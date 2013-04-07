@@ -222,6 +222,7 @@ void undo(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	gtk_source_buffer_undo(page->buffer);
+	page->isFirst=true;
 	setSensitive();
 }
 
@@ -229,6 +230,7 @@ void redo(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	gtk_source_buffer_redo(page->buffer);
+	page->isFirst=true;
 	setSensitive();
 }
 
@@ -262,43 +264,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 	switch (response_id)
 		{
-			case FINDANDREPLACE:
-						if(page->isFirst==true)
-							{
-								gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-								page->isFirst=false;
-								gtk_text_iter_forward_search(&page->iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&page->match_start,&page->match_end,NULL);
-							}
-						else
-							{
-								gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&tempiter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-
-								if (!gtk_text_iter_in_range(&tempiter,&page->match_start,&page->match_end))
-									gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-								//gtk_text_iter_forward_search(&page->iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&page->match_start,&page->match_end,NULL);
-							}
-
-						if(gtk_text_iter_forward_search(&page->iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&page->match_start,&page->match_end,NULL))
-							{
-								gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-								//gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
-							//	page->iter=page->match_end;
-								
-								gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-								gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,gtk_entry_get_text((GtkEntry*)replaceBox),-1);
-								gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-								gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
-								page->match_start=page->iter;
-								page->match_end=page->iter;
-								page->iter=page->match_end;
-							if(gtk_text_iter_forward_search(&page->iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&page->match_start,&page->match_end,NULL))
-							{
-								gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-								gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
-								page->iter=page->match_end;
-							}
-							}
-				break;
 
 			case FINDNEXT:
 						if(page->isFirst==true)
@@ -349,32 +314,41 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 			case REPLACE:
 				if(page->isFirst==false)
 					{
-							gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&tempiter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-							if(gtk_text_iter_in_range(&tempiter,&page->match_start,&page->match_end))
-								{
-									gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-									gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,gtk_entry_get_text((GtkEntry*)replaceBox),-1);
-									gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-					}
-				else
-				{
-					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-					if(gtk_text_iter_forward_search(&page->iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&page->match_start,&page->match_end,NULL))
+						gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&tempiter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+						if(gtk_text_iter_in_range(&tempiter,&page->match_start,&page->match_end))
 							{
-								gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-								gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
-								break;
+								gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+								gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,gtk_entry_get_text((GtkEntry*)replaceBox),-1);
+								gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 							}
-				}
+						else
+							{
+								gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+								if(gtk_text_iter_forward_search(&page->iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&page->match_start,&page->match_end,NULL))
+									{
+										gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+										gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
+										break;
+									}
+							}
 
 						if(gtk_text_iter_forward_search(&page->iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&page->match_start,&page->match_end,NULL))
 							{
 								gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 								gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
-									//page->iter=page->match_end;
 							}	
 					}
-
+				else
+					{
+						gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+						page->isFirst=false;
+						if(gtk_text_iter_forward_search(&page->iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_VISIBLE_ONLY,&page->match_start,&page->match_end,NULL))
+							{
+								gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+								gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
+								page->iter=page->match_end;
+							}
+					}
 				break;
 
 			default:
