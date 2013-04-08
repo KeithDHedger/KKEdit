@@ -420,7 +420,8 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 		}
 //not in any open files
 //check ./
-	asprintf(&command,"ctags -xR .");
+//		asprintf(&searchdir,"%s",g_path_get_dirname(page->filePath));
+	asprintf(&command,"ctags -xR %s",g_path_get_dirname(page->filePath));
 	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
 	if (retval==0)
 		{
@@ -476,7 +477,7 @@ void findFile(GtkWidget* widget,gpointer data)
 	if(strarg[0]=='<')
 		asprintf(&searchdir,"/usr/include");
 	else
-		asprintf(&searchdir,"./");
+		asprintf(&searchdir,"%s",g_path_get_dirname(page->filePath));
 
 	filename=g_path_get_basename(&strarg[1]);
 	asprintf(&command,"find \"%s\" -name \"%s\"",searchdir,filename);
