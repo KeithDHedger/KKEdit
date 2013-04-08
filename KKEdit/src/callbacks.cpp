@@ -445,4 +445,58 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 		}
 }
 
+void findFile(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=getPageStructPtr(-1);
+	GtkTextIter	start;
+	GtkTextIter	end;
+	char*		selection=NULL;
+	int			numpages=gtk_notebook_get_n_pages(notebook);
+	char		strarg[256];
+	char*		filepath;
+	char*		filename;
+	char*	command;
+	gchar*	stdout=NULL;
+	gchar*	stderr=NULL;
+	gint	retval=0;
+
+
+	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+		{
+			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+			if(selection==NULL)
+				return;
+		}
+	else
+		return;
+	printf("XXX%sZZZ\n",selection);
+//%[]a-zA-Z0-9 ()_-,.*#;[\"]s
+	sscanf(selection,"#include %s",(char*)&strarg);
+	strarg[strlen(strarg)-1]=0;
+	printf("XXX%sZZZ\n",&strarg[1]);
+	
+	if(strarg[0]=='<')
+		{
+			filename=g_path_get_basename(strarg);
+			asprintf(&command,"find \"/usr/include\" -name \"%s\"",filename);
+			printf("find \"/usr/include\" -name \"%s\"\n",filename);
+			g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
+			if (retval==0)
+				{
+					stdout[strlen(stdout)-1]=0;
+					printf("%s\n",stdout);
+					openFile(stdout,0);
+					g_free(stdout);
+					g_free(stderr);
+				}
+
+		//printf("system file\n");
+		//	asprintf(&filepath,"/usr/include/%s",(char*)&strarg[1]);
+		//	openFile(filepath,0);
+		//	g_free(filepath);
+		}
+	else
+		printf("user file\n");
+
+}
 
