@@ -133,9 +133,7 @@ void setSensitive(void)
 		offset=1;
 
 	if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer))==true)
-		{
-			asprintf(&newlabel,"*%s",&text[offset]);
-		}
+		asprintf(&newlabel,"*%s",&text[offset]);
 	else
 		asprintf(&newlabel,"%s",&text[offset]);
 
