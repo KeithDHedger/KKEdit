@@ -19,6 +19,9 @@
 #define FINDNEXT		200
 #define FINDPREV		300
 
+#define MYEMAIL "kdhedger68713@gmail.com"
+#define MYWEBSITE "http://keithhedger.hostingsiteforfree.com"
+#define VERSION "0.0.4"
 struct pageStruct
 {
 	GtkScrolledWindow*	pageWindow;
@@ -44,6 +47,7 @@ extern GtkWidget*		menuedit;
 extern GtkWidget*		menufunc;
 extern GtkWidget*		menunav;
 extern GtkWidget*		menubookmark;
+extern GtkWidget*		menuhelp;
 extern GtkWidget*		redoMenu;
 extern GtkWidget*		undoMenu;
 extern GtkWidget*		saveMenu;

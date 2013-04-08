@@ -23,6 +23,7 @@ GtkWidget*		menufile;
 GtkWidget*		menuedit;
 GtkWidget*		menufunc;
 GtkWidget*		menunav;
+GtkWidget*		menuhelp;
 
 GtkWidget*		menubookmark;
 GtkWidget*		redoMenu;

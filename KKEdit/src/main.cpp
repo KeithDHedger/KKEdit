@@ -18,6 +18,16 @@
 #include "files.h"
 #include "callbacks.h"
 
+void doAbout(GtkWidget* widget,gpointer data)
+{
+	const char*	authors[]={"K.D.Hedger <"MYEMAIL">",NULL};
+	const char	copyright[] ="Copyright \xc2\xa9 2013 K.D.Hedger";
+	const char*	aboutboxstring="KKEdit Code Text Editor";
+//	const char*	translators="Spanish translation:\nPablo Morales Romero <pg.morales.romero@gmail.com>.\n\nGerman translation:\nMartin F. Schumann. <mfs@mfs.name>";
+
+	gtk_show_about_dialog(NULL,"authors",authors,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",MYWEBSITE,"program-name","KKEdit","logo-icon-name","KKEdit",NULL); 
+}
+
 void shutdown(GtkWidget* widget,gpointer data)
 {
 	int			numpages=gtk_notebook_get_n_pages(notebook);
@@ -335,11 +345,20 @@ int main(int argc,char **argv)
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
+//help
+	menuhelp=gtk_menu_item_new_with_label("Help");
+	menu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuhelp),menu);
+	menuitem=gtk_menu_item_new_with_label("About");
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doAbout),NULL);
+
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufile);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuedit);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menunav);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufunc);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menubookmark);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
 
 	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)vbox);
 
