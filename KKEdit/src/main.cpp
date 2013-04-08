@@ -54,7 +54,6 @@ void readConfig(void)
 	char	buffer[1024];
 	char	name[256];
 	int		intarg;
-	bool	boolarg;
 	char	strarg[256];
 
 	asprintf(&filename,"%s/.config/kkedit.rc",getenv("HOME"));
@@ -64,7 +63,7 @@ void readConfig(void)
 			while(feof(fd)==0)
 				{
 					fgets(buffer,4096,fd);
-					sscanf(buffer,"%s %s",&name,&strarg);
+					sscanf(buffer,"%s %s",(char*)&name,(char*)&strarg);
 
 					if(strcasecmp(name,"indentcode")==0)
 							indent=(bool)atoi(strarg);
@@ -78,7 +77,7 @@ void readConfig(void)
 							tabWidth=atoi(strarg);
 					if(strcasecmp(name,"font")==0)
 						{
-							sscanf(buffer,"%*s %s %i",&strarg,&intarg);
+							sscanf(buffer,"%*s %s %i",(char*)&strarg,(int*)&intarg);
 							asprintf(&fontAndSize,"%s %i",strarg,intarg);
 						}
 				}

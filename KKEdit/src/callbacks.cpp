@@ -142,13 +142,13 @@ void setSensitive(void)
 
 	gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)newlabel);
 	g_free(newlabel);
+	gtk_widget_show_all(page->tabName);
 }
 
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
 {
 	pageStruct*	page=getPageStructPtr(thispage);
 	char*		functions;
-//	GtkWidget*	menu;
 	GtkWidget*	menuitem;
 	int			linenum;
 	char		tmpstr[1024];
@@ -388,7 +388,6 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 	gchar*		stdout=NULL;
 	gchar*		stderr=NULL;
 	gint		retval=0;
-	int			intab=-1;
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
