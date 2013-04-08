@@ -451,16 +451,15 @@ void findFile(GtkWidget* widget,gpointer data)
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
-	int			numpages=gtk_notebook_get_n_pages(notebook);
-	char		strarg[256];
-	char*		filepath;
+	char		strarg[2048];
 	char*		filename;
-	char*	command;
-	gchar*	stdout=NULL;
-	gchar*	stderr=NULL;
-	gint	retval=0;
+	char*		command;
+	gchar*		stdout=NULL;
+	gchar*		stderr=NULL;
+	gint		retval=0;
 	char*		lineptr;
 	char		buffer[2048];
+	char*		searchdir;
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
@@ -470,43 +469,36 @@ void findFile(GtkWidget* widget,gpointer data)
 		}
 	else
 		return;
-//	printf("XXX%sZZZ\n",selection);
-//%[]a-zA-Z0-9 ()_-,.*#;[\"]s
+
 	sscanf(selection,"#include %s",(char*)&strarg);
 	strarg[strlen(strarg)-1]=0;
-//	printf("XXX%sZZZ\n",&strarg[1]);
 	
 	if(strarg[0]=='<')
-		{
-			filename=g_path_get_basename(&strarg[1]);
-			asprintf(&command,"find \"/usr/include\" -name \"%s\"",filename);
-			//printf("find \"/usr/include\" -name \"%s\"\n",filename);
-			g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
-			if (retval==0)
-				{
-					stdout[strlen(stdout)-1]=0;
-					lineptr=stdout;
-					while (lineptr!=NULL)
-						{
-							sscanf (lineptr,"%s",&buffer);
-							lineptr=strchr(lineptr,'\n');
-							if (lineptr!=NULL)
-								lineptr++;
-							printf("%s\n",buffer);
-							openFile(buffer,0);
-						}
-					//openFile(stdout,0);
-					g_free(stdout);
-					g_free(stderr);
-				}
-
-		//printf("system file\n");
-		//	asprintf(&filepath,"/usr/include/%s",(char*)&strarg[1]);
-		//	openFile(filepath,0);
-		//	g_free(filepath);
-		}
+		asprintf(&searchdir,"/usr/include");
 	else
-		printf("user file\n");
+		asprintf(&searchdir,"./");
 
+	filename=g_path_get_basename(&strarg[1]);
+	asprintf(&command,"find \"%s\" -name \"%s\"",searchdir,filename);
+	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
+	if (retval==0)
+		{
+			stdout[strlen(stdout)-1]=0;
+			lineptr=stdout;
+			while (lineptr!=NULL)
+				{
+					sscanf (lineptr,"%s",(char*)&buffer);
+					lineptr=strchr(lineptr,'\n');
+					if (lineptr!=NULL)
+						lineptr++;
+					openFile(buffer,0);
+				}
+			g_free(stdout);
+			g_free(stderr);
+		}
+
+	g_free(searchdir);
+	g_free(filename);
+	g_free(command);
 }
 
