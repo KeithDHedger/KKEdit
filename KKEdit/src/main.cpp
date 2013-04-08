@@ -153,6 +153,7 @@ int main(int argc,char **argv)
 	g_signal_connect(G_OBJECT(window),"delete-event",G_CALLBACK(shutdown),NULL);
 
 	notebook=(GtkNotebook*)gtk_notebook_new();
+	gtk_notebook_set_scrollable(notebook,true);
 	gtk_signal_connect(GTK_OBJECT(notebook),"switch-page",G_CALLBACK(switchPage),NULL);
 
 	vbox=gtk_vbox_new(FALSE,0);

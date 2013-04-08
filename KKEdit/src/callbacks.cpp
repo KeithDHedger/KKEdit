@@ -459,7 +459,8 @@ void findFile(GtkWidget* widget,gpointer data)
 	gchar*	stdout=NULL;
 	gchar*	stderr=NULL;
 	gint	retval=0;
-
+	char*		lineptr;
+	char		buffer[2048];
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
@@ -469,23 +470,32 @@ void findFile(GtkWidget* widget,gpointer data)
 		}
 	else
 		return;
-	printf("XXX%sZZZ\n",selection);
+//	printf("XXX%sZZZ\n",selection);
 //%[]a-zA-Z0-9 ()_-,.*#;[\"]s
 	sscanf(selection,"#include %s",(char*)&strarg);
 	strarg[strlen(strarg)-1]=0;
-	printf("XXX%sZZZ\n",&strarg[1]);
+//	printf("XXX%sZZZ\n",&strarg[1]);
 	
 	if(strarg[0]=='<')
 		{
-			filename=g_path_get_basename(strarg);
+			filename=g_path_get_basename(&strarg[1]);
 			asprintf(&command,"find \"/usr/include\" -name \"%s\"",filename);
-			printf("find \"/usr/include\" -name \"%s\"\n",filename);
+			//printf("find \"/usr/include\" -name \"%s\"\n",filename);
 			g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
 			if (retval==0)
 				{
 					stdout[strlen(stdout)-1]=0;
-					printf("%s\n",stdout);
-					openFile(stdout,0);
+					lineptr=stdout;
+					while (lineptr!=NULL)
+						{
+							sscanf (lineptr,"%s",&buffer);
+							lineptr=strchr(lineptr,'\n');
+							if (lineptr!=NULL)
+								lineptr++;
+							printf("%s\n",buffer);
+							openFile(buffer,0);
+						}
+					//openFile(stdout,0);
 					g_free(stdout);
 					g_free(stderr);
 				}
