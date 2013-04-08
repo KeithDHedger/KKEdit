@@ -278,6 +278,7 @@ int main(int argc,char **argv)
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(closeTab),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'W',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -285,6 +286,7 @@ int main(int argc,char **argv)
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_QUIT,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(shutdown),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'Q',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 //edit menu
 	menuedit=gtk_menu_item_new_with_label("Edit");
@@ -294,11 +296,13 @@ int main(int argc,char **argv)
 	undoMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_UNDO,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),undoMenu);
 	gtk_signal_connect(GTK_OBJECT(undoMenu),"activate",G_CALLBACK(undo),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)undoMenu,"activate",accgroup,'Z',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 //redo
 	redoMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_REDO,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),redoMenu);
 	gtk_signal_connect(GTK_OBJECT(redoMenu),"activate",G_CALLBACK(redo),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)redoMenu,"activate",accgroup,'Z',(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -307,35 +311,43 @@ int main(int argc,char **argv)
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_CUT,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(cutToClip),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'X',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 //copy
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_COPY,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(copyToClip),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'C',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 //paste
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_PASTE,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(pasteFromClip),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'V',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
+//find
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_FIND,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_FIND_AND_REPLACE,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(find),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'F',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 //navigaion menu
 	menunav=gtk_menu_item_new_with_label("Navigation");
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),menu);
+//goto define
 	menuitem=gtk_menu_item_new_with_label("Go To Definition");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'D',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+//open include
 	menuitem=gtk_menu_item_new_with_label("Open Include File");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(findFile),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'I',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 //function menu
 	menufunc=gtk_menu_item_new_with_label("Functions");
