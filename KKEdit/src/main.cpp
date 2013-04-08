@@ -23,7 +23,6 @@ void doAbout(GtkWidget* widget,gpointer data)
 	const char*	authors[]={"K.D.Hedger <"MYEMAIL">",NULL};
 	const char	copyright[] ="Copyright \xc2\xa9 2013 K.D.Hedger";
 	const char*	aboutboxstring="KKEdit Code Text Editor";
-//	const char*	translators="Spanish translation:\nPablo Morales Romero <pg.morales.romero@gmail.com>.\n\nGerman translation:\nMartin F. Schumann. <mfs@mfs.name>";
 
 	gtk_show_about_dialog(NULL,"authors",authors,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",MYWEBSITE,"program-name","KKEdit","logo-icon-name","KKEdit",NULL); 
 }
@@ -154,6 +153,7 @@ int main(int argc,char **argv)
 	GtkWidget*		menu;
 	GtkWidget*		toolbar;
 	GtkToolItem*	toolbutton;
+	GtkAccelGroup*	accgroup;
 
 	gtk_init(&argc,&argv);
 	init();
@@ -161,6 +161,8 @@ int main(int argc,char **argv)
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_widget_set_size_request(window,800,600);
 	g_signal_connect(G_OBJECT(window),"delete-event",G_CALLBACK(shutdown),NULL);
+	accgroup=gtk_accel_group_new();
+	gtk_window_add_accel_group((GtkWindow*)window,accgroup);
 
 	notebook=(GtkNotebook*)gtk_notebook_new();
 	gtk_notebook_set_scrollable(notebook,true);
@@ -249,11 +251,13 @@ int main(int argc,char **argv)
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newFile),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'N',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 //open
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_OPEN,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doOpenFile),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'O',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -261,10 +265,12 @@ int main(int argc,char **argv)
 	saveMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),saveMenu);
 	gtk_signal_connect(GTK_OBJECT(saveMenu),"activate",G_CALLBACK(saveFile),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)saveMenu,"activate",accgroup,'S',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 //savas
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE_AS,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(saveFile),(void*)1);
+	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'S',(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -349,7 +355,7 @@ int main(int argc,char **argv)
 	menuhelp=gtk_menu_item_new_with_label("Help");
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuhelp),menu);
-	menuitem=gtk_menu_item_new_with_label("About");
+	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_ABOUT,NULL);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doAbout),NULL);
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
