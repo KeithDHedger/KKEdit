@@ -154,6 +154,7 @@ int main(int argc,char **argv)
 	GtkWidget*		toolbar;
 	GtkToolItem*	toolbutton;
 	GtkAccelGroup*	accgroup;
+	GtkWidget*		image;
 
 	gtk_init(&argc,&argv);
 	init();
@@ -333,13 +334,16 @@ int main(int argc,char **argv)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(find),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'F',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-
+//GTK_STOCK_DIALOG_QUESTION
 //navigaion menu
 	menunav=gtk_menu_item_new_with_label("Navigation");
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),menu);
+
 //goto define
-	menuitem=gtk_menu_item_new_with_label("Go To Definition");
+	image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
+	menuitem= gtk_image_menu_item_new_with_label  ("Go To Definition");
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'D',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
