@@ -49,14 +49,40 @@ void shutdown(GtkWidget* widget,gpointer data)
 
 void readConfig(void)
 {
-	FILE*	fd;
+	FILE*	fd=NULL;
 	char*	filename;
+	char	buffer[1024];
+	char	name[256];
+	int		intarg;
+	bool	boolarg;
+	char	strarg[256];
 
 	asprintf(&filename,"%s/.config/kkedit.rc",getenv("HOME"));
 	fd=fopen(filename,"r");
 	if (fd!=NULL)
 		{
-			fscanf(fd
+			while(feof(fd)==0)
+				{
+					fgets(buffer,4096,fd);
+					sscanf(buffer,"%s %s",&name,&strarg);
+
+					if(strcasecmp(name,"indentcode")==0)
+							indent=(bool)atoi(strarg);
+					if(strcasecmp(name,"showlinenumbers")==0)
+							lineNumbers=(bool)atoi(strarg);
+					if(strcasecmp(name,"wrapline")==0)
+							lineWrap=(bool)atoi(strarg);
+					if(strcasecmp(name,"highlightcurrentline")==0)
+							highLight=(bool)atoi(strarg);
+					if(strcasecmp(name,"tabwidth")==0)
+							tabWidth=atoi(strarg);
+					if(strcasecmp(name,"font")==0)
+						{
+							sscanf(buffer,"%*s %s %i",&strarg,&intarg);
+							asprintf(&fontAndSize,"%s %i",strarg,intarg);
+						}
+				}
+			fclose(fd);
 		}
 }
 
@@ -68,6 +94,7 @@ void init(void)
 	highLight=true;
 	tabWidth=4;
 	asprintf(&fontAndSize,"%s","mono 10");
+	readConfig();
 }
 
 void buildFindReplace(void)

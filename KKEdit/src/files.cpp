@@ -61,7 +61,10 @@ void setFilePrefs(GtkSourceView* sourceview)
 	gtk_source_view_set_show_line_numbers(sourceview,lineNumbers);
 	gtk_source_view_set_highlight_current_line(sourceview,highLight);
 
-	gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_WORD);
+	if(lineWrap==true)
+		gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_WORD);
+	else
+		gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_NONE);
 
 	gtk_source_view_set_tab_width(sourceview,tabWidth);
 
