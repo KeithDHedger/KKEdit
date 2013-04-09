@@ -46,6 +46,7 @@ extern GtkWidget*		menufile;
 extern GtkWidget*		menuedit;
 extern GtkWidget*		menufunc;
 extern GtkWidget*		menunav;
+extern GtkWidget*		menutools;
 extern GtkWidget*		menubookmark;
 extern GtkWidget*		menuhelp;
 extern GtkWidget*		redoMenu;
@@ -83,6 +84,7 @@ pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
 int getTabFromPath(char* filepath);
+void runCommand(char* commandtorun,void* ptr);
 
 #endif
 

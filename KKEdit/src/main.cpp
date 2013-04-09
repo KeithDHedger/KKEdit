@@ -38,7 +38,10 @@ void writeConfig(void)
 	gtk_widget_get_allocation(window,&alloc);
 	gtk_window_get_position((GtkWindow*)window,&winx,&winy);
 
-	asprintf(&filename,"%s/.config/kkedit.rc",getenv("HOME"));
+	asprintf(&filename,"%s/.config/KKEdit",getenv("HOME"));
+	g_mkdir_with_parents(filename,493);
+	g_free(filename);
+	asprintf(&filename,"%s/.config/KKEdit/kkedit.rc",getenv("HOME"));
 	fd=fopen(filename,"w");
 	if (fd!=NULL)
 		{
@@ -93,7 +96,7 @@ void readConfig(void)
 	int		intarg;
 	char	strarg[256];
 
-	asprintf(&filename,"%s/.config/kkedit.rc",getenv("HOME"));
+	asprintf(&filename,"%s/.config/KKEdit/kkedit.rc",getenv("HOME"));
 	fd=fopen(filename,"r");
 	if (fd!=NULL)
 		{
@@ -179,6 +182,11 @@ void buildFindReplace(void)
 
 	gtk_signal_connect_object(GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(findReplaceDialog));
 	gtk_signal_connect (GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
+}
+
+void buildTools(void)
+{
+printf("todo\n");
 }
 
 int main(int argc,char **argv)
@@ -372,7 +380,7 @@ int main(int argc,char **argv)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(find),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'F',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-//GTK_STOCK_DIALOG_QUESTION
+
 //navigaion menu
 	menunav=gtk_menu_item_new_with_label("Navigation");
 	menu=gtk_menu_new();
@@ -386,7 +394,9 @@ int main(int argc,char **argv)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'D',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 //open include
-	menuitem=gtk_menu_item_new_with_label("Open Include File");
+	menuitem= gtk_image_menu_item_new_with_label  ("Open Include File");
+	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(findFile),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'I',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
@@ -405,6 +415,18 @@ int main(int argc,char **argv)
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
+//external tools
+	menutools=gtk_menu_item_new_with_label("Tools");
+	menu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutools),menu);
+	buildTools();
+
+//	menuitem=gtk_menu_item_new_with_label("Add Bookmark");
+///	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	menuitem=gtk_separator_menu_item_new();
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+
 //help
 	menuhelp=gtk_menu_item_new_with_label("Help");
 	menu=gtk_menu_new();
@@ -418,6 +440,7 @@ int main(int argc,char **argv)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menunav);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufunc);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menubookmark);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menutools);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
 
 	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)vbox);

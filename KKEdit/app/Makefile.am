@@ -11,7 +11,7 @@ pixfilesdir = $(pkgdatadir)/pixmaps
 pixfiles_DATA = ../resources/pixmaps/*
 
 scriptfilesdir = $(pkgdatadir)/scripts
-scriptfiles_SCRIPTS = ../resources/scripts/README
+scriptfiles_SCRIPTS = ../resources/scripts/*
 
 bin_PROGRAMS = kkedit
 
