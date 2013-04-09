@@ -102,7 +102,7 @@ void readConfig(void)
 		{
 			while(feof(fd)==0)
 				{
-					fgets(buffer,4096,fd);
+					fgets(buffer,1024,fd);
 					sscanf(buffer,"%s %s",(char*)&name,(char*)&strarg);
 
 					if(strcasecmp(name,"indentcode")==0)
@@ -209,19 +209,29 @@ void buildTools(void)
 	const gchar*	entry=NULL;
 	FILE*			fd=NULL;
 	char*			filepath;
+	char			buffer[4096];
+	char			strarg[256];
 
-	folder=g_dir_open("/usr/share/KKEdit/tools",0,NULL);
+	
+//	if (g_file_test("/usr/share/KKEdit/tools",G_FILE_TEST_IS_DIR))
+//		{
+//	folder=g_dir_open("/usr/share/KKEdit/tools",0,NULL);
+	folder=g_dir_open("/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/tools",0,NULL);
 	if(folder!=NULL)
 		{
 			entry=g_dir_read_name(folder);
 			while(entry!=NULL)
 				{
-					asprintf(&filepath,"/usr/share/KKEdit/tools/%s",entry);
+					//asprintf(&filepath,"/usr/share/KKEdit/tools/%s",entry);
+					asprintf(&filepath,"/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/tools/%s",entry);
 					fd=fopen(filepath,"r");
 					if (fd!=NULL)
 						{
 							while(feof(fd)==0)
 								{
+									fgets(buffer,4096,fd);
+									sscanf(buffer,"%s",(char*)&strarg);
+									printf("%s\n",(char*)&strarg);
 								}
 							fclose(fd);
 						}
