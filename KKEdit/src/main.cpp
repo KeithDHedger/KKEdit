@@ -200,6 +200,13 @@ void buildFindReplace(void)
 				{
 					fgets(buffer,4096,fd);
 					sscanf(buffer,"%s %s",(char*)&name,(char*)&strarg);
+
+name	Open Terminal Here
+insert	0
+replace 0
+paste 0
+interminal 0
+
 */
 
 void buildTools(void)
@@ -235,6 +242,7 @@ void buildTools(void)
 								}
 							fclose(fd);
 						}
+					entry=g_dir_read_name(folder);
 					g_free(filepath);
 				}
 						
