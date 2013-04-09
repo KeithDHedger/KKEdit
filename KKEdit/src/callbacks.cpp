@@ -506,16 +506,46 @@ void findFile(GtkWidget* widget,gpointer data)
 void externalTool(GtkWidget* widget,gpointer data)
 {
 	toolStruct*	tool=(toolStruct*)data;
+	pageStruct*	page=getPageStructPtr(-1);
+	char*		dirname;
+	char*		text=NULL;
+	GtkTextIter	start;
+	GtkTextIter	end;
+
+	dirname=g_path_get_dirname(page->filePath);
+	asprintf(&tool->currentDir,"%s",dirname);
 //
 	printf("%s\n",tool->menuName);
 	printf("%s\n",tool->filePath);
 	printf("%i\n",tool->flags);
-//	printf("%i\n",tool->replace);
+	printf("%s\n",tool->currentDir);
 //	printf("%i\n",tool->paste);
 	printf("%i\n",tool->inTerminal);
 	
-	runCommand(tool->filePath,NULL);
+	runCommand(tool->filePath,&text);
+	if(text!=NULL)
+		{
+			if(tool->flags & TOOL_REPLACE_OP)
+				{
+					gtk_text_buffer_get_bounds((GtkTextBuffer*)page->buffer,&start,&end);
+					gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&start,&end);
+					gtk_text_buffer_delete_selection((GtkTextBuffer*)page->buffer,true,true);
+					gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER (page->buffer),&start);
+					gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&start,text,strlen(text));
+				}
+			else
+				{
+					if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+						gtk_text_buffer_delete_selection((GtkTextBuffer*)page->buffer,true,true);
+					gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(page->buffer),text,strlen(text));
+				}
+		}
 
+	g_free(text);
+	g_free(tool->currentDir);
+	g_free(dirname);
+//	gtk_text_buffer_paste_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),NULL,true);
+//	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 }
 
 

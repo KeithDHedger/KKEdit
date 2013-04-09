@@ -222,6 +222,7 @@ void buildTools(void)
 	GtkWidget*		menu;
 	char*			scriptdata;
 	toolStruct*		tool;
+//	pageStruct*	page=getPageStructPtr(-1);
 
 //	if (g_file_test("/usr/share/KKEdit/tools",G_FILE_TEST_IS_DIR))
 //		{
@@ -248,6 +249,7 @@ void buildTools(void)
 							sscanf(buffer,"#%i %i %[a-zA-Z0-9 \t_-]s",(int*)&tool->flags,(int*)&tool->inTerminal,strarg);
 							asprintf(&tool->menuName,"%s",strarg);
 							asprintf(&tool->filePath,"%s",filepath);
+							//asprintf(&tool->currentDir,"%s",g_path_get_dirname(page->filePath));
 							menuitem=gtk_image_menu_item_new_with_label(tool->menuName);
 							gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 

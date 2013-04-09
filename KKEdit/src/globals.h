@@ -22,6 +22,13 @@
 #define MYEMAIL "kdhedger68713@gmail.com"
 #define MYWEBSITE "http://keithhedger.hostingsiteforfree.com"
 #define VERSION "0.0.4"
+
+#define TOOL_SYNC 8
+//#define TOOL_ASYNC 
+//#define TOOL_INSERT_OP 4
+//#define TOOL_PASTE_OP 8
+#define TOOL_REPLACE_OP 1
+
 struct pageStruct
 {
 	GtkScrolledWindow*	pageWindow;
