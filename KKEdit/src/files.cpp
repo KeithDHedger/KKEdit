@@ -62,7 +62,7 @@ void setFilePrefs(GtkSourceView* sourceview)
 	gtk_source_view_set_highlight_current_line(sourceview,highLight);
 
 	if(lineWrap==true)
-		gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_WORD);
+		gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_WORD_CHAR);
 	else
 		gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_NONE);
 
@@ -84,7 +84,7 @@ bool openFile(const gchar *filepath,int linenumber)
 	GtkTextMark*	scroll2mark=gtk_text_mark_new(NULL,true);
 
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
 	asprintf(&page->filePath,"%s",filepath);
 	asprintf(&page->fileName,"%s",filename);
@@ -112,9 +112,9 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	gtk_source_buffer_begin_not_undoable_action(page->buffer);
 		gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
-		gtk_text_buffer_insert (GTK_TEXT_BUFFER(page->buffer),&iter,buffer,filelen);
+		gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,buffer,filelen);
 		g_free (buffer);
-	gtk_source_buffer_end_not_undoable_action (page->buffer);
+	gtk_source_buffer_end_not_undoable_action(page->buffer);
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
 
@@ -171,6 +171,7 @@ bool saveFile(GtkWidget* widget,gpointer data)
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start,end;
 	gchar*		text;
+	FILE*		fd=NULL;
 
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
@@ -178,7 +179,14 @@ bool saveFile(GtkWidget* widget,gpointer data)
 
 	gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,FALSE);
 	if(page->filePath!=NULL && data==NULL)
-		g_file_set_contents(page->filePath,text,-1,NULL);
+		{
+			fd=fopen(page->filePath,"w");
+			if (fd!=NULL)
+				{
+					fprintf(fd,"%s",text);
+					fclose(fd);
+				}
+		}
 	else
 		{
 			if(data!=NULL)
@@ -192,7 +200,13 @@ bool saveFile(GtkWidget* widget,gpointer data)
 
 			gtk_widget_set_tooltip_text(page->tabName,page->filePath);
 			gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)saveFileName);
-			g_file_set_contents(page->filePath,text,-1,NULL);
+
+			fd=fopen(page->filePath,"w");
+			if (fd!=NULL)
+				{
+					fprintf(fd,"%s",text);
+					fclose(fd);
+				}
 
 			saveFileName=NULL;
 			saveFilePath=NULL;

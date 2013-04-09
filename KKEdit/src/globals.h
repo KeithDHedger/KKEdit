@@ -27,7 +27,9 @@
 //#define TOOL_ASYNC 
 //#define TOOL_INSERT_OP 4
 //#define TOOL_PASTE_OP 8
-#define TOOL_REPLACE_OP 1
+#define TOOL_IGNORE_OP 0
+#define TOOL_PASTE_OP 1
+#define TOOL_REPLACE_OP 2
 
 struct pageStruct
 {

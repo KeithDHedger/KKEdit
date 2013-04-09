@@ -218,9 +218,9 @@ void buildTools(void)
 	char*			filepath;
 	char			buffer[4096];
 	char			strarg[256];
-	char			tooldata[256];
+//	char			tooldata[256];
 	GtkWidget*		menu;
-	char*			scriptdata;
+//	char*			scriptdata;
 	toolStruct*		tool;
 //	pageStruct*	page=getPageStructPtr(-1);
 

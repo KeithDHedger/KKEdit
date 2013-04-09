@@ -277,13 +277,22 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 					{
 						gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 						page->isFirst=false;
+						printf("FIRST\n");
 					}
 				else
 					{
 						gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&tempiter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-
+printf("SECOND\n");
+						GtkTextIter t2iter;
+						XXXXXXXXXXXX
+						printf("XX%iZZ\n",page->match_start);
 						if (!gtk_text_iter_in_range(&tempiter,&page->match_start,&page->match_end))
-							gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+							{
+							printf("3rd\n");
+								gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+								
+							}
+						printf("LAST\n");
 					}
 
 				if(gtk_text_iter_forward_search(&page->iter,gtk_entry_get_text((GtkEntry*)findBox),GTK_TEXT_SEARCH_TEXT_ONLY,&page->match_start,&page->match_end,NULL))
@@ -511,17 +520,21 @@ void externalTool(GtkWidget* widget,gpointer data)
 	char*		text=NULL;
 	GtkTextIter	start;
 	GtkTextIter	end;
+	char*		fullcommand;
 
 	dirname=g_path_get_dirname(page->filePath);
-	asprintf(&tool->currentDir,"%s",dirname);
 //
-	printf("%s\n",tool->menuName);
-	printf("%s\n",tool->filePath);
-	printf("%i\n",tool->flags);
-	printf("%s\n",tool->currentDir);
+//	printf("%s\n",tool->menuName);
+//	printf("%s\n",tool->filePath);
+//	printf("%i\n",tool->flags);
+//	printf("%s\n",tool->currentDir);
 //	printf("%i\n",tool->paste);
-	printf("%i\n",tool->inTerminal);
-	
+//	printf("%i\n",tool->inTerminal);
+//	asprintf(&fullcommand,"(cd \"%s\";%s)",dirname,tool->filePath);
+//	runCommand(fullcommand,&text);
+	chdir(dirname);
+	setenv("KKEDIT_CURRENTFILE",page->filePath,1);
+	setenv("KKEDIT_CURRENTDIR",dirname,1);
 	runCommand(tool->filePath,&text);
 	if(text!=NULL)
 		{
@@ -533,7 +546,8 @@ void externalTool(GtkWidget* widget,gpointer data)
 					gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER (page->buffer),&start);
 					gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&start,text,strlen(text));
 				}
-			else
+
+			if(tool->flags & TOOL_PASTE_OP)
 				{
 					if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 						gtk_text_buffer_delete_selection((GtkTextBuffer*)page->buffer,true,true);
@@ -541,11 +555,10 @@ void externalTool(GtkWidget* widget,gpointer data)
 				}
 		}
 
+	unsetenv("KKEDIT_FILEPATH");
+	unsetenv("KKEDIT_CURRENTDIR");
 	g_free(text);
-	g_free(tool->currentDir);
 	g_free(dirname);
-//	gtk_text_buffer_paste_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),NULL,true);
-//	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 }
 
 
