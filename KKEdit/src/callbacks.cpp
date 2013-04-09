@@ -507,12 +507,12 @@ void externalTool(GtkWidget* widget,gpointer data)
 {
 	toolStruct*	tool=(toolStruct*)data;
 //
-//	printf("%s\n",tool->menuName);
-//	printf("%s\n",tool->filePath);
-//	printf("%i\n",tool->insert);
+	printf("%s\n",tool->menuName);
+	printf("%s\n",tool->filePath);
+	printf("%i\n",tool->flags);
 //	printf("%i\n",tool->replace);
 //	printf("%i\n",tool->paste);
-//	printf("%i\n",tool->inTerminal);
+	printf("%i\n",tool->inTerminal);
 	
 	runCommand(tool->filePath,NULL);
 
