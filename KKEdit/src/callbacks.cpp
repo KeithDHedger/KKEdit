@@ -503,3 +503,19 @@ void findFile(GtkWidget* widget,gpointer data)
 	g_free(command);
 }
 
+void externalTool(GtkWidget* widget,gpointer data)
+{
+	toolStruct*	tool=(toolStruct*)data;
+//
+//	printf("%s\n",tool->menuName);
+//	printf("%s\n",tool->filePath);
+//	printf("%i\n",tool->insert);
+//	printf("%i\n",tool->replace);
+//	printf("%i\n",tool->paste);
+//	printf("%i\n",tool->inTerminal);
+	
+	runCommand(tool->filePath,NULL);
+
+}
+
+

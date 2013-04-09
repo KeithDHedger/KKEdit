@@ -218,11 +218,17 @@ void buildTools(void)
 	char*			filepath;
 	char			buffer[4096];
 	char			strarg[256];
+	char			tooldata[256];
+	GtkWidget*		menu;
+	char*			scriptdata;
+	toolStruct*		tool;
 
-	
 //	if (g_file_test("/usr/share/KKEdit/tools",G_FILE_TEST_IS_DIR))
 //		{
 //	folder=g_dir_open("/usr/share/KKEdit/tools",0,NULL);
+	menu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutools),menu);
+
 	folder=g_dir_open("/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/tools",0,NULL);
 	if(folder!=NULL)
 		{
@@ -234,16 +240,20 @@ void buildTools(void)
 					fd=fopen(filepath,"r");
 					if (fd!=NULL)
 						{
-							while(feof(fd)==0)
-								{
-									fgets(buffer,4096,fd);
-									sscanf(buffer,"%s",(char*)&strarg);
-									printf("%s\n",(char*)&strarg);
-								}
+							fgets(buffer,4096,fd);
+							fgets(buffer,4096,fd);
 							fclose(fd);
+
+							tool=(toolStruct*)malloc(sizeof(toolStruct));
+							sscanf(buffer,"#%i %i %[a-zA-Z0-9 \t_-]s",(int*)&tool->flags,(int*)&tool->inTerminal,strarg);
+							asprintf(&tool->menuName,"%s",strarg);
+							asprintf(&tool->filePath,"%s",filepath);
+							menuitem=gtk_image_menu_item_new_with_label(tool->menuName);
+							gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)tool);
 						}
 					entry=g_dir_read_name(folder);
-					g_free(filepath);
 				}
 						
 			g_dir_close(folder);
@@ -478,8 +488,8 @@ int main(int argc,char **argv)
 
 //external tools
 	menutools=gtk_menu_item_new_with_label("Tools");
-	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutools),menu);
+//	menu=gtk_menu_new();
+//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutools),menu);
 	buildTools();
 
 //	menuitem=gtk_menu_item_new_with_label("Add Bookmark");

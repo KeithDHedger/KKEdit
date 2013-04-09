@@ -153,11 +153,16 @@ void runCommand(char* commandtorun,void* ptr)
 	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
 	if (retval==0)
 		{
-			stdout[strlen(stdout)-1]=0;
-			if(ptr!=NULL)
-				asprintf((char**)ptr,"%s",stdout);
-			g_free(stdout);
-			g_free(stderr);
+			if(stdout!=NULL)
+				{
+					stdout[strlen(stdout)-1]=0;
+					if(ptr!=NULL)
+						asprintf((char**)ptr,"%s",stdout);
+					g_free(stdout);
+				}
+			if(stderr!=NULL)
+				g_free(stderr);
+			g_free(command);
 		}
 }
 

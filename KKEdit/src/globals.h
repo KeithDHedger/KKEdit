@@ -38,6 +38,15 @@ struct pageStruct
 	char*				fileName;
 };
 
+struct toolStruct
+{
+	char*				menuName;
+	char*				filePath;
+	char*				currentDir;
+	int					flags;
+	bool				inTerminal;					
+};
+
 extern GtkWidget*		window;
 extern GtkNotebook*		notebook;
 

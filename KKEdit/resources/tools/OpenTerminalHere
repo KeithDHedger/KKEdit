@@ -1,8 +1,7 @@
-name	Open Terminal Here
-insert	0
-replace 0
-paste 0
-interminal 0
+#!/bin/bash
+#0 0 Open Terminal Here
 
 terminal
 
+
+echo "XXXXXXXXX"
