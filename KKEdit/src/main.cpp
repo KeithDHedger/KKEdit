@@ -184,9 +184,52 @@ void buildFindReplace(void)
 	gtk_signal_connect (GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
 }
 
+/*
+	FILE*	fd=NULL;
+	char*	filename;
+	char	buffer[1024];
+	char	name[256];
+	int		intarg;
+	char	strarg[256];
+
+	asprintf(&filename,"%s/.config/KKEdit/kkedit.rc",getenv("HOME"));
+	fd=fopen(filename,"r");
+	if (fd!=NULL)
+		{
+			while(feof(fd)==0)
+				{
+					fgets(buffer,4096,fd);
+					sscanf(buffer,"%s %s",(char*)&name,(char*)&strarg);
+*/
+
 void buildTools(void)
 {
-printf("todo\n");
+	GDir*			folder;
+	GtkWidget*		menuitem;
+	const gchar*	entry=NULL;
+	FILE*			fd=NULL;
+	char*			filepath;
+
+	folder=g_dir_open("/usr/share/KKEdit/tools",0,NULL);
+	if(folder!=NULL)
+		{
+			entry=g_dir_read_name(folder);
+			while(entry!=NULL)
+				{
+					asprintf(&filepath,"/usr/share/KKEdit/tools/%s",entry);
+					fd=fopen(filepath,"r");
+					if (fd!=NULL)
+						{
+							while(feof(fd)==0)
+								{
+								}
+							fclose(fd);
+						}
+					g_free(filepath);
+				}
+						
+			g_dir_close(folder);
+		}
 }
 
 int main(int argc,char **argv)
