@@ -38,6 +38,10 @@ bool			lineWrap;
 bool			highLight;
 int				tabWidth;
 char*			fontAndSize;
+int				windowWidth;
+int				windowHeight;
+int				windowX=-1;
+int				windowY=-1;
 
 int				currentTabNumber;
 

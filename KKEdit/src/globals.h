@@ -60,6 +60,10 @@ extern bool				lineWrap;
 extern bool				highLight;
 extern int				tabWidth;
 extern char*			fontAndSize;
+extern int				windowWidth;
+extern int				windowHeight;
+extern int				windowX;
+extern int				windowY;
 
 extern int				currentTabNumber;
 

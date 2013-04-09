@@ -27,6 +27,33 @@ void doAbout(GtkWidget* widget,gpointer data)
 	gtk_show_about_dialog(NULL,"authors",authors,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",MYWEBSITE,"program-name","KKEdit","logo-icon-name","KKEdit",NULL); 
 }
 
+void writeConfig(void)
+{
+	GtkAllocation	alloc;
+	FILE*			fd=NULL;
+	char*			filename;
+	int				winx;
+	int				winy;
+
+	gtk_widget_get_allocation(window,&alloc);
+	gtk_window_get_position((GtkWindow*)window,&winx,&winy);
+
+	asprintf(&filename,"%s/.config/kkedit.rc",getenv("HOME"));
+	fd=fopen(filename,"w");
+	if (fd!=NULL)
+		{
+			fprintf(fd,"indentcode	%i\n",(int)indent);
+			fprintf(fd,"showlinenumbers	%i\n",(int)lineNumbers);
+			fprintf(fd,"wrapline	%i\n",(int)lineWrap);
+			fprintf(fd,"highlightcurrentline	%i\n",(int)highLight);
+			fprintf(fd,"tabwidth	%i\n",tabWidth);
+			fprintf(fd,"font	%s\n",fontAndSize);
+			fprintf(fd,"windowsize	%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
+			fclose(fd);
+		}
+	g_free(filename);
+}
+
 void shutdown(GtkWidget* widget,gpointer data)
 {
 	int			numpages=gtk_notebook_get_n_pages(notebook);
@@ -53,6 +80,7 @@ void shutdown(GtkWidget* widget,gpointer data)
 						}
 				}
 		}
+	writeConfig();
 	gtk_main_quit();
 }
 
@@ -89,6 +117,8 @@ void readConfig(void)
 							sscanf(buffer,"%*s %s %i",(char*)&strarg,(int*)&intarg);
 							asprintf(&fontAndSize,"%s %i",strarg,intarg);
 						}
+					if(strcasecmp(name,"windowsize")==0)
+						sscanf(buffer,"%*s %i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
 				}
 			fclose(fd);
 		}
@@ -102,6 +132,11 @@ void init(void)
 	highLight=true;
 	tabWidth=4;
 	asprintf(&fontAndSize,"%s","mono 10");
+	windowWidth=800;
+	windowHeight=400;
+	windowX=-1;
+	windowY=-1;
+
 	readConfig();
 }
 
@@ -160,7 +195,10 @@ int main(int argc,char **argv)
 	init();
 
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_widget_set_size_request(window,800,600);
+	gtk_window_set_default_size((GtkWindow*)window,windowWidth,windowHeight);
+	if(windowX!=-1 && windowY!=-1)
+		gtk_window_move((GtkWindow *)window,windowX,windowY);
+
 	g_signal_connect(G_OBJECT(window),"delete-event",G_CALLBACK(shutdown),NULL);
 	accgroup=gtk_accel_group_new();
 	gtk_window_add_accel_group((GtkWindow*)window,accgroup);
