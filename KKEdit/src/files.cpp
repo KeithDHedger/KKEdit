@@ -219,7 +219,6 @@ void newFile(GtkWidget* widget,gpointer data)
 {
 	GtkTextIter	iter;
 	GtkWidget*	label;
-	//const char*	filename="Untitled";
 	pageStruct*	page=(pageStruct*)malloc(sizeof(pageStruct));
 
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);

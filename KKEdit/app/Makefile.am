@@ -13,12 +13,12 @@ pixfiles_DATA = ../resources/pixmaps/*
 helpfilesdir = $(pkgdatadir)/help
 helpfiles_DATA = ../resources/help/*
 
-scriptfilesdir = $(pkgdatadir)/tools
-scriptfiles_SCRIPTS = ../resources/tools/*
+#scriptfilesdir = $(pkgdatadir)/tools
+#scriptfiles_SCRIPTS = ../resources/tools/*
 
 bin_PROGRAMS = kkedit
 
-man1_MANS = ../resources/man/kkedit.1
+#man1_MANS = ../resources/man/kkedit.1
 
 install-exec-hook:
 	cp ../resources/pixmaps/KKEdit.desktop /usr/share/applications/KKEdit.desktop
