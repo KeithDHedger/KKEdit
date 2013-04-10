@@ -142,14 +142,18 @@ int getTabFromPath(char* filepath)
 	return(-1);
 }
 
-void runCommand(char* commandtorun,void* ptr)
+void runCommand(char* commandtorun,void* ptr,bool interm)
 {
 	char*	command;
 	gchar*	stdout=NULL;
 	gchar*	stderr=NULL;
 	gint	retval=0;
 
-	asprintf(&command,"%s",commandtorun);
+	if(interm==true)
+		asprintf(&command,"terminal -x %s",commandtorun);
+	else
+		asprintf(&command,"%s",commandtorun);
+
 	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
 	if (retval==0)
 		{

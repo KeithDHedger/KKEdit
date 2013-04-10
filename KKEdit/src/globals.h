@@ -102,7 +102,7 @@ pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
 int getTabFromPath(char* filepath);
-void runCommand(char* commandtorun,void* ptr);
+void runCommand(char* commandtorun,void* ptr,bool interm);
 
 #endif
 

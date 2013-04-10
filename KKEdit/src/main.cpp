@@ -184,31 +184,6 @@ void buildFindReplace(void)
 	gtk_signal_connect (GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
 }
 
-/*
-	FILE*	fd=NULL;
-	char*	filename;
-	char	buffer[1024];
-	char	name[256];
-	int		intarg;
-	char	strarg[256];
-
-	asprintf(&filename,"%s/.config/KKEdit/kkedit.rc",getenv("HOME"));
-	fd=fopen(filename,"r");
-	if (fd!=NULL)
-		{
-			while(feof(fd)==0)
-				{
-					fgets(buffer,4096,fd);
-					sscanf(buffer,"%s %s",(char*)&name,(char*)&strarg);
-
-name	Open Terminal Here
-insert	0
-replace 0
-paste 0
-interminal 0
-
-*/
-
 void buildTools(void)
 {
 	GDir*			folder;
@@ -218,47 +193,44 @@ void buildTools(void)
 	char*			filepath;
 	char			buffer[4096];
 	char			strarg[256];
-//	char			tooldata[256];
 	GtkWidget*		menu;
-//	char*			scriptdata;
 	toolStruct*		tool;
-//	pageStruct*	page=getPageStructPtr(-1);
+	char*			datafolder[2];
 
-//	if (g_file_test("/usr/share/KKEdit/tools",G_FILE_TEST_IS_DIR))
-//		{
-//	folder=g_dir_open("/usr/share/KKEdit/tools",0,NULL);
+	asprintf(&datafolder[0],"%s/tools/",DATADIR);
+	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));
+
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutools),menu);
 
-	folder=g_dir_open("/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/tools",0,NULL);
-	if(folder!=NULL)
+	for(int loop=0;loop<2;loop++)
 		{
-			entry=g_dir_read_name(folder);
-			while(entry!=NULL)
+			folder=g_dir_open(datafolder[loop],0,NULL);
+			if(folder!=NULL)
 				{
-					//asprintf(&filepath,"/usr/share/KKEdit/tools/%s",entry);
-					asprintf(&filepath,"/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/tools/%s",entry);
-					fd=fopen(filepath,"r");
-					if (fd!=NULL)
-						{
-							fgets(buffer,4096,fd);
-							fgets(buffer,4096,fd);
-							fclose(fd);
-
-							tool=(toolStruct*)malloc(sizeof(toolStruct));
-							sscanf(buffer,"#%i %i %[a-zA-Z0-9 \t_-]s",(int*)&tool->flags,(int*)&tool->inTerminal,strarg);
-							asprintf(&tool->menuName,"%s",strarg);
-							asprintf(&tool->filePath,"%s",filepath);
-							//asprintf(&tool->currentDir,"%s",g_path_get_dirname(page->filePath));
-							menuitem=gtk_image_menu_item_new_with_label(tool->menuName);
-							gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
-							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)tool);
-						}
 					entry=g_dir_read_name(folder);
+					while(entry!=NULL)
+						{
+							asprintf(&filepath,"%s%s",datafolder[loop],entry);
+							fd=fopen(filepath,"r");
+							if (fd!=NULL)
+								{
+									fgets(buffer,4096,fd);
+									fgets(buffer,4096,fd);
+									fclose(fd);
+
+									tool=(toolStruct*)malloc(sizeof(toolStruct));
+									sscanf(buffer,"#%i %i %[a-zA-Z0-9 \t_-]s",(int*)&tool->flags,(int*)&tool->inTerminal,strarg);
+									asprintf(&tool->menuName,"%s",strarg);
+									asprintf(&tool->filePath,"%s",filepath);
+									menuitem=gtk_image_menu_item_new_with_label(tool->menuName);
+									gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+									gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)tool);
+								}
+							entry=g_dir_read_name(folder);
+						}
+					g_dir_close(folder);
 				}
-						
-			g_dir_close(folder);
 		}
 }
 
@@ -274,9 +246,6 @@ int main(int argc,char **argv)
 
 	gtk_init(&argc,&argv);
 	init();
-
-//printf("XXX%sZZZ\n",DATADIR);
-//return(0);
 
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size((GtkWindow*)window,windowWidth,windowHeight);

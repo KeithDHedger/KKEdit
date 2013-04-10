@@ -266,7 +266,6 @@ void find(GtkWidget* widget,gpointer data)
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 {
 	pageStruct* page=getPageStructPtr(-1);
-	GtkTextIter tempiter;
 	gchar*		selectedtext=NULL;
 
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
@@ -379,7 +378,6 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 		}
 //not in any open files
 //check ./
-//		asprintf(&searchdir,"%s",g_path_get_dirname(page->filePath));
 	asprintf(&command,"ctags -xR %s",g_path_get_dirname(page->filePath));
 	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
 	if (retval==0)
@@ -470,7 +468,6 @@ void externalTool(GtkWidget* widget,gpointer data)
 	char*		text=NULL;
 	GtkTextIter	start;
 	GtkTextIter	end;
-	char*		fullcommand;
 
 	dirname=g_path_get_dirname(page->filePath);
 //
@@ -485,7 +482,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	chdir(dirname);
 	setenv("KKEDIT_CURRENTFILE",page->filePath,1);
 	setenv("KKEDIT_CURRENTDIR",dirname,1);
-	runCommand(tool->filePath,&text);
+	runCommand(tool->filePath,&text,tool->inTerminal);
 	if(text!=NULL)
 		{
 			if(tool->flags & TOOL_REPLACE_OP)
