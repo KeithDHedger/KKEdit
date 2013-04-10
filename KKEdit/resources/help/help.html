@@ -15,6 +15,10 @@
       <hr size="2" width="100%"><big><a href="#navanc">Navigation Menu</a><br>
         <a href="#funcanc">Functions Menu</a><br>
         <a href="#toolsanc">Tools Menu</a><br>
+        <a href="#prefsanc">Preferences</a><br>
+        <br>
+        <font color="#ff0000"><a href="#tbdanc"><b><u>TO BE DONE -
+                PLEASE READ</u></b></a></font><br>
       </big>
       <hr size="2" width="100%"><big><b><br>
         </b><u><b><a name="navanc"></a>Navigation Menu</b></u></big><br>
@@ -59,10 +63,58 @@
                 <img alt="openterm" src="openterminal.png" height="396"
                   width="729"><br>
                 <br>
-                External tools can either be added globaly to
+                External tools can either be added globally to
                 /usr/share/KKEdit/tools (if you have installed with
                 --prefix=/usr) or locally in ~/.KKEdit/tools.<br>
+                External tools are just script files with the second
+                line beginning with a '#' like so:<br>
                 <br>
-              </big></small></small></small></big></div>
+                <img alt="exttool" src="exttool.png" height="209"
+                  width="437"><br>
+                Where the first number can be 0 to ignore the output
+                from the script, 1 to replace the currently selected
+                text (or insert at the cursor) and 2 to replace the
+                entire contents of the current document with the output
+                from the script.<br>
+                The second number if set to 1 will run the script in a
+                terminal, you must have an app called 'terminal'
+                somewhere in your path, in Xfce4 for instance 'terminal'
+                is a symlink to '/usr/bin/terminal'<br>
+                The final bit is the name that appears in the 'Tools'
+                menu of KKEdit.<br>
+                <br>
+              </big></small></small></small></big>
+      <hr size="2" width="100%"><big><small><small><small><big><br>
+                <big><big><a name="prefsanc"></a><u><b>Preferences<br>
+                      </b></u><small><small>The Prefs file is created
+                        ~/.config/KKEdit/kkedit.rc and will be
+                        created/recreated when quitting KKEdit, the
+                        format is one prefname for each line followed by
+                        a value like so:<br>
+                        <br>
+                        indentcode&nbsp;&nbsp;&nbsp; 1<br>
+                        showlinenumbers&nbsp;&nbsp;&nbsp; 1<br>
+                        wrapline&nbsp;&nbsp;&nbsp; 1<br>
+                        highlightcurrentline&nbsp;&nbsp;&nbsp; 1<br>
+                        tabwidth&nbsp;&nbsp;&nbsp; 4<br>
+                        font&nbsp;&nbsp;&nbsp; mono 10<br>
+                        <br>
+                      </small></small></big></big></big></small></small></small></big><small>What
+        the variables do is fairly self evident, a one is a boolean
+        value and turns the variable on a off.<br>
+        The tab width is number of spaces for a tab.<br>
+        The font should specify a fontname and size.<br>
+        <br>
+      </small><u><b></b></u>
+      <hr size="2" width="100%"><br>
+      <u><b><a name="tbdanc"></a>TO BE DONE<br>
+          <br>
+        </b></u><b>1)</b><small> Set up&nbsp; a GUI to build an external
+        tool script.<br>
+        <big><b>2)</b></big> Set up a GUI for the preferences<br>
+        <big><b>3)</b></big> Add bookmarks.<br>
+        <big><b>4)</b></big> Improve this help file.<br>
+        <br>
+      </small></div>
   </body>
 </html>
