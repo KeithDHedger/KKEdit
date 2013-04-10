@@ -10,6 +10,9 @@ kkedit_CXXFLAGS = -O3 -export-dynamic
 pixfilesdir = $(pkgdatadir)/pixmaps
 pixfiles_DATA = ../resources/pixmaps/*
 
+helpfilesdir = $(pkgdatadir)/help
+helpfiles_DATA = ../resources/help/*
+
 scriptfilesdir = $(pkgdatadir)/tools
 scriptfiles_SCRIPTS = ../resources/tools/*
 

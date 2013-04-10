@@ -524,6 +524,7 @@ void openHelp(GtkWidget* widget,gpointer data)
 {
 	char*	runhelp;
 
-	asprintf(&runhelp,"%s%s",
-	runCommand("xdg-open
+	asprintf(&runhelp,"xdg-open %s/help/help.html",DATADIR);
+	runCommand(runhelp,NULL,false);
+	g_free(runhelp);
 }

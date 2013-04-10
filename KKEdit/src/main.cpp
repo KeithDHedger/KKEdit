@@ -470,11 +470,17 @@ int main(int argc,char **argv)
 //help
 	menuhelp=gtk_menu_item_new_with_label("Help");
 	menu=gtk_menu_new();
+//about
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuhelp),menu);
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_ABOUT,NULL);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doAbout),NULL);
-
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doAbout),NULL);
+//help
+	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_HELP,NULL);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(openHelp),NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufile);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuedit);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menunav);
