@@ -31,5 +31,5 @@ PKG_CHECK_MODULES(GTKSRC, $GTKSRC_MODULES)
 AC_SUBST(GTKSRC_CFLAGS)
 AC_SUBST(GTKSRC_LIBS)
 
-AC_OUTPUT(Makefile KKEdit/app/Makefile KKEdit/debug/Makefile)
+AC_OUTPUT(Makefile KKEdit/app/Makefile)
 
