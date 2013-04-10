@@ -31,5 +31,11 @@ PKG_CHECK_MODULES(GTKSRC, $GTKSRC_MODULES)
 AC_SUBST(GTKSRC_CFLAGS)
 AC_SUBST(GTKSRC_LIBS)
 
+AC_CHECK_PROG(CTAGS, ctags ,true,false)
+if test $CTAGS = false; then
+	AC_MSG_ERROR([No ctags program found!])
+fi
+
 AC_OUTPUT(Makefile KKEdit/app/Makefile)
+
 
