@@ -30,5 +30,7 @@ int show_question(char* filename);
 void goToDefinition(GtkWidget* widget,gpointer data);
 void findFile(GtkWidget* widget,gpointer data);
 void externalTool(GtkWidget* widget,gpointer data);
+void addBookmark(GtkWidget* widget,gpointer data);
+void removeBookmark(GtkWidget* widget,gpointer data);
 
 #endif

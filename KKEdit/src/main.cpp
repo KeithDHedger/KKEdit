@@ -448,29 +448,24 @@ int main(int argc,char **argv)
 
 //function menu
 	menufunc=gtk_menu_item_new_with_label("Functions");
-//	menu=gtk_menu_new();
-//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufunc),menu);
 
+#if false
 //bookmarks
 	menubookmark=gtk_menu_item_new_with_label("Bookmarks");
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menubookmark),menu);
 	menuitem=gtk_menu_item_new_with_label("Add Bookmark");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(addBookmark),NULL);
+	menuitem=gtk_menu_item_new_with_label("Remove Bookmark");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(removeBookmark),NULL);
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
+#endif
 //external tools
 	menutools=gtk_menu_item_new_with_label("Tools");
-//	menu=gtk_menu_new();
-//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutools),menu);
 	buildTools();
-
-//	menuitem=gtk_menu_item_new_with_label("Add Bookmark");
-///	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-//	menuitem=gtk_separator_menu_item_new();
-//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
 
 //help
 	menuhelp=gtk_menu_item_new_with_label("Help");
@@ -484,7 +479,7 @@ int main(int argc,char **argv)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuedit);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menunav);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufunc);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menubookmark);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menubookmark);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menutools);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
 

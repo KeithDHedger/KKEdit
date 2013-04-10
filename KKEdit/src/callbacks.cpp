@@ -508,4 +508,22 @@ void externalTool(GtkWidget* widget,gpointer data)
 	g_free(dirname);
 }
 
+void addBookmark(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=getPageStructPtr(-1);
+	printf("addBookmark\n");
+	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+}
 
+void removeBookmark(GtkWidget* widget,gpointer data)
+{
+	printf("removeBookmark\n");
+}
+
+void openHelp(GtkWidget* widget,gpointer data)
+{
+	char*	runhelp;
+
+	asprintf(&runhelp,"%s%s",
+	runCommand("xdg-open
+}
