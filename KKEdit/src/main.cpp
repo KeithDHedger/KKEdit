@@ -275,6 +275,9 @@ int main(int argc,char **argv)
 	gtk_init(&argc,&argv);
 	init();
 
+//printf("XXX%sZZZ\n",DATADIR);
+//return(0);
+
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size((GtkWindow*)window,windowWidth,windowHeight);
 	if(windowX!=-1 && windowY!=-1)
