@@ -1,3 +1,47 @@
 #!/bin/bash
 #0 1 Make External Tool
 
+echo "What do you want to do with the output?" 
+select THENAME in "Ignore" "Paste" "Replace Entire Contents"
+	do
+		if [ "X${THENAME:0:1}" = 'XI' ] ||  [ "X${THENAME:0:1}" = 'XP' ] || [ "X${THENAME:0:1}" = 'XR' ];then
+			break
+		fi
+	done
+
+case "${THENAME:0:1}" in
+	'I')
+		OP=0
+		;;
+	'P')
+		OP=1
+		;;
+	'R')
+		OP=2
+		;;
+esac
+
+echo "Do you want to run the tool in a terminal window?" 
+select THENAME in "Yes" "No"
+	do
+		if [ "X${THENAME:0:1}" = 'XN' ] ||  [ "X${THENAME:0:1}" = 'XY' ]
+			break
+		fi
+	done
+
+case "${THENAME:0:1}" in
+	'Y')
+		INTERM=1
+		;;
+	'N')
+		INTERM=0
+		;;
+esac
+
+read -p "What name should apear in the menu? " TOOLNAME
+
+
+
+
+
+echo $OP
