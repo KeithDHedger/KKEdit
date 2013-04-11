@@ -24,7 +24,7 @@ esac
 echo "Do you want to run the tool in a terminal window?" 
 select THENAME in "Yes" "No"
 	do
-		if [ "X${THENAME:0:1}" = 'XN' ] ||  [ "X${THENAME:0:1}" = 'XY' ]
+		if [ "X${THENAME:0:1}" = 'XN' ] ||  [ "X${THENAME:0:1}" = 'XY' ];then
 			break
 		fi
 	done
@@ -40,8 +40,32 @@ esac
 
 read -p "What name should apear in the menu? " TOOLNAME
 
+sed -i "1atext_to_insert" "$KKEDIT_FILEPATH"
+chmod +x "$KKEDIT_FILEPATH"
 
+echo "Do you want to install the file?" 
+select THENAME in "No" "Local Install" "Global Install" "Both"
+	do
+		if [ "X${THENAME:0:1}" = 'XN' ] ||  [ "X${THENAME:0:1}" = 'XL' ] || [ "X${THENAME:0:1}" = 'XG' ] ||  [ "X${THENAME:0:1}" = 'XB' ];then
+			break
+		fi
+	done
 
-
-
-echo $OP
+case "${THENAME:0:1}" in
+	'N')
+		return
+		;;
+	'L')
+		cp "$KKEDIT_FILEPATH" ${HOME}/.KKEdit/tools
+		;;
+	'G')
+		sudo mkdir -p "${KKEDIT_DATADIR}/tools/"
+		sudo cp "$KKEDIT_FILEPATH" "${KKEDIT_DATADIR}/tools/"
+		;;
+	'B')
+		mkdir -p ${HOME}/.KKEdit/tools
+		cp "$KKEDIT_FILEPATH" ${HOME}/.KKEdit/tools
+		sudo mkdir -p "${KKEDIT_DATADIR}/tools/"
+		sudo cp "$KKEDIT_FILEPATH" "${KKEDIT_DATADIR}/tools/"
+		;;
+esac

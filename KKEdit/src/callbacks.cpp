@@ -482,6 +482,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	chdir(dirname);
 	setenv("KKEDIT_CURRENTFILE",page->filePath,1);
 	setenv("KKEDIT_CURRENTDIR",dirname,1);
+	setenv("KKEDIT_DATADIR",DATADIR,1);
 	runCommand(tool->filePath,&text,tool->inTerminal);
 	if(text!=NULL)
 		{
@@ -504,6 +505,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 
 	unsetenv("KKEDIT_FILEPATH");
 	unsetenv("KKEDIT_CURRENTDIR");
+	unsetenv("KKEDIT_DATADIR");
 	g_free(text);
 	g_free(dirname);
 }

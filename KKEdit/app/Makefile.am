@@ -25,6 +25,7 @@ install-exec-hook:
 	cp ../resources/pixmaps/KKEdit.png /usr/share/pixmaps
 	echo Icon=${prefix}/share/KKEdit/pixmaps/KKEdit.png >> /usr/share/applications/KKEdit.desktop
 	echo Exec=${prefix}/bin/kkedit >> /usr/share/applications/KKEdit.desktop
+	mkdir -p $(pkgdatadir)/tools
 
 uninstall-hook:
 	rm -f /usr/share/applications/KKEdit.desktop /usr/share/pixmaps/KKEdit.png
