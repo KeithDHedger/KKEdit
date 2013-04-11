@@ -33,5 +33,6 @@ void externalTool(GtkWidget* widget,gpointer data);
 void addBookmark(GtkWidget* widget,gpointer data);
 void removeBookmark(GtkWidget* widget,gpointer data);
 void openHelp(GtkWidget* widget,gpointer data);
+void reloadFile(GtkWidget* widget,gpointer data);
 
 #endif

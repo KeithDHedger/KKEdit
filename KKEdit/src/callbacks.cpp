@@ -503,7 +503,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 				}
 		}
 
-	unsetenv("KKEDIT_FILEPATH");
+	unsetenv("KKEDIT_CURRENTFILE");
 	unsetenv("KKEDIT_CURRENTDIR");
 	unsetenv("KKEDIT_DATADIR");
 	g_free(text);
@@ -530,3 +530,26 @@ void openHelp(GtkWidget* widget,gpointer data)
 	runCommand(runhelp,NULL,false);
 	g_free(runhelp);
 }
+
+void reloadFile(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=getPageStructPtr(-1);
+	gchar*		buffer;
+	long		filelen;
+	GtkTextIter	start;
+	GtkTextIter	end;
+
+	g_file_get_contents(page->filePath,&buffer,(gsize*)&filelen,NULL);
+
+	gtk_text_buffer_get_bounds((GtkTextBuffer*)page->buffer,&start,&end);
+	gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&start,&end);
+	gtk_text_buffer_delete_selection((GtkTextBuffer*)page->buffer,true,true);
+	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+	gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
+}
+
+
+
+
+
+

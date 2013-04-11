@@ -13,8 +13,8 @@ pixfiles_DATA = ../resources/pixmaps/*
 helpfilesdir = $(pkgdatadir)/help
 helpfiles_DATA = ../resources/help/*
 
-#scriptfilesdir = $(pkgdatadir)/tools
-#scriptfiles_SCRIPTS = ../resources/tools/*
+scriptfilesdir = $(pkgdatadir)/tools
+scriptfiles_SCRIPTS = ../resources/tools/*
 
 bin_PROGRAMS = kkedit
 
@@ -25,7 +25,6 @@ install-exec-hook:
 	cp ../resources/pixmaps/KKEdit.png /usr/share/pixmaps
 	echo Icon=${prefix}/share/KKEdit/pixmaps/KKEdit.png >> /usr/share/applications/KKEdit.desktop
 	echo Exec=${prefix}/bin/kkedit >> /usr/share/applications/KKEdit.desktop
-	mkdir -p $(pkgdatadir)/tools
 
 uninstall-hook:
 	rm -f /usr/share/applications/KKEdit.desktop /usr/share/pixmaps/KKEdit.png

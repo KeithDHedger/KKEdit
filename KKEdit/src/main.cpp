@@ -38,10 +38,10 @@ void writeConfig(void)
 	gtk_widget_get_allocation(window,&alloc);
 	gtk_window_get_position((GtkWindow*)window,&winx,&winy);
 
-	asprintf(&filename,"%s/.config/KKEdit",getenv("HOME"));
+	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	g_free(filename);
-	asprintf(&filename,"%s/.config/KKEdit/kkedit.rc",getenv("HOME"));
+	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	fd=fopen(filename,"w");
 	if (fd!=NULL)
 		{
@@ -96,7 +96,7 @@ void readConfig(void)
 	int		intarg;
 	char	strarg[256];
 
-	asprintf(&filename,"%s/.config/KKEdit/kkedit.rc",getenv("HOME"));
+	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	fd=fopen(filename,"r");
 	if (fd!=NULL)
 		{
@@ -383,6 +383,13 @@ int main(int argc,char **argv)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(closeTab),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'W',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//reload file
+	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_REVERT_TO_SAVED,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(reloadFile),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
