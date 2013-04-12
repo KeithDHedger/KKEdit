@@ -152,6 +152,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	int			linenum;
 	char		tmpstr[1024];
 	char*		lineptr;
+	bool		onefunc=false;
 
 	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menufunc);
 	if (submenu!=NULL)
@@ -174,20 +175,24 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 
 			while (lineptr!=NULL)
 				{
+					tmpstr[0]=0;
 					sscanf (lineptr,"%*s %*s %i %*s %[]a-zA-Z0-9 ()_-,.*#;[\"]s",&linenum,tmpstr);
 					lineptr=strchr(lineptr,'\n');
 					if (lineptr!=NULL)
 						lineptr++;
-
-					menuitem=gtk_image_menu_item_new_with_label(tmpstr);
-					gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
-					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
-//					asprintf(&funcdef
-//					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)tmpstr);
+					if(strlen(tmpstr)>0)
+						{
+							onefunc=true;
+							menuitem=gtk_image_menu_item_new_with_label(tmpstr);
+							gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
+							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
+						}
 				}
 			gtk_window_set_title((GtkWindow*)window,page->fileName);
 			gtk_widget_show_all(window);
 			g_free(functions);
+
+			gtk_widget_set_sensitive((GtkWidget*)menufunc,onefunc);
 //		}
 //	else
 //		{
