@@ -18,6 +18,17 @@
 #include "files.h"
 #include "callbacks.h"
 
+GtkWidget*	prefswin;
+GtkWidget*	fontBox;
+GtkWidget*	terminalBox;
+bool		tmpIndent;
+bool		tmpLineNumbers;
+bool		tmpLineWrap;
+bool		tmpHighLight;
+int			tmpTabWidth;
+//char*		tmpFontAndSize;
+//char*		tmpTerminalCommand;
+
 void doAbout(GtkWidget* widget,gpointer data)
 {
 	const char*	authors[]={"K.D.Hedger <"MYEMAIL">",NULL};
@@ -153,6 +164,12 @@ void init(void)
 	replaceAll=false;
 
 	readConfig();
+
+	tmpIndent=indent;
+	tmpLineNumbers=lineNumbers;
+	tmpLineWrap=lineWrap;
+	tmpHighLight=highLight;
+	tmpTabWidth=tabWidth;
 }
 
 void buildFindReplace(void)
@@ -276,15 +293,6 @@ void buildTools(void)
 		}
 }
 
-GtkWidget*	prefswin;
-GtkWidget*	fontBox;
-GtkWidget*	terminalBox;
-bool		tmpIndent;
-bool		tmpLineNumbers;
-bool		tmpLineWrap;
-bool		tmpHighLight;
-int			tmpTabWidth;
-
 void setPrefs(GtkWidget* widget,gpointer data)
 {
 
@@ -297,9 +305,12 @@ void setPrefs(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"high")==0)
 		tmpHighLight=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
+	if(strcmp(gtk_widget_get_name(widget),"tabs")==0)
+		tmpTabWidth=(int)gtk_spin_button_get_value((GtkSpinButton*)data);
+
 	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
 		gtk_widget_destroy(prefswin);
-		
+
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{
 			indent=tmpIndent;
@@ -310,22 +321,25 @@ void setPrefs(GtkWidget* widget,gpointer data)
 				{
 					g_free(terminalCommand);
 					asprintf(&terminalCommand,"%s",gtk_entry_get_text((GtkEntry*)terminalBox));
+				//	g_free(tmpTerminalCommand);
+				//	asprintf(&tmpTerminalCommand,"%s",terminalCommand);
 				}
 
 			if(fontAndSize!=NULL)
 				{
 					g_free(fontAndSize);
 					asprintf(&fontAndSize,"%s",gtk_entry_get_text((GtkEntry*)fontBox));
+				//	g_free(tmpFontAndSize);
+				//	asprintf(&tmpFontAndSize,"%s",fontAndSize);
 				}
 
+			tabWidth=tmpTabWidth;
 			gtk_widget_destroy(prefswin);
 		}
-
 }
 
 void doPrefs(void)
 {
-	
 	GtkWidget*	vbox;
 	GtkWidget*	hbox;
 	GtkWidget*	item;
@@ -360,7 +374,7 @@ void doPrefs(void)
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
 //tabwidth  -- CLEAN
-	GtkObject*	adj=gtk_adjustment_new(tabWidth,1,64,1,1,0);
+	GtkObject*	adj=gtk_adjustment_new(tmpTabWidth,1,64,1,1,0);
 	hbox=gtk_hbox_new(true,0);
 	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
 	gtk_widget_set_name(item,"tabs");
