@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cd /tmp
+svn co file:///media/LinuxData/Development/SVN/KKEdit
+cd KKEdit
+find -iname ".svn" -exec rm -rf '{}' \;
+cd ..
+tar -cvzf KKEdit.tar.gz KKEdit
+#rm -rf KKEdit

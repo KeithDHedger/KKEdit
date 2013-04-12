@@ -1,0 +1,11 @@
+0.0.4
+1st release
+
+0.0.5
+Added case insensitive search.
+Function menu updated on save file.
+Added revert.
+Added GUI for Prefs.
+Added save state of search sensitive to rc file.
+Added teminal command to prefs.
+Code clean.
