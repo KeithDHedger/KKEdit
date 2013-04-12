@@ -152,6 +152,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	int			linenum;
 	char		tmpstr[1024];
 	char*		lineptr;
+	char*		funcdef;
 
 	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menufunc);
 	if (submenu!=NULL)
@@ -182,6 +183,8 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 					menuitem=gtk_image_menu_item_new_with_label(tmpstr);
 					gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
 					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
+//					asprintf(&funcdef
+//					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)tmpstr);
 				}
 			gtk_window_set_title((GtkWindow*)window,page->fileName);
 			gtk_widget_show_all(window);
@@ -327,7 +330,9 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 				if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
 					{
 						selectedtext=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end,false);
-						if(strcasecmp(selectedtext,gtk_entry_get_text((GtkEntry*)findBox))==0)
+	
+	
+						if((insensitiveSearch==true && strcasecmp(selectedtext,gtk_entry_get_text((GtkEntry*)findBox))==0) ||(insensitiveSearch==false && strcmp(selectedtext,gtk_entry_get_text((GtkEntry*)findBox))==0))
 							{
 								gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 								gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,gtk_entry_get_text((GtkEntry*)replaceBox),-1);

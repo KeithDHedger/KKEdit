@@ -212,6 +212,7 @@ bool saveFile(GtkWidget* widget,gpointer data)
 			saveFilePath=NULL;
 		}
 	setLanguage(page);
+	switchPage(notebook,NULL,currentTabNumber,NULL);
 	return(true);
 }
 

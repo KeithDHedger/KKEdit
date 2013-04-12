@@ -58,6 +58,8 @@ void writeConfig(void)
 			fprintf(fd,"showlinenumbers	%i\n",(int)lineNumbers);
 			fprintf(fd,"wrapline	%i\n",(int)lineWrap);
 			fprintf(fd,"highlightcurrentline	%i\n",(int)highLight);
+			fprintf(fd,"insenssearch	%i\n",(int)insensitiveSearch);
+
 			fprintf(fd,"tabwidth	%i\n",tabWidth);
 			fprintf(fd,"font	%s\n",fontAndSize);
 			fprintf(fd,"terminalcommand	%s\n",terminalCommand);
@@ -123,6 +125,10 @@ void readConfig(void)
 							lineWrap=(bool)atoi(strarg);
 					if(strcasecmp(name,"highlightcurrentline")==0)
 							highLight=(bool)atoi(strarg);
+
+					if(strcasecmp(name,"insenssearch")==0)
+							insensitiveSearch=(bool)atoi(strarg);
+
 					if(strcasecmp(name,"tabwidth")==0)
 							tabWidth=atoi(strarg);
 					if(strcasecmp(name,"font")==0)
