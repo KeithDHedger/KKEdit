@@ -323,7 +323,6 @@ void setPrefs(GtkWidget* widget,gpointer data)
 
 }
 
-
 void doPrefs(void)
 {
 	
