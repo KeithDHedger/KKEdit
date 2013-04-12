@@ -218,13 +218,15 @@ void buildFindReplace(void)
 	item=gtk_check_button_new_with_label("Wrap");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,wrapSearch);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	gtk_widget_show(item);
+//	gtk_widget_show(item);
+	gtk_widget_hide(item);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)2);
 
 	item=gtk_check_button_new_with_label("Replace All");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,replaceAll);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	gtk_widget_show(item);
+//	gtk_widget_show(item);
+	gtk_widget_hide(item);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)3);
 
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
