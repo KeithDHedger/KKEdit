@@ -9,4 +9,5 @@ Added GUI for Prefs.
 Added save state of search sensitive to rc file.
 Added teminal command to prefs.
 Code clean.
-Bug Fix;
+Bug Fix.
+Updated Help file.
