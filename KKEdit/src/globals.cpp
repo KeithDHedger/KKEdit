@@ -74,8 +74,10 @@ pageStruct* getPageStructPtr(int pagenum)
 		thispage=pagenum;
 
 	pageBox=gtk_notebook_get_nth_page(notebook,thispage);
-
-	return((pageStruct*)g_object_get_data(G_OBJECT(pageBox),"pagedata"));
+	if(pageBox==NULL)
+		return(NULL);
+	else
+		return((pageStruct*)g_object_get_data(G_OBJECT(pageBox),"pagedata"));
 }
 
 void getMimeType(char* filepath,void* ptr)

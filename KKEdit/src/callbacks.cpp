@@ -152,7 +152,6 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	int			linenum;
 	char		tmpstr[1024];
 	char*		lineptr;
-	char*		funcdef;
 
 	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menufunc);
 	if (submenu!=NULL)
@@ -501,8 +500,13 @@ void externalTool(GtkWidget* widget,gpointer data)
 	char*		text=NULL;
 	GtkTextIter	start;
 	GtkTextIter	end;
+	if(page==NULL)
+		return;
 
-	dirname=g_path_get_dirname(page->filePath);
+	if(page->filePath!=NULL)
+		dirname=g_path_get_dirname(page->filePath);
+	else
+		asprintf(&dirname,"%s",getenv("HOME"));
 //
 //	printf("%s\n",tool->menuName);
 //	printf("%s\n",tool->filePath);
@@ -512,10 +516,13 @@ void externalTool(GtkWidget* widget,gpointer data)
 //	printf("%i\n",tool->inTerminal);
 //	asprintf(&fullcommand,"(cd \"%s\";%s)",dirname,tool->filePath);
 //	runCommand(fullcommand,&text);
+	
 	chdir(dirname);
+
 	setenv("KKEDIT_CURRENTFILE",page->filePath,1);
 	setenv("KKEDIT_CURRENTDIR",dirname,1);
 	setenv("KKEDIT_DATADIR",DATADIR,1);
+
 	runCommand(tool->filePath,&text,tool->inTerminal);
 	if(text!=NULL)
 		{
