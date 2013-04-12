@@ -26,8 +26,6 @@ bool		tmpLineNumbers;
 bool		tmpLineWrap;
 bool		tmpHighLight;
 int			tmpTabWidth;
-//char*		tmpFontAndSize;
-//char*		tmpTerminalCommand;
 
 void doAbout(GtkWidget* widget,gpointer data)
 {
@@ -323,16 +321,12 @@ void setPrefs(GtkWidget* widget,gpointer data)
 				{
 					g_free(terminalCommand);
 					asprintf(&terminalCommand,"%s",gtk_entry_get_text((GtkEntry*)terminalBox));
-				//	g_free(tmpTerminalCommand);
-				//	asprintf(&tmpTerminalCommand,"%s",terminalCommand);
 				}
 
 			if(fontAndSize!=NULL)
 				{
 					g_free(fontAndSize);
 					asprintf(&fontAndSize,"%s",gtk_entry_get_text((GtkEntry*)fontBox));
-				//	g_free(tmpFontAndSize);
-				//	asprintf(&tmpFontAndSize,"%s",fontAndSize);
 				}
 
 			tabWidth=tmpTabWidth;

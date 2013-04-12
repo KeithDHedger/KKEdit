@@ -327,7 +327,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 				if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
 					{
 						selectedtext=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end,false);
-						if(strcmp(selectedtext,gtk_entry_get_text((GtkEntry*)findBox))==0)
+						if(strcasecmp(selectedtext,gtk_entry_get_text((GtkEntry*)findBox))==0)
 							{
 								gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 								gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,gtk_entry_get_text((GtkEntry*)replaceBox),-1);
