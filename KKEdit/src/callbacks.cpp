@@ -311,9 +311,23 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 						gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
 						page->iter=page->match_end;
 					}
-//				else
+				else
+					{
+						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
+						if(gtk_source_iter_forward_search(&page->iter,gtk_entry_get_text((GtkEntry*)findBox),flags,&page->match_start,&page->match_end,NULL))
+							{
+								gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+								gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
+								page->iter=page->match_end;
+							}
+						//else
+						//	{
+						//		gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->iter,&page->iter);
+						//	}
+					}
 	//				{
 		//			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
+		
 			//		//gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,&page->iter));
 				//	}
 
