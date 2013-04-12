@@ -79,10 +79,15 @@ extern bool				lineWrap;
 extern bool				highLight;
 extern int				tabWidth;
 extern char*			fontAndSize;
+extern char*			terminalCommand;
+
 extern int				windowWidth;
 extern int				windowHeight;
 extern int				windowX;
 extern int				windowY;
+extern bool				wrapSearch;
+extern bool				insensitiveSearch;
+extern bool				replaceAll;
 
 extern int				currentTabNumber;
 

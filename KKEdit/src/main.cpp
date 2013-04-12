@@ -51,6 +51,7 @@ void writeConfig(void)
 			fprintf(fd,"highlightcurrentline	%i\n",(int)highLight);
 			fprintf(fd,"tabwidth	%i\n",tabWidth);
 			fprintf(fd,"font	%s\n",fontAndSize);
+			fprintf(fd,"terminalcommand	%s\n",terminalCommand);
 			fprintf(fd,"windowsize	%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
 			fclose(fd);
 		}
@@ -120,6 +121,13 @@ void readConfig(void)
 							sscanf(buffer,"%*s %s %i",(char*)&strarg,(int*)&intarg);
 							asprintf(&fontAndSize,"%s %i",strarg,intarg);
 						}
+					if(strcasecmp(name,"terminalcommand")==0)
+						{
+							g_free(terminalCommand);
+							sscanf(buffer,"%*s %[]a-zA-Z0-9 ()_-,.*#;[\"]s",(char*)&strarg);
+							asprintf(&terminalCommand,"%s",strarg);
+						}
+
 					if(strcasecmp(name,"windowsize")==0)
 						sscanf(buffer,"%*s %i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
 				}
@@ -135,10 +143,14 @@ void init(void)
 	highLight=true;
 	tabWidth=4;
 	asprintf(&fontAndSize,"%s","mono 10");
+	asprintf(&terminalCommand,"%s","xterm");
 	windowWidth=800;
 	windowHeight=400;
 	windowX=-1;
 	windowY=-1;
+	wrapSearch=true;
+	insensitiveSearch=true;
+	replaceAll=false;
 
 	readConfig();
 }
@@ -149,11 +161,18 @@ void buildFindReplace(void)
 	GtkWidget*	replace;
 	GtkWidget*	image;
 	GtkWidget*	label;
+	GtkWidget*	vbox;
+	GtkWidget*	hbox;
+	GtkWidget*	item;
 
 	findReplaceDialog=gtk_dialog_new_with_buttons("Find/Replace",(GtkWindow*)window, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_GO_FORWARD,FINDNEXT,GTK_STOCK_GO_BACK,FINDPREV,"Replace",REPLACE,NULL);
 	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,GTK_RESPONSE_OK);
 	g_signal_connect(G_OBJECT(findReplaceDialog),"response",G_CALLBACK(doFindReplace),NULL);
 	content_area=gtk_dialog_get_content_area(GTK_DIALOG(findReplaceDialog));
+
+	vbox=gtk_vbox_new(true,0);
+	hbox=gtk_hbox_new(false,0);
+
 
 	label=gtk_label_new("Find");
 	gtk_container_add(GTK_CONTAINER(content_area),label);
@@ -173,12 +192,35 @@ void buildFindReplace(void)
 	gtk_entry_set_activates_default((GtkEntry*)replaceBox,true);
 	gtk_container_add(GTK_CONTAINER(content_area),replaceBox);
 
+	item=gtk_check_button_new_with_label("Case insensitive");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,insensitiveSearch);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
+	gtk_widget_show(item);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)1);
+
+	item=gtk_check_button_new_with_label("Wrap");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,wrapSearch);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
+	gtk_widget_show(item);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)2);
+
+	item=gtk_check_button_new_with_label("Replace All");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,replaceAll);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
+	gtk_widget_show(item);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)3);
+
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+	gtk_box_pack_start(GTK_BOX(content_area),vbox,true,true,0);
+
 	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,100);
 	image=gtk_image_new_from_stock(GTK_STOCK_FIND_AND_REPLACE,GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image((GtkButton*)replace,image);
 
 	gtk_widget_show(findBox);
 	gtk_widget_show(replaceBox);
+	gtk_widget_show(vbox);
+	gtk_widget_show(hbox);
 
 	gtk_signal_connect_object(GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(findReplaceDialog));
 	gtk_signal_connect (GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);

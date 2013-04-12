@@ -39,10 +39,15 @@ bool			lineWrap;
 bool			highLight;
 int				tabWidth;
 char*			fontAndSize;
+char*			terminalCommand;
+
 int				windowWidth;
 int				windowHeight;
 int				windowX=-1;
 int				windowY=-1;
+bool			wrapSearch;
+bool			insensitiveSearch;
+bool			replaceAll;
 
 int				currentTabNumber;
 
@@ -150,7 +155,7 @@ void runCommand(char* commandtorun,void* ptr,bool interm)
 	gint	retval=0;
 
 	if(interm==true)
-		asprintf(&command,"terminal -x %s",commandtorun);
+		asprintf(&command,"%s %s",terminalCommand,commandtorun);
 	else
 		asprintf(&command,"%s",commandtorun);
 
