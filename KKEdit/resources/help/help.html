@@ -9,15 +9,70 @@
   <body background="NautilusBackground2.png">
     <div align="center"><big><b><u><big><big><big>KKEdit</big></big></big></u><br>
           <br>
-        </b><b>Help Manual<br>
+        </b><b>Source code text editor<br>
         </b></big>
       <hr size="2" width="100%"><img alt="main" src="main.png"
         height="554" width="923"><big><b><br>
         </b><b></b></big>
+      <hr size="2" width="100%">
+      <div align="center"><u><b>Why another text editor?</b></u><br>
+        <small><br>
+          Simple, I didn't like any of the others they were all too flat
+          ( sorry wrong sketch! ), anyway having used gedit for years it
+          was getting increasingly difficult to keep it compiling
+          without loads of gnome dependencies, looking around linux text
+          editors seem to be VERY simple (leafpad) stupidly complex
+          (GVim,Bluefish), trying to be all things to all people.<br>
+          One of the best text editors I have used is BBEdit but that is
+          only available on the mac, so I bit the bullet and decided to
+          write my own with the best bits from BBEdit ( the name KKEdit
+          is a tip of the hat to BBEdit ), gedit and leafpad. A simple
+          uncluttered interface, no major dependencies, with just the
+          features I use all the time, and TA DAH! KKEdit.<br>
+          <br>
+          <big><b><u>What it's not!</u></b></big><br>
+          <br>
+          KKEdit is NOT a word processor or a web page editor, it is NOT
+          and IDE! It won't right code for you, it wont insist on
+          inserting brackets ( REALLY annoying! ), it wont force you to
+          use any particular style, it doesn't need you to break all
+          your fingers trying to hit weird and wonderful key combo's and
+          it is not tied to one particular distro, oh yes and it won't
+          cost you a penny!<br>
+          <br>
+          <u><b><big>What it is and does</big></b></u><br>
+          <br>
+          KKEdit is a deceptivly simple text editor with syntax
+          colouring.<br>
+          It also has a function menu which allows you to jump instantly
+          to a function definition, a navigation menu which will look in
+          all open files for a function definition and then switch to
+          that tab and go to the relevant line if it can't find a
+          definition in any open files it will do a recursive search
+          from the folder of the currently selected document, you can
+          also highlight a #include directive and it will search for and
+          try to open the file, include files surrounded by &lt;&gt;
+          will be looked for in /usr/include, files surrounded by ""
+          will be looked for in the current folder.<br>
+          External tools can be added either globally or locally and
+          when run can either replace the currently select text with
+          their ouptut, replace all the files text, be run in a terminal
+          or you can choose to ignore the output form the script, BASH,
+          python and perl can be used for the script language or any
+          interpretor that uses '#' as a comment marker.<br>
+          A number of simple demo scripts are included in the folder
+          "demotoools" ( good name eh ).<br>
+          You can drag and drop a file onto the main toolbar/menu to
+          open a file.</small><small><br>
+          <br>
+        </small>
+        <hr size="2" width="100%"><small><big><big><big><big><big><big><u><b>Manual</b></u></big></big></big></big></big></big><br>
+        </small></div>
       <hr size="2" width="100%"><big><a href="#navanc">Navigation Menu</a><br>
         <a href="#funcanc">Functions Menu</a><br>
         <a href="#toolsanc">Tools Menu</a><br>
         <a href="#prefsanc">Preferences</a><br>
+        <a href="#getanc">Get It And Build It</a><br>
         <br>
         <font color="#ff0000"><a href="#tbdanc"><b><u>TO BE DONE -
                 PLEASE READ</u></b></a></font><br>
@@ -52,6 +107,8 @@
         from the menu like so:<br>
         <br>
         <img alt="funcmenu" src="functions.png" height="586" width="806"><br>
+        The Functions menu will be updated after saving a file or
+        switching tabs.<br>
         <br>
       </small>
       <hr size="2" width="100%"><big><u><b><br>
@@ -68,6 +125,12 @@
                 External tools can either be added globally to
                 /usr/share/KKEdit/tools (if you have installed with
                 --prefix=/usr) or locally in ~/.KKEdit/tools.<br>
+                External tools are passed three environment variables:<br>
+                KKEDIT_CURRENTFILE - Path to current document.<br>
+                KKEDIT_CURRENTDIR - Directory of current document.<br>
+                KKEDIT_DATADIR - Directory of global folder ( eg
+                /usr/share/KKEdit ).<br>
+                More variables may be defined later.<br>
                 External tools are just script files with the second
                 line beginning with a '#' like so:<br>
                 <br>
@@ -93,37 +156,58 @@
                         created/recreated when quitting KKEdit, the
                         format is one prefname for each line followed by
                         a value like so:<br>
-                        <br>
-                        indentcode&nbsp;&nbsp;&nbsp; 1<br>
-                        showlinenumbers&nbsp;&nbsp;&nbsp; 1<br>
-                        wrapline&nbsp;&nbsp;&nbsp; 1<br>
-                        highlightcurrentline&nbsp;&nbsp;&nbsp; 1<br>
-                        tabwidth&nbsp;&nbsp;&nbsp; 4<br>
-                        font&nbsp;&nbsp;&nbsp; mono 10<br>
-                        <br>
-                      </small></small></big></big></big></small></small></small></big><small>What
-
-        the variables do is fairly self evident, a one is a boolean
-        value and turns the variable on a 0 turns off.<br>
-        The tab width is number of spaces for a tab.<br>
-        The font should specify a fontname and size.<br>
+                        Preferences should be set from
+                        'Edit-&gt;Preferences'<br>
+                        You can set the command to run an external tool
+                        in a terminal from here.<br>
+                      </small></small></big></big></big></small></small></small></big><small>
+      </small>
+      <hr size="2" width="100%"><small><big><big><u><b><a name="getanc"></a>Get
+                it here!</b></u></big></big><br>
+        <big><a
+            href="file:///media/LinuxData/MyWebSite/zips/kkedit/KKEdit.tar.gz">KKEdit</a></big><br>
         <br>
+        <big><u><b>Dependencies</b></u></big><br>
+        <br>
+        A reasonably new Xorg and desktop.<br>
+        gtk-2.24.13.<br>
+        gtksourceview-2.11.1.<br>
+        ctags.<br>
+        xdg-utils-1.1.0.<br>
+        Autotools.<br>
+        <br>
+        If you use a source based distro like LFS or Slackware you
+        should have all(most) of these installed, if you use a
+        prepackaged distro like debian and you have not compiled from
+        source before you may have to install some development packages
+        ie for debian ( this is from memory ) the build-essential
+        package and the -dev packages for gtk2 and </small><br>
+      <small>gtksourceview, check your distros documentation and you
+        distros forums for general help on compiling software.<br>
+        <br>
+        <big><u><b>Building</b></u></big><br>
+        <br>
+        Unpack the tarball,cd into the KKEdit folder and run:<br>
+        ./autogen.sh --prefix=/usr<br>
+        make<br>
+        sudo make install</small><small><br>
       </small><u><b></b></u>
       <hr size="2" width="100%"><br>
       <u><b><a name="tbdanc"></a>TO BE DONE<br>
           <br>
         </b></u><b>1)</b><small> Make find/replace MUCH more versatile
-        with case insensitive search, file wrap, replace-all and maybe
-        simple regex.</small><br>
+        with <strike>case insensitive search</strike>, file wrap,
+        replace-all and maybe simple regex.</small><br>
       <b>2)</b><small> Set up&nbsp; a proper GUI to build an external
         tool script.<br>
-        <big><b>3)</b></big> Set up a GUI for the preferences<br>
+        <big><b>3)</b></big> <strike>Set up a GUI for the preferences</strike><br>
         <big><b>4)</b></big> Add bookmarks.</small><br>
       <small><small><big><big><b>5)</b></big> Check for file changing on
             disk and issue alert.</big><br>
         </small></small><small><small><big><big><b>6)</b></big> A decent
-            icon.</big></small><big> </big><br>
-        <big><b>7)</b></big> Improve this help file.<br>
+            icon.<br>
+            <big><b>7)</b> <small>Save/Restore session</small>.</big></big></small><br>
+        <big><b>8)</b></big> Improve this help file.<br>
         <br>
         <br>
       </small></div>
