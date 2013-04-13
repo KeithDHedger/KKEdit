@@ -597,7 +597,6 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 					gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
 					gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 					if(thistab!=loop)
-						//switchPage(notebook,NULL,loop,NULL);
 						gtk_notebook_set_current_page(notebook,loop);
 				}
 		}
@@ -611,15 +610,28 @@ void addBookmark(GtkWidget* widget,gpointer data)
 	GtkTextIter		iter;
 	char*			name;
 	int				line;
+	GtkTextIter		startprev,endprev;
+	char*			previewtext;
+//	char*			menulabel;
 
-	//printf("addBookmark\n");
-	//gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 	mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
-	//line(gtk_text_iter_get_line(&iter);
-	asprintf(&name,"Bookmark - %i",marknum);
+
+	line=gtk_text_iter_get_line(&iter);
+
+	gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&startprev,line);
+	gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&endprev,line+1);
+	previewtext=gtk_text_iter_get_text(&startprev,&endprev);
+
+	previewtext[strlen(previewtext)-1]=0;
+	asprintf(&name,"BookMark%i",marknum);
+//	asprintf(&menulabel,"%s",previewtext);
+//	menulabel[strlen(menulabel)-1]=0;
+
+//	g_free(previewtext);
+
 	gtk_text_buffer_create_mark((GtkTextBuffer*)page->buffer,name,&iter,true);
-	menuitem=gtk_image_menu_item_new_with_label(name);
+	menuitem=gtk_image_menu_item_new_with_label(previewtext);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)name);
 	marknum++;
