@@ -699,9 +699,10 @@ int main(int argc,char **argv)
 	menuitem=gtk_menu_item_new_with_label("Add Bookmark");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(addBookmark),NULL);
-	menuitem=gtk_menu_item_new_with_label("Remove Bookmark");
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(removeBookmark),NULL);
+//	menuitem=gtk_menu_item_new_with_label("Remove Bookmark");
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(removeBookmark),NULL);
+
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
 

@@ -581,16 +581,26 @@ int marknum=0;
 void jumpToMark(GtkWidget* widget,gpointer data)
 {
 	GtkTextMark*	mark;
-	pageStruct*		page=getPageStructPtr(-1);
+	pageStruct*		page;
 	GtkTextIter		iter;
+	int				thistab=currentTabNumber;
 
 	printf("%s\n",(char*)data);
-	mark=gtk_text_buffer_get_mark((GtkTextBuffer*)page->buffer,(char*)data);
 
-//	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,mark,0,false,0,0);
-	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
-	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
+		{
+			page=getPageStructPtr(loop);
+			mark=gtk_text_buffer_get_mark((GtkTextBuffer*)page->buffer,(char*)data);
+			if(mark!=NULL)
+				{
+					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+					gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
+					gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+					if(thistab!=loop)
+						//switchPage(notebook,NULL,loop,NULL);
+						gtk_notebook_set_current_page(notebook,loop);
+				}
+		}
 }
 
 void addBookmark(GtkWidget* widget,gpointer data)
@@ -600,11 +610,13 @@ void addBookmark(GtkWidget* widget,gpointer data)
 	GtkTextMark*	mark;
 	GtkTextIter		iter;
 	char*			name;
+	int				line;
 
-	printf("addBookmark\n");
+	//printf("addBookmark\n");
 	//gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 	mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+	//line(gtk_text_iter_get_line(&iter);
 	asprintf(&name,"Bookmark - %i",marknum);
 	gtk_text_buffer_create_mark((GtkTextBuffer*)page->buffer,name,&iter,true);
 	menuitem=gtk_image_menu_item_new_with_label(name);
