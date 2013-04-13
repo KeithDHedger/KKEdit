@@ -35,5 +35,7 @@ void removeBookmark(GtkWidget* widget,gpointer data);
 void openHelp(GtkWidget* widget,gpointer data);
 void reloadFile(GtkWidget* widget,gpointer data);
 void doSearchPrefs(GtkWidget* widget,gpointer data);
+void saveSession(GtkWidget* widget,gpointer data);
+void restoreSession(GtkWidget* widget,gpointer data);
 
 #endif

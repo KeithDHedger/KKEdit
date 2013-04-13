@@ -615,6 +615,13 @@ void reloadFile(GtkWidget* widget,gpointer data)
 	gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
 }
 
+void saveSession(GtkWidget* widget,gpointer data)
+{
+}
+
+void restoreSession(GtkWidget* widget,gpointer data)
+{
+}
 
 
 

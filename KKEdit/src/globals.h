@@ -21,7 +21,7 @@
 
 #define MYEMAIL "kdhedger68713@gmail.com"
 #define MYWEBSITE "http://keithhedger.hostingsiteforfree.com"
-#define VERSION "0.0.6"
+#define VERSION "0.0.7"
 
 #define TOOL_SYNC 8
 //#define TOOL_ASYNC 
