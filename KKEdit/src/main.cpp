@@ -569,14 +569,18 @@ int main(int argc,char **argv)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //save session
-	menuitem=gtk_menu_item_new_with_label("Save Session");
+	image=gtk_image_new_from_stock(GTK_STOCK_SAVE,GTK_ICON_SIZE_MENU);
+	menuitem=gtk_image_menu_item_new_with_label("Save Session");
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(saveMenu),"activate",G_CALLBACK(saveSession),NULL);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(saveSession),NULL);
 //	gtk_widget_add_accelerator((GtkWidget *)saveMenu,"activate",accgroup,'S',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 //restore session
-	menuitem=gtk_menu_item_new_with_label("Restore Session");
+	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
+	menuitem=gtk_image_menu_item_new_with_label("Restore Session");
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(saveMenu),"activate",G_CALLBACK(restoreSession),NULL);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(restoreSession),NULL);
 //	gtk_widget_add_accelerator((GtkWidget *)saveMenu,"activate",accgroup,'S',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 	menuitem=gtk_separator_menu_item_new();
@@ -664,13 +668,13 @@ int main(int argc,char **argv)
 
 //goto define
 	image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
-	menuitem= gtk_image_menu_item_new_with_label  ("Go To Definition");
+	menuitem=gtk_image_menu_item_new_with_label("Go To Definition");
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'D',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 //open include
-	menuitem= gtk_image_menu_item_new_with_label  ("Open Include File");
+	menuitem=gtk_image_menu_item_new_with_label("Open Include File");
 	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);

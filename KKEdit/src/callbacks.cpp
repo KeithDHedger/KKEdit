@@ -615,12 +615,66 @@ void reloadFile(GtkWidget* widget,gpointer data)
 	gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
 }
 
+/*
+		buff=winview.get_buffer()
+		mark=buff.get_insert()
+
+		iter=buff.get_iter_at_mark(mark)
+		ln=iter.get_line()
+
+*/
 void saveSession(GtkWidget* widget,gpointer data)
 {
+	pageStruct*	page;
+	FILE*		fd=NULL;
+	char*		filename;
+	GtkTextMark* mark;
+	GtkTextIter iter;
+	int			linenumber;
+
+	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
+	g_mkdir_with_parents(filename,493);
+	g_free(filename);
+	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
+	fd=fopen(filename,"w");
+	if (fd!=NULL)
+		{
+			for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
+				{
+					page=getPageStructPtr(loop);
+					mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+					linenumber=gtk_text_iter_get_line(&iter);
+					fprintf(fd,"%s %i\n",page->filePath,linenumber);
+				}
+			fclose(fd);
+			g_free(filename);
+		}
 }
 
 void restoreSession(GtkWidget* widget,gpointer data)
 {
+	FILE*		fd=NULL;
+	char*		filename;
+	pageStruct*	page;
+	char		buffer[2048];
+	int			intarg;
+	char		strarg[2048];
+
+	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
+	fd=fopen(filename,"r");
+	if (fd!=NULL)
+		{
+			while(fgets(buffer,2048,fd)!=NULL)
+				{
+					//buffer[strlen(buffer)-1]=0;
+					sscanf(buffer,"%s %i",(char*)&strarg,(int*)&intarg);
+					openFile(strarg,intarg);
+				}
+
+			fclose(fd);
+			g_free(filename);
+		}
 }
 
 
