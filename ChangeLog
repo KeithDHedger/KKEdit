@@ -11,3 +11,7 @@ Added teminal command to prefs.
 Code clean.
 Bug Fix.
 Updated Help file.
+
+0.0.6
+Added wrap for search replace.
+Dim function menu when no functions available.
