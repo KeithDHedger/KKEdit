@@ -577,11 +577,41 @@ void externalTool(GtkWidget* widget,gpointer data)
 	g_free(dirname);
 }
 
+int marknum=0;
+void jumpToMark(GtkWidget* widget,gpointer data)
+{
+	GtkTextMark*	mark;
+	pageStruct*		page=getPageStructPtr(-1);
+	GtkTextIter		iter;
+
+	printf("%s\n",(char*)data);
+	mark=gtk_text_buffer_get_mark((GtkTextBuffer*)page->buffer,(char*)data);
+
+//	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,mark,0,false,0,0);
+	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
+	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+}
+
 void addBookmark(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct*		page=getPageStructPtr(-1);
+	GtkWidget*		menuitem;
+	GtkTextMark*	mark;
+	GtkTextIter		iter;
+	char*			name;
+
 	printf("addBookmark\n");
-	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+	//gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+	mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+	asprintf(&name,"Bookmark - %i",marknum);
+	gtk_text_buffer_create_mark((GtkTextBuffer*)page->buffer,name,&iter,true);
+	menuitem=gtk_image_menu_item_new_with_label(name);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)name);
+	marknum++;
+	gtk_widget_show_all(menubookmark);
 }
 
 void removeBookmark(GtkWidget* widget,gpointer data)
@@ -667,7 +697,87 @@ void restoreSession(GtkWidget* widget,gpointer data)
 		}
 }
 
+#if false
+void printFile(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=getPageStructPtr(-1);
+	GtkSourcePrintJob *job;
+	GnomePrintJob *print_job;
 
+	/* create the job using default print configuration */
+	job = gtk_source_print_job_new (NULL);
 
+	/* quickly setup the buffer, font and wrapping */
+	gtk_source_print_job_setup_from_view (job,page->view);
+
+	/* print line numbers every 5 lines, using default font */
+	gtk_source_print_job_set_print_numbers (job, 5);
+
+	/* print a header with the title centered */
+	gtk_source_print_job_set_header_footer_font (job, "Sans Regular 12.0");
+	gtk_source_print_job_set_header_format (job,
+	                                        NULL,
+	                                        page->fileName,
+	                                        NULL,
+	                                        TRUE);
+	gtk_source_print_job_set_print_header (job, TRUE);
+
+	/* print the page number in the page bottom */
+	gtk_source_print_job_set_footer_format (job,
+	                                        NULL,
+	                                        NULL,
+	                                        "Page %N of %Q",
+	                                        TRUE);
+	gtk_source_print_job_set_print_footer (job, TRUE);
+
+	/* print the whole buffer and return the result */
+	print_job = gtk_source_print_job_print (job);
+
+	/* job is no longer needed */
+	g_object_unref (job);
+
+	return print_job;
+}
+
+void GnomePrintJob * print_source_buffer_from_view (GtkSourceView *view, const gchar *title)
+{
+	GtkSourcePrintJob *job;
+	GnomePrintJob *print_job;
+
+	/* create the job using default print configuration */
+	job = gtk_source_print_job_new (NULL);
+
+	/* quickly setup the buffer, font and wrapping */
+	gtk_source_print_job_setup_from_view (job, view);
+
+	/* print line numbers every 5 lines, using default font */
+	gtk_source_print_job_set_print_numbers (job, 5);
+
+	/* print a header with the title centered */
+	gtk_source_print_job_set_header_footer_font (job, "Sans Regular 12.0");
+	gtk_source_print_job_set_header_format (job,
+	                                        NULL,
+	                                        title,
+	                                        NULL,
+	                                        TRUE);
+	gtk_source_print_job_set_print_header (job, TRUE);
+
+	/* print the page number in the page bottom */
+	gtk_source_print_job_set_footer_format (job,
+	                                        NULL,
+	                                        NULL,
+	                                        "Page %N of %Q",
+	                                        TRUE);
+	gtk_source_print_job_set_print_footer (job, TRUE);
+
+	/* print the whole buffer and return the result */
+	print_job = gtk_source_print_job_print (job);
+
+	/* job is no longer needed */
+	g_object_unref (job);
+
+	return print_job;
+}
+#endif
 
 

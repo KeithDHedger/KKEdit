@@ -585,6 +585,14 @@ int main(int argc,char **argv)
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+//printfile
+//	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_PRINT,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(printFile),NULL);
+
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //close
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -684,20 +692,19 @@ int main(int argc,char **argv)
 //function menu
 	menufunc=gtk_menu_item_new_with_label("Functions");
 
-#if false
 //bookmarks
 	menubookmark=gtk_menu_item_new_with_label("Bookmarks");
-	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menubookmark),menu);
+	menubookmarksub=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menubookmark),menubookmarksub);
 	menuitem=gtk_menu_item_new_with_label("Add Bookmark");
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(addBookmark),NULL);
 	menuitem=gtk_menu_item_new_with_label("Remove Bookmark");
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(removeBookmark),NULL);
 	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-#endif
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
+
 //external tools
 	menutools=gtk_menu_item_new_with_label("Tools");
 	buildTools();
@@ -720,7 +727,7 @@ int main(int argc,char **argv)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuedit);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menunav);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufunc);
-//	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menubookmark);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menubookmark);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menutools);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
 

@@ -66,6 +66,7 @@ extern GtkWidget*		menufunc;
 extern GtkWidget*		menunav;
 extern GtkWidget*		menutools;
 extern GtkWidget*		menubookmark;
+extern GtkWidget*		menubookmarksub;
 extern GtkWidget*		menuhelp;
 extern GtkWidget*		redoMenu;
 extern GtkWidget*		undoMenu;

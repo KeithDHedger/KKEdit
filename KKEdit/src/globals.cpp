@@ -27,6 +27,8 @@ GtkWidget*		menutools;
 GtkWidget*		menuhelp;
 
 GtkWidget*		menubookmark;
+GtkWidget*		menubookmarksub;
+
 GtkWidget*		redoMenu;
 GtkWidget*		undoMenu;
 GtkWidget*		saveMenu;
