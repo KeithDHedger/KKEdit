@@ -615,22 +615,14 @@ void reloadFile(GtkWidget* widget,gpointer data)
 	gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
 }
 
-/*
-		buff=winview.get_buffer()
-		mark=buff.get_insert()
-
-		iter=buff.get_iter_at_mark(mark)
-		ln=iter.get_line()
-
-*/
 void saveSession(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page;
-	FILE*		fd=NULL;
-	char*		filename;
-	GtkTextMark* mark;
-	GtkTextIter iter;
-	int			linenumber;
+	pageStruct*		page;
+	FILE*			fd=NULL;
+	char*			filename;
+	GtkTextMark*	mark;
+	GtkTextIter		iter;
+	int				linenumber;
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
@@ -667,11 +659,9 @@ void restoreSession(GtkWidget* widget,gpointer data)
 		{
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
-					//buffer[strlen(buffer)-1]=0;
 					sscanf(buffer,"%s %i",(char*)&strarg,(int*)&intarg);
 					openFile(strarg,intarg);
 				}
-
 			fclose(fd);
 			g_free(filename);
 		}
