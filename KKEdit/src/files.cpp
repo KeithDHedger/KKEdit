@@ -73,6 +73,17 @@ void setFilePrefs(GtkSourceView* sourceview)
 	pango_font_description_free(font_desc);
 }
 
+void resetAllFilePrefs(void)
+{
+	pageStruct*	page;
+
+	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
+		{
+			page=getPageStructPtr(loop);
+			setFilePrefs(page->view);
+		}
+}
+
 bool openFile(const gchar *filepath,int linenumber)
 {
 	GtkTextIter		iter;

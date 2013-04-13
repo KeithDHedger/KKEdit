@@ -11,5 +11,6 @@
 bool openFile(const gchar *filepath,int linenumber);
 bool saveFile(GtkWidget* widget,gpointer data);
 void newFile(GtkWidget* widget,gpointer data);
+void resetAllFilePrefs(void);
 
 #endif

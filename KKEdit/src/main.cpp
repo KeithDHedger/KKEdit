@@ -59,6 +59,7 @@ void writeConfig(void)
 			fprintf(fd,"wrapline	%i\n",(int)lineWrap);
 			fprintf(fd,"highlightcurrentline	%i\n",(int)highLight);
 			fprintf(fd,"insenssearch	%i\n",(int)insensitiveSearch);
+			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
 
 			fprintf(fd,"tabwidth	%i\n",tabWidth);
 			fprintf(fd,"font	%s\n",fontAndSize);
@@ -128,6 +129,8 @@ void readConfig(void)
 
 					if(strcasecmp(name,"insenssearch")==0)
 							insensitiveSearch=(bool)atoi(strarg);
+					if(strcasecmp(name,"wrapsearch")==0)
+							wrapSearch=(bool)atoi(strarg);
 
 					if(strcasecmp(name,"tabwidth")==0)
 							tabWidth=atoi(strarg);
@@ -223,7 +226,6 @@ void buildFindReplace(void)
 	gtk_toggle_button_set_active((GtkToggleButton*)item,wrapSearch);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	gtk_widget_show(item);
-//	gtk_widget_hide(item);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)2);
 
 	item=gtk_check_button_new_with_label("Replace All");
@@ -337,6 +339,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 
 			tabWidth=tmpTabWidth;
 			gtk_widget_destroy(prefswin);
+			resetAllFilePrefs();
 		}
 }
 
