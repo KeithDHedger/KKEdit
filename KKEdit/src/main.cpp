@@ -421,7 +421,6 @@ void doPrefs(void)
 //show it
 	gtk_container_add(GTK_CONTAINER(prefswin),(GtkWidget*)vbox);
 	gtk_widget_show_all(prefswin);
-
 }
 
 int main(int argc,char **argv)
@@ -480,10 +479,10 @@ int main(int argc,char **argv)
 	gtk_signal_connect(GTK_OBJECT(saveButton),"clicked",G_CALLBACK(saveFile),NULL);
 	gtk_widget_set_tooltip_text((GtkWidget*)saveButton,"Save File");
 //saveas
-	saveasButton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE_AS);
-	gtk_toolbar_insert((GtkToolbar*)toolbar,saveasButton,-1);
-	gtk_signal_connect(GTK_OBJECT(saveasButton),"clicked",G_CALLBACK(saveFile),(void*)1);
-	gtk_widget_set_tooltip_text((GtkWidget*)saveasButton,"Save As File");
+//	saveasButton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE_AS);
+//	gtk_toolbar_insert((GtkToolbar*)toolbar,saveasButton,-1);
+//	gtk_signal_connect(GTK_OBJECT(saveasButton),"clicked",G_CALLBACK(saveFile),(void*)1);
+//	gtk_widget_set_tooltip_text((GtkWidget*)saveasButton,"Save As File");
 //close
 	closeButton=gtk_tool_button_new_from_stock(GTK_STOCK_CLOSE);
 	gtk_toolbar_insert((GtkToolbar*)toolbar,closeButton,-1);
