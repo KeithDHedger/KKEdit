@@ -633,10 +633,6 @@ void addBookmark(GtkWidget* widget,gpointer data)
 
 	previewtext[strlen(previewtext)-1]=0;
 	asprintf(&name,"BookMark%i",marknum);
-//	asprintf(&menulabel,"%s",previewtext);
-//	menulabel[strlen(menulabel)-1]=0;
-
-//	g_free(previewtext);
 
 	gtk_text_buffer_create_mark((GtkTextBuffer*)page->buffer,name,&iter,true);
 	menuitem=gtk_image_menu_item_new_with_label(previewtext);
@@ -789,7 +785,7 @@ int showLineEntry(void)
 	GtkWidget*	entrybox;
 	char		line[48];
 
-	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_QUESTION,GTK_BUTTONS_NONE,"Enter Line Number");
+	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,"Enter Line Number");
 
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OK,GTK_RESPONSE_YES,NULL);
 	gtk_window_set_title(GTK_WINDOW(dialog),"Go To Line");
