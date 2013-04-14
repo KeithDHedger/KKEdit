@@ -23,7 +23,6 @@ GtkWidget*	vbox;
 char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
 
-
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
 	GtkWidget*	evbox=gtk_event_box_new();
@@ -135,6 +134,10 @@ bool openFile(const gchar *filepath,int linenumber)
 	currentPage++;
 	page->rebuildMenu=true;
 	page->isFirst=true;
+	page->itsMe=false;
+	page->gFile=g_file_new_for_path(page->filePath);
+	page->monitor=g_file_monitor(page->gFile,(GFileMonitorFlags)G_FILE_MONITOR_NONE,NULL,NULL);
+	g_signal_connect(G_OBJECT(page->monitor),"changed",G_CALLBACK(fileChangedOnDisk),(void*)page);
 
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 	
@@ -148,7 +151,7 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
 
 	g_free(filename);
-//	g_free(filepath);
+
 	return TRUE;
 }
 
@@ -184,6 +187,7 @@ bool saveFile(GtkWidget* widget,gpointer data)
 	gchar*		text;
 	FILE*		fd=NULL;
 
+	page->itsMe=true;
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
 	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer, &start, &end, FALSE);
@@ -224,6 +228,7 @@ bool saveFile(GtkWidget* widget,gpointer data)
 		}
 	setLanguage(page);
 	switchPage(notebook,NULL,currentTabNumber,NULL);
+	//page->itsMe=false;
 	return(true);
 }
 

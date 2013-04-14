@@ -77,6 +77,9 @@ void closeTab(GtkWidget* widget,gpointer data)
 		}
 		
 	g_free(page->filePath);
+	g_free(page->fileName);
+	g_free(page->gFile);
+	g_free(page->monitor);
 	g_free(page);
 	currentPage--;
 	gtk_notebook_remove_page(notebook,thispage);
@@ -672,6 +675,7 @@ void reloadFile(GtkWidget* widget,gpointer data)
 	gtk_text_buffer_delete_selection((GtkTextBuffer*)page->buffer,true,true);
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 	gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
+	g_free(buffer);
 }
 
 void saveSession(GtkWidget* widget,gpointer data)
@@ -725,87 +729,58 @@ void restoreSession(GtkWidget* widget,gpointer data)
 		}
 }
 
-#if false
-void printFile(GtkWidget* widget,gpointer data)
+
+int showFileChanged(char* filename)
 {
-	pageStruct*	page=getPageStructPtr(-1);
-	GtkSourcePrintJob *job;
-	GnomePrintJob *print_job;
+	GtkWidget*	dialog;
+	gint		result;
+	char*		message;
 
-	/* create the job using default print configuration */
-	job = gtk_source_print_job_new (NULL);
+	asprintf(&message,"File %s Has Changed on disk\nDo you want to reload it?",filename);
+	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
 
-	/* quickly setup the buffer, font and wrapping */
-	gtk_source_print_job_setup_from_view (job,page->view);
+	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_REFRESH,GTK_RESPONSE_YES,NULL);
+	gtk_window_set_title(GTK_WINDOW(dialog),"Warning file changed!");
 
-	/* print line numbers every 5 lines, using default font */
-	gtk_source_print_job_set_print_numbers (job, 5);
+	result=gtk_dialog_run(GTK_DIALOG(dialog));
 
-	/* print a header with the title centered */
-	gtk_source_print_job_set_header_footer_font (job, "Sans Regular 12.0");
-	gtk_source_print_job_set_header_format (job,
-	                                        NULL,
-	                                        page->fileName,
-	                                        NULL,
-	                                        TRUE);
-	gtk_source_print_job_set_print_header (job, TRUE);
-
-	/* print the page number in the page bottom */
-	gtk_source_print_job_set_footer_format (job,
-	                                        NULL,
-	                                        NULL,
-	                                        "Page %N of %Q",
-	                                        TRUE);
-	gtk_source_print_job_set_print_footer (job, TRUE);
-
-	/* print the whole buffer and return the result */
-	print_job = gtk_source_print_job_print (job);
-
-	/* job is no longer needed */
-	g_object_unref (job);
-
-	return print_job;
+	gtk_widget_destroy(dialog);
+	g_free(message);
+	return(result);
 }
 
-void GnomePrintJob * print_source_buffer_from_view (GtkSourceView *view, const gchar *title)
+void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data)
 {
-	GtkSourcePrintJob *job;
-	GnomePrintJob *print_job;
+	pageStruct*		page=(pageStruct*)user_data;
+	GtkTextIter	start;
+	GtkTextIter	end;
+	gchar*		buffer;
+	long		filelen;
 
-	/* create the job using default print configuration */
-	job = gtk_source_print_job_new (NULL);
+	const gchar*	text=gtk_label_get_text((GtkLabel*)page->tabName);
+	char*			newlabel;
+	int				answer;
 
-	/* quickly setup the buffer, font and wrapping */
-	gtk_source_print_job_setup_from_view (job, view);
-
-	/* print line numbers every 5 lines, using default font */
-	gtk_source_print_job_set_print_numbers (job, 5);
-
-	/* print a header with the title centered */
-	gtk_source_print_job_set_header_footer_font (job, "Sans Regular 12.0");
-	gtk_source_print_job_set_header_format (job,
-	                                        NULL,
-	                                        title,
-	                                        NULL,
-	                                        TRUE);
-	gtk_source_print_job_set_print_header (job, TRUE);
-
-	/* print the page number in the page bottom */
-	gtk_source_print_job_set_footer_format (job,
-	                                        NULL,
-	                                        NULL,
-	                                        "Page %N of %Q",
-	                                        TRUE);
-	gtk_source_print_job_set_print_footer (job, TRUE);
-
-	/* print the whole buffer and return the result */
-	print_job = gtk_source_print_job_print (job);
-
-	/* job is no longer needed */
-	g_object_unref (job);
-
-	return print_job;
+	if(G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT==event_type)
+		{
+			if(page->itsMe==false)
+				{
+					answer=showFileChanged(page->fileName);
+					if(answer==GTK_RESPONSE_YES)
+						{
+							g_file_get_contents(page->filePath,&buffer,(gsize*)&filelen,NULL);
+							gtk_text_buffer_get_bounds((GtkTextBuffer*)page->buffer,&start,&end);
+							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&start,&end);
+							gtk_text_buffer_delete_selection((GtkTextBuffer*)page->buffer,true,true);
+							gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+							gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
+							g_free(buffer);
+						}
+				}
+			else
+				page->itsMe=false;
+		}
 }
-#endif
+
 
 

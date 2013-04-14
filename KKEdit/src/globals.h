@@ -45,6 +45,9 @@ struct pageStruct
 	GtkTextIter			match_end;
 	bool				isFirst;
 	char*				fileName;
+	GFile*				gFile;
+	GFileMonitor*		monitor;
+	bool				itsMe;
 };
 
 struct toolStruct
