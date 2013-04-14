@@ -812,4 +812,10 @@ void jumpToLine(GtkWidget* widget,gpointer data)
 		gotoLine(NULL,(gpointer)(long)theLineNum);
 }
 
+void jumpToLineFromBar(GtkWidget* widget,gpointer data)
+{
+		theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
+		gotoLine(NULL,(gpointer)(long)theLineNum);
+}
+
 

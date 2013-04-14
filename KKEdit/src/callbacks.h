@@ -40,5 +40,6 @@ void restoreSession(GtkWidget* widget,gpointer data);
 void printFile(GtkWidget* widget,gpointer data);
 void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data);
 void jumpToLine(GtkWidget* widget,gpointer data);
+void jumpToLineFromBar(GtkWidget* widget,gpointer data);
 
 #endif

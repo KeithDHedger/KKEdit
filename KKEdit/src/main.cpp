@@ -432,6 +432,7 @@ int main(int argc,char **argv)
 	GtkToolItem*	toolbutton;
 	GtkAccelGroup*	accgroup;
 	GtkWidget*		image;
+	GtkWidget*		entrybox;
 
 	gtk_init(&argc,&argv);
 	init();
@@ -529,6 +530,17 @@ int main(int argc,char **argv)
 	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
 	gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(goToDefinition),NULL);
 	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Go To Definition");
+
+	gtk_toolbar_insert((GtkToolbar*)toolbar,gtk_separator_tool_item_new(),-1);
+
+//goto line
+	entrybox=gtk_entry_new();
+	toolbutton=gtk_tool_item_new();
+	gtk_container_add((GtkContainer *)toolbutton,entrybox);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+	g_signal_connect_after(G_OBJECT(entrybox),"key-release-event",G_CALLBACK(jumpToLineFromBar),NULL);
+	gtk_widget_set_size_request((GtkWidget*)toolbutton,48,-1);
+//	gtk_toolbar_insert((GtkToolbar*)toolbar,gtk_separator_tool_item_new(),-1);
 
 //menus
 //file menu
