@@ -478,11 +478,6 @@ int main(int argc,char **argv)
 	gtk_toolbar_insert((GtkToolbar*)toolbar,saveButton,-1);
 	gtk_signal_connect(GTK_OBJECT(saveButton),"clicked",G_CALLBACK(saveFile),NULL);
 	gtk_widget_set_tooltip_text((GtkWidget*)saveButton,"Save File");
-//saveas
-//	saveasButton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE_AS);
-//	gtk_toolbar_insert((GtkToolbar*)toolbar,saveasButton,-1);
-//	gtk_signal_connect(GTK_OBJECT(saveasButton),"clicked",G_CALLBACK(saveFile),(void*)1);
-//	gtk_widget_set_tooltip_text((GtkWidget*)saveasButton,"Save As File");
 //close
 	closeButton=gtk_tool_button_new_from_stock(GTK_STOCK_CLOSE);
 	gtk_toolbar_insert((GtkToolbar*)toolbar,closeButton,-1);
@@ -673,7 +668,6 @@ int main(int argc,char **argv)
 	menunav=gtk_menu_item_new_with_label("Navigation");
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),menu);
-
 //goto define
 	image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
 	menuitem=gtk_image_menu_item_new_with_label("Go To Definition");
@@ -688,6 +682,12 @@ int main(int argc,char **argv)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(findFile),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'I',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+//goto line number
+	menuitem=gtk_image_menu_item_new_with_label("Go To Line");
+	image=gtk_image_new_from_stock(GTK_STOCK_GO_DOWN,GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToLine),NULL);
 
 //function menu
 	menufunc=gtk_menu_item_new_with_label("Functions");
@@ -699,9 +699,6 @@ int main(int argc,char **argv)
 	menuitem=gtk_menu_item_new_with_label("Add Bookmark");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(addBookmark),NULL);
-//	menuitem=gtk_menu_item_new_with_label("Remove Bookmark");
-//	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
-//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(removeBookmark),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);

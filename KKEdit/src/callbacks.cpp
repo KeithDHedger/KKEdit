@@ -752,13 +752,10 @@ int showFileChanged(char* filename)
 void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data)
 {
 	pageStruct*		page=(pageStruct*)user_data;
-	GtkTextIter	start;
-	GtkTextIter	end;
-	gchar*		buffer;
-	long		filelen;
-
-	const gchar*	text=gtk_label_get_text((GtkLabel*)page->tabName);
-	char*			newlabel;
+	GtkTextIter		start;
+	GtkTextIter		end;
+	gchar*			buffer;
+	long			filelen;
 	int				answer;
 
 	if(G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT==event_type)
@@ -782,5 +779,41 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 		}
 }
 
+int	theLineNum=0;
+
+int showLineEntry(void)
+{
+	GtkWidget*	dialog;
+	gint		result;
+	GtkWidget*	content_area;
+	GtkWidget*	entrybox;
+	char		line[48];
+
+	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_QUESTION,GTK_BUTTONS_NONE,"Enter Line Number");
+
+	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OK,GTK_RESPONSE_YES,NULL);
+	gtk_window_set_title(GTK_WINDOW(dialog),"Go To Line");
+
+	content_area=gtk_dialog_get_content_area(GTK_DIALOG(dialog));	
+	entrybox=gtk_entry_new();
+	sprintf((char*)&line,"%i",theLineNum);
+	gtk_entry_set_text((GtkEntry*)entrybox,line);
+	gtk_entry_set_activates_default((GtkEntry*)entrybox,true);
+	gtk_dialog_set_default_response((GtkDialog*)dialog,GTK_RESPONSE_YES);
+	gtk_container_add(GTK_CONTAINER(content_area),entrybox);
+	gtk_widget_show_all(content_area);
+	result=gtk_dialog_run(GTK_DIALOG(dialog));
+	theLineNum=atoi(gtk_entry_get_text((GtkEntry*)entrybox));
+	
+	gtk_widget_destroy(dialog);
+
+	return(result);
+}
+
+void jumpToLine(GtkWidget* widget,gpointer data)
+{
+	if(showLineEntry()==GTK_RESPONSE_YES)
+		gotoLine(NULL,(gpointer)(long)theLineNum);
+}
 
 
