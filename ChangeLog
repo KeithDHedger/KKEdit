@@ -27,3 +27,4 @@ Added simple bookmarks
 Can now use escapes in search/replace \n, \t etc.
 Added monitor for file changed on disk.
 Code clean.
+Added go to line number in navigation menu.
