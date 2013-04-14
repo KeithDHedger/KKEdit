@@ -1,6 +1,6 @@
 /*
  *
- * K.D.Hedger 2012 <kdhedger68713@gmail.com>
+ * K.D.Hedger 2013 <kdhedger68713@gmail.com>
  *
  * globals.h
  *
@@ -23,10 +23,7 @@
 #define MYWEBSITE "http://keithhedger.hostingsiteforfree.com"
 #define VERSION "0.0.8"
 
-#define TOOL_SYNC 8
-//#define TOOL_ASYNC 
-//#define TOOL_INSERT_OP 4
-//#define TOOL_PASTE_OP 8
+#define TOOL_ASYNC 8
 #define TOOL_IGNORE_OP 0
 #define TOOL_PASTE_OP 1
 #define TOOL_REPLACE_OP 2
