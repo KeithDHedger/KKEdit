@@ -32,6 +32,20 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	GtkWidget*	button=gtk_button_new();
 	GtkRcStyle*	style=gtk_rc_style_new();
 
+
+	GtkWidget*		menuitem;
+	GtkWidget*		menu;
+	GtkWidget*		menutab;
+
+	menutab=gtk_menu_item_new_with_label("File");
+	menu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutab),menu);
+	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+gtk_box_pack_start(GTK_BOX(hbox),menutab,false,false,0);
+
+
 	gtk_button_set_relief((GtkButton*)button,GTK_RELIEF_NONE);
 	gtk_widget_set_tooltip_text(label,tooltip);
 	gtk_box_pack_start(GTK_BOX(hbox),label,false,false,0);
