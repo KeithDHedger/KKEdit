@@ -585,8 +585,6 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 	GtkTextIter		iter;
 	int				thistab=currentTabNumber;
 
-	printf("%s\n",(char*)data);
-
 	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
 		{
 			page=getPageStructPtr(loop);
@@ -612,7 +610,6 @@ void addBookmark(GtkWidget* widget,gpointer data)
 	int				line;
 	GtkTextIter		startprev,endprev;
 	char*			previewtext;
-//	char*			menulabel;
 
 	mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
@@ -702,7 +699,6 @@ void restoreSession(GtkWidget* widget,gpointer data)
 {
 	FILE*		fd=NULL;
 	char*		filename;
-	pageStruct*	page;
 	char		buffer[2048];
 	int			intarg;
 	char		strarg[2048];

@@ -17,8 +17,8 @@ Added wrap for search replace.
 Dim function menu when no functions available.
 Apply prefs immedietly.
 Added save search wrap mode
-Removed 'Save-As' from toolbar.
 
 0.0.7
+Removed 'Save-As' from toolbar.
 Added save/restore session
 Added simple bookmarks
