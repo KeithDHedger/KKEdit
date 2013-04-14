@@ -22,3 +22,6 @@ Added save search wrap mode
 Removed 'Save-As' from toolbar.
 Added save/restore session
 Added simple bookmarks
+
+0.0.8
+Can now use escapes in search/replace \n, \t etc.
