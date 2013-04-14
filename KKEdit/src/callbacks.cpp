@@ -78,8 +78,8 @@ void closeTab(GtkWidget* widget,gpointer data)
 		
 	g_free(page->filePath);
 	g_free(page->fileName);
-	g_free(page->gFile);
-	g_free(page->monitor);
+	g_object_unref(page->gFile);
+	g_object_unref(page->monitor);
 	g_free(page);
 	currentPage--;
 	gtk_notebook_remove_page(notebook,thispage);

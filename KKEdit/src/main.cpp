@@ -583,8 +583,8 @@ int main(int argc,char **argv)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(restoreSession),NULL);
 //	gtk_widget_add_accelerator((GtkWidget *)saveMenu,"activate",accgroup,'S',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
-	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	menuitem=gtk_separator_menu_item_new();
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //printfile
 //	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_PRINT,NULL);
