@@ -26,3 +26,4 @@ Added simple bookmarks
 0.0.8
 Can now use escapes in search/replace \n, \t etc.
 Added monitor for file changed on disk.
+Code clean.
