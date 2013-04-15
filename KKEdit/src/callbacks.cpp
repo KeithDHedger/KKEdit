@@ -109,9 +109,12 @@ void gotoLine(GtkWidget* widget,gpointer data)
 	GtkTextIter	iter;
 	pageStruct*	page=getPageStructPtr(-1);
 
-	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,line-1,0);
-	gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
-	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
+	if(page!=NULL)
+		{
+			gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,line-1,0);
+			gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
+			gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
+		}
 }
 
 void setSensitive(void)
@@ -560,8 +563,9 @@ void externalTool(GtkWidget* widget,gpointer data)
 	setenv("KKEDIT_CURRENTFILE",page->filePath,1);
 	setenv("KKEDIT_CURRENTDIR",dirname,1);
 	setenv("KKEDIT_DATADIR",DATADIR,1);
+	setenv("KKEDIT_SELECTION","GtkWidget",1);
 
-	runCommand(tool->filePath,&text,tool->inTerminal);
+	runCommand(tool->filePath,&text,tool->inTerminal,tool->flags);
 	if(text!=NULL)
 		{
 			if(tool->flags & TOOL_REPLACE_OP)
@@ -652,7 +656,7 @@ void openHelp(GtkWidget* widget,gpointer data)
 	char*	runhelp;
 
 	asprintf(&runhelp,"xdg-open %s/help/help.html",DATADIR);
-	runCommand(runhelp,NULL,false);
+	runCommand(runhelp,NULL,false,8);
 	g_free(runhelp);
 }
 

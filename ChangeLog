@@ -28,3 +28,6 @@ Can now use escapes in search/replace \n, \t etc.
 Added monitor for file changed on disk.
 Code clean.
 Added go to line number in navigation menu.
+Added run asyync external tool.
+Help now runs async.
+Set new env variable to selected text.

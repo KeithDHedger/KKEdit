@@ -151,7 +151,7 @@ int getTabFromPath(char* filepath)
 	return(-1);
 }
 
-void runCommand(char* commandtorun,void* ptr,bool interm)
+void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 {
 	char*	command;
 	gchar*	stdout=NULL;
@@ -163,20 +163,27 @@ void runCommand(char* commandtorun,void* ptr,bool interm)
 	else
 		asprintf(&command,"%s",commandtorun);
 
-	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
-	if (retval==0)
+	if(flags==8)
 		{
-			if(stdout!=NULL)
-				{
-					stdout[strlen(stdout)-1]=0;
-					if(ptr!=NULL)
-						asprintf((char**)ptr,"%s",stdout);
-					g_free(stdout);
-				}
-			if(stderr!=NULL)
-				g_free(stderr);
-			g_free(command);
+			g_spawn_command_line_async(command,NULL);
 		}
+	else
+		{
+			g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
+			if (retval==0)
+				{
+					if(stdout!=NULL)
+						{
+							stdout[strlen(stdout)-1]=0;
+							if(ptr!=NULL)
+								asprintf((char**)ptr,"%s",stdout);
+							g_free(stdout);
+						}
+					if(stderr!=NULL)
+						g_free(stderr);
+				}
+		}
+	g_free(command);
 }
 
 
