@@ -35,3 +35,5 @@ Added Find API to installed tools.
 
 0.0.9
 Added external tool creater GUI.
+Bug fix crash on closing empty new tab.
+Set senitive on save/saveas buttons menu items on startup.
