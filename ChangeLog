@@ -32,3 +32,6 @@ Added run async external tool.
 Help now runs async.
 Set new env variable to selected text.
 Added Find API to installed tools.
+
+0.0.9
+Added external tool creater GUI.

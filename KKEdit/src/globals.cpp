@@ -32,6 +32,7 @@ GtkWidget*		menubookmarksub;
 GtkWidget*		redoMenu;
 GtkWidget*		undoMenu;
 GtkWidget*		saveMenu;
+GtkWidget*		saveAsMenu;
 
 int				currentPage=0;
 

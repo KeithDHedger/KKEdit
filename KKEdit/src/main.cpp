@@ -251,7 +251,13 @@ void buildFindReplace(void)
 	gtk_signal_connect (GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
 }
 
-GtkWidget*	toolName;
+GtkWidget*	toolNameWidget;;
+GtkWidget*	inTermWidget;
+GtkWidget*	syncWidget;
+GtkWidget*	ignoreWidget;
+GtkWidget*	pasteWidget;
+GtkWidget*	replaceWidget;
+
 bool		inTerm=false;
 bool		runSync=true;
 bool		ignoreOut=true;
@@ -260,40 +266,58 @@ bool		replaceOut=false;
 
 void setToolOptions(GtkWidget* widget,gpointer data)
 {
-	int flags;
+	int			flags;
+	pageStruct*	page=getPageStructPtr(-1);
+	GtkTextIter iter;
+	char*		command;
 
 	if(strcmp(gtk_widget_get_name(widget),"interm")==0)
-		inTerm=gtk_toggle_button_get_active((GtkToggleButton*)data);
+		inTerm=gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget);
 	if(strcmp(gtk_widget_get_name(widget),"sync")==0)
-		runSync=gtk_toggle_button_get_active((GtkToggleButton*)data);
+		runSync=gtk_toggle_button_get_active((GtkToggleButton*)syncWidget);
 	if(strcmp(gtk_widget_get_name(widget),"ignore")==0)
-		ignoreOut=gtk_toggle_button_get_active((GtkToggleButton*)data);
+		ignoreOut=gtk_toggle_button_get_active((GtkToggleButton*)ignoreWidget);
 	if(strcmp(gtk_widget_get_name(widget),"paste")==0)
-		pasteOut=gtk_toggle_button_get_active((GtkToggleButton*)data);
+		pasteOut=gtk_toggle_button_get_active((GtkToggleButton*)pasteWidget);
 	if(strcmp(gtk_widget_get_name(widget),"replace")==0)
-		replaceOut=gtk_toggle_button_get_active((GtkToggleButton*)data);
+		replaceOut=gtk_toggle_button_get_active((GtkToggleButton*)replaceWidget);
 
-	if(inTerm==true)
-		flags=0;
+	if(runSync==false)
+		{
+			flags=TOOL_ASYNC;
+			gtk_widget_set_sensitive(ignoreWidget,false);
+			gtk_widget_set_sensitive(pasteWidget,false);
+			gtk_widget_set_sensitive(replaceWidget,false);
+		}
 	else
 		{
-			if(runSync==false)
-				flags=TOOL_ASYNC;
-			else
-				{
-					if(ignoreOut==true)
-						flags=TOOL_IGNORE_OP;
-					if(pasteOut==true)
-						flags=TOOL_PASTE_OP;
-					if(replaceOut==true)
-						flags=TOOL_REPLACE_OP;				
-				}
+			gtk_widget_set_sensitive(ignoreWidget,true);
+			gtk_widget_set_sensitive(pasteWidget,true);
+			gtk_widget_set_sensitive(replaceWidget,true);
+
+			if(ignoreOut==true)
+				flags=TOOL_IGNORE_OP;
+			if(pasteOut==true)
+				flags=TOOL_PASTE_OP;
+			if(replaceOut==true)
+				flags=TOOL_REPLACE_OP;				
+		}
+
+	if(inTerm==true)
+		{
+			gtk_widget_set_sensitive(ignoreWidget,false);
+			gtk_widget_set_sensitive(pasteWidget,false);
+			gtk_widget_set_sensitive(replaceWidget,false);
 		}
 
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{
-			printf("#%i %i %s\n",flags,(int)inTerm,gtk_entry_get_text((GtkEntry*)toolName));
+			asprintf(&command,"#%i %i %s\n",flags,(int)inTerm,gtk_entry_get_text((GtkEntry*)toolNameWidget));
+			gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&iter,1);
+			gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&iter,command,-1);
+			g_free(command);
 		}
+
 	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
 		gtk_widget_destroy((GtkWidget*)data);
 }
@@ -302,9 +326,7 @@ void doMakeTool(void)
 {
 	GtkWidget*	vbox;
 	GtkWidget*	hbox;
-	GtkWidget*	item;
-	GSList*		group;
-	GtkWidget*	firstradio;
+	GtkWidget*	button;
 	GtkWidget*	toolwin;
 
 	toolwin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -312,62 +334,62 @@ void doMakeTool(void)
 	vbox=gtk_vbox_new(true,8);
 
 //name
-	toolName=gtk_entry_new();
+	toolNameWidget=gtk_entry_new();
 	hbox=gtk_hbox_new(false,0);
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Tool Name: "),false,true,0);
-	gtk_container_add(GTK_CONTAINER(hbox),toolName);
+	gtk_container_add(GTK_CONTAINER(hbox),toolNameWidget);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
-	gtk_widget_show(toolName);
-	gtk_entry_set_text((GtkEntry*)toolName,"New Tool");
+	gtk_widget_show(toolNameWidget);
+	gtk_entry_set_text((GtkEntry*)toolNameWidget,"New Tool");
 
 //in terminal
-	item=gtk_check_button_new_with_label("Run Tool In Terminal");
-	gtk_widget_set_name(item,"interm");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,inTerm);
-	gtk_box_pack_start(GTK_BOX(vbox),item,false,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setToolOptions),(void*)item);
+	inTermWidget=gtk_check_button_new_with_label("Run Tool In Terminal");
+	gtk_widget_set_name(inTermWidget,"interm");
+	gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,inTerm);
+	gtk_box_pack_start(GTK_BOX(vbox),inTermWidget,false,true,0);
+	g_signal_connect(G_OBJECT(inTermWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 //flags
 //snch/async
-	item=gtk_check_button_new_with_label("Run Tool Synchronously");
-	gtk_widget_set_name(item,"sync");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,runSync);
-	gtk_box_pack_start(GTK_BOX(vbox),item,false,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setToolOptions),(void*)item);
+	syncWidget=gtk_check_button_new_with_label("Run Tool Synchronously");
+	gtk_widget_set_name(syncWidget,"sync");
+	gtk_toggle_button_set_active((GtkToggleButton*)syncWidget,runSync);
+	gtk_box_pack_start(GTK_BOX(vbox),syncWidget,false,true,0);
+	g_signal_connect(G_OBJECT(syncWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags - ignore
-	firstradio=gtk_radio_button_new_with_label(group,"Ignore Output");
-	gtk_widget_set_name(firstradio,"ignore");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,ignoreOut);
-	gtk_box_pack_start(GTK_BOX(vbox),firstradio,false,true,0);
-	g_signal_connect(G_OBJECT(firstradio),"toggled",G_CALLBACK(setToolOptions),(void*)firstradio);
+	ignoreWidget=gtk_radio_button_new_with_label(NULL,"Ignore Output");
+	gtk_widget_set_name(ignoreWidget,"ignore");
+	gtk_toggle_button_set_active((GtkToggleButton*)ignoreWidget,ignoreOut);
+	gtk_box_pack_start(GTK_BOX(vbox),ignoreWidget,false,true,0);
+	g_signal_connect(G_OBJECT(ignoreWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags - paste
-	item=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)firstradio,"Paste Output");
-    gtk_widget_set_name(item,"paste");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,pasteOut);
-	gtk_box_pack_start(GTK_BOX(vbox),item,false,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setToolOptions),(void*)item);
+	pasteWidget=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)ignoreWidget,"Paste Output");
+    gtk_widget_set_name(pasteWidget,"paste");
+	gtk_toggle_button_set_active((GtkToggleButton*)pasteWidget,pasteOut);
+	gtk_box_pack_start(GTK_BOX(vbox),pasteWidget,false,true,0);
+	g_signal_connect(G_OBJECT(pasteWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags - replace all
-	item=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)firstradio,"Replace All Contents");
-	gtk_widget_set_name(item,"replace");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,replaceOut);
-	gtk_box_pack_start(GTK_BOX(vbox),item,false,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setToolOptions),(void*)item);
+	replaceWidget=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)ignoreWidget,"Replace All Contents");
+	gtk_widget_set_name(replaceWidget,"replace");
+	gtk_toggle_button_set_active((GtkToggleButton*)replaceWidget,replaceOut);
+	gtk_box_pack_start(GTK_BOX(vbox),replaceWidget,false,true,0);
+	g_signal_connect(G_OBJECT(replaceWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //buttons
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),false,false,0);
 
 	hbox=gtk_hbox_new(false,0);
-	item=gtk_button_new_from_stock(GTK_STOCK_APPLY);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
-	gtk_widget_set_name(item,"apply");
-	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setToolOptions),(void*)item);	
+	button=gtk_button_new_from_stock(GTK_STOCK_APPLY);
+	gtk_box_pack_start(GTK_BOX(hbox),button,true,false,2);
+	gtk_widget_set_name(button,"apply");
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setToolOptions),NULL);	
 
-	item=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
-	gtk_widget_set_name(item,"cancel");
-	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setToolOptions),(void*)toolwin);
+	button=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+	gtk_box_pack_start(GTK_BOX(hbox),button,true,false,2);
+	gtk_widget_set_name(button,"cancel");
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setToolOptions),(void*)toolwin);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,false,2);
 
 //show it
@@ -699,10 +721,11 @@ int main(int argc,char **argv)
 	gtk_signal_connect(GTK_OBJECT(saveMenu),"activate",G_CALLBACK(saveFile),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)saveMenu,"activate",accgroup,'S',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 //savas
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE_AS,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(saveFile),(void*)1);
-	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'S',(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
+	saveAsMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE_AS,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),saveAsMenu);
+	gtk_signal_connect(GTK_OBJECT(saveAsMenu),"activate",G_CALLBACK(saveFile),(void*)1);
+	gtk_widget_add_accelerator((GtkWidget *)saveAsMenu,"activate",accgroup,'S',(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
+	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -874,6 +897,8 @@ int main(int argc,char **argv)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
 
 	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)vbox);
+	gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
+	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 
 	for (int j=1;j<argc;j++)
 		openFile(argv[j],0);

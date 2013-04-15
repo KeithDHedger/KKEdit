@@ -71,6 +71,7 @@ extern GtkWidget*		menuhelp;
 extern GtkWidget*		redoMenu;
 extern GtkWidget*		undoMenu;
 extern GtkWidget*		saveMenu;
+extern GtkWidget*		saveAsMenu;
 
 extern int				currentPage;
 

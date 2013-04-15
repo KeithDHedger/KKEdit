@@ -75,12 +75,17 @@ void closeTab(GtkWidget* widget,gpointer data)
 						break;
 				}
 		}
-		
-	g_free(page->filePath);
-	g_free(page->fileName);
-	g_object_unref(page->gFile);
-	g_object_unref(page->monitor);
-	g_free(page);
+
+	if(page->filePath!=NULL)
+		g_free(page->filePath);
+	if(page->fileName!=NULL)
+		g_free(page->fileName);
+	if(page->gFile!=NULL)
+		g_object_unref(page->gFile);
+	if(page->monitor!=NULL)
+		g_object_unref(page->monitor);
+	if(page!=NULL)
+		g_free(page);
 	currentPage--;
 	gtk_notebook_remove_page(notebook,thispage);
 }

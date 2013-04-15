@@ -164,6 +164,8 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
 	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
 
+	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
+
 	g_free(filename);
 
 	return TRUE;
@@ -242,7 +244,6 @@ bool saveFile(GtkWidget* widget,gpointer data)
 		}
 	setLanguage(page);
 	switchPage(notebook,NULL,currentTabNumber,NULL);
-	//page->itsMe=false;
 	return(true);
 }
 
@@ -283,6 +284,12 @@ void newFile(GtkWidget* widget,gpointer data)
 	currentPage++;
 	page->rebuildMenu=true;
 	page->isFirst=true;
+	page->gFile=NULL;
+	page->monitor=NULL;
+	gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
+	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
+	gtk_widget_show_all(window);
 
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 }
