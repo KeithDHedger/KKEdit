@@ -541,6 +541,8 @@ void externalTool(GtkWidget* widget,gpointer data)
 	char*		text=NULL;
 	GtkTextIter	start;
 	GtkTextIter	end;
+	char*		selection=NULL;
+
 	if(page==NULL)
 		return;
 
@@ -563,7 +565,12 @@ void externalTool(GtkWidget* widget,gpointer data)
 	setenv("KKEDIT_CURRENTFILE",page->filePath,1);
 	setenv("KKEDIT_CURRENTDIR",dirname,1);
 	setenv("KKEDIT_DATADIR",DATADIR,1);
-	setenv("KKEDIT_SELECTION","GtkWidget",1);
+	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+		{
+			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+			setenv("KKEDIT_SELECTION",selection,1);
+			g_free(selection);
+		}
 
 	runCommand(tool->filePath,&text,tool->inTerminal,tool->flags);
 	if(text!=NULL)
@@ -588,6 +595,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	unsetenv("KKEDIT_CURRENTFILE");
 	unsetenv("KKEDIT_CURRENTDIR");
 	unsetenv("KKEDIT_DATADIR");
+	unsetenv("KKEDIT_SELECTION");
 	g_free(text);
 	g_free(dirname);
 }
