@@ -260,6 +260,8 @@ bool		replaceOut=false;
 
 void setToolOptions(GtkWidget* widget,gpointer data)
 {
+	int flags;
+
 	if(strcmp(gtk_widget_get_name(widget),"interm")==0)
 		inTerm=gtk_toggle_button_get_active((GtkToggleButton*)data);
 	if(strcmp(gtk_widget_get_name(widget),"sync")==0)
@@ -271,49 +273,29 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"replace")==0)
 		replaceOut=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
-		printf("interm %i\n",(int)inTerm);
-		printf("runsync %i\n",(int)runSync);
-		printf("ignore %i\n",(int)ignoreOut);
-		printf("paste %i\n",(int)pasteOut);
-		printf("replace %i\n",(int)replaceOut);
-		printf("toolname %s\n\n",gtk_entry_get_text((GtkEntry*)toolName));
-/*
-	if(strcmp(gtk_widget_get_name(widget),"show")==0)
-		tmpLineNumbers=gtk_toggle_button_get_active((GtkToggleButton*)data);
-	if(strcmp(gtk_widget_get_name(widget),"wrap")==0)
-		tmpLineWrap=gtk_toggle_button_get_active((GtkToggleButton*)data);
-	if(strcmp(gtk_widget_get_name(widget),"high")==0)
-		tmpHighLight=gtk_toggle_button_get_active((GtkToggleButton*)data);
-
-	if(strcmp(gtk_widget_get_name(widget),"tabs")==0)
-		tmpTabWidth=(int)gtk_spin_button_get_value((GtkSpinButton*)data);
-
-	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
-		gtk_widget_destroy(prefswin);
+	if(inTerm==true)
+		flags=0;
+	else
+		{
+			if(runSync==false)
+				flags=TOOL_ASYNC;
+			else
+				{
+					if(ignoreOut==true)
+						flags=TOOL_IGNORE_OP;
+					if(pasteOut==true)
+						flags=TOOL_PASTE_OP;
+					if(replaceOut==true)
+						flags=TOOL_REPLACE_OP;				
+				}
+		}
 
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{
-			indent=tmpIndent;
-			lineNumbers=tmpLineNumbers;
-			lineWrap=tmpLineWrap;
-			highLight=tmpHighLight;
-			if(terminalCommand!=NULL)
-				{
-					g_free(terminalCommand);
-					asprintf(&terminalCommand,"%s",gtk_entry_get_text((GtkEntry*)terminalBox));
-				}
-
-			if(fontAndSize!=NULL)
-				{
-					g_free(fontAndSize);
-					asprintf(&fontAndSize,"%s",gtk_entry_get_text((GtkEntry*)fontBox));
-				}
-
-			tabWidth=tmpTabWidth;
-			gtk_widget_destroy(prefswin);
-			resetAllFilePrefs();
+			printf("#%i %i %s\n",flags,(int)inTerm,gtk_entry_get_text((GtkEntry*)toolName));
 		}
-*/
+	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
+		gtk_widget_destroy((GtkWidget*)data);
 }
 
 void doMakeTool(void)
@@ -323,10 +305,21 @@ void doMakeTool(void)
 	GtkWidget*	item;
 	GSList*		group;
 	GtkWidget*	firstradio;
+	GtkWidget*	toolwin;
 
-	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title((GtkWindow*)prefswin,"Create New Tool");
+	toolwin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_title((GtkWindow*)toolwin,"Create New Tool");
 	vbox=gtk_vbox_new(true,8);
+
+//name
+	toolName=gtk_entry_new();
+	hbox=gtk_hbox_new(false,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Tool Name: "),false,true,0);
+	gtk_container_add(GTK_CONTAINER(hbox),toolName);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
+	gtk_widget_show(toolName);
+	gtk_entry_set_text((GtkEntry*)toolName,"New Tool");
+
 //in terminal
 	item=gtk_check_button_new_with_label("Run Tool In Terminal");
 	gtk_widget_set_name(item,"interm");
@@ -362,15 +355,6 @@ void doMakeTool(void)
 	gtk_box_pack_start(GTK_BOX(vbox),item,false,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setToolOptions),(void*)item);
 
-
-//name
-	toolName=gtk_entry_new();
-	hbox=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Tool Name: "),false,true,0);
-	gtk_container_add(GTK_CONTAINER(hbox),toolName);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
-	gtk_entry_set_text((GtkEntry*)toolName,"New Tool");
-
 //buttons
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),false,false,0);
 
@@ -378,17 +362,17 @@ void doMakeTool(void)
 	item=gtk_button_new_from_stock(GTK_STOCK_APPLY);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
 	gtk_widget_set_name(item,"apply");
-//	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setPrefs),(void*)item);	
+	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setToolOptions),(void*)item);	
 
 	item=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
 	gtk_widget_set_name(item,"cancel");
-//	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setPrefs),(void*)item);
+	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setToolOptions),(void*)toolwin);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,false,2);
 
 //show it
-	gtk_container_add(GTK_CONTAINER(prefswin),(GtkWidget*)vbox);
-	gtk_widget_show_all(prefswin);
+	gtk_container_add(GTK_CONTAINER(toolwin),(GtkWidget*)vbox);
+	gtk_widget_show_all(toolwin);
 }
 
 void buildTools(void)
