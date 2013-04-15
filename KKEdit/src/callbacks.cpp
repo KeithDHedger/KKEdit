@@ -592,7 +592,6 @@ void externalTool(GtkWidget* widget,gpointer data)
 				}
 		}
 
-
 	unsetenv("KKEDIT_CURRENTFILE");
 	unsetenv("KKEDIT_CURRENTDIR");
 	unsetenv("KKEDIT_DATADIR");

@@ -131,7 +131,10 @@
                 --prefix=/usr) or locally in ~/.KKEdit/tools.<br>
                 External tools are passed three environment variables:<br>
                 KKEDIT_CURRENTFILE - Path to current document.<br>
-                KKEDIT_CURRENTDIR - Directory of current document.<br>
+                KKEDIT_CURRENTDIR - Directory of current document.</big></small></small></small></big><br>
+      <big><small><small><small><big><big><small><small><small><big><big>KKEDIT_SELECTION
+                            - Currently selected text.</big><br>
+                        </big></small></small></small></big>
                 KKEDIT_DATADIR - Directory of global folder ( eg
                 /usr/share/KKEdit ).<br>
                 More variables may be defined later.<br>
@@ -145,10 +148,11 @@
                 text (or insert at the cursor) and 2 to replace the
                 entire contents of the current document with the output
                 from the script.<br>
+                You can aslo use '8' to run a tool asynchronously, all
+                output is ignored.<br>
                 The second number if set to 1 will run the script in a
-                terminal, you must have an app called 'terminal'
-                somewhere in your path, in Xfce4 for instance 'terminal'
-                is a symlink to '/usr/bin/terminal'<br>
+                terminal, you can set the command to run the terminal of
+                your choice from the prefs menu.<br>
                 The final bit is the name that appears in the 'Tools'
                 menu of KKEdit.<br>
                 <br>
@@ -157,10 +161,11 @@
                 <big><big><a name="prefsanc"></a><u><b>Preferences<br>
                         <br>
                         <img alt="prefs" src="prefs.png" height="388"
-                          width="324"><br>
-                      </b></u><small><small>The Prefs file is created
-                        ~/.KKEdit/kkedit.rc and will be
-                        created/recreated when quitting KKEdit.<br>
+                          width="324"><small><small><br>
+                            <br>
+                          </small></small> </b></u><small><small>The
+                        Prefs file is created ~/.KKEdit/kkedit.rc and
+                        will be created/recreated when quitting KKEdit.<br>
                         Preferences should be set from
                         'Edit-&gt;Preferences'<br>
                         You can set the command to run an external tool
@@ -168,6 +173,7 @@
                       </small></small></big></big></big></small></small></small></big><small>
       </small>
       <hr size="2" width="100%"><small><big><big><u><b><a name="getanc"></a>Get
+
 
 
 
