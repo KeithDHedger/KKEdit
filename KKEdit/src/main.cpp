@@ -251,6 +251,146 @@ void buildFindReplace(void)
 	gtk_signal_connect (GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
 }
 
+GtkWidget*	toolName;
+bool		inTerm=false;
+bool		runSync=true;
+bool		ignoreOut=true;
+bool		pasteOut=false;
+bool		replaceOut=false;
+
+void setToolOptions(GtkWidget* widget,gpointer data)
+{
+	if(strcmp(gtk_widget_get_name(widget),"interm")==0)
+		inTerm=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"sync")==0)
+		runSync=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"ignore")==0)
+		ignoreOut=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"paste")==0)
+		pasteOut=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"replace")==0)
+		replaceOut=gtk_toggle_button_get_active((GtkToggleButton*)data);
+
+		printf("interm %i\n",(int)inTerm);
+		printf("runsync %i\n",(int)runSync);
+		printf("ignore %i\n",(int)ignoreOut);
+		printf("paste %i\n",(int)pasteOut);
+		printf("replace %i\n",(int)replaceOut);
+		printf("toolname %s\n\n",gtk_entry_get_text((GtkEntry*)toolName));
+/*
+	if(strcmp(gtk_widget_get_name(widget),"show")==0)
+		tmpLineNumbers=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"wrap")==0)
+		tmpLineWrap=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"high")==0)
+		tmpHighLight=gtk_toggle_button_get_active((GtkToggleButton*)data);
+
+	if(strcmp(gtk_widget_get_name(widget),"tabs")==0)
+		tmpTabWidth=(int)gtk_spin_button_get_value((GtkSpinButton*)data);
+
+	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
+		gtk_widget_destroy(prefswin);
+
+	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
+		{
+			indent=tmpIndent;
+			lineNumbers=tmpLineNumbers;
+			lineWrap=tmpLineWrap;
+			highLight=tmpHighLight;
+			if(terminalCommand!=NULL)
+				{
+					g_free(terminalCommand);
+					asprintf(&terminalCommand,"%s",gtk_entry_get_text((GtkEntry*)terminalBox));
+				}
+
+			if(fontAndSize!=NULL)
+				{
+					g_free(fontAndSize);
+					asprintf(&fontAndSize,"%s",gtk_entry_get_text((GtkEntry*)fontBox));
+				}
+
+			tabWidth=tmpTabWidth;
+			gtk_widget_destroy(prefswin);
+			resetAllFilePrefs();
+		}
+*/
+}
+
+void doMakeTool(void)
+{
+	GtkWidget*	vbox;
+	GtkWidget*	hbox;
+	GtkWidget*	item;
+	GSList*		group;
+	GtkWidget*	firstradio;
+
+	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_title((GtkWindow*)prefswin,"Create New Tool");
+	vbox=gtk_vbox_new(true,8);
+//in terminal
+	item=gtk_check_button_new_with_label("Run Tool In Terminal");
+	gtk_widget_set_name(item,"interm");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,inTerm);
+	gtk_box_pack_start(GTK_BOX(vbox),item,false,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setToolOptions),(void*)item);
+//flags
+//snch/async
+	item=gtk_check_button_new_with_label("Run Tool Synchronously");
+	gtk_widget_set_name(item,"sync");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,runSync);
+	gtk_box_pack_start(GTK_BOX(vbox),item,false,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setToolOptions),(void*)item);
+
+//flags - ignore
+	firstradio=gtk_radio_button_new_with_label(group,"Ignore Output");
+	gtk_widget_set_name(firstradio,"ignore");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,ignoreOut);
+	gtk_box_pack_start(GTK_BOX(vbox),firstradio,false,true,0);
+	g_signal_connect(G_OBJECT(firstradio),"toggled",G_CALLBACK(setToolOptions),(void*)firstradio);
+
+//flags - paste
+	item=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)firstradio,"Paste Output");
+    gtk_widget_set_name(item,"paste");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,pasteOut);
+	gtk_box_pack_start(GTK_BOX(vbox),item,false,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setToolOptions),(void*)item);
+
+//flags - replace all
+	item=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)firstradio,"Replace All Contents");
+	gtk_widget_set_name(item,"replace");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,replaceOut);
+	gtk_box_pack_start(GTK_BOX(vbox),item,false,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setToolOptions),(void*)item);
+
+
+//name
+	toolName=gtk_entry_new();
+	hbox=gtk_hbox_new(false,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Tool Name: "),false,true,0);
+	gtk_container_add(GTK_CONTAINER(hbox),toolName);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
+	gtk_entry_set_text((GtkEntry*)toolName,"New Tool");
+
+//buttons
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),false,false,0);
+
+	hbox=gtk_hbox_new(false,0);
+	item=gtk_button_new_from_stock(GTK_STOCK_APPLY);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
+	gtk_widget_set_name(item,"apply");
+//	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setPrefs),(void*)item);	
+
+	item=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
+	gtk_widget_set_name(item,"cancel");
+//	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setPrefs),(void*)item);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,false,2);
+
+//show it
+	gtk_container_add(GTK_CONTAINER(prefswin),(GtkWidget*)vbox);
+	gtk_widget_show_all(prefswin);
+}
+
 void buildTools(void)
 {
 	GDir*			folder;
@@ -269,6 +409,14 @@ void buildTools(void)
 
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutools),menu);
+
+//addtool
+	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doMakeTool),NULL);
+
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 	for(int loop=0;loop<2;loop++)
 		{
@@ -540,6 +688,7 @@ int main(int argc,char **argv)
 	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
 	g_signal_connect_after(G_OBJECT(entrybox),"key-release-event",G_CALLBACK(jumpToLineFromBar),NULL);
 	gtk_widget_set_size_request((GtkWidget*)toolbutton,48,-1);
+	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Go To Line");
 
 //menus
 //file menu
