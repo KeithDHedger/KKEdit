@@ -410,12 +410,12 @@ void buildTools(void)
 	toolStruct*		tool;
 	char*			datafolder[2];
 
-	char			menuname[256];
+	char			menuname[256]="New Tool";
 	int				intarg;
-	char			commandarg[1024];
+	char			commandarg[1024]="env";
 	char			strarg[1024];
-	int				intermarg;
-	int				flagsarg;
+	int				intermarg=0;
+	int				flagsarg=0;
 
 	asprintf(&datafolder[0],"%s/tools/",DATADIR);
 	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));
@@ -457,6 +457,7 @@ void buildTools(void)
 											if(strcmp(strarg,"flags")==0)
 												sscanf((char*)&buffer,"%*s %i",&flagsarg);
 										}
+									
 									printf("menu name - %s\ncommand - %s\nflags %i\nterm - %i\n",menuname,commandarg,flagsarg,intermarg);
 									fclose(fd);
 								}
