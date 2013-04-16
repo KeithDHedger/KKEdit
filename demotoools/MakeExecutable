@@ -1,4 +1,0 @@
-#!/bin/bash
-#0 0 Make Executable
-
-chmod +x "$KKEDIT_CURRENTFILE"

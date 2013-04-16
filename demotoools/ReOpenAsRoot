@@ -1,4 +1,0 @@
-#!/bin/bash
-#0 1 Reopen As Root
-
-sudo kkedit "$KKEDIT_CURRENTFILE"
