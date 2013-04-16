@@ -547,12 +547,12 @@ void externalTool(GtkWidget* widget,gpointer data)
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
-	char*		vars[]={"%t","%f","%d","%i",NULL};
+	const char*		vars[]={"%t","%f","%d","%i",NULL};
 	char*		ptr;
 	long		pos;
 	int			loop=0;
 	GString*	tempCommand=g_string_new(tool->command);
-	char*		varData[]={NULL,page->filePath,NULL,DATADIR};
+	const char*		varData[]={NULL,page->filePath,NULL,DATADIR};
 
 	if(page==NULL)
 		return;
@@ -573,7 +573,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 			setenv("KKEDIT_SELECTION",selection,1);
 		}
 	else
-		asprintf(&selection,"");
+		asprintf(&selection,"%s","");
 
 	varData[0]=selection;
 	varData[2]=dirname;

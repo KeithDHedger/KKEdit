@@ -277,9 +277,6 @@ bool		replaceOut=false;
 void setToolOptions(GtkWidget* widget,gpointer data)
 {
 	int			flags;
-	pageStruct*	page=getPageStructPtr(-1);
-	GtkTextIter iter;
-	char*		command;
 	char*		dirname;
 	char*		toolpath;
 	FILE*		fd=NULL;
@@ -441,11 +438,8 @@ void buildTools(void)
 	FILE*			fd=NULL;
 	char*			filepath;
 	char			buffer[4096];
-
 	toolStruct*		tool;
 	char*			datafolder[2];
-
-	int				intarg;
 	char			strarg[1024];
 	
 	int				intermarg=0;
@@ -491,9 +485,9 @@ void buildTools(void)
 											buffer[strlen(buffer)-1]=0;
 											sscanf((char*)&buffer,"%s",(char*)&strarg);
 											if(strcmp(strarg,"name")==0)
-												asprintf(&menuname,"%.*s",strlen(buffer)-5,(char*)&buffer[5]);
+												asprintf(&menuname,"%.*s",(int)strlen(buffer)-5,(char*)&buffer[5]);
 											if(strcmp(strarg,"command")==0)
-												asprintf(&commandarg,"%.*s",strlen(buffer)-8,(char*)&buffer[8]);
+												asprintf(&commandarg,"%.*s",(int)strlen(buffer)-8,(char*)&buffer[8]);
 											if(strcmp(strarg,"interm")==0)
 												sscanf((char*)&buffer,"%*s %i",&intermarg);
 											if(strcmp(strarg,"flags")==0)
