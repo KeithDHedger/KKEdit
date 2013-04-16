@@ -38,4 +38,5 @@ Added external tool creater GUI.
 Bug fix crash on closing empty new tab.
 Set senitive on save/saveas buttons menu items on startup.
 Completly redone external tools.
-Checked build wwith lower version of gtksourceview (2.9.9).
+Checked build with lower version of gtksourceview (2.9.9) but 2.11.1 recommended.
+Added GUI to build external tools.
