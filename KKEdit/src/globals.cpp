@@ -160,7 +160,10 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 	gint	retval=0;
 
 	if(interm==true)
-		asprintf(&command,"%s %s",terminalCommand,commandtorun);
+		{
+			asprintf(&command,"%s %s",terminalCommand,commandtorun);
+			flags=8;
+		}
 	else
 		asprintf(&command,"%s",commandtorun);
 

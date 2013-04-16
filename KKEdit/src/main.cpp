@@ -27,6 +27,8 @@ bool		tmpLineWrap;
 bool		tmpHighLight;
 int			tmpTabWidth;
 
+void buildTools(void);
+
 void doAbout(GtkWidget* widget,gpointer data)
 {
 	const char*	authors[]={"K.D.Hedger <"MYEMAIL">",NULL};
@@ -252,6 +254,7 @@ void buildFindReplace(void)
 }
 
 GtkWidget*	toolNameWidget;;
+GtkWidget*	commandLineWidget;;
 GtkWidget*	inTermWidget;
 GtkWidget*	syncWidget;
 GtkWidget*	ignoreWidget;
@@ -270,6 +273,9 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter iter;
 	char*		command;
+	char*		dirname;
+	char*		toolpath;
+	FILE*		fd=NULL;
 
 	if(strcmp(gtk_widget_get_name(widget),"interm")==0)
 		inTerm=gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget);
@@ -312,10 +318,23 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{
-			asprintf(&command,"#%i %i %s\n",flags,(int)inTerm,gtk_entry_get_text((GtkEntry*)toolNameWidget));
-			gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&iter,1);
-			gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&iter,command,-1);
-			g_free(command);
+			asprintf(&dirname,"%s/.KKEdit/tools",getenv("HOME"));
+			toolpath=tempnam(dirname,"tool");
+			fd=fopen(toolpath,"w");
+			if (fd!=NULL)
+				{
+					fprintf(fd,"name\t%s\n",gtk_entry_get_text((GtkEntry*)toolNameWidget));
+					fprintf(fd,"command\t%s\n",gtk_entry_get_text((GtkEntry*)commandLineWidget));
+					fprintf(fd,"flags\t%i\n",flags);
+					fprintf(fd,"interm\t%i\n",(int)inTerm);
+					fclose(fd);
+				}
+			g_free(dirname);
+			g_free(toolpath);
+			gtk_widget_destroy((GtkWidget*)data);
+
+			buildTools();
+			gtk_widget_show_all(menutools);
 		}
 
 	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
@@ -341,6 +360,16 @@ void doMakeTool(void)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_widget_show(toolNameWidget);
 	gtk_entry_set_text((GtkEntry*)toolNameWidget,"New Tool");
+
+//command
+	commandLineWidget=gtk_entry_new();
+	hbox=gtk_hbox_new(false,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Command: "),false,true,0);
+	gtk_container_add(GTK_CONTAINER(hbox),commandLineWidget);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
+	gtk_widget_show(commandLineWidget);
+	gtk_entry_set_text((GtkEntry*)commandLineWidget,"");
+
 
 //in terminal
 	inTermWidget=gtk_check_button_new_with_label("Run Tool In Terminal");
@@ -384,7 +413,7 @@ void doMakeTool(void)
 	button=gtk_button_new_from_stock(GTK_STOCK_APPLY);
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,false,2);
 	gtk_widget_set_name(button,"apply");
-	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setToolOptions),NULL);	
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setToolOptions),(void*)toolwin);	
 
 	button=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,false,2);
@@ -401,12 +430,12 @@ void buildTools(void)
 {
 	GDir*			folder;
 	GtkWidget*		menuitem;
+	GtkWidget*		menu;
 	const gchar*	entry=NULL;
 	FILE*			fd=NULL;
 	char*			filepath;
 	char			buffer[4096];
 
-	GtkWidget*		menu;
 	toolStruct*		tool;
 	char*			datafolder[2];
 
@@ -421,93 +450,9 @@ void buildTools(void)
 	asprintf(&datafolder[0],"%s/tools/",DATADIR);
 	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));
 
-	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutools),menu);
-
-//addtool
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doMakeTool),NULL);
-
-	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
-	for(int loop=1;loop<2;loop++)
-		{
-			folder=g_dir_open(datafolder[loop],0,NULL);
-			if(folder!=NULL)
-				{
-					entry=g_dir_read_name(folder);
-					while(entry!=NULL)
-						{
-							asprintf(&filepath,"%s%s",datafolder[loop],entry);
-							fd=fopen(filepath,"r");
-							printf("%s\n",filepath);
-							if (fd!=NULL)
-								{
-									intermarg=0;
-									flagsarg=0;
-
-									while(fgets(buffer,4096,fd))
-										{
-											buffer[strlen(buffer)-1]=0;
-											sscanf((char*)&buffer,"%s",(char*)&strarg);
-											if(strcmp(strarg,"name")==0)
-												asprintf(&menuname,"%.*s",strlen(buffer)-5,(char*)&buffer[5]);
-											if(strcmp(strarg,"command")==0)
-												asprintf(&commandarg,"%.*s",strlen(buffer)-8,(char*)&buffer[8]);
-											if(strcmp(strarg,"interm")==0)
-												sscanf((char*)&buffer,"%*s %i",&intermarg);
-											if(strcmp(strarg,"flags")==0)
-												sscanf((char*)&buffer,"%*s %i",&flagsarg);
-										}
-									if(strlen(menuname)>0)
-										{
-										/*
-										
-									sscanf(buffer,"#%i %i %[a-zA-Z0-9 \t_-]s",(int*)&tool->flags,(int*)&tool->inTerminal,strarg);
-									asprintf(&tool->menuName,"%s",strarg);
-									asprintf(&tool->filePath,"%s",filepath);
-									menuitem=gtk_image_menu_item_new_with_label(tool->menuName);
-									gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-									gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)tool);
-										*/
-												tool=(toolStruct*)malloc(sizeof(toolStruct));
-												asprintf(&tool->menuName,"%s",menuname);
-												asprintf(&tool->command,"%s",commandarg);
-												tool->flags=flagsarg;
-												tool->inTerminal=(bool)intermarg;
-												menuitem=gtk_image_menu_item_new_with_label(tool->menuName);
-												gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-												gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)tool);
-											printf("menu name - %s\ncommand - %s\nflags %i\nterm - %i\n",menuname,commandarg,flagsarg,intermarg);
-											g_free(menuname);
-											g_free(commandarg);
-										}
-									fclose(fd);
-								}
-							entry=g_dir_read_name(folder);
-						}
-				}
-		}
-}
-
-#if false
-void buildToolsX(void)
-{
-	GDir*			folder;
-	GtkWidget*		menuitem;
-	const gchar*	entry=NULL;
-	FILE*			fd=NULL;
-	char*			filepath;
-	char			buffer[4096];
-	char			strarg[256];
-	GtkWidget*		menu;
-	toolStruct*		tool;
-	char*			datafolder[2];
-
-	asprintf(&datafolder[0],"%s/tools/",DATADIR);
-	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));
+	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menutools);
+	if (submenu!=NULL)
+		gtk_menu_item_set_submenu((GtkMenuItem*)menutools,NULL);
 
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutools),menu);
@@ -532,25 +477,43 @@ void buildToolsX(void)
 							fd=fopen(filepath,"r");
 							if (fd!=NULL)
 								{
-									fgets(buffer,4096,fd);
-									fgets(buffer,4096,fd);
-									fclose(fd);
+									intermarg=0;
+									flagsarg=0;
 
-									tool=(toolStruct*)malloc(sizeof(toolStruct));
-									sscanf(buffer,"#%i %i %[a-zA-Z0-9 \t_-]s",(int*)&tool->flags,(int*)&tool->inTerminal,strarg);
-									asprintf(&tool->menuName,"%s",strarg);
-									asprintf(&tool->filePath,"%s",filepath);
-									menuitem=gtk_image_menu_item_new_with_label(tool->menuName);
-									gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-									gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)tool);
+									while(fgets(buffer,4096,fd))
+										{
+											buffer[strlen(buffer)-1]=0;
+											sscanf((char*)&buffer,"%s",(char*)&strarg);
+											if(strcmp(strarg,"name")==0)
+												asprintf(&menuname,"%.*s",strlen(buffer)-5,(char*)&buffer[5]);
+											if(strcmp(strarg,"command")==0)
+												asprintf(&commandarg,"%.*s",strlen(buffer)-8,(char*)&buffer[8]);
+											if(strcmp(strarg,"interm")==0)
+												sscanf((char*)&buffer,"%*s %i",&intermarg);
+											if(strcmp(strarg,"flags")==0)
+												sscanf((char*)&buffer,"%*s %i",&flagsarg);
+										}
+
+									if(strlen(menuname)>0)
+										{
+											tool=(toolStruct*)malloc(sizeof(toolStruct));
+											asprintf(&tool->menuName,"%s",menuname);
+											asprintf(&tool->command,"%s",commandarg);
+											tool->flags=flagsarg;
+											tool->inTerminal=(bool)intermarg;
+											menuitem=gtk_image_menu_item_new_with_label(tool->menuName);
+											gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+											gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)tool);
+											g_free(menuname);
+											g_free(commandarg);
+										}
+									fclose(fd);
 								}
 							entry=g_dir_read_name(folder);
 						}
-					g_dir_close(folder);
 				}
 		}
 }
-#endif
 
 void setPrefs(GtkWidget* widget,gpointer data)
 {

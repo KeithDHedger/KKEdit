@@ -37,3 +37,5 @@ Added Find API to installed tools.
 Added external tool creater GUI.
 Bug fix crash on closing empty new tab.
 Set senitive on save/saveas buttons menu items on startup.
+Completly redone external tools.
+Checked build wwith lower version of gtksourceview (2.9.9).
