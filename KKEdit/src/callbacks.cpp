@@ -605,6 +605,74 @@ void externalTool(GtkWidget* widget,gpointer data)
 	g_free(dirname);
 }
 
+#if false
+void externalTool(GtkWidget* widget,gpointer data)
+{
+	toolStruct*	tool=(toolStruct*)data;
+	pageStruct*	page=getPageStructPtr(-1);
+	char*		dirname;
+	char*		text=NULL;
+	GtkTextIter	start;
+	GtkTextIter	end;
+	char*		selection=NULL;
+
+	if(page==NULL)
+		return;
+
+	if(page->filePath!=NULL)
+		dirname=g_path_get_dirname(page->filePath);
+	else
+		asprintf(&dirname,"%s",getenv("HOME"));
+//
+//	printf("%s\n",tool->menuName);
+//	printf("%s\n",tool->filePath);
+//	printf("%i\n",tool->flags);
+//	printf("%s\n",tool->currentDir);
+//	printf("%i\n",tool->paste);
+//	printf("%i\n",tool->inTerminal);
+//	asprintf(&fullcommand,"(cd \"%s\";%s)",dirname,tool->filePath);
+//	runCommand(fullcommand,&text);
+	
+	chdir(dirname);
+
+	setenv("KKEDIT_CURRENTFILE",page->filePath,1);
+	setenv("KKEDIT_CURRENTDIR",dirname,1);
+	setenv("KKEDIT_DATADIR",DATADIR,1);
+	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+		{
+			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+			setenv("KKEDIT_SELECTION",selection,1);
+			g_free(selection);
+		}
+
+	runCommand(tool->filePath,&text,tool->inTerminal,tool->flags);
+	if(text!=NULL)
+		{
+			if(tool->flags & TOOL_REPLACE_OP)
+				{
+					gtk_text_buffer_get_bounds((GtkTextBuffer*)page->buffer,&start,&end);
+					gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&start,&end);
+					gtk_text_buffer_delete_selection((GtkTextBuffer*)page->buffer,true,true);
+					gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER (page->buffer),&start);
+					gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&start,text,strlen(text));
+				}
+
+			if(tool->flags & TOOL_PASTE_OP)
+				{
+					if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+						gtk_text_buffer_delete_selection((GtkTextBuffer*)page->buffer,true,true);
+					gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(page->buffer),text,strlen(text));
+				}
+		}
+
+	unsetenv("KKEDIT_CURRENTFILE");
+	unsetenv("KKEDIT_CURRENTDIR");
+	unsetenv("KKEDIT_DATADIR");
+	unsetenv("KKEDIT_SELECTION");
+	g_free(text);
+	g_free(dirname);
+}
+#endif
 int marknum=0;
 void jumpToMark(GtkWidget* widget,gpointer data)
 {

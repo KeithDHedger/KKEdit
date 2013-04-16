@@ -51,6 +51,7 @@ struct toolStruct
 {
 	char*				menuName;
 	char*				filePath;
+	char*				command;
 	char*				currentDir;
 	int					flags;
 	bool				inTerminal;					
