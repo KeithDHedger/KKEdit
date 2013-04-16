@@ -1,5 +1,0 @@
-#!/bin/bash -e
-#8 0 Find API
-#©keithhedger Mon 15 Apr 11:18:12 BST 2013 kdhedger68713@gmail.com
-#if you have devhelp installed just select an api ie "gtk_window_new" and select Find API and devhelp will open it for you
-devhelp --search "$KKEDIT_SELECTION"

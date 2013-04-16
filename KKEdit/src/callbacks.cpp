@@ -555,16 +555,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 		dirname=g_path_get_dirname(page->filePath);
 	else
 		asprintf(&dirname,"%s",getenv("HOME"));
-//
-//	printf("%s\n",tool->menuName);
-//	printf("%s\n",tool->filePath);
-//	printf("%i\n",tool->flags);
-//	printf("%s\n",tool->currentDir);
-//	printf("%i\n",tool->paste);
-//	printf("%i\n",tool->inTerminal);
-//	asprintf(&fullcommand,"(cd \"%s\";%s)",dirname,tool->filePath);
-//	runCommand(fullcommand,&text);
-	
+
 	chdir(dirname);
 
 	setenv("KKEDIT_CURRENTFILE",page->filePath,1);
@@ -576,8 +567,11 @@ void externalTool(GtkWidget* widget,gpointer data)
 			setenv("KKEDIT_SELECTION",selection,1);
 			g_free(selection);
 		}
+	else
+		asprintf(&selection,"");
 
 	runCommand(tool->command,&text,tool->inTerminal,tool->flags);
+
 	if(text!=NULL)
 		{
 			if(tool->flags & TOOL_REPLACE_OP)

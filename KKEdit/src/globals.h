@@ -50,7 +50,7 @@ struct pageStruct
 struct toolStruct
 {
 	char*				menuName;
-	char*				filePath;
+	char*				prefixDir;
 	char*				command;
 	char*				currentDir;
 	int					flags;

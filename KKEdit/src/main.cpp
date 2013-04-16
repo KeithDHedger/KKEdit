@@ -157,6 +157,8 @@ void readConfig(void)
 
 void init(void)
 {
+	char*	filename;
+
 	indent=true;
 	lineNumbers=true;
 	lineWrap=true;
@@ -171,6 +173,10 @@ void init(void)
 	wrapSearch=true;
 	insensitiveSearch=true;
 	replaceAll=false;
+
+	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
+	g_mkdir_with_parents(filename,493);
+	g_free(filename);
 
 	readConfig();
 
@@ -255,6 +261,7 @@ void buildFindReplace(void)
 
 GtkWidget*	toolNameWidget;;
 GtkWidget*	commandLineWidget;;
+//GtkWidget*	prefixDir;
 GtkWidget*	inTermWidget;
 GtkWidget*	syncWidget;
 GtkWidget*	ignoreWidget;
@@ -370,7 +377,6 @@ void doMakeTool(void)
 	gtk_widget_show(commandLineWidget);
 	gtk_entry_set_text((GtkEntry*)commandLineWidget,"");
 
-
 //in terminal
 	inTermWidget=gtk_check_button_new_with_label("Run Tool In Terminal");
 	gtk_widget_set_name(inTermWidget,"interm");
@@ -444,8 +450,8 @@ void buildTools(void)
 	
 	int				intermarg=0;
 	int				flagsarg=0;
-	char*			commandarg;
-	char*			menuname;
+	char*			commandarg=NULL;
+	char*			menuname=NULL;
 
 	asprintf(&datafolder[0],"%s/tools/",DATADIR);
 	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));
@@ -494,7 +500,7 @@ void buildTools(void)
 												sscanf((char*)&buffer,"%*s %i",&flagsarg);
 										}
 
-									if(strlen(menuname)>0)
+									if((menuname!=NULL) && (strlen(menuname)>0))
 										{
 											tool=(toolStruct*)malloc(sizeof(toolStruct));
 											asprintf(&tool->menuName,"%s",menuname);
@@ -506,6 +512,7 @@ void buildTools(void)
 											gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)tool);
 											g_free(menuname);
 											g_free(commandarg);
+											menuname=NULL;
 										}
 									fclose(fd);
 								}
