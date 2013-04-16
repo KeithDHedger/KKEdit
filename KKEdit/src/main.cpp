@@ -405,6 +405,75 @@ void buildTools(void)
 	FILE*			fd=NULL;
 	char*			filepath;
 	char			buffer[4096];
+//	char			strarg[256];
+	GtkWidget*		menu;
+	toolStruct*		tool;
+	char*			datafolder[2];
+
+	char			menuname[256];
+	int				intarg;
+	char			commandarg[1024];
+	char			strarg[1024];
+	int				intermarg;
+	int				flagsarg;
+
+	asprintf(&datafolder[0],"%s/tools/",DATADIR);
+	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));
+
+	menu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutools),menu);
+
+//addtool
+	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doMakeTool),NULL);
+
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+	for(int loop=1;loop<2;loop++)
+		{
+			folder=g_dir_open(datafolder[loop],0,NULL);
+			if(folder!=NULL)
+				{
+					entry=g_dir_read_name(folder);
+					while(entry!=NULL)
+						{
+							asprintf(&filepath,"%s%s",datafolder[loop],entry);
+							fd=fopen(filepath,"r");
+							printf("%s\n",filepath);
+							if (fd!=NULL)
+								{
+									while(fgets(buffer,4096,fd))
+										{
+											buffer[strlen(buffer)-1]=0;
+											sscanf((char*)&buffer,"%s",(char*)&strarg);
+											if(strcmp(strarg,"name")==0)
+												sscanf((char*)&buffer,"%*s %[a-zA-Z0-9 _-]s",(char*)&menuname);
+											if(strcmp(strarg,"command")==0)
+												sscanf((char*)&buffer,"%*s %[a-zA-Z0-9 _-]s",(char*)&commandarg);
+											if(strcmp(strarg,"interm")==0)
+												sscanf((char*)&buffer,"%*s %i",&intermarg);
+											if(strcmp(strarg,"flags")==0)
+												sscanf((char*)&buffer,"%*s %i",&flagsarg);
+										}
+									printf("menu name - %s\ncommand - %s\nflags %i\nterm - %i\n",menuname,commandarg,flagsarg,intermarg);
+									fclose(fd);
+								}
+							entry=g_dir_read_name(folder);
+						}
+				}
+		}
+}
+
+void buildToolsX(void)
+{
+	GDir*			folder;
+	GtkWidget*		menuitem;
+	const gchar*	entry=NULL;
+	FILE*			fd=NULL;
+	char*			filepath;
+	char			buffer[4096];
 	char			strarg[256];
 	GtkWidget*		menu;
 	toolStruct*		tool;
