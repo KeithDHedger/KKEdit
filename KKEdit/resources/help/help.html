@@ -125,8 +125,8 @@
                 working directory set to the folder where the current
                 file is open:<br>
                 <br>
-                <img alt="openterm" src="openterminal.png" height="396"
-                  width="729"><br>
+                <img alt="openterm" src="toolsmenu.png" height="273"
+                  width="681"><br>
                 <br>
                 External tools can either be added globally to
                 /usr/share/KKEdit/tools (if you have installed with
@@ -137,30 +137,41 @@
       <big><small><small><small><big><big><small><small><small><big><big>KKEDIT_SELECTION
 
 
+
                             - Currently selected text.</big><br>
                         </big></small></small></small></big>
                 KKEDIT_DATADIR - Directory of global folder ( eg
                 /usr/share/KKEdit ).<br>
                 More variables may be defined later.<br>
-                External tools are just script files with the second
-                line beginning with a '#' like so:<br>
+                External tools can be created by hand or via the
+                'Tools-&gt;New' menu like so:<br>
                 <br>
-                <img alt="exttool" src="exttool.png" height="209"
-                  width="437"><br>
-                Where the first number can be 0 to ignore the output
-                from the script, 1 to replace the currently selected
-                text (or insert at the cursor) and 2 to replace the
-                entire contents of the current document with the output
-                from the script.<br>
-                You can aslo use '8' to run a tool asynchronously, all
-                output is ignored.<br>
-                The second number if set to 1 will run the script in a
-                terminal, you can set the command to run the terminal of
-                your choice from the prefs menu.<br>
-                The final bit is the name that appears in the 'Tools'
-                menu of KKEdit.<br>
+                <img alt="exttool" src="newtool.png" height="388"
+                  width="292"><br>
                 <br>
-              </big></small></small></small></big>
+                The placeholders are:<br>
+                %t - Currently selected text, the same as the
+                $KKEDIT_SELECTION environment variable passed to the
+                command .</big></small></small></small></big><br>
+      <big><small><small><small><big><big><small><small><small><big><big>%f
+                            - Filepath of the current document, the same
+                            as the $KKEDIT_CURRENTFILE environment
+                            variable passed to the command.</big><br>
+                        </big></small></small></small></big></big></small></small></small></big><big><small><small><small><big><big><small><small><small><big><big><small><small><small><big><big><big>%d
+                                        - Directory of the current
+                                        document or ${HOME}, the same as
+                                        the $KKEDIT_CURRENTDIR
+                                        environment variable passed to
+                                        the command.</big></big></big></small></small></small></big></big></small></small></small></big></big></small></small></small></big><br>
+      <small>%i -The location of the globally installed tools, the same
+        as the $KKEDIT_DATADIR environment variable passed to the
+        command.</small><br>
+      <br>
+      <small>Commands should be simple commands, compound commands ( ie
+        cd /opt;ls;touch xx) will not be executed properly, if you need
+        to use a complex command create a script and set 'command' to
+        the filepath of your script.</small><br>
+      <br>
       <hr size="2" width="100%"><big><small><small><small><big><br>
                 <big><big><a name="prefsanc"></a><u><b>Preferences<br>
                         <br>
@@ -177,6 +188,7 @@
                       </small></small></big></big></big></small></small></small></big><small>
       </small>
       <hr size="2" width="100%"><small><big><big><u><b><a name="getanc"></a>Get
+
 
 
 
@@ -218,8 +230,8 @@
         </b></u><b>1)</b><small> Make find/replace MUCH more versatile
         with <strike>case insensitive search</strike>,<strike> file
           wrap</strike>, replace-all and maybe simple regex.</small><br>
-      <b>2)</b><small> Set up&nbsp; a proper GUI to build an external
-        tool script.<br>
+      <b>2)</b><small> <strike>Set up&nbsp; a proper GUI to build an
+          external tool script.</strike><br>
         <big><b>3)</b></big> <strike>Set up a GUI for the preferences.</strike><br>
         <big><b>4)</b></big> <strike>Add bookmarks.</strike></small><br>
       <small><small><big><big><b>5)</b></big> <strike>Check for file
