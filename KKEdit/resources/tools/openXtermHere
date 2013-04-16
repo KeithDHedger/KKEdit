@@ -1,0 +1,4 @@
+name	Open Xterm Here
+command	xterm
+flags	8
+interm	0
