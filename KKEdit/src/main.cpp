@@ -655,6 +655,29 @@ int main(int argc,char **argv)
 	GtkWidget*		image;
 	GtkWidget*		entrybox;
 
+/*
+char* findstr="this bit";
+char* seachin="test out  this bit $xx";
+char* var="check it out";
+char* varname="$xx";
+
+char finalstr[4096];
+char buffer[4096];
+char*ptr;
+long pos;
+
+GString *    ss=g_string_new(seachin);
+GString *    s2=g_string_new(NULL);
+
+ptr=strstr(ss->str,"$xx");
+pos=(long)ptr-(long)ss->str;
+ss=g_string_erase(ss, pos,strlen(varname));
+ss=g_string_insert(ss,pos,var);
+
+printf("%s %i\n",ss->str,pos);
+//printf("%s %i\n",s2->str,pos);
+return 0;
+*/
 	gtk_init(&argc,&argv);
 	init();
 
