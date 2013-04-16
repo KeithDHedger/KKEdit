@@ -577,6 +577,8 @@ void externalTool(GtkWidget* widget,gpointer data)
 			g_free(selection);
 		}
 
+//	runCommand(tool->command,&text,tool->inTerminal,tool->flags);
+
 	runCommand(tool->filePath,&text,tool->inTerminal,tool->flags);
 	if(text!=NULL)
 		{
@@ -596,6 +598,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 					gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(page->buffer),text,strlen(text));
 				}
 		}
+
 
 	unsetenv("KKEDIT_CURRENTFILE");
 	unsetenv("KKEDIT_CURRENTDIR");
