@@ -96,6 +96,27 @@ void resetAllFilePrefs(void)
 			setFilePrefs(page->view);
 		}
 }
+void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
+{
+	printf("pop up\n");
+	GtkWidget*	menuitem;
+	GtkWidget*		image;
+
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+	//menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_OPEN,NULL);
+	//gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	
+	image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
+	menuitem=gtk_image_menu_item_new_with_label("Go To Definition");
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
+
+	
+	gtk_widget_show_all((GtkWidget*)menu);
+}
 
 bool openFile(const gchar *filepath,int linenumber)
 {
@@ -115,6 +136,8 @@ bool openFile(const gchar *filepath,int linenumber)
 	
 	page->buffer=gtk_source_buffer_new(NULL);
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
+
+	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
 
 	setFilePrefs(page->view);
 
