@@ -1,4 +1,4 @@
 name	Find API
 command	devhelp --search %t
-flags	0
+flags	8
 interm	0
