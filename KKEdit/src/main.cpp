@@ -261,7 +261,6 @@ void buildFindReplace(void)
 
 GtkWidget*	toolNameWidget;;
 GtkWidget*	commandLineWidget;;
-//GtkWidget*	prefixDir;
 GtkWidget*	inTermWidget;
 GtkWidget*	syncWidget;
 GtkWidget*	ignoreWidget;
@@ -276,10 +275,11 @@ bool		replaceOut=false;
 
 void setToolOptions(GtkWidget* widget,gpointer data)
 {
-	int			flags;
-	char*		dirname;
-	char*		toolpath;
-	FILE*		fd=NULL;
+	int		flags;
+	char*	dirname;
+	FILE*	fd=NULL;
+	char	toolpath[2048];
+	int		toolnum=1;
 
 	if(strcmp(gtk_widget_get_name(widget),"interm")==0)
 		inTerm=gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget);
@@ -323,7 +323,15 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{
 			asprintf(&dirname,"%s/.KKEdit/tools",getenv("HOME"));
-			toolpath=tempnam(dirname,"tool");
+
+			while(true)
+				{
+					sprintf((char*)&toolpath,"%s/.KKEdit/tools/tool-%s-%i",getenv("HOME"),gtk_entry_get_text((GtkEntry*)toolNameWidget),toolnum);
+					if(!g_file_test(toolpath,G_FILE_TEST_EXISTS))
+						break;
+					toolnum++;
+				}
+
 			fd=fopen(toolpath,"w");
 			if (fd!=NULL)
 				{
@@ -334,7 +342,6 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 					fclose(fd);
 				}
 			g_free(dirname);
-			g_free(toolpath);
 			gtk_widget_destroy((GtkWidget*)data);
 
 			buildTools();
@@ -649,29 +656,6 @@ int main(int argc,char **argv)
 	GtkWidget*		image;
 	GtkWidget*		entrybox;
 
-/*
-char* findstr="this bit";
-char* seachin="test out  this bit $xx";
-char* var="check it out";
-char* varname="$xx";
-
-char finalstr[4096];
-char buffer[4096];
-char*ptr;
-long pos;
-
-GString *    ss=g_string_new(seachin);
-GString *    s2=g_string_new(NULL);
-
-ptr=strstr(ss->str,"$xx");
-pos=(long)ptr-(long)ss->str;
-ss=g_string_erase(ss, pos,strlen(varname));
-ss=g_string_insert(ss,pos,var);
-
-printf("%s %i\n",ss->str,pos);
-//printf("%s %i\n",s2->str,pos);
-return 0;
-*/
 	gtk_init(&argc,&argv);
 	init();
 

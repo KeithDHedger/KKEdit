@@ -547,15 +547,18 @@ void externalTool(GtkWidget* widget,gpointer data)
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
-	const char*		vars[]={"%t","%f","%d","%i",NULL};
+	const char*	vars[]={"%t","%f","%d","%i",NULL};
 	char*		ptr;
 	long		pos;
 	int			loop=0;
-	GString*	tempCommand=g_string_new(tool->command);
+	GString*	tempCommand;
+
+	if(page==NULL || tool==NULL)
+		return;
+
 	const char*		varData[]={NULL,page->filePath,NULL,DATADIR};
 
-	if(page==NULL)
-		return;
+	tempCommand=g_string_new(tool->command);
 
 	if(page->filePath!=NULL)
 		dirname=g_path_get_dirname(page->filePath);
