@@ -278,6 +278,8 @@ void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectio
 
 void doSearchPrefs(GtkWidget* widget,gpointer data)
 {
+	GtkWidget*	button;
+
 	switch ((long)data)
 		{
 			case 1:
@@ -288,6 +290,11 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 				break;
 			case 3:
 				replaceAll=gtk_toggle_button_get_active((GtkToggleButton*)widget);
+				button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,100);
+				if(replaceAll==false)
+					gtk_button_set_label((GtkButton*)button,"Replace");
+				else
+					gtk_button_set_label((GtkButton*)button,"Replace All");
 				break;
 		}
 }
@@ -305,6 +312,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
 	char*					searchtext;
 	char*					replacetext;
+	bool					replaceAllFlag;
 
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 
@@ -370,6 +378,24 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 				break;
 //replace and search
 			case REPLACE:
+				if(replaceAll==true)
+					{
+					replaceAllFlag=true;
+					gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
+					gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&page->iter);
+					if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
+						{
+							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+							gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
+							page->iter=page->match_end;
+						}
+					else
+						break;
+					}
+				else
+					replaceAllFlag=false;
+				do
+				{
 				if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
 					{
 						selectedtext=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end,false);
@@ -386,10 +412,17 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 										gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
 										page->iter=page->match_end;
 									}
+								else
+									{
+									replaceAllFlag=false;
+									//printf("XXX\n");
+									}
 							}
 						if(selectedtext!=NULL)
 							g_free(selectedtext);
 					}
+					}
+					while(replaceAllFlag==true);
 				break;
 
 			default:

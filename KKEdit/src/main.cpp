@@ -240,7 +240,6 @@ void buildFindReplace(void)
 	gtk_toggle_button_set_active((GtkToggleButton*)item,replaceAll);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	gtk_widget_show(item);
-//	gtk_widget_hide(item);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)3);
 
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);

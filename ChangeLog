@@ -42,4 +42,5 @@ Checked build with lower version of gtksourceview (2.9.9) but 2.11.1 recommended
 Added GUI to build external tools.
 
 0.0.10
-Bug fix.
+Bug fix - seg fault on run external tool with no tabs.
+Added Replace all
