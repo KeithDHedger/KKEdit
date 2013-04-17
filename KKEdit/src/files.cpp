@@ -103,17 +103,16 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	GtkWidget*		image;
 
 	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 
-	//menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_OPEN,NULL);
-	//gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	
 	image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
 	menuitem=gtk_image_menu_item_new_with_label("Go To Definition");
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
 
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 	
 	gtk_widget_show_all((GtkWidget*)menu);
 }
