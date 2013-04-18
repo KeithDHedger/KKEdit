@@ -888,8 +888,8 @@ void jumpToLineFromBar(GtkWidget* widget,gpointer data)
 
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 {
-	GtkWidget*	menuitem;
-	GtkWidget*	image;
+	GtkWidget*		menuitem;
+	GtkWidget*		image;
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
@@ -900,14 +900,50 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
 
-	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-	
 	gtk_widget_show_all((GtkWidget*)menu);
 }
 
-void tabPopUp(GtkWidget *my_widget, GdkEventButton *event)
+GtkWidget*	tabMenu;
+
+void doTabMenu(GtkWidget *widget,gpointer user_data)
 {
-	printf("here\n");
+	GtkClipboard*	clipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+
+	gtk_clipboard_set_text(clipboard,(char*)user_data,-1);
+	gtk_widget_destroy(tabMenu);
+}
+
+bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
+{
+	pageStruct* page;
+	GtkWidget*	menuitem;
+	GtkWidget*	image;
+
+	if(event->button==3 && event->type==GDK_BUTTON_PRESS)
+	    {
+			tabMenu=gtk_menu_new();
+			page=(pageStruct*)user_data;
+
+//copy filepath
+			image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
+			menuitem=gtk_image_menu_item_new_with_label("Copy Filepath");
+			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
+			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
+			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doTabMenu),(void*)page->filePath);
+//copy filename
+			image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
+			menuitem=gtk_image_menu_item_new_with_label("Copy FileName");
+			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
+			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
+			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doTabMenu),(void*)page->fileName);
+
+			gtk_menu_attach_to_widget(GTK_MENU(tabMenu),widget,NULL);
+			gtk_menu_popup(GTK_MENU(tabMenu),NULL,NULL,NULL,NULL,event->button,event->time);
+			gtk_widget_show_all((GtkWidget*)tabMenu);
+
+			return(true);
+		}
+	else
+		return(false);
 }
 

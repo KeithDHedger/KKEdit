@@ -23,61 +23,6 @@ GtkWidget*	vbox;
 char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
 
-
-
-static void
-do_popup_menu (GtkWidget *my_widget, GdkEventButton *event)
-{
-  GtkWidget *menu;
-  int button, event_time;
-
-printf("XXXXX\n");
-  menu = gtk_menu_new ();
-  g_signal_connect (menu, "deactivate", 
-                    G_CALLBACK (gtk_widget_destroy), NULL);
-
-  /* ... add menu items ... */
-
-  if (event)
-    {
-      button = event->button;
-      event_time = event->time;
-    }
-  else
-    {
-      button = 0;
-      event_time = gtk_get_current_event_time ();
-    }
-
-  gtk_menu_attach_to_widget (GTK_MENU (menu), my_widget, NULL);
-  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 
-                  button, event_time);
-}
-	
-static gboolean
-my_widget_popup_menu_handler (GtkWidget *widget)
-{
-  do_popup_menu (widget, NULL);
-  return TRUE;
-}
-	
-
-static gboolean
-my_widget_button_press_event_handler (GtkWidget *widget, GdkEventButton *event)
-{
-  /* Ignore double-clicks and triple-clicks */
-  if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
-    {
-      do_popup_menu (widget, event);
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-
-
-
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
 	GtkWidget*	evbox=gtk_event_box_new();
@@ -97,7 +42,7 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
 	gtk_container_add(GTK_CONTAINER(evbox),hbox);
 	gtk_signal_connect(GTK_OBJECT(button),"clicked",G_CALLBACK(closeTab),(void*)vbox);
-	gtk_signal_connect(GTK_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),NULL);
+	gtk_signal_connect(GTK_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),(void*)page);
 
 	page->tabName=label;
 
