@@ -947,7 +947,6 @@ char* getDefinition(char* selection)
 				{
 					sscanf (lineptr,"%*s %*s %*i %*s %[]a-zA-Z0-9:/ ()_-,.*#;[\"]s",name);
 					asprintf(&functionDefine,"%s",name);
-					//openFile((char*)&file,line-1);
 					g_free(stdout);
 					printf("%s\n%s\n",functionDefine,name);
 					return(functionDefine);
@@ -959,6 +958,12 @@ char* getDefinition(char* selection)
 
 		}
 	return(NULL);
+}
+
+void copyToClipboard(GtkWidget* widget,gpointer data)
+{
+	GtkClipboard*	clipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+	gtk_clipboard_set_text(clipboard,(char*)data,-1);
 }
 
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
@@ -984,8 +989,8 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 					{
 						menuitem=gtk_menu_item_new_with_label(define);
 						gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-						gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
-						g_free(define);
+						gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)define);
+//						g_free(define);
 					}
 				}
 		}
