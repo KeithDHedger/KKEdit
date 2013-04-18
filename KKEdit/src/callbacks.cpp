@@ -899,6 +899,17 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
+//menutools
+//	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menutools);
+//	menuitem=gtk_menu_item_new();
+//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),submenu);
+//gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//gtk_menu_shell_append(GTK_MENU_SHELL(menu),submenu);
+//	menuitem=gtk_menu_item_new_with_label("Tools");
+//	GtkWidget* menu2=gtk_menu_new();
+//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menu2);
+//	gtk_menu_shell_append((GtkMenuShell*)menuitem,submenu);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 	gtk_widget_show_all((GtkWidget*)menu);
 }

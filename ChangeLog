@@ -45,3 +45,4 @@ Added GUI to build external tools.
 Bug fix - seg fault on run external tool with no tabs.
 Added Replace all
 Added 'Go To Definition' to popup menu in document.
+Added popup menu to tabs to copy filepath/name.
