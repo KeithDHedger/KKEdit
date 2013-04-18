@@ -23,6 +23,61 @@ GtkWidget*	vbox;
 char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
 
+
+
+static void
+do_popup_menu (GtkWidget *my_widget, GdkEventButton *event)
+{
+  GtkWidget *menu;
+  int button, event_time;
+
+printf("XXXXX\n");
+  menu = gtk_menu_new ();
+  g_signal_connect (menu, "deactivate", 
+                    G_CALLBACK (gtk_widget_destroy), NULL);
+
+  /* ... add menu items ... */
+
+  if (event)
+    {
+      button = event->button;
+      event_time = event->time;
+    }
+  else
+    {
+      button = 0;
+      event_time = gtk_get_current_event_time ();
+    }
+
+  gtk_menu_attach_to_widget (GTK_MENU (menu), my_widget, NULL);
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 
+                  button, event_time);
+}
+	
+static gboolean
+my_widget_popup_menu_handler (GtkWidget *widget)
+{
+  do_popup_menu (widget, NULL);
+  return TRUE;
+}
+	
+
+static gboolean
+my_widget_button_press_event_handler (GtkWidget *widget, GdkEventButton *event)
+{
+  /* Ignore double-clicks and triple-clicks */
+  if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    {
+      do_popup_menu (widget, event);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+
+
+
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
 	GtkWidget*	evbox=gtk_event_box_new();
@@ -31,20 +86,6 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	GtkWidget*	close=gtk_image_new_from_stock(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
 	GtkWidget*	button=gtk_button_new();
 	GtkRcStyle*	style=gtk_rc_style_new();
-
-
-//	GtkWidget*		menuitem;
-//	GtkWidget*		menu;
-//	GtkWidget*		menutab;
-//
-//	//menutab=gtk_menu_item_new_with_label("File");
-//	menu=gtk_menu_new();
-//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutab),menu);
-//	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW,NULL);
-//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
-//gtk_box_pack_start(GTK_BOX(hbox),menutab,false,false,0);
-
 
 	gtk_button_set_relief((GtkButton*)button,GTK_RELIEF_NONE);
 	gtk_widget_set_tooltip_text(label,tooltip);
@@ -56,6 +97,8 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
 	gtk_container_add(GTK_CONTAINER(evbox),hbox);
 	gtk_signal_connect(GTK_OBJECT(button),"clicked",G_CALLBACK(closeTab),(void*)vbox);
+	gtk_signal_connect(GTK_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),NULL);
+
 	page->tabName=label;
 
 	style->xthickness=style->ythickness=0;
@@ -63,6 +106,7 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	g_object_unref(G_OBJECT(style));
   
 	gtk_widget_show_all(evbox);
+	
 	return(evbox);
 }
 
@@ -95,25 +139,6 @@ void resetAllFilePrefs(void)
 			page=getPageStructPtr(loop);
 			setFilePrefs(page->view);
 		}
-}
-void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
-{
-	GtkWidget*	menuitem;
-	GtkWidget*	image;
-
-	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-
-	image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
-	menuitem=gtk_image_menu_item_new_with_label("Go To Definition");
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
-
-	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-	
-	gtk_widget_show_all((GtkWidget*)menu);
 }
 
 bool openFile(const gchar *filepath,int linenumber)

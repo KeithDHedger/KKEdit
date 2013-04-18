@@ -44,3 +44,4 @@ Added GUI to build external tools.
 0.0.10
 Bug fix - seg fault on run external tool with no tabs.
 Added Replace all
+Added 'Go To Definition' to popup menu in document.
