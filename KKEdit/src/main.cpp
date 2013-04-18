@@ -258,8 +258,8 @@ void buildFindReplace(void)
 	gtk_signal_connect (GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
 }
 
-GtkWidget*	toolNameWidget;;
-GtkWidget*	commandLineWidget;;
+GtkWidget*	toolNameWidget;
+GtkWidget*	commandLineWidget;
 GtkWidget*	inTermWidget;
 GtkWidget*	syncWidget;
 GtkWidget*	ignoreWidget;

@@ -46,3 +46,10 @@ Bug fix - seg fault on run external tool with no tabs.
 Added Replace all
 Added 'Go To Definition' to popup menu in document.
 Added popup menu to tabs to copy filepath/name.
+
+0.0.11
+Added selected function def to popupmenu.
+Added show functions def in popupmenu.
+Fixed defines that contain : or / not displaying.
+Added version number to tarball.
+Strpped whitespace from bookmark label;
