@@ -98,9 +98,8 @@ void resetAllFilePrefs(void)
 }
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 {
-	printf("pop up\n");
 	GtkWidget*	menuitem;
-	GtkWidget*		image;
+	GtkWidget*	image;
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
