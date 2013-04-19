@@ -187,7 +187,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 			while (lineptr!=NULL)
 				{
 					tmpstr[0]=0;
-					sscanf (lineptr,"%*s %*s %i %*s %[]a-zA-Z0-9:/ ()_-,.*#;[\"]s",&linenum,tmpstr);
+					sscanf (lineptr,"%*s %*s %i %*s %"VALIDCHARS"s",&linenum,tmpstr);
 					lineptr=strchr(lineptr,'\n');
 					if (lineptr!=NULL)
 						lineptr++;
@@ -415,7 +415,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 								else
 									{
 									replaceAllFlag=false;
-									//printf("XXX\n");
 									}
 							}
 						if(selectedtext!=NULL)
@@ -918,7 +917,7 @@ char* getDefinition(char* selection)
 					sscanf (lineptr,"%s",name);
 					if((strcasecmp(name,selection)==0))
 						{
-							sscanf (lineptr,"%*s %*s %*i %*s %[]a-zA-Z0-9:/ ()_-,.*#;[\"]s",name);
+							sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",name);
 							asprintf(&functionDefine,"%s",name);
 							return(functionDefine);
 						}
@@ -945,10 +944,9 @@ char* getDefinition(char* selection)
 			sscanf (lineptr,"%s %*s %i %s",name,&line,file);
 			if((strcasecmp(name,selection)==0))
 				{
-					sscanf (lineptr,"%*s %*s %*i %*s %[]a-zA-Z0-9:/ ()_-,.*#;[\"]s",name);
+					sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",name);
 					asprintf(&functionDefine,"%s",name);
 					g_free(stdout);
-					printf("%s\n%s\n",functionDefine,name);
 					return(functionDefine);
 				}
 
@@ -991,15 +989,16 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 						gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 						gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)define);
 //						g_free(define);
+
+						image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
+						menuitem=gtk_image_menu_item_new_with_label("Go To Definition");
+						gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+						gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+						gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
 					}
 				}
 		}
 
-	image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
-	menuitem=gtk_image_menu_item_new_with_label("Go To Definition");
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
 
 	gtk_widget_show_all((GtkWidget*)menu);
 }

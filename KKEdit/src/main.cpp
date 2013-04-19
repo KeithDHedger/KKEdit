@@ -144,7 +144,7 @@ void readConfig(void)
 					if(strcasecmp(name,"terminalcommand")==0)
 						{
 							g_free(terminalCommand);
-							sscanf(buffer,"%*s %[]a-zA-Z0-9 ()_-,.*#;[\"]s",(char*)&strarg);
+							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
 							asprintf(&terminalCommand,"%s",strarg);
 						}
 

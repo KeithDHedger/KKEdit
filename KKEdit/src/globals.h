@@ -21,12 +21,14 @@
 
 #define MYEMAIL "kdhedger68713@gmail.com"
 #define MYWEBSITE "http://keithhedger.hostingsiteforfree.com"
-#define VERSION "0.0.10"
+#define VERSION "0.0.11"
 
 #define TOOL_ASYNC 8
 #define TOOL_IGNORE_OP 0
 #define TOOL_PASTE_OP 1
 #define TOOL_REPLACE_OP 2
+
+#define VALIDCHARS "[]a-zA-Z0-9:/@ ()_-,.*#;[\"]"
 
 struct pageStruct
 {

@@ -53,3 +53,5 @@ Added show functions def in popupmenu.
 Fixed defines that contain : or / not displaying.
 Added version number to tarball.
 Strpped whitespace from bookmark label;
+Go To Definition not shown in popup if not available.
+Selecting function def in popup copies def to clipboard.
