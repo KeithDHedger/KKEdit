@@ -208,21 +208,19 @@ void getTagList(char* filepath,void* ptr)
 		}
 }
 
-
 functionData* getFunctionByName(char* name)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	int			numpages=gtk_notebook_get_n_pages(notebook);
 	char*		lineptr;
 	char*		functions;
-	int			line;
-	char		file[4096];
+
+
 	char*		command;
 	gchar*		stdout=NULL;
 	gchar*		stderr=NULL;
 	gint		retval=0;
 	char		function[1024];
-	char*		functionDefine;
 
 	functionData* fdata;
 
@@ -248,6 +246,7 @@ functionData* getFunctionByName(char* name)
 							asprintf(&fdata->file,"%s",function);
 							sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
 							asprintf(&fdata->define,"%s",function);
+							fdata->intab=loop;
 							return(fdata);
 						}
 
@@ -283,6 +282,7 @@ functionData* getFunctionByName(char* name)
 					asprintf(&fdata->file,"%s",function);
 					sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
 					asprintf(&fdata->define,"%s",function);
+					fdata->intab=-1;
 					g_free(stdout);
 					return(fdata);
 				}
@@ -290,9 +290,7 @@ functionData* getFunctionByName(char* name)
 			lineptr=strchr(lineptr,'\n');
 			if (lineptr!=NULL)
 				lineptr++;
-
 		}
-
 	return(NULL);
 }
 

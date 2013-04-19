@@ -29,6 +29,7 @@
 #define TOOL_REPLACE_OP 2
 
 #define VALIDCHARS "[]a-zA-Z0-9:/@ ()_-,.*#;[\"]"
+//#define VALIDCHARS "[A-Za-z0-9_-./]"
 
 struct pageStruct
 {
@@ -66,6 +67,7 @@ struct functionData
 	int					line;
 	char*				file;
 	char*				define;
+	int					intab;
 };
 
 extern GtkWidget*		window;

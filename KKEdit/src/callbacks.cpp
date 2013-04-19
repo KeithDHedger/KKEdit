@@ -407,24 +407,30 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	g_free(replacetext);
 }
 
+void goToDefine(functionData* fdata)
+{
+	pageStruct*	page;
+	GtkTextIter	iter;
+
+	if(fdata->intab==-1)
+		openFile(fdata->file,fdata->line-1);
+	else
+		{
+			page=getPageStructPtr(fdata->intab);
+			gtk_notebook_set_current_page(notebook,fdata->intab);
+			gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,fdata->line-1,0);
+			gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
+			gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
+		}
+
+}
+
 void goToDefinition(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
-	int			numpages=gtk_notebook_get_n_pages(notebook);
-	char*		functions;
-	char		name[1024];
-	int			line;
-	char		file[4096];
-	char*		lineptr;
-	GtkTextIter	iter;
-
-	char*		command;
-	gchar*		stdout=NULL;
-	gchar*		stderr=NULL;
-	gint		retval=0;
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
@@ -435,53 +441,13 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 	else
 		return;
 
-	for(int loop=0;loop<numpages;loop++)
+	functionData* fdata=getFunctionByName(selection);
+	if(fdata!=NULL)
 		{
-			page=getPageStructPtr(loop);
-			getTagList(page->filePath,&functions);
-			lineptr=functions;
-			while (lineptr!=NULL)
-				{
-					sscanf (lineptr,"%s %*s %i",name,&line);
-					lineptr=strchr(lineptr,'\n');
-					if (lineptr!=NULL)
-						lineptr++;
-
-					if((strcasecmp(name,selection)==0))
-						{
-							gtk_notebook_set_current_page(notebook,loop);
-							gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,line-1,0);
-							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
-							gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
-							return;
-						}
-				}
+			goToDefine(fdata);
+			g_free(fdata);
 		}
-//not in any open files
-//check ./
-	asprintf(&command,"ctags -xR %s",g_path_get_dirname(page->filePath));
-	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
-	if (retval==0)
-		{
-			stdout[strlen(stdout)-1]=0;
-			g_free(stderr);
-		}
-
-	lineptr=stdout;
-	while (lineptr!=NULL)
-		{
-			sscanf (lineptr,"%s %*s %i %s",name,&line,file);
-			lineptr=strchr(lineptr,'\n');
-			if (lineptr!=NULL)
-				lineptr++;
-
-			if((strcasecmp(name,selection)==0))
-				{
-					openFile((char*)&file,line-1);
-					g_free(stdout);
-					return;
-				}
-		}
+	return;
 }
 
 void findFile(GtkWidget* widget,gpointer data)
@@ -860,7 +826,6 @@ int showFunctionEntry(void)
 	GtkWidget*	dialog;
 	gint		result;
 	GtkWidget*	content_area;
-	char		line[48];
 	GtkWidget*	entrybox;
 
 	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,"Enter Function Name");
@@ -885,13 +850,7 @@ int showFunctionEntry(void)
 
 	return(result);
 }
-/*
-	char*				name;
-	char*				type;
-	int					line;
-	char*				file;
-	char*				define;
-*/
+
 void functionSearch(GtkWidget* widget,gpointer data)
 {
 	if(showFunctionEntry()==GTK_RESPONSE_YES)
@@ -899,90 +858,16 @@ void functionSearch(GtkWidget* widget,gpointer data)
 		functionData* fdata=getFunctionByName(functionSearchText);
 		if(fdata!=NULL)
 		{
-			printf("%s\n",fdata->name);
-			printf("%s\n",fdata->type);
-			printf("%i\n",fdata->line);
-			printf("%s\n",fdata->file);
-			printf("%s\n",fdata->define);
+			goToDefine(fdata);
 			g_free(fdata);
 		}
 	}
-		//gotoLine(NULL,(gpointer)(long)theLineNum);
 }
-
 
 void jumpToLineFromBar(GtkWidget* widget,gpointer data)
 {
 		theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
 		gotoLine(NULL,(gpointer)(long)theLineNum);
-}
-
-char* getDefinition(char* selection)
-{
-	pageStruct*	page=getPageStructPtr(-1);
-	int			numpages=gtk_notebook_get_n_pages(notebook);
-	char*		lineptr;
-	char*		functions;
-	int			line;
-	char		file[4096];
-	char*		command;
-	gchar*		stdout=NULL;
-	gchar*		stderr=NULL;
-	gint		retval=0;
-	char		name[1024];
-	char*		functionDefine;
-
-	for(int loop=0;loop<numpages;loop++)
-		{
-			page=getPageStructPtr(loop);
-			getTagList(page->filePath,&functions);
-			
-			lineptr=functions;
-
-			while (lineptr!=NULL)
-				{
-					sscanf (lineptr,"%s",name);
-					if((strcasecmp(name,selection)==0))
-						{
-							sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",name);
-							asprintf(&functionDefine,"%s",name);
-							return(functionDefine);
-						}
-
-					lineptr=strchr(lineptr,'\n');
-					if (lineptr!=NULL)
-						lineptr++;
-				}
-		}
-
-//not in any open files
-//check ./
-	asprintf(&command,"ctags -xR %s",g_path_get_dirname(page->filePath));
-	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
-	if (retval==0)
-		{
-			stdout[strlen(stdout)-1]=0;
-			g_free(stderr);
-		}
-
-	lineptr=stdout;
-	while (lineptr!=NULL)
-		{
-			sscanf (lineptr,"%s %*s %i %s",name,&line,file);
-			if((strcasecmp(name,selection)==0))
-				{
-					sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",name);
-					asprintf(&functionDefine,"%s",name);
-					g_free(stdout);
-					return(functionDefine);
-				}
-
-			lineptr=strchr(lineptr,'\n');
-			if (lineptr!=NULL)
-				lineptr++;
-
-		}
-	return(NULL);
 }
 
 void copyToClipboard(GtkWidget* widget,gpointer data)
@@ -999,7 +884,6 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	char*		selection=NULL;
 	GtkWidget*	menuitem;
 	GtkWidget*	image;
-	char*		define=NULL;
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
@@ -1009,25 +893,23 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 			if(selection!=NULL)
 				{
-				define=getDefinition(selection);
-				if(define!=NULL)
-					{
-						sprintf((char*)&defineText,"%s",define);
-						menuitem=gtk_menu_item_new_with_label(defineText);
-						gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-						gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)defineText);
-						g_free(define);
+					functionData* fdata=getFunctionByName(selection);
+					if(fdata!=NULL)
+						{
+							sprintf((char*)&defineText,"%s",fdata->define);
+							menuitem=gtk_menu_item_new_with_label(defineText);
+							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)defineText);
+							g_free(fdata);
 
-						image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
-						menuitem=gtk_image_menu_item_new_with_label("Go To Definition");
-						gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-						gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-						gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
-					}
+							image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
+							menuitem=gtk_image_menu_item_new_with_label("Go To Definition");
+							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
+						}
 				}
 		}
-
-
 	gtk_widget_show_all((GtkWidget*)menu);
 }
 
