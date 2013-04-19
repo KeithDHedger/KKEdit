@@ -29,8 +29,8 @@
 #define TOOL_REPLACE_OP 2
 
 #define VALIDCHARS "[]a-zA-Z0-9:/@ ()_-,.*#;[\"]"
-//#define VALIDCHARS "[A-Za-z0-9_-./]"
-
+#define VALIDFILENAMECHARS "[A-Za-z0-9_-./]"
+#define VALIDFUNCTIONCHARS "[A-Za-z0-9_*]"
 struct pageStruct
 {
 	GtkScrolledWindow*	pageWindow;

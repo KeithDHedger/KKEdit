@@ -210,7 +210,7 @@ void getTagList(char* filepath,void* ptr)
 
 functionData* getFunctionByName(char* name)
 {
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct*	page;
 	int			numpages=gtk_notebook_get_n_pages(notebook);
 	char*		lineptr;
 	char*		functions;
@@ -223,6 +223,9 @@ functionData* getFunctionByName(char* name)
 	char		function[1024];
 
 	functionData* fdata;
+	page=getPageStructPtr(-1);
+	if(page==NULL)
+		return(NULL);
 
 	for(int loop=0;loop<numpages;loop++)
 		{
@@ -237,12 +240,12 @@ functionData* getFunctionByName(char* name)
 					if((strncasecmp(name,function,strlen(name))==0))
 						{
 							fdata=(functionData*)malloc(sizeof(functionData));
-							sscanf (lineptr,"%[A-Za-z0-9_-]s",function);
+							sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
 							asprintf(&fdata->name,"%s",function);
-							sscanf (lineptr,"%*s %[A-Za-z0-9_-]s",function);
+							sscanf (lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
 							asprintf(&fdata->type,"%s",function);
 							sscanf (lineptr,"%*s %*s %i",&fdata->line);
-							sscanf (lineptr,"%*s %*s %*i %[A-Za-z0-9_-./]s",function);
+							sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
 							asprintf(&fdata->file,"%s",function);
 							sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
 							asprintf(&fdata->define,"%s",function);
@@ -273,12 +276,12 @@ functionData* getFunctionByName(char* name)
 			if((strncasecmp(name,function,strlen(name))==0))
 				{
 					fdata=(functionData*)malloc(sizeof(functionData));
-					sscanf (lineptr,"%[A-Za-z0-9_-]s",function);
+					sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
 					asprintf(&fdata->name,"%s",function);
-					sscanf (lineptr,"%*s %[A-Za-z0-9_-]s",function);
+					sscanf (lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
 					asprintf(&fdata->type,"%s",function);
 					sscanf (lineptr,"%*s %*s %i",&fdata->line);
-					sscanf (lineptr,"%*s %*s %*i %[A-Za-z0-9_-./]s",function);
+					sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
 					asprintf(&fdata->file,"%s",function);
 					sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
 					asprintf(&fdata->define,"%s",function);

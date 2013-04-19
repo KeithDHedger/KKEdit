@@ -56,3 +56,4 @@ Strpped whitespace from bookmark label;
 Go To Definition not shown in popup if not available.
 Selecting function def in popup copies def to clipboard.
 Added new icon.
+Code clean.
