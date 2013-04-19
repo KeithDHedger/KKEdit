@@ -43,7 +43,7 @@ void jumpToLine(GtkWidget* widget,gpointer data);
 void jumpToLineFromBar(GtkWidget* widget,gpointer data);
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data);
 void tabPopUp(GtkWidget *my_widget, GdkEventButton *event,gpointer user_data);
-
+void functionSearch(GtkWidget* widget,gpointer data);
 
 
 #endif

@@ -59,6 +59,15 @@ struct toolStruct
 	bool				inTerminal;					
 };
 
+struct functionData
+{
+	char*				name;
+	char*				type;
+	int					line;
+	char*				file;
+	char*				define;
+};
+
 extern GtkWidget*		window;
 extern GtkNotebook*		notebook;
 
@@ -113,6 +122,8 @@ void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
 int getTabFromPath(char* filepath);
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags);
+functionData* getFunctionByName(char* name);
+void getTagList(char* filepath,void* ptr);
 
 #endif
 

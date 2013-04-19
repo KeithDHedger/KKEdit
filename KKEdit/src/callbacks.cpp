@@ -93,24 +93,6 @@ void closeTab(GtkWidget* widget,gpointer data)
 	gtk_notebook_remove_page(notebook,thispage);
 }
 
-void getTagList(char* filepath,void* ptr)
-{
-	char*	command;
-	gchar*	stdout=NULL;
-	gchar*	stderr=NULL;
-	gint	retval=0;
-
-	asprintf(&command,"ctags -x %s",filepath);
-	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
-	if (retval==0)
-		{
-			stdout[strlen(stdout)-1]=0;
-			asprintf((char**)ptr,"%s",stdout);
-			g_free(stdout);
-			g_free(stderr);
-		}
-}
-
 void gotoLine(GtkWidget* widget,gpointer data)
 {
 	int			line=(long)data;
@@ -870,6 +852,64 @@ void jumpToLine(GtkWidget* widget,gpointer data)
 	if(showLineEntry()==GTK_RESPONSE_YES)
 		gotoLine(NULL,(gpointer)(long)theLineNum);
 }
+
+char*	functionSearchText=NULL;
+
+int showFunctionEntry(void)
+{
+	GtkWidget*	dialog;
+	gint		result;
+	GtkWidget*	content_area;
+	char		line[48];
+	GtkWidget*	entrybox;
+
+	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,"Enter Function Name");
+
+	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OK,GTK_RESPONSE_YES,NULL);
+	gtk_window_set_title(GTK_WINDOW(dialog),"Find Function");
+
+	content_area=gtk_dialog_get_content_area(GTK_DIALOG(dialog));	
+	entrybox=gtk_entry_new();
+	if(functionSearchText!=NULL)
+		gtk_entry_set_text((GtkEntry*)entrybox,functionSearchText);
+	gtk_entry_set_activates_default((GtkEntry*)entrybox,true);
+	gtk_dialog_set_default_response((GtkDialog*)dialog,GTK_RESPONSE_YES);
+	gtk_container_add(GTK_CONTAINER(content_area),entrybox);
+	gtk_widget_show_all(content_area);
+	result=gtk_dialog_run(GTK_DIALOG(dialog));
+	if(functionSearchText!=NULL)
+		g_free(functionSearchText);
+	asprintf(&functionSearchText,"%s",gtk_entry_get_text((GtkEntry*)entrybox));
+	
+	gtk_widget_destroy(dialog);
+
+	return(result);
+}
+/*
+	char*				name;
+	char*				type;
+	int					line;
+	char*				file;
+	char*				define;
+*/
+void functionSearch(GtkWidget* widget,gpointer data)
+{
+	if(showFunctionEntry()==GTK_RESPONSE_YES)
+	{
+		functionData* fdata=getFunctionByName(functionSearchText);
+		if(fdata!=NULL)
+		{
+			printf("%s\n",fdata->name);
+			printf("%s\n",fdata->type);
+			printf("%i\n",fdata->line);
+			printf("%s\n",fdata->file);
+			printf("%s\n",fdata->define);
+			g_free(fdata);
+		}
+	}
+		//gotoLine(NULL,(gpointer)(long)theLineNum);
+}
+
 
 void jumpToLineFromBar(GtkWidget* widget,gpointer data)
 {

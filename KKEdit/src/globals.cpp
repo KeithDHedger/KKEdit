@@ -190,4 +190,113 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 	g_free(command);
 }
 
+void getTagList(char* filepath,void* ptr)
+{
+	char*	command;
+	gchar*	stdout=NULL;
+	gchar*	stderr=NULL;
+	gint	retval=0;
+
+	asprintf(&command,"ctags -x %s",filepath);
+	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
+	if (retval==0)
+		{
+			stdout[strlen(stdout)-1]=0;
+			asprintf((char**)ptr,"%s",stdout);
+			g_free(stdout);
+			g_free(stderr);
+		}
+}
+
+
+functionData* getFunctionByName(char* name)
+{
+	pageStruct*	page=getPageStructPtr(-1);
+	int			numpages=gtk_notebook_get_n_pages(notebook);
+	char*		lineptr;
+	char*		functions;
+	int			line;
+	char		file[4096];
+	char*		command;
+	gchar*		stdout=NULL;
+	gchar*		stderr=NULL;
+	gint		retval=0;
+	char		function[1024];
+	char*		functionDefine;
+
+	functionData* fdata;
+
+	for(int loop=0;loop<numpages;loop++)
+		{
+			page=getPageStructPtr(loop);
+			getTagList(page->filePath,&functions);
+			
+			lineptr=functions;
+
+			while (lineptr!=NULL)
+				{
+					sscanf (lineptr,"%s",function);
+					if((strncasecmp(name,function,strlen(name))==0))
+						{
+							fdata=(functionData*)malloc(sizeof(functionData));
+							sscanf (lineptr,"%[A-Za-z0-9_-]s",function);
+							asprintf(&fdata->name,"%s",function);
+							sscanf (lineptr,"%*s %[A-Za-z0-9_-]s",function);
+							asprintf(&fdata->type,"%s",function);
+							sscanf (lineptr,"%*s %*s %i",&fdata->line);
+							sscanf (lineptr,"%*s %*s %*i %[A-Za-z0-9_-./]s",function);
+							asprintf(&fdata->file,"%s",function);
+							sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
+							asprintf(&fdata->define,"%s",function);
+							return(fdata);
+						}
+
+					lineptr=strchr(lineptr,'\n');
+					if (lineptr!=NULL)
+						lineptr++;
+				}
+		}
+
+//not in any open files
+//check ./
+	asprintf(&command,"ctags -xR %s",g_path_get_dirname(page->filePath));
+	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
+	if (retval==0)
+		{
+			stdout[strlen(stdout)-1]=0;
+			g_free(stderr);
+		}
+
+	lineptr=stdout;
+	while (lineptr!=NULL)
+		{
+			sscanf (lineptr,"%s",function);
+			if((strncasecmp(name,function,strlen(name))==0))
+				{
+					fdata=(functionData*)malloc(sizeof(functionData));
+					sscanf (lineptr,"%[A-Za-z0-9_-]s",function);
+					asprintf(&fdata->name,"%s",function);
+					sscanf (lineptr,"%*s %[A-Za-z0-9_-]s",function);
+					asprintf(&fdata->type,"%s",function);
+					sscanf (lineptr,"%*s %*s %i",&fdata->line);
+					sscanf (lineptr,"%*s %*s %*i %[A-Za-z0-9_-./]s",function);
+					asprintf(&fdata->file,"%s",function);
+					sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
+					asprintf(&fdata->define,"%s",function);
+					g_free(stdout);
+					return(fdata);
+				}
+
+			lineptr=strchr(lineptr,'\n');
+			if (lineptr!=NULL)
+				lineptr++;
+
+		}
+
+	return(NULL);
+}
+
+
+
+
 
