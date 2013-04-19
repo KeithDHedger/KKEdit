@@ -31,6 +31,7 @@
 #define VALIDCHARS "[]a-zA-Z0-9:/@ ()_-,.*#;[\"]"
 #define VALIDFILENAMECHARS "[A-Za-z0-9_-./]"
 #define VALIDFUNCTIONCHARS "[A-Za-z0-9_*]"
+
 struct pageStruct
 {
 	GtkScrolledWindow*	pageWindow;
@@ -122,10 +123,10 @@ extern GtkWidget*		replaceBox;
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
-int getTabFromPath(char* filepath);
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags);
 functionData* getFunctionByName(char* name);
 void getTagList(char* filepath,void* ptr);
+void destroyData(functionData* fdata);
 
 #endif
 

@@ -138,20 +138,6 @@ void setLanguage(pageStruct* page)
 
 }
 
-int getTabFromPath(char* filepath)
-{
-	pageStruct*	page;
-	int			numpages=gtk_notebook_get_n_pages(notebook);
-
-	for(int loop=0;loop<numpages;loop++)
-		{
-			page=getPageStructPtr(loop);
-			if(strstr(page->filePath,filepath)!=NULL)
-				return(loop);
-		}
-	return(-1);
-}
-
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 {
 	char*	command;
@@ -214,7 +200,6 @@ functionData* getFunctionByName(char* name)
 	int			numpages=gtk_notebook_get_n_pages(notebook);
 	char*		lineptr;
 	char*		functions;
-
 
 	char*		command;
 	gchar*		stdout=NULL;
@@ -297,7 +282,17 @@ functionData* getFunctionByName(char* name)
 	return(NULL);
 }
 
-
+void destroyData(functionData* fdata)
+{
+	if(fdata!=NULL)
+		{
+			g_free(fdata->name);
+			g_free(fdata->type);
+			g_free(fdata->file);
+			g_free(fdata->define);
+			g_free(fdata);
+		}
+}
 
 
 
