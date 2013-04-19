@@ -812,7 +812,6 @@ int main(int argc,char **argv)
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(restoreSession),NULL);
-//	gtk_widget_add_accelerator((GtkWidget *)saveMenu,"activate",accgroup,'S',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 //	menuitem=gtk_separator_menu_item_new();
 //	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -956,7 +955,6 @@ int main(int argc,char **argv)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(openHelp),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
-//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufile);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuedit);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menunav);

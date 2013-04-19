@@ -12,6 +12,9 @@
 #include "globals.h"
 #include "files.h"
 
+GtkWidget*	tabMenu;
+char		defineText[1024];
+
 void doOpenFile(GtkWidget* widget,gpointer data)
 {
 	GtkWidget*	dialog;
@@ -171,49 +174,35 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 
 	currentTabNumber=thispage;
 
-//	if(page->rebuildMenu==true)
-//		{
-//			printf("rebuilding menu for tab %i\n",thispage);
+	page->rebuildMenu=false;
+	getTagList(page->filePath,&functions);
+	lineptr=functions;
 
-			page->rebuildMenu=false;
-			getTagList(page->filePath,&functions);
-			lineptr=functions;
+	page->isFirst=true;
 
-			page->isFirst=true;
+	page->navSubMenu=(GtkMenuItem*)gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufunc),(GtkWidget*)page->navSubMenu);
 
-			page->navSubMenu=(GtkMenuItem*)gtk_menu_new();
-			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufunc),(GtkWidget*)page->navSubMenu);
-
-			while (lineptr!=NULL)
+	while (lineptr!=NULL)
+		{
+			tmpstr[0]=0;
+			sscanf (lineptr,"%*s %*s %i %*s %"VALIDCHARS"s",&linenum,tmpstr);
+			lineptr=strchr(lineptr,'\n');
+			if (lineptr!=NULL)
+				lineptr++;
+			if(strlen(tmpstr)>0)
 				{
-					tmpstr[0]=0;
-					sscanf (lineptr,"%*s %*s %i %*s %"VALIDCHARS"s",&linenum,tmpstr);
-					lineptr=strchr(lineptr,'\n');
-					if (lineptr!=NULL)
-						lineptr++;
-					if(strlen(tmpstr)>0)
-						{
-							onefunc=true;
-							menuitem=gtk_image_menu_item_new_with_label(tmpstr);
-							gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
-							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
-						}
+					onefunc=true;
+					menuitem=gtk_image_menu_item_new_with_label(tmpstr);
+					gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
+					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
 				}
-			gtk_window_set_title((GtkWindow*)window,page->fileName);
-			gtk_widget_show_all(window);
-			g_free(functions);
+		}
+	gtk_window_set_title((GtkWindow*)window,page->fileName);
+	gtk_widget_show_all(window);
+	g_free(functions);
 
-			gtk_widget_set_sensitive((GtkWidget*)menufunc,onefunc);
-//		}
-//	else
-//		{
-//				printf("just switch neu\n");)
-//			menu=gtk_menu_new();
-//			gtk_menu_item_set_submenu((GtkMenuItem*)menufunc,NULL);
-//			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufunc),(GtkWidget*)page->navSubMenu);
-//			gtk_menu_shell_append(GTK_MENU_SHELL(menu),(GtkWidget*)page->navSubMenu);
-//			gtk_widget_show_all(window);
-//		}
+	gtk_widget_set_sensitive((GtkWidget*)menufunc,onefunc);
 	setSensitive();
 }
 
@@ -888,8 +877,6 @@ void jumpToLineFromBar(GtkWidget* widget,gpointer data)
 		gotoLine(NULL,(gpointer)(long)theLineNum);
 }
 
-GtkWidget*	tabMenu;
-
 char* getDefinition(char* selection)
 {
 	pageStruct*	page=getPageStructPtr(-1);
@@ -985,10 +972,11 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 				define=getDefinition(selection);
 				if(define!=NULL)
 					{
-						menuitem=gtk_menu_item_new_with_label(define);
+						sprintf((char*)&defineText,"%s",define);
+						menuitem=gtk_menu_item_new_with_label(defineText);
 						gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-						gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)define);
-//						g_free(define);
+						gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)defineText);
+						g_free(define);
 
 						image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
 						menuitem=gtk_image_menu_item_new_with_label("Go To Definition");
