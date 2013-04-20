@@ -58,3 +58,5 @@ Selecting function def in popup copies def to clipboard.
 Added new icon.
 Code clean.
 Set recursive search for tags (default = 1).
+Added Search For Define to Navigation menu.
+
