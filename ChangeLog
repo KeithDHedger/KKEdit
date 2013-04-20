@@ -60,3 +60,5 @@ Code clean.
 Set recursive search for tags (default = 1).
 Added Search For Define to Navigation menu.
 
+0.1.12
+Do simple conversion to UTF-8.

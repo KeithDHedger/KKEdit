@@ -10,6 +10,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <glib.h>
 
 #include <gtksourceview/gtksourceview.h>
 #include <gtksourceview/gtksourcebuffer.h>
@@ -89,12 +90,14 @@ void resetAllFilePrefs(void)
 bool openFile(const gchar *filepath,int linenumber)
 {
 	GtkTextIter		iter;
-	gchar*			buffer;
+	gchar*			buffer=NULL;
 	long			filelen;
 	GtkWidget*		label;
 	gchar*			filename=g_path_get_basename(filepath);
 	pageStruct*		page=(pageStruct*)malloc(sizeof(pageStruct));
 	GtkTextMark*	scroll2mark=gtk_text_mark_new(NULL,true);
+	const gchar*	charset;
+	char*			str=NULL;
 
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -124,15 +127,20 @@ bool openFile(const gchar *filepath,int linenumber)
 	setLanguage(page);
 
 	g_file_get_contents(filepath,&buffer,(gsize*)&filelen,NULL);
+	g_get_charset(&charset);
+	str=g_convert(buffer,-1,"UTF-8",charset,NULL,NULL,NULL);
 
 	gtk_source_buffer_begin_not_undoable_action(page->buffer);
 		gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
-		gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,buffer,filelen);
-		g_free (buffer);
+		gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str,strlen(str));
 	gtk_source_buffer_end_not_undoable_action(page->buffer);
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
 
+	if(str!=NULL)
+		g_free(str);
+	if(buffer!=NULL)
+		g_free (buffer);
  
 	gtk_widget_show_all((GtkWidget*)window);
 	gtk_notebook_set_current_page(notebook,currentPage);
