@@ -143,7 +143,7 @@ void setSensitive(void)
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
 {
 	pageStruct*	page=getPageStructPtr(thispage);
-	char*		functions;
+	char*		functions=NULL;
 	GtkWidget*	menuitem;
 	int			linenum;
 	char		tmpstr[1024];
@@ -157,7 +157,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	currentTabNumber=thispage;
 
 	page->rebuildMenu=false;
-	getTagList(page->filePath,&functions);
+	getRecursiveTagList(page->filePath,&functions);
 	lineptr=functions;
 
 	page->isFirst=true;
@@ -182,7 +182,8 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 		}
 	gtk_window_set_title((GtkWindow*)window,page->fileName);
 	gtk_widget_show_all(window);
-	g_free(functions);
+	if(functions!=NULL)
+		g_free(functions);
 
 	gtk_widget_set_sensitive((GtkWidget*)menufunc,onefunc);
 	setSensitive();
@@ -901,13 +902,13 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)defineText);
 							destroyData(fdata);
-
-							image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
-							menuitem=gtk_image_menu_item_new_with_label("Go To Definition");
-							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
 						}
+
+					image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
+					menuitem=gtk_image_menu_item_new_with_label("Go To Definition");
+					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
 				}
 		}
 	gtk_widget_show_all((GtkWidget*)menu);

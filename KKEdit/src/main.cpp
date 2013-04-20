@@ -26,6 +26,7 @@ bool		tmpLineNumbers;
 bool		tmpLineWrap;
 bool		tmpHighLight;
 int			tmpTabWidth;
+int			tmpDepth;
 
 void buildTools(void);
 
@@ -64,6 +65,7 @@ void writeConfig(void)
 			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
 
 			fprintf(fd,"tabwidth	%i\n",tabWidth);
+			fprintf(fd,"depth	%i\n",depth);
 			fprintf(fd,"font	%s\n",fontAndSize);
 			fprintf(fd,"terminalcommand	%s\n",terminalCommand);
 			fprintf(fd,"windowsize	%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
@@ -136,6 +138,9 @@ void readConfig(void)
 
 					if(strcasecmp(name,"tabwidth")==0)
 							tabWidth=atoi(strarg);
+					if(strcasecmp(name,"depth")==0)
+							depth=atoi(strarg);
+
 					if(strcasecmp(name,"font")==0)
 						{
 							sscanf(buffer,"%*s %s %i",(char*)&strarg,(int*)&intarg);
@@ -164,6 +169,8 @@ void init(void)
 	lineWrap=true;
 	highLight=true;
 	tabWidth=4;
+	depth=1;
+
 	asprintf(&fontAndSize,"%s","mono 10");
 	asprintf(&terminalCommand,"%s","xterm");
 	windowWidth=800;
@@ -185,6 +192,7 @@ void init(void)
 	tmpLineWrap=lineWrap;
 	tmpHighLight=highLight;
 	tmpTabWidth=tabWidth;
+	tmpDepth=depth;
 }
 
 void buildFindReplace(void)
@@ -539,6 +547,9 @@ void setPrefs(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"tabs")==0)
 		tmpTabWidth=(int)gtk_spin_button_get_value((GtkSpinButton*)data);
 
+	if(strcmp(gtk_widget_get_name(widget),"depth")==0)
+		tmpDepth=(int)gtk_spin_button_get_value((GtkSpinButton*)data);
+
 	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
 		gtk_widget_destroy(prefswin);
 
@@ -561,6 +572,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 				}
 
 			tabWidth=tmpTabWidth;
+			depth=tmpDepth;
 			gtk_widget_destroy(prefswin);
 			resetAllFilePrefs();
 		}
@@ -610,6 +622,17 @@ void doPrefs(void)
 	gtk_container_add(GTK_CONTAINER(hbox),item);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
+
+//function search depth
+	GtkObject*	adjdepth=gtk_adjustment_new(tmpDepth,1,64,1,1,0);
+	hbox=gtk_hbox_new(true,0);
+	item=gtk_spin_button_new((GtkAdjustment*)adjdepth,1,0);
+	gtk_widget_set_name(item,"depth");
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Tag File Search Depth: "),false,true,0);
+	gtk_container_add(GTK_CONTAINER(hbox),item);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
+	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
+
 //font
 	fontBox=gtk_entry_new();
 	hbox=gtk_hbox_new(true,0);

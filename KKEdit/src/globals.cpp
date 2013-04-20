@@ -43,6 +43,7 @@ bool			highLight;
 int				tabWidth;
 char*			fontAndSize;
 char*			terminalCommand;
+int				depth;
 
 int				windowWidth;
 int				windowHeight;
@@ -176,35 +177,14 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 	g_free(command);
 }
 
-void getTagList(char* filepath,void* ptr)
-{
-	char*	command;
-	gchar*	stdout=NULL;
-	gchar*	stderr=NULL;
-	gint	retval=0;
-
-	asprintf(&command,"ctags -x %s",filepath);
-	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
-	if (retval==0)
-		{
-			stdout[strlen(stdout)-1]=0;
-			asprintf((char**)ptr,"%s",stdout);
-			g_free(stdout);
-			g_free(stderr);
-		}
-}
-
 functionData* getFunctionByName(char* name)
 {
 	pageStruct*	page;
 	int			numpages=gtk_notebook_get_n_pages(notebook);
 	char*		lineptr;
-	char*		functions;
-
-	char*		command;
+	char*		functions=NULL;
+	char*		dirname;
 	gchar*		stdout=NULL;
-	gchar*		stderr=NULL;
-	gint		retval=0;
 	char		function[1024];
 
 	functionData* fdata;
@@ -215,70 +195,79 @@ functionData* getFunctionByName(char* name)
 	for(int loop=0;loop<numpages;loop++)
 		{
 			page=getPageStructPtr(loop);
-			getTagList(page->filePath,&functions);
-			
-			lineptr=functions;
-
-			while (lineptr!=NULL)
+			if(page->filePath!=NULL)
 				{
-					sscanf (lineptr,"%s",function);
-					if((strncasecmp(name,function,strlen(name))==0))
-						{
-							fdata=(functionData*)malloc(sizeof(functionData));
-							sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
-							asprintf(&fdata->name,"%s",function);
-							sscanf (lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
-							asprintf(&fdata->type,"%s",function);
-							sscanf (lineptr,"%*s %*s %i",&fdata->line);
-							sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
-							asprintf(&fdata->file,"%s",function);
-							sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
-							asprintf(&fdata->define,"%s",function);
-							fdata->intab=loop;
-							return(fdata);
-						}
+					getRecursiveTagList(page->filePath,&functions);
+					lineptr=functions;
 
-					lineptr=strchr(lineptr,'\n');
-					if (lineptr!=NULL)
-						lineptr++;
+					while (lineptr!=NULL)
+						{
+							sscanf (lineptr,"%s",function);
+							if((strncasecmp(name,function,strlen(name))==0))
+								{
+									fdata=(functionData*)malloc(sizeof(functionData));
+									sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
+									asprintf(&fdata->name,"%s",function);
+									sscanf (lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
+									asprintf(&fdata->type,"%s",function);
+									sscanf (lineptr,"%*s %*s %i",&fdata->line);
+									sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
+									asprintf(&fdata->file,"%s",function);
+									sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
+									asprintf(&fdata->define,"%s",function);
+									fdata->intab=loop;
+									return(fdata);
+								}
+
+							lineptr=strchr(lineptr,'\n');
+							if (lineptr!=NULL)
+								lineptr++;
+						}
 				}
 		}
 
 //not in any open files
-//check ./
-	asprintf(&command,"ctags -xR %s",g_path_get_dirname(page->filePath));
-	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
-	if (retval==0)
-		{
-			stdout[strlen(stdout)-1]=0;
-			g_free(stderr);
-		}
+//check ./ from all files
 
-	lineptr=stdout;
-	while (lineptr!=NULL)
+	for(int loop=0;loop<numpages;loop++)
 		{
-			sscanf (lineptr,"%s",function);
-			if((strncasecmp(name,function,strlen(name))==0))
+			page=getPageStructPtr(loop);
+			if(page->filePath!=NULL)
 				{
-					fdata=(functionData*)malloc(sizeof(functionData));
-					sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
-					asprintf(&fdata->name,"%s",function);
-					sscanf (lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
-					asprintf(&fdata->type,"%s",function);
-					sscanf (lineptr,"%*s %*s %i",&fdata->line);
-					sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
-					asprintf(&fdata->file,"%s",function);
-					sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
-					asprintf(&fdata->define,"%s",function);
-					fdata->intab=-1;
-					g_free(stdout);
-					return(fdata);
-				}
+					asprintf(&dirname,"%s",g_path_get_dirname(page->filePath));
+					getRecursiveTagList(dirname,&stdout);
 
-			lineptr=strchr(lineptr,'\n');
-			if (lineptr!=NULL)
-				lineptr++;
+					lineptr=stdout;
+					while (lineptr!=NULL)
+						{
+							sscanf (lineptr,"%s",function);
+							if((strncasecmp(name,function,strlen(name))==0))
+								{
+									fdata=(functionData*)malloc(sizeof(functionData));
+									sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
+									asprintf(&fdata->name,"%s",function);
+									sscanf (lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
+									asprintf(&fdata->type,"%s",function);
+									sscanf (lineptr,"%*s %*s %i",&fdata->line);
+									sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
+									asprintf(&fdata->file,"%s",function);
+									sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
+									asprintf(&fdata->define,"%s",function);
+									fdata->intab=-1;
+									return(fdata);
+								}
+
+							lineptr=strchr(lineptr,'\n');
+							if (lineptr!=NULL)
+								lineptr++;
+						}
+					if(stdout!=NULL)
+						g_free(stdout);
+					if(dirname!=NULL)
+						g_free(dirname);
+				}
 		}
+
 	return(NULL);
 }
 
@@ -294,5 +283,26 @@ void destroyData(functionData* fdata)
 		}
 }
 
+void getRecursiveTagList(char* filepath,void* ptr)
+{
+	FILE*		fp;
+	char		line[1024];
+	GString*	str=g_string_new(NULL);
+	char*		command;
 
+	if(filepath==NULL)
+		return;
+
+	asprintf(&command,"find %s -maxdepth %i|ctags -L - -x",filepath,depth);
+
+	fp=popen(command, "r");
+	while(fgets(line,1024,fp))
+		{
+			g_string_append_printf(str,"%s",line);
+		}
+	pclose(fp);
+	asprintf((char**)ptr,"%s",str->str);
+	g_string_free(str,true);
+	g_free(command);
+}
 

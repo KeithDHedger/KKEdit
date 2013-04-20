@@ -97,6 +97,7 @@ extern bool				highLight;
 extern int				tabWidth;
 extern char*			fontAndSize;
 extern char*			terminalCommand;
+extern int				depth;
 
 extern int				windowWidth;
 extern int				windowHeight;
@@ -125,8 +126,8 @@ void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags);
 functionData* getFunctionByName(char* name);
-void getTagList(char* filepath,void* ptr);
 void destroyData(functionData* fdata);
+void getRecursiveTagList(char* filepath,void* ptr);
 
 #endif
 
