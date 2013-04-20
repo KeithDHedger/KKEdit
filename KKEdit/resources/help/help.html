@@ -87,16 +87,17 @@
       <hr size="2" width="100%"><big><b><br>
         </b><u><b><a name="navanc"></a>Navigation Menu</b></u></big><br>
       <br>
-      <small>The Navigation menu has two sub-menus - </small>Go To
-      Definition <small>and </small>Open Include File.<br>
+      <small>The Navigation menu has four sub-menus - </small>Go To
+      Definition,<small> </small>Open Include File, Go To Line <small>and</small>
+      Search For Define.<br>
       <br>
       <small>To go where a function etc is defined, select it and choose
         'Go To Definition' KKEdit will then look in open files for the
         definition and switch to that page and highlight the appropriate
         line like so:<br>
         <br>
-        <img alt="gotodefine" src="gotodefine.png" height="575"
-          width="521"><br>
+        <img alt="gotodefine" src="gotodefine.png" height="239"
+          width="417"><br>
         <br>
       </small><img alt="define" src="define.png" height="476"
         width="507"><br>
@@ -104,6 +105,24 @@
         KKEdit looks for the definition recursively starting from the
         folder where the file was opened from and if found opening the
         file and selecting the line with the definition.<br>
+        The search depth for finding a definition is set in the prefs
+        and defaults to 1 ie only looks for definitions in files in the
+        same folder as any open documents, be careful about setting this
+        too high as it can cause an unwanted delay when right clicking
+        if it has to look in a lot of sub-folders.<br>
+        <br>
+        You can also open an include file just highlight the line and
+        select&nbsp; </small>Open Include File<small> like so:<br>
+        <img alt="openinclude" src="openinclude.png" height="290"
+          width="440"><br>
+        Include files are looked for in either /usr/include or the
+        directory the current document is in, depending whether the file
+        name is surrounded by '&lt;&gt;' or ' "" '.<br>
+        <br>
+      </small>Search for Define <small>will open an entry box and allow
+        you to type in a definition or part of a definition and will try
+        to find it in the usual places opening a file if necessary, the
+        search is case insensitive.<br>
         &nbsp;</small><br>
       <hr size="2" width="100%"><br>
       <a name="funcanc"></a><u><b><big>Functions Menu</big></b></u><br>
@@ -147,6 +166,7 @@
 
 
 
+
                             - Currently selected text.</big><br>
                         </big></small></small></small></big>
                 KKEDIT_DATADIR - Directory of global folder ( eg
@@ -171,10 +191,12 @@
 
 
 
+
                             - Filepath of the current document, the same
                             as the $KKEDIT_CURRENTFILE environment
                             variable passed to the command.</big><br>
                         </big></small></small></small></big></big></small></small></small></big><big><small><small><small><big><big><small><small><small><big><big><small><small><small><big><big><big>%d
+
 
 
 
@@ -204,8 +226,8 @@
       <hr size="2" width="100%"><big><small><small><small><big><br>
                 <big><big><a name="prefsanc"></a><u><b>Preferences<br>
                         <br>
-                        <img alt="prefs" src="prefs.png" height="388"
-                          width="324"><small><small><br>
+                        <img alt="prefs" src="prefs.png" height="428"
+                          width="458"><small><small><br>
                             <br>
                           </small></small> </b></u><small><small>The
                         Prefs file is created ~/.KKEdit/kkedit.rc and
@@ -243,6 +265,7 @@
               </small></small><u><b></b></u></big></big></small><small>
       </small>
       <hr size="2" width="100%"><small><big><big><u><b><a name="getanc"></a>Get
+
 
 
 
