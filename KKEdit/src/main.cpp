@@ -14,6 +14,7 @@
 #include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
+#include <unique/unique.h>
 
 #include "globals.h"
 #include "files.h"
@@ -56,7 +57,7 @@ void writeConfig(void)
 	g_free(filename);
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	fd=fopen(filename,"w");
-	if (fd!=NULL)
+	if(fd!=NULL)
 		{
 			fprintf(fd,"indentcode	%i\n",(int)indent);
 			fprintf(fd,"showlinenumbers	%i\n",(int)lineNumbers);
@@ -116,7 +117,7 @@ void readConfig(void)
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	fd=fopen(filename,"r");
-	if (fd!=NULL)
+	if(fd!=NULL)
 		{
 			while(feof(fd)==0)
 				{
@@ -264,7 +265,7 @@ void buildFindReplace(void)
 	gtk_widget_show(hbox);
 
 	gtk_signal_connect_object(GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(findReplaceDialog));
-	gtk_signal_connect (GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
+	gtk_signal_connect(GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
 }
 
 GtkWidget*	toolNameWidget;
@@ -342,7 +343,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 				}
 
 			fd=fopen(toolpath,"w");
-			if (fd!=NULL)
+			if(fd!=NULL)
 				{
 					fprintf(fd,"name\t%s\n",gtk_entry_get_text((GtkEntry*)toolNameWidget));
 					fprintf(fd,"command\t%s\n",gtk_entry_get_text((GtkEntry*)commandLineWidget));
@@ -467,7 +468,7 @@ void buildTools(void)
 	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));
 
 	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menutools);
-	if (submenu!=NULL)
+	if(submenu!=NULL)
 		gtk_menu_item_set_submenu((GtkMenuItem*)menutools,NULL);
 
 	menu=gtk_menu_new();
@@ -491,7 +492,7 @@ void buildTools(void)
 						{
 							asprintf(&filepath,"%s%s",datafolder[loop],entry);
 							fd=fopen(filepath,"r");
-							if (fd!=NULL)
+							if(fd!=NULL)
 								{
 									intermarg=0;
 									flagsarg=0;
@@ -510,7 +511,7 @@ void buildTools(void)
 												sscanf((char*)&buffer,"%*s %i",&flagsarg);
 										}
 
-									if((menuname!=NULL) && (strlen(menuname)>0))
+									if((menuname!=NULL) &&(strlen(menuname)>0))
 										{
 											tool=(toolStruct*)malloc(sizeof(toolStruct));
 											asprintf(&tool->menuName,"%s",menuname);
@@ -670,6 +671,71 @@ void doPrefs(void)
 	gtk_widget_show_all(prefswin);
 }
 
+enum
+{
+  COMMAND_0, /* unused: 0 is an invalid command */
+
+  COMMAND_FOO,
+  COMMAND_BAR
+};
+
+bool do_command_bar(void)
+{
+	printf("do_command_bar COMMAND_BAR\n");
+	return(true);
+}
+
+
+bool do_command_foo(UniqueMessageData *message)
+{
+	gchar** uris=unique_message_data_get_uris(message);
+	printf("do_command_foo COMMAND_FOO\n");
+	printf("uri - %s\n",uris[1]);
+	return(true);
+}
+
+bool ask_user_for_bar(void)
+{
+	printf("ask_user_for_bar COMMAND_BAR\n");
+	return(true);
+}
+
+UniqueResponse message_received_cb(UniqueApp *app,UniqueCommand command, UniqueMessageData *message, guint time_,gpointer user_data)
+{
+	UniqueResponse res;
+printf("messge received\n");
+	switch(command)
+		{
+			case UNIQUE_ACTIVATE:
+      /* move the main window to the screen that sent us the command */
+				gtk_window_set_screen(GTK_WINDOW(window),unique_message_data_get_screen(message));
+				gtk_window_present_with_time(GTK_WINDOW(window), time_);
+				res=UNIQUE_RESPONSE_OK;
+				break;
+			case COMMAND_FOO:
+      /* "foo" is a command that can fail */
+				if(do_command_foo(message))
+					res=UNIQUE_RESPONSE_OK;
+				else
+					res=UNIQUE_RESPONSE_FAIL;
+				break;
+			case COMMAND_BAR:
+      /* "bar" is a command that requires user interaction */
+				if(!ask_user_for_bar())
+					res=UNIQUE_RESPONSE_CANCEL;
+				else
+					{
+						do_command_bar();
+						res=UNIQUE_RESPONSE_OK;
+					}
+				break;
+			default:
+				res=UNIQUE_RESPONSE_OK;
+				break;
+		}
+	return(res);
+}
+
 int main(int argc,char **argv)
 {
 	GtkWidget*		vbox;
@@ -680,8 +746,73 @@ int main(int argc,char **argv)
 	GtkAccelGroup*	accgroup;
 	GtkWidget*		image;
 	GtkWidget*		entrybox;
+	UniqueApp*		app;
+//	commanddata		command;
 
 	gtk_init(&argc,&argv);
+
+	app=(UniqueApp*)unique_app_new_with_commands("org.mydomain.MyApplication",NULL,"foo",COMMAND_FOO,"bar",COMMAND_BAR,NULL);
+
+  /* if there already is an instance running, this will return TRUE; there
+   * is no race condition because the check is already performed at
+   * construction time
+   */
+	if(unique_app_is_running(app))
+		{
+
+			UniqueCommand command;   /* the command we want to send */
+			UniqueResponse response; /* the response to our command */
+
+	//		command=parse_command_line(&argc, &argv);
+command=(UniqueCommand)COMMAND_FOO;
+			if(command == UNIQUE_ACTIVATE)
+				response=unique_app_send_message(app,command,NULL);
+			else
+				{
+					UniqueMessageData *message=(UniqueMessageData*)unique_message_data_new(); /* the payload for the command */
+
+          /* here, populate_message() will create the message data using
+           * the command line arguments. for instance, if we want to send
+           * a list of URIs we can use unique_message_data_set_uris() to
+           * correctly populate the UniqueMessageData structure with the
+           * URI list.
+          message=populate_message(&argc, &argv);
+
+          /* send_message() will block until we get our response back */
+
+					unique_message_data_set_uris(message,argv);
+
+					response=unique_app_send_message(app,command,message);
+
+          /* the message is copied, so we need to free it before returning */
+					unique_message_data_free(message);
+				}
+      /* we don't need the application instance anymore */
+			//g_object_unref(app);
+
+			if(response==UNIQUE_RESPONSE_OK)
+				return 0;
+			else
+				printf("FAIL\n");
+				//handle_fail_or_user_cancel();
+		}
+	else
+		{
+      /* the UniqueApp instance must "watch" all the top-level windows the application
+       * creates, so that it can terminate the startup notification sequence for us
+       */
+//printf("1111\n");
+
+	//		unique_app_watch_window((UniqueApp*)app,(GtkWindow*)window);
+     // g_signal_connect (app, "message-received", G_CALLBACK (message_received_cb), NULL);
+//printf("22222\n");
+      /* using this signal we get notifications from the newly launched instances
+       * and we can reply to them; the default signal handler will just return
+       * UNIQUE_RESPONSE_OK and terminate the startup notification sequence on each
+       * watched window, so you can connect to the message-received signal only if
+       * you want to handle the commands and responses
+       */
+
 	init();
 
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -708,7 +839,7 @@ int main(int argc,char **argv)
 //dnd
 	gtk_drag_dest_set(vbox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets(vbox);
-	g_signal_connect (G_OBJECT(vbox),"drag_data_received",G_CALLBACK(dropUri),NULL);
+	g_signal_connect(G_OBJECT(vbox),"drag_data_received",G_CALLBACK(dropUri),NULL);
 
 //toolbar
 //new
@@ -1009,10 +1140,15 @@ int main(int argc,char **argv)
 	gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
 	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 
-	for (int j=1;j<argc;j++)
+	for(int j=1;j<argc;j++)
 		openFile(argv[j],0);
 
 	gtk_widget_show_all(window);
 	buildFindReplace();
+
+	unique_app_watch_window(app,(GtkWindow*)window);
+	g_signal_connect(app,"message-received",G_CALLBACK(message_received_cb),NULL);
+
 	gtk_main();
+	}
 }
