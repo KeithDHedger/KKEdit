@@ -61,7 +61,7 @@ Set recursive search for tags (default = 1).
 Added Search For Define to Navigation menu.
 
 0.0.12
-Do simple conversion to UTF-8.
+Do simple conversion to/from UTF-8.
 Added "Search https://developer.gnome.org" to nav menu.
 Added "Open As Hexdump" to file menu.
 Added number to untitled docs.
