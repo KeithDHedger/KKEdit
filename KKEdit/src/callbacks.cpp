@@ -1007,27 +1007,27 @@ void openAsHexDump(GtkWidget *widget,gpointer user_data)
 			asprintf(&command,"hexdump -C %s",filepath);
 			fp=popen(command, "r");
 			while(fgets(line,1024,fp))
-				{
-					g_string_append_printf(str,"%s",line);
-				}
+				g_string_append_printf(str,"%s",line);
+
 			pclose(fp);
-			g_get_charset(&charset);
-			//convstr=g_convert(str->str,-1,"UTF-8",charset,NULL,NULL,NULL);
-			convstr=g_locale_to_utf8(str->str,-1,NULL,NULL,NULL);
+
 			gtk_source_buffer_begin_not_undoable_action(page->buffer);
 				gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
-				gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,convstr,-1);
+				if(g_utf8_validate(str->str,-1,NULL)==false)
+					{
+						convstr=g_locale_to_utf8(str->str,-1,NULL,NULL,NULL);
+						gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,convstr,-1);
+						g_free(convstr);
+					}
+				else
+					{
+						gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str->str,-1);
+					}
 			gtk_source_buffer_end_not_undoable_action(page->buffer);
 			gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),true);
-			//asprintf(&page->fileName,"%s.dump",filename);
-			//asprintf(&page->filePath,"%s.dump",filepath);
-
-			//gtk_widget_set_tooltip_text(page->tabName,"Unsaved Document");
-			//gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)page->fileName);
 			g_string_free(str,true);
 			g_free (filepath);
 			g_free (filename);
-			g_free (convstr);
 			setSensitive();
 		}
 

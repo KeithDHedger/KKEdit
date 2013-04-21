@@ -127,11 +127,6 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	g_file_get_contents(filepath,&buffer,(gsize*)&filelen,NULL);
 
-	if(g_utf8_validate(buffer,-1,NULL)==false)
-		str=g_locale_to_utf8(buffer,-1,NULL,NULL,NULL);
-	else
-		str=buffer;
-
 	gtk_source_buffer_begin_not_undoable_action(page->buffer);
 		gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
 		if(g_utf8_validate(buffer,-1,NULL)==false)
@@ -212,7 +207,6 @@ bool saveFile(GtkWidget* widget,gpointer data)
 	GtkTextIter	start,end;
 	gchar*		text;
 	FILE*		fd=NULL;
-	gchar*		str=NULL;
 
 	page->itsMe=true;
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
