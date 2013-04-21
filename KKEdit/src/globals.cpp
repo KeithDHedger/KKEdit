@@ -54,6 +54,7 @@ bool			insensitiveSearch;
 bool			replaceAll;
 
 int				currentTabNumber;
+int 			untitledNumber=1;
 
 GtkToolItem*	newButton;
 GtkToolItem*	openButton;

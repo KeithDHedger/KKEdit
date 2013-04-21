@@ -108,6 +108,7 @@ extern bool				insensitiveSearch;
 extern bool				replaceAll;
 
 extern int				currentTabNumber;
+extern int 				untitledNumber;
 
 extern GtkToolItem*		newButton;
 extern GtkToolItem*		openButton;

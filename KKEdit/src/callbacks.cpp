@@ -957,3 +957,79 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 		return(false);
 }
 
+void searchGnome(GtkWidget *widget,gpointer user_data)
+{
+	pageStruct*	page=getPageStructPtr(-1);
+	GtkTextIter	start;
+	GtkTextIter	end;
+	char*		selection=NULL;
+	char*		command;
+
+	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+		{
+			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+			if(selection==NULL)
+				return;
+		}
+	else
+		return;
+
+	asprintf(&command,"xdg-open https://developer.gnome.org/symbols/?q=%s",selection);
+	g_spawn_command_line_async(command,NULL);
+	g_free(command);
+
+}
+
+void openAsHexDump(GtkWidget *widget,gpointer user_data)
+{
+	GtkWidget*		dialog;
+	char*			filepath;
+	char*			filename;
+	int				pagenum;
+	FILE*			fp;
+	char			line[1024];
+	GString*		str=g_string_new(NULL);
+	char*			command;
+	GtkTextIter		iter;
+	pageStruct*		page;
+	const gchar*	charset;
+	char*			convstr=NULL;
+
+	dialog=gtk_file_chooser_dialog_new("Open File",NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,NULL);
+	if (gtk_dialog_run(GTK_DIALOG (dialog))==GTK_RESPONSE_ACCEPT)
+		{
+			filepath=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+			filename=g_path_get_basename(filepath);
+			newFile(NULL,NULL);
+			pagenum=currentPage-1;
+			page=getPageStructPtr(pagenum);
+			asprintf(&command,"hexdump -C %s",filepath);
+			fp=popen(command, "r");
+			while(fgets(line,1024,fp))
+				{
+					g_string_append_printf(str,"%s",line);
+				}
+			pclose(fp);
+			g_get_charset(&charset);
+			convstr=g_convert(str->str,-1,"UTF-8",charset,NULL,NULL,NULL);
+			gtk_source_buffer_begin_not_undoable_action(page->buffer);
+
+				gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
+				gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,convstr,-1);
+			gtk_source_buffer_end_not_undoable_action(page->buffer);
+			gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),true);
+			//asprintf(&page->fileName,"%s.dump",filename);
+			//asprintf(&page->filePath,"%s.dump",filepath);
+
+			//gtk_widget_set_tooltip_text(page->tabName,"Unsaved Document");
+			//gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)page->fileName);
+			g_string_free(str,true);
+			g_free (filepath);
+			g_free (filename);
+			g_free (convstr);
+			setSensitive();
+		}
+
+	gtk_widget_destroy (dialog);
+	gtk_widget_show_all(window);
+}

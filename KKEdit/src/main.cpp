@@ -4,6 +4,7 @@
  *
 */
 
+
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <string.h>
@@ -805,6 +806,13 @@ int main(int argc,char **argv)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doOpenFile),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'O',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
+//open as hexdump
+	menuitem=gtk_image_menu_item_new_with_label("Open As Hexdump");
+	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(openAsHexDump),NULL);
+
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //save
@@ -951,7 +959,12 @@ int main(int argc,char **argv)
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(functionSearch),NULL);
-
+//search web
+	menuitem=gtk_image_menu_item_new_with_label("Search https://developer.gnome.org");
+	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(searchGnome),NULL);
 
 //function menu
 	menufunc=gtk_menu_item_new_with_label("Functions");

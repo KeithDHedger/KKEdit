@@ -256,7 +256,8 @@ void newFile(GtkWidget* widget,gpointer data)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	page->filePath=NULL;
 	page->buffer=gtk_source_buffer_new(NULL);
-	asprintf(&page->fileName,"Untitled");
+	asprintf(&page->fileName,"Untitled-%i",untitledNumber);
+	untitledNumber++;
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
 	setFilePrefs(page->view);
