@@ -96,7 +96,6 @@ bool openFile(const gchar *filepath,int linenumber)
 	gchar*			filename=g_path_get_basename(filepath);
 	pageStruct*		page=(pageStruct*)malloc(sizeof(pageStruct));
 	GtkTextMark*	scroll2mark=gtk_text_mark_new(NULL,true);
-	const gchar*	charset;
 	char*			str=NULL;
 
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
@@ -127,20 +126,28 @@ bool openFile(const gchar *filepath,int linenumber)
 	setLanguage(page);
 
 	g_file_get_contents(filepath,&buffer,(gsize*)&filelen,NULL);
-	g_get_charset(&charset);
-	str=g_convert(buffer,-1,"UTF-8",charset,NULL,NULL,NULL);
+
+	if(g_utf8_validate(buffer,-1,NULL)==false)
+		str=g_locale_to_utf8(buffer,-1,NULL,NULL,NULL);
+	else
+		str=buffer;
 
 	gtk_source_buffer_begin_not_undoable_action(page->buffer);
 		gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
-		gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str,strlen(str));
+		if(g_utf8_validate(buffer,-1,NULL)==false)
+			{
+				str=g_locale_to_utf8(buffer,-1,NULL,NULL,NULL);
+				gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str,-1);
+				g_free(str);
+			}
+		else
+			{
+				gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,buffer,-1);
+				g_free(buffer);
+			}
 	gtk_source_buffer_end_not_undoable_action(page->buffer);
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
-
-	if(str!=NULL)
-		g_free(str);
-	if(buffer!=NULL)
-		g_free (buffer);
  
 	gtk_widget_show_all((GtkWidget*)window);
 	gtk_notebook_set_current_page(notebook,currentPage);
@@ -170,16 +177,18 @@ bool openFile(const gchar *filepath,int linenumber)
 	return TRUE;
 }
 
-void getSaveFile(void)
+bool getSaveFile(void)
 {
 	GtkWidget*	dialog;
+	bool		retval=false;
 
 	dialog=gtk_file_chooser_dialog_new("Save File",(GtkWindow*)window, GTK_FILE_CHOOSER_ACTION_SAVE,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_SAVE,GTK_RESPONSE_ACCEPT,NULL);
 
 	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER (dialog),TRUE);
 	if(saveFileName!=NULL)
 		{
-			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),g_path_get_dirname(saveFilePath));
+			if(saveFilePath!=NULL)
+				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),g_path_get_dirname(saveFilePath));
 			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),saveFileName);
 		}
  	else
@@ -189,10 +198,12 @@ void getSaveFile(void)
 		{
 			saveFilePath=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 			saveFileName=g_path_get_basename(saveFilePath);
+			retval=true;
 		}
 
 	gtk_widget_destroy(dialog);
 	gtk_widget_show_all(window);
+	return(retval);
 }
 
 bool saveFile(GtkWidget* widget,gpointer data)
@@ -201,20 +212,20 @@ bool saveFile(GtkWidget* widget,gpointer data)
 	GtkTextIter	start,end;
 	gchar*		text;
 	FILE*		fd=NULL;
+	gchar*		str=NULL;
 
 	page->itsMe=true;
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
 	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer, &start, &end, FALSE);
-
-	gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,FALSE);
 	if(page->filePath!=NULL && data==NULL)
 		{
 			fd=fopen(page->filePath,"w");
 			if (fd!=NULL)
 				{
-					fprintf(fd,"%s",text);
+					fputs(text,fd);
 					fclose(fd);
+					gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,false);
 				}
 		}
 	else
@@ -224,9 +235,14 @@ bool saveFile(GtkWidget* widget,gpointer data)
 					saveFilePath=page->filePath;
 					saveFileName=page->fileName;
 				}
-			getSaveFile();
+
+			saveFileName=page->fileName;
+			if(getSaveFile()==false)
+				return(false);
 			page->filePath=saveFilePath;
 			page->fileName=saveFileName;
+
+			gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,FALSE);
 
 			gtk_widget_set_tooltip_text(page->tabName,page->filePath);
 			gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)saveFileName);
@@ -243,6 +259,7 @@ bool saveFile(GtkWidget* widget,gpointer data)
 		}
 	setLanguage(page);
 	switchPage(notebook,NULL,currentTabNumber,NULL);
+	setSensitive();
 	return(true);
 }
 

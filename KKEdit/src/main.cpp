@@ -86,7 +86,7 @@ void shutdown(GtkWidget* widget,gpointer data)
 			page=getPageStructPtr(loop);
 			if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)))
 				{
-					result=show_question(g_path_get_basename(page->filePath));
+					result=show_question(g_path_get_basename(page->fileName));
 					switch(result)
 						{
 							case GTK_RESPONSE_YES:

@@ -65,11 +65,12 @@ void closeTab(GtkWidget* widget,gpointer data)
 
 	if(gtk_text_buffer_get_modified((GtkTextBuffer*)page->buffer))
 		{
-			result=show_question(page->filePath);
+			result=show_question(page->fileName);
 			switch(result)
 				{
 					case GTK_RESPONSE_YES:
-						saveFile(NULL,NULL);
+						if(saveFile(NULL,NULL)==false)
+							return;
 						break;
 					case GTK_RESPONSE_NO:
 						break;
@@ -1011,9 +1012,9 @@ void openAsHexDump(GtkWidget *widget,gpointer user_data)
 				}
 			pclose(fp);
 			g_get_charset(&charset);
-			convstr=g_convert(str->str,-1,"UTF-8",charset,NULL,NULL,NULL);
+			//convstr=g_convert(str->str,-1,"UTF-8",charset,NULL,NULL,NULL);
+			convstr=g_locale_to_utf8(str->str,-1,NULL,NULL,NULL);
 			gtk_source_buffer_begin_not_undoable_action(page->buffer);
-
 				gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
 				gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,convstr,-1);
 			gtk_source_buffer_end_not_undoable_action(page->buffer);
