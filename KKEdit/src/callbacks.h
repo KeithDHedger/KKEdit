@@ -45,12 +45,12 @@ void jumpToLineFromBar(GtkWidget* widget,gpointer data);
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data);
 void tabPopUp(GtkWidget *my_widget, GdkEventButton *event,gpointer user_data);
 void functionSearch(GtkWidget* widget,gpointer data);
-void searchGnome(GtkWidget *widget,gpointer user_data);
 void openAsHexDump(GtkWidget *widget,gpointer user_data);
 UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessageData *message,guint time,gpointer user_data);
 void shutdown(GtkWidget* widget,gpointer data);
 void setPrefs(GtkWidget* widget,gpointer data);
 void setToolOptions(GtkWidget* widget,gpointer data);
 void doAbout(GtkWidget* widget,gpointer data);
+void writeExitData(void);
 
 #endif

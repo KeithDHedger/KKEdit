@@ -71,12 +71,26 @@ void readConfig(void)
 							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
 							asprintf(&terminalCommand,"%s",strarg);
 						}
+				}
+			fclose(fd);
+		}
+
+	g_free(filename);
+	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
+	fd=fopen(filename,"r");
+	if(fd!=NULL)
+		{
+			while(feof(fd)==0)
+				{
+					fgets(buffer,1024,fd);
+					sscanf(buffer,"%s %s",(char*)&name,(char*)&strarg);
 
 					if(strcasecmp(name,"windowsize")==0)
 						sscanf(buffer,"%*s %i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
 				}
 			fclose(fd);
 		}
+	g_free(filename);
 }
 
 void init(void)

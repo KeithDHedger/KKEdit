@@ -961,29 +961,6 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 		return(false);
 }
 
-void searchGnome(GtkWidget *widget,gpointer user_data)
-{
-	pageStruct*	page=getPageStructPtr(-1);
-	GtkTextIter	start;
-	GtkTextIter	end;
-	char*		selection=NULL;
-	char*		command;
-
-	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
-		{
-			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
-			if(selection==NULL)
-				return;
-		}
-	else
-		return;
-
-	asprintf(&command,"xdg-open https://developer.gnome.org/symbols/?q=%s",selection);
-	g_spawn_command_line_async(command,NULL);
-	g_free(command);
-
-}
-
 void openAsHexDump(GtkWidget *widget,gpointer user_data)
 {
 	GtkWidget*		dialog;
@@ -1074,6 +1051,30 @@ UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessag
 	return(res);
 }
 
+void writeExitData(void)
+{
+	GtkAllocation	alloc;
+	FILE*			fd=NULL;
+	char*			filename;
+	int				winx;
+	int				winy;
+
+	gtk_widget_get_allocation(window,&alloc);
+	gtk_window_get_position((GtkWindow*)window,&winx,&winy);
+
+	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
+	g_mkdir_with_parents(filename,493);
+	g_free(filename);
+	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
+	fd=fopen(filename,"w");
+	if(fd!=NULL)
+		{
+			fprintf(fd,"windowsize	%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
+			fclose(fd);
+		}
+	g_free(filename);
+}
+
 void writeConfig(void)
 {
 	GtkAllocation	alloc;
@@ -1104,7 +1105,7 @@ void writeConfig(void)
 			fprintf(fd,"depth	%i\n",depth);
 			fprintf(fd,"font	%s\n",fontAndSize);
 			fprintf(fd,"terminalcommand	%s\n",terminalCommand);
-			fprintf(fd,"windowsize	%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
+//			fprintf(fd,"windowsize	%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
 			fclose(fd);
 		}
 	g_free(filename);
@@ -1136,7 +1137,7 @@ void shutdown(GtkWidget* widget,gpointer data)
 						}
 				}
 		}
-	writeConfig();
+	writeExitData();
 	gtk_main_quit();
 }
 
