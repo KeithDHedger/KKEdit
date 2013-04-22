@@ -1062,6 +1062,8 @@ UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessag
 
 			case UNIQUE_OPEN:
 				messageOpen(message);
+				gtk_window_set_screen(GTK_WINDOW(window),unique_message_data_get_screen(message));
+				gtk_window_present_with_time(GTK_WINDOW(window),time);
    				res=UNIQUE_RESPONSE_OK;
 				break;
 
