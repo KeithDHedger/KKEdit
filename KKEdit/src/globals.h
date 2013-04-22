@@ -32,9 +32,6 @@
 #define VALIDFILENAMECHARS "[A-Za-z0-9_-./]"
 #define VALIDFUNCTIONCHARS "[A-Za-z0-9_*]"
 
-//#define COMMAND_ACTIVATE 1
-//#define COMMAND_OPENFILE 2
-
 struct pageStruct
 {
 	GtkScrolledWindow*	pageWindow;
