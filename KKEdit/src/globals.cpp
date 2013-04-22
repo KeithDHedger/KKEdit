@@ -36,6 +36,7 @@ GtkWidget*		saveAsMenu;
 
 int				currentPage=0;
 
+GtkWidget*		prefswin;
 bool			indent;
 bool			lineNumbers;
 bool			lineWrap;
@@ -44,6 +45,30 @@ int				tabWidth;
 char*			fontAndSize;
 char*			terminalCommand;
 int				depth;
+
+GtkWidget*		fontBox;
+GtkWidget*		terminalBox;
+bool			tmpIndent;
+bool			tmpLineNumbers;
+bool			tmpLineWrap;
+bool			tmpHighLight;
+int				tmpTabWidth;
+int				tmpDepth;
+
+GtkWidget*		toolNameWidget;
+GtkWidget*		commandLineWidget;
+GtkWidget*		inTermWidget;
+GtkWidget*		syncWidget;
+GtkWidget*		ignoreWidget;
+GtkWidget*		pasteWidget;
+GtkWidget*		replaceWidget;
+
+bool			inTerm=false;
+bool			runSync=true;
+bool			ignoreOut=true;
+bool			pasteOut=false;
+bool			replaceOut=false;
+bool			editTool=false;
 
 int				windowWidth;
 int				windowHeight;

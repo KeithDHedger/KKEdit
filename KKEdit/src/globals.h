@@ -21,7 +21,7 @@
 
 #define MYEMAIL "kdhedger68713@gmail.com"
 #define MYWEBSITE "http://keithhedger.hostingsiteforfree.com"
-#define VERSION "0.0.11"
+#define VERSION "0.0.12"
 
 #define TOOL_ASYNC 8
 #define TOOL_IGNORE_OP 0
@@ -90,6 +90,7 @@ extern GtkWidget*		saveAsMenu;
 
 extern int				currentPage;
 
+extern GtkWidget*		prefswin;
 extern bool				indent;
 extern bool				lineNumbers;
 extern bool				lineWrap;
@@ -98,6 +99,30 @@ extern int				tabWidth;
 extern char*			fontAndSize;
 extern char*			terminalCommand;
 extern int				depth;
+
+extern GtkWidget*		fontBox;
+extern GtkWidget*		terminalBox;
+extern bool				tmpIndent;
+extern bool				tmpLineNumbers;
+extern bool				tmpLineWrap;
+extern bool				tmpHighLight;
+extern int				tmpTabWidth;
+extern int				tmpDepth;
+
+extern GtkWidget*		toolNameWidget;
+extern GtkWidget*		commandLineWidget;
+extern GtkWidget*		inTermWidget;
+extern GtkWidget*		syncWidget;
+extern GtkWidget*		ignoreWidget;
+extern GtkWidget*		pasteWidget;
+extern GtkWidget*		replaceWidget;
+
+extern bool				inTerm;
+extern bool				runSync;
+extern bool				ignoreOut;
+extern bool				pasteOut;
+extern bool				replaceOut;
+extern bool				editTool;
 
 extern int				windowWidth;
 extern int				windowHeight;

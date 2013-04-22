@@ -98,6 +98,9 @@ bool openFile(const gchar *filepath,int linenumber)
 	GtkTextMark*	scroll2mark=gtk_text_mark_new(NULL,true);
 	char*			str=NULL;
 
+	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
+		return(false);
+
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 

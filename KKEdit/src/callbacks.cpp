@@ -8,12 +8,15 @@
 
 #include <gtk/gtk.h>
 #include <gtksourceview/gtksourceiter.h>
+#include <unique/unique.h>
 
 #include "globals.h"
 #include "files.h"
+#include "guis.h"
 
 GtkWidget*	tabMenu;
 char		defineText[1024];
+
 
 void doOpenFile(GtkWidget* widget,gpointer data)
 {
@@ -1032,4 +1035,238 @@ void openAsHexDump(GtkWidget *widget,gpointer user_data)
 
 	gtk_widget_destroy (dialog);
 	gtk_widget_show_all(window);
+}
+
+void messageOpen(UniqueMessageData *message)
+{
+	int argc;
+
+	gchar** uris=unique_message_data_get_uris(message);
+	argc=g_strv_length(uris);
+
+	for (int loop=1;loop<argc;loop++)
+		openFile(uris[loop],1);
+}
+
+UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessageData *message,guint time,gpointer user_data)
+{
+	UniqueResponse	res;
+
+	switch(command)
+		{
+			case UNIQUE_ACTIVATE:
+				gtk_window_set_screen(GTK_WINDOW(window),unique_message_data_get_screen(message));
+				gtk_window_present_with_time(GTK_WINDOW(window),time);
+				res=UNIQUE_RESPONSE_OK;
+				break;
+
+			case UNIQUE_OPEN:
+				messageOpen(message);
+   				res=UNIQUE_RESPONSE_OK;
+				break;
+
+			default:
+				res=UNIQUE_RESPONSE_OK;
+				break;
+		}
+	return(res);
+}
+
+void writeConfig(void)
+{
+	GtkAllocation	alloc;
+	FILE*			fd=NULL;
+	char*			filename;
+	int				winx;
+	int				winy;
+
+	gtk_widget_get_allocation(window,&alloc);
+	gtk_window_get_position((GtkWindow*)window,&winx,&winy);
+
+	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
+	g_mkdir_with_parents(filename,493);
+	g_free(filename);
+	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
+	fd=fopen(filename,"w");
+	if(fd!=NULL)
+		{
+			fprintf(fd,"indentcode	%i\n",(int)indent);
+			fprintf(fd,"showlinenumbers	%i\n",(int)lineNumbers);
+			fprintf(fd,"wrapline	%i\n",(int)lineWrap);
+			fprintf(fd,"highlightcurrentline	%i\n",(int)highLight);
+			fprintf(fd,"insenssearch	%i\n",(int)insensitiveSearch);
+			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
+
+			fprintf(fd,"tabwidth	%i\n",tabWidth);
+			fprintf(fd,"depth	%i\n",depth);
+			fprintf(fd,"font	%s\n",fontAndSize);
+			fprintf(fd,"terminalcommand	%s\n",terminalCommand);
+			fprintf(fd,"windowsize	%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
+			fclose(fd);
+		}
+	g_free(filename);
+}
+
+void shutdown(GtkWidget* widget,gpointer data)
+{
+	int			numpages=gtk_notebook_get_n_pages(notebook);
+	int			result;
+	pageStruct*	page;
+
+	for(int loop=0;loop<numpages;loop++)
+		{
+			page=getPageStructPtr(loop);
+			if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)))
+				{
+					result=show_question(g_path_get_basename(page->fileName));
+					switch(result)
+						{
+							case GTK_RESPONSE_YES:
+								gtk_notebook_set_current_page(notebook,loop);
+								saveFile(NULL,NULL);
+								break;
+							case GTK_RESPONSE_NO:
+								break;
+							default:
+								return;
+								break;
+						}
+				}
+		}
+	writeConfig();
+	gtk_main_quit();
+}
+
+void setPrefs(GtkWidget* widget,gpointer data)
+{
+
+	if(strcmp(gtk_widget_get_name(widget),"indent")==0)
+		tmpIndent=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"show")==0)
+		tmpLineNumbers=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"wrap")==0)
+		tmpLineWrap=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"high")==0)
+		tmpHighLight=gtk_toggle_button_get_active((GtkToggleButton*)data);
+
+	if(strcmp(gtk_widget_get_name(widget),"tabs")==0)
+		tmpTabWidth=(int)gtk_spin_button_get_value((GtkSpinButton*)data);
+
+	if(strcmp(gtk_widget_get_name(widget),"depth")==0)
+		tmpDepth=(int)gtk_spin_button_get_value((GtkSpinButton*)data);
+
+	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
+		gtk_widget_destroy(prefswin);
+
+	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
+		{
+			indent=tmpIndent;
+			lineNumbers=tmpLineNumbers;
+			lineWrap=tmpLineWrap;
+			highLight=tmpHighLight;
+			if(terminalCommand!=NULL)
+				{
+					g_free(terminalCommand);
+					asprintf(&terminalCommand,"%s",gtk_entry_get_text((GtkEntry*)terminalBox));
+				}
+
+			if(fontAndSize!=NULL)
+				{
+					g_free(fontAndSize);
+					asprintf(&fontAndSize,"%s",gtk_entry_get_text((GtkEntry*)fontBox));
+				}
+
+			tabWidth=tmpTabWidth;
+			depth=tmpDepth;
+			gtk_widget_destroy(prefswin);
+			resetAllFilePrefs();
+		}
+}
+
+void setToolOptions(GtkWidget* widget,gpointer data)
+{
+	int		flags;
+	char*	dirname;
+	FILE*	fd=NULL;
+	char	toolpath[2048];
+	int		toolnum=1;
+
+	if(strcmp(gtk_widget_get_name(widget),"interm")==0)
+		inTerm=gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget);
+	if(strcmp(gtk_widget_get_name(widget),"sync")==0)
+		runSync=gtk_toggle_button_get_active((GtkToggleButton*)syncWidget);
+	if(strcmp(gtk_widget_get_name(widget),"ignore")==0)
+		ignoreOut=gtk_toggle_button_get_active((GtkToggleButton*)ignoreWidget);
+	if(strcmp(gtk_widget_get_name(widget),"paste")==0)
+		pasteOut=gtk_toggle_button_get_active((GtkToggleButton*)pasteWidget);
+	if(strcmp(gtk_widget_get_name(widget),"replace")==0)
+		replaceOut=gtk_toggle_button_get_active((GtkToggleButton*)replaceWidget);
+
+	if(runSync==false)
+		{
+			flags=TOOL_ASYNC;
+			gtk_widget_set_sensitive(ignoreWidget,false);
+			gtk_widget_set_sensitive(pasteWidget,false);
+			gtk_widget_set_sensitive(replaceWidget,false);
+		}
+	else
+		{
+			gtk_widget_set_sensitive(ignoreWidget,true);
+			gtk_widget_set_sensitive(pasteWidget,true);
+			gtk_widget_set_sensitive(replaceWidget,true);
+
+			if(ignoreOut==true)
+				flags=TOOL_IGNORE_OP;
+			if(pasteOut==true)
+				flags=TOOL_PASTE_OP;
+			if(replaceOut==true)
+				flags=TOOL_REPLACE_OP;				
+		}
+
+	if(inTerm==true)
+		{
+			gtk_widget_set_sensitive(ignoreWidget,false);
+			gtk_widget_set_sensitive(pasteWidget,false);
+			gtk_widget_set_sensitive(replaceWidget,false);
+		}
+
+	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
+		{
+			asprintf(&dirname,"%s/.KKEdit/tools",getenv("HOME"));
+
+			while(true)
+				{
+					sprintf((char*)&toolpath,"%s/.KKEdit/tools/tool-%s-%i",getenv("HOME"),gtk_entry_get_text((GtkEntry*)toolNameWidget),toolnum);
+					if(!g_file_test(toolpath,G_FILE_TEST_EXISTS))
+						break;
+					toolnum++;
+				}
+
+			fd=fopen(toolpath,"w");
+			if(fd!=NULL)
+				{
+					fprintf(fd,"name\t%s\n",gtk_entry_get_text((GtkEntry*)toolNameWidget));
+					fprintf(fd,"command\t%s\n",gtk_entry_get_text((GtkEntry*)commandLineWidget));
+					fprintf(fd,"flags\t%i\n",flags);
+					fprintf(fd,"interm\t%i\n",(int)inTerm);
+					fclose(fd);
+				}
+			g_free(dirname);
+			gtk_widget_destroy((GtkWidget*)data);
+
+			buildTools();
+			gtk_widget_show_all(menutools);
+		}
+
+	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
+		gtk_widget_destroy((GtkWidget*)data);
+}
+
+void doAbout(GtkWidget* widget,gpointer data)
+{
+	const char*	authors[]={"K.D.Hedger <"MYEMAIL">",NULL};
+	const char	copyright[] ="Copyright \xc2\xa9 2013 K.D.Hedger";
+	const char*	aboutboxstring="KKEdit Code Text Editor";
+
+	gtk_show_about_dialog(NULL,"authors",authors,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",MYWEBSITE,"program-name","KKEdit","logo-icon-name","KKEdit",NULL); 
 }
