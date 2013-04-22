@@ -95,6 +95,7 @@ extern bool				indent;
 extern bool				lineNumbers;
 extern bool				lineWrap;
 extern bool				highLight;
+extern bool				singleUse;
 extern int				tabWidth;
 extern char*			fontAndSize;
 extern char*			terminalCommand;
@@ -106,6 +107,7 @@ extern bool				tmpIndent;
 extern bool				tmpLineNumbers;
 extern bool				tmpLineWrap;
 extern bool				tmpHighLight;
+extern bool				tmpSingleUse;
 extern int				tmpTabWidth;
 extern int				tmpDepth;
 

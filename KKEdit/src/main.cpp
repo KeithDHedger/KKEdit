@@ -47,6 +47,8 @@ void readConfig(void)
 							lineWrap=(bool)atoi(strarg);
 					if(strcasecmp(name,"highlightcurrentline")==0)
 							highLight=(bool)atoi(strarg);
+					if(strcasecmp(name,"singleuse")==0)
+							singleUse=(bool)atoi(strarg);
 
 					if(strcasecmp(name,"insenssearch")==0)
 							insensitiveSearch=(bool)atoi(strarg);
@@ -87,6 +89,7 @@ void init(void)
 	highLight=true;
 	tabWidth=4;
 	depth=1;
+	singleUse=true;
 
 	asprintf(&fontAndSize,"%s","mono 10");
 	asprintf(&terminalCommand,"%s","xterm");
@@ -108,6 +111,7 @@ void init(void)
 	tmpLineNumbers=lineNumbers;
 	tmpLineWrap=lineWrap;
 	tmpHighLight=highLight;
+	tmpSingleUse=singleUse;
 	tmpTabWidth=tabWidth;
 	tmpDepth=depth;
 }
@@ -118,15 +122,20 @@ int main(int argc,char **argv)
 	UniqueMessageData*	message=NULL;
 	UniqueCommand 		command;
 	UniqueResponse 		response;
+	UniqueBackend*		back;
+	char*				dbusname;
 
 	gtk_init(&argc,&argv);
 
-	app=(UniqueApp*)unique_app_new("org.keithhedger.KKEdit",NULL);
+	back=unique_backend_create();
+	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace(back));
+	app=unique_app_new(dbusname,NULL);
 	message=unique_message_data_new();
 
-	if(unique_app_is_running(app))
-		{
+	init();
 
+	if((unique_app_is_running(app)==true) && (singleUse==true))
+		{
 			if(argc==1)
 				{
 					command=UNIQUE_ACTIVATE;
@@ -150,7 +159,7 @@ int main(int argc,char **argv)
 		}
 	else
 		{
-			init();
+//			init();
 			buildMainGui();
 
 			for(int j=1;j<argc;j++)

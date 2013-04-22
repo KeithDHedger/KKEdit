@@ -226,6 +226,13 @@ void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(vbox),item,false,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
+//single instance
+	item=gtk_check_button_new_with_label("Use single Instance");
+	gtk_widget_set_name(item,"single");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,singleUse);
+	gtk_box_pack_start(GTK_BOX(vbox),item,false,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+
 //tabwidth  -- CLEAN
 	GtkObject*	adj=gtk_adjustment_new(tmpTabWidth,1,64,1,1,0);
 	hbox=gtk_hbox_new(true,0);

@@ -67,3 +67,4 @@ Added "Open As Hexdump" to file menu.
 Added number to untitled docs.
 Made application single instance.
 Major Code clean.
+Added select single/multi instance to prefs.

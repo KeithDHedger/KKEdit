@@ -41,6 +41,7 @@ bool			indent;
 bool			lineNumbers;
 bool			lineWrap;
 bool			highLight;
+bool			singleUse;
 int				tabWidth;
 char*			fontAndSize;
 char*			terminalCommand;
@@ -52,6 +53,7 @@ bool			tmpIndent;
 bool			tmpLineNumbers;
 bool			tmpLineWrap;
 bool			tmpHighLight;
+bool			tmpSingleUse;
 int				tmpTabWidth;
 int				tmpDepth;
 

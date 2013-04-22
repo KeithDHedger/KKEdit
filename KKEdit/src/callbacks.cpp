@@ -1096,6 +1096,7 @@ void writeConfig(void)
 			fprintf(fd,"showlinenumbers	%i\n",(int)lineNumbers);
 			fprintf(fd,"wrapline	%i\n",(int)lineWrap);
 			fprintf(fd,"highlightcurrentline	%i\n",(int)highLight);
+			fprintf(fd,"singleuse	%i\n",(int)singleUse);
 			fprintf(fd,"insenssearch	%i\n",(int)insensitiveSearch);
 			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
 
@@ -1150,6 +1151,8 @@ void setPrefs(GtkWidget* widget,gpointer data)
 		tmpLineWrap=gtk_toggle_button_get_active((GtkToggleButton*)data);
 	if(strcmp(gtk_widget_get_name(widget),"high")==0)
 		tmpHighLight=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"single")==0)
+		tmpSingleUse=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
 	if(strcmp(gtk_widget_get_name(widget),"tabs")==0)
 		tmpTabWidth=(int)gtk_spin_button_get_value((GtkSpinButton*)data);
@@ -1166,6 +1169,8 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			lineNumbers=tmpLineNumbers;
 			lineWrap=tmpLineWrap;
 			highLight=tmpHighLight;
+			singleUse=tmpSingleUse;
+
 			if(terminalCommand!=NULL)
 				{
 					g_free(terminalCommand);
@@ -1182,6 +1187,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			depth=tmpDepth;
 			gtk_widget_destroy(prefswin);
 			resetAllFilePrefs();
+			writeConfig();
 		}
 }
 
