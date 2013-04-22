@@ -993,7 +993,6 @@ void openAsHexDump(GtkWidget *widget,gpointer user_data)
 	char*			command;
 	GtkTextIter		iter;
 	pageStruct*		page;
-	const gchar*	charset;
 	char*			convstr=NULL;
 
 	dialog=gtk_file_chooser_dialog_new("Open File",NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,NULL);

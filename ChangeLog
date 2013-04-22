@@ -65,3 +65,4 @@ Do simple conversion to/from UTF-8.
 Added "Search https://developer.gnome.org" to nav menu.
 Added "Open As Hexdump" to file menu.
 Added number to untitled docs.
+Made application single instance.
