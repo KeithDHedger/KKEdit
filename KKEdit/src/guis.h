@@ -1,0 +1,20 @@
+/*
+ *
+ * K.D.Hedger 2013 <kdhedger68713@gmail.com>
+ *
+*/
+
+#include <stdlib.h>
+#include <gtk/gtk.h>
+#include <string.h>
+#include <sys/stat.h>
+
+#include <gtksourceview/gtksourceview.h>
+#include <gtksourceview/gtksourcebuffer.h>
+#include <gtksourceview/gtksourcelanguage.h>
+#include <gtksourceview/gtksourcelanguagemanager.h>
+
+void buildMainGui(void);
+void buildTools(void);
+void buildFindReplace(void);
+
