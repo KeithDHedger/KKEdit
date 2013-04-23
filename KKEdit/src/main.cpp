@@ -173,7 +173,6 @@ int main(int argc,char **argv)
 		}
 	else
 		{
-//			init();
 			buildMainGui();
 
 			for(int j=1;j<argc;j++)
