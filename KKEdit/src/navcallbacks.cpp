@@ -20,6 +20,7 @@ void gtkDocSearch(GtkWidget* widget,gpointer data)
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
+	char*		selectionorig=NULL;
 	FILE*		fp;
 	FILE*		fd;
 	char		line[1024];
@@ -27,17 +28,17 @@ void gtkDocSearch(GtkWidget* widget,gpointer data)
 	char*		searchdata[2048];
 	int			cnt=0;
 	char*		ptr=NULL;
+	long		hashsign;
 
 	for(int loop=0;loop<2048;loop++)
 		searchdata[loop]=NULL;
-
-//find /usr/share/gtk-doc/html -iname "*.sgml"  -exec grep -ie g-free '{}' \;|awk -F 'href=\"' '{print $2}'|awk -F '">' '{print $1}'|sort|awk -F '#' '{print $1}'|xargs --replace cat /usr/share/gtk-doc/html/'{}'|sed -n '/title="g_free/p'|awk -F 'title="' '{print $2}'|awk -F '"' '{print $1}'
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 			if(selection!=NULL)
 				{
+					selectionorig=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 					selection=g_strdelimit(selection,"_",'-');
 					asprintf(&command,"find /usr/share/gtk-doc/html -iname \"*.sgml\"  -exec grep -ie %s '{}' \\;|awk -F 'href=\"' '{print $2}'|awk -F '\">' '{print $1}'|sort",selection);
 					fp=popen(command,"r");
@@ -66,8 +67,22 @@ void gtkDocSearch(GtkWidget* widget,gpointer data)
 											ptr=strchr(searchdata[loop],'#');
 											if(ptr!=NULL)
 												{
-													ptr=(char*)(long)ptr++;
-													fprintf(fd,"<a href=\"/usr/share/gtk-doc/html/%s\">%s</a><br>\n",searchdata[loop],ptr);
+													hashsign=(long)ptr-(long)searchdata[loop];
+													searchdata[loop][hashsign]=0;
+													asprintf(&command,"sed -n '/%s/p' /usr/share/gtk-doc/html/%s",selectionorig,searchdata[loop]);
+													searchdata[loop][hashsign]='#';
+													printf("%s\n",command);
+													fp=popen(command,"r");
+													line[0]=0;
+													fgets(line,1024,fp);
+													if(strlen((char*)line)>1)
+														{
+															ptr=(char*)(long)ptr++;
+															fprintf(fd,"<a href=\"/usr/share/gtk-doc/html/%s\">%s</a><br>\n",searchdata[loop],ptr);
+														}
+													pclose(fp);
+													g_free(command);
+																									
 												}
 										}
 									fprintf(fd,"</body>\n");
@@ -93,4 +108,6 @@ void gtkDocSearch(GtkWidget* widget,gpointer data)
 
 	if(selection!=NULL)
 		g_free(selection);
+	if(selectionorig!=NULL)
+		g_free(selectionorig);
 }
