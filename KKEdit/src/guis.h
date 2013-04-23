@@ -14,7 +14,11 @@
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
 
+#ifndef _GUIS_
+#define _GUIS_
+
 void buildMainGui(void);
 void buildTools(void);
 void buildFindReplace(void);
 
+#endif

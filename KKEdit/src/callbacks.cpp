@@ -13,6 +13,7 @@
 #include "globals.h"
 #include "files.h"
 #include "guis.h"
+#include "navcallbacks.h"
 
 GtkWidget*	tabMenu;
 char		defineText[1024];
