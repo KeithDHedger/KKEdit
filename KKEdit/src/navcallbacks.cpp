@@ -23,10 +23,15 @@ void gtkDocSearch(GtkWidget* widget,gpointer data)
 	FILE*		fp;
 	FILE*		fd;
 	char		line[1024];
-	char*		command;
+	char*		command=NULL;
 	char*		searchdata[2048];
 	int			cnt=0;
 	char*		ptr=NULL;
+
+	for(int loop=0;loop<2048;loop++)
+		searchdata[loop]=NULL;
+
+//find /usr/share/gtk-doc/html -iname "*.sgml"  -exec grep -ie g-free '{}' \;|awk -F 'href=\"' '{print $2}'|awk -F '">' '{print $1}'|sort|awk -F '#' '{print $1}'|xargs --replace cat /usr/share/gtk-doc/html/'{}'|sed -n '/title="g_free/p'|awk -F 'title="' '{print $2}'|awk -F '"' '{print $1}'
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
@@ -41,8 +46,11 @@ void gtkDocSearch(GtkWidget* widget,gpointer data)
 							asprintf(&searchdata[cnt],"%s",line);
 							searchdata[cnt][strlen(searchdata[cnt])-1]=0;
 							cnt++;
+							if(cnt>2048)
+								break;
 						}
 					pclose(fp);
+					g_free(command);
 
 					if(cnt>1)
 						{
@@ -56,8 +64,11 @@ void gtkDocSearch(GtkWidget* widget,gpointer data)
 									for(int loop=0;loop<cnt;loop++)
 										{
 											ptr=strchr(searchdata[loop],'#');
-											ptr=(char*)(long)ptr++;
-											fprintf(fd,"<a href=\"/usr/share/gtk-doc/html/%s\">%s</a><br>\n",searchdata[loop],ptr);
+											if(ptr!=NULL)
+												{
+													ptr=(char*)(long)ptr++;
+													fprintf(fd,"<a href=\"/usr/share/gtk-doc/html/%s\">%s</a><br>\n",searchdata[loop],ptr);
+												}
 										}
 									fprintf(fd,"</body>\n");
 									fprintf(fd,"</html>\n");
@@ -70,9 +81,16 @@ void gtkDocSearch(GtkWidget* widget,gpointer data)
 						{
 							asprintf(&command,"xdg-open file:///usr/share/gtk-doc/html/%s",searchdata[0]);
 							g_spawn_command_line_async(command,NULL);
-							
 						}
 				}
 		}
 
+	for(int loop=0;loop<cnt;loop++)
+		{
+			if(searchdata[loop]!=NULL)
+				g_free(searchdata[loop]);
+		}
+
+	if(selection!=NULL)
+		g_free(selection);
 }
