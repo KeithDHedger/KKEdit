@@ -17,7 +17,7 @@
 #include "globals.h"
 #include "files.h"
 #include "callbacks.h"
-
+#include "navcallbacks.h"
 
 void doMakeTool(void)
 {

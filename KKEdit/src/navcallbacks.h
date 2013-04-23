@@ -2,7 +2,7 @@
  *
  * K.D.Hedger 2013 <kdhedger68713@gmail.com>
  *
- * callbacks.h
+ * navcallbacks.h
  *
 */
 
@@ -15,6 +15,6 @@
 #ifndef _NAVCALLBACKS_
 #define _NAVCALLBACKS_
 
-void doOpenFile(GtkWidget* widget,gpointer data);
+void gtkDocSearch(GtkWidget* widget,gpointer data);
 
 #endif

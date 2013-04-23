@@ -68,3 +68,5 @@ Made application single instance.
 Major Code clean.
 Added select single/multi instance to prefs.
 Prefs applied immediately  ( again! ).
+
+0.0.13
