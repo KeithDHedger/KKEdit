@@ -28,8 +28,6 @@ void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectio
 void find(GtkWidget* widget,gpointer data);
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data);
 int show_question(char* filename);
-
-
 void externalTool(GtkWidget* widget,gpointer data);
 void addBookmark(GtkWidget* widget,gpointer data);
 void removeBookmark(GtkWidget* widget,gpointer data);
@@ -40,8 +38,6 @@ void saveSession(GtkWidget* widget,gpointer data);
 void restoreSession(GtkWidget* widget,gpointer data);
 void printFile(GtkWidget* widget,gpointer data);
 void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data);
-
-void jumpToLineFromBar(GtkWidget* widget,gpointer data);
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data);
 void tabPopUp(GtkWidget *my_widget, GdkEventButton *event,gpointer user_data);
 void functionSearch(GtkWidget* widget,gpointer data);

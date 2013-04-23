@@ -14,6 +14,8 @@
 #include "files.h"
 #include "guis.h"
 
+int	theLineNum=0;
+
 void gtkDocSearch(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
@@ -225,7 +227,11 @@ void gotoLine(GtkWidget* widget,gpointer data)
 		}
 }
 
-int	theLineNum=0;
+void jumpToLineFromBar(GtkWidget* widget,gpointer data)
+{
+		theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
+		gotoLine(NULL,(gpointer)(long)theLineNum);
+}
 
 int showLineEntry(void)
 {
@@ -260,5 +266,18 @@ void jumpToLine(GtkWidget* widget,gpointer data)
 {
 	if(showLineEntry()==GTK_RESPONSE_YES)
 		gotoLine(NULL,(gpointer)(long)theLineNum);
+}
+
+void functionSearch(GtkWidget* widget,gpointer data)
+{
+	if(showFunctionEntry()==GTK_RESPONSE_YES)
+	{
+		functionData* fdata=getFunctionByName(functionSearchText);
+		if(fdata!=NULL)
+		{
+			goToDefine(fdata);
+			destroyData(fdata);
+		}
+	}
 }
 

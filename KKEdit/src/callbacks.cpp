@@ -675,57 +675,6 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 		}
 }
 
-char*	functionSearchText=NULL;
-
-int showFunctionEntry(void)
-{
-	GtkWidget*	dialog;
-	gint		result;
-	GtkWidget*	content_area;
-	GtkWidget*	entrybox;
-
-	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,"Enter Function Name");
-
-	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OK,GTK_RESPONSE_YES,NULL);
-	gtk_window_set_title(GTK_WINDOW(dialog),"Find Function");
-
-	content_area=gtk_dialog_get_content_area(GTK_DIALOG(dialog));	
-	entrybox=gtk_entry_new();
-	if(functionSearchText!=NULL)
-		gtk_entry_set_text((GtkEntry*)entrybox,functionSearchText);
-	gtk_entry_set_activates_default((GtkEntry*)entrybox,true);
-	gtk_dialog_set_default_response((GtkDialog*)dialog,GTK_RESPONSE_YES);
-	gtk_container_add(GTK_CONTAINER(content_area),entrybox);
-	gtk_widget_show_all(content_area);
-	result=gtk_dialog_run(GTK_DIALOG(dialog));
-	if(functionSearchText!=NULL)
-		g_free(functionSearchText);
-	asprintf(&functionSearchText,"%s",gtk_entry_get_text((GtkEntry*)entrybox));
-	
-	gtk_widget_destroy(dialog);
-
-	return(result);
-}
-
-void functionSearch(GtkWidget* widget,gpointer data)
-{
-	if(showFunctionEntry()==GTK_RESPONSE_YES)
-	{
-		functionData* fdata=getFunctionByName(functionSearchText);
-		if(fdata!=NULL)
-		{
-			goToDefine(fdata);
-			destroyData(fdata);
-		}
-	}
-}
-
-void jumpToLineFromBar(GtkWidget* widget,gpointer data)
-{
-		theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
-		gotoLine(NULL,(gpointer)(long)theLineNum);
-}
-
 void copyToClipboard(GtkWidget* widget,gpointer data)
 {
 	GtkClipboard*	clipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
