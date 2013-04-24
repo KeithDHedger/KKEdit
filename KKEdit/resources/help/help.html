@@ -87,17 +87,17 @@
       <hr size="2" width="100%"><big><b><br>
         </b><u><b><a name="navanc"></a>Navigation Menu</b></u></big><br>
       <br>
-      <small>The Navigation menu has four sub-menus - </small>Go To
-      Definition,<small> </small>Open Include File, Go To Line <small>and</small>
-      Search For Define.<br>
+      <small>The Navigation menu has five sub-menus - </small>Go To
+      Definition,<small> </small>Open Include File, Go To Line, Search
+      For Define <small>and</small> Search In Gtk-Docs.<br>
       <br>
       <small>To go where a function etc is defined, select it and choose
         'Go To Definition' KKEdit will then look in open files for the
         definition and switch to that page and highlight the appropriate
         line like so:<br>
         <br>
-        <img alt="gotodefine" src="gotodefine.png" height="239"
-          width="417"><br>
+        <img alt="gotodefine" src="gotodefine.png" height="309"
+          width="500"><br>
         <br>
       </small><img alt="define" src="define.png" height="476"
         width="507"><br>
@@ -113,8 +113,8 @@
         <br>
         You can also open an include file just highlight the line and
         select&nbsp; </small>Open Include File<small> like so:<br>
-        <img alt="openinclude" src="openinclude.png" height="290"
-          width="440"><br>
+        <img alt="openinclude" src="openinclude.png" height="386"
+          width="464"><br>
         Include files are looked for in either /usr/include or the
         directory the current document is in, depending whether the file
         name is surrounded by '&lt;&gt;' or ' "" '.<br>
@@ -169,6 +169,7 @@
 
 
 
+
                             - Currently selected text.</big><br>
                         </big></small></small></small></big>
                 KKEDIT_DATADIR - Directory of global folder ( eg
@@ -196,10 +197,12 @@
 
 
 
+
                             - Filepath of the current document, the same
                             as the $KKEDIT_CURRENTFILE environment
                             variable passed to the command.</big><br>
                         </big></small></small></small></big></big></small></small></small></big><big><small><small><small><big><big><small><small><small><big><big><small><small><small><big><big><big>%d
+
 
 
 
@@ -246,13 +249,26 @@
       <hr size="2" width="100%"><br>
       <u><b><a name="featanc"></a>Other Features</b></u><small><big><big><u><b><br>
                 <br>
-              </b></u><small><small>Right clicking on a tab allows
-                copying of the document filename or filepath.<br>
+              </b></u><b><small><a href="#copyfilenameanc">Copy filename
+                  from tab menu.</a><br>
+                <a href="#copyfilenameanc">Copy filepath from tab menu.</a><br>
+                <a href="#copyfunctiondefine">Copy function define.</a><br>
+                <a href="#copyfunctiondefine">Go to function definition.</a><br>
+                <a href="#bookmarkanc">Add bookmark.</a><br>
+                <a href="#instanceanc">Single or multiple instance app.</a><br>
+                <a href="#hexdumpanc">Open as hexdump.</a><br>
+                <a href="#findapi">Find API definition in Gtk Doc's.</a><br>
+                <br>
+                <br>
+              </small></b><small><small><a name="copyfilenameanc"></a>Right
+                clicking on a tab allows copying of the document
+                filename or filepath.<br>
                 <img alt="tabmenu" src="tabmenu.png" height="353"
                   width="518"><br>
                 <br>
-                The document context menu also contains the&nbsp; 'Go To
-                Definition' function for convenience.<br>
+                <a name="copyfunctiondefine"></a>The document context
+                menu also contains the&nbsp; 'Go To Definition' function
+                for convenience.<br>
                 Selecting the definition will copy it to the clipboard.<br>
                 If there is no valid definition selected the menu item
                 will not be shown.<br>
@@ -260,25 +276,56 @@
                   width="806"><br>
                 <br>
                 <br>
-                Any amount of bookmarks can be added, selecting one will
-                switch to that document and line.<br>
+                <a name="bookmarkanc"></a>Any amount of bookmarks can be
+                added, selecting one will switch to that document and
+                line.<br>
                 Bookmarks are only valid for open documents in the
                 running instance, they are not stored with the 'Save
                 Session' option although that may change.<br>
                 <img alt="boomark" src="bookmark.png" height="287"
                   width="762"><br>
                 <br>
-                You can run KKEdit either as a single instance app or as
-                a multiple instance app , set via the prefs menu. Single
-                instances are unique to each workspace.<br>
+                <a name="instanceanc"></a>You can run KKEdit either as a
+                single instance app or as a multiple instance app , set
+                via the prefs menu. Single instances are unique to each
+                workspace.<br>
                 <br>
-                You can open a file as a hexdump like so:<br>
+                <a name="hexdumpanc"></a>You can open a file as a
+                hexdump like so:<br>
                 <img alt="hexdump" src="hexdump.png" height="288"
                   width="669"><br>
                 <br>
+                <a name="findapi"></a>You can look up an API decleration
+                from any installed gtk-doc's installed by selecting all
+                or part of an API name like so:<br>
+                <img alt="selectapi" src="selectapi.png" height="169"
+                  width="560"><br>
+                And then selecting 'Search In Gtk-Docs' form the
+                Navigation menu or from the right click pop-up menu like
+                so:<br>
+                <img alt="apimenu" src="gotodefine.png" height="309"
+                  width="500"><br>
+                And if you have built with the --enable-docviewer option
+                to configure ( the default ) you will get a window
+                pop-up with a list of possible links to the API you
+                want, if there is only one possible link you will go
+                straight to that. ie using the above example:<br>
+                <img alt="list" src="list.png" height="422" width="471"><br>
+                Click the Link:<br>
+                <img alt="selected" src="selectedlist.png" height="526"
+                  width="697"><br>
+                Links can be clicked and followed in the Gtk doc viewer,
+                and functions etc can be copied and pasted into your
+                document.<br>
+                If you had select all of the 'gtk_window_set_title</small></small></big></big></small><small><big><big><small><small>
+                <meta http-equiv="content-type" content="text/html;
+                  charset=ISO-8859-1">
+                ' API name you would have gone staight to the screen
+                shown.<br>
               </small></small><u><b></b></u></big></big></small><small>
       </small>
       <hr size="2" width="100%"><small><big><big><u><b><a name="getanc"></a>Get
+
 
 
 
@@ -310,6 +357,10 @@
         xdg-utils-1.1.0.<br>
         Autotools.<br>
         libunique-1.1.6<br>
+        webkitgtk-1.10.x.<br>
+        webkit is is an optional dependency if you want to build the
+        Gtk-Doc viewer disable by adding --disable-docviewer to
+        ./configure or ./autogen.sh.<br>
         <br>
         If you use a source based distro like LFS or Slackware you
         should have all(most) of these installed, if you use a
