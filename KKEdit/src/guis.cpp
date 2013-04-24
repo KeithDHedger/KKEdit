@@ -19,6 +19,7 @@
 #include "files.h"
 #include "callbacks.h"
 #include "navcallbacks.h"
+#include "functioncallbacks.h"
 
 char*	functionSearchText=NULL;
 
@@ -585,11 +586,11 @@ void buildMainGui(void)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gtkDocSearch),NULL);
 
 //find gtkdoc in webwin
-//	menuitem=gtk_image_menu_item_new_with_label("Search In Gtk-Doc - NEW");
-//	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
-//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doWebKit),NULL);
+	menuitem=gtk_image_menu_item_new_with_label("Search In Gtk-Doc - NEW");
+	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(showDocView),NULL);
 
 
 //function menu
@@ -737,16 +738,6 @@ int showFunctionEntry(void)
 	return(result);
 }
 
-void webKitGoBack(GtkWidget* widget,gpointer data)
-{
-	webkit_web_view_go_back((WebKitWebView*)data);
-}
-
-void webKitGoForward(GtkWidget* widget,gpointer data)
-{
-	webkit_web_view_go_forward((WebKitWebView*)data);
-}
-
 void buildGtkDocViewer(void)
 {
 	GtkWidget*	vbox;
@@ -780,13 +771,10 @@ void buildGtkDocViewer(void)
     gtk_box_pack_start(GTK_BOX(vbox),hbox,false,false,4);
 
     gtk_container_add(GTK_CONTAINER(docView),vbox);
-
-    // Load a web page into the browser instance
-	webkit_web_view_load_uri(webView, "file:///tmp/kkeditsearchfile.html");
 	gtk_widget_grab_focus(GTK_WIDGET(webView));
 
-    // Make sure the main window and all its contents are visible
-//    gtk_widget_show_all(main_window);
+	gtk_signal_connect_object(GTK_OBJECT(docView),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(docView));
+	gtk_signal_connect(GTK_OBJECT(docView),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
 }
 
 

@@ -36,11 +36,20 @@ PKG_CHECK_MODULES(UNIQ, $UNIQ_MODULES)
 AC_SUBST(UNIQ_CFLAGS)
 AC_SUBST(UNIQ_LIBS)
 
-WEBKIT_MODULES="webkit-1.0 >= 1.10.0"
-PKG_CHECK_MODULES(WEBKIT, $WEBKIT_MODULES)
-AC_SUBST(WEBKIT_CFLAGS)
-AC_SUBST(WEBKIT_LIBS)
 
+AC_MSG_CHECKING(build gtk-doc viewer)
+AC_ARG_ENABLE(docviewer,
+    [  --enable-docviewer         Build the Gtk-Doc viewer.],
+    [enable_docviewer=$enableval],
+    [enable_docviewer="yes"])
+AC_MSG_RESULT($enable_docviewer)
+if test "$enable_docviewer" = "yes"; then
+	WEBKIT_MODULES="webkit-1.0 >= 1.10.0"
+	PKG_CHECK_MODULES(WEBKIT, $WEBKIT_MODULES)
+	AC_SUBST(WEBKIT_CFLAGS)
+	AC_SUBST(WEBKIT_LIBS)
+	AC_DEFINE([BUILDDOCVIEWER], [], [Build gtk-doc viewer])
+fi
 
 AC_CHECK_PROG(CTAGS, ctags ,true,false)
 if test $CTAGS = false; then

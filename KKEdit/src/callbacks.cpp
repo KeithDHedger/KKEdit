@@ -9,7 +9,10 @@
 #include <gtk/gtk.h>
 #include <gtksourceview/gtksourceiter.h>
 #include <unique/unique.h>
+
+#ifdef BUILDDOCVIEWER
 #include <webkit/webkit.h>
+#endif
 
 #include "globals.h"
 #include "files.h"
@@ -1085,60 +1088,3 @@ void doAbout(GtkWidget* widget,gpointer data)
 	gtk_show_about_dialog(NULL,"authors",authors,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",MYWEBSITE,"program-name","KKEdit","logo-icon-name","KKEdit",NULL); 
 }
 
-
-#if 0
-
-void doWebKit(GtkWidget* widget,gpointer data)
-{
-    GtkWidget *main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_default_size(GTK_WINDOW(main_window), 800, 600);
-
-	GtkWidget*	vbox;
-	GtkWidget*	hbox;
-	GtkWidget*	button;
-	vbox=gtk_vbox_new(false,0);
-	hbox=gtk_hbox_new(true,0);
-
-    WebKitWebView *webView = WEBKIT_WEB_VIEW(webkit_web_view_new());
-
-    // Create a scrollable area, and put the browser instance into it
-    GtkWidget *scrolledWindow = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledWindow),
-            GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-//    gtk_container_add(GTK_CONTAINER(scrolledWindow), GTK_WIDGET(vbox));
-
-    gtk_container_add(GTK_CONTAINER(scrolledWindow), GTK_WIDGET(webView));
-//gtk_box_pack_start(GTK_BOX(vbox),GTK_WIDGET(webView),false,true,0);
-    // Set up callbacks so that if either the main window or the browser instance is
-    // closed, the program will exit
-/////    g_signal_connect(main_window, "destroy", G_CALLBACK(destroyWindowCb), NULL);
-////    g_signal_connect(webView, "close-web-view", G_CALLBACK(closeWebViewCb), main_window);
-
-    // Put the scrollable area into the main window
-    gtk_container_add(GTK_CONTAINER(vbox), scrolledWindow);
-//     gtk_container_add(GTK_CONTAINER(vbox),hbox);
-   
-    button=gtk_button_new_from_stock(GTK_STOCK_GO_BACK);
-    gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
-    g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoBack),(void*)webView);	
-    
-    button=gtk_button_new_from_stock(GTK_STOCK_GO_FORWARD);
-    gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
-    g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoForward),(void*)webView);	
-
-    gtk_box_pack_start(GTK_BOX(vbox),hbox,false,false,4);
-
-    gtk_container_add(GTK_CONTAINER(main_window),vbox);
-
-    // Load a web page into the browser instance
-    webkit_web_view_load_uri(webView, "file:///tmp/kkeditsearchfile.html");
-
-    // Make sure that when the browser area becomes visible, it will get mouse
-    // and keyboard events
-    gtk_widget_grab_focus(GTK_WIDGET(webView));
-
-    // Make sure the main window and all its contents are visible
-    gtk_widget_show_all(main_window);
-
-}
-#endif

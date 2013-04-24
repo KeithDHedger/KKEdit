@@ -13,7 +13,11 @@
 #include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
+
+#ifdef BUILDDOCVIEWER
 #include <webkit/webkit.h>
+#endif
+
 
 #include "globals.h"
 
@@ -96,8 +100,10 @@ GtkWidget*		findReplaceDialog;
 GtkWidget*		findBox;
 GtkWidget*		replaceBox;
 
+#ifdef BUILDDOCVIEWER
 GtkWidget*		docView;
 WebKitWebView*	webView;
+#endif
 
 pageStruct* getPageStructPtr(int pagenum)
 {

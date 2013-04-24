@@ -11,7 +11,10 @@
 #include <sys/stat.h>
 #include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourceview.h>
+
+#ifdef BUILDDOCVIEWER
 #include <webkit/webkit.h>
+#endif
 
 #ifndef _GLOBALS_
 #define _GLOBALS_
@@ -150,8 +153,10 @@ extern GtkWidget*		findReplaceDialog;
 extern GtkWidget*		findBox;
 extern GtkWidget*		replaceBox;
 
+#ifdef BUILDDOCVIEWER
 extern GtkWidget*		docView;
 extern WebKitWebView*	webView;
+#endif
 
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);

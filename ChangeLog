@@ -72,3 +72,4 @@ Prefs applied immediately  ( again! ).
 0.0.13
 Added crude fucntion lookup ingtk-doc folder - to be improved.
 Added gkt-doc viewer in own window via webkit.
+Added switch to configure for optional gkt-doc viewer.
