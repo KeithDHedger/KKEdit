@@ -20,6 +20,7 @@
 #include "files.h"
 #include "callbacks.h"
 #include "guis.h"
+#include "config.h"
 
 void readConfig(void)
 {
@@ -180,7 +181,9 @@ int main(int argc,char **argv)
 
 			gtk_widget_show_all(window);
 			buildFindReplace();
+#ifdef BUILDDOCVIEWER
 			buildGtkDocViewer();
+#endif
 
 			unique_app_watch_window(app,(GtkWindow*)window);
 			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);

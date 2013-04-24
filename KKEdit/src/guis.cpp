@@ -13,8 +13,12 @@
 #include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
-#include <webkit/webkit.h>
 
+#ifdef BUILDDOCVIEWER
+#include <webkit/webkit.h>
+#endif
+
+#include "config.h"
 #include "globals.h"
 #include "files.h"
 #include "callbacks.h"
@@ -578,20 +582,35 @@ void buildMainGui(void)
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(functionSearch),NULL);
+
 //find gtkdoc
-	menuitem=gtk_image_menu_item_new_with_label("Search In Gtk-Doc");
+	menuitem=gtk_image_menu_item_new_with_label("Search In Gtk-Docs");
 	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+#ifdef BUILDDOCVIEWER
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(showDocView),NULL);
+#else
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gtkDocSearch),NULL);
+#endif
 
+#if 0
+#ifdef BUILDDOCVIEWER
 //find gtkdoc in webwin
 	menuitem=gtk_image_menu_item_new_with_label("Search In Gtk-Doc - NEW");
 	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(showDocView),NULL);
-
+#else
+//find gtkdoc
+	menuitem=gtk_image_menu_item_new_with_label("Search In Gtk-Doc");
+	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gtkDocSearch),NULL);
+#endif
+#endif
 
 //function menu
 	menufunc=gtk_menu_item_new_with_label("Functions");
@@ -738,6 +757,7 @@ int showFunctionEntry(void)
 	return(result);
 }
 
+#ifdef BUILDDOCVIEWER
 void buildGtkDocViewer(void)
 {
 	GtkWidget*	vbox;
@@ -776,7 +796,7 @@ void buildGtkDocViewer(void)
 	gtk_signal_connect_object(GTK_OBJECT(docView),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(docView));
 	gtk_signal_connect(GTK_OBJECT(docView),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
 }
-
+#endif
 
 
 

@@ -10,6 +10,7 @@
 #include <gtksourceview/gtksourceiter.h>
 #include <unique/unique.h>
 
+#include "config.h"
 #ifdef BUILDDOCVIEWER
 #include <webkit/webkit.h>
 #endif
@@ -1085,6 +1086,6 @@ void doAbout(GtkWidget* widget,gpointer data)
 	const char	copyright[] ="Copyright \xc2\xa9 2013 K.D.Hedger";
 	const char*	aboutboxstring="KKEdit Code Text Editor";
 
-	gtk_show_about_dialog(NULL,"authors",authors,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",MYWEBSITE,"program-name","KKEdit","logo-icon-name","KKEdit",NULL); 
+	gtk_show_about_dialog(NULL,"authors",authors,"comments",aboutboxstring,"copyright",copyright,"version",KKEDIT_VERSION,"website",MYWEBSITE,"program-name","KKEdit","logo-icon-name","KKEdit",NULL); 
 }
 

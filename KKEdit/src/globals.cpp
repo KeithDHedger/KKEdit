@@ -14,12 +14,13 @@
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
 
+#include "config.h"
 #ifdef BUILDDOCVIEWER
 #include <webkit/webkit.h>
 #endif
 
-
 #include "globals.h"
+
 
 GtkWidget*		window=NULL;
 GtkNotebook*	notebook=NULL;

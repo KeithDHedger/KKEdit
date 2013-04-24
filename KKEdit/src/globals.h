@@ -12,9 +12,11 @@
 #include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourceview.h>
 
+#include "config.h"
 #ifdef BUILDDOCVIEWER
 #include <webkit/webkit.h>
 #endif
+
 
 #ifndef _GLOBALS_
 #define _GLOBALS_
@@ -25,7 +27,7 @@
 
 #define MYEMAIL "kdhedger68713@gmail.com"
 #define MYWEBSITE "http://keithhedger.hostingsiteforfree.com"
-#define VERSION "0.0.12"
+#define KKEDIT_VERSION "0.0.12"
 
 #define TOOL_ASYNC 8
 #define TOOL_IGNORE_OP 0

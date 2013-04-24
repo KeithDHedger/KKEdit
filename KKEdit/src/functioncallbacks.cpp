@@ -10,10 +10,16 @@
 #include <gtksourceview/gtksourceiter.h>
 #include <unique/unique.h>
 
+#include "config.h"
+#ifdef BUILDDOCVIEWER
+#include <webkit/webkit.h>
+#endif
+
 #include "globals.h"
 #include "files.h"
 #include "guis.h"
 
+#ifdef BUILDDOCVIEWER
 void webKitGoBack(GtkWidget* widget,gpointer data)
 {
 	webkit_web_view_go_back((WebKitWebView*)data);
@@ -23,6 +29,7 @@ void webKitGoForward(GtkWidget* widget,gpointer data)
 {
 	webkit_web_view_go_forward((WebKitWebView*)data);
 }
+#endif
 
 char* thePage=NULL;
 
@@ -88,12 +95,11 @@ void docSearch(GtkWidget* widget,gpointer data)
 													fgets(line,1024,fp);
 													if(strlen((char*)line)>1)
 														{
-															ptr=(char*)(long)ptr++;
+															ptr=(char*)(long)ptr+1;
 															fprintf(fd,"<a href=\"/usr/share/gtk-doc/html/%s\">%s</a><br>\n",searchdata[loop],ptr);
 														}
 													pclose(fp);
 													g_free(command);
-																									
 												}
 										}
 									fprintf(fd,"</body>\n");
@@ -121,9 +127,11 @@ void docSearch(GtkWidget* widget,gpointer data)
 		g_free(selectionorig);
 }
 
+#ifdef BUILDDOCVIEWER
 void showDocView(GtkWidget* widget,gpointer data)
 {
 	docSearch(NULL,NULL);
+
 
 	if(thePage!=NULL)
 		{
@@ -133,7 +141,8 @@ void showDocView(GtkWidget* widget,gpointer data)
 		}
 
 	gtk_widget_show_all(docView);
-	
+	gtk_window_present((GtkWindow*)docView);
 }
+#endif
 
 
