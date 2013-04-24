@@ -268,12 +268,6 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 		}
 }
 
-void find(GtkWidget* widget,gpointer data)
-{
-	gtk_widget_show(findReplaceDialog);
-	gtk_dialog_run((GtkDialog *)findReplaceDialog);
-}
-
 void externalTool(GtkWidget* widget,gpointer data)
 {
 	toolStruct*	tool=(toolStruct*)data;

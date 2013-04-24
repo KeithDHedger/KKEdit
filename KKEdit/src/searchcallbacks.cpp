@@ -275,3 +275,10 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	g_free(searchtext);
 	g_free(replacetext);
 }
+
+void find(GtkWidget* widget,gpointer data)
+{
+	gtk_widget_show(findReplaceDialog);
+	gtk_dialog_run((GtkDialog *)findReplaceDialog);
+}
+
