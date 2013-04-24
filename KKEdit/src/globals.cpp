@@ -13,6 +13,7 @@
 #include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
+#include <webkit/webkit.h>
 
 #include "globals.h"
 
@@ -94,6 +95,9 @@ GtkToolItem*	undoButton;
 GtkWidget*		findReplaceDialog;
 GtkWidget*		findBox;
 GtkWidget*		replaceBox;
+
+GtkWidget*		docView;
+WebKitWebView*	webView;
 
 pageStruct* getPageStructPtr(int pagenum)
 {

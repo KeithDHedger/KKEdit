@@ -916,7 +916,7 @@ void writeConfig(void)
 	g_free(filename);
 }
 
-void shutdown(GtkWidget* widget,gpointer data)
+void doShutdown(GtkWidget* widget,gpointer data)
 {
 	int			numpages=gtk_notebook_get_n_pages(notebook);
 	int			result;
@@ -1086,27 +1086,19 @@ void doAbout(GtkWidget* widget,gpointer data)
 }
 
 
-void webKitGoBack(GtkWidget* widget,gpointer data)
-{
-	webkit_web_view_go_back((WebKitWebView*)data);
-}
-
-void webKitGoForward(GtkWidget* widget,gpointer data)
-{
-	webkit_web_view_go_forward((WebKitWebView*)data);
-}
+#if 0
 
 void doWebKit(GtkWidget* widget,gpointer data)
 {
     GtkWidget *main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_default_size(GTK_WINDOW(main_window), 800, 600);
+
 	GtkWidget*	vbox;
 	GtkWidget*	hbox;
 	GtkWidget*	button;
-
 	vbox=gtk_vbox_new(false,0);
 	hbox=gtk_hbox_new(true,0);
-    // Create a browser instance
+
     WebKitWebView *webView = WEBKIT_WEB_VIEW(webkit_web_view_new());
 
     // Create a scrollable area, and put the browser instance into it
@@ -1147,4 +1139,6 @@ void doWebKit(GtkWidget* widget,gpointer data)
 
     // Make sure the main window and all its contents are visible
     gtk_widget_show_all(main_window);
+
 }
+#endif

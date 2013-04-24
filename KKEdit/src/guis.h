@@ -23,5 +23,6 @@ void buildMainGui(void);
 void buildTools(void);
 void buildFindReplace(void);
 int showFunctionEntry(void);
+void buildGtkDocViewer(void);
 
 #endif

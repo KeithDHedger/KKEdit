@@ -13,6 +13,7 @@
 #include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
+#include <webkit/webkit.h>
 
 #include "globals.h"
 #include "files.h"
@@ -307,7 +308,7 @@ void buildMainGui(void)
 	if(windowX!=-1 && windowY!=-1)
 		gtk_window_move((GtkWindow *)window,windowX,windowY);
 
-	g_signal_connect(G_OBJECT(window),"delete-event",G_CALLBACK(shutdown),NULL);
+	g_signal_connect(G_OBJECT(window),"delete-event",G_CALLBACK(doShutdown),NULL);
 	accgroup=gtk_accel_group_new();
 	gtk_window_add_accel_group((GtkWindow*)window,accgroup);
 
@@ -489,7 +490,7 @@ void buildMainGui(void)
 
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_QUIT,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(shutdown),NULL);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doShutdown),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'Q',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 //edit menu
@@ -584,11 +585,11 @@ void buildMainGui(void)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gtkDocSearch),NULL);
 
 //find gtkdoc in webwin
-	menuitem=gtk_image_menu_item_new_with_label("Search In Gtk-Doc - NEW");
-	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doWebKit),NULL);
+//	menuitem=gtk_image_menu_item_new_with_label("Search In Gtk-Doc - NEW");
+//	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doWebKit),NULL);
 
 
 //function menu
@@ -735,4 +736,60 @@ int showFunctionEntry(void)
 
 	return(result);
 }
+
+void webKitGoBack(GtkWidget* widget,gpointer data)
+{
+	webkit_web_view_go_back((WebKitWebView*)data);
+}
+
+void webKitGoForward(GtkWidget* widget,gpointer data)
+{
+	webkit_web_view_go_forward((WebKitWebView*)data);
+}
+
+void buildGtkDocViewer(void)
+{
+	GtkWidget*	vbox;
+	GtkWidget*	hbox;
+	GtkWidget*	button;
+	GtkWidget*	scrolledWindow;
+	
+	
+	docView=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_default_size(GTK_WINDOW(docView),800,600);
+
+	vbox=gtk_vbox_new(false,0);
+	hbox=gtk_hbox_new(true,0);
+
+    webView=WEBKIT_WEB_VIEW(webkit_web_view_new());
+
+	scrolledWindow=gtk_scrolled_window_new(NULL,NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+    gtk_container_add(GTK_CONTAINER(scrolledWindow),GTK_WIDGET(webView));
+
+    gtk_container_add(GTK_CONTAINER(vbox),scrolledWindow);
+   
+    button=gtk_button_new_from_stock(GTK_STOCK_GO_BACK);
+    gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
+    g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoBack),(void*)webView);	
+    
+    button=gtk_button_new_from_stock(GTK_STOCK_GO_FORWARD);
+    gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
+    g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoForward),(void*)webView);	
+
+    gtk_box_pack_start(GTK_BOX(vbox),hbox,false,false,4);
+
+    gtk_container_add(GTK_CONTAINER(docView),vbox);
+
+    // Load a web page into the browser instance
+	webkit_web_view_load_uri(webView, "file:///tmp/kkeditsearchfile.html");
+	gtk_widget_grab_focus(GTK_WIDGET(webView));
+
+    // Make sure the main window and all its contents are visible
+//    gtk_widget_show_all(main_window);
+}
+
+
+
+
 

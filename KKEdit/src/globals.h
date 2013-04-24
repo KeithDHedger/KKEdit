@@ -11,6 +11,7 @@
 #include <sys/stat.h>
 #include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourceview.h>
+#include <webkit/webkit.h>
 
 #ifndef _GLOBALS_
 #define _GLOBALS_
@@ -148,6 +149,9 @@ extern GtkToolItem*		undoButton;
 extern GtkWidget*		findReplaceDialog;
 extern GtkWidget*		findBox;
 extern GtkWidget*		replaceBox;
+
+extern GtkWidget*		docView;
+extern WebKitWebView*	webView;
 
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);

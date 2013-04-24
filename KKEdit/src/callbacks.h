@@ -43,12 +43,12 @@ void tabPopUp(GtkWidget *my_widget, GdkEventButton *event,gpointer user_data);
 void functionSearch(GtkWidget* widget,gpointer data);
 void openAsHexDump(GtkWidget *widget,gpointer user_data);
 UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessageData *message,guint time,gpointer user_data);
-void shutdown(GtkWidget* widget,gpointer data);
+void doShutdown(GtkWidget* widget,gpointer data);
 void setPrefs(GtkWidget* widget,gpointer data);
 void setToolOptions(GtkWidget* widget,gpointer data);
 void doAbout(GtkWidget* widget,gpointer data);
 void writeExitData(void);
 
-void doWebKit(GtkWidget* widget,gpointer data);
+//void doWebKit(GtkWidget* widget,gpointer data);
 
 #endif

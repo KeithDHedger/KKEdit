@@ -180,6 +180,7 @@ int main(int argc,char **argv)
 
 			gtk_widget_show_all(window);
 			buildFindReplace();
+			buildGtkDocViewer();
 
 			unique_app_watch_window(app,(GtkWindow*)window);
 			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
