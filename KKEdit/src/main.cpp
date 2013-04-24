@@ -31,7 +31,7 @@ void readConfig(void)
 	int		intarg;
 	char	strarg[256];
 
-	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
+	asprintf(&filename,"%s/.KKEdit/kkeditdebug.rc",getenv("HOME"));
 	fd=fopen(filename,"r");
 	if(fd!=NULL)
 		{
@@ -143,7 +143,7 @@ int main(int argc,char **argv)
 	gtk_init(&argc,&argv);
 
 	back=unique_backend_create();
-	asprintf(&dbusname,"org.keithhedgerdebug%i.KKEdit",unique_backend_get_workspace(back));
+	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace(back));
 	app=unique_app_new(dbusname,NULL);
 	message=unique_message_data_new();
 

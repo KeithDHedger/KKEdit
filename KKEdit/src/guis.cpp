@@ -149,53 +149,53 @@ void buildTools(void)
 
 	for(int loop=0;loop<2;loop++)
 		{
-	folder=g_dir_open(datafolder[loop],0,NULL);
-	if(folder!=NULL)
-		{
-			entry=g_dir_read_name(folder);
-			while(entry!=NULL)
+			folder=g_dir_open(datafolder[loop],0,NULL);
+			if(folder!=NULL)
 				{
-					asprintf(&filepath,"%s%s",datafolder[loop],entry);
-					fd=fopen(filepath,"r");
-					if(fd!=NULL)
-						{
-							intermarg=0;
-							flagsarg=0;
-
-							while(fgets(buffer,4096,fd))
-								{
-									buffer[strlen(buffer)-1]=0;
-									sscanf((char*)&buffer,"%s",(char*)&strarg);
-									if(strcmp(strarg,"name")==0)
-										asprintf(&menuname,"%.*s",(int)strlen(buffer)-5,(char*)&buffer[5]);
-									if(strcmp(strarg,"command")==0)
-										asprintf(&commandarg,"%.*s",(int)strlen(buffer)-8,(char*)&buffer[8]);
-									if(strcmp(strarg,"interm")==0)
-										sscanf((char*)&buffer,"%*s %i",&intermarg);
-									if(strcmp(strarg,"flags")==0)
-										sscanf((char*)&buffer,"%*s %i",&flagsarg);
-								}
-
-							if((menuname!=NULL) &&(strlen(menuname)>0))
-								{
-									tool=(toolStruct*)malloc(sizeof(toolStruct));
-									asprintf(&tool->menuName,"%s",menuname);
-									asprintf(&tool->command,"%s",commandarg);
-									tool->flags=flagsarg;
-									tool->inTerminal=(bool)intermarg;
-									asprintf(&tool->filePath,"%s",filepath);
-									menuitem=gtk_image_menu_item_new_with_label(tool->menuName);
-									gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-									gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)tool);
-									g_free(menuname);
-									g_free(commandarg);
-									menuname=NULL;
-								}
-							fclose(fd);
-						}
 					entry=g_dir_read_name(folder);
+					while(entry!=NULL)
+						{
+							asprintf(&filepath,"%s%s",datafolder[loop],entry);
+							fd=fopen(filepath,"r");
+							if(fd!=NULL)
+								{
+									intermarg=0;
+									flagsarg=0;
+
+									while(fgets(buffer,4096,fd))
+										{
+											buffer[strlen(buffer)-1]=0;
+											sscanf((char*)&buffer,"%s",(char*)&strarg);
+											if(strcmp(strarg,"name")==0)
+												asprintf(&menuname,"%.*s",(int)strlen(buffer)-5,(char*)&buffer[5]);
+											if(strcmp(strarg,"command")==0)
+												asprintf(&commandarg,"%.*s",(int)strlen(buffer)-8,(char*)&buffer[8]);
+											if(strcmp(strarg,"interm")==0)
+												sscanf((char*)&buffer,"%*s %i",&intermarg);
+											if(strcmp(strarg,"flags")==0)
+												sscanf((char*)&buffer,"%*s %i",&flagsarg);
+										}
+
+									if((menuname!=NULL) &&(strlen(menuname)>0))
+										{
+											tool=(toolStruct*)malloc(sizeof(toolStruct));
+											asprintf(&tool->menuName,"%s",menuname);
+											asprintf(&tool->command,"%s",commandarg);
+											tool->flags=flagsarg;
+											tool->inTerminal=(bool)intermarg;
+											asprintf(&tool->filePath,"%s",filepath);
+											menuitem=gtk_image_menu_item_new_with_label(tool->menuName);
+											gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+											gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)tool);
+											g_free(menuname);
+											g_free(commandarg);
+											menuname=NULL;
+										}
+									fclose(fd);
+								}
+							entry=g_dir_read_name(folder);
+						}
 				}
-		}
 		}
 }
 
