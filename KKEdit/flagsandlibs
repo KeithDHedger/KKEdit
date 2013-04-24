@@ -3,6 +3,7 @@ INCLUDES =	-I$(top_srcdir) \
 			$(GTK_CFLAGS) \
 			$(GTKSRC_CFLAGS) \
 			$(UNIQ_CFLAGS) \
+			$(WEBKIT_CFLAGS) \
 			-DPREFIX=\""${prefix}\"" \
 			-DDATADIR=\""${pkgdatadir}"\" \
 			-DSYSCONFDIR=\""${sysconfdir}/${PACKAGE}"\" \
@@ -10,5 +11,6 @@ INCLUDES =	-I$(top_srcdir) \
 
 LIBS =	$(GTK_LIBS) \
 	$(GTKSRC_LIBS) \
-	$(UNIQ_LIBS)
+	$(UNIQ_LIBS) \
+	$(WEBKIT_LIBS)
 

@@ -49,4 +49,6 @@ void setToolOptions(GtkWidget* widget,gpointer data);
 void doAbout(GtkWidget* widget,gpointer data);
 void writeExitData(void);
 
+void doWebKit(GtkWidget* widget,gpointer data);
+
 #endif
