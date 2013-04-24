@@ -20,5 +20,6 @@ void webKitGoBack(GtkWidget* widget,gpointer data);
 void webKitGoForward(GtkWidget* widget,gpointer data);
 #endif
 void showDocView(GtkWidget* widget,gpointer data);
+void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data);
 
 #endif

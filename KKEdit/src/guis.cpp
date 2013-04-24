@@ -23,7 +23,7 @@
 #include "files.h"
 #include "callbacks.h"
 #include "navcallbacks.h"
-#include "functioncallbacks.h"
+#include "searchcallbacks.h"
 
 char*	functionSearchText=NULL;
 
