@@ -24,7 +24,6 @@
 GtkWidget*	tabMenu;
 char		defineText[1024];
 
-
 void doOpenFile(GtkWidget* widget,gpointer data)
 {
 	GtkWidget*	dialog;
@@ -245,29 +244,6 @@ void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectio
 	g_strfreev(array);
 }
 
-void doSearchPrefs(GtkWidget* widget,gpointer data)
-{
-	GtkWidget*	button;
-
-	switch ((long)data)
-		{
-			case 1:
-				insensitiveSearch=gtk_toggle_button_get_active((GtkToggleButton*)widget);
-				break;
-			case 2:
-				wrapSearch=gtk_toggle_button_get_active((GtkToggleButton*)widget);
-				break;
-			case 3:
-				replaceAll=gtk_toggle_button_get_active((GtkToggleButton*)widget);
-				button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,100);
-				if(replaceAll==false)
-					gtk_button_set_label((GtkButton*)button,"Replace");
-				else
-					gtk_button_set_label((GtkButton*)button,"Replace All");
-				break;
-		}
-}
-
 void externalTool(GtkWidget* widget,gpointer data)
 {
 	toolStruct*	tool=(toolStruct*)data;
@@ -351,68 +327,6 @@ void externalTool(GtkWidget* widget,gpointer data)
 	unsetenv("KKEDIT_SELECTION");
 	g_free(text);
 	g_free(dirname);
-}
-
-int marknum=0;
-void jumpToMark(GtkWidget* widget,gpointer data)
-{
-	GtkTextMark*	mark;
-	pageStruct*		page;
-	GtkTextIter		iter;
-	int				thistab=currentTabNumber;
-
-	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
-		{
-			page=getPageStructPtr(loop);
-			mark=gtk_text_buffer_get_mark((GtkTextBuffer*)page->buffer,(char*)data);
-			if(mark!=NULL)
-				{
-					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
-					gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
-					gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-					if(thistab!=loop)
-						gtk_notebook_set_current_page(notebook,loop);
-				}
-		}
-}
-
-void addBookmark(GtkWidget* widget,gpointer data)
-{
-	pageStruct*		page=getPageStructPtr(-1);
-	GtkWidget*		menuitem;
-	GtkTextMark*	mark;
-	GtkTextIter		iter;
-	char*			name;
-	int				line;
-	GtkTextIter		startprev,endprev;
-	char*			previewtext;
-
-	mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
-	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
-
-	line=gtk_text_iter_get_line(&iter);
-
-	gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&startprev,line);
-	gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&endprev,line+1);
-	previewtext=gtk_text_iter_get_text(&startprev,&endprev);
-
-	previewtext[strlen(previewtext)-1]=0;
-	asprintf(&name,"BookMark%i",marknum);
-
-	gtk_text_buffer_create_mark((GtkTextBuffer*)page->buffer,name,&iter,true);
-	g_strchug(previewtext);
-	g_strchomp(previewtext);
-
-	menuitem=gtk_image_menu_item_new_with_label(previewtext);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)name);
-	marknum++;
-	gtk_widget_show_all(menubookmark);
-}
-
-void removeBookmark(GtkWidget* widget,gpointer data)
-{
-	printf("removeBookmark\n");
 }
 
 void openHelp(GtkWidget* widget,gpointer data)
@@ -781,13 +695,12 @@ void writeConfig(void)
 			fprintf(fd,"depth	%i\n",depth);
 			fprintf(fd,"font	%s\n",fontAndSize);
 			fprintf(fd,"terminalcommand	%s\n",terminalCommand);
-//			fprintf(fd,"windowsize	%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
 			fclose(fd);
 		}
 	g_free(filename);
 }
 
-void doShutdown(GtkWidget* widget,gpointer data)
+bool doSaveAll(GtkWidget* widget,gpointer data)
 {
 	int			numpages=gtk_notebook_get_n_pages(notebook);
 	int			result;
@@ -798,23 +711,40 @@ void doShutdown(GtkWidget* widget,gpointer data)
 			page=getPageStructPtr(loop);
 			if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)))
 				{
-					result=show_question(g_path_get_basename(page->fileName));
-					switch(result)
+					if((bool)data==true)
 						{
-							case GTK_RESPONSE_YES:
-								gtk_notebook_set_current_page(notebook,loop);
-								saveFile(NULL,NULL);
-								break;
-							case GTK_RESPONSE_NO:
-								break;
-							default:
-								return;
-								break;
+							result=show_question(g_path_get_basename(page->fileName));
+							switch(result)
+								{
+									case GTK_RESPONSE_YES:
+										gtk_notebook_set_current_page(notebook,loop);
+										saveFile(NULL,NULL);
+										
+										break;
+									case GTK_RESPONSE_NO:
+										break;
+									default:
+										return(false);;
+										break;
+								}
+						}
+					else
+						{
+							gtk_notebook_set_current_page(notebook,loop);
+							saveFile(NULL,NULL);
 						}
 				}
 		}
-	writeExitData();
-	gtk_main_quit();
+	return(true);
+}
+
+void doShutdown(GtkWidget* widget,gpointer data)
+{
+	if(doSaveAll(widget,(void*)true)==true)
+		{
+			writeExitData();
+			gtk_main_quit();
+		}
 }
 
 void setPrefs(GtkWidget* widget,gpointer data)

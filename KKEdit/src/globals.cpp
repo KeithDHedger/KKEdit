@@ -101,6 +101,8 @@ GtkWidget*		findReplaceDialog;
 GtkWidget*		findBox;
 GtkWidget*		replaceBox;
 
+char*			functionSearchText=NULL;
+
 #ifdef BUILDDOCVIEWER
 GtkWidget*		docView;
 WebKitWebView*	webView;

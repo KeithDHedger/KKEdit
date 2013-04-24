@@ -19,6 +19,8 @@
 #include "files.h"
 #include "guis.h"
 
+char* thePage=NULL;
+
 #ifdef BUILDDOCVIEWER
 void webKitGoBack(GtkWidget* widget,gpointer data)
 {
@@ -31,7 +33,7 @@ void webKitGoForward(GtkWidget* widget,gpointer data)
 }
 #endif
 
-char* thePage=NULL;
+
 
 void docSearch(GtkWidget* widget,gpointer data)
 {
@@ -280,5 +282,28 @@ void find(GtkWidget* widget,gpointer data)
 {
 	gtk_widget_show(findReplaceDialog);
 	gtk_dialog_run((GtkDialog *)findReplaceDialog);
+}
+
+void doSearchPrefs(GtkWidget* widget,gpointer data)
+{
+	GtkWidget*	button;
+
+	switch ((long)data)
+		{
+			case 1:
+				insensitiveSearch=gtk_toggle_button_get_active((GtkToggleButton*)widget);
+				break;
+			case 2:
+				wrapSearch=gtk_toggle_button_get_active((GtkToggleButton*)widget);
+				break;
+			case 3:
+				replaceAll=gtk_toggle_button_get_active((GtkToggleButton*)widget);
+				button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,100);
+				if(replaceAll==false)
+					gtk_button_set_label((GtkButton*)button,"Replace");
+				else
+					gtk_button_set_label((GtkButton*)button,"Replace All");
+				break;
+		}
 }
 

@@ -27,7 +27,7 @@
 
 #define MYEMAIL "kdhedger68713@gmail.com"
 #define MYWEBSITE "http://keithhedger.hostingsiteforfree.com"
-#define KKEDIT_VERSION "0.0.12"
+#define KKEDIT_VERSION "0.0.13"
 
 #define TOOL_ASYNC 8
 #define TOOL_IGNORE_OP 0
@@ -154,6 +154,8 @@ extern GtkToolItem*		undoButton;
 extern GtkWidget*		findReplaceDialog;
 extern GtkWidget*		findBox;
 extern GtkWidget*		replaceBox;
+
+extern char*			functionSearchText;
 
 #ifdef BUILDDOCVIEWER
 extern GtkWidget*		docView;

@@ -22,5 +22,7 @@ void findFile(GtkWidget* widget,gpointer data);
 void jumpToLine(GtkWidget* widget,gpointer data);
 void gotoLine(GtkWidget* widget,gpointer data);
 void jumpToLineFromBar(GtkWidget* widget,gpointer data);
+void functionSearch(GtkWidget* widget,gpointer data);
+void addBookmark(GtkWidget* widget,gpointer data);
 
 #endif

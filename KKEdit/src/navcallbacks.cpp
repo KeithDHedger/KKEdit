@@ -15,6 +15,7 @@
 #include "guis.h"
 
 int	theLineNum=0;
+int marknum=0;
 
 void gtkDocSearch(GtkWidget* widget,gpointer data)
 {
@@ -78,7 +79,7 @@ void gtkDocSearch(GtkWidget* widget,gpointer data)
 													fgets(line,1024,fp);
 													if(strlen((char*)line)>1)
 														{
-															ptr=(char*)(long)ptr++;
+															ptr=(char*)(long)ptr+1;
 															fprintf(fd,"<a href=\"/usr/share/gtk-doc/html/%s\">%s</a><br>\n",searchdata[loop],ptr);
 														}
 													pclose(fp);
@@ -281,3 +282,63 @@ void functionSearch(GtkWidget* widget,gpointer data)
 	}
 }
 
+void jumpToMark(GtkWidget* widget,gpointer data)
+{
+	GtkTextMark*	mark;
+	pageStruct*		page;
+	GtkTextIter		iter;
+	int				thistab=currentTabNumber;
+
+	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
+		{
+			page=getPageStructPtr(loop);
+			mark=gtk_text_buffer_get_mark((GtkTextBuffer*)page->buffer,(char*)data);
+			if(mark!=NULL)
+				{
+					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+					gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
+					gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+					if(thistab!=loop)
+						gtk_notebook_set_current_page(notebook,loop);
+				}
+		}
+}
+
+void addBookmark(GtkWidget* widget,gpointer data)
+{
+	pageStruct*		page=getPageStructPtr(-1);
+	GtkWidget*		menuitem;
+	GtkTextMark*	mark;
+	GtkTextIter		iter;
+	char*			name;
+	int				line;
+	GtkTextIter		startprev,endprev;
+	char*			previewtext;
+
+	mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+
+	line=gtk_text_iter_get_line(&iter);
+
+	gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&startprev,line);
+	gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&endprev,line+1);
+	previewtext=gtk_text_iter_get_text(&startprev,&endprev);
+
+	previewtext[strlen(previewtext)-1]=0;
+	asprintf(&name,"BookMark%i",marknum);
+
+	gtk_text_buffer_create_mark((GtkTextBuffer*)page->buffer,name,&iter,true);
+	g_strchug(previewtext);
+	g_strchomp(previewtext);
+
+	menuitem=gtk_image_menu_item_new_with_label(previewtext);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)name);
+	marknum++;
+	gtk_widget_show_all(menubookmark);
+}
+
+void removeBookmark(GtkWidget* widget,gpointer data)
+{
+	printf("removeBookmark\n");
+}

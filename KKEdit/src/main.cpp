@@ -4,7 +4,6 @@
  *
 */
 
-
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <string.h>
@@ -31,7 +30,7 @@ void readConfig(void)
 	int		intarg;
 	char	strarg[256];
 
-	asprintf(&filename,"%s/.KKEdit/kkeditdebug.rc",getenv("HOME"));
+	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	fd=fopen(filename,"r");
 	if(fd!=NULL)
 		{
