@@ -594,24 +594,6 @@ void buildMainGui(void)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gtkDocSearch),NULL);
 #endif
 
-#if 0
-#ifdef BUILDDOCVIEWER
-//find gtkdoc in webwin
-	menuitem=gtk_image_menu_item_new_with_label("Search In Gtk-Doc - NEW");
-	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(showDocView),NULL);
-#else
-//find gtkdoc
-	menuitem=gtk_image_menu_item_new_with_label("Search In Gtk-Doc");
-	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gtkDocSearch),NULL);
-#endif
-#endif
-
 //function menu
 	menufunc=gtk_menu_item_new_with_label("Functions");
 
@@ -768,6 +750,7 @@ void buildGtkDocViewer(void)
 	
 	docView=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(docView),800,600);
+	gtk_window_set_title((GtkWindow*)docView,"Search Gtk Docs");
 
 	vbox=gtk_vbox_new(false,0);
 	hbox=gtk_hbox_new(true,0);
