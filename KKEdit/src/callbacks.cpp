@@ -19,7 +19,7 @@
 #include "files.h"
 #include "guis.h"
 #include "navcallbacks.h"
-#include "functioncallbacks.h"
+#include "searchcallback.h"
 
 GtkWidget*	tabMenu;
 char		defineText[1024];
