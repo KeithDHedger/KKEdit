@@ -6,5 +6,5 @@ autoheader
 touch NEWS README AUTHORS ChangeLog
 automake --add-missing --copy
 autoconf
-./configure "$1"
+./configure $@
 

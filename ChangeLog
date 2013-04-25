@@ -76,3 +76,5 @@ Added gkt-doc viewer in own window via webkit.
 Added switch to configure for optional gkt-doc viewer.
 Added 'Save All'
 Added 'Help' now shown local if doc viewer has been built.
+Redone demo installed external tools.
+Fixed autogen.sh only passing first option on command line.
