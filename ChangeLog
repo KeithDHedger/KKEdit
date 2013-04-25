@@ -78,3 +78,6 @@ Added 'Save All'
 Added 'Help' now shown local if doc viewer has been built.
 Redone demo installed external tools.
 Fixed autogen.sh only passing first option on command line.
+
+0.0.14
+Removed redundant close button from toolbar.

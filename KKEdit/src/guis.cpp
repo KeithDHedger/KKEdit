@@ -350,11 +350,6 @@ void buildMainGui(void)
 	gtk_toolbar_insert((GtkToolbar*)toolbar,saveButton,-1);
 	gtk_signal_connect(GTK_OBJECT(saveButton),"clicked",G_CALLBACK(saveFile),NULL);
 	gtk_widget_set_tooltip_text((GtkWidget*)saveButton,"Save File");
-//close
-	closeButton=gtk_tool_button_new_from_stock(GTK_STOCK_CLOSE);
-	gtk_toolbar_insert((GtkToolbar*)toolbar,closeButton,-1);
-	gtk_signal_connect(GTK_OBJECT(closeButton),"clicked",G_CALLBACK(closeTab),NULL);
-	gtk_widget_set_tooltip_text((GtkWidget*)closeButton,"Close Tab");
 
 	gtk_toolbar_insert((GtkToolbar*)toolbar,gtk_separator_tool_item_new(),-1);
 
