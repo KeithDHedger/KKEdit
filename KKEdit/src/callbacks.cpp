@@ -750,6 +750,7 @@ void doShutdown(GtkWidget* widget,gpointer data)
 			writeExitData();
 			gtk_main_quit();
 		}
+	system("rm /tmp/kkeditsearchfile.html");
 }
 
 void setPrefs(GtkWidget* widget,gpointer data)
