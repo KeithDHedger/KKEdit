@@ -9,6 +9,7 @@
 #include <gtk/gtk.h>
 #include <gtksourceview/gtksourceiter.h>
 #include <unique/unique.h>
+#include <gtksourceview/gtksourceprintcompositor.h>
 
 #include "config.h"
 #ifdef BUILDDOCVIEWER
@@ -21,8 +22,9 @@
 #include "navcallbacks.h"
 #include "searchcallbacks.h"
 
-GtkWidget*	tabMenu;
-char		defineText[1024];
+GtkWidget*			tabMenu;
+char				defineText[1024];
+GtkPrintSettings*	settings=NULL;
 
 void doOpenFile(GtkWidget* widget,gpointer data)
 {
@@ -331,8 +333,6 @@ void externalTool(GtkWidget* widget,gpointer data)
 
 void openHelp(GtkWidget* widget,gpointer data)
 {
-	char*	runhelp;
-
 #ifdef BUILDDOCVIEWER
 	asprintf(&thePage,"file://%s/help/help.html",DATADIR);
 	showDocView(NULL,(void*)1);
@@ -750,7 +750,7 @@ void doShutdown(GtkWidget* widget,gpointer data)
 			writeExitData();
 			gtk_main_quit();
 		}
-	system("rm /tmp/kkeditsearchfile.html");
+	system("rm /tmp/kkeditsearchfile.html &>/dev/null");
 }
 
 void setPrefs(GtkWidget* widget,gpointer data)
@@ -892,3 +892,46 @@ void doAbout(GtkWidget* widget,gpointer data)
 	gtk_show_about_dialog(NULL,"authors",authors,"comments",aboutboxstring,"copyright",copyright,"version",KKEDIT_VERSION,"website",MYWEBSITE,"program-name","KKEdit","logo-icon-name","KKEdit",NULL); 
 }
 
+void draw_page(GtkPrintOperation *operation,GtkPrintContext *context,gint page_nr,gpointer user_data)
+{
+	GtkSourcePrintCompositor *compositor;
+
+	compositor=GTK_SOURCE_PRINT_COMPOSITOR(user_data);
+	gtk_source_print_compositor_draw_page(compositor,context,page_nr);
+}
+
+void begin_print (GtkPrintOperation *operation,GtkPrintContext *context,gpointer user_data)
+{
+	GtkSourcePrintCompositor*	compositor;
+	gint						n_pages;
+
+    compositor=GTK_SOURCE_PRINT_COMPOSITOR (user_data);
+
+    while(!gtk_source_print_compositor_paginate(compositor,context));
+
+    n_pages=gtk_source_print_compositor_get_n_pages(compositor);
+    gtk_print_operation_set_n_pages(operation,n_pages);
+}
+
+void printFile(GtkWidget* widget,gpointer data)
+{
+	pageStruct*					page=getPageStructPtr(-1);
+	GtkSourcePrintCompositor*	printview=gtk_source_print_compositor_new_from_view(page->view);
+	GtkPrintOperation*			print;
+	GtkPrintOperationResult		result;
+
+	print=gtk_print_operation_new ();
+	if (settings != NULL)
+		gtk_print_operation_set_print_settings(print,settings);
+	g_signal_connect(print,"begin_print",G_CALLBACK(begin_print),(void*)printview);
+	g_signal_connect(print,"draw_page",G_CALLBACK (draw_page),(void*)printview);
+	result=gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(window),NULL);
+	if (result==GTK_PRINT_OPERATION_RESULT_APPLY)
+		{
+			if (settings != NULL)
+				g_object_unref(settings);
+			settings=(GtkPrintSettings*)g_object_ref((gpointer)gtk_print_operation_get_print_settings(print));
+		}
+	g_object_unref(print);
+	g_object_unref(printview);
+}
