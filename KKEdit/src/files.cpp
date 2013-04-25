@@ -308,3 +308,174 @@ void newFile(GtkWidget* widget,gpointer data)
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 }
 
+void openAsHexDump(GtkWidget *widget,gpointer user_data)
+{
+	GtkWidget*		dialog;
+	char*			filepath;
+	char*			filename;
+	int				pagenum;
+	FILE*			fp;
+	char			line[1024];
+	GString*		str=g_string_new(NULL);
+	char*			command;
+	GtkTextIter		iter;
+	pageStruct*		page;
+	char*			convstr=NULL;
+
+	dialog=gtk_file_chooser_dialog_new("Open File",NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,NULL);
+	if (gtk_dialog_run(GTK_DIALOG (dialog))==GTK_RESPONSE_ACCEPT)
+		{
+			filepath=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+			filename=g_path_get_basename(filepath);
+			newFile(NULL,NULL);
+			pagenum=currentPage-1;
+			page=getPageStructPtr(pagenum);
+			asprintf(&command,"hexdump -C %s",filepath);
+			fp=popen(command, "r");
+			while(fgets(line,1024,fp))
+				g_string_append_printf(str,"%s",line);
+
+			pclose(fp);
+
+			gtk_source_buffer_begin_not_undoable_action(page->buffer);
+				gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
+				if(g_utf8_validate(str->str,-1,NULL)==false)
+					{
+						convstr=g_locale_to_utf8(str->str,-1,NULL,NULL,NULL);
+						gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,convstr,-1);
+						g_free(convstr);
+					}
+				else
+					{
+						gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str->str,-1);
+					}
+			gtk_source_buffer_end_not_undoable_action(page->buffer);
+			gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),true);
+			g_string_free(str,true);
+			g_free (filepath);
+			g_free (filename);
+			setSensitive();
+		}
+
+	gtk_widget_destroy (dialog);
+	gtk_widget_show_all(window);
+}
+
+void reloadFile(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=getPageStructPtr(-1);
+	gchar*		buffer;
+	long		filelen;
+	GtkTextIter	start;
+	GtkTextIter	end;
+
+	g_file_get_contents(page->filePath,&buffer,(gsize*)&filelen,NULL);
+
+	gtk_text_buffer_get_bounds((GtkTextBuffer*)page->buffer,&start,&end);
+	gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&start,&end);
+	gtk_text_buffer_delete_selection((GtkTextBuffer*)page->buffer,true,true);
+	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+	gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
+	g_free(buffer);
+}
+
+void saveSession(GtkWidget* widget,gpointer data)
+{
+	pageStruct*		page;
+	FILE*			fd=NULL;
+	char*			filename;
+	GtkTextMark*	mark;
+	GtkTextIter		iter;
+	int				linenumber;
+
+	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
+	g_mkdir_with_parents(filename,493);
+	g_free(filename);
+	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
+	fd=fopen(filename,"w");
+	if (fd!=NULL)
+		{
+			for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
+				{
+					page=getPageStructPtr(loop);
+					mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+					linenumber=gtk_text_iter_get_line(&iter);
+					fprintf(fd,"%s %i\n",page->filePath,linenumber);
+				}
+			fclose(fd);
+			g_free(filename);
+		}
+}
+
+void restoreSession(GtkWidget* widget,gpointer data)
+{
+	FILE*		fd=NULL;
+	char*		filename;
+	char		buffer[2048];
+	int			intarg;
+	char		strarg[2048];
+
+	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
+	fd=fopen(filename,"r");
+	if (fd!=NULL)
+		{
+			while(fgets(buffer,2048,fd)!=NULL)
+				{
+					sscanf(buffer,"%s %i",(char*)&strarg,(int*)&intarg);
+					openFile(strarg,intarg);
+				}
+			fclose(fd);
+			g_free(filename);
+		}
+}
+
+int showFileChanged(char* filename)
+{
+	GtkWidget*	dialog;
+	gint		result;
+	char*		message;
+
+	asprintf(&message,"File %s Has Changed on disk\nDo you want to reload it?",filename);
+	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
+
+	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_REFRESH,GTK_RESPONSE_YES,NULL);
+	gtk_window_set_title(GTK_WINDOW(dialog),"Warning file changed!");
+
+	result=gtk_dialog_run(GTK_DIALOG(dialog));
+
+	gtk_widget_destroy(dialog);
+	g_free(message);
+	return(result);
+}
+
+void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data)
+{
+	pageStruct*		page=(pageStruct*)user_data;
+	GtkTextIter		start;
+	GtkTextIter		end;
+	gchar*			buffer;
+	long			filelen;
+	int				answer;
+
+	if(G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT==event_type)
+		{
+			if(page->itsMe==false)
+				{
+					answer=showFileChanged(page->fileName);
+					if(answer==GTK_RESPONSE_YES)
+						{
+							g_file_get_contents(page->filePath,&buffer,(gsize*)&filelen,NULL);
+							gtk_text_buffer_get_bounds((GtkTextBuffer*)page->buffer,&start,&end);
+							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&start,&end);
+							gtk_text_buffer_delete_selection((GtkTextBuffer*)page->buffer,true,true);
+							gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+							gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
+							g_free(buffer);
+						}
+				}
+			else
+				page->itsMe=false;
+		}
+}
+

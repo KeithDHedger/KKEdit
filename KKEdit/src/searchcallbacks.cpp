@@ -31,9 +31,52 @@ void webKitGoForward(GtkWidget* widget,gpointer data)
 }
 #endif
 
-
-
 void docSearch(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=getPageStructPtr(-1);
+	GtkTextIter	start;
+	GtkTextIter	end;
+	char*		selection=NULL;
+	char*		searchdata[2048];
+	char		line[1024];
+	FILE*		fp;
+	char*		command=NULL;
+	char*		ptr=NULL;
+	int			startchar;
+	int			endchar;
+
+	char*		funcname;
+
+	for(int loop=0;loop<2048;loop++)
+		searchdata[loop]=NULL;
+
+	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+		{
+			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+			if(selection!=NULL)
+				{
+					asprintf(&command,"find /usr/share/gtk-doc/html -iname \"*.devhelp2\" -exec grep -iHe %s '{}' \\;",selection);
+					fp=popen(command,"r");
+					while(fgets(line,1024,fp))
+						{
+							ptr=strstr(line,"name=\"");
+							if(ptr!=NULL)
+								{
+									ptr=(char*)(long)ptr+6;
+									endchar=(int)(long)strchr(ptr,'"')-(long)ptr;
+									asprintf(&funcname,"%.*s",endchar,ptr);
+									
+									
+									printf("%s - \n",funcname);
+									g_free(funcname);
+								}
+						}
+				}
+		}
+}
+
+
+void docSearchXX(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -132,6 +175,7 @@ void showDocView(GtkWidget* widget,gpointer data)
 {
 	if(data==NULL)
 		docSearch(NULL,NULL);
+return;
 
 	if(thePage!=NULL)
 		{
