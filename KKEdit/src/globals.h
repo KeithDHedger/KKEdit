@@ -38,6 +38,7 @@
 #define VALIDFILENAMECHARS "[A-Za-z0-9_-./]"
 #define VALIDFUNCTIONCHARS "[A-Za-z0-9_*]"
 
+#define PLACEHOLDERINFO "PLACEHOLDERS:\n%t - Currently selected text. Passed to command as $KKEDIT_SELECTION\n%f - Filepath of the current document. Passed to command as $KKEDIT_CURRENTFILE\n%d - Directory of the current document or $HOME. Passed to command as $KKEDIT_CURRENTDIR\n%i -The location of the globally installed tools. Passed to command as $KKEDIT_DATADIR"
 struct pageStruct
 {
 	GtkScrolledWindow*	pageWindow;

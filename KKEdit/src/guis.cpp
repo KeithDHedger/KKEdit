@@ -34,7 +34,7 @@ void doMakeTool(void)
 
 	toolwin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)toolwin,"Create New Tool");
-	vbox=gtk_vbox_new(true,8);
+	vbox=gtk_vbox_new(false,8);
 
 //name
 	toolNameWidget=gtk_entry_new();
@@ -54,6 +54,8 @@ void doMakeTool(void)
 	gtk_widget_show(commandLineWidget);
 	gtk_entry_set_text((GtkEntry*)commandLineWidget,"");
 
+//info
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_label_new(PLACEHOLDERINFO),false,false,0);
 //in terminal
 	inTermWidget=gtk_check_button_new_with_label("Run Tool In Terminal");
 	gtk_widget_set_name(inTermWidget,"interm");

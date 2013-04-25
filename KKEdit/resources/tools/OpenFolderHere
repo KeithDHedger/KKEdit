@@ -1,0 +1,4 @@
+name	Open Folder Here
+command	xdg-open %d
+flags	8
+interm	0
