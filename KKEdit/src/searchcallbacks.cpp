@@ -19,8 +19,6 @@
 #include "files.h"
 #include "guis.h"
 
-char* thePage=NULL;
-
 #ifdef BUILDDOCVIEWER
 void webKitGoBack(GtkWidget* widget,gpointer data)
 {
@@ -132,8 +130,8 @@ void docSearch(GtkWidget* widget,gpointer data)
 #ifdef BUILDDOCVIEWER
 void showDocView(GtkWidget* widget,gpointer data)
 {
-	docSearch(NULL,NULL);
-
+	if(data==NULL)
+		docSearch(NULL,NULL);
 
 	if(thePage!=NULL)
 		{

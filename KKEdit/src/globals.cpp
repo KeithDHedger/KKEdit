@@ -102,6 +102,7 @@ GtkWidget*		findBox;
 GtkWidget*		replaceBox;
 
 char*			functionSearchText=NULL;
+char*			thePage=NULL;
 
 #ifdef BUILDDOCVIEWER
 GtkWidget*		docView;

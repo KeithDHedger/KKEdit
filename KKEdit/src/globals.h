@@ -156,6 +156,7 @@ extern GtkWidget*		findBox;
 extern GtkWidget*		replaceBox;
 
 extern char*			functionSearchText;
+extern char*			thePage;
 
 #ifdef BUILDDOCVIEWER
 extern GtkWidget*		docView;

@@ -333,9 +333,14 @@ void openHelp(GtkWidget* widget,gpointer data)
 {
 	char*	runhelp;
 
+#ifdef BUILDDOCVIEWER
+	asprintf(&thePage,"file://%s/help/help.html",DATADIR);
+	showDocView(NULL,(void*)1);
+#else
 	asprintf(&runhelp,"xdg-open %s/help/help.html",DATADIR);
 	runCommand(runhelp,NULL,false,8);
 	g_free(runhelp);
+#endif
 }
 
 void reloadFile(GtkWidget* widget,gpointer data)

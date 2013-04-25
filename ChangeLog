@@ -74,3 +74,5 @@ Added crude function lookup in gtk-doc folder - to be improved.
 Added optional webkit dependency if building doc viewer.
 Added gkt-doc viewer in own window via webkit.
 Added switch to configure for optional gkt-doc viewer.
+Added 'Save All'
+Added 'Help' now shown local if doc viewer has been built.
