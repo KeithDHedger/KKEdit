@@ -892,7 +892,7 @@ void doAbout(GtkWidget* widget,gpointer data)
 	gtk_show_about_dialog(NULL,"authors",authors,"comments",aboutboxstring,"copyright",copyright,"version",KKEDIT_VERSION,"website",MYWEBSITE,"program-name","KKEdit","logo-icon-name","KKEdit",NULL); 
 }
 
-void draw_page(GtkPrintOperation *operation,GtkPrintContext *context,gint page_nr,gpointer user_data)
+void drawPage(GtkPrintOperation *operation,GtkPrintContext *context,gint page_nr,gpointer user_data)
 {
 	GtkSourcePrintCompositor *compositor;
 
@@ -900,7 +900,7 @@ void draw_page(GtkPrintOperation *operation,GtkPrintContext *context,gint page_n
 	gtk_source_print_compositor_draw_page(compositor,context,page_nr);
 }
 
-void begin_print (GtkPrintOperation *operation,GtkPrintContext *context,gpointer user_data)
+void beginPrint(GtkPrintOperation *operation,GtkPrintContext *context,gpointer user_data)
 {
 	GtkSourcePrintCompositor*	compositor;
 	gint						n_pages;
@@ -923,8 +923,8 @@ void printFile(GtkWidget* widget,gpointer data)
 	print=gtk_print_operation_new ();
 	if (settings != NULL)
 		gtk_print_operation_set_print_settings(print,settings);
-	g_signal_connect(print,"begin_print",G_CALLBACK(begin_print),(void*)printview);
-	g_signal_connect(print,"draw_page",G_CALLBACK (draw_page),(void*)printview);
+	g_signal_connect(print,"begin-print",G_CALLBACK(beginPrint),(void*)printview);
+	g_signal_connect(print,"draw-page",G_CALLBACK (drawPage),(void*)printview);
 	result=gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(window),NULL);
 	if (result==GTK_PRINT_OPERATION_RESULT_APPLY)
 		{
