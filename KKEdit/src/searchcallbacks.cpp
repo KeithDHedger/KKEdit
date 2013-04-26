@@ -68,60 +68,56 @@ void docSearch(GtkWidget* widget,gpointer data)
 				}
 		}
 
-//	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
-//		{
-//			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
-			if(selection!=NULL)
+	if(selection!=NULL)
+		{
+			asprintf(&command,"find /usr/share/gtk-doc/html -iname \"*.devhelp2\" -exec grep -iHe %s '{}' \\;",selection);
+			fp=popen(command,"r");
+			while(fgets(line,1024,fp))
 				{
-					asprintf(&command,"find /usr/share/gtk-doc/html -iname \"*.devhelp2\" -exec grep -iHe %s '{}' \\;",selection);
-					fp=popen(command,"r");
-					while(fgets(line,1024,fp))
+					ptr=strstr(line,"name=\"");
+					if(ptr!=NULL)
 						{
-							ptr=strstr(line,"name=\"");
-							if(ptr!=NULL)
+							funcname=sliceBetween(line,(char*)"name=\"",(char*)"\" link=");
+							if(strstr(funcname,selection)!=NULL)
 								{
-									funcname=sliceBetween(line,(char*)"name=\"",(char*)"\" link=");
-									if(strstr(funcname,selection)!=NULL)
-										{
-											tempstr=sliceBetween(line,(char*)"",(char*)":");
-											foldername=g_path_get_dirname(tempstr);
-											link=sliceBetween(line,(char*)"link=\"",(char*)"\"");
+									tempstr=sliceBetween(line,(char*)"",(char*)":");
+									foldername=g_path_get_dirname(tempstr);
+									link=sliceBetween(line,(char*)"link=\"",(char*)"\"");
 
-											asprintf(&searchdata[cnt][0],"%s",funcname);
-											asprintf(&searchdata[cnt][1],"%s/%s",foldername,link);
-											g_free(foldername);
-											g_free(tempstr);
-											g_free(link);
-											cnt++;
-										}
-									g_free(funcname);
+									asprintf(&searchdata[cnt][0],"%s",funcname);
+									asprintf(&searchdata[cnt][1],"%s/%s",foldername,link);
+									g_free(foldername);
+									g_free(tempstr);
+									g_free(link);
+									cnt++;
 								}
-						}
-					if(cnt>1)
-						{
-							fd=fopen("/tmp/kkeditsearchfile.html","w");
-							if(fd!=NULL)
-								{								
-									fprintf(fd,"<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
-									fprintf(fd,"<html>\n");
-									fprintf(fd,"<body>\n");
-
-									for(int loop=0;loop<cnt;loop++)
-										{
-											fprintf(fd,"<a href=\"%s\">%s</a><br>\n",searchdata[loop][1],searchdata[loop][0]);
-										}
-									fprintf(fd,"</body>\n");
-									fprintf(fd,"</html>\n");
-									fclose(fd);
-									asprintf(&thePage,"file:///tmp/kkeditsearchfile.html");
-								}
-						}
-					else
-						{
-							asprintf(&thePage,"file://%s",searchdata[0][1]);
+							g_free(funcname);
 						}
 				}
-//		}
+			if(cnt>1)
+				{
+					fd=fopen("/tmp/kkeditsearchfile.html","w");
+					if(fd!=NULL)
+						{								
+							fprintf(fd,"<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
+							fprintf(fd,"<html>\n");
+							fprintf(fd,"<body>\n");
+
+							for(int loop=0;loop<cnt;loop++)
+								{
+									fprintf(fd,"<a href=\"%s\">%s</a><br>\n",searchdata[loop][1],searchdata[loop][0]);
+								}
+							fprintf(fd,"</body>\n");
+							fprintf(fd,"</html>\n");
+							fclose(fd);
+							asprintf(&thePage,"file:///tmp/kkeditsearchfile.html");
+						}
+				}
+			else
+				{
+					asprintf(&thePage,"file://%s",searchdata[0][1]);
+				}
+		}
 
 	for(int loop=0;loop<cnt;loop++)
 		{

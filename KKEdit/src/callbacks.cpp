@@ -522,6 +522,7 @@ void writeConfig(void)
 			fprintf(fd,"singleuse	%i\n",(int)singleUse);
 			fprintf(fd,"insenssearch	%i\n",(int)insensitiveSearch);
 			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
+			fprintf(fd,"savesessiononexit	%i\n",(int)saveSessionOnExit);
 
 			fprintf(fd,"tabwidth	%i\n",tabWidth);
 			fprintf(fd,"depth	%i\n",depth);
@@ -574,6 +575,8 @@ void doShutdown(GtkWidget* widget,gpointer data)
 {
 	if(doSaveAll(widget,(void*)true)==true)
 		{
+			if(saveSessionOnExit)
+				saveSession(NULL,NULL);
 			writeExitData();
 			gtk_main_quit();
 		}
@@ -593,6 +596,8 @@ void setPrefs(GtkWidget* widget,gpointer data)
 		tmpHighLight=gtk_toggle_button_get_active((GtkToggleButton*)data);
 	if(strcmp(gtk_widget_get_name(widget),"single")==0)
 		tmpSingleUse=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"save")==0)
+		tmpSaveSessionOnExit=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
 	if(strcmp(gtk_widget_get_name(widget),"tabs")==0)
 		tmpTabWidth=(int)gtk_spin_button_get_value((GtkSpinButton*)data);
@@ -610,6 +615,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			lineWrap=tmpLineWrap;
 			highLight=tmpHighLight;
 			singleUse=tmpSingleUse;
+			saveSessionOnExit=tmpSaveSessionOnExit;
 
 			if(terminalCommand!=NULL)
 				{

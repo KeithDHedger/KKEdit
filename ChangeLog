@@ -86,3 +86,4 @@ Improved Gtk Doc search.
 Code clean.
 Only recursivly search for define form main menu not pop-up ( for speed ).
 Added manual search box to gtk-doc viewer.
+Added auto save/restore session to prefs (default off).

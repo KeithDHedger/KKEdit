@@ -241,6 +241,13 @@ void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(vbox),item,false,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
+//auto save session
+	item=gtk_check_button_new_with_label("Save/Restore session on exit/startup");
+	gtk_widget_set_name(item,"save");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,saveSessionOnExit);
+	gtk_box_pack_start(GTK_BOX(vbox),item,false,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+
 //tabwidth  -- CLEAN
 	GtkObject*	adj=gtk_adjustment_new(tmpTabWidth,1,64,1,1,0);
 	hbox=gtk_hbox_new(true,0);
@@ -779,7 +786,7 @@ void buildGtkDocViewer(void)
     g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoBack),(void*)webView);	
  
     entry=gtk_entry_new();
-    gtk_box_pack_start(GTK_BOX(hbox),entry,false,false,0);
+    gtk_box_pack_start(GTK_BOX(hbox),entry,false,true,0);
 	g_signal_connect_after(G_OBJECT(entry),"activate",G_CALLBACK(liveGtkDocSearch),(void*)entry);
     findbutton=gtk_button_new_from_stock(GTK_STOCK_FIND);
     gtk_box_pack_start(GTK_BOX(hbox),findbutton,false,false,0);
