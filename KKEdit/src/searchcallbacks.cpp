@@ -53,6 +53,7 @@ void docSearch(GtkWidget* widget,gpointer data)
 	char		tmpbuffer[256];
 	char*		link;
 	int			cnt=0;
+	char*		itermediate;
 
 	for(int loop=0;loop<2048;loop++)
 		{
@@ -72,25 +73,23 @@ void docSearch(GtkWidget* widget,gpointer data)
 							ptr=strstr(line,"name=\"");
 							if(ptr!=NULL)
 								{
-///usr/share/gtk-doc/html/poppler/poppler.devhelp2:    <keyword type="function" name="poppler_annot_mapping_free ()" link="PopplerPage.html#poppler-annot-mapping-free"/>
-
-//Problem occurred while loading the URL file:///usr/share/gtk-doc/html/g_mkdir_with_parents%20()
-
-
 									funcname=sliceBetween(line,"name=\"","\" link=");
-									tempstr=sliceBetween(line,"",":");
-									foldername=g_path_get_dirname(tempstr);
-									link=sliceBetween(line,"link=\"","\"");
+									if(strstr(funcname,selection)!=NULL)
+										{
+											tempstr=sliceBetween(line,"",":");
+											foldername=g_path_get_dirname(tempstr);
+											link=sliceBetween(line,"link=\"","\"");
 
-									printf("%s\n",line);
-									printf("\n%s \n %s \n %s\n",funcname,foldername,link);
-									asprintf(&searchdata[cnt][0],"%s",funcname);
-									asprintf(&searchdata[cnt][1],"%s/%s",foldername,link);
+											//printf("%s\n",line);
+											//printf("\n%s \n %s \n %s\n",funcname,foldername,link);
+											asprintf(&searchdata[cnt][0],"%s",funcname);
+											asprintf(&searchdata[cnt][1],"%s/%s",foldername,link);
+											g_free(foldername);
+											g_free(tempstr);
+											g_free(link);
+											cnt++;
+										}
 									g_free(funcname);
-									g_free(foldername);
-									g_free(tempstr);
-									g_free(link);
-									cnt++;
 								}
 						}
 					if(cnt>1)
@@ -115,7 +114,7 @@ void docSearch(GtkWidget* widget,gpointer data)
 					else
 						{
 							asprintf(&thePage,"file://%s",searchdata[0][1]);
-							printf("file://%s\n",searchdata[0][1]);
+							//printf("file://%s\n",searchdata[0][1]);
 						}
 				}
 		}
