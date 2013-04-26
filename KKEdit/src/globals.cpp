@@ -348,3 +348,71 @@ void getRecursiveTagList(char* filepath,void* ptr)
 	g_free(command);
 }
 
+//string sliceing
+//deststring=[startchar-int],[endchar-int] of srcstring
+//deststring=[startstr-str],[endstr-str] of srcstring
+//valint=pos[str] of srcstring
+//valint=pos[str] of srcstring
+
+char* slice(char* srcstring,int tmpstartchar,int tmpendchar)
+{
+
+	char*	dest;
+	int		strsize;
+	int		startchar=tmpstartchar;
+	int		endchar=tmpendchar;
+
+	if(tmpstartchar<0)
+		startchar=0;
+
+	if((tmpendchar<0) || (tmpendchar>strlen(srcstring)))
+		endchar=strlen(srcstring)-1;
+
+	strsize=endchar-startchar+1;
+
+	dest=(char*)malloc(strsize+1);
+	strncpy(dest,(char*)&srcstring[startchar],strsize);
+	dest[strsize]=0;
+
+	return(dest);
+}
+
+char* sliceBetween(char* srcstring,char* startstr,char* endstr)
+{
+
+	int		startchar;
+	int		endchar;
+	char*	ptr;
+	char*	dest=NULL;
+
+	ptr=strstr(srcstring,startstr);
+	if(ptr==NULL)
+		return(NULL);
+	startchar=(int)(long)ptr+strlen(startstr)-(long)srcstring;
+
+	ptr=strstr((char*)&srcstring[startchar],endstr);
+	if(ptr==NULL)
+		return(NULL);
+	endchar=(int)(long)ptr-(long)srcstring-1;
+
+	dest=slice(srcstring,startchar,endchar);
+	return(dest);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

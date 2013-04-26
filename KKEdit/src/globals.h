@@ -171,6 +171,8 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags);
 functionData* getFunctionByName(char* name);
 void destroyData(functionData* fdata);
 void getRecursiveTagList(char* filepath,void* ptr);
+char* slice(char* srcstring,int startchar,int endchar);
+char* sliceBetween(char* srcstring,char* startstr,char* endstr);
 
 #endif
 

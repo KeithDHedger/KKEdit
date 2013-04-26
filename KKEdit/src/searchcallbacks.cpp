@@ -37,18 +37,118 @@ void docSearch(GtkWidget* widget,gpointer data)
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
-	char*		searchdata[2048];
+	char*		searchdata[2048][2];
 	char		line[1024];
 	FILE*		fp;
+	FILE*		fd;
 	char*		command=NULL;
 	char*		ptr=NULL;
+	char*		endptr=NULL;
 	int			startchar;
 	int			endchar;
 
 	char*		funcname;
+	char*		foldername;
+	char*		tempstr;
+	char		tmpbuffer[256];
+	char*		link;
+	int			cnt=0;
 
 	for(int loop=0;loop<2048;loop++)
-		searchdata[loop]=NULL;
+		{
+			searchdata[loop][0]=NULL;
+			searchdata[loop][1]=NULL;
+		}
+
+	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+		{
+			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+			if(selection!=NULL)
+				{
+					asprintf(&command,"find /usr/share/gtk-doc/html -iname \"*.devhelp2\" -exec grep -iHe %s '{}' \\;",selection);
+					fp=popen(command,"r");
+					while(fgets(line,1024,fp))
+						{
+							ptr=strstr(line,"name=\"");
+							if(ptr!=NULL)
+								{
+///usr/share/gtk-doc/html/poppler/poppler.devhelp2:    <keyword type="function" name="poppler_annot_mapping_free ()" link="PopplerPage.html#poppler-annot-mapping-free"/>
+
+//Problem occurred while loading the URL file:///usr/share/gtk-doc/html/g_mkdir_with_parents%20()
+
+
+									funcname=sliceBetween(line,"name=\"","\" link=");
+									tempstr=sliceBetween(line,"",":");
+									foldername=g_path_get_dirname(tempstr);
+									link=sliceBetween(line,"link=\"","\"");
+
+									printf("%s\n",line);
+									printf("\n%s \n %s \n %s\n",funcname,foldername,link);
+									asprintf(&searchdata[cnt][0],"%s",funcname);
+									asprintf(&searchdata[cnt][1],"%s/%s",foldername,link);
+									g_free(funcname);
+									g_free(foldername);
+									g_free(tempstr);
+									g_free(link);
+									cnt++;
+								}
+						}
+					if(cnt>1)
+						{
+							fd=fopen("/tmp/kkeditsearchfile.html","w");
+							if(fd!=NULL)
+								{								
+									fprintf(fd,"<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
+									fprintf(fd,"<html>\n");
+									fprintf(fd,"<body>\n");
+
+									for(int loop=0;loop<cnt;loop++)
+										{
+											fprintf(fd,"<a href=\"%s\">%s</a><br>\n",searchdata[loop][1],searchdata[loop][0]);
+										}
+									fprintf(fd,"</body>\n");
+									fprintf(fd,"</html>\n");
+									fclose(fd);
+									asprintf(&thePage,"file:///tmp/kkeditsearchfile.html");
+								}
+						}
+					else
+						{
+							asprintf(&thePage,"file://%s",searchdata[0][1]);
+							printf("file://%s\n",searchdata[0][1]);
+						}
+				}
+		}
+}
+
+void docSearchYY(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=getPageStructPtr(-1);
+	GtkTextIter	start;
+	GtkTextIter	end;
+	char*		selection=NULL;
+	char*		searchdata[2048][2];
+	char		line[1024];
+	FILE*		fp;
+	FILE*		fd;
+	char*		command=NULL;
+	char*		ptr=NULL;
+	char*		endptr=NULL;
+	int			startchar;
+	int			endchar;
+
+	char*		funcname;
+	char*		foldername;
+	char*		tempstr;
+	char		tmpbuffer[256];
+	char*		link;
+	int			cnt=0;
+
+	for(int loop=0;loop<2048;loop++)
+		{
+			searchdata[loop][0]=NULL;
+			searchdata[loop][1]=NULL;
+		}
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
@@ -65,11 +165,56 @@ void docSearch(GtkWidget* widget,gpointer data)
 									ptr=(char*)(long)ptr+6;
 									endchar=(int)(long)strchr(ptr,'"')-(long)ptr;
 									asprintf(&funcname,"%.*s",endchar,ptr);
+
+									endchar=(int)(long)strchr(line,':')-(long)line;
+									strncpy(tmpbuffer,line,endchar);
+									tmpbuffer[endchar]=0;
+									foldername=g_path_get_dirname(tmpbuffer);
 									
+									ptr=strstr(line,"link=\"");
+									ptr=(char*)(long)ptr+6;
+									endptr=strstr(ptr,"\"/>");
+									endptr=(char*)(long)endptr;
+									endchar=(int)(long)endptr-(long)ptr;
+									strncpy(tmpbuffer,ptr,endchar);
+									tmpbuffer[endchar]=0;
+									asprintf(&link,"%s/%s",foldername,tmpbuffer);
 									
-									printf("%s - \n",funcname);
+									printf("%s\n",line);
+									printf("\n%s \n %s \n %s\n",funcname,foldername,link);
+									asprintf(&searchdata[cnt][0],"%s",funcname);
+									asprintf(&searchdata[cnt][1],"%s",link);
 									g_free(funcname);
+									g_free(foldername);
+									g_free(tempstr);
+									g_free(link);
+									cnt++;
 								}
+						}
+					if(cnt>1)
+						{
+							fd=fopen("/tmp/kkeditsearchfile.html","w");
+							if(fd!=NULL)
+								{								
+									fprintf(fd,"<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
+									fprintf(fd,"<html>\n");
+									fprintf(fd,"<body>\n");
+
+//<a href="/usr/share/gtk-doc/html/glib/glib-IO-Channels.html#g-io-channel-close">g-io-channel-close</a><br>
+
+									for(int loop=0;loop<cnt;loop++)
+										{
+											fprintf(fd,"<a href=\"%s\">%s</a><br>\n",searchdata[loop][1],searchdata[loop][0]);
+										}
+									fprintf(fd,"</body>\n");
+									fprintf(fd,"</html>\n");
+									fclose(fd);
+									asprintf(&thePage,"file:///tmp/kkeditsearchfile.html");
+								}
+						}
+					else
+						{
+							asprintf(&thePage,"file:///usr/share/gtk-doc/html/%s",searchdata[0][0]);
 						}
 				}
 		}
@@ -175,7 +320,6 @@ void showDocView(GtkWidget* widget,gpointer data)
 {
 	if(data==NULL)
 		docSearch(NULL,NULL);
-return;
 
 	if(thePage!=NULL)
 		{
