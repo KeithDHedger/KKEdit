@@ -121,32 +121,35 @@ void docSearch(GtkWidget* widget,gpointer data)
 	if(selection!=NULL)
 		g_free(selection);
 }
-/*
 
-	if(selection!=NULL)
-		g_free(selection);
-	if(selectionorig!=NULL)
-		g_free(selectionorig);
-
-*/
-
-#ifdef BUILDDOCVIEWER
 void showDocView(GtkWidget* widget,gpointer data)
 {
+	char*	command;
+
 	if(data==NULL)
 		docSearch(NULL,NULL);
-
+#ifdef BUILDDOCVIEWER
 	if(thePage!=NULL)
 		{
 			webkit_web_view_load_uri(webView,thePage);
 			g_free(thePage);
 			thePage=NULL;
 		}
-
 	gtk_widget_show_all(docView);
 	gtk_window_present((GtkWindow*)docView);
-}
+
+#else
+	if(thePage!=NULL)
+		{
+			asprintf(&command,"xdg-open %s",thePage);
+			g_spawn_command_line_async(command,NULL);
+			g_free(command);
+			g_free(thePage);
+			thePage=NULL;
+		}	
 #endif
+}
+
 
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 {

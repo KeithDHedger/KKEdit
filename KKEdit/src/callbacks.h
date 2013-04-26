@@ -28,7 +28,6 @@ void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectio
 void externalTool(GtkWidget* widget,gpointer data);
 void openHelp(GtkWidget* widget,gpointer data);
 void printFile(GtkWidget* widget,gpointer data);
-
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data);
 void tabPopUp(GtkWidget *my_widget, GdkEventButton *event,gpointer user_data);
 UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessageData *message,guint time,gpointer user_data);

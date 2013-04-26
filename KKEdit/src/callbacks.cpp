@@ -333,6 +333,8 @@ void externalTool(GtkWidget* widget,gpointer data)
 
 void openHelp(GtkWidget* widget,gpointer data)
 {
+	char*	runhelp;
+
 #ifdef BUILDDOCVIEWER
 	asprintf(&thePage,"file://%s/help/help.html",DATADIR);
 	showDocView(NULL,(void*)1);
@@ -341,6 +343,7 @@ void openHelp(GtkWidget* widget,gpointer data)
 	runCommand(runhelp,NULL,false,8);
 	g_free(runhelp);
 #endif
+
 }
 
 void copyToClipboard(GtkWidget* widget,gpointer data)
@@ -385,11 +388,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 					image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
 					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-#ifdef BUILDDOCVIEWER
 					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(showDocView),NULL);
-#else
-					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gtkDocSearch),NULL);
-#endif
 				}
 		}
 	gtk_widget_show_all((GtkWidget*)menu);

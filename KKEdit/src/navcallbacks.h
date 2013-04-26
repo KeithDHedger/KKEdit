@@ -15,7 +15,6 @@
 #ifndef _NAVCALLBACKS_
 #define _NAVCALLBACKS_
 
-void gtkDocSearch(GtkWidget* widget,gpointer data);
 void goToDefine(functionData* fdata);
 void goToDefinition(GtkWidget* widget,gpointer data);
 void findFile(GtkWidget* widget,gpointer data);
