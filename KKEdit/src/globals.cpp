@@ -365,7 +365,7 @@ char* slice(char* srcstring,int tmpstartchar,int tmpendchar)
 	if(tmpstartchar<0)
 		startchar=0;
 
-	if((tmpendchar<0) || (tmpendchar>strlen(srcstring)))
+	if((tmpendchar<0) || (tmpendchar>(int)strlen(srcstring)))
 		endchar=strlen(srcstring)-1;
 
 	strsize=endchar-startchar+1;
