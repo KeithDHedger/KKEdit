@@ -17,8 +17,6 @@
 #ifndef _GUIS_
 #define _GUIS_
 
-//extern char*	functionSearchText;
-
 void buildMainGui(void);
 void buildTools(void);
 void buildFindReplace(void);

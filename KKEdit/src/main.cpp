@@ -144,29 +144,6 @@ int main(int argc,char **argv)
 	UniqueBackend*		back;
 	char*				dbusname;
 
-#if 0
-//char* src="/usr/share/gtk-doc/html/glib/glib.devhelp2:    <keyword type=\"function\" name=\"g_string_free_to_bytes ()\" link=\"glib-Strings.html#g-string-free-to-bytes\" since=\"2.34\"/>";
-char* deststr;
-char* src="this is a string slice test";
-
-//
-//deststr=slice(src,4,10);
-//printf("--%s--\n",deststr);
-//deststr=sliceBetween(src,"link=\"","\"");
-//printf("%s\n",src);
-
-deststr=sliceLen(src,-90,100);
-if(deststr!=NULL)
-printf("--%s--\n",deststr);
-
-deststr=sliceStrLen(src,"",5);
-if(deststr!=NULL)
-printf("--%s--\n",deststr);
-
-
-return 0;
-#endif
-
 	gtk_init(&argc,&argv);
 
 	back=unique_backend_create();

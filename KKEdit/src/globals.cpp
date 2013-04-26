@@ -353,10 +353,6 @@ void getRecursiveTagList(char* filepath,void* ptr)
 }
 
 //string sliceing
-//deststring=[startchar-int],[endchar-int] of srcstring
-//deststring=[startstr-str],[endstr-str] of srcstring
-//valint=pos[str] of srcstring
-//valint=pos[str] of srcstring
 
 char* slice(char* srcstring,int tmpstartchar,int tmpendchar)
 {
@@ -382,7 +378,6 @@ char* slice(char* srcstring,int tmpstartchar,int tmpendchar)
 
 char* sliceBetween(char* srcstring,char* startstr,char* endstr)
 {
-
 	int		startchar;
 	int		endchar;
 	char*	ptr;
