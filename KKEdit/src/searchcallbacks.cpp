@@ -56,9 +56,21 @@ void docSearch(GtkWidget* widget,gpointer data)
 			searchdata[loop][1]=NULL;
 		}
 
-	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+	if(data!=NULL)
 		{
-			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+			selection=(char*)data;
+		}
+	else
+		{
+			if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+				{
+					selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+				}
+		}
+
+//	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+//		{
+//			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 			if(selection!=NULL)
 				{
 					asprintf(&command,"find /usr/share/gtk-doc/html -iname \"*.devhelp2\" -exec grep -iHe %s '{}' \\;",selection);
@@ -109,7 +121,7 @@ void docSearch(GtkWidget* widget,gpointer data)
 							asprintf(&thePage,"file://%s",searchdata[0][1]);
 						}
 				}
-		}
+//		}
 
 	for(int loop=0;loop<cnt;loop++)
 		{
@@ -118,7 +130,7 @@ void docSearch(GtkWidget* widget,gpointer data)
 			if(searchdata[loop][1]!=NULL)
 				g_free(searchdata[loop][1]);
 		}
-	if(selection!=NULL)
+	if((selection!=NULL) && (data==NULL))
 		g_free(selection);
 }
 

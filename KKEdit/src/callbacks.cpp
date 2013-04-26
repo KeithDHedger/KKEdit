@@ -333,12 +333,12 @@ void externalTool(GtkWidget* widget,gpointer data)
 
 void openHelp(GtkWidget* widget,gpointer data)
 {
-	char*	runhelp;
 
 #ifdef BUILDDOCVIEWER
 	asprintf(&thePage,"file://%s/help/help.html",DATADIR);
 	showDocView(NULL,(void*)1);
 #else
+	char*	runhelp;
 	asprintf(&runhelp,"xdg-open %s/help/help.html",DATADIR);
 	runCommand(runhelp,NULL,false,8);
 	g_free(runhelp);
@@ -369,7 +369,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 			if(selection!=NULL)
 				{
-					functionData* fdata=getFunctionByName(selection);
+					functionData* fdata=getFunctionByName(selection,false);
 					if(fdata!=NULL)
 						{
 							sprintf((char*)&defineText,"%s",fdata->define);

@@ -51,7 +51,7 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 	else
 		return;
 
-	functionData* fdata=getFunctionByName(selection);
+	functionData* fdata=getFunctionByName(selection,true);
 	if(fdata!=NULL)
 		{
 			goToDefine(fdata);
@@ -176,7 +176,7 @@ void functionSearch(GtkWidget* widget,gpointer data)
 {
 	if(showFunctionEntry()==GTK_RESPONSE_YES)
 	{
-		functionData* fdata=getFunctionByName(functionSearchText);
+		functionData* fdata=getFunctionByName(functionSearchText,true);
 		if(fdata!=NULL)
 		{
 			goToDefine(fdata);

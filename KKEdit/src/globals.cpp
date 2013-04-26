@@ -219,7 +219,7 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 	g_free(command);
 }
 
-functionData* getFunctionByName(char* name)
+functionData* getFunctionByName(char* name,bool recurse)
 {
 	pageStruct*	page;
 	int			numpages=gtk_notebook_get_n_pages(notebook);
@@ -268,48 +268,50 @@ functionData* getFunctionByName(char* name)
 				}
 		}
 
+	if(recurse==true)
+		{
 //not in any open files
 //check ./ from all files
-
-	for(int loop=0;loop<numpages;loop++)
-		{
-			page=getPageStructPtr(loop);
-			if(page->filePath!=NULL)
+//dont do this from popup for speed reasons
+			for(int loop=0;loop<numpages;loop++)
 				{
-					asprintf(&dirname,"%s",g_path_get_dirname(page->filePath));
-					getRecursiveTagList(dirname,&stdout);
-
-					lineptr=stdout;
-					while (lineptr!=NULL)
+					page=getPageStructPtr(loop);
+					if(page->filePath!=NULL)
 						{
-							sscanf (lineptr,"%s",function);
-							if((strncasecmp(name,function,strlen(name))==0))
-								{
-									fdata=(functionData*)malloc(sizeof(functionData));
-									sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
-									asprintf(&fdata->name,"%s",function);
-									sscanf (lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
-									asprintf(&fdata->type,"%s",function);
-									sscanf (lineptr,"%*s %*s %i",&fdata->line);
-									sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
-									asprintf(&fdata->file,"%s",function);
-									sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
-									asprintf(&fdata->define,"%s",function);
-									fdata->intab=-1;
-									return(fdata);
-								}
+							asprintf(&dirname,"%s",g_path_get_dirname(page->filePath));
+							getRecursiveTagList(dirname,&stdout);
 
-							lineptr=strchr(lineptr,'\n');
-							if (lineptr!=NULL)
-								lineptr++;
+							lineptr=stdout;
+							while (lineptr!=NULL)
+								{
+									sscanf (lineptr,"%s",function);
+									if((strncasecmp(name,function,strlen(name))==0))
+										{
+											fdata=(functionData*)malloc(sizeof(functionData));
+											sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
+											asprintf(&fdata->name,"%s",function);
+											sscanf (lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
+											asprintf(&fdata->type,"%s",function);
+											sscanf (lineptr,"%*s %*s %i",&fdata->line);
+											sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
+											asprintf(&fdata->file,"%s",function);
+											sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
+											asprintf(&fdata->define,"%s",function);
+											fdata->intab=-1;
+											return(fdata);
+										}
+
+									lineptr=strchr(lineptr,'\n');
+									if (lineptr!=NULL)
+										lineptr++;
+								}
+							if(stdout!=NULL)
+								g_free(stdout);
+							if(dirname!=NULL)
+								g_free(dirname);
 						}
-					if(stdout!=NULL)
-						g_free(stdout);
-					if(dirname!=NULL)
-						g_free(dirname);
 				}
 		}
-
 	return(NULL);
 }
 
