@@ -1,4 +1,0 @@
-name	Simple Print File
-command	lpr %f
-flags	8
-interm	0

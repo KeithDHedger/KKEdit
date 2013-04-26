@@ -82,3 +82,5 @@ Fixed autogen.sh only passing first option on command line.
 0.0.14
 Removed redundant close button from toolbar.
 Added printing.
+Improved Gtk Doc search.
+Code clean.
