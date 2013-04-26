@@ -110,13 +110,18 @@ void docSearch(GtkWidget* widget,gpointer data)
 						}
 				}
 		}
-}
-/*
+
 	for(int loop=0;loop<cnt;loop++)
 		{
-			if(searchdata[loop]!=NULL)
-				g_free(searchdata[loop]);
+			if(searchdata[loop][0]!=NULL)
+				g_free(searchdata[loop][0]);
+			if(searchdata[loop][1]!=NULL)
+				g_free(searchdata[loop][1]);
 		}
+	if(selection!=NULL)
+		g_free(selection);
+}
+/*
 
 	if(selection!=NULL)
 		g_free(selection);
