@@ -305,6 +305,24 @@ void doPrefs(void)
 	gtk_widget_show_all(prefswin);
 }
 
+#ifdef BUILDDOCVIEWER
+void liveGtkDocSearch(GtkWidget* widget,gpointer data)
+{
+	const char*	thestring=gtk_entry_get_text((GtkEntry*)data);
+
+	docSearch(NULL,(void*)thestring);
+
+	if(thePage!=NULL)
+		{
+			webkit_web_view_load_uri(webView,thePage);
+			g_free(thePage);
+			thePage=NULL;
+		}
+	gtk_widget_show_all(docView);
+	gtk_window_present((GtkWindow*)docView);
+}
+#endif
+
 void buildMainGui(void)
 {
 	GtkWidget*			vbox;
@@ -415,6 +433,16 @@ void buildMainGui(void)
 	g_signal_connect_after(G_OBJECT(entrybox),"key-release-event",G_CALLBACK(jumpToLineFromBar),NULL);
 	gtk_widget_set_size_request((GtkWidget*)toolbutton,48,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Go To Line");
+
+//#ifdef BUILDDOCVIEWER
+//find in gtkdoc
+	entrybox=gtk_entry_new();
+	toolbutton=gtk_tool_item_new();
+	gtk_container_add((GtkContainer *)toolbutton,entrybox);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+	g_signal_connect_after(G_OBJECT(entrybox),"activate",G_CALLBACK(showDocView),NULL);
+	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Find API In Gtk Docs");
+//#endif
 
 //menus
 //file menu
@@ -742,22 +770,6 @@ int showFunctionEntry(void)
 }
 
 #ifdef BUILDDOCVIEWER
-void liveGtkDocSearch(GtkWidget* widget,gpointer data)
-{
-	const char*	thestring=gtk_entry_get_text((GtkEntry*)data);
-
-	docSearch(NULL,(void*)thestring);
-
-	if(thePage!=NULL)
-		{
-			webkit_web_view_load_uri(webView,thePage);
-			g_free(thePage);
-			thePage=NULL;
-		}
-	gtk_widget_show_all(docView);
-	gtk_window_present((GtkWindow*)docView);
-}
-
 void buildGtkDocViewer(void)
 {
 	GtkWidget*	vbox;

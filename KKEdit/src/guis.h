@@ -21,6 +21,9 @@ void buildMainGui(void);
 void buildTools(void);
 void buildFindReplace(void);
 int showFunctionEntry(void);
+#ifdef BUILDDOCVIEWER
+void liveGtkDocSearch(GtkWidget* widget,gpointer data);
 void buildGtkDocViewer(void);
+#endif
 
 #endif
