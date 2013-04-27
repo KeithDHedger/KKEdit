@@ -88,3 +88,4 @@ Only recursivly search for define from main menu not pop-up ( for speed ).
 Added manual search box to gtk-doc viewer.
 Added auto save/restore session to prefs (default off).
 Tweaked help page.
+Added manual gtk doc search to toolbar

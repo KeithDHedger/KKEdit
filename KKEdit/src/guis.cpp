@@ -416,7 +416,7 @@ void buildMainGui(void)
 	gtk_widget_set_size_request((GtkWidget*)toolbutton,48,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Go To Line");
 
-//find in gtkdoc liveGtkDocSearch
+//find in gtkdoc
 	entrybox=gtk_entry_new();
 	toolbutton=gtk_tool_item_new();
 	gtk_container_add((GtkContainer *)toolbutton,entrybox);
