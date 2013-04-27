@@ -166,10 +166,16 @@ void showDocView(GtkWidget* widget,gpointer data)
 			g_free(command);
 			g_free(thePage);
 			thePage=NULL;
-		}	
+		}
 #endif
 }
 
+void docSearchFromBar(GtkWidget* widget,gpointer data)
+{
+	const char* text=gtk_entry_get_text((GtkEntry*)data);
+	docSearch(NULL,(void*)text);
+	showDocView(NULL,(void*)text);
+}
 
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 {
