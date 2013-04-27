@@ -78,22 +78,34 @@ void docSearch(GtkWidget* widget,gpointer data)
 					if(ptr!=NULL)
 						{
 							funcname=sliceBetween(line,(char*)"name=\"",(char*)"\" link=");
-							if(strstr(funcname,selection)!=NULL)
+							if(funcname!=NULL)
 								{
-									tempstr=sliceBetween(line,(char*)"",(char*)":");
-									foldername=g_path_get_dirname(tempstr);
-									link=sliceBetween(line,(char*)"link=\"",(char*)"\"");
-
-									asprintf(&searchdata[cnt][0],"%s",funcname);
-									asprintf(&searchdata[cnt][1],"%s/%s",foldername,link);
-									g_free(foldername);
-									g_free(tempstr);
-									g_free(link);
-									cnt++;
+									if(strstr(funcname,selection)!=NULL)
+										{
+											if(cnt<2048)
+												{
+													tempstr=sliceBetween(line,(char*)"",(char*)":");
+													if(tempstr!=NULL)
+														{
+															foldername=g_path_get_dirname(tempstr);
+															link=sliceBetween(line,(char*)"link=\"",(char*)"\"");
+															if((foldername!=NULL) && (link!=NULL))
+																{
+																	asprintf(&searchdata[cnt][0],"%s",funcname);
+																	asprintf(&searchdata[cnt][1],"%s/%s",foldername,link);
+																	g_free(foldername);
+																	g_free(link);
+																	cnt++;
+																}
+															g_free(tempstr);
+														}
+												}
+										}
+									g_free(funcname);
 								}
-							g_free(funcname);
 						}
 				}
+
 			if(cnt>1)
 				{
 					fd=fopen("/tmp/kkeditsearchfile.html","w");
