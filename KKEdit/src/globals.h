@@ -78,6 +78,13 @@ struct functionData
 	int					intab;
 };
 
+struct bookMarkStruct
+{
+	char*				name;
+	char*				label;
+	pageStruct*			page;
+};
+
 extern GtkWidget*		window;
 extern GtkNotebook*		notebook;
 

@@ -191,11 +191,13 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 	pageStruct*		page;
 	GtkTextIter		iter;
 	int				thistab=currentTabNumber;
+	bookMarkStruct*	bookmark=(bookMarkStruct*)data;
 
 	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
 		{
 			page=getPageStructPtr(loop);
-			mark=gtk_text_buffer_get_mark((GtkTextBuffer*)page->buffer,(char*)data);
+//			mark=gtk_text_buffer_get_mark((GtkTextBuffer*)page->buffer,(char*)data);
+			mark=gtk_text_buffer_get_mark((GtkTextBuffer*)page->buffer,bookmark->name);
 			if(mark!=NULL)
 				{
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
@@ -220,6 +222,7 @@ void addBookmark(GtkWidget* widget,gpointer data)
 	char*			starttext;
 	char*			endtext;
 	char*			finaltext;
+	bookMarkStruct*	bookmark;
 
 	mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
@@ -243,14 +246,31 @@ void addBookmark(GtkWidget* widget,gpointer data)
 		}
 
 	asprintf(&name,"BookMark%i",marknum);
+	bookmark=(bookMarkStruct*)malloc(sizeof(bookMarkStruct));
+
+	bookmark->name=name;
+	bookmark->page=page;
+	bookmark->label=previewtext;
+
+
+	gtk_text_buffer_create_mark((GtkTextBuffer*)bookmark->page->buffer,bookmark->name,&iter,true);
+	menuitem=gtk_menu_item_new_with_label(bookmark->label);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);	
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)bookmark);
+	marknum++;
+	gtk_widget_show_all(menubookmark);
+
+return;
 	gtk_text_buffer_create_mark((GtkTextBuffer*)page->buffer,name,&iter,true);
+
 
 	menuitem=gtk_image_menu_item_new_with_label(previewtext);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)name);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)name);
 	marknum++;
 	gtk_widget_show_all(menubookmark);
-	g_free(previewtext);
+//	g_free(previewtext);
 }
 
 void removeBookmark(GtkWidget* widget,gpointer data)
