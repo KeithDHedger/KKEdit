@@ -56,6 +56,7 @@ struct pageStruct
 	GFile*				gFile;
 	GFileMonitor*		monitor;
 	bool				itsMe;
+	GList*				markList;
 };
 
 struct toolStruct
@@ -83,6 +84,12 @@ struct bookMarkStruct
 	char*				name;
 	char*				label;
 	pageStruct*			page;
+};
+
+struct pageBMark
+{
+	char*				name;
+	char*				label;
 };
 
 extern GtkWidget*		window;

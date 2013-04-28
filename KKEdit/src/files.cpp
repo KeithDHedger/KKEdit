@@ -155,6 +155,7 @@ bool openFile(const gchar *filepath,int linenumber)
 	page->itsMe=false;
 	page->gFile=g_file_new_for_path(page->filePath);
 	page->monitor=g_file_monitor(page->gFile,(GFileMonitorFlags)G_FILE_MONITOR_NONE,NULL,NULL);
+	page->markList=NULL;
 	g_signal_connect(G_OBJECT(page->monitor),"changed",G_CALLBACK(fileChangedOnDisk),(void*)page);
 
 	gtk_widget_grab_focus((GtkWidget*)page->view);
