@@ -144,10 +144,9 @@ void docSearch(GtkWidget* widget,gpointer data)
 
 void showDocView(GtkWidget* widget,gpointer data)
 {
-	char*	command;
-
 	if(data==NULL)
 		docSearch(NULL,NULL);
+
 #ifdef BUILDDOCVIEWER
 	if(thePage!=NULL)
 		{
@@ -159,6 +158,8 @@ void showDocView(GtkWidget* widget,gpointer data)
 	gtk_window_present((GtkWindow*)docView);
 
 #else
+	char*	command;
+
 	if(thePage!=NULL)
 		{
 			asprintf(&command,"xdg-open %s",thePage);

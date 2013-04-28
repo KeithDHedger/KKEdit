@@ -52,7 +52,7 @@ int				tabWidth;
 char*			fontAndSize;
 char*			terminalCommand;
 int				depth;
-bool			saveSessionOnExit;
+bool			onExitSaveSession;
 
 GtkWidget*		fontBox;
 GtkWidget*		terminalBox;

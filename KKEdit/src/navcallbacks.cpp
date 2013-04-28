@@ -217,6 +217,9 @@ void addBookmark(GtkWidget* widget,gpointer data)
 	int				line;
 	GtkTextIter		startprev,endprev;
 	char*			previewtext;
+	char*			starttext;
+	char*			endtext;
+	char*			finaltext;
 
 	mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
@@ -228,17 +231,26 @@ void addBookmark(GtkWidget* widget,gpointer data)
 	previewtext=gtk_text_iter_get_text(&startprev,&endprev);
 
 	previewtext[strlen(previewtext)-1]=0;
-	asprintf(&name,"BookMark%i",marknum);
-
-	gtk_text_buffer_create_mark((GtkTextBuffer*)page->buffer,name,&iter,true);
 	g_strchug(previewtext);
 	g_strchomp(previewtext);
+
+	if(strlen(previewtext)>43)
+		{
+			starttext=sliceLen(previewtext,-1,20);
+			endtext=sliceLen(previewtext,strlen(previewtext)-20,-1);
+			g_free(previewtext);
+			asprintf(&previewtext,"%s...%s",starttext,endtext);
+		}
+
+	asprintf(&name,"BookMark%i",marknum);
+	gtk_text_buffer_create_mark((GtkTextBuffer*)page->buffer,name,&iter,true);
 
 	menuitem=gtk_image_menu_item_new_with_label(previewtext);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)name);
 	marknum++;
 	gtk_widget_show_all(menubookmark);
+	g_free(previewtext);
 }
 
 void removeBookmark(GtkWidget* widget,gpointer data)

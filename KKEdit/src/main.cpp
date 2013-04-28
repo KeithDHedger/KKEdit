@@ -56,7 +56,7 @@ void readConfig(void)
 							wrapSearch=(bool)atoi(strarg);
 
 					if(strcasecmp(name,"savesessiononexit")==0)
-							saveSessionOnExit=(bool)atoi(strarg);
+							onExitSaveSession=(bool)atoi(strarg);
 
 					if(strcasecmp(name,"tabwidth")==0)
 							tabWidth=atoi(strarg);
@@ -117,7 +117,7 @@ void init(void)
 	wrapSearch=true;
 	insensitiveSearch=true;
 	replaceAll=false;
-	saveSessionOnExit=false;
+	onExitSaveSession=false;
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
@@ -132,7 +132,7 @@ void init(void)
 	tmpSingleUse=singleUse;
 	tmpTabWidth=tabWidth;
 	tmpDepth=depth;
-	tmpSaveSessionOnExit=saveSessionOnExit;
+	tmpSaveSessionOnExit=onExitSaveSession;
 }
 
 int main(int argc,char **argv)
@@ -180,7 +180,7 @@ int main(int argc,char **argv)
 		{
 			buildMainGui();
 
-			if(saveSessionOnExit==true)
+			if(onExitSaveSession==true)
 				restoreSession(NULL,NULL);
 
 			for(int j=1;j<argc;j++)

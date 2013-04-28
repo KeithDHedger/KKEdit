@@ -107,7 +107,7 @@ extern int				tabWidth;
 extern char*			fontAndSize;
 extern char*			terminalCommand;
 extern int				depth;
-extern bool				saveSessionOnExit;
+extern bool				onExitSaveSession;
 
 extern GtkWidget*		fontBox;
 extern GtkWidget*		terminalBox;

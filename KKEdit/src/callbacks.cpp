@@ -522,7 +522,7 @@ void writeConfig(void)
 			fprintf(fd,"singleuse	%i\n",(int)singleUse);
 			fprintf(fd,"insenssearch	%i\n",(int)insensitiveSearch);
 			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
-			fprintf(fd,"savesessiononexit	%i\n",(int)saveSessionOnExit);
+			fprintf(fd,"savesessiononexit	%i\n",(int)onExitSaveSession);
 
 			fprintf(fd,"tabwidth	%i\n",tabWidth);
 			fprintf(fd,"depth	%i\n",depth);
@@ -575,7 +575,7 @@ void doShutdown(GtkWidget* widget,gpointer data)
 {
 	if(doSaveAll(widget,(void*)true)==true)
 		{
-			if(saveSessionOnExit)
+			if(onExitSaveSession)
 				saveSession(NULL,NULL);
 			writeExitData();
 			gtk_main_quit();
@@ -615,7 +615,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			lineWrap=tmpLineWrap;
 			highLight=tmpHighLight;
 			singleUse=tmpSingleUse;
-			saveSessionOnExit=tmpSaveSessionOnExit;
+			onExitSaveSession=tmpSaveSessionOnExit;
 
 			if(terminalCommand!=NULL)
 				{
