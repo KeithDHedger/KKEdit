@@ -212,6 +212,7 @@ bool saveFile(GtkWidget* widget,gpointer data)
 	GtkTextIter	start,end;
 	gchar*		text;
 	FILE*		fd=NULL;
+	GtkWidget*	dialog;
 
 	page->itsMe=true;
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
@@ -226,6 +227,13 @@ bool saveFile(GtkWidget* widget,gpointer data)
 					fclose(fd);
 					gtk_text_buffer_set_modified((GtkTextBuffer*)page->buffer,false);
 				}
+			else
+				{
+					dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"Can't save file '%s' :(",page->filePath);
+					gtk_dialog_run(GTK_DIALOG(dialog));
+					gtk_widget_destroy(dialog);
+					return(false);
+				}
 		}
 	else
 		{
@@ -238,19 +246,27 @@ bool saveFile(GtkWidget* widget,gpointer data)
 			saveFileName=page->fileName;
 			if(getSaveFile()==false)
 				return(false);
-			page->filePath=saveFilePath;
-			page->fileName=saveFileName;
 
-			gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,FALSE);
-
-			gtk_widget_set_tooltip_text(page->tabName,page->filePath);
-			gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)saveFileName);
-
-			fd=fopen(page->filePath,"w");
+			fd=fopen(saveFilePath,"w");
 			if (fd!=NULL)
 				{
+					page->filePath=saveFilePath;
+					page->fileName=saveFileName;
+
+					gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,FALSE);
+
+					gtk_widget_set_tooltip_text(page->tabName,page->filePath);
+					gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)saveFileName);
+
 					fprintf(fd,"%s",text);
 					fclose(fd);
+				}
+			else
+				{
+					dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"Can't save file '%s' :(",page->filePath);
+					gtk_dialog_run(GTK_DIALOG(dialog));
+					gtk_widget_destroy(dialog);
+					return(false);
 				}
 
 			saveFileName=NULL;
