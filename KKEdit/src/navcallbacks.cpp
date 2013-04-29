@@ -185,18 +185,17 @@ void functionSearch(GtkWidget* widget,gpointer data)
 	}
 }
 
-void jumpToMark(GtkWidget* widget,gpointer data)
+void jumpToMark(GtkWidget* widget,gpointer glist)
 {
 	GtkTextMark*	mark;
 	pageStruct*		page;
 	GtkTextIter		iter;
 	int				thistab=currentTabNumber;
-	bookMarkStruct*	bookmark=(bookMarkStruct*)data;
+	bookMarkStruct*	bookmark=(bookMarkStruct*)((GList*)glist)->data;
 
 	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
 		{
 			page=getPageStructPtr(loop);
-//			mark=gtk_text_buffer_get_mark((GtkTextBuffer*)page->buffer,(char*)data);
 			mark=gtk_text_buffer_get_mark((GtkTextBuffer*)page->buffer,bookmark->name);
 			if(mark!=NULL)
 				{
@@ -237,10 +236,10 @@ void addBookmark(GtkWidget* widget,gpointer data)
 	g_strchug(previewtext);
 	g_strchomp(previewtext);
 
-	if(strlen(previewtext)>43)
+	if(strlen(previewtext)>BOOKMAXMARKMENULEN)
 		{
-			starttext=sliceLen(previewtext,-1,20);
-			endtext=sliceLen(previewtext,strlen(previewtext)-20,-1);
+			starttext=sliceLen(previewtext,-1,BOOKMAXMARKMENULEN/2);
+			endtext=sliceLen(previewtext,strlen(previewtext)-BOOKMAXMARKMENULEN/2,-1);
 			g_free(previewtext);
 			asprintf(&previewtext,"%s...%s",starttext,endtext);
 		}
@@ -250,13 +249,15 @@ void addBookmark(GtkWidget* widget,gpointer data)
 
 	bookmark->name=name;
 	bookmark->page=page;
+	bookmark->filePath=page->filePath;
 	bookmark->label=previewtext;
 
+	page->markList=g_list_prepend(page->markList,(gpointer)bookmark);
 
-	gtk_text_buffer_create_mark((GtkTextBuffer*)bookmark->page->buffer,bookmark->name,&iter,true);
+	bookmark->mark=gtk_text_buffer_create_mark((GtkTextBuffer*)bookmark->page->buffer,bookmark->name,&iter,true);
 	menuitem=gtk_menu_item_new_with_label(bookmark->label);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);	
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)bookmark);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)page->markList);
 	marknum++;
 	gtk_widget_show_all(menubookmark);
 

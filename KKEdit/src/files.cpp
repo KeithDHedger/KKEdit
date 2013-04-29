@@ -223,7 +223,7 @@ bool saveFile(GtkWidget* widget,gpointer data)
 				{
 					fputs(text,fd);
 					fclose(fd);
-					gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,false);
+					gtk_text_buffer_set_modified((GtkTextBuffer*)page->buffer,false);
 				}
 		}
 	else
@@ -388,6 +388,8 @@ void saveSession(GtkWidget* widget,gpointer data)
 	GtkTextMark*	mark;
 	GtkTextIter		iter;
 	int				linenumber;
+	GList*			listelement;
+	GtkTextIter		markiter;
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
@@ -403,6 +405,18 @@ void saveSession(GtkWidget* widget,gpointer data)
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
 					linenumber=gtk_text_iter_get_line(&iter);
 					fprintf(fd,"%s %i\n",page->filePath,linenumber);
+					if(page->markList!=NULL)
+						{
+							listelement=page->markList;
+							for(int loop2=0;loop2<g_list_length(page->markList);loop2++)
+								{
+									gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&markiter,((bookMarkStruct*)listelement->data)->mark);
+									fprintf(fd,"%i ",gtk_text_iter_get_line(&markiter));
+									fprintf(fd,"%s\n",((bookMarkStruct*)listelement->data)->label);
+									listelement=g_list_next(listelement);
+								}
+						}
+					fprintf(fd,"-1 endmarks\n",page->filePath);
 				}
 			fclose(fd);
 			g_free(filename);
