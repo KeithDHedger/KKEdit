@@ -85,8 +85,6 @@ struct bookMarkStruct
 {
 	char*				name;
 	char*				label;
-//	pageStruct*			page;
-//	char*				filePath;
 	GtkTextMark*		mark;
 };
 
