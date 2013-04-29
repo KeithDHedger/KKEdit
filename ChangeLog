@@ -96,3 +96,4 @@ Added "Close All Tabs" to file menu.
 Close all tabs BEFORE restoring session.
 Dimmed Nav, func and bookmark menus when no docs open.
 Dimmed saveall, close etc when no docs open.
+Session can now be restored with/without the saved bookmarks.

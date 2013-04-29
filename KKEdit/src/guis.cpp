@@ -476,13 +476,19 @@ void buildMainGui(void)
 	menuitem=gtk_image_menu_item_new_with_label("Save Session");
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(saveSession),NULL);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(saveSession),(void*)false);
 //restore session
 	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
 	menuitem=gtk_image_menu_item_new_with_label("Restore Session");
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(restoreSession),NULL);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(restoreSession),(void*)false);
+//restore session and bookmarks
+	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
+	menuitem=gtk_image_menu_item_new_with_label("Restore Session With Bookmarks");
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(restoreSession),(void*)true);
 
 //printfile
 	menuprint=gtk_image_menu_item_new_from_stock(GTK_STOCK_PRINT,NULL);

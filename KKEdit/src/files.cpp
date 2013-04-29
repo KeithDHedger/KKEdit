@@ -451,10 +451,13 @@ void restoreSession(GtkWidget* widget,gpointer data)
 					gtk_notebook_set_current_page(notebook,currentPage-1);
 					while(intarg!=-1)
 						{
-							gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
-							intarg++;
-							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
-							addBookmark(NULL,NULL);
+							if((bool)data==true)
+								{
+									gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
+									intarg++;
+									gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
+									addBookmark(NULL,NULL);
+								}
 							fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 						}
