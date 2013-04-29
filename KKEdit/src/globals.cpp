@@ -58,6 +58,7 @@ char*			fontAndSize;
 char*			terminalCommand;
 int				depth;
 bool			onExitSaveSession;
+bool			restoreBookmarks;
 
 GtkWidget*		fontBox;
 GtkWidget*		terminalBox;
@@ -69,6 +70,7 @@ bool			tmpSingleUse;
 int				tmpTabWidth;
 int				tmpDepth;
 bool			tmpSaveSessionOnExit;
+bool			tmpRestoreBookmarks;
 
 GtkWidget*		toolNameWidget;
 GtkWidget*		commandLineWidget;
@@ -77,6 +79,8 @@ GtkWidget*		syncWidget;
 GtkWidget*		ignoreWidget;
 GtkWidget*		pasteWidget;
 GtkWidget*		replaceWidget;
+
+GtkWidget*		restoreBMs;
 
 bool			inTerm=false;
 bool			runSync=true;

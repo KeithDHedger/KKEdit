@@ -124,6 +124,7 @@ extern char*			fontAndSize;
 extern char*			terminalCommand;
 extern int				depth;
 extern bool				onExitSaveSession;
+extern bool				restoreBookmarks;
 
 extern GtkWidget*		fontBox;
 extern GtkWidget*		terminalBox;
@@ -135,6 +136,7 @@ extern bool				tmpSingleUse;
 extern int				tmpTabWidth;
 extern int				tmpDepth;
 extern bool				tmpSaveSessionOnExit;
+extern bool				tmpRestoreBookmarks;
 
 extern GtkWidget*		toolNameWidget;
 extern GtkWidget*		commandLineWidget;
@@ -143,6 +145,8 @@ extern GtkWidget*		syncWidget;
 extern GtkWidget*		ignoreWidget;
 extern GtkWidget*		pasteWidget;
 extern GtkWidget*		replaceWidget;
+
+extern GtkWidget*		restoreBMs;
 
 extern bool				inTerm;
 extern bool				runSync;

@@ -586,6 +586,7 @@ void writeConfig(void)
 			fprintf(fd,"insenssearch	%i\n",(int)insensitiveSearch);
 			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
 			fprintf(fd,"savesessiononexit	%i\n",(int)onExitSaveSession);
+			fprintf(fd,"restorebookmarks	%i\n",(int)restoreBookmarks);
 
 			fprintf(fd,"tabwidth	%i\n",tabWidth);
 			fprintf(fd,"depth	%i\n",depth);
@@ -661,6 +662,13 @@ void setPrefs(GtkWidget* widget,gpointer data)
 		tmpSingleUse=gtk_toggle_button_get_active((GtkToggleButton*)data);
 	if(strcmp(gtk_widget_get_name(widget),"save")==0)
 		tmpSaveSessionOnExit=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"marks")==0)
+		tmpRestoreBookmarks=gtk_toggle_button_get_active((GtkToggleButton*)data);
+
+//	if(tmpSaveSessionOnExit==false)
+//		tmpRestoreBookmarks=false;
+
+	gtk_widget_set_sensitive(restoreBMs,tmpSaveSessionOnExit);
 
 	if(strcmp(gtk_widget_get_name(widget),"tabs")==0)
 		tmpTabWidth=(int)gtk_spin_button_get_value((GtkSpinButton*)data);
@@ -679,6 +687,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			highLight=tmpHighLight;
 			singleUse=tmpSingleUse;
 			onExitSaveSession=tmpSaveSessionOnExit;
+			restoreBookmarks=tmpRestoreBookmarks;
 
 			if(terminalCommand!=NULL)
 				{

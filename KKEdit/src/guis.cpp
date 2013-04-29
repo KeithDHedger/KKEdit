@@ -248,6 +248,14 @@ void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
+//auto restore bookmarks
+	restoreBMs=gtk_check_button_new_with_label("Restore bookmarks with session");
+	gtk_widget_set_name(restoreBMs,"marks");
+	gtk_toggle_button_set_active((GtkToggleButton*)restoreBMs,restoreBookmarks);
+	gtk_box_pack_start(GTK_BOX(vbox),restoreBMs,true,true,0);
+	g_signal_connect(G_OBJECT(restoreBMs),"toggled",G_CALLBACK(setPrefs),(void*)restoreBMs);
+	gtk_widget_set_sensitive(restoreBMs,onExitSaveSession);
+
 //tabwidth  -- CLEAN
 	GtkObject*	adj=gtk_adjustment_new(tmpTabWidth,1,64,1,1,0);
 	hbox=gtk_hbox_new(true,0);

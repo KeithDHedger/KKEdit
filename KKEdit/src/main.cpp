@@ -57,6 +57,8 @@ void readConfig(void)
 
 					if(strcasecmp(name,"savesessiononexit")==0)
 							onExitSaveSession=(bool)atoi(strarg);
+					if(strcasecmp(name,"restorebookmarks")==0)
+							restoreBookmarks=(bool)atoi(strarg);
 
 					if(strcasecmp(name,"tabwidth")==0)
 							tabWidth=atoi(strarg);
@@ -118,6 +120,8 @@ void init(void)
 	insensitiveSearch=true;
 	replaceAll=false;
 	onExitSaveSession=false;
+	onExitSaveSession=false;
+	restoreBookmarks=false;
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
@@ -133,6 +137,7 @@ void init(void)
 	tmpTabWidth=tabWidth;
 	tmpDepth=depth;
 	tmpSaveSessionOnExit=onExitSaveSession;
+	tmpRestoreBookmarks=restoreBookmarks;
 }
 
 int main(int argc,char **argv)
@@ -181,7 +186,7 @@ int main(int argc,char **argv)
 			buildMainGui();
 
 			if(onExitSaveSession==true)
-				restoreSession(NULL,NULL);
+				restoreSession(NULL,(void*)restoreBookmarks);
 
 			for(int j=1;j<argc;j++)
 				openFile(argv[j],0);
