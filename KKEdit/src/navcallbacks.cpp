@@ -191,7 +191,6 @@ void jumpToMark(GtkWidget* widget,gpointer glist)
 	pageStruct*		page;
 	GtkTextIter		iter;
 	int				thistab=currentTabNumber;
-	bookMarkStruct*	bookmark=(bookMarkStruct*)((GList*)glist)->data;
 
 	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
 		{
@@ -220,8 +219,10 @@ void addBookmark(GtkWidget* widget,gpointer data)
 	char*			previewtext;
 	char*			starttext;
 	char*			endtext;
-	char*			finaltext;
 	bookMarkStruct*	bookmark;
+
+	if(page==NULL)
+		return;
 
 	mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
@@ -248,31 +249,16 @@ void addBookmark(GtkWidget* widget,gpointer data)
 	bookmark=(bookMarkStruct*)malloc(sizeof(bookMarkStruct));
 
 	bookmark->name=name;
-	bookmark->page=page;
-	bookmark->filePath=page->filePath;
 	bookmark->label=previewtext;
 
 	page->markList=g_list_append(page->markList,(gpointer)bookmark);
 
-	bookmark->mark=gtk_text_buffer_create_mark((GtkTextBuffer*)bookmark->page->buffer,bookmark->name,&iter,true);
+	bookmark->mark=gtk_text_buffer_create_mark((GtkTextBuffer*)page->buffer,name,&iter,true);
 	menuitem=gtk_menu_item_new_with_label(bookmark->label);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);	
-//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)page->markList);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)bookmark->name);
 	marknum++;
 	gtk_widget_show_all(menubookmark);
-
-return;
-	gtk_text_buffer_create_mark((GtkTextBuffer*)page->buffer,name,&iter,true);
-
-
-	menuitem=gtk_image_menu_item_new_with_label(previewtext);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
-//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)name);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)name);
-	marknum++;
-	gtk_widget_show_all(menubookmark);
-//	g_free(previewtext);
 }
 
 void removeBookmark(GtkWidget* widget,gpointer data)

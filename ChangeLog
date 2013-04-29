@@ -94,3 +94,5 @@ Added manual gtk doc search to toolbar
 Save/restore bookmarks with session, if the files change on disk, restoring will skew bookmarks.
 Added "Close All Tabs" to file menu.
 Close all tabs BEFORE restoring session.
+Dimmed Nav, func and bookmark menus when no docs open.
+Dimmed saveall, close etc when no docs open.

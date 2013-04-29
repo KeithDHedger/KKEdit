@@ -371,14 +371,16 @@ void reloadFile(GtkWidget* widget,gpointer data)
 	GtkTextIter	start;
 	GtkTextIter	end;
 
-	g_file_get_contents(page->filePath,&buffer,(gsize*)&filelen,NULL);
-
-	gtk_text_buffer_get_bounds((GtkTextBuffer*)page->buffer,&start,&end);
-	gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&start,&end);
-	gtk_text_buffer_delete_selection((GtkTextBuffer*)page->buffer,true,true);
-	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
-	gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
-	g_free(buffer);
+	if(page->filePath!=NULL)
+		{
+			g_file_get_contents(page->filePath,&buffer,(gsize*)&filelen,NULL);
+			gtk_text_buffer_get_bounds((GtkTextBuffer*)page->buffer,&start,&end);
+			gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&start,&end);
+			gtk_text_buffer_delete_selection((GtkTextBuffer*)page->buffer,true,true);
+			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+			gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
+			g_free(buffer);
+		}
 }
 
 void saveSession(GtkWidget* widget,gpointer data)
@@ -409,7 +411,7 @@ void saveSession(GtkWidget* widget,gpointer data)
 					if(page->markList!=NULL)
 						{
 							listelement=page->markList;
-							for(int loop2=0;loop2<g_list_length(page->markList);loop2++)
+							for(int loop2=0;loop2<(int)g_list_length(page->markList);loop2++)
 								{
 									gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&markiter,((bookMarkStruct*)listelement->data)->mark);
 									fprintf(fd,"%i ",gtk_text_iter_get_line(&markiter));
@@ -417,7 +419,7 @@ void saveSession(GtkWidget* widget,gpointer data)
 									listelement=g_list_next(listelement);
 								}
 						}
-					fprintf(fd,"-1 endmarks\n",page->filePath);
+					fprintf(fd,"-1 endmarks\n");
 				}
 			fclose(fd);
 			g_free(filename);
@@ -433,7 +435,6 @@ void restoreSession(GtkWidget* widget,gpointer data)
 	char		strarg[2048];
 	pageStruct*	page;
 	GtkTextIter	markiter;
-	GtkWidget*	menuitem;
 
 	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
 	fd=fopen(filename,"r");

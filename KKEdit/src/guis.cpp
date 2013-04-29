@@ -462,11 +462,11 @@ void buildMainGui(void)
 	gtk_widget_add_accelerator((GtkWidget *)saveAsMenu,"activate",accgroup,'S',(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
 	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
 //save all
-	menuitem=gtk_image_menu_item_new_with_label("Save All");
+	menusaveall=gtk_image_menu_item_new_with_label("Save All");
 	image=gtk_image_new_from_stock(GTK_STOCK_SAVE,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doSaveAll),NULL);
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menusaveall,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menusaveall);
+	gtk_signal_connect(GTK_OBJECT(menusaveall),"activate",G_CALLBACK(doSaveAll),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -485,30 +485,30 @@ void buildMainGui(void)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(restoreSession),NULL);
 
 //printfile
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_PRINT,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(printFile),NULL);
+	menuprint=gtk_image_menu_item_new_from_stock(GTK_STOCK_PRINT,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuprint);
+	gtk_signal_connect(GTK_OBJECT(menuprint),"activate",G_CALLBACK(printFile),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //close
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(closeTab),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'W',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+	menuclose=gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuclose);
+	gtk_signal_connect(GTK_OBJECT(menuclose),"activate",G_CALLBACK(closeTab),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)menuclose,"activate",accgroup,'W',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 //close-all
 	image=gtk_image_new_from_stock(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
-	menuitem=gtk_image_menu_item_new_with_label("Close All Tabs");
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(closeAllTabs),NULL);
+	menucloseall=gtk_image_menu_item_new_with_label("Close All Tabs");
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menucloseall,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menucloseall);
+	gtk_signal_connect(GTK_OBJECT(menucloseall),"activate",G_CALLBACK(closeAllTabs),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //reload file
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_REVERT_TO_SAVED,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(reloadFile),NULL);
+	menurevert=gtk_image_menu_item_new_from_stock(GTK_STOCK_REVERT_TO_SAVED,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menurevert);
+	gtk_signal_connect(GTK_OBJECT(menurevert),"activate",G_CALLBACK(reloadFile),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);

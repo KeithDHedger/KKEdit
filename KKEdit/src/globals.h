@@ -85,15 +85,9 @@ struct bookMarkStruct
 {
 	char*				name;
 	char*				label;
-	pageStruct*			page;
-	char*				filePath;
+//	pageStruct*			page;
+//	char*				filePath;
 	GtkTextMark*		mark;
-};
-
-struct pageBMark
-{
-	char*				name;
-	char*				label;
 };
 
 extern GtkWidget*		window;
@@ -108,6 +102,12 @@ extern GtkWidget*		menutools;
 extern GtkWidget*		menubookmark;
 extern GtkWidget*		menubookmarksub;
 extern GtkWidget*		menuhelp;
+extern GtkWidget*		menuprint;
+extern GtkWidget*		menuclose;
+extern GtkWidget*		menucloseall;
+extern GtkWidget*		menusaveall;
+extern GtkWidget*		menurevert;
+
 extern GtkWidget*		redoMenu;
 extern GtkWidget*		undoMenu;
 extern GtkWidget*		saveMenu;

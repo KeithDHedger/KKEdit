@@ -61,6 +61,69 @@ int show_question(char* filename)
 	return(result);
 }
 
+void setSensitive(void)
+{
+	pageStruct*		page=getPageStructPtr(currentTabNumber);
+	const gchar*	text;
+	char*			newlabel;
+	int				offset=0;
+
+	if(page==NULL)
+		{
+//toolbar
+			gtk_widget_set_sensitive((GtkWidget*)undoButton,false);
+			gtk_widget_set_sensitive((GtkWidget*)redoButton,false);
+			gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
+//menu
+			gtk_widget_set_sensitive((GtkWidget*)undoMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)redoMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)menubookmark,false);
+			gtk_widget_set_sensitive((GtkWidget*)menufunc,false);
+			gtk_widget_set_sensitive((GtkWidget*)menunav,false);
+			gtk_widget_set_sensitive((GtkWidget*)menuprint,false);
+			gtk_widget_set_sensitive((GtkWidget*)menuclose,false);
+			gtk_widget_set_sensitive((GtkWidget*)menucloseall,false);
+			gtk_widget_set_sensitive((GtkWidget*)menusaveall,false);
+			gtk_widget_set_sensitive((GtkWidget*)menurevert,false);
+		}
+	else
+		{
+			text=gtk_label_get_text((GtkLabel*)page->tabName);
+//toolbar
+			gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
+			gtk_widget_set_sensitive((GtkWidget*)redoButton,gtk_source_buffer_can_redo(page->buffer));
+			gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
+
+//menu
+			gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));
+			gtk_widget_set_sensitive((GtkWidget*)redoMenu,gtk_source_buffer_can_redo(page->buffer));
+			gtk_widget_set_sensitive((GtkWidget*)saveMenu,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
+//tab
+			gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
+			if(text[0]=='*')
+				offset=1;
+
+			if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer))==true)
+				asprintf(&newlabel,"*%s",&text[offset]);
+			else
+				asprintf(&newlabel,"%s",&text[offset]);
+
+			gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)newlabel);
+			g_free(newlabel);
+			gtk_widget_set_sensitive((GtkWidget*)menubookmark,true);
+			gtk_widget_set_sensitive((GtkWidget*)menunav,true);
+			gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
+			gtk_widget_set_sensitive((GtkWidget*)menuprint,true);
+			gtk_widget_set_sensitive((GtkWidget*)menuclose,true);
+			gtk_widget_set_sensitive((GtkWidget*)menucloseall,true);
+			gtk_widget_set_sensitive((GtkWidget*)menusaveall,true);
+			gtk_widget_set_sensitive((GtkWidget*)menurevert,true);
+			gtk_widget_show_all(page->tabName);
+		}
+}
+
 bool closingAll=false;
 
 void closeTab(GtkWidget* widget,gpointer data)
@@ -81,6 +144,8 @@ void closeTab(GtkWidget* widget,gpointer data)
 
 	closingAll=false;
 	page=getPageStructPtr(thispage);
+	if(page==NULL)
+		return;
 
 	if(gtk_text_buffer_get_modified((GtkTextBuffer*)page->buffer))
 		{
@@ -111,6 +176,7 @@ void closeTab(GtkWidget* widget,gpointer data)
 		g_free(page);
 	currentPage--;
 	gtk_notebook_remove_page(notebook,thispage);
+	setSensitive();
 }
 
 void closeAllTabs(GtkWidget* widget,gpointer data)
@@ -133,39 +199,6 @@ void closeAllTabs(GtkWidget* widget,gpointer data)
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
 	gtk_widget_show_all(menubookmark);
-}
-
-void setSensitive(void)
-{
-	pageStruct*		page=getPageStructPtr(currentTabNumber);
-	const gchar*	text=gtk_label_get_text((GtkLabel*)page->tabName);
-	char*			newlabel;
-	int				offset=0;
-
-//toolbar
-	gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
-	gtk_widget_set_sensitive((GtkWidget*)redoButton,gtk_source_buffer_can_redo(page->buffer));
-	gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
-
-//menu
-	gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));
-	gtk_widget_set_sensitive((GtkWidget*)redoMenu,gtk_source_buffer_can_redo(page->buffer));
-	gtk_widget_set_sensitive((GtkWidget*)saveMenu,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
-
-//tab
-	gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
-	if(text[0]=='*')
-		offset=1;
-
-	if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer))==true)
-		asprintf(&newlabel,"*%s",&text[offset]);
-	else
-		asprintf(&newlabel,"%s",&text[offset]);
-
-
-	gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)newlabel);
-	g_free(newlabel);
-	gtk_widget_show_all(page->tabName);
 }
 
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
