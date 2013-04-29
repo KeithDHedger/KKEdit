@@ -83,7 +83,6 @@ struct functionData
 
 struct bookMarkStruct
 {
-	char*				name;
 	char*				label;
 	GtkTextMark*		mark;
 };

@@ -302,6 +302,8 @@ void newFile(GtkWidget* widget,gpointer data)
 	page->isFirst=true;
 	page->gFile=NULL;
 	page->monitor=NULL;
+	page->markList=NULL;
+
 	gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
 	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);

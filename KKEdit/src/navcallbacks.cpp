@@ -248,7 +248,6 @@ void addBookmark(GtkWidget* widget,gpointer data)
 	asprintf(&name,"BookMark%i",marknum);
 	bookmark=(bookMarkStruct*)malloc(sizeof(bookMarkStruct));
 
-	bookmark->name=name;
 	bookmark->label=previewtext;
 
 	page->markList=g_list_append(page->markList,(gpointer)bookmark);
@@ -256,7 +255,7 @@ void addBookmark(GtkWidget* widget,gpointer data)
 	bookmark->mark=gtk_text_buffer_create_mark((GtkTextBuffer*)page->buffer,name,&iter,true);
 	menuitem=gtk_menu_item_new_with_label(bookmark->label);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);	
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)bookmark->name);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)name);
 	marknum++;
 	gtk_widget_show_all(menubookmark);
 }
