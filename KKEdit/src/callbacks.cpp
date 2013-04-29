@@ -665,9 +665,6 @@ void setPrefs(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"marks")==0)
 		tmpRestoreBookmarks=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
-//	if(tmpSaveSessionOnExit==false)
-//		tmpRestoreBookmarks=false;
-
 	gtk_widget_set_sensitive(restoreBMs,tmpSaveSessionOnExit);
 
 	if(strcmp(gtk_widget_get_name(widget),"tabs")==0)
