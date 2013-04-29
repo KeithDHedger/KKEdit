@@ -89,3 +89,8 @@ Added manual search box to gtk-doc viewer.
 Added auto save/restore session to prefs (default off).
 Tweaked help page.
 Added manual gtk doc search to toolbar
+
+0.0.15
+Save/restore bookmarks with session.
+Added "Close All Tabs" to file menu.
+Close all tabs BEFORE restoring session.

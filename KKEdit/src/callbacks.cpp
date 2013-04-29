@@ -61,17 +61,25 @@ int show_question(char* filename)
 	return(result);
 }
 
+bool closingAll=false;
+
 void closeTab(GtkWidget* widget,gpointer data)
 {
 	long		thispage;
 	int			result;
 	pageStruct*	page;
 
-	if(data==NULL)
-		thispage=gtk_notebook_get_current_page(notebook);
+	if(closingAll==true)
+		thispage=0;
 	else
-		thispage=gtk_notebook_page_num(notebook,(GtkWidget *)data);
+		{
+			if(data==NULL)
+				thispage=gtk_notebook_get_current_page(notebook);
+			else
+				thispage=gtk_notebook_page_num(notebook,(GtkWidget *)data);
+		}
 
+	closingAll=false;
 	page=getPageStructPtr(thispage);
 
 	if(gtk_text_buffer_get_modified((GtkTextBuffer*)page->buffer))
@@ -103,6 +111,28 @@ void closeTab(GtkWidget* widget,gpointer data)
 		g_free(page);
 	currentPage--;
 	gtk_notebook_remove_page(notebook,thispage);
+}
+
+void closeAllTabs(GtkWidget* widget,gpointer data)
+{
+	int	numtabs=gtk_notebook_get_n_pages(notebook);
+	GtkWidget*	menuitem;
+
+	for(int loop=0;loop<numtabs;loop++)
+		{
+			closingAll=true;
+			closeTab(NULL,0);
+		}
+
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menubookmark),NULL);
+	menubookmarksub=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menubookmark),menubookmarksub);
+	menuitem=gtk_menu_item_new_with_label("Add Bookmark");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(addBookmark),NULL);
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
+	gtk_widget_show_all(menubookmark);
 }
 
 void setSensitive(void)

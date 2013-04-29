@@ -196,7 +196,7 @@ void jumpToMark(GtkWidget* widget,gpointer glist)
 	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
 		{
 			page=getPageStructPtr(loop);
-			mark=gtk_text_buffer_get_mark((GtkTextBuffer*)page->buffer,bookmark->name);
+			mark=gtk_text_buffer_get_mark((GtkTextBuffer*)page->buffer,(char*)glist);
 			if(mark!=NULL)
 				{
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
@@ -252,12 +252,13 @@ void addBookmark(GtkWidget* widget,gpointer data)
 	bookmark->filePath=page->filePath;
 	bookmark->label=previewtext;
 
-	page->markList=g_list_prepend(page->markList,(gpointer)bookmark);
+	page->markList=g_list_append(page->markList,(gpointer)bookmark);
 
 	bookmark->mark=gtk_text_buffer_create_mark((GtkTextBuffer*)bookmark->page->buffer,bookmark->name,&iter,true);
 	menuitem=gtk_menu_item_new_with_label(bookmark->label);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);	
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)page->markList);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)page->markList);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)bookmark->name);
 	marknum++;
 	gtk_widget_show_all(menubookmark);
 

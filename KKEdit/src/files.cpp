@@ -19,6 +19,7 @@
 
 #include "globals.h"
 #include "callbacks.h"
+#include "navcallbacks.h"
 
 GtkWidget*	vbox;
 char*		saveFileName=NULL;
@@ -430,15 +431,32 @@ void restoreSession(GtkWidget* widget,gpointer data)
 	char		buffer[2048];
 	int			intarg;
 	char		strarg[2048];
+	pageStruct*	page;
+	GtkTextIter	markiter;
+	GtkWidget*	menuitem;
 
 	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
 	fd=fopen(filename,"r");
 	if (fd!=NULL)
 		{
+			closeAllTabs(NULL,NULL);
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
 					sscanf(buffer,"%s %i",(char*)&strarg,(int*)&intarg);
 					openFile(strarg,intarg);
+					fgets(buffer,2048,fd);
+					sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
+					page=getPageStructPtr(currentPage-1);
+					gtk_notebook_set_current_page(notebook,currentPage-1);
+					while(intarg!=-1)
+						{
+							gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
+							intarg++;
+							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
+							addBookmark(NULL,NULL);
+							fgets(buffer,2048,fd);
+							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
+						}
 				}
 			fclose(fd);
 			g_free(filename);
