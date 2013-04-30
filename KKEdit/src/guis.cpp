@@ -67,6 +67,7 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 															if(selectedToolPath!=NULL)
 																g_free(selectedToolPath);
 															asprintf(&selectedToolPath,"%s",filepath);
+															gtk_entry_set_text((GtkEntry*)toolNameWidget,nameoftool);
 														}
 												}
 										}
@@ -78,13 +79,14 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 				}
 		}
 	if(selectedToolPath!=NULL)
-		printf("%s\n",selectedToolPath);
+		{
+			printf("%s\n",selectedToolPath);
+		}
 	g_free(text);
 }
 
 void fillCombo(GtkComboBoxText* combo)
 {
-
 	GDir*			folder;
 	const gchar*	entry=NULL;
 	FILE*			fd=NULL;
