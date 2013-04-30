@@ -144,8 +144,10 @@ extern GtkWidget*		syncWidget;
 extern GtkWidget*		ignoreWidget;
 extern GtkWidget*		pasteWidget;
 extern GtkWidget*		replaceWidget;
+extern GtkWidget*		toolSelect;
 
 extern GtkWidget*		restoreBMs;
+
 
 extern bool				inTerm;
 extern bool				runSync;

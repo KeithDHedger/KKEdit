@@ -25,6 +25,63 @@
 #include "navcallbacks.h"
 #include "searchcallbacks.h"
 
+void selectToolOptions(GtkWidget* widget,gpointer data)
+{
+	char*	text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
+	//sprintf((char*)&toolpath,"%s/.KKEdit/tools/tool-%s-%i",getenv("HOME"),gtk_entry_get_text((GtkEntry*)toolNameWidget),toolnum);
+	printf("%s\n",text);
+	text=g_strdelimit(text," ",'-');
+	printf("%s/.KKEdit/tools/%s\n",getenv("HOME"),text);
+
+	g_free(text);
+}
+
+void fillCombo(GtkComboBoxText* combo)
+{
+
+	GDir*			folder;
+	const gchar*	entry=NULL;
+	FILE*			fd=NULL;
+	char*			filepath;
+	char			buffer[4096];
+	char*			datafolder[2];
+	char			strarg[1024];
+	char*			menuname=NULL;
+
+	asprintf(&datafolder[0],"%s/tools/",DATADIR);
+	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));
+
+	for(int loop=0;loop<2;loop++)
+		{
+			folder=g_dir_open(datafolder[loop],0,NULL);
+
+			if(folder!=NULL)
+				{
+					entry=g_dir_read_name(folder);
+					while(entry!=NULL)
+						{
+							asprintf(&filepath,"%s%s",datafolder[loop],entry);
+							fd=fopen(filepath,"r");
+							if(fd!=NULL)
+								{
+									while(fgets(buffer,4096,fd))
+										{
+											buffer[strlen(buffer)-1]=0;
+											sscanf((char*)&buffer,"%s",(char*)&strarg);
+											if(strcmp(strarg,"name")==0)
+												asprintf(&menuname,"%.*s",(int)strlen(buffer)-5,(char*)&buffer[5]);
+
+										}
+									if((menuname!=NULL) &&(strlen(menuname)>0))
+										gtk_combo_box_text_append_text((GtkComboBoxText*)toolSelect,menuname);
+									fclose(fd);
+								}
+							entry=g_dir_read_name(folder);
+						}
+				}
+		}
+}
+
 void doMakeTool(void)
 {
 	GtkWidget*	vbox;
@@ -36,6 +93,15 @@ void doMakeTool(void)
 	gtk_window_set_title((GtkWindow*)toolwin,"Create New Tool");
 	vbox=gtk_vbox_new(false,8);
 
+//select tool
+//	toolSelect=gtk_combo_box_text_new();
+	toolSelect=gtk_combo_box_text_new();
+	gtk_box_pack_start(GTK_BOX(vbox),toolSelect,false,true,0);
+	g_signal_connect(G_OBJECT(toolSelect),"changed",G_CALLBACK(selectToolOptions),NULL);
+
+	fillCombo((GtkComboBoxText*) toolSelect);
+
+//gtk_combo_box_text_append_text((GtkComboBoxText*)toolSelect,menuname);
 //name
 	toolNameWidget=gtk_entry_new();
 	hbox=gtk_hbox_new(false,0);
@@ -108,6 +174,10 @@ void doMakeTool(void)
 
 //show it
 	gtk_container_add(GTK_CONTAINER(toolwin),(GtkWidget*)vbox);
+
+	gtk_signal_connect_object(GTK_OBJECT(toolwin),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(toolwin));
+	gtk_signal_connect(GTK_OBJECT(toolwin),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
+
 	gtk_widget_show_all(toolwin);
 }
 
@@ -146,6 +216,8 @@ void buildTools(void)
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+//	toolSelect=gtk_combo_box_text_new();
 
 	for(int loop=0;loop<2;loop++)
 		{
@@ -187,6 +259,9 @@ void buildTools(void)
 											menuitem=gtk_image_menu_item_new_with_label(tool->menuName);
 											gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 											gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)tool);
+											
+										//	gtk_combo_box_text_append_text((GtkComboBoxText*)toolSelect,menuname);
+											
 											g_free(menuname);
 											g_free(commandarg);
 											menuname=NULL;

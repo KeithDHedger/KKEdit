@@ -79,6 +79,7 @@ GtkWidget*		syncWidget;
 GtkWidget*		ignoreWidget;
 GtkWidget*		pasteWidget;
 GtkWidget*		replaceWidget;
+GtkWidget*		toolSelect;
 
 GtkWidget*		restoreBMs;
 
