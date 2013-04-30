@@ -25,14 +25,60 @@
 #include "navcallbacks.h"
 #include "searchcallbacks.h"
 
+char*	selectedToolPath=NULL;
+
 void selectToolOptions(GtkWidget* widget,gpointer data)
 {
-	char*	text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
-	//sprintf((char*)&toolpath,"%s/.KKEdit/tools/tool-%s-%i",getenv("HOME"),gtk_entry_get_text((GtkEntry*)toolNameWidget),toolnum);
-	printf("%s\n",text);
-	text=g_strdelimit(text," ",'-');
-	printf("%s/.KKEdit/tools/%s\n",getenv("HOME"),text);
+	char*			datafolder[2];
+	char*			nameoftool=NULL;
+	GDir*			folder;
+	const gchar*	entry=NULL;
+	FILE*			fd=NULL;
+	char*			filepath;
+	char			buffer[4096];
+	char			strarg[1024];
+	char*			text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
 
+	asprintf(&datafolder[0],"%s/tools/",DATADIR);
+	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));
+
+	for(int loop=0;loop<2;loop++)
+		{
+			folder=g_dir_open(datafolder[loop],0,NULL);
+
+			if(folder!=NULL)
+				{
+					entry=g_dir_read_name(folder);
+					while(entry!=NULL)
+						{
+							asprintf(&filepath,"%s%s",datafolder[loop],entry);
+							fd=fopen(filepath,"r");
+							if(fd!=NULL)
+								{
+									while(fgets(buffer,4096,fd))
+										{
+											buffer[strlen(buffer)-1]=0;
+											sscanf((char*)&buffer,"%s",(char*)&strarg);
+											if(strcmp(strarg,"name")==0)
+												{
+													asprintf(&nameoftool,"%s",(char*)&buffer[5]);
+													if((nameoftool!=NULL) &&(strlen(nameoftool)>0) && (strcmp(nameoftool,text)==0))
+														{
+															if(selectedToolPath!=NULL)
+																g_free(selectedToolPath);
+															asprintf(&selectedToolPath,"%s",filepath);
+														}
+												}
+										}
+									fclose(fd);
+								}
+							g_free(filepath);
+							entry=g_dir_read_name(folder);
+						}
+				}
+		}
+	if(selectedToolPath!=NULL)
+		printf("%s\n",selectedToolPath);
 	g_free(text);
 }
 
