@@ -712,7 +712,6 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 	char*	dirname;
 	FILE*	fd=NULL;
 	char	toolpath[2048];
-	int		toolnum=1;
 	char*	text;
 
 	if(strcmp(gtk_widget_get_name(widget),"interm")==0)

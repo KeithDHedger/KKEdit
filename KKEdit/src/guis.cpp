@@ -37,6 +37,10 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 	char*			filepath;
 	char			buffer[4096];
 	char			strarg[1024];
+
+	int				intermarg=0;
+	int				flagsarg=0;
+
 	char*			text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
 
 	asprintf(&datafolder[0],"%s/tools/",DATADIR);
@@ -80,7 +84,39 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 		}
 	if(selectedToolPath!=NULL)
 		{
-			printf("%s\n",selectedToolPath);
+			fd=fopen(selectedToolPath,"r");
+			if(fd!=NULL)
+				{
+					while(fgets(buffer,4096,fd))
+						{
+							buffer[strlen(buffer)-1]=0;
+							sscanf((char*)&buffer,"%s",(char*)&strarg);
+							if(strcmp(strarg,"name")==0)
+								gtk_entry_set_text((GtkEntry*)toolNameWidget,(char*)&buffer[5]);
+							if(strcmp(strarg,"command")==0)
+								gtk_entry_set_text((GtkEntry*)commandLineWidget,(char*)&buffer[8]);
+							if(strcmp(strarg,"interm")==0)
+								{
+									sscanf((char*)&buffer,"%*s %i",&intermarg);
+									gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,(bool)intermarg);
+								}
+							if(strcmp(strarg,"flags")==0)
+								{
+									sscanf((char*)&buffer,"%*s %i",&flagsarg);
+									if(flagsarg==TOOL_ASYNC)
+										gtk_toggle_button_set_active((GtkToggleButton*)syncWidget,false);
+									else
+										gtk_toggle_button_set_active((GtkToggleButton*)syncWidget,true);
+									if(flagsarg==TOOL_IGNORE_OP)
+										gtk_toggle_button_set_active((GtkToggleButton*)ignoreWidget,true);
+									if(flagsarg==TOOL_PASTE_OP)
+										gtk_toggle_button_set_active((GtkToggleButton*)pasteWidget,true);
+									if(flagsarg==TOOL_REPLACE_OP)
+										gtk_toggle_button_set_active((GtkToggleButton*)replaceWidget,true);
+								}
+							}
+						fclose(fd);
+					}
 		}
 	g_free(text);
 }
@@ -251,7 +287,7 @@ void buildTools(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutools),menu);
 
 //addtool
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW,NULL);
+	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_EDIT,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doMakeTool),NULL);
 
