@@ -94,14 +94,11 @@ void doMakeTool(void)
 	vbox=gtk_vbox_new(false,8);
 
 //select tool
-//	toolSelect=gtk_combo_box_text_new();
 	toolSelect=gtk_combo_box_text_new();
 	gtk_box_pack_start(GTK_BOX(vbox),toolSelect,false,true,0);
 	g_signal_connect(G_OBJECT(toolSelect),"changed",G_CALLBACK(selectToolOptions),NULL);
-
 	fillCombo((GtkComboBoxText*) toolSelect);
 
-//gtk_combo_box_text_append_text((GtkComboBoxText*)toolSelect,menuname);
 //name
 	toolNameWidget=gtk_entry_new();
 	hbox=gtk_hbox_new(false,0);
@@ -174,10 +171,6 @@ void doMakeTool(void)
 
 //show it
 	gtk_container_add(GTK_CONTAINER(toolwin),(GtkWidget*)vbox);
-
-	gtk_signal_connect_object(GTK_OBJECT(toolwin),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(toolwin));
-	gtk_signal_connect(GTK_OBJECT(toolwin),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
-
 	gtk_widget_show_all(toolwin);
 }
 
@@ -216,8 +209,6 @@ void buildTools(void)
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
-//	toolSelect=gtk_combo_box_text_new();
 
 	for(int loop=0;loop<2;loop++)
 		{
@@ -259,9 +250,6 @@ void buildTools(void)
 											menuitem=gtk_image_menu_item_new_with_label(tool->menuName);
 											gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 											gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)tool);
-											
-										//	gtk_combo_box_text_append_text((GtkComboBoxText*)toolSelect,menuname);
-											
 											g_free(menuname);
 											g_free(commandarg);
 											menuname=NULL;

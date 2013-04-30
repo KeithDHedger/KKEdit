@@ -713,6 +713,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 	FILE*	fd=NULL;
 	char	toolpath[2048];
 	int		toolnum=1;
+	char*	text;
 
 	if(strcmp(gtk_widget_get_name(widget),"interm")==0)
 		inTerm=gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget);
@@ -756,22 +757,9 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{
 			asprintf(&dirname,"%s/.KKEdit/tools",getenv("HOME"));
-
-//gchar *             g_strdelimit                        (gchar *string,
-                             //                            const gchar *delimiters,
-                               //                          gchar new_delimiter);
-
-			char*	text;
 			asprintf(&text,"%s",gtk_entry_get_text((GtkEntry*)toolNameWidget));
 			text=g_strdelimit(text," ",'-');
 			sprintf((char*)&toolpath,"%s/.KKEdit/tools/%s",getenv("HOME"),text);
-		//	while(true)
-			//	{
-				//	sprintf((char*)&toolpath,"%s/.KKEdit/tools/tool-%s-%i",getenv("HOME"),gtk_entry_get_text((GtkEntry*)toolNameWidget),toolnum);
-					//if(!g_file_test(toolpath,G_FILE_TEST_EXISTS))
-//						//break;
-	//				toolnum++;
-		//		}
 
 			fd=fopen(toolpath,"w");
 			if(fd!=NULL)
@@ -783,17 +771,14 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 					fclose(fd);
 				}
 			g_free(dirname);
-			//gtk_widget_destroy((GtkWidget*)data);
-gtk_widget_hide((GtkWidget*)data);
+			gtk_widget_destroy((GtkWidget*)data);
 
 			buildTools();
 			gtk_widget_show_all(menutools);
 		}
 
 	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
-		gtk_widget_hide((GtkWidget*)data);
-
-		//gtk_widget_destroy((GtkWidget*)data);
+		gtk_widget_destroy((GtkWidget*)data);
 }
 
 void doAbout(GtkWidget* widget,gpointer data)
