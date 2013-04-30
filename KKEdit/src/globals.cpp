@@ -81,6 +81,8 @@ GtkWidget*		pasteWidget;
 GtkWidget*		replaceWidget;
 GtkWidget*		toolSelect;
 
+char*			selectedToolPath=NULL;
+
 GtkWidget*		restoreBMs;
 
 bool			inTerm=false;

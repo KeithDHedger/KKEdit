@@ -146,6 +146,8 @@ extern GtkWidget*		pasteWidget;
 extern GtkWidget*		replaceWidget;
 extern GtkWidget*		toolSelect;
 
+extern char*			selectedToolPath;
+
 extern GtkWidget*		restoreBMs;
 
 

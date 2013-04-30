@@ -100,3 +100,5 @@ Session can now be restored with/without the saved bookmarks.
 Auto restore bookmarks can be set in prefs
 Added error dialog if can't save.
 External tools now editable from the GUI.
+For convienience info label in tools gui is selectable.
+Added 'delete' to tools GUI.

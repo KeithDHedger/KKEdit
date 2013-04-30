@@ -14,10 +14,6 @@
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
 
-#ifdef BUILDDOCVIEWER
-#include <webkit/webkit.h>
-#endif
-
 #include "config.h"
 #include "globals.h"
 #include "files.h"
@@ -25,7 +21,9 @@
 #include "navcallbacks.h"
 #include "searchcallbacks.h"
 
-char*	selectedToolPath=NULL;
+#ifdef BUILDDOCVIEWER
+#include <webkit/webkit.h>
+#endif
 
 void selectToolOptions(GtkWidget* widget,gpointer data)
 {
@@ -99,6 +97,12 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 								{
 									sscanf((char*)&buffer,"%*s %i",&intermarg);
 									gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,(bool)intermarg);
+									if((bool)intermarg==true)
+										{
+											gtk_widget_set_sensitive(ignoreWidget,false);
+											gtk_widget_set_sensitive(pasteWidget,false);
+											gtk_widget_set_sensitive(replaceWidget,false);
+										}
 								}
 							if(strcmp(strarg,"flags")==0)
 								{
@@ -172,6 +176,7 @@ void doMakeTool(void)
 	GtkWidget*	hbox;
 	GtkWidget*	button;
 	GtkWidget*	toolwin;
+	GtkWidget*	infolabel;
 
 	toolwin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)toolwin,"Edit External Tools");
@@ -202,7 +207,9 @@ void doMakeTool(void)
 	gtk_entry_set_text((GtkEntry*)commandLineWidget,"");
 
 //info
-	gtk_box_pack_start(GTK_BOX(vbox),gtk_label_new(PLACEHOLDERINFO),false,false,0);
+	infolabel=gtk_label_new(PLACEHOLDERINFO);
+	gtk_label_set_selectable((GtkLabel*)infolabel,true);
+	gtk_box_pack_start(GTK_BOX(vbox),infolabel,false,false,0);
 //in terminal
 	inTermWidget=gtk_check_button_new_with_label("Run Tool In Terminal");
 	gtk_widget_set_name(inTermWidget,"interm");
@@ -247,6 +254,11 @@ void doMakeTool(void)
 	gtk_widget_set_name(button,"apply");
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setToolOptions),(void*)toolwin);	
 
+	button=gtk_button_new_from_stock(GTK_STOCK_DELETE);
+	gtk_box_pack_start(GTK_BOX(hbox),button,true,false,2);
+	gtk_widget_set_name(button,"delete");
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setToolOptions),(void*)toolwin);	
+
 	button=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,false,2);
 	gtk_widget_set_name(button,"cancel");
@@ -263,6 +275,7 @@ void buildTools(void)
 	GDir*			folder;
 	GtkWidget*		menuitem;
 	GtkWidget*		menu;
+	GtkWidget*		image;
 	const gchar*	entry=NULL;
 	FILE*			fd=NULL;
 	char*			filepath;
@@ -287,7 +300,9 @@ void buildTools(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutools),menu);
 
 //addtool
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_EDIT,NULL);
+	menuitem=gtk_image_menu_item_new_with_label("Manage External Tools");
+	image=gtk_image_new_from_stock(GTK_STOCK_EDIT,GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doMakeTool),NULL);
 

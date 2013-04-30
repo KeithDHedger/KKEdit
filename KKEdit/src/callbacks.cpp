@@ -26,6 +26,22 @@ GtkWidget*			tabMenu;
 char				defineText[1024];
 GtkPrintSettings*	settings=NULL;
 
+int yesNo(char* question,char* file)
+{
+	GtkWidget*	dialog;
+	int			result;
+
+	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,"%s %s",question,file);
+
+	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_YES,GTK_RESPONSE_YES,GTK_STOCK_NO,GTK_RESPONSE_CANCEL,NULL);
+	gtk_window_set_title(GTK_WINDOW(dialog),"What Do You Want To Do?");
+
+	result=gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+
+	return(result);
+}
+
 void doOpenFile(GtkWidget* widget,gpointer data)
 {
 	GtkWidget*	dialog;
@@ -774,6 +790,19 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 
 			buildTools();
 			gtk_widget_show_all(menutools);
+		}
+
+	if(strcmp(gtk_widget_get_name(widget),"delete")==0)
+		{
+			if((selectedToolPath!=NULL) && (yesNo("Are you sure you want to delete",(char*)gtk_entry_get_text((GtkEntry*)toolNameWidget))==GTK_RESPONSE_YES))
+				{
+						asprintf(&dirname,"rm %s",selectedToolPath);
+						system(dirname);
+						buildTools();
+						gtk_widget_show_all(menutools);
+						g_free(dirname);
+				}
+			gtk_widget_destroy((GtkWidget*)data);
 		}
 
 	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
