@@ -174,7 +174,7 @@ void doMakeTool(void)
 	GtkWidget*	toolwin;
 
 	toolwin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title((GtkWindow*)toolwin,"Create New Tool");
+	gtk_window_set_title((GtkWindow*)toolwin,"Edit External Tools");
 	vbox=gtk_vbox_new(false,8);
 
 //select tool

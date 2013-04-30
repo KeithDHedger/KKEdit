@@ -99,3 +99,4 @@ Dimmed saveall, close etc when no docs open.
 Session can now be restored with/without the saved bookmarks.
 Auto restore bookmarks can be set in prefs
 Added error dialog if can't save.
+External tools now editable from the GUI.
