@@ -614,7 +614,7 @@ void buildMainGui(void)
 	gtk_container_add((GtkContainer *)toolbutton,entrybox);
 	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
 	g_signal_connect_after(G_OBJECT(entrybox),"activate",G_CALLBACK(defSearchFromBar),(void*)entrybox);
-	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Find Definition");
+	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Search For Define");
 
 
 //menus
