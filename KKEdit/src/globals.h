@@ -33,6 +33,8 @@
 #define TOOL_IGNORE_OP 0
 #define TOOL_PASTE_OP 1
 #define TOOL_REPLACE_OP 2
+#define TOOL_SHOW_DOC 4
+#define	TOOL_INSERT_MASK 3
 
 #define VALIDCHARS "[]a-zA-Z0-9:/@ ()_-,.*#;[\"]"
 #define VALIDFILENAMECHARS "[A-Za-z0-9_-./]"
@@ -40,7 +42,8 @@
 
 #define BOOKMAXMARKMENULEN 40
 
-#define PLACEHOLDERINFO "PLACEHOLDERS:\n%t - Currently selected text. Passed to command as $KKEDIT_SELECTION\n%f - Filepath of the current document. Passed to command as $KKEDIT_CURRENTFILE\n%d - Directory of the current document or $HOME. Passed to command as $KKEDIT_CURRENTDIR\n%i -The location of the globally installed tools. Passed to command as $KKEDIT_DATADIR"
+#define PLACEHOLDERINFO "PLACEHOLDERS:\n%t - Currently selected text. Passed to command as $KKEDIT_SELECTION\n%f - Filepath of the current document. Passed to command as $KKEDIT_CURRENTFILE\n%d - Directory of the current document or $HOME. Passed to command as $KKEDIT_CURRENTDIR\n%i -The location of the globally installed tools. Passed to command as $KKEDIT_DATADIR\n%h - Tempory file for displaying html in doc viewer. Passed to command as $KKEDIT_HTMLFILE"
+
 struct pageStruct
 {
 	GtkScrolledWindow*	pageWindow;
@@ -144,6 +147,7 @@ extern GtkWidget*		syncWidget;
 extern GtkWidget*		ignoreWidget;
 extern GtkWidget*		pasteWidget;
 extern GtkWidget*		replaceWidget;
+extern GtkWidget*		showDocWidget;
 extern GtkWidget*		toolSelect;
 
 extern char*			selectedToolPath;
@@ -156,6 +160,7 @@ extern bool				runSync;
 extern bool				ignoreOut;
 extern bool				pasteOut;
 extern bool				replaceOut;
+extern bool				showDoc;
 extern bool				editTool;
 
 extern int				windowWidth;
@@ -183,6 +188,8 @@ extern GtkWidget*		replaceBox;
 
 extern char*			functionSearchText;
 extern char*			thePage;
+extern char*			htmlFile;
+extern char*			htmlURI;
 
 #ifdef BUILDDOCVIEWER
 extern GtkWidget*		docView;

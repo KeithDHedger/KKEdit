@@ -102,3 +102,7 @@ Added error dialog if can't save.
 External tools now editable from the GUI.
 For convienience info label in tools gui is selectable.
 Added 'delete' to tools GUI.
+Added 'Home' button to gtk doc viewer.
+Added '$KKEDIT_HTMLFILE' to vars passed to external script, this file should be used for displaying output from tool in html format.
+Adde '%h% to tools place holders, details as above.
+Added 'show HTML doc' option to tool, to either display the gtk doc viewer or the default browser with the page ' $KKEDIT_HTMLFILE'

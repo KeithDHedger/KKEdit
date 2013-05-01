@@ -355,6 +355,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	chdir(dirname);
 
 	setenv("KKEDIT_CURRENTFILE",page->filePath,1);
+	setenv("KKEDIT_HTMLFILE",htmlFile,1);
 	setenv("KKEDIT_CURRENTDIR",dirname,1);
 	setenv("KKEDIT_DATADIR",DATADIR,1);
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
@@ -406,13 +407,13 @@ void externalTool(GtkWidget* widget,gpointer data)
 	unsetenv("KKEDIT_CURRENTDIR");
 	unsetenv("KKEDIT_DATADIR");
 	unsetenv("KKEDIT_SELECTION");
+	unsetenv("KKEDIT_HTMLFILE");
 	g_free(text);
 	g_free(dirname);
 }
 
 void openHelp(GtkWidget* widget,gpointer data)
 {
-
 #ifdef BUILDDOCVIEWER
 	asprintf(&thePage,"file://%s/help/help.html",DATADIR);
 	showDocView(NULL,(void*)1);
@@ -422,7 +423,6 @@ void openHelp(GtkWidget* widget,gpointer data)
 	runCommand(runhelp,NULL,false,8);
 	g_free(runhelp);
 #endif
-
 }
 
 void copyToClipboard(GtkWidget* widget,gpointer data)
@@ -653,6 +653,9 @@ bool doSaveAll(GtkWidget* widget,gpointer data)
 
 void doShutdown(GtkWidget* widget,gpointer data)
 {
+	char*	command;
+
+	asprintf(&command,"rm %s &>/dev/null",htmlFile);
 	if(doSaveAll(widget,(void*)true)==true)
 		{
 			if(onExitSaveSession)
@@ -660,7 +663,8 @@ void doShutdown(GtkWidget* widget,gpointer data)
 			writeExitData();
 			gtk_main_quit();
 		}
-	system("rm /tmp/kkeditsearchfile.html &>/dev/null");
+	system(command);
+	g_free(command);
 }
 
 void setPrefs(GtkWidget* widget,gpointer data)
@@ -740,6 +744,8 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 		pasteOut=gtk_toggle_button_get_active((GtkToggleButton*)pasteWidget);
 	if(strcmp(gtk_widget_get_name(widget),"replace")==0)
 		replaceOut=gtk_toggle_button_get_active((GtkToggleButton*)replaceWidget);
+	if(strcmp(gtk_widget_get_name(widget),"showdoc")==0)
+		showDoc=gtk_toggle_button_get_active((GtkToggleButton*)showDocWidget);
 
 	if(runSync==false)
 		{
@@ -761,6 +767,9 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 			if(replaceOut==true)
 				flags=TOOL_REPLACE_OP;				
 		}
+
+	if(showDoc==true)
+		flags=flags+TOOL_SHOW_DOC;				
 
 	if(inTerm==true)
 		{

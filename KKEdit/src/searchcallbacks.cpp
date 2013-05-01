@@ -29,6 +29,12 @@ void webKitGoForward(GtkWidget* widget,gpointer data)
 {
 	webkit_web_view_go_forward((WebKitWebView*)data);
 }
+
+void webKitGoHome(GtkWidget* widget,gpointer data)
+{
+	if(g_file_test(htmlFile,G_FILE_TEST_EXISTS)==true)
+		webkit_web_view_load_uri((WebKitWebView*)data,htmlURI);
+}
 #endif
 
 void docSearch(GtkWidget* widget,gpointer data)
@@ -48,7 +54,6 @@ void docSearch(GtkWidget* widget,gpointer data)
 	char*		tempstr;
 	char*		link;
 	int			cnt=0;
-
 
 	for(int loop=0;loop<2048;loop++)
 		{
@@ -108,7 +113,7 @@ void docSearch(GtkWidget* widget,gpointer data)
 
 			if(cnt>1)
 				{
-					fd=fopen("/tmp/kkeditsearchfile.html","w");
+					fd=fopen(htmlFile,"w");
 					if(fd!=NULL)
 						{								
 							fprintf(fd,"<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
@@ -122,7 +127,7 @@ void docSearch(GtkWidget* widget,gpointer data)
 							fprintf(fd,"</body>\n");
 							fprintf(fd,"</html>\n");
 							fclose(fd);
-							asprintf(&thePage,"file:///tmp/kkeditsearchfile.html");
+							asprintf(&thePage,"%s",htmlURI);
 						}
 				}
 			else
@@ -154,6 +159,10 @@ void showDocView(GtkWidget* widget,gpointer data)
 			g_free(thePage);
 			thePage=NULL;
 		}
+	else
+		{
+			webKitGoHome(NULL,(void*)webView);
+		}
 	gtk_widget_show_all(docView);
 	gtk_window_present((GtkWindow*)docView);
 
@@ -167,6 +176,12 @@ void showDocView(GtkWidget* widget,gpointer data)
 			g_free(command);
 			g_free(thePage);
 			thePage=NULL;
+		}
+	else
+		{
+			asprintf(&command,"xdg-open %s",htmlURI);
+			g_spawn_command_line_async(command,NULL);
+			g_free(command);			
 		}
 #endif
 }

@@ -20,7 +20,7 @@
 #endif
 
 #include "globals.h"
-
+#include "searchcallbacks.h"
 
 GtkWidget*		window=NULL;
 GtkNotebook*	notebook=NULL;
@@ -79,6 +79,7 @@ GtkWidget*		syncWidget;
 GtkWidget*		ignoreWidget;
 GtkWidget*		pasteWidget;
 GtkWidget*		replaceWidget;
+GtkWidget*		showDocWidget;
 GtkWidget*		toolSelect;
 
 char*			selectedToolPath=NULL;
@@ -90,6 +91,7 @@ bool			runSync=true;
 bool			ignoreOut=true;
 bool			pasteOut=false;
 bool			replaceOut=false;
+bool			showDoc=false;
 bool			editTool=false;
 
 int				windowWidth;
@@ -117,6 +119,8 @@ GtkWidget*		replaceBox;
 
 char*			functionSearchText=NULL;
 char*			thePage=NULL;
+char*			htmlFile=NULL;
+char*			htmlURI=NULL;
 
 #ifdef BUILDDOCVIEWER
 GtkWidget*		docView;
@@ -210,7 +214,7 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 	else
 		asprintf(&command,"%s",commandtorun);
 
-	if(flags==8)
+	if((flags & TOOL_ASYNC)==TOOL_ASYNC)
 		{
 			g_spawn_command_line_async(command,NULL);
 		}
@@ -230,6 +234,10 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 						g_free(stderr);
 				}
 		}
+
+	if(flags & TOOL_SHOW_DOC)
+		showDocView(NULL,(void*)1);
+
 	g_free(command);
 }
 
@@ -444,20 +452,4 @@ char* sliceStrLen(char* srcstring,char* startstr,int len)
 	printf("%i\n",startchar);
 	return(sliceLen(srcstring,startchar,len));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

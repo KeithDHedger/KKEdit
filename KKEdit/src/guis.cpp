@@ -107,16 +107,23 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 							if(strcmp(strarg,"flags")==0)
 								{
 									sscanf((char*)&buffer,"%*s %i",&flagsarg);
-									if(flagsarg==TOOL_ASYNC)
+									if(flagsarg & TOOL_ASYNC)
 										gtk_toggle_button_set_active((GtkToggleButton*)syncWidget,false);
 									else
 										gtk_toggle_button_set_active((GtkToggleButton*)syncWidget,true);
-									if(flagsarg==TOOL_IGNORE_OP)
+
+									if((flagsarg & TOOL_INSERT_MASK)==TOOL_IGNORE_OP)
 										gtk_toggle_button_set_active((GtkToggleButton*)ignoreWidget,true);
-									if(flagsarg==TOOL_PASTE_OP)
+									if((flagsarg & TOOL_INSERT_MASK)==TOOL_PASTE_OP)
 										gtk_toggle_button_set_active((GtkToggleButton*)pasteWidget,true);
-									if(flagsarg==TOOL_REPLACE_OP)
+									if((flagsarg & TOOL_INSERT_MASK)==TOOL_REPLACE_OP)
 										gtk_toggle_button_set_active((GtkToggleButton*)replaceWidget,true);
+
+									if(flagsarg & TOOL_SHOW_DOC)
+										gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,true);
+									else
+										gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,false);
+
 								}
 							}
 						fclose(fd);
@@ -224,6 +231,13 @@ void doMakeTool(void)
 	gtk_box_pack_start(GTK_BOX(vbox),syncWidget,false,true,0);
 	g_signal_connect(G_OBJECT(syncWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
+//flags - show html doc
+	showDocWidget=gtk_check_button_new_with_label("Show HTML Doc");
+	gtk_widget_set_name(showDocWidget,"showdoc");
+	gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,showDoc);
+	gtk_box_pack_start(GTK_BOX(vbox),showDocWidget,false,true,0);
+	g_signal_connect(G_OBJECT(showDocWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
+
 //flags - ignore
 	ignoreWidget=gtk_radio_button_new_with_label(NULL,"Ignore Output");
 	gtk_widget_set_name(ignoreWidget,"ignore");
@@ -233,7 +247,7 @@ void doMakeTool(void)
 
 //flags - paste
 	pasteWidget=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)ignoreWidget,"Paste Output");
-    gtk_widget_set_name(pasteWidget,"paste");
+	gtk_widget_set_name(pasteWidget,"paste");
 	gtk_toggle_button_set_active((GtkToggleButton*)pasteWidget,pasteOut);
 	gtk_box_pack_start(GTK_BOX(vbox),pasteWidget,false,true,0);
 	g_signal_connect(G_OBJECT(pasteWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
@@ -948,32 +962,36 @@ void buildGtkDocViewer(void)
 	vbox=gtk_vbox_new(false,0);
 	hbox=gtk_hbox_new(true,0);
 
-    webView=WEBKIT_WEB_VIEW(webkit_web_view_new());
+	webView=WEBKIT_WEB_VIEW(webkit_web_view_new());
 
 	scrolledWindow=gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
-    gtk_container_add(GTK_CONTAINER(scrolledWindow),GTK_WIDGET(webView));
+	gtk_container_add(GTK_CONTAINER(scrolledWindow),GTK_WIDGET(webView));
 
-    gtk_container_add(GTK_CONTAINER(vbox),scrolledWindow);
+	gtk_container_add(GTK_CONTAINER(vbox),scrolledWindow);
 
-    button=gtk_button_new_from_stock(GTK_STOCK_GO_BACK);
-    gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
-    g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoBack),(void*)webView);	
+	button=gtk_button_new_from_stock(GTK_STOCK_GO_BACK);
+	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoBack),(void*)webView);	
  
-    entry=gtk_entry_new();
-    gtk_box_pack_start(GTK_BOX(hbox),entry,false,true,0);
+	button=gtk_button_new_from_stock(GTK_STOCK_HOME);
+	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoHome),(void*)webView);	
+ 
+	entry=gtk_entry_new();
+	gtk_box_pack_start(GTK_BOX(hbox),entry,false,true,0);
 	g_signal_connect_after(G_OBJECT(entry),"activate",G_CALLBACK(docSearchFromBar),(void*)entry);
-    findbutton=gtk_button_new_from_stock(GTK_STOCK_FIND);
-    gtk_box_pack_start(GTK_BOX(hbox),findbutton,false,false,0);
-    g_signal_connect(G_OBJECT(findbutton),"clicked",G_CALLBACK(docSearchFromBar),(void*)entry);	
+	findbutton=gtk_button_new_from_stock(GTK_STOCK_FIND);
+	gtk_box_pack_start(GTK_BOX(hbox),findbutton,false,false,0);
+	g_signal_connect(G_OBJECT(findbutton),"clicked",G_CALLBACK(docSearchFromBar),(void*)entry);	
 
-    button=gtk_button_new_from_stock(GTK_STOCK_GO_FORWARD);
-    gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
-    g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoForward),(void*)webView);	
+	button=gtk_button_new_from_stock(GTK_STOCK_GO_FORWARD);
+	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoForward),(void*)webView);	
 
-    gtk_box_pack_start(GTK_BOX(vbox),hbox,false,false,4);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,false,4);
 
-    gtk_container_add(GTK_CONTAINER(docView),vbox);
+	gtk_container_add(GTK_CONTAINER(docView),vbox);
 	gtk_widget_grab_focus(GTK_WIDGET(webView));
 
 	gtk_signal_connect_object(GTK_OBJECT(docView),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(docView));

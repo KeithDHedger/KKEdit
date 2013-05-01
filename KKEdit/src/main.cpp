@@ -138,6 +138,12 @@ void init(void)
 	tmpDepth=depth;
 	tmpSaveSessionOnExit=onExitSaveSession;
 	tmpRestoreBookmarks=restoreBookmarks;
+
+
+	filename=tempnam(NULL,"KKEdit");
+	asprintf(&htmlFile,"%s.html",filename);
+	asprintf(&htmlURI,"file://%s.html",filename);
+	g_free(filename);
 }
 
 int main(int argc,char **argv)
