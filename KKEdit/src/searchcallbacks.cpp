@@ -18,6 +18,7 @@
 #include "globals.h"
 #include "files.h"
 #include "guis.h"
+#include "navcallbacks.h"
 
 #ifdef BUILDDOCVIEWER
 void webKitGoBack(GtkWidget* widget,gpointer data)
@@ -184,6 +185,21 @@ void showDocView(GtkWidget* widget,gpointer data)
 			g_free(command);			
 		}
 #endif
+}
+
+void defSearchFromBar(GtkWidget* widget,gpointer data)
+{
+	asprintf(&functionSearchText,"%s",gtk_entry_get_text((GtkEntry*)widget));
+	if(functionSearchText!=NULL)
+		{
+			functionData* fdata=getFunctionByName(functionSearchText,true);
+			if(fdata!=NULL)
+				{
+					goToDefine(fdata);
+					destroyData(fdata);
+				}
+			g_free(functionSearchText);
+		}
 }
 
 void docSearchFromBar(GtkWidget* widget,gpointer data)

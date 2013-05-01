@@ -25,5 +25,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data);
 void find(GtkWidget* widget,gpointer data);
 void doSearchPrefs(GtkWidget* widget,gpointer data);
 void docSearchFromBar(GtkWidget* widget,gpointer data);
+void defSearchFromBar(GtkWidget* widget,gpointer data);
 
 #endif

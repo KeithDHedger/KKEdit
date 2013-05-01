@@ -608,6 +608,15 @@ void buildMainGui(void)
 	g_signal_connect_after(G_OBJECT(entrybox),"activate",G_CALLBACK(docSearchFromBar),(void*)entrybox);
 	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Find API In Gtk Docs");
 
+//find in function def
+	entrybox=gtk_entry_new();
+	toolbutton=gtk_tool_item_new();
+	gtk_container_add((GtkContainer *)toolbutton,entrybox);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+	g_signal_connect_after(G_OBJECT(entrybox),"activate",G_CALLBACK(defSearchFromBar),(void*)entrybox);
+	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Find Definition");
+
+
 //menus
 //file menu
 	menufile=gtk_menu_item_new_with_label("File");
@@ -929,8 +938,6 @@ int showFunctionEntry(void)
 
 	content_area=gtk_dialog_get_content_area(GTK_DIALOG(dialog));	
 	entrybox=gtk_entry_new();
-	if(functionSearchText!=NULL)
-		gtk_entry_set_text((GtkEntry*)entrybox,functionSearchText);
 	gtk_entry_set_activates_default((GtkEntry*)entrybox,true);
 	gtk_dialog_set_default_response((GtkDialog*)dialog,GTK_RESPONSE_YES);
 	gtk_container_add(GTK_CONTAINER(content_area),entrybox);

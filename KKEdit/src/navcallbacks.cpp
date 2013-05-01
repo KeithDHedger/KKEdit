@@ -175,14 +175,17 @@ void jumpToLine(GtkWidget* widget,gpointer data)
 void functionSearch(GtkWidget* widget,gpointer data)
 {
 	if(showFunctionEntry()==GTK_RESPONSE_YES)
-	{
-		functionData* fdata=getFunctionByName(functionSearchText,true);
-		if(fdata!=NULL)
 		{
-			goToDefine(fdata);
-			destroyData(fdata);
+			if(functionSearchText!=NULL)
+				{
+					functionData* fdata=getFunctionByName(functionSearchText,true);
+					if(fdata!=NULL)
+						{
+							goToDefine(fdata);
+							destroyData(fdata);
+						}
+				}
 		}
-	}
 }
 
 void jumpToMark(GtkWidget* widget,gpointer glist)
