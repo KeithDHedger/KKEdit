@@ -140,7 +140,7 @@
         ie to open a terminal with the working directory set to the
         folder where the current file is open:</font><br>
       <br>
-      <img alt="openterm" src="toolsmenu.png" height="273" width="681"><br>
+      <img alt="openterm" src="toolsmenu.png" height="264" width="638"><br>
       <br>
       <font size="-1">External tools can either be added globally to
         /usr/share/KKEdit/tools (if you have installed with
@@ -152,11 +152,14 @@
         size="-1"><br>
         KKEDIT_DATADIR - Directory of global folder ( eg
         /usr/share/KKEdit ). <br>
+      </font><font size="-1">KKEDIT_HTMLFILE</font><font size="-1">-
+        Tempory file for displaying html in doc viewer<br>
+        <br>
         More variables may be defined later.<br>
         External tools can be created by hand or via the 'Tools-&gt;New'
         menu like so:</font><br>
       <br>
-      <img alt="exttool" src="newtool.png" height="397" width="626"><br>
+      <img alt="exttool" src="newtool.png" height="440" width="626"><br>
       <br>
       <font size="-1">The placeholders are:<br>
         %t - Currently selected text, the same as the $KKEDIT_SELECTION
@@ -169,7 +172,21 @@
         command. <br>
         %i -The location of the globally installed tools, the same as
         the $KKEDIT_DATADIR environment variable passed to the command .<br>
+        %h - Tempory file for displaying html in doc viewer, the same as
+        the $KKEDIT_HTMLFILE environment variable passed to the command
+        .<br>
         <br>
+        <font size="-1">Selecting <font size="-1">'Show HTML Doc' will
+            display the file </font></font></font><font size="-1"><font
+          size="-1"><font size="-1"><font size="-1">$KKEDIT_HTMLFILE in
+              either the Gtk Doc vierer or your <font size="-1">default
+                browser<font size="-1">, this is used in the installed
+                  example tool 'Open Man Page' to display the manpage of
+                  the selec<font size="-1">tion ( if it exists and if
+                    you have man2html installed<font size="-1">, most
+                      people do ).<br>
+                      <br>
+                    </font></font></font></font></font></font></font>
         Commands should be simple commands, compound commands ( ie cd
         /opt;ls;touch xx) will not be executed properly, if you need to
         use a complex command create a script and set 'command' to the
@@ -226,7 +243,7 @@
       <img alt="boomark" src="bookmark.png" height="287" width="762"><br>
       <br>
       <a name="hexdumpanc"></a><font size="-1">You can open a file as a
-        hexdump like so:</font><br>
+        hex dump like so:</font><br>
       <img alt="hexdump" src="hexdump.png" height="288" width="669"><br>
       <br>
       <a name="findapi"></a><font size="-1">You can look up an API
