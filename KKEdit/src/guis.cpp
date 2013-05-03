@@ -489,6 +489,11 @@ void doPrefs(void)
 	gtk_widget_show_all(prefswin);
 }
 
+void recentFileMenu(GtkWidget* widget,char* filename)
+{
+	openFile(filename,0);
+}
+
 void recentToolMenu(GtkRecentChooser* chooser,gpointer* data)
 {
 	gchar*	uri=NULL;
@@ -504,6 +509,38 @@ void recentToolMenu(GtkRecentChooser* chooser,gpointer* data)
 	}
 }
 
+void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
+{
+	GList*		itemlist=NULL;
+	GList*		l=NULL;
+	GtkWidget*	menuitem;
+	char*		uri=NULL;
+	char*		filename=NULL;
+	int			i=0;
+
+	itemlist=gtk_recent_chooser_get_items(chooser);
+
+	for (l = itemlist; l != NULL; l = l->next)
+		{
+			const gchar *menuname;
+			GtkRecentInfo *info = (GtkRecentInfo*)l->data;
+			if (i >= MAXRECENT)
+				break;
+			i++;
+
+			menuname=gtk_recent_info_get_display_name(info);
+			uri=(char*)gtk_recent_info_get_uri(info);
+			if (uri!=NULL)
+				{
+					filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
+					menuitem=gtk_image_menu_item_new_with_label(menuname);
+					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(recentFileMenu),(void*)filename);
+					g_free (uri);
+				}
+		}
+}
+
 void buildMainGui(void)
 {
 	GtkWidget*			vbox;
@@ -516,6 +553,7 @@ void buildMainGui(void)
 	GtkWidget*			entrybox;
 	GtkWidget*			recent;
 	GtkRecentFilter*	filter;
+	GtkWidget*			menurecent;
 
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size((GtkWindow*)window,windowWidth,windowHeight);
@@ -663,6 +701,13 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doOpenFile),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'O',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+
+//recent menu
+	menuitem=gtk_image_menu_item_new_with_label("Recent Files");
+	menurecent=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
+	addRecentToMenu((GtkRecentChooser*)recent,menurecent);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //open as hexdump
 	menuitem=gtk_image_menu_item_new_with_label("Open As Hexdump");
