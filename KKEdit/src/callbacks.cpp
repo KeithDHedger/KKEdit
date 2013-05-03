@@ -870,3 +870,29 @@ void printFile(GtkWidget* widget,gpointer data)
 	g_object_unref(print);
 	g_object_unref(printview);
 }
+
+//void recentFileMenu(GtkWidget* widget,char* filename)
+//{
+//	openFile(filename,0);
+//}
+
+void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
+{
+	gchar*	uri=NULL;
+	char*	filename;
+
+	if(data!=NULL)
+		{
+			openFile((char*)data,0);
+			return;
+		}
+
+	uri=gtk_recent_chooser_get_current_uri(chooser);
+	if (uri!=NULL)
+	{
+		filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
+		openFile(filename,0);
+		g_free (uri);
+		g_free(filename);
+	}
+}

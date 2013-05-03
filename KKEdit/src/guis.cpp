@@ -489,26 +489,6 @@ void doPrefs(void)
 	gtk_widget_show_all(prefswin);
 }
 
-void recentFileMenu(GtkWidget* widget,char* filename)
-{
-	openFile(filename,0);
-}
-
-void recentToolMenu(GtkRecentChooser* chooser,gpointer* data)
-{
-	gchar*	uri=NULL;
-	char*	filename;
-
-	uri=gtk_recent_chooser_get_current_uri(chooser);
-	if (uri!=NULL)
-	{
-		filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
-		openFile(filename,0);
-		g_free (uri);
-		g_free(filename);
-	}
-}
-
 void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 {
 	GList*		itemlist=NULL;
@@ -603,7 +583,7 @@ void buildMainGui(void)
 	gtk_toolbar_insert((GtkToolbar*)toolbar,openButton,-1);
 	gtk_signal_connect(GTK_OBJECT(openButton),"clicked",G_CALLBACK(doOpenFile),NULL);
 	gtk_widget_set_tooltip_text((GtkWidget*)openButton,"Open File");
-	g_signal_connect(recent,"item_activated",G_CALLBACK(recentToolMenu),NULL);
+	g_signal_connect(recent,"item_activated",G_CALLBACK(recentFileMenu),NULL);
 	gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(openButton),"Open Recent File");
 
 //save
@@ -702,13 +682,6 @@ void buildMainGui(void)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doOpenFile),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'O',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
-//recent menu
-	menuitem=gtk_image_menu_item_new_with_label("Recent Files");
-	menurecent=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
-	addRecentToMenu((GtkRecentChooser*)recent,menurecent);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
 //open as hexdump
 	menuitem=gtk_image_menu_item_new_with_label("Open As Hexdump");
 	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
@@ -718,6 +691,16 @@ void buildMainGui(void)
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//recent menu
+	menuitem=gtk_image_menu_item_new_with_label("Recent Files");
+	menurecent=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
+	addRecentToMenu((GtkRecentChooser*)recent,menurecent);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
 //save
 	saveMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),saveMenu);

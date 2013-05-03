@@ -38,5 +38,7 @@ void doAbout(GtkWidget* widget,gpointer data);
 void writeExitData(void);
 bool doSaveAll(GtkWidget* widget,gpointer data);
 void closeAllTabs(GtkWidget* widget,gpointer data);
+void recentFileMenu(GtkRecentChooser* chooser,gpointer* data);
+//void recentToolMenu(GtkRecentChooser* chooser,gpointer* data);
 
 #endif
