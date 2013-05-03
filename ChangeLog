@@ -107,3 +107,6 @@ Added '$KKEDIT_HTMLFILE' to vars passed to external script, this file should be 
 Adde '%h% to tools place holders, details as above.
 Added 'show HTML doc' option to tool, to either display the gtk doc viewer or the default browser with the page ' $KKEDIT_HTMLFILE'
 Added 'Search For Definition' entry to toolbar - same as 'Navigation->Search For Define'.
+
+0.0.16
+Added Recent File menu.
