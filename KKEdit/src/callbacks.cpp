@@ -803,7 +803,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 
 	if(strcmp(gtk_widget_get_name(widget),"delete")==0)
 		{
-			if((selectedToolPath!=NULL) && (yesNo("Are you sure you want to delete",(char*)gtk_entry_get_text((GtkEntry*)toolNameWidget))==GTK_RESPONSE_YES))
+			if((selectedToolPath!=NULL) && (yesNo((char*)"Are you sure you want to delete",(char*)gtk_entry_get_text((GtkEntry*)toolNameWidget))==GTK_RESPONSE_YES))
 				{
 						asprintf(&dirname,"rm %s",selectedToolPath);
 						system(dirname);

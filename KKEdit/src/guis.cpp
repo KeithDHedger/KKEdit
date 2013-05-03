@@ -489,6 +489,21 @@ void doPrefs(void)
 	gtk_widget_show_all(prefswin);
 }
 
+void recentToolMenu(GtkRecentChooser* chooser,gpointer* data)
+{
+	gchar*	uri=NULL;
+	char*	filename;
+
+	uri=gtk_recent_chooser_get_current_uri(chooser);
+	if (uri!=NULL)
+	{
+		filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
+		openFile(filename,0);
+		g_free (uri);
+		g_free(filename);
+	}
+}
+
 void buildMainGui(void)
 {
 	GtkWidget*			vbox;
@@ -499,6 +514,8 @@ void buildMainGui(void)
 	GtkAccelGroup*		accgroup;
 	GtkWidget*			image;
 	GtkWidget*			entrybox;
+	GtkWidget*			recent;
+	GtkRecentFilter*	filter;
 
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size((GtkWindow*)window,windowWidth,windowHeight);
@@ -532,11 +549,25 @@ void buildMainGui(void)
 	gtk_toolbar_insert((GtkToolbar*)toolbar,newButton,-1);
 	gtk_signal_connect(GTK_OBJECT(newButton),"clicked",G_CALLBACK(newFile),NULL);
 	gtk_widget_set_tooltip_text((GtkWidget*)newButton,"New File");
-//open
-	openButton=gtk_tool_button_new_from_stock(GTK_STOCK_OPEN);
+
+//recent
+	recent=gtk_recent_chooser_menu_new();
+	gtk_recent_chooser_set_local_only(GTK_RECENT_CHOOSER(recent),false);
+	gtk_recent_chooser_set_sort_type(GTK_RECENT_CHOOSER(recent),GTK_RECENT_SORT_MRU);
+	gtk_recent_chooser_set_limit(GTK_RECENT_CHOOSER(recent),MAXRECENT);
+
+	filter=gtk_recent_filter_new();
+	gtk_recent_filter_add_application(filter,"kkedit");
+	gtk_recent_chooser_set_filter(GTK_RECENT_CHOOSER(recent),filter);
+
+	openButton=gtk_menu_tool_button_new_from_stock(GTK_STOCK_OPEN);
+	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(openButton),recent);
 	gtk_toolbar_insert((GtkToolbar*)toolbar,openButton,-1);
 	gtk_signal_connect(GTK_OBJECT(openButton),"clicked",G_CALLBACK(doOpenFile),NULL);
 	gtk_widget_set_tooltip_text((GtkWidget*)openButton,"Open File");
+	g_signal_connect(recent,"item_activated",G_CALLBACK(recentToolMenu),NULL);
+	gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(openButton),"Open Recent File");
+
 //save
 	saveButton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE);
 	gtk_toolbar_insert((GtkToolbar*)toolbar,saveButton,-1);
@@ -615,7 +646,6 @@ void buildMainGui(void)
 	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
 	g_signal_connect_after(G_OBJECT(entrybox),"activate",G_CALLBACK(defSearchFromBar),(void*)entrybox);
 	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Search For Define");
-
 
 //menus
 //file menu
