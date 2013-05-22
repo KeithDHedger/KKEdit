@@ -46,13 +46,24 @@ void doOpenFile(GtkWidget* widget,gpointer data)
 {
 	GtkWidget*	dialog;
 	char*		filename;
-
+	GSList*		filenames;
+	GSList*		thisnext;
+	
 	dialog=gtk_file_chooser_dialog_new("Open File",NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,NULL);
+	gtk_file_chooser_set_select_multiple((GtkFileChooser*)dialog,true);
 	if (gtk_dialog_run(GTK_DIALOG (dialog))==GTK_RESPONSE_ACCEPT)
 		{
-			filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-			openFile(filename,0);
-			g_free (filename);
+			filenames=gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(dialog));
+			thisnext=filenames;
+			while(thisnext!=NULL)
+				{
+					filename=(char*)thisnext->data;
+				//	filename=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+					openFile(filename,0);
+					g_free (filename);
+					thisnext=thisnext->next;
+				}
+			g_slist_free(filenames);
 		}
 	gtk_widget_destroy (dialog);
 	gtk_widget_show_all(window);
