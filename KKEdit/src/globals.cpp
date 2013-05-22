@@ -21,6 +21,7 @@
 
 #include "globals.h"
 #include "searchcallbacks.h"
+#include "callbacks.h"
 
 GtkWidget*		window=NULL;
 GtkNotebook*	notebook=NULL;
@@ -84,6 +85,7 @@ GtkWidget*		showDocWidget;
 GtkWidget*		toolSelect;
 
 char*			selectedToolPath=NULL;
+GList*			toolsList=NULL;
 
 GtkWidget*		restoreBMs;
 
@@ -454,4 +456,93 @@ char* sliceStrLen(char* srcstring,char* startstr,int len)
 	printf("%i\n",startchar);
 	return(sliceLen(srcstring,startchar,len));
 }
+
+void destroyTool(gpointer data)
+{
+	g_free(data);
+}
+
+
+void buildToolsList (void)
+{
+	GDir*			folder;
+	const gchar*	entry=NULL;
+	FILE*			fd=NULL;
+	char*			filepath;
+	char			buffer[4096];
+	toolStruct*		tool;
+	char*			datafolder[2];
+	char			strarg[1024];
+	
+	int				intermarg=0;
+	int				flagsarg=0;
+	int				inpopup=0;
+	char*			commandarg=NULL;
+	char*			menuname=NULL;
+
+	if(toolsList!=NULL)
+		g_list_free_full(toolsList,destroyTool);
+
+	asprintf(&datafolder[0],"%s/tools/",DATADIR);
+	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));
+	for(int loop=0;loop<2;loop++)
+		{
+			folder=g_dir_open(datafolder[loop],0,NULL);
+			if(folder!=NULL)
+				{
+					entry=g_dir_read_name(folder);
+					while(entry!=NULL)
+						{
+							asprintf(&filepath,"%s%s",datafolder[loop],entry);
+							fd=fopen(filepath,"r");
+							if(fd!=NULL)
+								{
+									intermarg=0;
+									flagsarg=0;
+
+									while(fgets(buffer,4096,fd))
+										{
+											buffer[strlen(buffer)-1]=0;
+											sscanf((char*)&buffer,"%s",(char*)&strarg);
+											if(strcmp(strarg,"name")==0)
+												asprintf(&menuname,"%.*s",(int)strlen(buffer)-5,(char*)&buffer[5]);
+											if(strcmp(strarg,"command")==0)
+												asprintf(&commandarg,"%.*s",(int)strlen(buffer)-8,(char*)&buffer[8]);
+											if(strcmp(strarg,"interm")==0)
+												sscanf((char*)&buffer,"%*s %i",&intermarg);
+											if(strcmp(strarg,"flags")==0)
+												sscanf((char*)&buffer,"%*s %i",&flagsarg);
+											if(strcmp(strarg,"inpopup")==0)
+												sscanf((char*)&buffer,"%*s %i",&inpopup);
+										}
+
+									if((menuname!=NULL) &&(strlen(menuname)>0))
+										{
+											tool=(toolStruct*)malloc(sizeof(toolStruct));
+											asprintf(&tool->menuName,"%s",menuname);
+											asprintf(&tool->command,"%s",commandarg);
+											tool->flags=flagsarg;
+											tool->inTerminal=(bool)intermarg;
+											tool->inpopup=(bool)inpopup;
+											asprintf(&tool->filePath,"%s",filepath);
+											toolsList=g_list_prepend(toolsList,(gpointer)tool);
+										}
+									g_free(menuname);
+									g_free(commandarg);
+									menuname=NULL;
+									fclose(fd);
+								}
+							entry=g_dir_read_name(folder);
+						}
+				}
+		}
+}
+
+
+
+
+
+
+
+
 

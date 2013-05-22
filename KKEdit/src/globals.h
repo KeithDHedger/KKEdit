@@ -17,7 +17,6 @@
 #include <webkit/webkit.h>
 #endif
 
-
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
@@ -155,6 +154,7 @@ extern GtkWidget*		showDocWidget;
 extern GtkWidget*		toolSelect;
 
 extern char*			selectedToolPath;
+extern GList*			toolsList;
 
 extern GtkWidget*		restoreBMs;
 
