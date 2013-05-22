@@ -73,6 +73,7 @@ struct toolStruct
 	char*				currentDir;
 	int					flags;
 	bool				inTerminal;					
+	int					inpopup;
 };
 
 struct functionData
@@ -144,6 +145,8 @@ extern bool				tmpRestoreBookmarks;
 extern GtkWidget*		toolNameWidget;
 extern GtkWidget*		commandLineWidget;
 extern GtkWidget*		inTermWidget;
+extern GtkWidget*		inPopupWidget;
+
 extern GtkWidget*		syncWidget;
 extern GtkWidget*		ignoreWidget;
 extern GtkWidget*		pasteWidget;
@@ -157,6 +160,7 @@ extern GtkWidget*		restoreBMs;
 
 
 extern bool				inTerm;
+extern bool				inPopup;
 extern bool				runSync;
 extern bool				ignoreOut;
 extern bool				pasteOut;

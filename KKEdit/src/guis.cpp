@@ -37,6 +37,7 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 	char			strarg[1024];
 
 	int				intermarg=0;
+	int				inpopup=0;
 	int				flagsarg=0;
 
 	char*			text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
@@ -85,6 +86,12 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 			fd=fopen(selectedToolPath,"r");
 			if(fd!=NULL)
 				{
+					intermarg=0;
+					inpopup=0;
+					flagsarg=0;
+					gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,(bool)inpopup);
+					gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,(bool)intermarg);
+
 					while(fgets(buffer,4096,fd))
 						{
 							buffer[strlen(buffer)-1]=0;
@@ -93,6 +100,11 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 								gtk_entry_set_text((GtkEntry*)toolNameWidget,(char*)&buffer[5]);
 							if(strcmp(strarg,"command")==0)
 								gtk_entry_set_text((GtkEntry*)commandLineWidget,(char*)&buffer[8]);
+							if(strcmp(strarg,"inpopup")==0)
+								{
+									sscanf((char*)&buffer,"%*s %i",&inpopup);
+									gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,(bool)inpopup);
+								}
 							if(strcmp(strarg,"interm")==0)
 								{
 									sscanf((char*)&buffer,"%*s %i",&intermarg);
@@ -223,6 +235,13 @@ void doMakeTool(void)
 	gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,inTerm);
 	gtk_box_pack_start(GTK_BOX(vbox),inTermWidget,false,true,0);
 	g_signal_connect(G_OBJECT(inTermWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
+//show in popup menu
+	inPopupWidget=gtk_check_button_new_with_label("Show Tool In Pop-Up Menu");
+	gtk_widget_set_name(inPopupWidget,"inpopup");
+	gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,inPopup);
+	gtk_box_pack_start(GTK_BOX(vbox),inPopupWidget,false,true,0);
+	g_signal_connect(G_OBJECT(inPopupWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
+
 //flags
 //snch/async
 	syncWidget=gtk_check_button_new_with_label("Run Tool Synchronously");
@@ -300,6 +319,7 @@ void buildTools(void)
 	
 	int				intermarg=0;
 	int				flagsarg=0;
+	int				inpopup=0;
 	char*			commandarg=NULL;
 	char*			menuname=NULL;
 
@@ -350,6 +370,8 @@ void buildTools(void)
 												sscanf((char*)&buffer,"%*s %i",&intermarg);
 											if(strcmp(strarg,"flags")==0)
 												sscanf((char*)&buffer,"%*s %i",&flagsarg);
+											if(strcmp(strarg,"inpopup")==0)
+												sscanf((char*)&buffer,"%*s %i",&inpopup);
 										}
 
 									if((menuname!=NULL) &&(strlen(menuname)>0))
@@ -359,6 +381,7 @@ void buildTools(void)
 											asprintf(&tool->command,"%s",commandarg);
 											tool->flags=flagsarg;
 											tool->inTerminal=(bool)intermarg;
+											tool->inpopup=(bool)inpopup;
 											asprintf(&tool->filePath,"%s",filepath);
 											menuitem=gtk_image_menu_item_new_with_label(tool->menuName);
 											gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);

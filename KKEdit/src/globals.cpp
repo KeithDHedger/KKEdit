@@ -75,6 +75,7 @@ bool			tmpRestoreBookmarks;
 GtkWidget*		toolNameWidget;
 GtkWidget*		commandLineWidget;
 GtkWidget*		inTermWidget;
+GtkWidget*		inPopupWidget;
 GtkWidget*		syncWidget;
 GtkWidget*		ignoreWidget;
 GtkWidget*		pasteWidget;
@@ -87,6 +88,7 @@ char*			selectedToolPath=NULL;
 GtkWidget*		restoreBMs;
 
 bool			inTerm=false;
+bool			inPopup=false;
 bool			runSync=true;
 bool			ignoreOut=true;
 bool			pasteOut=false;
