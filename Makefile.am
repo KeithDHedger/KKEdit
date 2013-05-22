@@ -7,5 +7,4 @@ remake:
 makepkg:
 	svn commit -m ""
 	cd /tmp
-	svn co file:///home/keithhedger/Development/SVN/KKEdit
-	cd /tmp/KKEdit
+	cd /tmp && svn co file:///home/keithhedger/Development/SVN/KKEdit
