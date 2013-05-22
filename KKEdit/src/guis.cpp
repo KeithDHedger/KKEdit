@@ -380,7 +380,7 @@ void buildTools(void)
 											asprintf(&tool->command,"%s",commandarg);
 											tool->flags=flagsarg;
 											tool->inTerminal=(bool)intermarg;
-											tool->inpopup=(bool)inpopup;
+											tool->inPopUp=(bool)inpopup;
 											asprintf(&tool->filePath,"%s",filepath);
 											menuitem=gtk_image_menu_item_new_with_label(tool->menuName);
 											gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);

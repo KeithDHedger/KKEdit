@@ -523,7 +523,7 @@ void buildToolsList (void)
 											asprintf(&tool->command,"%s",commandarg);
 											tool->flags=flagsarg;
 											tool->inTerminal=(bool)intermarg;
-											tool->inpopup=(bool)inpopup;
+											tool->inPopUp=(bool)inpopup;
 											asprintf(&tool->filePath,"%s",filepath);
 											toolsList=g_list_prepend(toolsList,(gpointer)tool);
 										}
@@ -536,7 +536,10 @@ void buildToolsList (void)
 						}
 				}
 		}
+	g_free(datafolder[0]);
+	g_free(datafolder[1]);
 }
+
 
 
 
