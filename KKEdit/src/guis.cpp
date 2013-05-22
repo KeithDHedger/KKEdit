@@ -135,7 +135,6 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 										gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,true);
 									else
 										gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,false);
-
 								}
 							}
 						fclose(fd);
