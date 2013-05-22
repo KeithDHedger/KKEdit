@@ -98,6 +98,7 @@ bool openFile(const gchar *filepath,int linenumber)
 	pageStruct*		page=(pageStruct*)malloc(sizeof(pageStruct));
 	GtkTextMark*	scroll2mark=gtk_text_mark_new(NULL,true);
 	char*			str=NULL;
+	char*			recenturi;
 
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		return(false);
@@ -172,7 +173,10 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
 
+	recenturi=g_filename_to_uri(filepath,NULL,NULL);
+	gtk_recent_manager_add_item(gtk_recent_manager_get_default(),recenturi);
 	g_free(filename);
+	g_free(recenturi);
 
 	return TRUE;
 }

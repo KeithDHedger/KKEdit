@@ -112,3 +112,4 @@ Added 'Search For Definition' entry to toolbar - same as 'Navigation->Search For
 Added Recent File menu.
 Added multiple select fiile open.
 Added 'Show in Pop Up' option to external tools GUI.
+Files opened on commandline/dnd etc now get added to recent items.
