@@ -459,11 +459,16 @@ char* sliceStrLen(char* srcstring,char* startstr,int len)
 
 void destroyTool(gpointer data)
 {
+	if(((toolStruct*)data)->menuName!=NULL)
+		g_free(((toolStruct*)data)->menuName);
+	if(((toolStruct*)data)->filePath!=NULL)
+		g_free(((toolStruct*)data)->filePath);
+	if(((toolStruct*)data)->command!=NULL)
+		g_free(((toolStruct*)data)->command);
 	g_free(data);
 }
 
-
-void buildToolsList (void)
+void buildToolsList(void)
 {
 	GDir*			folder;
 	const gchar*	entry=NULL;
@@ -499,6 +504,7 @@ void buildToolsList (void)
 								{
 									intermarg=0;
 									flagsarg=0;
+									inpopup=0;
 
 									while(fgets(buffer,4096,fd))
 										{
@@ -530,6 +536,7 @@ void buildToolsList (void)
 									g_free(menuname);
 									g_free(commandarg);
 									menuname=NULL;
+									commandarg=NULL;
 									fclose(fd);
 								}
 							entry=g_dir_read_name(folder);

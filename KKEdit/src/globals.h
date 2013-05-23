@@ -71,7 +71,7 @@ struct toolStruct
 	char*				command;
 	int					flags;
 	bool				inTerminal;					
-	int					inPopUp;
+	bool				inPopUp;
 };
 
 struct functionData
@@ -211,6 +211,7 @@ char* slice(char* srcstring,int startchar,int endchar);
 char* sliceBetween(char* srcstring,char* startstr,char* endstr);
 char* sliceLen(char* srcstring,int tmpstartchar,int len);
 char* sliceStrLen(char* srcstring,char* startstr,int len);
+void buildToolsList(void);
 
 #endif
 
