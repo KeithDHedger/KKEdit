@@ -486,7 +486,10 @@ void buildToolsList(void)
 	char*			menuname=NULL;
 
 	if(toolsList!=NULL)
-		g_list_free_full(toolsList,destroyTool);
+		{
+			g_list_free_full(toolsList,destroyTool);
+			toolsList=NULL;
+		}
 
 	asprintf(&datafolder[0],"%s/tools/",DATADIR);
 	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));

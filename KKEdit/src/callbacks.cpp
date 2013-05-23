@@ -806,10 +806,6 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 			gtk_widget_set_sensitive(replaceWidget,false);
 		}
 
-//	if(inPopup==true)
-//		{
-//		}
-
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{
 			asprintf(&dirname,"%s/.KKEdit/tools",getenv("HOME"));
