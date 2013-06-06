@@ -266,6 +266,9 @@ functionData* getFunctionByName(char* name,bool recurse)
 	char*		dirname;
 	gchar*		stdout=NULL;
 	char		function[1024];
+	char		funcname[256];
+	char		filepath[1024];
+	int			linenumber;
 
 	functionData* fdata;
 	page=getPageStructPtr(-1);
@@ -305,7 +308,6 @@ functionData* getFunctionByName(char* name,bool recurse)
 						}
 				}
 		}
-
 	if(recurse==true)
 		{
 //not in any open files
@@ -317,7 +319,7 @@ functionData* getFunctionByName(char* name,bool recurse)
 					if(page->filePath!=NULL)
 						{
 							asprintf(&dirname,"%s",g_path_get_dirname(page->filePath));
-							getRecursiveTagList(dirname,&stdout);
+							getRecursiveTagListFileName(dirname,&stdout);
 
 							lineptr=stdout;
 							while (lineptr!=NULL)
@@ -325,16 +327,14 @@ functionData* getFunctionByName(char* name,bool recurse)
 									sscanf (lineptr,"%s",function);
 									if((strncasecmp(name,function,strlen(name))==0))
 										{
+											sscanf (lineptr, "%s\t%s\t%i",funcname,filepath,&linenumber);
+
 											fdata=(functionData*)malloc(sizeof(functionData));
-											sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
-											asprintf(&fdata->name,"%s",function);
-											sscanf (lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
-											asprintf(&fdata->type,"%s",function);
-											sscanf (lineptr,"%*s %*s %i",&fdata->line);
-											sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
-											asprintf(&fdata->file,"%s",function);
-											sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
-											asprintf(&fdata->define,"%s",function);
+											asprintf(&fdata->name,"%s",funcname);
+											asprintf(&fdata->file,"%s",filepath);
+											fdata->line=linenumber;
+											fdata->type=NULL;
+											fdata->define=NULL;
 											fdata->intab=-1;
 											return(fdata);
 										}
@@ -350,6 +350,7 @@ functionData* getFunctionByName(char* name,bool recurse)
 						}
 				}
 		}
+
 	return(NULL);
 }
 
@@ -357,10 +358,14 @@ void destroyData(functionData* fdata)
 {
 	if(fdata!=NULL)
 		{
-			g_free(fdata->name);
-			g_free(fdata->type);
-			g_free(fdata->file);
-			g_free(fdata->define);
+			if(fdata->name!=NULL)
+				g_free(fdata->name);
+			if(fdata->type!=NULL)
+				g_free(fdata->type);
+			if(fdata->file!=NULL)
+				g_free(fdata->file);
+			if(fdata->define!=NULL)
+				g_free(fdata->define);
 			g_free(fdata);
 		}
 }
@@ -373,7 +378,28 @@ char* deleteSlice(char* srcstring,char* delstr)
 	ptr=strstr(str->str,delstr);
 	g_string_erase(str,(long)ptr-(long)str->str,strlen(delstr));
 	return(g_string_free(str,false));
+}
 
+void getRecursiveTagListFileName(char* filepath,void* ptr)
+{
+	FILE*		fp;
+	char		line[1024];
+	GString*	str=g_string_new(NULL);
+	char*		command;
+
+	if(filepath==NULL)
+		return;
+
+	asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - --excmd=number --format=1 -f -",filepath,depth);
+	fp=popen(command, "r");
+	while(fgets(line,1024,fp))
+		{
+			g_string_append_printf(str,"%s",line);
+		}
+	pclose(fp);
+	asprintf((char**)ptr,"%s",str->str);
+	g_string_free(str,true);
+	g_free(command);
 }
 
 void getRecursiveTagList(char* filepath,void* ptr)

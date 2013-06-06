@@ -21,7 +21,6 @@ void goToDefine(functionData* fdata)
 {
 	pageStruct*	page;
 	GtkTextIter	iter;
-
 	if(fdata->intab==-1)
 		openFile(fdata->file,fdata->line-1);
 	else
@@ -32,7 +31,6 @@ void goToDefine(functionData* fdata)
 			gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
 			gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
 		}
-
 }
 
 void goToDefinition(GtkWidget* widget,gpointer data)

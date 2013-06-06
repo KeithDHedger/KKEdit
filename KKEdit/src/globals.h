@@ -213,6 +213,7 @@ char* sliceLen(char* srcstring,int tmpstartchar,int len);
 char* sliceStrLen(char* srcstring,char* startstr,int len);
 void buildToolsList(void);
 char* deleteSlice(char* srcstring,char* delstr);
+void getRecursiveTagListFileName(char* filepath,void* ptr);
 
 #endif
 
