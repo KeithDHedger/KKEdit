@@ -36,7 +36,7 @@
 #define	TOOL_INSERT_MASK 3
 
 #define VALIDCHARS "[]a-zA-Z0-9:/@ ()_-,.*#;[\"]"
-#define VALIDFILENAMECHARS "[A-Za-z0-9_-./]"
+#define VALIDFILENAMECHARS "[A-Za-z0-9_-./ ]"
 #define VALIDFUNCTIONCHARS "[A-Za-z0-9_*]"
 
 #define BOOKMAXMARKMENULEN 40
@@ -212,6 +212,7 @@ char* sliceBetween(char* srcstring,char* startstr,char* endstr);
 char* sliceLen(char* srcstring,int tmpstartchar,int len);
 char* sliceStrLen(char* srcstring,char* startstr,int len);
 void buildToolsList(void);
+char* deleteSlice(char* srcstring,char* delstr);
 
 #endif
 

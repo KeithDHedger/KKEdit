@@ -365,24 +365,39 @@ void destroyData(functionData* fdata)
 		}
 }
 
+char* deleteSlice(char* srcstring,char* delstr)
+{
+	GString*	str=g_string_new(srcstring);
+	char*		ptr;
+
+	ptr=strstr(str->str,delstr);
+	g_string_erase(str,(long)ptr-(long)str->str,strlen(delstr));
+	return(g_string_free(str,false));
+
+}
+
 void getRecursiveTagList(char* filepath,void* ptr)
 {
 	FILE*		fp;
 	char		line[1024];
 	GString*	str=g_string_new(NULL);
 	char*		command;
+	char*		newstr=NULL;
 
 	if(filepath==NULL)
 		return;
 
-	asprintf(&command,"find %s -maxdepth %i|ctags -L - -x",filepath,depth);
+	asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - -x",filepath,depth);
 
 	fp=popen(command, "r");
 	while(fgets(line,1024,fp))
 		{
-			g_string_append_printf(str,"%s",line);
+			newstr=deleteSlice(line,filepath);
+			g_string_append_printf(str,"%s",newstr);
+			g_free(newstr);
 		}
 	pclose(fp);
+
 	asprintf((char**)ptr,"%s",str->str);
 	g_string_free(str,true);
 	g_free(command);
