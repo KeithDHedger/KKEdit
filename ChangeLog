@@ -113,3 +113,9 @@ Added Recent File menu.
 Added multiple select to file open.
 Added 'Show in Pop Up' option to external tools GUI.
 Files opened on commandline/dnd etc now get added to recent items.
+
+0.0.17
+Handles files with spaces in their names properly.
+Added get mime type via external command if glib fails.
+Code clean.
+Fixed segfault on filename with spaces in certain circumstances.
