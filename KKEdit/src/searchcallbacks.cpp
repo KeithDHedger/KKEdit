@@ -111,6 +111,7 @@ void docSearch(GtkWidget* widget,gpointer data)
 								}
 						}
 				}
+			pclose(fp);
 
 			if(cnt>1)
 				{

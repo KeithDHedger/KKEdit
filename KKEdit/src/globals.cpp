@@ -172,6 +172,9 @@ void setLanguage(pageStruct* page)
 	GtkSourceLanguageManager*	lm=NULL;
 	char*						mimetype;
 	gboolean					result_uncertain;
+	char*						command;
+	char						line[1024];
+	FILE*						fp;
 
 	lm=gtk_source_language_manager_new();
 
@@ -179,10 +182,17 @@ void setLanguage(pageStruct* page)
 	g_object_set_data_full(G_OBJECT(page->buffer),"languages-manager",lm,(GDestroyNotify)g_object_unref);
 	lm=gtk_source_language_manager_get_default();
 	mimetype=g_content_type_guess(page->filePath,NULL,0,&result_uncertain);
+
 	if (result_uncertain)
 		{
 			g_free(mimetype);
 			mimetype=NULL;
+
+			asprintf(&command,"xdg-mime query filetype \"%s\"",page->filePath);
+			fp=popen(command,"r");
+			fgets(line,1024,fp);
+			asprintf(&mimetype,"%s",sliceBetween(line,(char*)"",(char*)";"));
+			pclose(fp);
 		}
 
 	lang=gtk_source_language_manager_guess_language(lm,page->filePath,mimetype);
@@ -201,6 +211,8 @@ void setLanguage(pageStruct* page)
 			gtk_source_buffer_set_language(page->buffer,lang);
 		}
 
+	if(mimetype!=NULL)
+		g_free(mimetype);
 }
 
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags)

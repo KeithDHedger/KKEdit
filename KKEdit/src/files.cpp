@@ -173,10 +173,12 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
 
-	recenturi=g_filename_to_uri(filepath,NULL,NULL);
+	str=g_file_get_path(page->gFile);
+	recenturi=g_filename_to_uri(str,NULL,NULL);
 	gtk_recent_manager_add_item(gtk_recent_manager_get_default(),recenturi);
 	g_free(filename);
 	g_free(recenturi);
+	g_free(str);
 
 	return TRUE;
 }
