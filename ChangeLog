@@ -122,3 +122,4 @@ Fixed segfault on filename with spaces in certain circumstances.
 
 0.0.18
 Added commandline switch (-m) to overide the single instance pref ( used for running an extra version via the tools menu etc ).
+
