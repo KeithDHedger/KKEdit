@@ -163,6 +163,15 @@ int main(int argc,char **argv)
 
 	init();
 
+	if(argc>1)
+		{
+			if(strcmp(argv[1],"-m")==0)
+				{
+					tmpSingleUse=false;
+					singleUse=false;
+				}
+		}
+
 	if((unique_app_is_running(app)==true) && (singleUse==true))
 		{
 			if(argc==1)
