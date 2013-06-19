@@ -32,6 +32,7 @@ GtkWidget*		menufunc;
 GtkWidget*		menunav;
 GtkWidget*		menutools;
 GtkWidget*		menuhelp;
+GtkWidget*		menumanpage;
 
 GtkWidget*		menubookmark;
 GtkWidget*		menubookmarksub;

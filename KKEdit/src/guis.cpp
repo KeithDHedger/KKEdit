@@ -483,6 +483,37 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 				}
 		}
 }
+#if 0
+void doManPageMark(GtkWidget* widget,gpointer data)
+{
+printf("XXXXXXXXXXXX%i\n",(int)(long)data);
+	pageStruct*					page=getPageStructPtr(-1);
+	GtkTextMark*	mark;
+	GtkTextMark*	manmark;
+	GtkTextIter		iter;
+	int				line;
+
+	mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+
+	line=gtk_text_iter_get_line(&iter);
+
+	gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&iter,line);
+
+	manmark=gtk_text_mark_new("TESTMARK",true);
+	gtk_text_buffer_add_mark((GtkTextBuffer*)page->buffer,manmark,&iter);
+	gtk_text_mark_set_visible(manmark,true);
+
+
+GtkTextTag *tag;
+  
+      tag = gtk_text_buffer_create_tag ((GtkTextBuffer*)page->buffer, NULL, 
+                                        "weight", PANGO_WEIGHT_BOLD, "editable",false,
+                                        NULL);
+      gtk_text_buffer_insert_with_tags ((GtkTextBuffer*)page->buffer, &iter, "hypertext:\n", -1, tag, NULL);
+}
+
+#endif
 
 void buildMainGui(void)
 {
@@ -848,6 +879,19 @@ void buildMainGui(void)
 	menutools=gtk_menu_item_new_with_label("Tools");
 	buildTools();
 
+#if 0
+//manpage stuff
+	menumanpage=gtk_menu_item_new_with_label("ManpageEdit");
+	menu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menumanpage),menu);
+	menuitem=gtk_menu_item_new_with_label("Title");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doManPageMark),(void*)1);
+	menuitem=gtk_menu_item_new_with_label("Section");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doManPageMark),(void*)2);
+#endif
+
 //help
 	menuhelp=gtk_menu_item_new_with_label("Help");
 	menu=gtk_menu_new();
@@ -868,6 +912,8 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menubookmark);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menutools);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
+
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menumanpage);
 
 	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)vbox);
 	gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
