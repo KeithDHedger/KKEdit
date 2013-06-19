@@ -93,14 +93,23 @@ bool dropTextFile=false;
 void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
 {
 	
-	gchar**		array=gtk_selection_data_get_uris(selection_data);
-	int			cnt=g_strv_length(array);
+	gchar**		array=NULL;
+	int			cnt;
 	char*		filename;
 	FILE*		fp;
 	char*		command;
 	GString*	str;
 	char		line[1024];
 	pageStruct*	page=(pageStruct*)user_data;
+
+	array=gtk_selection_data_get_uris(selection_data);
+	if(array==NULL)
+		{
+			gtk_drag_finish (context,true,true,time);
+			return;
+		}
+
+	cnt=g_strv_length(array);
 
 	if(dropTextFile==false)
 		{
@@ -124,6 +133,8 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 		}
 	else
 			dropTextFile=false;
+
+	gtk_drag_finish (context, true, true, time);
 }
 
 bool openFile(const gchar *filepath,int linenumber)
@@ -220,7 +231,8 @@ bool openFile(const gchar *filepath,int linenumber)
 //dnd
 	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);
-	g_signal_connect(G_OBJECT(page->view),"drag_data_received",G_CALLBACK(dropText),(void*)page);
+	gtk_drag_dest_add_text_targets((GtkWidget*)page->view);
+	g_signal_connect_after(G_OBJECT(page->view),"drag-data-received",G_CALLBACK(dropText),(void*)page);
 
 	return TRUE;
 }
@@ -378,7 +390,8 @@ void newFile(GtkWidget* widget,gpointer data)
 //dnd
 	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);
-	g_signal_connect(G_OBJECT(page->view),"drag_data_received",G_CALLBACK(dropText),(void*)page);
+	gtk_drag_dest_add_text_targets((GtkWidget*)page->view);
+	g_signal_connect_after(G_OBJECT(page->view),"drag-data-received",G_CALLBACK(dropText),(void*)page);
 }
 
 void openAsHexDump(GtkWidget *widget,gpointer user_data)
