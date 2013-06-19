@@ -24,6 +24,7 @@
 GtkWidget*	vbox;
 char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
+bool		dropTextFile=false;
 
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
@@ -88,19 +89,18 @@ void resetAllFilePrefs(void)
 		}
 }
 
-bool dropTextFile=false;
-
 void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
 {
-	
-	gchar**		array=NULL;
-	int			cnt;
-	char*		filename;
-	FILE*		fp;
-	char*		command;
-	GString*	str;
-	char		line[1024];
-	pageStruct*	page=(pageStruct*)user_data;
+	gchar**			array=NULL;
+	int				cnt;
+	char*			filename;
+	FILE*			fp;
+	char*			command;
+	GString*		str;
+	char			line[1024];
+	pageStruct*		page=(pageStruct*)user_data;
+	GtkTextIter		iter;
+	GtkTextMark*	mark;
 
 	array=gtk_selection_data_get_uris(selection_data);
 	if(array==NULL)
@@ -124,6 +124,12 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 					while(fgets(line,1024,fp))
 						g_string_append_printf(str,"%s",line);
 					gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(page->buffer),str->str,str->len);
+
+					mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+					gtk_text_iter_forward_chars(&iter,str->len);
+					gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
+
 					g_free(command);
 					g_string_free(str,true);
 					pclose(fp);

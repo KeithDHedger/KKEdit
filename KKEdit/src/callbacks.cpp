@@ -326,7 +326,6 @@ void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectio
 	int		cnt=g_strv_length(array);
 	char*	filename;
 
-printf("from drop uri\n");
 	for(int j=0;j<cnt;j++)
 		{
 			filename=g_filename_from_uri(array[j],NULL,NULL);
