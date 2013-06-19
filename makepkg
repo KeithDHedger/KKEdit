@@ -10,5 +10,5 @@ svn co file:///home/keithhedger/Development/SVN/KKEdit
 find KKEdit -name ".svn" -exec rm -r '{}' \; || true
 rm /tmp/KKEdit/makepkg
 mv /tmp/KKEdit /tmp/KKEdit-${VERSION}
-tar -czvf KKEdit-${VERSION}.tar.gz KKEdit
+tar -czvf KKEdit-${VERSION}.tar.gz KKEdit-${VERSION}
 rm -r /tmp/KKEdit-${VERSION}
