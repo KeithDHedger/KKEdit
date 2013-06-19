@@ -2,10 +2,13 @@
 
 #©keithhedger Wed 22 May 19:55:26 BST 2013 kdhedger68713@gmail.com
 
+VERSION=$(head ./configure.ac|grep AC_INIT|awk -F [ '{print $3}'|awk -F ] '{print $1}')
+
 svn commit -m ""
 cd /tmp
 svn co file:///home/keithhedger/Development/SVN/KKEdit
 find KKEdit -name ".svn" -exec rm -r '{}' \; || true
 rm /tmp/KKEdit/makepkg
-tar -czvf KKEdit-$(cat /tmp/KKEdit/KKEdit/src/globals.h|grep KKEDIT_VERSION|awk '{ print $3 }'|sed 's/"//g').tar.gz KKEdit
-rm -r /tmp/KKEdit
+mv /tmp/KKEdit /tmp/KKEdit-${VERSION}
+tar -czvf KKEdit-${VERSION}.tar.gz KKEdit
+rm -r /tmp/KKEdit-${VERSION}
