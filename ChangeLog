@@ -1,94 +1,19 @@
-0.0.4
-1st release
+0.0.18
+Added commandline switch (-m) to overide the single instance pref ( used for running an extra version via the tools menu etc ).
+Added drag 'n' drop to insert text file into text when dropped on text part of window;
+Added drag 'm' drop text between windows/applications.
 
-0.0.5
-Added case insensitive search.
-Function menu updated on save file.
-Added revert.
-Added GUI for Prefs.
-Added save state of search sensitive to rc file.
-Added teminal command to prefs.
+0.0.17
+Handles files with spaces in their names properly.
+Added get mime type via external command if glib fails.
 Code clean.
-Bug Fix.
-Updated Help file.
+Fixed segfault on filename with spaces in certain circumstances.
 
-0.0.6
-Added wrap for search replace.
-Dim function menu when no functions available.
-Apply prefs immedietly.
-Added save search wrap mode
-
-0.0.7
-Removed 'Save-As' from toolbar.
-Added save/restore session
-Added simple bookmarks
-
-0.0.8
-Can now use escapes in search/replace \n, \t etc.
-Added monitor for file changed on disk.
-Code clean.
-Added go to line number in navigation menu.
-Added run async external tool.
-Help now runs async.
-Set new env variable to selected text.
-Added Find API to installed tools.
-
-0.0.9
-Added external tool creater GUI.
-Bug fix crash on closing empty new tab.
-Set senitive on save/saveas buttons menu items on startup.
-Completly redone external tools.
-Checked build with lower version of gtksourceview (2.9.9) but 2.11.1 recommended.
-Added GUI to build external tools.
-
-0.0.10
-Bug fix - seg fault on run external tool with no tabs.
-Added Replace all
-Added 'Go To Definition' to popup menu in document.
-Added popup menu to tabs to copy filepath/name.
-
-0.0.11
-Added selected function def to popupmenu.
-Added show functions def in popupmenu.
-Fixed defines that contain : or / not displaying.
-Added version number to tarball.
-Strpped whitespace from bookmark label;
-Go To Definition not shown in popup if not available.
-Selecting function def in popup copies def to clipboard.
-Added new icon.
-Code clean.
-Set recursive search for tags (default = 1).
-Added Search For Define to Navigation menu.
-
-0.0.12
-Do simple conversion to/from UTF-8.
-Added "Open As Hexdump" to file menu.
-Added number to untitled docs.
-Made application single instance.
-Major Code clean.
-Added select single/multi instance to prefs.
-Prefs applied immediately  ( again! ).
-
-0.0.13
-Added crude function lookup in gtk-doc folder - to be improved.
-Added optional webkit dependency if building doc viewer.
-Added gkt-doc viewer in own window via webkit.
-Added switch to configure for optional gkt-doc viewer.
-Added 'Save All'
-Added 'Help' now shown local if doc viewer has been built.
-Redone demo installed external tools.
-Fixed autogen.sh only passing first option on command line.
-
-0.0.14
-Removed redundant close button from toolbar.
-Added printing.
-Improved Gtk Doc search.
-Code clean.
-Only recursivly search for define from main menu not pop-up ( for speed ).
-Added manual search box to gtk-doc viewer.
-Added auto save/restore session to prefs (default off).
-Tweaked help page.
-Added manual gtk doc search to toolbar
+0.0.16
+Added Recent File menu.
+Added multiple select to file open.
+Added 'Show in Pop Up' option to external tools GUI.
+Files opened on commandline/dnd etc now get added to recent items.
 
 0.0.15
 Save/restore bookmarks with session, if the files change on disk after saving session, restoring will skew bookmarks.
@@ -108,18 +33,94 @@ Adde '%h% to tools place holders, details as above.
 Added 'show HTML doc' option to tool, to either display the gtk doc viewer or the default browser with the page ' $KKEDIT_HTMLFILE'
 Added 'Search For Definition' entry to toolbar - same as 'Navigation->Search For Define'.
 
-0.0.16
-Added Recent File menu.
-Added multiple select to file open.
-Added 'Show in Pop Up' option to external tools GUI.
-Files opened on commandline/dnd etc now get added to recent items.
-
-0.0.17
-Handles files with spaces in their names properly.
-Added get mime type via external command if glib fails.
+0.0.14
+Removed redundant close button from toolbar.
+Added printing.
+Improved Gtk Doc search.
 Code clean.
-Fixed segfault on filename with spaces in certain circumstances.
+Only recursivly search for define from main menu not pop-up ( for speed ).
+Added manual search box to gtk-doc viewer.
+Added auto save/restore session to prefs (default off).
+Tweaked help page.
+Added manual gtk doc search to toolbar
 
-0.0.18
-Added commandline switch (-m) to overide the single instance pref ( used for running an extra version via the tools menu etc ).
+0.0.13
+Added crude function lookup in gtk-doc folder - to be improved.
+Added optional webkit dependency if building doc viewer.
+Added gkt-doc viewer in own window via webkit.
+Added switch to configure for optional gkt-doc viewer.
+Added 'Save All'
+Added 'Help' now shown local if doc viewer has been built.
+Redone demo installed external tools.
+Fixed autogen.sh only passing first option on command line.
 
+0.0.12
+Do simple conversion to/from UTF-8.
+Added "Open As Hexdump" to file menu.
+Added number to untitled docs.
+Made application single instance.
+Major Code clean.
+Added select single/multi instance to prefs.
+Prefs applied immediately  ( again! ).
+
+0.0.11
+Added selected function def to popupmenu.
+Added show functions def in popupmenu.
+Fixed defines that contain : or / not displaying.
+Added version number to tarball.
+Strpped whitespace from bookmark label;
+Go To Definition not shown in popup if not available.
+Selecting function def in popup copies def to clipboard.
+Added new icon.
+Code clean.
+Set recursive search for tags (default = 1).
+Added Search For Define to Navigation menu.
+
+0.0.10
+Bug fix - seg fault on run external tool with no tabs.
+Added Replace all
+Added 'Go To Definition' to popup menu in document.
+Added popup menu to tabs to copy filepath/name.
+
+0.0.9
+Added external tool creater GUI.
+Bug fix crash on closing empty new tab.
+Set senitive on save/saveas buttons menu items on startup.
+Completly redone external tools.
+Checked build with lower version of gtksourceview (2.9.9) but 2.11.1 recommended.
+Added GUI to build external tools.
+
+0.0.8
+Can now use escapes in search/replace \n, \t etc.
+Added monitor for file changed on disk.
+Code clean.
+Added go to line number in navigation menu.
+Added run async external tool.
+Help now runs async.
+Set new env variable to selected text.
+Added Find API to installed tools.
+
+0.0.7
+Removed 'Save-As' from toolbar.
+Added save/restore session
+Added simple bookmarks
+
+0.0.6
+Added wrap for search replace.
+Dim function menu when no functions available.
+Apply prefs immedietly.
+Added save search wrap mode
+
+0.0.5
+Added case insensitive search.
+Function menu updated on save file.
+Added revert.
+Added GUI for Prefs.
+Added save state of search sensitive to rc file.
+Added teminal command to prefs.
+Code clean.
+Bug Fix.
+Updated Help file.
+
+0.0.4
+1st release
