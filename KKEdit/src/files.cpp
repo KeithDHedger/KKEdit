@@ -140,7 +140,7 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 	else
 			dropTextFile=false;
 
-	gtk_drag_finish (context, true, true, time);
+	gtk_drag_finish (context,true,true,time);
 }
 
 bool openFile(const gchar *filepath,int linenumber)
