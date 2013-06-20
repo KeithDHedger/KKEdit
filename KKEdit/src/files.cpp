@@ -268,7 +268,7 @@ bool getSaveFile(void)
 		}
 
 	gtk_widget_destroy(dialog);
-	gtk_widget_show_all(window);
+	refreshMainWindow();
 	return(retval);
 }
 
@@ -389,8 +389,8 @@ void newFile(GtkWidget* widget,gpointer data)
 	gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
 	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
-	gtk_widget_show_all(window);
 
+	refreshMainWindow();
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 
 //dnd
@@ -450,7 +450,7 @@ void openAsHexDump(GtkWidget *widget,gpointer user_data)
 		}
 
 	gtk_widget_destroy (dialog);
-	gtk_widget_show_all(window);
+	refreshMainWindow();
 }
 
 void reloadFile(GtkWidget* widget,gpointer data)
@@ -555,6 +555,11 @@ void restoreSession(GtkWidget* widget,gpointer data)
 			fclose(fd);
 			g_free(filename);
 		}
+
+		showHideWidget(lineNumberWidget,showJumpToLine);
+		showHideWidget(findApiWidget,showFindAPI);
+		showHideWidget(findDefWidget,showFindDef);
+		showHideWidget(liveSearchWidget,showLiveSearch);
 }
 
 int showFileChanged(char* filename)

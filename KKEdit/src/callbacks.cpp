@@ -34,6 +34,15 @@ void showHideWidget(GtkWidget* widget,bool show)
 		gtk_widget_show(widget);
 }
 
+void refreshMainWindow(void)
+{
+	gtk_widget_show_all(window);
+	showHideWidget(lineNumberWidget,showJumpToLine);
+	showHideWidget(findApiWidget,showFindAPI);
+	showHideWidget(findDefWidget,showFindDef);
+	showHideWidget(liveSearchWidget,showLiveSearch);
+}
+
 int yesNo(char* question,char* file)
 {
 	GtkWidget*	dialog;
@@ -73,7 +82,7 @@ void doOpenFile(GtkWidget* widget,gpointer data)
 			g_slist_free(filenames);
 		}
 	gtk_widget_destroy (dialog);
-	gtk_widget_show_all(window);
+	refreshMainWindow();	
 }
 
 int show_question(char* filename)
@@ -276,7 +285,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 				}
 		}
 	gtk_window_set_title((GtkWindow*)window,page->fileName);
-	gtk_widget_show_all(window);
+	refreshMainWindow();
 	if(functions!=NULL)
 		g_free(functions);
 

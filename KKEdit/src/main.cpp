@@ -222,7 +222,8 @@ int main(int argc,char **argv)
 			for(int j=1;j<argc;j++)
 				openFile(argv[j],0);
 
-			gtk_widget_show_all(window);
+			refreshMainWindow();
+
 			buildFindReplace();
 #ifdef BUILDDOCVIEWER
 			buildGtkDocViewer();
@@ -231,10 +232,7 @@ int main(int argc,char **argv)
 			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
 			setSensitive();
 
-			showHideWidget(lineNumberWidget,showJumpToLine);
-			showHideWidget(findApiWidget,showFindAPI);
-			showHideWidget(findDefWidget,showFindDef);
-			showHideWidget(liveSearchWidget,showLiveSearch);
+
 
 			gtk_main();
 		}
