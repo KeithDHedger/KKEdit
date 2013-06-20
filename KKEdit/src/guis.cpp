@@ -395,6 +395,33 @@ void doPrefs(void)
 	g_signal_connect(G_OBJECT(restoreBMs),"toggled",G_CALLBACK(setPrefs),(void*)restoreBMs);
 	gtk_widget_set_sensitive(restoreBMs,onExitSaveSession);
 
+//show goto line on toolbar
+	item=gtk_check_button_new_with_label("Show 'Jump To Line' in toolbar");
+	gtk_widget_set_name(item,"jtolintool");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,showJumpToLine);
+	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+
+//find api in toolbar
+	item=gtk_check_button_new_with_label("Show 'Find API' in toolbar");
+	gtk_widget_set_name(item,"findapiintool");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,showFindAPI);
+	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+
+//show search definition in toolbar
+	item=gtk_check_button_new_with_label("Show 'Search For Define' in toolbar");
+	gtk_widget_set_name(item,"searchdef");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,showFindDef);
+	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+//show live search in toolbar
+	item=gtk_check_button_new_with_label("Show 'Live Search' in toolbar");
+	gtk_widget_set_name(item,"livesearch");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,showLiveSearch);
+	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+
 //tabwidth  -- CLEAN
 	GtkObject*	adj=gtk_adjustment_new(tmpTabWidth,1,64,1,1,0);
 	hbox=gtk_hbox_new(true,0);
@@ -524,7 +551,6 @@ void buildMainGui(void)
 	GtkToolItem*		toolbutton;
 	GtkAccelGroup*		accgroup;
 	GtkWidget*			image;
-	GtkWidget*			entrybox;
 	GtkWidget*			recent;
 	GtkRecentFilter*	filter;
 	GtkWidget*			menurecent;
@@ -635,29 +661,37 @@ void buildMainGui(void)
 	gtk_toolbar_insert((GtkToolbar*)toolbar,gtk_separator_tool_item_new(),-1);
 
 //goto line
-	entrybox=gtk_entry_new();
-	toolbutton=gtk_tool_item_new();
-	gtk_container_add((GtkContainer *)toolbutton,entrybox);
-	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
-	g_signal_connect_after(G_OBJECT(entrybox),"key-release-event",G_CALLBACK(jumpToLineFromBar),NULL);
-	gtk_widget_set_size_request((GtkWidget*)toolbutton,48,-1);
-	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Go To Line");
-
+			lineNumberWidget=gtk_entry_new();
+			toolbutton=gtk_tool_item_new();
+			gtk_container_add((GtkContainer *)toolbutton,lineNumberWidget);
+			gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+			g_signal_connect_after(G_OBJECT(lineNumberWidget),"key-release-event",G_CALLBACK(jumpToLineFromBar),NULL);
+			gtk_widget_set_size_request((GtkWidget*)toolbutton,48,-1);
+			gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Go To Line");
+		
 //find in gtkdoc
-	entrybox=gtk_entry_new();
+	findApiWidget=gtk_entry_new();
 	toolbutton=gtk_tool_item_new();
-	gtk_container_add((GtkContainer *)toolbutton,entrybox);
+	gtk_container_add((GtkContainer *)toolbutton,findApiWidget);
 	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
-	g_signal_connect_after(G_OBJECT(entrybox),"activate",G_CALLBACK(docSearchFromBar),(void*)entrybox);
+	g_signal_connect_after(G_OBJECT(findApiWidget),"activate",G_CALLBACK(docSearchFromBar),(void*)findApiWidget);
 	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Find API In Gtk Docs");
 
 //find in function def
-	entrybox=gtk_entry_new();
+	findDefWidget=gtk_entry_new();
 	toolbutton=gtk_tool_item_new();
-	gtk_container_add((GtkContainer *)toolbutton,entrybox);
+	gtk_container_add((GtkContainer *)toolbutton,findDefWidget);
 	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
-	g_signal_connect_after(G_OBJECT(entrybox),"activate",G_CALLBACK(defSearchFromBar),(void*)entrybox);
+	g_signal_connect_after(G_OBJECT(findDefWidget),"activate",G_CALLBACK(defSearchFromBar),(void*)findDefWidget);
 	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Search For Define");
+
+//livesearch
+	liveSearchWidget=gtk_entry_new();
+	toolbutton=gtk_tool_item_new();
+	gtk_container_add((GtkContainer *)toolbutton,liveSearchWidget);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+	g_signal_connect_after(G_OBJECT(liveSearchWidget),"key-release-event",G_CALLBACK(doLiveSearch),NULL);
+	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Live Search");
 
 //menus
 //file menu

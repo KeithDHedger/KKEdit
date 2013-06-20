@@ -26,6 +26,14 @@ GtkWidget*			tabMenu;
 char				defineText[1024];
 GtkPrintSettings*	settings=NULL;
 
+void showHideWidget(GtkWidget* widget,bool show)
+{
+	if(show==false)
+		gtk_widget_hide(widget);
+	else
+		gtk_widget_show(widget);
+}
+
 int yesNo(char* question,char* file)
 {
 	GtkWidget*	dialog;
@@ -629,6 +637,10 @@ void writeConfig(void)
 			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
 			fprintf(fd,"savesessiononexit	%i\n",(int)onExitSaveSession);
 			fprintf(fd,"restorebookmarks	%i\n",(int)restoreBookmarks);
+			fprintf(fd,"showjtoline	%i\n",(int)showJumpToLine);
+			fprintf(fd,"showfindapi	%i\n",(int)showFindAPI);
+			fprintf(fd,"showfinddef	%i\n",(int)showFindDef);
+			fprintf(fd,"showlivesearch	%i\n",(int)showLiveSearch);
 
 			fprintf(fd,"tabwidth	%i\n",tabWidth);
 			fprintf(fd,"depth	%i\n",depth);
@@ -711,6 +723,16 @@ void setPrefs(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"marks")==0)
 		tmpRestoreBookmarks=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
+	if(strcmp(gtk_widget_get_name(widget),"jtolintool")==0)
+		tmpShowJumpToLine=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"findapiintool")==0)
+		tmpShowFindAPI=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"searchdef")==0)
+		tmpShowFindDef=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"livesearch")==0)
+		tmpShowLiveSearch=gtk_toggle_button_get_active((GtkToggleButton*)data);
+
+
 	gtk_widget_set_sensitive(restoreBMs,tmpSaveSessionOnExit);
 
 	if(strcmp(gtk_widget_get_name(widget),"tabs")==0)
@@ -731,6 +753,15 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			singleUse=tmpSingleUse;
 			onExitSaveSession=tmpSaveSessionOnExit;
 			restoreBookmarks=tmpRestoreBookmarks;
+			showJumpToLine=tmpShowJumpToLine;
+			showFindAPI=tmpShowFindAPI;
+			showFindDef=tmpShowFindDef;
+			showLiveSearch=tmpShowLiveSearch;
+
+			showHideWidget(lineNumberWidget,showJumpToLine);
+			showHideWidget(findApiWidget,showFindAPI);
+			showHideWidget(findDefWidget,showFindDef);
+			showHideWidget(liveSearchWidget,showLiveSearch);
 
 			if(terminalCommand!=NULL)
 				{

@@ -47,6 +47,11 @@ GtkWidget*		undoMenu;
 GtkWidget*		saveMenu;
 GtkWidget*		saveAsMenu;
 
+GtkWidget*		lineNumberWidget;
+GtkWidget*		findApiWidget;
+GtkWidget*		findDefWidget;
+GtkWidget*		liveSearchWidget;
+
 int				currentPage=0;
 
 GtkWidget*		prefswin;
@@ -61,6 +66,10 @@ char*			terminalCommand;
 int				depth;
 bool			onExitSaveSession;
 bool			restoreBookmarks;
+bool			showJumpToLine;
+bool			showFindAPI;
+bool			showFindDef;
+bool			showLiveSearch;
 
 GtkWidget*		fontBox;
 GtkWidget*		terminalBox;
@@ -73,6 +82,10 @@ int				tmpTabWidth;
 int				tmpDepth;
 bool			tmpSaveSessionOnExit;
 bool			tmpRestoreBookmarks;
+bool			tmpShowJumpToLine;
+bool			tmpShowFindAPI;
+bool			tmpShowFindDef;
+bool			tmpShowLiveSearch;
 
 GtkWidget*		toolNameWidget;
 GtkWidget*		commandLineWidget;

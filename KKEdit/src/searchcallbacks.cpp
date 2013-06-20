@@ -369,3 +369,69 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 		}
 }
 
+void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
+{
+	pageStruct* 			page=getPageStructPtr(-1);
+	GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
+	char*					searchtext;
+	int						modkey=((GdkEventKey*)event)->state;
+
+	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+
+	if(insensitiveSearch==true)
+		flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
+
+	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)widget));
+
+	if(modkey==0)
+		{
+			if(!gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
+				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+
+			if(gtk_source_iter_forward_search(&page->match_end,searchtext,flags,&page->match_start,&page->match_end,NULL))
+				{
+					gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+					gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
+					page->iter=page->match_end;
+				}
+			else
+				{
+					gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
+					if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
+						{
+							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+							gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
+							page->iter=page->match_end;
+						}
+				}
+		}
+	else
+		{
+			if(!gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
+				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+			if(gtk_source_iter_backward_search(&page->match_start,searchtext,flags,&page->match_start,&page->match_end,NULL))
+				{
+					gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+					gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
+					page->iter=page->match_start;
+				}
+			else
+				{
+					gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&page->iter);
+					if(gtk_source_iter_backward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
+						{
+							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+							gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
+							page->iter=page->match_start;
+						}
+				}
+		}
+}
+
+
+
+
+
+
+
+

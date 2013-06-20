@@ -1,5 +1,9 @@
+0.0.19
+Added 'Live Search' to toolbar, 'Enter' -> find next,'Shift' -> find prev.
+Added show/hide entry boxes on toolbar to prefs.
+
 0.0.18
-Added commandline switch (-m) to overide the single instance pref ( used for running an extra version via the tools menu etc ).
+Added command line switch (-m) to override the single instance pref ( used for running an extra version via the tools menu etc ).
 Added drag 'n' drop to insert text file into text when dropped on text part of window;
 Added drag 'm' drop text between windows/applications.
 

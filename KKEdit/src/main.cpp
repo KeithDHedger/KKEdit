@@ -21,6 +21,8 @@
 #include "guis.h"
 #include "config.h"
 
+bool singleOverRide=false;
+
 void readConfig(void)
 {
 	FILE*	fd=NULL;
@@ -59,6 +61,15 @@ void readConfig(void)
 							onExitSaveSession=(bool)atoi(strarg);
 					if(strcasecmp(name,"restorebookmarks")==0)
 							restoreBookmarks=(bool)atoi(strarg);
+
+					if(strcasecmp(name,"showjtoline")==0)
+							showJumpToLine=(bool)atoi(strarg);
+					if(strcasecmp(name,"showfindapi")==0)
+							showFindAPI=(bool)atoi(strarg);
+					if(strcasecmp(name,"showfinddef")==0)
+							showFindDef=(bool)atoi(strarg);
+					if(strcasecmp(name,"showlivesearch")==0)
+							showLiveSearch=(bool)atoi(strarg);
 
 					if(strcasecmp(name,"tabwidth")==0)
 							tabWidth=atoi(strarg);
@@ -122,6 +133,10 @@ void init(void)
 	onExitSaveSession=false;
 	onExitSaveSession=false;
 	restoreBookmarks=false;
+	showJumpToLine=true;
+	showFindAPI=true;
+	showFindDef=true;
+	showLiveSearch=true;
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
@@ -138,6 +153,11 @@ void init(void)
 	tmpDepth=depth;
 	tmpSaveSessionOnExit=onExitSaveSession;
 	tmpRestoreBookmarks=restoreBookmarks;
+
+	tmpShowJumpToLine=showJumpToLine;
+	tmpShowFindAPI=showFindAPI;
+	tmpShowFindDef=showFindDef;
+	tmpShowLiveSearch=showLiveSearch;
 
 	filename=tempnam(NULL,"KKEdit");
 	asprintf(&htmlFile,"%s.html",filename);
@@ -166,13 +186,10 @@ int main(int argc,char **argv)
 	if(argc>1)
 		{
 			if(strcmp(argv[1],"-m")==0)
-				{
-					tmpSingleUse=false;
-					singleUse=false;
-				}
+				singleOverRide=true;
 		}
 
-	if((unique_app_is_running(app)==true) && (singleUse==true))
+	if((unique_app_is_running(app)==true) && (singleUse==true) && (singleOverRide==false))
 		{
 			if(argc==1)
 				{
@@ -213,6 +230,12 @@ int main(int argc,char **argv)
 			unique_app_watch_window(app,(GtkWindow*)window);
 			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
 			setSensitive();
+
+			showHideWidget(lineNumberWidget,showJumpToLine);
+			showHideWidget(findApiWidget,showFindAPI);
+			showHideWidget(findDefWidget,showFindDef);
+			showHideWidget(liveSearchWidget,showLiveSearch);
+
 			gtk_main();
 		}
 }

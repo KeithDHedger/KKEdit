@@ -26,7 +26,7 @@
 
 #define MYEMAIL "kdhedger68713@gmail.com"
 #define MYWEBSITE "http://keithhedger.hostingsiteforfree.com"
-#define KKEDIT_VERSION "0.0.17"
+#define KKEDIT_VERSION "0.0.19"
 
 #define TOOL_ASYNC 8
 #define TOOL_IGNORE_OP 0
@@ -114,6 +114,11 @@ extern GtkWidget*		undoMenu;
 extern GtkWidget*		saveMenu;
 extern GtkWidget*		saveAsMenu;
 
+extern GtkWidget*		lineNumberWidget;
+extern GtkWidget*		findApiWidget;
+extern GtkWidget*		findDefWidget;
+extern GtkWidget*		liveSearchWidget;
+
 extern int				currentPage;
 
 extern GtkWidget*		prefswin;
@@ -128,6 +133,10 @@ extern char*			terminalCommand;
 extern int				depth;
 extern bool				onExitSaveSession;
 extern bool				restoreBookmarks;
+extern bool				showJumpToLine;
+extern bool				showFindAPI;
+extern bool				showFindDef;
+extern bool				showLiveSearch;
 
 extern GtkWidget*		fontBox;
 extern GtkWidget*		terminalBox;
@@ -140,6 +149,10 @@ extern int				tmpTabWidth;
 extern int				tmpDepth;
 extern bool				tmpSaveSessionOnExit;
 extern bool				tmpRestoreBookmarks;
+extern bool				tmpShowJumpToLine;
+extern bool				tmpShowFindAPI;
+extern bool				tmpShowFindDef;
+extern bool				tmpShowLiveSearch;
 
 extern GtkWidget*		toolNameWidget;
 extern GtkWidget*		commandLineWidget;
