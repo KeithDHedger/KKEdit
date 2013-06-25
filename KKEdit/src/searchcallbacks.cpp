@@ -426,6 +426,7 @@ void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
 						}
 				}
 		}
+	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 }
 
 
