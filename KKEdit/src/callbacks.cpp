@@ -106,12 +106,11 @@ int show_question(char* filename)
 
 void setSensitive(void)
 {
-	pageStruct*		page=getPageStructPtr(-1);
+	pageStruct*		page=getPageStructPtr(currentTabNumber);
 	const gchar*	text;
 	char*			newlabel;
 	int				offset=0;
 
-/////////////////printf("tab num forom setSensitive=%i\n",currentTabNumber);
 	if(page==NULL)
 		{
 //toolbar
@@ -940,6 +939,11 @@ void printFile(GtkWidget* widget,gpointer data)
 	g_object_unref(print);
 	g_object_unref(printview);
 }
+
+//void recentFileMenu(GtkWidget* widget,char* filename)
+//{
+//	openFile(filename,0);
+//}
 
 void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 {
