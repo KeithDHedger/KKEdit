@@ -150,10 +150,21 @@ pageStruct* getPageStructPtr(int pagenum)
 	int			thispage;
 	GtkWidget*	pageBox;
 
+/////////////////////////
+#if 0
 	if(pagenum==-1)
+		{
+		
 		thispage=gtk_notebook_get_current_page(notebook);
+		printf("page %i\n",thispage);
+		printf("tab num forom setSensitive=%i\n",currentTabNumber);
+		}
 	else
 		thispage=pagenum;
+#endif
+
+	thispage=gtk_notebook_get_current_page(notebook);
+	currentTabNumber=thispage;
 
 	pageBox=gtk_notebook_get_nth_page(notebook,thispage);
 	if(pageBox==NULL)
