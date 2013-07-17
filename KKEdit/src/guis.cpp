@@ -1026,6 +1026,25 @@ void buildFindReplace(void)
 	gtk_signal_connect(GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
 }
 
+void buildWordCheck(void)
+{
+	GtkWidget*	vbox;
+	GtkWidget*	dropbox;
+	GtkWidget*	button;
+
+
+	spellCheckWord=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_title((GtkWindow*)spellCheckWord,"Spell check word");
+	vbox=gtk_vbox_new(false,8);
+
+//select tool
+	wordListDropbox=gtk_combo_box_text_new();
+	gtk_box_pack_start(GTK_BOX(vbox),wordListDropbox,false,true,0);
+	//g_signal_connect(G_OBJECT(toolSelect),"changed",G_CALLBACK(selectToolOptions),NULL);
+	//fillCombo((GtkComboBoxText*) toolSelect);
+	gtk_container_add(GTK_CONTAINER(spellCheckWord),(GtkWidget*)vbox);
+}
+
 int showFunctionEntry(void)
 {
 	GtkWidget*	dialog;

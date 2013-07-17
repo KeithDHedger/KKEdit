@@ -222,14 +222,13 @@ int main(int argc,char **argv)
 			refreshMainWindow();
 
 			buildFindReplace();
+
 #ifdef BUILDDOCVIEWER
 			buildGtkDocViewer();
 #endif
 			unique_app_watch_window(app,(GtkWindow*)window);
 			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
 			setSensitive();
-
-
 
 			gtk_main();
 		}

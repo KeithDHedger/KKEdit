@@ -145,6 +145,10 @@ GtkWidget*		docView;
 WebKitWebView*	webView;
 #endif
 
+//spellcheck
+GtkWidget*		spellCheckWord;
+GtkWidget*		wordListDropbox;
+
 pageStruct* getPageStructPtr(int pagenum)
 {
 	int			thispage;

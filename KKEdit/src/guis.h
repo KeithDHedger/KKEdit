@@ -20,6 +20,7 @@
 void buildMainGui(void);
 void buildTools(void);
 void buildFindReplace(void);
+void buildWordCheck(void);
 int showFunctionEntry(void);
 #ifdef BUILDDOCVIEWER
 void buildGtkDocViewer(void);

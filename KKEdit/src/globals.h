@@ -214,6 +214,9 @@ extern GtkWidget*		docView;
 extern WebKitWebView*	webView;
 #endif
 
+extern GtkWidget*		spellCheckWord;
+extern GtkWidget*		wordListDropbox;
+
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
