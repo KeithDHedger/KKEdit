@@ -20,9 +20,7 @@
 #include "globals.h"
 #include "guis.h"
 
-char	newWordBuffer[256];
-
-void checkword(char* word)
+void checkTheWord(char* word)
 {
 	int							correct;
 	AspellWordList*				suggestions;
@@ -34,7 +32,8 @@ void checkword(char* word)
 	correct=aspell_speller_check(spellChecker,word,-1);
 	if(!correct)
 		{
-			buildWordCheck(word);
+			badWord=word;
+			buildWordCheck();
 			suggestions=(AspellWordList*)aspell_speller_suggest(spellChecker,word,-1);
 			elements=aspell_word_list_elements(suggestions);
 
@@ -66,8 +65,7 @@ void checkWord(GtkWidget* widget,gpointer data)
 	else
 		return;
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
-	checkword(selection);
-	g_free(selection);
+	checkTheWord(selection);
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 }
 
@@ -91,9 +89,16 @@ void doChangeWord(GtkWidget* widget,gpointer data)
 	gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,newword,-1);
 
 	aspell_speller_store_replacement(spellChecker,selection,-1,newword,-1);
-
 	gtk_widget_destroy(spellCheckWord);
+	if(badWord!=NULL)
+		g_free(badWord);
 }
 
-
+void doAddWord(GtkWidget* widget,gpointer data)
+{
+	aspell_speller_add_to_session(spellChecker,badWord,-1);
+	gtk_widget_destroy(spellCheckWord);
+	if(badWord!=NULL)
+		g_free(badWord);
+}
 

@@ -218,6 +218,7 @@ extern WebKitWebView*	webView;
 
 extern GtkWidget*		spellCheckWord;
 extern GtkWidget*		wordListDropbox;
+extern char*			badWord;
 extern AspellConfig*	aspellConfig;
 extern AspellSpeller*	spellChecker;
 

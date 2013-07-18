@@ -29,6 +29,9 @@
 void doNothing(GtkWidget* widget,gpointer data)
 {
 	gtk_widget_destroy((GtkWidget*)data);
+	if(badWord!=NULL)
+		g_free(badWord);
+
 }
 
 void selectToolOptions(GtkWidget* widget,gpointer data)
@@ -1032,7 +1035,7 @@ void buildFindReplace(void)
 	gtk_signal_connect(GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
 }
 
-void buildWordCheck(char* badword)
+void buildWordCheck(void)
 {
 	GtkWidget*	vbox;
 	GtkWidget*	button;
@@ -1046,7 +1049,7 @@ void buildWordCheck(char* badword)
 
 	hbox=gtk_hbox_new(true,8);
 
-	sprintf((char*)&labeltext,"Change <i><b>%s</b></i> to: ",badword);
+	sprintf((char*)&labeltext,"Change <i><b>%s</b></i> to: ",badWord);
 	label=gtk_label_new((char*)&labeltext);
 	gtk_label_set_use_markup((GtkLabel*)label,true);
 	gtk_box_pack_start(GTK_BOX(hbox),label,true,true,0);
@@ -1059,6 +1062,11 @@ void buildWordCheck(char* badword)
 	button=gtk_button_new_from_stock(GTK_STOCK_APPLY);
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doChangeWord),NULL);
+
+	button=gtk_button_new_from_stock(GTK_STOCK_ADD);
+	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doAddWord),NULL);
+
 	button=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doNothing),(gpointer)spellCheckWord);

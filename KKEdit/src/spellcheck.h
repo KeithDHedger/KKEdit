@@ -13,5 +13,6 @@
 
 void checkWord(GtkWidget* widget,gpointer data);
 void doChangeWord(GtkWidget* widget,gpointer data);
+void doAddWord(GtkWidget* widget,gpointer data);
 
 #endif

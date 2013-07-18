@@ -150,6 +150,7 @@ WebKitWebView*	webView;
 //spellcheck
 GtkWidget*		spellCheckWord;
 GtkWidget*		wordListDropbox;
+char*			badWord=NULL;
 AspellConfig*	aspellConfig;
 AspellSpeller*	spellChecker=0;
 
