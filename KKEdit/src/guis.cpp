@@ -1041,6 +1041,7 @@ void buildWordCheck(void)
 	GtkWidget*	button;
 	GtkWidget*	hbox;
 	GtkWidget*	label;
+	GtkWidget*	image;
 	char*		labeltext[512];
 
 	spellCheckWord=gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -1063,9 +1064,15 @@ void buildWordCheck(void)
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doChangeWord),NULL);
 
+	button=gtk_button_new_with_label("Ignore");
+	image=gtk_image_new_from_stock(GTK_STOCK_ADD,GTK_ICON_SIZE_MENU);
+	gtk_button_set_image((GtkButton*)button,image);
+	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doAddIgnoreWord),(gpointer)1);
+
 	button=gtk_button_new_from_stock(GTK_STOCK_ADD);
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
-	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doAddWord),NULL);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doAddIgnoreWord),(gpointer)2);
 
 	button=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);

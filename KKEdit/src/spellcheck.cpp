@@ -94,9 +94,16 @@ void doChangeWord(GtkWidget* widget,gpointer data)
 		g_free(badWord);
 }
 
-void doAddWord(GtkWidget* widget,gpointer data)
+void doAddIgnoreWord(GtkWidget* widget,gpointer data)
 {
-	aspell_speller_add_to_session(spellChecker,badWord,-1);
+	if((long)data==1)
+		aspell_speller_add_to_session(spellChecker,badWord,-1);
+	else
+		{
+			aspell_speller_add_to_personal(spellChecker,badWord,-1);
+			aspell_speller_save_all_word_lists(spellChecker);
+		}
+
 	gtk_widget_destroy(spellCheckWord);
 	if(badWord!=NULL)
 		g_free(badWord);
