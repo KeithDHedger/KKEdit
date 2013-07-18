@@ -10,9 +10,10 @@
 
 #ifndef _SPELLCHECK_
 #define _SPELLCHECK_
-
+#ifdef _ASPELL_
 void checkWord(GtkWidget* widget,gpointer data);
 void doChangeWord(GtkWidget* widget,gpointer data);
 void doAddIgnoreWord(GtkWidget* widget,gpointer data);
-
+void doSpellCheckDoc(GtkWidget* widget,gpointer data);
+#endif
 #endif

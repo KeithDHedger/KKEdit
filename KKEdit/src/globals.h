@@ -17,7 +17,9 @@
 #include <webkit/webkit.h>
 #endif
 
+#ifdef _ASPELL_
 #include <aspell.h>
+#endif
 
 #ifndef _GLOBALS_
 #define _GLOBALS_
@@ -219,8 +221,11 @@ extern WebKitWebView*	webView;
 extern GtkWidget*		spellCheckWord;
 extern GtkWidget*		wordListDropbox;
 extern char*			badWord;
+extern char*			goodWord;
+#ifdef _ASPELL_
 extern AspellConfig*	aspellConfig;
 extern AspellSpeller*	spellChecker;
+#endif
 
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);

@@ -19,7 +19,9 @@
 #include <webkit/webkit.h>
 #endif
 
+#ifdef _ASPELL_
 #include <aspell.h>
+#endif
 
 #include "globals.h"
 #include "searchcallbacks.h"
@@ -151,8 +153,11 @@ WebKitWebView*	webView;
 GtkWidget*		spellCheckWord;
 GtkWidget*		wordListDropbox;
 char*			badWord=NULL;
+char*			goodWord=NULL;
+#ifdef _ASPELL_
 AspellConfig*	aspellConfig;
 AspellSpeller*	spellChecker=0;
+#endif
 
 pageStruct* getPageStructPtr(int pagenum)
 {

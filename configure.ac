@@ -50,6 +50,18 @@ if test "$enable_docviewer" = "yes"; then
 	AC_DEFINE([BUILDDOCVIEWER], [], [Build gtk-doc viewer])
 fi
 
+AC_MSG_CHECKING(Include spellchecker(aspell))
+AC_ARG_ENABLE(aspell,
+    [  --enable-aspell         Include spellchecker.],
+    [enable_aspell=$enableval],
+    [enable_aspell="no"])
+AC_MSG_RESULT($enable_aspell)
+if test "$enable_aspell" = "yes"; then
+	ASPELL_LIBS=-laspell
+	AC_SUBST(ASPELL_LIBS)
+	AC_DEFINE([_ASPELL_], [], [Include spellchecker])
+fi
+
 AC_CHECK_PROG(CTAGS, ctags ,true,false)
 if test $CTAGS = false; then
 	AC_MSG_ERROR([No ctags program found!])

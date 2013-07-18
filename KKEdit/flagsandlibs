@@ -13,5 +13,5 @@ LIBS =	$(GTK_LIBS) \
 	$(GTKSRC_LIBS) \
 	$(UNIQ_LIBS) \
 	$(WEBKIT_LIBS) \
-	-laspell
+	$(ASPELL_LIBS)
 
