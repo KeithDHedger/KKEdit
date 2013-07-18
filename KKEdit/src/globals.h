@@ -17,6 +17,8 @@
 #include <webkit/webkit.h>
 #endif
 
+#include <aspell.h>
+
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
@@ -216,6 +218,8 @@ extern WebKitWebView*	webView;
 
 extern GtkWidget*		spellCheckWord;
 extern GtkWidget*		wordListDropbox;
+extern AspellConfig*	aspellConfig;
+extern AspellSpeller*	spellChecker;
 
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);

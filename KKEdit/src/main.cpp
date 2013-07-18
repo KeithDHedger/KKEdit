@@ -111,8 +111,8 @@ void readConfig(void)
 
 void init(void)
 {
-	char*	filename;
-
+	char*				filename;
+	AspellCanHaveError*	possible_err;
 	indent=true;
 	lineNumbers=true;
 	lineWrap=true;
@@ -163,6 +163,14 @@ void init(void)
 	asprintf(&htmlFile,"%s.html",filename);
 	asprintf(&htmlURI,"file://%s.html",filename);
 	g_free(filename);
+
+	aspellConfig=new_aspell_config();
+	possible_err=new_aspell_speller(aspellConfig);
+
+	if(aspell_error_number(possible_err)!= 0)
+		puts(aspell_error_message(possible_err));
+	else
+		spellChecker=to_aspell_speller(possible_err);
 }
 
 int main(int argc,char **argv)

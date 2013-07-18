@@ -721,6 +721,9 @@ void doShutdown(GtkWidget* widget,gpointer data)
 		}
 	system(command);
 	g_free(command);
+
+	delete_aspell_config(aspellConfig);
+	delete_aspell_speller(spellChecker);
 }
 
 void setPrefs(GtkWidget* widget,gpointer data)

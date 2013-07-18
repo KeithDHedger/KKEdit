@@ -20,7 +20,7 @@
 void buildMainGui(void);
 void buildTools(void);
 void buildFindReplace(void);
-void buildWordCheck(void);
+void buildWordCheck(char* badword);
 int showFunctionEntry(void);
 #ifdef BUILDDOCVIEWER
 void buildGtkDocViewer(void);

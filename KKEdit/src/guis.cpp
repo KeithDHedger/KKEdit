@@ -20,10 +20,16 @@
 #include "callbacks.h"
 #include "navcallbacks.h"
 #include "searchcallbacks.h"
+#include "spellcheck.h"
 
 #ifdef BUILDDOCVIEWER
 #include <webkit/webkit.h>
 #endif
+
+void doNothing(GtkWidget* widget,gpointer data)
+{
+	gtk_widget_destroy((GtkWidget*)data);
+}
 
 void selectToolOptions(GtkWidget* widget,gpointer data)
 {
@@ -1026,23 +1032,44 @@ void buildFindReplace(void)
 	gtk_signal_connect(GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
 }
 
-void buildWordCheck(void)
+void buildWordCheck(char* badword)
 {
 	GtkWidget*	vbox;
-	GtkWidget*	dropbox;
 	GtkWidget*	button;
-
+	GtkWidget*	hbox;
+	GtkWidget*	label;
+	char*		labeltext[512];
 
 	spellCheckWord=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)spellCheckWord,"Spell check word");
-	vbox=gtk_vbox_new(false,8);
+	vbox=gtk_vbox_new(true,8);
 
-//select tool
+	hbox=gtk_hbox_new(true,8);
+
+	sprintf((char*)&labeltext,"Change <i><b>%s</b></i> to: ",badword);
+	label=gtk_label_new((char*)&labeltext);
+	gtk_label_set_use_markup((GtkLabel*)label,true);
+	gtk_box_pack_start(GTK_BOX(hbox),label,true,true,0);
+
 	wordListDropbox=gtk_combo_box_text_new();
-	gtk_box_pack_start(GTK_BOX(vbox),wordListDropbox,false,true,0);
-	//g_signal_connect(G_OBJECT(toolSelect),"changed",G_CALLBACK(selectToolOptions),NULL);
-	//fillCombo((GtkComboBoxText*) toolSelect);
+	gtk_box_pack_start(GTK_BOX(hbox),wordListDropbox,true,true,0);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+
+	hbox=gtk_hbox_new(true,8);
+	button=gtk_button_new_from_stock(GTK_STOCK_APPLY);
+	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doChangeWord),NULL);
+	button=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doNothing),(gpointer)spellCheckWord);
+
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+
 	gtk_container_add(GTK_CONTAINER(spellCheckWord),(GtkWidget*)vbox);
+
+	gtk_signal_connect_object(GTK_OBJECT(spellCheckWord),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(spellCheckWord));
+	gtk_signal_connect(GTK_OBJECT(spellCheckWord),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
 }
 
 int showFunctionEntry(void)

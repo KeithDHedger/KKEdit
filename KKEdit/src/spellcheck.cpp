@@ -20,50 +20,34 @@
 #include "globals.h"
 #include "guis.h"
 
+char	newWordBuffer[256];
+
 void checkword(char* word)
 {
-	AspellConfig*				spell_config;
-	AspellCanHaveError*			possible_err;
 	int							correct;
-	AspellSpeller*				spell_checker=0;
 	AspellWordList*				suggestions;
 	AspellStringEnumeration*	elements;
 	const char*					suggestedword;
 	int							wordcnt=0;
 	char*						wordlist[100];
 
-	spell_config=new_aspell_config();
-	aspell_config_replace(spell_config,"lang","en_GB");
-
-	possible_err=new_aspell_speller(spell_config);
-	if(aspell_error_number(possible_err)!= 0)
-		puts(aspell_error_message(possible_err));
-	else
-		spell_checker=to_aspell_speller(possible_err);
-
-	correct=aspell_speller_check(spell_checker,word,-1);
-	if(correct)
-		printf("correct\n");
-	else
+	correct=aspell_speller_check(spellChecker,word,-1);
+	if(!correct)
 		{
-			printf(":( %i\n",correct);
-			buildWordCheck();
-			suggestions=(AspellWordList*)aspell_speller_suggest(spell_checker,word,-1);
+			buildWordCheck(word);
+			suggestions=(AspellWordList*)aspell_speller_suggest(spellChecker,word,-1);
 			elements=aspell_word_list_elements(suggestions);
 
 			while((suggestedword=aspell_string_enumeration_next(elements))!=NULL)
 				{
-					printf("  %s\n", suggestedword);
 					wordlist[wordcnt]=strdup(suggestedword);
 					gtk_combo_box_text_append_text((GtkComboBoxText*)wordListDropbox,wordlist[wordcnt]);
 					wordcnt++;
 				}
 			delete_aspell_string_enumeration(elements);
+			gtk_combo_box_set_active((GtkComboBox*)wordListDropbox,0);
+			gtk_widget_show_all(spellCheckWord);
 		}
-	gtk_widget_show_all(spellCheckWord);
-
-	delete_aspell_config(spell_config);
-	delete_aspell_speller(spell_checker);
 }
 
 void checkWord(GtkWidget* widget,gpointer data)
@@ -72,7 +56,6 @@ void checkWord(GtkWidget* widget,gpointer data)
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
-	char*		command;
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
@@ -82,14 +65,35 @@ void checkWord(GtkWidget* widget,gpointer data)
 		}
 	else
 		return;
-
-	printf("word=%s\n",selection);
-
+	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 	checkword(selection);
-	
-
-	asprintf(&command,"echo -n \"%s\"|ispell -a|grep \":\"",selection);
-	system(command);
 	g_free(selection);
-
+	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 }
+
+void doChangeWord(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=getPageStructPtr(-1);
+	GtkTextIter	start;
+	GtkTextIter	end;
+	char*		selection=NULL;
+	char*		newword;
+
+	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+		{
+			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+			if(selection==NULL)
+				return;
+		}
+
+	newword=gtk_combo_box_text_get_active_text((GtkComboBoxText*)wordListDropbox);
+	gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
+	gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,newword,-1);
+
+	aspell_speller_store_replacement(spellChecker,selection,-1,newword,-1);
+
+	gtk_widget_destroy(spellCheckWord);
+}
+
+
+

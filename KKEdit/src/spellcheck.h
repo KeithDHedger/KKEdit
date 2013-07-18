@@ -12,5 +12,6 @@
 #define _SPELLCHECK_
 
 void checkWord(GtkWidget* widget,gpointer data);
+void doChangeWord(GtkWidget* widget,gpointer data);
 
 #endif
