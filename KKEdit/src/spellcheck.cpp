@@ -198,8 +198,6 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 	  /* Now find the misspellings in the line */
 	 		 while(token=aspell_document_checker_next_misspelling(checker),token.len!=0)
 				{
-	    /* Print out the misspelling and get a replacement from the user */
-
 	    /* Pay particular attention to how token.offset and diff is used */
 					asprintf(&badword,"%.*s",token.len,(char*)&line[token.offset+diff]);
 					goodWord=NULL;
