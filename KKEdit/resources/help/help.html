@@ -212,9 +212,9 @@
       <a name="featanc"></a><b>Other Features </b><br>
       <br>
       <b><a href="#copyfilenameanc">Copy filename from tab menu.</a></b><b><br>
-      </b> <b><a href="#copyfilenameanc">Copy filepath from tab menu.</a></b><b>
-      </b><b><br>
-      </b> <b><a href="#copyfunctiondefine">Copy function define.</a></b><b>
+      </b> <b><a href="#copyfilenameanc">Copy filepath from tab menu.</a></b><br>
+      <a href="#spellchk"><u><b>Spell check document from tab menu.</b></u></a><br>
+      <b> </b> <b><a href="#copyfunctiondefine">Copy function define.</a></b><b>
       </b><b><br>
       </b> <b><a href="#copyfunctiondefine">Go to function definition.</a></b><b>
       </b><b><br>
@@ -242,9 +242,10 @@
       <br>
       <br>
       <font size="-1">The right click context menu<font size="-1">:<br>
-          <img alt="popup" src="popup.png" height="696" width="544"><br>
+          <img alt="popup" src="popup.png" height="605" width="726"><br>
           <br>
-        </font></font><font size="-1">Spell checker dialog:</font><br>
+        </font></font><font size="-1"><a name="spellchk"></a>Spell
+        checker dialog:</font><br>
       <img alt="spellcheck"
 src="file:///media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/help/spellcheck.png"
         height="154" width="347"><br>
@@ -306,7 +307,7 @@ src="file:///media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/help/s
         width="684"><br>
       <hr size="2" width="100%"><a name="getanc"></a><b>Get it here!</b><b><br>
       </b> <b><a
-href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.16.tar.gz">KKEdit</a></b><br>
+href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.20.tar.gz">KKEdit</a></b><br>
       <br>
       <font size="-1">Dependencies<br>
         <br>
@@ -343,7 +344,10 @@ href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.16.tar.gz
       <br>
       <font size="-1">Unpack the tarball,cd into the KKEdit folder and
         run:<br>
-        ./autogen.sh --prefix=/usr<br>
+        ./autogen.sh --prefix=/usr&nbsp; </font><font size="-1"><font
+          size="-1"><font size="-1"><font size="-1"></font>--enable-aspell</font></font>&nbsp;
+
+        --enable-docviewer<br>
         make<br>
         sudo make install<br>
         <br>
