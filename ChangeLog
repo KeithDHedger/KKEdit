@@ -1,3 +1,9 @@
+0.0.20
+Added (optional) support for aspell.
+Added 'Check Spelling' to popup menu when word selected.
+Added 'Spell Check Document' to document tab menu.
+Updated 'Help'.
+
 0.0.19
 Added 'Live Search' to toolbar, 'Enter' -> find next,'Shift' -> find prev.
 Added show/hide entry boxes on toolbar to prefs.

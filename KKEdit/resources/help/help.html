@@ -80,7 +80,6 @@
       </b> <b><a href="#featanc">Other Features</a></b><b><br>
       </b> <b><a href="#getanc">Get It And Build It</a></b><br>
       <br>
-      <b><a href="#tbdanc">TO BE DONE - PLEASE READ</a></b><br>
       <hr size="2" width="100%"><br>
       <a name="navanc"></a><b>Navigation Menu</b><br>
       <br>
@@ -202,7 +201,7 @@
       <hr size="2" width="100%"><br>
       <b><a name="prefsanc"></a></b><b>Preferences</b><br>
       <br>
-      <img alt="prefs" src="prefs.png" height="403" width="453"><br>
+      <img alt="prefs" src="prefs.png" height="499" width="324"><br>
       <br>
       <font size="-1">The Prefs file is created ~/.KKEdit/kkedit.rc and
         will be created/recreated when quitting KKEdit.<br>
@@ -228,8 +227,10 @@
       </b> <b><a href="#otherfeatsanc">Other</a></b><br>
       <br>
       <a name="copyfilenameanc"></a><font size="-1">Right clicking on a
-        tab allows copying of the document filename or filepath.</font><br>
-      <img alt="tabmenu" src="tabmenu.png" height="353" width="518"><br>
+        tab allows copying of the document filename<font size="-1">,</font>
+        filepath or spell check the document.</font><br>
+      <img alt="tabmenu" src="tabmenu.png" height="377" width="674"><br>
+      <br>
       <br>
       <a name="copyfunctiondefine"></a><font size="-1">The document
         context menu also contains the&nbsp; 'Go To Definition' function
@@ -237,7 +238,16 @@
         Selecting the definition will copy it to the clipboard.<br>
         If there is no valid definition selected the menu item will not
         be shown.</font><br>
-      <img alt="context" src="contextgoto.png" height="543" width="849"><br>
+      <img src="contextgoto.png" alt="context" height="543" width="849"><br>
+      <br>
+      <br>
+      <font size="-1">The right click context menu<font size="-1">:<br>
+          <img alt="popup" src="popup.png" height="696" width="544"><br>
+          <br>
+        </font></font><font size="-1">Spell checker dialog:</font><br>
+      <img alt="spellcheck"
+src="file:///media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/help/spellcheck.png"
+        height="154" width="347"><br>
       <br>
       <a name="bookmarkanc"></a><font size="-1">Any amount of bookmarks
         can be added, selecting one will switch to that document and
@@ -307,13 +317,20 @@ href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.16.tar.gz
         xdg-utils-1.1.0.<br>
         Autotools.<br>
         libunique-1.1.6<br>
-        webkitgtk-1.10.x.<br>
-        webkit is is an optional dependency if you want to build the
-        Gtk-Doc viewer disable by adding --disable-docviewer to
-        ./configure or ./autogen.sh.<br>
-        <br>
-        If you use a source based distro like LFS or Slackware you
-        should have all(most) of these installed, if you use a
+        webkitgtk-1.10.x. (optional)<br>
+        <font size="-1">a<font size="-1">spell-0.60.6.1.</font></font></font><font
+        size="-1"><font size="-1"><font size="-1"><font size="-1">
+              (optional)<br>
+              <br>
+            </font></font></font> webkit is is an optional dependency if
+        you want to build the Gtk-Doc viewer disable by adding
+        --disable-docviewer to ./configure or ./autogen.sh.<br>
+        Spell checking via aspell is <font size="-1">optional and can
+          be enabled with the '--enable-aspell' switch to ./configure or
+          ./autogen.sh.<br>
+          <br>
+        </font> If you use a source based distro like LFS or Slackware
+        you should have all(most) of these installed, if you use a
         prepackaged distro like debian and you have not compiled from
         source before you may have to install some development packages
         ie for debian ( this is from memory ) the build-essential
@@ -329,29 +346,8 @@ href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.16.tar.gz
         ./autogen.sh --prefix=/usr<br>
         make<br>
         sudo make install<br>
+        <br>
       </font>
-      <hr size="2" width="100%"><br>
-      <a name="tbdanc"></a><b>TO BE DONE</b><br>
-      <br>
-      <font size="-1"><b>1)</b><strike> Make find/replace MUCH more
-          versatile with case insensitive search, file wrap, replace-all</strike>
-        and maybe simple regex.<br>
-        <b>2)</b> <strike>Set up&nbsp; a proper GUI to build an
-          external tool script. Make tools editable via the GUI.</strike></font><strike>
-      </strike><font size="-1"><br>
-        <b>3)</b> <strike>Set up a GUI for the preferences.</strike></font><strike>
-      </strike><font size="-1"><br>
-        <b>4)</b> <strike>Add bookmarks.</strike></font><strike> </strike><font
-        size="-1"><br>
-        <b>5)</b> <strike>Check for file changing on disk and issue
-          alert.</strike></font><strike> </strike><font size="-1"><br>
-        <b>6)</b> <strike>A decent icon.</strike></font><strike> </strike><font
-        size="-1"><br>
-        <b>7)</b> <strike>Save/Restore session.</strike></font><strike>
-      </strike><font size="-1"><br>
-        <b>8)</b> <strike>Improve this help file.</strike></font><strike>
-      </strike><font size="-1"><br>
-        <b>9)</b> <strike>Add printing. :(</strike></font><strike> </strike><br>
       <hr size="2" width="100%"><b><font size="+3"><a
             href="http://keithhedger.hostingsiteforfree.com">Home</a></font></b><br>
       <hr size="2" width="100%"><br>
