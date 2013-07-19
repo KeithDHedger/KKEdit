@@ -36,7 +36,7 @@ PKG_CHECK_MODULES(UNIQ, $UNIQ_MODULES)
 AC_SUBST(UNIQ_CFLAGS)
 AC_SUBST(UNIQ_LIBS)
 
-AC_MSG_CHECKING(build gtk-doc viewer)
+AC_MSG_CHECKING(whether to build gtk-doc viewer)
 AC_ARG_ENABLE(docviewer,
     [  --enable-docviewer         Build the Gtk-Doc viewer.],
     [enable_docviewer=$enableval],
@@ -50,7 +50,7 @@ if test "$enable_docviewer" = "yes"; then
 	AC_DEFINE([BUILDDOCVIEWER], [], [Build gtk-doc viewer])
 fi
 
-AC_MSG_CHECKING(Include spellchecker(aspell))
+AC_MSG_CHECKING(whether to include spell checker (aspell))
 AC_ARG_ENABLE(aspell,
     [  --enable-aspell         Include spellchecker.],
     [enable_aspell=$enableval],

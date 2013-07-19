@@ -563,7 +563,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 			menuitem=gtk_image_menu_item_new_with_label("Spell Check Document");
 			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
-			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doSpellCheckDoc),(void*)page->fileName);
+			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doSpellCheckDoc),(void*)page->filePath);
 #endif
 
 			gtk_menu_attach_to_widget(GTK_MENU(tabMenu),widget,NULL);

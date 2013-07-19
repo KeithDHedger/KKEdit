@@ -1064,7 +1064,7 @@ void buildWordCheck(int documentCheck)
 	hbox=gtk_hbox_new(true,8);
 	button=gtk_button_new_from_stock(GTK_STOCK_APPLY);
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
-	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doChangeWord),(gpointer)docflag);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doChangeWord),(gpointer)(long)docflag);
 
 	button=gtk_button_new_with_label("Ignore");
 	image=gtk_image_new_from_stock(GTK_STOCK_ADD,GTK_ICON_SIZE_MENU);
@@ -1085,7 +1085,6 @@ void buildWordCheck(int documentCheck)
 
 	GtkWidget* content=gtk_dialog_get_content_area((GtkDialog *)spellCheckWord);
 	gtk_container_add(GTK_CONTAINER(content),(GtkWidget*)vbox);
-	//gtk_container_add(GTK_CONTAINER(spellCheckWord),(GtkWidget*)vbox);
 
 	gtk_signal_connect_object(GTK_OBJECT(spellCheckWord),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(spellCheckWord));
 	gtk_signal_connect(GTK_OBJECT(spellCheckWord),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
