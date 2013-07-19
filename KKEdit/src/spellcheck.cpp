@@ -34,6 +34,16 @@
 
 #ifdef _ASPELL_
 
+bool	cancelCheck=false;
+
+void doCancelCheck(GtkWidget* widget,gpointer data)
+{
+	gtk_widget_destroy(spellCheckWord);
+	if(badWord!=NULL)
+		g_free(badWord);
+	cancelCheck=true;
+}
+
 void checkTheWord(char* word,int checkDoc)
 {
 	int							correct;
@@ -47,6 +57,7 @@ void checkTheWord(char* word,int checkDoc)
 	if(!correct)
 		{
 			badWord=word;
+			cancelCheck=false;
 			buildWordCheck(checkDoc);
 			suggestions=(AspellWordList*)aspell_speller_suggest(spellChecker,word,-1);
 			elements=aspell_word_list_elements(suggestions);
@@ -193,6 +204,16 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 					asprintf(&badword,"%.*s",token.len,(char*)&line[token.offset+diff]);
 					goodWord=NULL;
 					checkTheWord(badword,1);
+					if(cancelCheck==true)
+						{
+							delete_aspell_document_checker(checker);
+							fclose(out);
+							fclose(doc);
+							remove(tempfile);
+							g_free(tempfile);
+							gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+							return;
+						}
 					word_begin=line+token.offset+diff;
 
 					if(goodWord!=NULL)

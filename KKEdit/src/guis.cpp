@@ -26,14 +26,6 @@
 #include <webkit/webkit.h>
 #endif
 
-void doNothing(GtkWidget* widget,gpointer data)
-{
-	gtk_widget_destroy((GtkWidget*)data);
-	if(badWord!=NULL)
-		g_free(badWord);
-
-}
-
 void selectToolOptions(GtkWidget* widget,gpointer data)
 {
 	char*			datafolder[2];
@@ -1078,7 +1070,7 @@ void buildWordCheck(int documentCheck)
 
 	button=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
-	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doNothing),(gpointer)spellCheckWord);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doCancelCheck),NULL);
 
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
