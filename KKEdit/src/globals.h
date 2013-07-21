@@ -50,6 +50,7 @@
 
 struct pageStruct
 {
+	GtkWidget*			vbox;
 	GtkScrolledWindow*	pageWindow;
 	GtkSourceBuffer*	buffer;
 	GtkSourceView*		view;
@@ -226,6 +227,9 @@ extern char*			goodWord;
 extern AspellConfig*	aspellConfig;
 extern AspellSpeller*	spellChecker;
 #endif
+
+extern pageStruct*		documents[100];
+extern int				currentPageStruct;
 
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);

@@ -247,13 +247,17 @@ void closeAllTabs(GtkWidget* widget,gpointer data)
 
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
 {
-	pageStruct*	page=getPageStructPtr(thispage);
+	pageStruct*	page;
 	char*		functions=NULL;
 	GtkWidget*	menuitem;
 	int			linenum;
 	char		tmpstr[1024];
 	char*		lineptr;
 	bool		onefunc=false;
+
+	page=(pageStruct*)g_object_get_data(G_OBJECT(arg1),"pagedata");
+	if(page==NULL)
+		return;
 
 	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menufunc);
 	if (submenu!=NULL)
@@ -262,11 +266,11 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	currentTabNumber=thispage;
 
 	page->rebuildMenu=false;
+
 	getRecursiveTagList(page->filePath,&functions);
 	lineptr=functions;
 
 	page->isFirst=true;
-
 	page->navSubMenu=(GtkMenuItem*)gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufunc),(GtkWidget*)page->navSubMenu);
 
@@ -533,6 +537,25 @@ void doTabMenu(GtkWidget *widget,gpointer user_data)
 	gtk_widget_destroy(tabMenu);
 }
 
+void doSplitView(GtkWidget *widget,gpointer user_data)
+{
+	pageStruct* page=(pageStruct*)user_data;
+	//GtkSourceView*	holdview=page->view;
+	GtkWidget*		holdvbox=page->vbox;
+	GtkWidget*		parent=gtk_widget_get_parent(page->vbox);
+
+//printf("xxxxx%sxxxx\n",(char*)user_data);
+//printf("%s\n",G_OBJECT_TYPE_NAME(box));
+	page->vbox=gtk_vbox_new(true,4);
+	g_object_set_data(G_OBJECT(page->vbox),"pagedata",(gpointer)page);
+
+	gtk_widget_reparent((GtkWidget*)page->pageWindow,page->vbox);
+	//gtk_container_add(GTK_CONTAINER(page->vbox),GTK_WIDGET(page->pageWindow));
+	gtk_container_add(GTK_CONTAINER(parent),GTK_WIDGET(page->vbox));
+//gtk_box_pack_start(GTK_BOX(page->vbox),gtk_hseparator_new(),true,true,48);
+	printf("XXX\n");
+}
+
 bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 {
 	pageStruct* page;
@@ -565,6 +588,13 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doSpellCheckDoc),(void*)page->filePath);
 #endif
+
+//paned view
+			image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
+			menuitem=gtk_image_menu_item_new_with_label("Split View");
+			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
+			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
+			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doSplitView),(void*)page);
 
 			gtk_menu_attach_to_widget(GTK_MENU(tabMenu),widget,NULL);
 			gtk_menu_popup(GTK_MENU(tabMenu),NULL,NULL,NULL,NULL,event->button,event->time);

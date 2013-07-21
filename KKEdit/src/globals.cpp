@@ -159,6 +159,9 @@ AspellConfig*	aspellConfig;
 AspellSpeller*	spellChecker=0;
 #endif
 
+pageStruct*		documents[100]={NULL,};
+int				currentPageStruct=0;
+
 pageStruct* getPageStructPtr(int pagenum)
 {
 	int			thispage;
