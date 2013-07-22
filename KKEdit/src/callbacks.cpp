@@ -569,13 +569,12 @@ setFilePrefs((GtkSourceView*)page->view2);
 
 if(gtk_paned_get_child2((GtkPaned*)page->pane)==NULL)
 	{
-		printf("split\n");
 		gtk_paned_add2(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow2);
 		gtk_container_add(GTK_CONTAINER((GtkWidget*)page->pageWindow2),(GtkWidget*)page->view2);
 	}
 else
 	{
-		printf("unsplit\n");
+		gtk_widget_destroy(gtk_paned_get_child2((GtkPaned*)page->pane));
 	}
 	
 	//gtk_box_pack_start(GTK_BOX(parent),pane,true,true,0);
