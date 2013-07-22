@@ -50,10 +50,13 @@
 
 struct pageStruct
 {
+	GtkWidget*			pane;
 	GtkWidget*			vbox;
 	GtkScrolledWindow*	pageWindow;
+	GtkScrolledWindow*	pageWindow2;
 	GtkSourceBuffer*	buffer;
 	GtkSourceView*		view;
+	GtkSourceView*		view2;
 	char*				filePath;
 	GtkMenuItem*		navSubMenu;
 	bool				rebuildMenu;

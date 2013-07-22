@@ -156,27 +156,35 @@ bool openFile(const gchar *filepath,int linenumber)
 	GtkTextMark*	scroll2mark=gtk_text_mark_new(NULL,true);
 	char*			str=NULL;
 	char*			recenturi;
-
+	
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		return(false);
 	documents[currentPageStruct]=(pageStruct*)malloc(sizeof(pageStruct));
 	page=documents[currentPageStruct];
 	currentPageStruct++;
 
+	page->pane=gtk_vpaned_new();
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	page->pageWindow2=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
 	asprintf(&page->filePath,"%s",filepath);
 	asprintf(&page->fileName,"%s",filename);
 	
 	page->buffer=gtk_source_buffer_new(NULL);
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
+	page->view2=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
 	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
+	g_signal_connect(G_OBJECT(page->view2),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
 
 	setFilePrefs(page->view);
+	setFilePrefs(page->view2);
 
-	gtk_container_add(GTK_CONTAINER(page->pageWindow),GTK_WIDGET(page->view));
+//	gtk_container_add(GTK_CONTAINER(page->pageWindow),GTK_WIDGET(page->view));
+	gtk_paned_add1(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow);
+	gtk_container_add (GTK_CONTAINER(page->pageWindow),(GtkWidget*)page->view);
 
 	page->vbox=gtk_vbox_new(true,4);
 
@@ -184,7 +192,7 @@ bool openFile(const gchar *filepath,int linenumber)
 
 //	g_object_set_data(G_OBJECT(page->vbox),"pagedata",(gpointer)page);
 
-	gtk_container_add(GTK_CONTAINER(page->vbox),GTK_WIDGET(page->pageWindow));
+	//gtk_container_add(GTK_CONTAINER(page->vbox),GTK_WIDGET(page->pageWindow));
 
 //	GtkWidget*	npagevbox=gtk_vbox_new(true,4);
 //	gtk_container_add(GTK_CONTAINER(npagevbox),GTK_WIDGET(page->vbox));
@@ -255,7 +263,7 @@ bool openFile(const gchar *filepath,int linenumber)
 
 //connect to ntebook
 	GtkWidget*	npagevbox=gtk_vbox_new(true,4);
-	gtk_container_add(GTK_CONTAINER(npagevbox),GTK_WIDGET(page->vbox));
+	gtk_container_add(GTK_CONTAINER(npagevbox),GTK_WIDGET(page->pane));
 	g_object_set_data(G_OBJECT(npagevbox),"pagedata",(gpointer)page);
 
 	gtk_notebook_append_page(notebook,npagevbox,label);

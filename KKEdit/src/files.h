@@ -17,5 +17,6 @@ void reloadFile(GtkWidget* widget,gpointer data);
 void saveSession(GtkWidget* widget,gpointer data);
 void restoreSession(GtkWidget* widget,gpointer data);
 void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data);
+void setFilePrefs(GtkSourceView* sourceview);
 
 #endif
