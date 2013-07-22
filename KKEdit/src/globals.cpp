@@ -176,7 +176,7 @@ pageStruct* getPageStructPtr(int pagenum)
 	if(pageBox==NULL)
 		return(NULL);
 	else
-		return((pageStruct*)g_object_get_data(G_OBJECT(pageBox),"pagedata"));
+		return((pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata"));
 }
 
 void getMimeType(char* filepath,void* ptr)

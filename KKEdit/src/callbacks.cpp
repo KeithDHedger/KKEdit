@@ -255,7 +255,10 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	char*		lineptr;
 	bool		onefunc=false;
 
-	page=(pageStruct*)g_object_get_data(G_OBJECT(arg1),"pagedata");
+	if(arg1==NULL)
+		return;
+
+	page=(pageStruct*)g_object_get_data((GObject*)arg1,"pagedata");
 	if(page==NULL)
 		return;
 
