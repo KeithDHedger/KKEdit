@@ -567,9 +567,16 @@ setFilePrefs((GtkSourceView*)page->view2);
 //	gtk_paned_add1(GTK_PANED (pane), top);
 //	gtk_container_add (GTK_CONTAINER (top),v1);
 
-	gtk_paned_add2 (GTK_PANED(page->pane),(GtkWidget*)page->pageWindow2);
-	gtk_container_add(GTK_CONTAINER(bottom),(GtkWidget*)page->view2);
-
+if(gtk_paned_get_child2((GtkPaned*)page->pane)==NULL)
+	{
+		printf("split\n");
+		gtk_paned_add2(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow2);
+		gtk_container_add(GTK_CONTAINER((GtkWidget*)page->pageWindow2),(GtkWidget*)page->view2);
+	}
+else
+	{
+		printf("unsplit\n");
+	}
 	
 	//gtk_box_pack_start(GTK_BOX(parent),pane,true,true,0);
 //	gtk_widget_destroy(page->vbox);
@@ -584,7 +591,7 @@ setFilePrefs((GtkSourceView*)page->view2);
 //	//gtk_container_add(GTK_CONTAINER(page->vbox),GTK_WIDGET(page->pageWindow));
 //	gtk_container_add(GTK_CONTAINER(parent),GTK_WIDGET(page->vbox));
 //gtk_box_pack_start(GTK_BOX(page->vbox),gtk_hseparator_new(),true,true,48);
-	printf("XXX\n");
+//	printf("XXX\n");
 	gtk_widget_show_all(page->pane);
 }
 
