@@ -29,7 +29,7 @@ void goToDefine(functionData* fdata)
 			gtk_notebook_set_current_page(notebook,fdata->intab);
 			gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,fdata->line-1,0);
 			gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
-			gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
+			scrollToIterInPane(page,&iter);
 		}
 }
 
@@ -200,7 +200,8 @@ void jumpToMark(GtkWidget* widget,gpointer glist)
 			if(mark!=NULL)
 				{
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
-					gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
+					//gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
+					scrollToIterInPane(page,&iter);
 					gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 					if(thistab!=loop)
 						gtk_notebook_set_current_page(notebook,loop);
