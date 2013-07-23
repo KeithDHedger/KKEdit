@@ -372,14 +372,13 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
 {
 	pageStruct* 			page=getPageStructPtr(-1);
-	GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
+	GtkSourceSearchFlags	flags;
 	char*					searchtext;
 	int						modkey=((GdkEventKey*)event)->state;
 
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 
-	if(insensitiveSearch==true)
-		flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
+	flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
 
 	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)widget));
 
