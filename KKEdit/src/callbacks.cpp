@@ -568,6 +568,7 @@ void doSplitView(GtkWidget *widget,gpointer user_data)
 			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
 			page->view2 = (GtkSourceView*)gtk_source_view_new_with_buffer (page->buffer);
+			g_signal_connect(G_OBJECT(page->view2),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
 			setFilePrefs((GtkSourceView*)page->view2);
 
 			gtk_paned_add2(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow2);
