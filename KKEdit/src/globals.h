@@ -70,6 +70,7 @@ struct pageStruct
 	GFileMonitor*		monitor;
 	bool				itsMe;
 	GList*				markList;
+	bool				inTop;
 };
 
 struct toolStruct
@@ -248,6 +249,7 @@ char* sliceStrLen(char* srcstring,char* startstr,int len);
 void buildToolsList(void);
 char* deleteSlice(char* srcstring,char* delstr);
 void getRecursiveTagListFileName(char* filepath,void* ptr);
+void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
 
 #endif
 

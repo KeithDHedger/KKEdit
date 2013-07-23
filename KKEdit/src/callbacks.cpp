@@ -540,7 +540,51 @@ void doTabMenu(GtkWidget *widget,gpointer user_data)
 	gtk_widget_destroy(tabMenu);
 }
 
+gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
+{
+	pageStruct* page=(pageStruct*)getPageStructPtr(-1);
+
+	if((long)data==1)
+		page->inTop=true;
+	else
+		page->inTop=false;
+
+	return(false);
+}
+
 void doSplitView(GtkWidget *widget,gpointer user_data)
+{
+	pageStruct* page=(pageStruct*)user_data;
+	GtkWidget*		holdvbox=page->vbox;
+	GtkWidget*		top;
+	GtkWidget*		bottom;
+	GtkSourceBuffer*	buffer;
+	GtkWidget*		v1;
+	GtkWidget*		v2;
+
+	if(gtk_paned_get_child2((GtkPaned*)page->pane)==NULL)
+		{
+			page->pageWindow2=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
+			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+
+			page->view2 = (GtkSourceView*)gtk_source_view_new_with_buffer (page->buffer);
+			setFilePrefs((GtkSourceView*)page->view2);
+
+			gtk_paned_add2(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow2);
+			gtk_container_add(GTK_CONTAINER((GtkWidget*)page->pageWindow2),(GtkWidget*)page->view2);
+			g_signal_connect(G_OBJECT(page->view2),"button-release-event",G_CALLBACK(whatPane),(void*)2);
+		}
+	else
+		{
+			gtk_widget_destroy(gtk_paned_get_child2((GtkPaned*)page->pane));
+		}
+
+	gtk_widget_show_all(page->pane);
+}
+
+
+
+void XdoSplitView(GtkWidget *widget,gpointer user_data)
 {
 	pageStruct* page=(pageStruct*)user_data;
 	//GtkSourceView*	holdview=page->view;
@@ -574,6 +618,9 @@ if(gtk_paned_get_child2((GtkPaned*)page->pane)==NULL)
 	{
 		gtk_paned_add2(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow2);
 		gtk_container_add(GTK_CONTAINER((GtkWidget*)page->pageWindow2),(GtkWidget*)page->view2);
+	g_signal_connect(G_OBJECT(page->view),"button-release-event",G_CALLBACK(whatPane),(void*)1);
+	g_signal_connect(G_OBJECT(page->view2),"button-release-event",G_CALLBACK(whatPane),(void*)2);
+
 	}
 else
 	{

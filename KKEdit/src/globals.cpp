@@ -162,6 +162,14 @@ AspellSpeller*	spellChecker=0;
 pageStruct*		documents[100]={NULL,};
 int				currentPageStruct=0;
 
+void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
+{
+	if(page->inTop==true)
+		gtk_text_view_scroll_to_iter((GtkTextView*)page->view,iter,0,true,0,0.5);
+	else
+		gtk_text_view_scroll_to_iter((GtkTextView*)page->view2,iter,0,true,0,0.5);
+}
+
 pageStruct* getPageStructPtr(int pagenum)
 {
 	int			thispage;

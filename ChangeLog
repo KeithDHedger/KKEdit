@@ -1,3 +1,6 @@
+0.0.21
+Added 'Split View' to tab menu, click once to split, again ton un-split.
+
 0.0.20
 Added (optional) support for aspell.
 Added 'Check Spelling' to popup menu when word selected.
