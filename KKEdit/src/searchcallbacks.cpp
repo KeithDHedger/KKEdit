@@ -237,7 +237,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 				if(gtk_source_iter_forward_search(&page->match_end,searchtext,flags,&page->match_start,&page->match_end,NULL))
 					{
 						gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-						//gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
 						scrollToIterInPane(page,&page->match_start);
 						page->iter=page->match_end;
 					}
@@ -249,7 +248,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 								if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
 									{
 										gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-										//gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
 										scrollToIterInPane(page,&page->match_start);
 										page->iter=page->match_end;
 									}
@@ -264,7 +262,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 				if(gtk_source_iter_backward_search(&page->match_start,searchtext,flags,&page->match_start,&page->match_end,NULL))
 					{
 						gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-						//gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
 						scrollToIterInPane(page,&page->match_start);
 						page->iter=page->match_start;
 					}
@@ -276,7 +273,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 								if(gtk_source_iter_backward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
 									{
 										gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-										//gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
 										scrollToIterInPane(page,&page->match_start);
 										page->iter=page->match_start;
 									}
@@ -294,7 +290,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 					if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
 						{
 							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-							//gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
 							scrollToIterInPane(page,&page->match_start);
 							page->iter=page->match_end;
 						}
@@ -318,7 +313,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 								if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
 									{
 										gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-										//gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->match_start,0,true,0,0.5);
 										scrollToIterInPane(page,&page->match_start);
 										page->iter=page->match_end;
 									}

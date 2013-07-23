@@ -555,12 +555,6 @@ gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
 void doSplitView(GtkWidget *widget,gpointer user_data)
 {
 	pageStruct* page=(pageStruct*)user_data;
-	GtkWidget*		holdvbox=page->vbox;
-	GtkWidget*		top;
-	GtkWidget*		bottom;
-	GtkSourceBuffer*	buffer;
-	GtkWidget*		v1;
-	GtkWidget*		v2;
 
 	if(gtk_paned_get_child2((GtkPaned*)page->pane)==NULL)
 		{
@@ -574,9 +568,11 @@ void doSplitView(GtkWidget *widget,gpointer user_data)
 			gtk_paned_add2(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow2);
 			gtk_container_add(GTK_CONTAINER((GtkWidget*)page->pageWindow2),(GtkWidget*)page->view2);
 			g_signal_connect(G_OBJECT(page->view2),"button-release-event",G_CALLBACK(whatPane),(void*)2);
+			page->isSplit=true;
 		}
 	else
 		{
+			page->isSplit=false;
 			gtk_widget_destroy(gtk_paned_get_child2((GtkPaned*)page->pane));
 		}
 
@@ -618,7 +614,11 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 
 //paned view
 			image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
-			menuitem=gtk_image_menu_item_new_with_label("Split View");
+			if(page->isSplit==true)
+				menuitem=gtk_image_menu_item_new_with_label("Un-Split View");
+			else
+				menuitem=gtk_image_menu_item_new_with_label("Split View");
+
 			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doSplitView),(void*)page);

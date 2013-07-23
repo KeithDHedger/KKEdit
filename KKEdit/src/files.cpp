@@ -143,122 +143,6 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 	gtk_drag_finish (context,true,true,time);
 }
 
-
-
-bool XXopenFile(const gchar *filepath,int linenumber)
-{
-	GtkTextIter		iter;
-	gchar*			buffer=NULL;
-	long			filelen;
-	GtkWidget*		label;
-	gchar*			filename=g_path_get_basename(filepath);
-	pageStruct*		page;
-	GtkTextMark*	scroll2mark=gtk_text_mark_new(NULL,true);
-	char*			str=NULL;
-	char*			recenturi;
-	
-	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
-		return(false);
-	documents[currentPageStruct]=(pageStruct*)malloc(sizeof(pageStruct));
-	page=documents[currentPageStruct];
-	currentPageStruct++;
-
-	page->pane=gtk_vpaned_new();
-	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	page->pageWindow2=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-
-	asprintf(&page->filePath,"%s",filepath);
-	asprintf(&page->fileName,"%s",filename);
-	
-	page->buffer=gtk_source_buffer_new(NULL);
-	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
-	page->view2=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
-
-	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
-
-	setFilePrefs(page->view);
-
-	gtk_paned_add1(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow);
-	gtk_container_add (GTK_CONTAINER(page->pageWindow),(GtkWidget*)page->view);
-
-	g_signal_connect(G_OBJECT(page->view),"button-release-event",G_CALLBACK(whatPane),(void*)1);
-
-	page->vbox=gtk_vbox_new(true,4);
-
-	label=makeNewTab(page->fileName,page->filePath,page);
-
-	setLanguage(page);
-
-	g_file_get_contents(filepath,&buffer,(gsize*)&filelen,NULL);
-
-	gtk_source_buffer_begin_not_undoable_action(page->buffer);
-		gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
-		if(g_utf8_validate(buffer,-1,NULL)==false)
-			{
-				str=g_locale_to_utf8(buffer,-1,NULL,NULL,NULL);
-				gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str,-1);
-				g_free(str);
-			}
-		else
-			{
-				gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,buffer,-1);
-				g_free(buffer);
-			}
-	gtk_source_buffer_end_not_undoable_action(page->buffer);
-	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
-	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
-
-	page->rebuildMenu=true;
-	page->isFirst=true;
-	page->itsMe=false;
-	page->gFile=g_file_new_for_path(page->filePath);
-	page->monitor=g_file_monitor(page->gFile,(GFileMonitorFlags)G_FILE_MONITOR_NONE,NULL,NULL);
-	page->markList=NULL;
-	page->inTop=true;
-	g_signal_connect(G_OBJECT(page->monitor),"changed",G_CALLBACK(fileChangedOnDisk),(void*)page);
-
-	gtk_widget_grab_focus((GtkWidget*)page->view);
-	
-   /* move cursor to the linenumber */
-	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,linenumber,0);
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
-	gtk_text_iter_set_line(&iter,linenumber);
-	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark,&iter);  
-	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
-	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
-
-	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
-
-	str=g_file_get_path(page->gFile);
-	recenturi=g_filename_to_uri(str,NULL,NULL);
-	gtk_recent_manager_add_item(gtk_recent_manager_get_default(),recenturi);
-	g_free(filename);
-	g_free(recenturi);
-	g_free(str);
-//dnd
-	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
-	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);
-	gtk_drag_dest_add_text_targets((GtkWidget*)page->view);
-	g_signal_connect_after(G_OBJECT(page->view),"drag-data-received",G_CALLBACK(dropText),(void*)page);
-
-//connect to ntebook
-	GtkWidget*	npagevbox=gtk_vbox_new(true,4);
-	gtk_container_add(GTK_CONTAINER(npagevbox),GTK_WIDGET(page->pane));
-	g_object_set_data(G_OBJECT(npagevbox),"pagedata",(gpointer)page);
-
-	gtk_notebook_append_page(notebook,npagevbox,label);
-	gtk_notebook_set_tab_reorderable(notebook,npagevbox,true);
-	gtk_notebook_set_current_page(notebook,currentPage);
-	currentPage++;
-	gtk_widget_show_all((GtkWidget*)notebook);
-
-	return TRUE;
-}
-
-
 bool getSaveFile(void)
 {
 	GtkWidget*	dialog;
@@ -358,63 +242,6 @@ bool saveFile(GtkWidget* widget,gpointer data)
 	switchPage(notebook,NULL,currentTabNumber,NULL);
 	setSensitive();
 	return(true);
-}
-
-void newFile(GtkWidget* widget,gpointer data)
-{
-	GtkTextIter	iter;
-	GtkWidget*	label;
-	pageStruct*	page=(pageStruct*)malloc(sizeof(pageStruct));
-
-	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	page->filePath=NULL;
-	page->buffer=gtk_source_buffer_new(NULL);
-	asprintf(&page->fileName,"Untitled-%i",untitledNumber);
-	untitledNumber++;
-	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
-
-	setFilePrefs(page->view);
-	gtk_container_add(GTK_CONTAINER(page->pageWindow),GTK_WIDGET(page->view));
-
-//	vbox=gtk_vbox_new(true,4);
-	page->vbox=gtk_vbox_new(true,4);
-	label=makeNewTab(page->fileName,NULL,page);
-
-	g_object_set_data(G_OBJECT(page->vbox),"pagedata",(gpointer)page);
-
-	gtk_container_add(GTK_CONTAINER(page->vbox),GTK_WIDGET(page->pageWindow));
-
-	gtk_notebook_append_page(notebook,page->vbox,label);
-	gtk_notebook_set_tab_reorderable(notebook,page->vbox,true);
-
-	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive), NULL);
-
-    /* move cursor to the beginning */
-	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-
-	gtk_widget_show_all((GtkWidget*)window);
-	gtk_notebook_set_current_page(notebook,currentPage);
-	currentPage++;
-	page->rebuildMenu=true;
-	page->isFirst=true;
-	page->gFile=NULL;
-	page->monitor=NULL;
-	page->markList=NULL;
-
-	gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
-	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
-	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
-
-	refreshMainWindow();
-	gtk_widget_grab_focus((GtkWidget*)page->view);
-
-//dnd
-	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
-	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);
-	gtk_drag_dest_add_text_targets((GtkWidget*)page->view);
-	g_signal_connect_after(G_OBJECT(page->view),"drag-data-received",G_CALLBACK(dropText),(void*)page);
 }
 
 void openAsHexDump(GtkWidget *widget,gpointer user_data)
@@ -630,15 +457,7 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 
 pageStruct* makeNewPage(void)
 {
-	//GtkTextIter		iter;
-	//gchar*			buffer=NULL;
-	//long			filelen;
-	//GtkWidget*		label;
-	//gchar*			filename=g_path_get_basename(filepath);
 	pageStruct*		page;
-	//GtkTextMark*	scroll2mark=gtk_text_mark_new(NULL,true);
-	//char*			str=NULL;
-	//char*			recenturi;
 
 	documents[currentPageStruct]=(pageStruct*)malloc(sizeof(pageStruct));
 	page=documents[currentPageStruct];
@@ -666,8 +485,9 @@ pageStruct* makeNewPage(void)
 	page->itsMe=false;
 	page->markList=NULL;
 	page->inTop=true;
-
-	//page->vbox=gtk_vbox_new(true,4);
+	page->gFile=NULL;
+	page->monitor=NULL;
+	page->isSplit=false;
 
 //dnd
 	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
@@ -678,75 +498,6 @@ pageStruct* makeNewPage(void)
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
 	gtk_widget_grab_focus((GtkWidget*)page->view);
-
-//	asprintf(&page->filePath,"%s",filepath);
-//	asprintf(&page->fileName,"%s",filename);
-	
-
-
-
-
-
-
-//	label=makeNewTab(page->fileName,page->filePath,page);
-
-//	setLanguage(page);
-
-//	g_file_get_contents(filepath,&buffer,(gsize*)&filelen,NULL);
-
-#if 0
-	gtk_source_buffer_begin_not_undoable_action(page->buffer);
-		gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
-		if(g_utf8_validate(buffer,-1,NULL)==false)
-			{
-				str=g_locale_to_utf8(buffer,-1,NULL,NULL,NULL);
-				gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str,-1);
-				g_free(str);
-			}
-		else
-			{
-				gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,buffer,-1);
-				g_free(buffer);
-			}
-	gtk_source_buffer_end_not_undoable_action(page->buffer);
-
-
-	page->gFile=g_file_new_for_path(page->filePath);
-	page->monitor=g_file_monitor(page->gFile,(GFileMonitorFlags)G_FILE_MONITOR_NONE,NULL,NULL);
-	g_signal_connect(G_OBJECT(page->monitor),"changed",G_CALLBACK(fileChangedOnDisk),(void*)page);
-#endif
-
-	
-   /* move cursor to the linenumber */
-#if 0
-	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,linenumber,0);
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
-	gtk_text_iter_set_line(&iter,linenumber);
-	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark,&iter);  
-	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
-	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
-
-	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
-
-	str=g_file_get_path(page->gFile);
-	recenturi=g_filename_to_uri(str,NULL,NULL);
-	gtk_recent_manager_add_item(gtk_recent_manager_get_default(),recenturi);
-	g_free(filename);
-	g_free(recenturi);
-	g_free(str);
-#endif	
-
-//connect to ntebook
-//	GtkWidget*	npagevbox=gtk_vbox_new(true,4);
-//	gtk_container_add(GTK_CONTAINER(npagevbox),GTK_WIDGET(page->pane));
-//	g_object_set_data(G_OBJECT(npagevbox),"pagedata",(gpointer)page);
-//
-//	gtk_notebook_append_page(notebook,npagevbox,label);
-//	gtk_notebook_set_tab_reorderable(notebook,npagevbox,true);
-//	gtk_notebook_set_current_page(notebook,currentPage);
-//	currentPage++;
-//	gtk_widget_show_all((GtkWidget*)notebook);
 
 	return(page);
 }
@@ -762,39 +513,17 @@ bool openFile(const gchar *filepath,int linenumber)
 	GtkTextMark*	scroll2mark=gtk_text_mark_new(NULL,true);
 	char*			str=NULL;
 	char*			recenturi;
-	
+	int				linenum=linenumber-1;
+
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		return(false);
-
-//	documents[currentPageStruct]=(pageStruct*)malloc(sizeof(pageStruct));
-//	page=documents[currentPageStruct];
-//	currentPageStruct++;
+	if(linenum<0)
+		linenum=0;
 
 	page=makeNewPage();
 
-//	page->pane=gtk_vpaned_new();
-//	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
-//	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-//	page->pageWindow2=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
-//	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-
 	asprintf(&page->filePath,"%s",filepath);
 	asprintf(&page->fileName,"%s",filename);
-	
-//	page->buffer=gtk_source_buffer_new(NULL);
-//	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
-//	page->view2=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
-
-//	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
-
-//	setFilePrefs(page->view);
-
-//	gtk_paned_add1(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow);
-//	gtk_container_add (GTK_CONTAINER(page->pageWindow),(GtkWidget*)page->view);
-
-//	g_signal_connect(G_OBJECT(page->view),"button-release-event",G_CALLBACK(whatPane),(void*)1);
-
-//	page->vbox=gtk_vbox_new(true,4);
 
 	label=makeNewTab(page->fileName,page->filePath,page);
 	setLanguage(page);
@@ -818,25 +547,9 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
 
-//	page->rebuildMenu=true;
-//	page->isFirst=true;
-//	page->itsMe=false;
 	page->gFile=g_file_new_for_path(page->filePath);
 	page->monitor=g_file_monitor(page->gFile,(GFileMonitorFlags)G_FILE_MONITOR_NONE,NULL,NULL);
-//	page->markList=NULL;
-//	page->inTop=true;
 	g_signal_connect(G_OBJECT(page->monitor),"changed",G_CALLBACK(fileChangedOnDisk),(void*)page);
-
-//	gtk_widget_grab_focus((GtkWidget*)page->view);
-	
-   /* move cursor to the linenumber */
-	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,linenumber,0);
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
-	gtk_text_iter_set_line(&iter,linenumber);
-	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark,&iter);  
-	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
-	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
 
 	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
 
@@ -846,11 +559,50 @@ bool openFile(const gchar *filepath,int linenumber)
 	g_free(filename);
 	g_free(recenturi);
 	g_free(str);
-//dnd
-//	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
-//	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);
-//	gtk_drag_dest_add_text_targets((GtkWidget*)page->view);
-//	g_signal_connect_after(G_OBJECT(page->view),"drag-data-received",G_CALLBACK(dropText),(void*)page);
+
+//connect to ntebook
+	GtkWidget*	npagevbox=gtk_vbox_new(true,4);
+	gtk_container_add(GTK_CONTAINER(npagevbox),GTK_WIDGET(page->pane));
+	g_object_set_data(G_OBJECT(npagevbox),"pagedata",(gpointer)page);
+
+	gtk_notebook_append_page(notebook,npagevbox,label);
+	gtk_notebook_set_tab_reorderable(notebook,npagevbox,true);
+	gtk_notebook_set_current_page(notebook,currentPage);
+	currentPage++;
+	gtk_widget_grab_focus((GtkWidget*)page->view);
+
+   /* move cursor to the linenumber */
+	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,linenum,0);
+	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
+	gtk_text_iter_set_line(&iter,linenum);
+	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark,&iter);  
+	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
+	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
+
+	gtk_widget_show_all((GtkWidget*)notebook);
+
+	return TRUE;
+}
+
+void newFile(GtkWidget* widget,gpointer data)
+{
+	GtkTextIter	iter;
+	GtkWidget*	label;
+	pageStruct*	page;
+
+	page=makeNewPage();
+
+	page->filePath=NULL;
+
+	asprintf(&page->fileName,"Untitled-%i",untitledNumber);
+	untitledNumber++;
+
+	label=makeNewTab(page->fileName,NULL,page);
+
+    /* move cursor to the beginning */
+	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
+	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 
 //connect to ntebook
 	GtkWidget*	npagevbox=gtk_vbox_new(true,4);
@@ -863,5 +615,4 @@ bool openFile(const gchar *filepath,int linenumber)
 	currentPage++;
 	gtk_widget_show_all((GtkWidget*)notebook);
 
-	return TRUE;
 }

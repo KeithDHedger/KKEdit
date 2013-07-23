@@ -51,7 +51,6 @@
 struct pageStruct
 {
 	GtkWidget*			pane;
-	GtkWidget*			vbox;
 	GtkScrolledWindow*	pageWindow;
 	GtkScrolledWindow*	pageWindow2;
 	GtkSourceBuffer*	buffer;
@@ -71,6 +70,7 @@ struct pageStruct
 	bool				itsMe;
 	GList*				markList;
 	bool				inTop;
+	bool				isSplit;
 };
 
 struct toolStruct
