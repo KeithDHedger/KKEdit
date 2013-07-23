@@ -583,68 +583,6 @@ void doSplitView(GtkWidget *widget,gpointer user_data)
 	gtk_widget_show_all(page->pane);
 }
 
-
-
-void XdoSplitView(GtkWidget *widget,gpointer user_data)
-{
-	pageStruct* page=(pageStruct*)user_data;
-	//GtkSourceView*	holdview=page->view;
-	GtkWidget*		holdvbox=page->vbox;
-	GtkWidget*		top;
-	GtkWidget*		bottom;
-	GtkSourceBuffer*	buffer;
-	GtkWidget*		v1;
-	GtkWidget*		v2;
-
-//	top=gtk_scrolled_window_new(NULL, NULL);
-//	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(top),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-
-	page->pageWindow2=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-
-	//buffer=page->buffer;
-//	v1 = gtk_source_view_new_with_buffer (buffer);
-	page->view2 = (GtkSourceView*)gtk_source_view_new_with_buffer (page->buffer);
-//setFilePrefs((GtkSourceView*)v1);
-setFilePrefs((GtkSourceView*)page->view2);
-
-//	GtkWidget*		parent=gtk_widget_get_parent(page->vbox);
-
-//	GtkWidget*		pane=gtk_vpaned_new();
-
-//	gtk_paned_add1(GTK_PANED (pane), top);
-//	gtk_container_add (GTK_CONTAINER (top),v1);
-
-if(gtk_paned_get_child2((GtkPaned*)page->pane)==NULL)
-	{
-		gtk_paned_add2(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow2);
-		gtk_container_add(GTK_CONTAINER((GtkWidget*)page->pageWindow2),(GtkWidget*)page->view2);
-	g_signal_connect(G_OBJECT(page->view),"button-release-event",G_CALLBACK(whatPane),(void*)1);
-	g_signal_connect(G_OBJECT(page->view2),"button-release-event",G_CALLBACK(whatPane),(void*)2);
-
-	}
-else
-	{
-		gtk_widget_destroy(gtk_paned_get_child2((GtkPaned*)page->pane));
-	}
-	
-	//gtk_box_pack_start(GTK_BOX(parent),pane,true,true,0);
-//	gtk_widget_destroy(page->vbox);
-	//gtk_widget_destroy((GtkWidget*)page->view);
-	//gtk_paned_add1(GTK_PANED(pane),(GtkWidget*)page->pageWindow);
-//printf("xxxxx%sxxxx\n",(char*)user_data);
-//printf("%s\n",G_OBJECT_TYPE_NAME(box));
-//	page->vbox=gtk_vbox_new(true,4);
-//	g_object_set_data(G_OBJECT(page->vbox),"pagedata",(gpointer)page);
-
-//	gtk_widget_reparent((GtkWidget*)page->pageWindow,page->vbox);
-//	//gtk_container_add(GTK_CONTAINER(page->vbox),GTK_WIDGET(page->pageWindow));
-//	gtk_container_add(GTK_CONTAINER(parent),GTK_WIDGET(page->vbox));
-//gtk_box_pack_start(GTK_BOX(page->vbox),gtk_hseparator_new(),true,true,48);
-//	printf("XXX\n");
-	gtk_widget_show_all(page->pane);
-}
-
 bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 {
 	pageStruct* page;

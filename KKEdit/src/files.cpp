@@ -34,7 +34,6 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	GtkWidget*	close=gtk_image_new_from_stock(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
 	GtkWidget*	button=gtk_button_new();
 	GtkRcStyle*	style=gtk_rc_style_new();
-//	GtkWidget*	vbox;
 
 	gtk_button_set_relief((GtkButton*)button,GTK_RELIEF_NONE);
 	gtk_widget_set_tooltip_text(label,tooltip);
@@ -144,7 +143,6 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 	gtk_drag_finish (context,true,true,time);
 }
 
-
 bool openFile(const gchar *filepath,int linenumber)
 {
 	GtkTextIter		iter;
@@ -152,7 +150,7 @@ bool openFile(const gchar *filepath,int linenumber)
 	long			filelen;
 	GtkWidget*		label;
 	gchar*			filename=g_path_get_basename(filepath);
-	pageStruct*		page;//=(pageStruct*)malloc(sizeof(pageStruct));
+	pageStruct*		page;
 	GtkTextMark*	scroll2mark=gtk_text_mark_new(NULL,true);
 	char*			str=NULL;
 	char*			recenturi;
@@ -177,19 +175,13 @@ bool openFile(const gchar *filepath,int linenumber)
 	page->view2=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
 	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
-	g_signal_connect(G_OBJECT(page->view2),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
-
 
 	setFilePrefs(page->view);
-	setFilePrefs(page->view2);
 
 	gtk_paned_add1(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow);
 	gtk_container_add (GTK_CONTAINER(page->pageWindow),(GtkWidget*)page->view);
 
-
-
 	g_signal_connect(G_OBJECT(page->view),"button-release-event",G_CALLBACK(whatPane),(void*)1);
-
 
 	page->vbox=gtk_vbox_new(true,4);
 
