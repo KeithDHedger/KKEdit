@@ -11,5 +11,14 @@ find KKEdit -name ".svn" -exec rm -r '{}' \; || true
 rm /tmp/KKEdit/makepkg
 rm -r /tmp/KKEdit/artwork
 mv /tmp/KKEdit /tmp/KKEdit-${VERSION}
+cd /tmp/KKEdit-${VERSION}
+
+./remakesourcelist
+aclocal
+autoheader
+touch NEWS README AUTHORS ChangeLog
+automake --add-missing --copy
+autoconf
+cd ..
 tar -czvf KKEdit-${VERSION}.tar.gz KKEdit-${VERSION}
 rm -r /tmp/KKEdit-${VERSION}
