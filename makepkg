@@ -21,7 +21,7 @@ touch NEWS README AUTHORS ChangeLog
 automake --add-missing --copy
 autoconf
 rm -rf ./autom4te.cache
-rm ./compile ./missing ./COPYING ./INSTALL AUTHORS  NEWS README
+rm ./compile ./missing ./COPYING ./INSTALL ./AUTHORS  ./NEWS ./README ./remakesourcelist
 cd ..
 tar -czvf KKEdit-${VERSION}.tar.gz KKEdit-${VERSION}
 rm -r /tmp/KKEdit-${VERSION}
