@@ -11,6 +11,7 @@ find KKEdit -name ".svn" -exec rm -r '{}' \; || true
 rm /tmp/KKEdit/makepkg
 rm -r /tmp/KKEdit/artwork
 mv /tmp/KKEdit /tmp/KKEdit-${VERSION}
+
 cd /tmp/KKEdit-${VERSION}
 
 ./remakesourcelist
