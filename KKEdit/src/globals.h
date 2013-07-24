@@ -232,8 +232,8 @@ extern AspellConfig*	aspellConfig;
 extern AspellSpeller*	spellChecker;
 #endif
 
-extern pageStruct*		documents[100];
-extern int				currentPageStruct;
+//extern pageStruct*		documents[100];
+//extern int				currentPageStruct;
 
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);

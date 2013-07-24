@@ -159,8 +159,8 @@ AspellConfig*	aspellConfig;
 AspellSpeller*	spellChecker=0;
 #endif
 
-pageStruct*		documents[100]={NULL,};
-int				currentPageStruct=0;
+//pageStruct*		documents[100]={NULL,};
+//int				currentPageStruct=0;
 
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 {

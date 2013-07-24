@@ -286,7 +286,8 @@ void openAsHexDump(GtkWidget *widget,gpointer user_data)
 						gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str->str,-1);
 					}
 			gtk_source_buffer_end_not_undoable_action(page->buffer);
-			gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),true);
+			gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
+			
 			g_string_free(str,true);
 			g_free (filepath);
 			g_free (filename);
@@ -459,9 +460,7 @@ pageStruct* makeNewPage(void)
 {
 	pageStruct*		page;
 
-	documents[currentPageStruct]=(pageStruct*)malloc(sizeof(pageStruct));
-	page=documents[currentPageStruct];
-	currentPageStruct++;
+	page=(pageStruct*)malloc(sizeof(pageStruct));
 
 	page->pane=gtk_vpaned_new();
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
@@ -470,6 +469,9 @@ pageStruct* makeNewPage(void)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 
 	page->buffer=gtk_source_buffer_new(NULL);
+	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
+	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
+
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
 	page->view2=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
@@ -544,8 +546,6 @@ bool openFile(const gchar *filepath,int linenumber)
 				g_free(buffer);
 			}
 	gtk_source_buffer_end_not_undoable_action(page->buffer);
-	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
-	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
 
 	page->gFile=g_file_new_for_path(page->filePath);
 	page->monitor=g_file_monitor(page->gFile,(GFileMonitorFlags)G_FILE_MONITOR_NONE,NULL,NULL);
@@ -579,6 +579,8 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark,&iter);  
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
 	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
+
+	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
 
 	gtk_widget_show_all((GtkWidget*)notebook);
 

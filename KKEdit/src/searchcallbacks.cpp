@@ -318,7 +318,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 									}
 								else
 									{
-									replaceAllFlag=false;
+										replaceAllFlag=false;
 									}
 							}
 						if(selectedtext!=NULL)
