@@ -3,6 +3,7 @@ Added 'Split View' to tab menu, click once to split, again ton un-split.
 'Live Search' is now always case insensitive.
 Removed 'dirty' flag from buffe when firts opening as hexdump.
 Added configure and associated files to archive so no longer needs auto-tools.
+Updated 'INSTALL' file for debian/fedora users.
 
 0.0.20
 Added (optional) support for aspell.

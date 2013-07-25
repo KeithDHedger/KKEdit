@@ -43,7 +43,7 @@ AC_ARG_ENABLE(docviewer,
     [enable_docviewer="yes"])
 AC_MSG_RESULT($enable_docviewer)
 if test "$enable_docviewer" = "yes"; then
-	WEBKIT_MODULES="webkit-1.0 >= 1.10.0"
+	WEBKIT_MODULES="webkit-1.0 >= 1.6.1"
 	PKG_CHECK_MODULES(WEBKIT, $WEBKIT_MODULES)
 	AC_SUBST(WEBKIT_CFLAGS)
 	AC_SUBST(WEBKIT_LIBS)
