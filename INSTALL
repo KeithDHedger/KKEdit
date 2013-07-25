@@ -10,18 +10,20 @@ gktsu
 
 
 Source based distros (slackware etc):
-./configure
+./configure --prefix=/usr --enable-aspell
 make
-sudo make install
+sudo make install --prefix=/usr
 
 Or if you have autotools installed:
 ./autogen.sh
 make
-sudo make install
+sudo make install --enable-aspell
 
 Add --prefix=/usr etc to change the default installation from /usr/local
 Add --enable-docviewer if you have installed webkit and want the help/api/manpage files displayed in the doc viewer (default).
-Add --enable-Aspell if you have installed Aspell and want to include the spell checker (default is NOT to use spellchecker).
+Add --enable-aspell if you have installed Aspell and want to include the spell checker (default is NOT to use spellchecker).
+
+******************
 
 Debian install.
 
@@ -41,18 +43,28 @@ Debian install using autotools.
 The above +
 sudo apt-get install automake
 sudo apt-get install autotools-dev
-sudo apt-get install aclocal autoheader automake autoconf
+sudo apt-get install aclocal autoheader autoconf
 
-./autogen.sh
+./autogen.sh --prefix=/usr --enable-aspell
 make
 sudo make install
 
 Fedora Install
 sudo yum update kernel*
 sudo yum install gcc-c++ glib2-devel gtk2-devel gcc
-sudo yum install gtksourceview2-devel unique-devel ctags webkitgtk-devel Aspell-devel
+sudo yum install gtksourceview2-devel unique-devel ctags webkitgtk-devel aspell-devel
 
-You may need to adjust package names slightly depending on the version of debiam/fedora that you have installed.
+******************
+
+Fedora Install using autotools.
+The above +
+sudo yum install automake autoconf
+
+./autogen.sh --prefix=/usr --enable-aspell
+make
+sudo make install
+
+You may need to adjust package names slightly depending on the version of debian/fedora that you have installed.
 
 Bugs and suggestions welcome please email to kdhedger68713@gmail.com
 For general info on compiling/installing software on your disro see the relevant forums.
