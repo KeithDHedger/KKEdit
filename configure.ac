@@ -67,6 +67,16 @@ if test $CTAGS = false; then
 	AC_MSG_ERROR([No ctags program found!])
 fi
 
+AC_CHECK_PROG(GTKSU, gtksu ,true,false)
+if test $GTKSU = false; then
+	AC_MSG_NOTICE([No gtksu program found!])
+	AC_MSG_NOTICE([You can download it from here:])
+	AC_MSG_NOTICE([http://gtk-apps.org/content/show.php/GtkSu?content=158974])
+else
+	AC_DEFINE([_GTKSU_], [], [Do admin stuff])
+	AC_MSG_NOTICE([Using gtksu for admin stuff!])
+fi
+
 AC_OUTPUT(Makefile KKEdit/app/Makefile)
 
 

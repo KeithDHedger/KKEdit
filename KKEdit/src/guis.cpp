@@ -721,6 +721,22 @@ void buildMainGui(void)
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+#ifdef _GTKSU_
+	menuitem=gtk_image_menu_item_new_with_label("New Admin Editor");
+	image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newEditor),(void*)1);
+#endif
+	menuitem=gtk_image_menu_item_new_with_label("New Editor");
+	image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newEditor),(void*)2);
+
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //recent menu
 	menuitem=gtk_image_menu_item_new_with_label("Recent Files");
 	menurecent=gtk_menu_new();

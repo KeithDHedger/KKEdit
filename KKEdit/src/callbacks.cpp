@@ -1046,9 +1046,13 @@ void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 	}
 }
 
-
-
-
+void newEditor(GtkWidget* widget,gpointer data)
+{
+	if((long)data==1)
+		system("gtksu -- kkedit -m 2>/dev/null");
+	if((long)data==2)
+		system("kkedit -m");
+}
 
 
 

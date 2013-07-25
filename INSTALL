@@ -2,6 +2,12 @@
 
 KKEdit Installation Instructions.
 
+Optional installs:
+These apps/libs are not necessary but are recommended.
+webkit 1.6.1
+aspell
+gktsu
+
 
 Source based distros (slackware etc):
 ./configure
