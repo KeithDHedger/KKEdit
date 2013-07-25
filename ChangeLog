@@ -1,12 +1,12 @@
 0.0.21
-Added 'Split View' to tab menu, click once to split, again ton un-split.
+Added 'Split View' to tab menu, click once to split, again to un-split.
 'Live Search' is now always case insensitive.
-Removed 'dirty' flag from buffe when firts opening as hexdump.
+Removed 'dirty' flag from buffer when first opening as hexdump.
 Added configure and associated files to archive so no longer needs auto-tools.
-Updated 'INSTALL' file for debian/fedora users.
+Updated 'INSTALL' file for Debian/fedora users.
 
 0.0.20
-Added (optional) support for aspell.
+Added (optional) support for Aspell.
 Added 'Check Spelling' to popup menu when word selected.
 Added 'Spell Check Document' to document tab menu.
 'Cancel' while spell checking document now cancels entire action.
@@ -43,7 +43,7 @@ Session can now be restored with/without the saved bookmarks.
 Auto restore bookmarks can be set in prefs
 Added error dialog if can't save.
 External tools now editable from the GUI.
-For convienience info label in tools gui is selectable.
+For convenience info label in tools gui is selectable.
 Added 'delete' to tools GUI.
 Added 'Home' button to gtk doc viewer.
 Added '$KKEDIT_HTMLFILE' to vars passed to external script, this file should be used for displaying output from tool in html format.
@@ -56,7 +56,7 @@ Removed redundant close button from toolbar.
 Added printing.
 Improved Gtk Doc search.
 Code clean.
-Only recursivly search for define from main menu not pop-up ( for speed ).
+Only recursively search for define from main menu not pop-up ( for speed ).
 Added manual search box to gtk-doc viewer.
 Added auto save/restore session to prefs (default off).
 Tweaked help page.
@@ -103,8 +103,8 @@ Added popup menu to tabs to copy filepath/name.
 0.0.9
 Added external tool creater GUI.
 Bug fix crash on closing empty new tab.
-Set senitive on save/saveas buttons menu items on startup.
-Completly redone external tools.
+Set sensitive on save/saveas buttons menu items on startup.
+Completely redone external tools.
 Checked build with lower version of gtksourceview (2.9.9) but 2.11.1 recommended.
 Added GUI to build external tools.
 
@@ -126,7 +126,7 @@ Added simple bookmarks
 0.0.6
 Added wrap for search replace.
 Dim function menu when no functions available.
-Apply prefs immedietly.
+Apply prefs immediately.
 Added save search wrap mode
 
 0.0.5
@@ -135,7 +135,7 @@ Function menu updated on save file.
 Added revert.
 Added GUI for Prefs.
 Added save state of search sensitive to rc file.
-Added teminal command to prefs.
+Added terminal command to prefs.
 Code clean.
 Bug Fix.
 Updated Help file.
