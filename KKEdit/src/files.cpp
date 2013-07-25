@@ -526,8 +526,8 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	page=makeNewPage();
 
-	asprintf(&page->filePath,"%s",filepath);
-	asprintf(&page->fileName,"%s",filename);
+	page->filePath=strdup(filepath);
+	page->fileName=strdup(filename);
 
 	label=makeNewTab(page->fileName,page->filePath,page);
 	setLanguage(page);

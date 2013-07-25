@@ -198,7 +198,7 @@ void getMimeType(char* filepath,void* ptr)
 	if (retval==0)
 		{
 			stdout[strlen(stdout)-1]=0;
-			asprintf((char**)ptr,"%s",stdout);
+			*((char**)ptr)=strdup(stdout);
 			g_free(stdout);
 			g_free(stderr);
 		}
@@ -269,7 +269,8 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 			flags=8;
 		}
 	else
-		asprintf(&command,"%s",commandtorun);
+		command=strdup(commandtorun);
+
 
 	if((flags & TOOL_ASYNC)==TOOL_ASYNC)
 		{
@@ -284,7 +285,7 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 						{
 							stdout[strlen(stdout)-1]=0;
 							if(ptr!=NULL)
-								asprintf((char**)ptr,"%s",stdout);
+								*((char**)ptr)=strdup(stdout);
 							g_free(stdout);
 						}
 					if(stderr!=NULL)
@@ -331,14 +332,14 @@ functionData* getFunctionByName(char* name,bool recurse)
 								{
 									fdata=(functionData*)malloc(sizeof(functionData));
 									sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
-									asprintf(&fdata->name,"%s",function);
+									fdata->name=strdup(function);
 									sscanf (lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
-									asprintf(&fdata->type,"%s",function);
+									fdata->type=strdup(function);
 									sscanf (lineptr,"%*s %*s %i",&fdata->line);
 									sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
-									asprintf(&fdata->file,"%s",function);
+									fdata->file=strdup(function);
 									sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
-									asprintf(&fdata->define,"%s",function);
+									fdata->define=strdup(function);
 									fdata->intab=loop;
 									return(fdata);
 								}
