@@ -238,7 +238,8 @@ bool saveFile(GtkWidget* widget,gpointer data)
 			saveFileName=NULL;
 			saveFilePath=NULL;
 		}
-	setLanguage(page);
+	if(page->lang==NULL)
+		setLanguage(page);
 	switchPage(notebook,NULL,currentTabNumber,NULL);
 	setSensitive();
 	return(true);
@@ -490,6 +491,7 @@ pageStruct* makeNewPage(void)
 	page->gFile=NULL;
 	page->monitor=NULL;
 	page->isSplit=false;
+	page->lang=NULL;
 
 //dnd
 	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);

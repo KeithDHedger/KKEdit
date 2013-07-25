@@ -4,6 +4,7 @@ Added 'Split View' to tab menu, click once to split, again to un-split.
 Removed 'dirty' flag from buffer when first opening as hexdump.
 Added configure and associated files to archive so no longer needs auto-tools.
 Updated 'INSTALL' file for Debian/fedora users.
+Added drop down for syntax highlighting.
 
 0.0.20
 Added (optional) support for Aspell.

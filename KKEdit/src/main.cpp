@@ -175,6 +175,7 @@ void init(void)
 	else
 		spellChecker=to_aspell_speller(possible_err);
 #endif
+
 }
 
 int main(int argc,char **argv)

@@ -134,6 +134,7 @@ GtkToolItem*	saveasButton;
 GtkToolItem*	closeButton;
 GtkToolItem*	redoButton;
 GtkToolItem*	undoButton;
+GtkToolItem*	sourceFormatButton;
 
 GtkWidget*		findReplaceDialog;
 GtkWidget*		findBox;
@@ -159,8 +160,6 @@ AspellConfig*	aspellConfig;
 AspellSpeller*	spellChecker=0;
 #endif
 
-//pageStruct*		documents[100]={NULL,};
-//int				currentPageStruct=0;
 
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 {
@@ -249,6 +248,9 @@ void setLanguage(pageStruct* page)
 			//g_print("Language: [%s]\n", gtk_source_language_get_name(lang));
 			gtk_source_buffer_set_language(page->buffer,lang);
 		}
+
+	if(lang!=NULL)
+		page->lang=gtk_source_language_get_name(lang);
 
 	if(mimetype!=NULL)
 		g_free(mimetype);

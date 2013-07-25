@@ -299,6 +299,13 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 
 	gtk_widget_set_sensitive((GtkWidget*)menufunc,onefunc);
 	setSensitive();
+
+	if(page->lang!=NULL)
+		gtk_tool_button_set_label((GtkToolButton*)sourceFormatButton,page->lang);
+	else
+		gtk_tool_button_set_label((GtkToolButton*)sourceFormatButton,"");
+
+	gtk_widget_show_all((GtkWidget*)sourceFormatButton);
 }
 
 void copyToClip(GtkWidget* widget,gpointer data)
@@ -1048,12 +1055,35 @@ void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 
 void newEditor(GtkWidget* widget,gpointer data)
 {
+
 	if((long)data==1)
+#ifdef _GTKSU_
 		system("gtksu -- kkedit -m 2>/dev/null");
+#else
+		char*	command=NULL;
+		asprintf(&command,"%s sudo kkedit -m",terminalCommand);
+		system(command);
+		g_free(command);
+#endif
 	if((long)data==2)
 		system("kkedit -m");
 }
 
+void changeSourceStyle(GtkWidget* widget,gpointer data)
+{
+	pageStruct*					page=getPageStructPtr(-1);
+	GtkSourceLanguageManager*	lm=gtk_source_language_manager_get_default();
+	const gchar* const*			ids=gtk_source_language_manager_get_language_ids(lm);
+	GtkSourceLanguage*			lang=gtk_source_language_manager_get_language(lm,ids[(long)data]);
+
+	gtk_source_buffer_set_language(page->buffer,lang);
+	//if(page->lang!=NULL)
+	//	g_free(page->lang);
+	page->lang=strdup(ids[(long)data]);
+
+	gtk_tool_button_set_label((GtkToolButton*)sourceFormatButton,page->lang);
+	gtk_widget_show_all((GtkWidget*)sourceFormatButton);
+}
 
 
 

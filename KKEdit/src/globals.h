@@ -71,6 +71,7 @@ struct pageStruct
 	GList*				markList;
 	bool				inTop;
 	bool				isSplit;
+	const char*			lang;
 };
 
 struct toolStruct
@@ -208,6 +209,7 @@ extern GtkToolItem*		saveasButton;
 extern GtkToolItem*		closeButton;
 extern GtkToolItem*		redoButton;
 extern GtkToolItem*		undoButton;
+extern GtkToolItem*		sourceFormatButton;
 
 extern GtkWidget*		findReplaceDialog;
 extern GtkWidget*		findBox;
@@ -231,9 +233,6 @@ extern char*			goodWord;
 extern AspellConfig*	aspellConfig;
 extern AspellSpeller*	spellChecker;
 #endif
-
-//extern pageStruct*		documents[100];
-//extern int				currentPageStruct;
 
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);

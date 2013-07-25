@@ -545,16 +545,20 @@ GtkTextTag *tag;
 
 void buildMainGui(void)
 {
-	GtkWidget*			vbox;
-	GtkWidget*			menuitem;
-	GtkWidget*			menu;
-	GtkWidget*			toolbar;
-	GtkToolItem*		toolbutton;
-	GtkAccelGroup*		accgroup;
-	GtkWidget*			image;
-	GtkWidget*			recent;
-	GtkRecentFilter*	filter;
-	GtkWidget*			menurecent;
+	GtkWidget*					vbox;
+	GtkWidget*					menuitem;
+	GtkWidget*					menu;
+	GtkWidget*					toolbar;
+	GtkToolItem*				toolbutton;
+	GtkAccelGroup*				accgroup;
+	GtkWidget*					image;
+	GtkWidget*					recent;
+	GtkRecentFilter*			filter;
+	GtkWidget*					menurecent;
+
+	GtkSourceLanguageManager*	lm;
+	const gchar* const*			ids;
+	int							cnt=0;
 
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size((GtkWindow*)window,windowWidth,windowHeight);
@@ -599,13 +603,15 @@ void buildMainGui(void)
 	filter=gtk_recent_filter_new();
 	gtk_recent_filter_add_application(filter,"kkedit");
 	gtk_recent_chooser_set_filter(GTK_RECENT_CHOOSER(recent),filter);
+	g_signal_connect(recent,"item_activated",G_CALLBACK(recentFileMenu),NULL);
+
+//open+recent
 
 	openButton=gtk_menu_tool_button_new_from_stock(GTK_STOCK_OPEN);
 	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(openButton),recent);
 	gtk_toolbar_insert((GtkToolbar*)toolbar,openButton,-1);
 	gtk_signal_connect(GTK_OBJECT(openButton),"clicked",G_CALLBACK(doOpenFile),NULL);
 	gtk_widget_set_tooltip_text((GtkWidget*)openButton,"Open File");
-	g_signal_connect(recent,"item_activated",G_CALLBACK(recentFileMenu),NULL);
 	gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(openButton),"Open Recent File");
 
 //save
@@ -663,13 +669,13 @@ void buildMainGui(void)
 	gtk_toolbar_insert((GtkToolbar*)toolbar,gtk_separator_tool_item_new(),-1);
 
 //goto line
-			lineNumberWidget=gtk_entry_new();
-			toolbutton=gtk_tool_item_new();
-			gtk_container_add((GtkContainer *)toolbutton,lineNumberWidget);
-			gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
-			g_signal_connect_after(G_OBJECT(lineNumberWidget),"key-release-event",G_CALLBACK(jumpToLineFromBar),NULL);
-			gtk_widget_set_size_request((GtkWidget*)toolbutton,48,-1);
-			gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Go To Line");
+	lineNumberWidget=gtk_entry_new();
+	toolbutton=gtk_tool_item_new();
+	gtk_container_add((GtkContainer *)toolbutton,lineNumberWidget);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
+	g_signal_connect_after(G_OBJECT(lineNumberWidget),"key-release-event",G_CALLBACK(jumpToLineFromBar),NULL);
+	gtk_widget_set_size_request((GtkWidget*)toolbutton,48,-1);
+	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Go To Line");
 		
 //find in gtkdoc
 	findApiWidget=gtk_entry_new();
@@ -694,6 +700,26 @@ void buildMainGui(void)
 	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
 	g_signal_connect_after(G_OBJECT(liveSearchWidget),"key-release-event",G_CALLBACK(doLiveSearch),NULL);
 	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Live Search");
+
+
+//src format
+	sourceFormatButton=gtk_menu_tool_button_new(NULL,NULL);
+	gtk_toolbar_insert((GtkToolbar*)toolbar,sourceFormatButton,-1);
+
+	lm=gtk_source_language_manager_get_default();
+	ids=gtk_source_language_manager_get_language_ids(lm);
+
+	menu=gtk_menu_new();
+	while(ids[cnt]!=NULL)
+		{
+			menuitem=gtk_menu_item_new_with_label(ids[cnt]);
+			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(changeSourceStyle),(void*)(long)cnt);
+			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+			cnt++;
+		}
+
+	gtk_widget_show_all(menu);
+	gtk_menu_tool_button_set_menu((GtkMenuToolButton*)sourceFormatButton,menu);
 
 //menus
 //file menu
@@ -722,13 +748,12 @@ void buildMainGui(void)
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
-#ifdef _GTKSU_
 	menuitem=gtk_image_menu_item_new_with_label("New Admin Editor");
 	image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newEditor),(void*)1);
-#endif
+
 	menuitem=gtk_image_menu_item_new_with_label("New Editor");
 	image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
@@ -737,6 +762,7 @@ void buildMainGui(void)
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
 //recent menu
 	menuitem=gtk_image_menu_item_new_with_label("Recent Files");
 	menurecent=gtk_menu_new();
