@@ -5,6 +5,7 @@ Removed 'dirty' flag from buffer when first opening as hexdump.
 Added configure and associated files to archive so no longer needs auto-tools.
 Updated 'INSTALL' file for Debian/fedora users.
 Added drop down for syntax highlighting.
+Updated help file.
 
 0.0.20
 Added (optional) support for Aspell.
