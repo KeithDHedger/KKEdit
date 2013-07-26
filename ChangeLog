@@ -5,6 +5,8 @@ Removed 'dirty' flag from buffer when first opening as hexdump.
 Added configure and associated files to archive so no longer needs auto-tools.
 Updated 'INSTALL' file for Debian/fedora users.
 Added drop down for syntax highlighting.
+Added 'New Editor' to file menu.
+Added 'New Admin Editor' to file menu.
 Updated help file.
 
 0.0.20
