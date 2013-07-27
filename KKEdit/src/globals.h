@@ -72,6 +72,7 @@ struct pageStruct
 	bool				inTop;
 	bool				isSplit;
 	const char*			lang;
+	GtkWidget*			tabVbox;
 };
 
 struct toolStruct

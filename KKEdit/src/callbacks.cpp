@@ -152,7 +152,7 @@ void setSensitive(void)
 			if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer))==true)
 				asprintf(&newlabel,"*%s",&text[offset]);
 			else
-				asprintf(&newlabel,"%s",&text[offset]);
+				newlabel=strdup(&text[offset]);
 
 			gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)newlabel);
 			g_free(newlabel);
@@ -392,7 +392,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	if(page->filePath!=NULL)
 		dirname=g_path_get_dirname(page->filePath);
 	else
-		asprintf(&dirname,"%s",getenv("HOME"));
+		dirname=strdup(getenv("HOME"));
 
 	chdir(dirname);
 
@@ -406,7 +406,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 			setenv("KKEDIT_SELECTION",selection,1);
 		}
 	else
-		asprintf(&selection,"%s","");
+		selection=strdup("");
 
 	varData[0]=selection;
 	varData[2]=dirname;
@@ -862,13 +862,13 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			if(terminalCommand!=NULL)
 				{
 					g_free(terminalCommand);
-					asprintf(&terminalCommand,"%s",gtk_entry_get_text((GtkEntry*)terminalBox));
+					terminalCommand=strdup(gtk_entry_get_text((GtkEntry*)terminalBox));
 				}
 
 			if(fontAndSize!=NULL)
 				{
 					g_free(fontAndSize);
-					asprintf(&fontAndSize,"%s",gtk_entry_get_text((GtkEntry*)fontBox));
+					fontAndSize=strdup(gtk_entry_get_text((GtkEntry*)fontBox));
 				}
 
 			tabWidth=tmpTabWidth;
@@ -936,7 +936,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{
 			asprintf(&dirname,"%s/.KKEdit/tools",getenv("HOME"));
-			asprintf(&text,"%s",gtk_entry_get_text((GtkEntry*)toolNameWidget));
+			text=strdup(gtk_entry_get_text((GtkEntry*)toolNameWidget));
 			text=g_strdelimit(text," ",'-');
 			sprintf((char*)&toolpath,"%s/.KKEdit/tools/%s",getenv("HOME"),text);
 

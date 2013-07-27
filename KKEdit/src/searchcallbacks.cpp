@@ -97,7 +97,7 @@ void docSearch(GtkWidget* widget,gpointer data)
 															link=sliceBetween(line,(char*)"link=\"",(char*)"\"");
 															if((foldername!=NULL) && (link!=NULL))
 																{
-																	asprintf(&searchdata[cnt][0],"%s",funcname);
+																	searchdata[cnt][0]=strdup(funcname);
 																	asprintf(&searchdata[cnt][1],"%s/%s",foldername,link);
 																	g_free(foldername);
 																	g_free(link);
@@ -128,7 +128,7 @@ void docSearch(GtkWidget* widget,gpointer data)
 							fprintf(fd,"</body>\n");
 							fprintf(fd,"</html>\n");
 							fclose(fd);
-							asprintf(&thePage,"%s",htmlURI);
+							thePage=strdup(htmlURI);
 						}
 				}
 			else
@@ -189,7 +189,7 @@ void showDocView(GtkWidget* widget,gpointer data)
 
 void defSearchFromBar(GtkWidget* widget,gpointer data)
 {
-	asprintf(&functionSearchText,"%s",gtk_entry_get_text((GtkEntry*)widget));
+	functionSearchText=strdup(gtk_entry_get_text((GtkEntry*)widget));
 	if(functionSearchText!=NULL)
 		{
 			functionData* fdata=getFunctionByName(functionSearchText,true);

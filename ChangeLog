@@ -1,3 +1,8 @@
+0.0.21r1
+Fixed 'close tab' bug'
+Code clean.
+Now allow's pipes in external tool command.
+
 0.0.21
 Added 'Split View' to tab menu, click once to split, again to un-split.
 'Live Search' is now always case insensitive.

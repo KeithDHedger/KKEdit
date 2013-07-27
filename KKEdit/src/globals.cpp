@@ -256,12 +256,13 @@ void setLanguage(pageStruct* page)
 		g_free(mimetype);
 }
 
+
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 {
 	char*	command;
-	gchar*	stdout=NULL;
-	gchar*	stderr=NULL;
-	gint	retval=0;
+	FILE*	fp=NULL;
+	GString*	str=NULL;
+	char		line[1024];
 
 	if(interm==true)
 		{
@@ -271,25 +272,22 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 	else
 		command=strdup(commandtorun);
 
-
 	if((flags & TOOL_ASYNC)==TOOL_ASYNC)
 		{
 			g_spawn_command_line_async(command,NULL);
 		}
 	else
 		{
-			g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
-			if (retval==0)
+			fp=popen(command,"r");
+			if(fp!=NULL)
 				{
-					if(stdout!=NULL)
-						{
-							stdout[strlen(stdout)-1]=0;
-							if(ptr!=NULL)
-								*((char**)ptr)=strdup(stdout);
-							g_free(stdout);
-						}
-					if(stderr!=NULL)
-						g_free(stderr);
+					str=g_string_new(NULL);
+					while(fgets(line,1024,fp))
+						 g_string_append(str,line);
+					pclose(fp);
+					if(ptr!=NULL)
+						*((char**)ptr)=str->str;
+					g_string_free(str,false);
 				}
 		}
 
@@ -360,7 +358,7 @@ functionData* getFunctionByName(char* name,bool recurse)
 					page=getPageStructPtr(loop);
 					if(page->filePath!=NULL)
 						{
-							asprintf(&dirname,"%s",g_path_get_dirname(page->filePath));
+							dirname=strdup(g_path_get_dirname(page->filePath));
 							getRecursiveTagListFileName(dirname,&stdout);
 
 							lineptr=stdout;
@@ -372,8 +370,8 @@ functionData* getFunctionByName(char* name,bool recurse)
 											sscanf (lineptr, "%s\t%s\t%i",funcname,filepath,&linenumber);
 
 											fdata=(functionData*)malloc(sizeof(functionData));
-											asprintf(&fdata->name,"%s",funcname);
-											asprintf(&fdata->file,"%s",filepath);
+											fdata->name=strdup(funcname);
+											fdata->file=strdup(filepath);
 											fdata->line=linenumber;
 											fdata->type=NULL;
 											fdata->define=NULL;
@@ -439,8 +437,10 @@ void getRecursiveTagListFileName(char* filepath,void* ptr)
 			g_string_append_printf(str,"%s",line);
 		}
 	pclose(fp);
-	asprintf((char**)ptr,"%s",str->str);
-	g_string_free(str,true);
+
+	*((char**)ptr)=str->str;
+	g_string_free(str,false);
+
 	g_free(command);
 }
 
@@ -466,12 +466,12 @@ void getRecursiveTagList(char* filepath,void* ptr)
 		}
 	pclose(fp);
 
-	asprintf((char**)ptr,"%s",str->str);
-	g_string_free(str,true);
+	*((char**)ptr)=str->str;
+	g_string_free(str,false);
 	g_free(command);
 }
 
-//string sliceing
+//string slicing
 
 char* slice(char* srcstring,int tmpstartchar,int tmpendchar)
 {
@@ -623,12 +623,12 @@ void buildToolsList(void)
 									if((menuname!=NULL) &&(strlen(menuname)>0))
 										{
 											tool=(toolStruct*)malloc(sizeof(toolStruct));
-											asprintf(&tool->menuName,"%s",menuname);
-											asprintf(&tool->command,"%s",commandarg);
+											tool->menuName=strdup(menuname);
+											tool->command=strdup(commandarg);											
 											tool->flags=flagsarg;
 											tool->inTerminal=(bool)intermarg;
 											tool->inPopUp=(bool)inpopup;
-											asprintf(&tool->filePath,"%s",filepath);
+											tool->filePath=strdup(filepath);
 											toolsList=g_list_prepend(toolsList,(gpointer)tool);
 										}
 									g_free(menuname);

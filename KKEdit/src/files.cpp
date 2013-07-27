@@ -44,7 +44,7 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
 	gtk_container_add(GTK_CONTAINER(evbox),hbox);
-	gtk_signal_connect(GTK_OBJECT(button),"clicked",G_CALLBACK(closeTab),(void*)vbox);
+	gtk_signal_connect(GTK_OBJECT(button),"clicked",G_CALLBACK(closeTab),(void*)page->tabVbox);
 	gtk_signal_connect(GTK_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),(void*)page);
 
 	page->tabName=label;
@@ -472,8 +472,8 @@ pageStruct* makeNewPage(void)
 	page->buffer=gtk_source_buffer_new(NULL);
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
-
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
+
 	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
 	page->view2=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
@@ -492,7 +492,7 @@ pageStruct* makeNewPage(void)
 	page->monitor=NULL;
 	page->isSplit=false;
 	page->lang=NULL;
-
+	page->tabVbox=NULL;
 //dnd
 	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);
@@ -525,6 +525,7 @@ bool openFile(const gchar *filepath,int linenumber)
 		linenum=0;
 
 	page=makeNewPage();
+	page->tabVbox=gtk_vbox_new(true,4);
 
 	page->filePath=strdup(filepath);
 	page->fileName=strdup(filename);
@@ -563,12 +564,11 @@ bool openFile(const gchar *filepath,int linenumber)
 	g_free(str);
 
 //connect to ntebook
-	GtkWidget*	npagevbox=gtk_vbox_new(true,4);
-	gtk_container_add(GTK_CONTAINER(npagevbox),GTK_WIDGET(page->pane));
-	g_object_set_data(G_OBJECT(npagevbox),"pagedata",(gpointer)page);
+	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
+	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
 
-	gtk_notebook_append_page(notebook,npagevbox,label);
-	gtk_notebook_set_tab_reorderable(notebook,npagevbox,true);
+	gtk_notebook_append_page(notebook,page->tabVbox,label);
+	gtk_notebook_set_tab_reorderable(notebook,page->tabVbox,true);
 	gtk_notebook_set_current_page(notebook,currentPage);
 	currentPage++;
 	gtk_widget_grab_focus((GtkWidget*)page->view);
@@ -596,7 +596,7 @@ void newFile(GtkWidget* widget,gpointer data)
 	pageStruct*	page;
 
 	page=makeNewPage();
-
+	page->tabVbox=gtk_vbox_new(true,4);
 	page->filePath=NULL;
 
 	asprintf(&page->fileName,"Untitled-%i",untitledNumber);
@@ -609,12 +609,11 @@ void newFile(GtkWidget* widget,gpointer data)
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 
 //connect to ntebook
-	GtkWidget*	npagevbox=gtk_vbox_new(true,4);
-	gtk_container_add(GTK_CONTAINER(npagevbox),GTK_WIDGET(page->pane));
-	g_object_set_data(G_OBJECT(npagevbox),"pagedata",(gpointer)page);
+	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
+	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
 
-	gtk_notebook_append_page(notebook,npagevbox,label);
-	gtk_notebook_set_tab_reorderable(notebook,npagevbox,true);
+	gtk_notebook_append_page(notebook,page->tabVbox,label);
+	gtk_notebook_set_tab_reorderable(notebook,page->tabVbox,true);
 	gtk_notebook_set_current_page(notebook,currentPage);
 	currentPage++;
 	gtk_widget_show_all((GtkWidget*)notebook);

@@ -85,7 +85,7 @@ void readConfig(void)
 						{
 							g_free(terminalCommand);
 							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
-							asprintf(&terminalCommand,"%s",strarg);
+							terminalCommand=strdup(strarg);
 						}
 				}
 			fclose(fd);
@@ -122,9 +122,8 @@ void init(void)
 	tabWidth=4;
 	depth=1;
 	singleUse=true;
-
-	asprintf(&fontAndSize,"%s","mono 10");
-	asprintf(&terminalCommand,"%s","xterm");
+	fontAndSize=strdup("mono 10");
+	terminalCommand=strdup("xterm");
 	windowWidth=800;
 	windowHeight=400;
 	windowX=-1;

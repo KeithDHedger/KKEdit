@@ -21,10 +21,13 @@ void goToDefine(functionData* fdata)
 {
 	pageStruct*	page;
 	GtkTextIter	iter;
+
+
 	if(fdata->intab==-1)
 		openFile(fdata->file,fdata->line-1);
 	else
 		{
+
 			page=getPageStructPtr(fdata->intab);
 			gtk_notebook_set_current_page(notebook,fdata->intab);
 			gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,fdata->line-1,0);
@@ -35,10 +38,11 @@ void goToDefine(functionData* fdata)
 
 void goToDefinition(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getPageStructPtr(-1);
-	GtkTextIter	start;
-	GtkTextIter	end;
-	char*		selection=NULL;
+	pageStruct*		page=getPageStructPtr(-1);
+	GtkTextIter		start;
+	GtkTextIter		end;
+	char*			selection=NULL;
+	functionData*	fdata=NULL;
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
@@ -49,7 +53,8 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 	else
 		return;
 
-	functionData* fdata=getFunctionByName(selection,true);
+	fdata=getFunctionByName(selection,true);
+
 	if(fdata!=NULL)
 		{
 			goToDefine(fdata);
@@ -87,9 +92,9 @@ void findFile(GtkWidget* widget,gpointer data)
 	strarg[strlen(strarg)-1]=0;
 	
 	if(strarg[0]=='<')
-		asprintf(&searchdir,"/usr/include");
+		searchdir=strdup("/usr/include");
 	else
-		asprintf(&searchdir,"%s",g_path_get_dirname(page->filePath));
+		searchdir=strdup(g_path_get_dirname(page->filePath));
 
 	filename=g_path_get_basename(&strarg[1]);
 	asprintf(&command,"find \"%s\" -name \"%s\"",searchdir,filename);

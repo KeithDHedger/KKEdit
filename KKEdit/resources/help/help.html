@@ -6,7 +6,8 @@
     <title>KKEdit help page</title>
     <meta content="K.D.Hedger" name="author">
   </head>
-  <body background="background.png">
+  <body alink="#EE0000" bgcolor="#cccccc" link="#0000EE" text="#000000"
+    vlink="#551A8B">
     <div align="center"><big><big><u><b><font size="+3"><big><big>KKEdit</big></big></font></b></u></big></big><br>
       <br>
       <font size="+3">Source code text editor</font><br>
@@ -20,7 +21,7 @@
           were all too flat ( sorry wrong sketch! ), anyway having used
           gedit for years it was getting increasingly difficult to keep
           it compiling without loads of gnome dependencies, looking
-          around linux text editors seem to be VERY simple (leafpad)
+          around Linux text editors seem to be VERY simple (leafpad)
           stupidly complex (GVim,Bluefish), trying to be all things to
           all people. <br>
           One of the best text editors I have used is BBEdit but that is
@@ -42,7 +43,7 @@
         <br>
         <b><font size="+1">What it is and does <br>
           </font></b> <br>
-        <font size="-1">KKEdit is a deceptivly simple text editor with
+        <font size="-1">KKEdit is a deceptively simple text editor with
           syntax colouring. <br>
           It also has a function menu which allows you to jump instantly
           to a function definition, a navigation menu which will look in
@@ -56,7 +57,7 @@
           will be looked for in the current folder.<br>
           External tools can be added either globally or locally and
           when run can either replace the currently select text with
-          their ouptut, replace all the files text, be run in a terminal
+          their output, replace all the files text, be run in a terminal
           or you can choose to ignore the output form the script, BASH,
           python and perl can be used for the script language or any
           interpretor that uses '#' as a comment marker.<br>
@@ -101,10 +102,10 @@
         from the folder where the file was opened from and if found
         opening the file and selecting the line with the definition.<br>
         The search depth for finding a definition is set in the prefs
-        and defaults to 1 ie only looks for definitions in files in the
-        same folder as any open documents, be careful about setting this
-        too high as it can cause an unwanted delay when right clicking
-        if it has to look in a lot of sub-folders.<br>
+        and defaults to 1 i.e. only looks for definitions in files in
+        the same folder as any open documents, be careful about setting
+        this too high as it can cause an unwanted delay when right
+        clicking if it has to look in a lot of sub-folders.<br>
         <br>
         You can also open an include file just highlight the line and
         select&nbsp; Open Include File like so:</font> <br>
@@ -136,7 +137,7 @@
       <a name="toolsanc"></a><b>Tools Menu</b><br>
       <br>
       <font size="-1">The Tools menu allow you to run an external script
-        ie to open a terminal with the working directory set to the
+        i.e. to open a terminal with the working directory set to the
         folder where the current file is open:</font><br>
       <br>
       <img alt="openterm" src="toolsmenu.png" height="264" width="638"><br>
@@ -149,10 +150,10 @@
         KKEDIT_CURRENTDIR - Directory of current document.<br>
         KKEDIT_SELECTION - Currently selected text.</font> <font
         size="-1"><br>
-        KKEDIT_DATADIR - Directory of global folder ( eg
+        KKEDIT_DATADIR - Directory of global folder ( e.g.
         /usr/share/KKEdit ). <br>
       </font><font size="-1">KKEDIT_HTMLFILE</font><font size="-1">-
-        Tempory file for displaying html in doc viewer<br>
+        Temporary file for displaying html in doc viewer<br>
         <br>
         More variables may be defined later.<br>
         External tools can be created by hand or via the 'Tools-&gt;New'
@@ -160,7 +161,7 @@
       <br>
       <img alt="exttool" src="newtool.png" height="451" width="626"><br>
       <br>
-      <font size="-1">The placeholders are:<br>
+      <font size="-1">The place holders are:<br>
         %t - Currently selected text, the same as the $KKEDIT_SELECTION
         environment variable passed to the command .<br>
         %f - Filepath of the current document, the same as the
@@ -171,14 +172,14 @@
         command. <br>
         %i -The location of the globally installed tools, the same as
         the $KKEDIT_DATADIR environment variable passed to the command .<br>
-        %h - Tempory file for displaying html in doc viewer, the same as
-        the $KKEDIT_HTMLFILE environment variable passed to the command
-        .<br>
+        %h - Temporary file for displaying html in doc viewer, the same
+        as the $KKEDIT_HTMLFILE environment variable passed to the
+        command .<br>
         <br>
         <font size="-1">Selecting <font size="-1">'Show HTML Doc' will
             display the file </font></font></font><font size="-1"><font
           size="-1"><font size="-1"><font size="-1">$KKEDIT_HTMLFILE in
-              either the Gtk Doc vierer or your <font size="-1">default
+              either the Gtk Doc viewer or your <font size="-1">default
                 browser<font size="-1">, this is used in the installed
                   example tool 'Open Man Page' to display the manpage of
                   the selec<font size="-1">tion ( if it exists and if
@@ -187,17 +188,32 @@
                       <br>
                       <font size="-1">Only tools that have </font>"<font
                         size="-1">Show Tool In Pop-Up Menu"</font>
-                      selected will show up in the popup menu if you
+                      selected will show up in the pop-up menu if you
                       have also<font size="-1"> selected some text.<br>
                         <br>
-                      </font> </font></font></font></font></font></font></font>
-        Commands should be simple commands, compound commands ( ie cd
-        /opt;ls;touch xx) will not be executed properly, if you need to
-        use a complex command create a script and set 'command' to the
-        filepath of your script. </font> <font size="-1"><br>
+                        Commands can be 'comp<font size="-1">ound</font>'
+                        commands i.e. 'cat /tmp/textfile|head' but using
+                        pipes to a terminal may not always give what you
+                        want i.e. 'xterm -hold -e 'cat "</font></font></font></font></font></font></font></font></font><font
+        size="-1"><font size="-1"><font size="-1"><font size="-1"><font
+                size="-1"><font size="-1"><font size="-1"><font
+                      size="-1"><font size="-1"><font size="-1"><font
+                            size="-1"><font size="-1"><font size="-1"><font
+                                  size="-1"><font size="-1"><font
+                                      size="-1"><font size="-1"><font
+                                          size="-1">/tmp/textfile</font></font></font></font></font></font></font></font></font>"|tail
+                        -f'' WILL <font size="-1">work and show the
+                          tail of the file but <font size="-1">WILL NOT
+                            follow properly this is a <font size="-1">feature/problem
+                              of xterm and beyond</font></font> my
+                          control :(<br>
+                          <br>
+                        </font>For very </font></font></font></font></font></font></font></font>complex
+        commands create a script and set 'command' to the filepath of
+        your script. </font> <font size="-1"><br>
         Tools can be edited by selecting from the drop down list, if you
-        attempt to edit a globally installed tool ( ie one in
-        /usr/share/KKEdit/tools ) you must have root privileges.</font><br>
+        attempt to edit a globally installed tool ( <font size="-1">i.e.</font>i.e.
+        one in /usr/share/KKEdit/tools ) you must have root privileges.</font><br>
       <hr size="2" width="100%"><br>
       <b><a name="prefsanc"></a></b><b>Preferences</b><br>
       <br>
@@ -271,8 +287,8 @@
       <font size="-1">And if you have built with the --enable-docviewer
         option to configure ( the default ) you will get a window pop-up
         with a list of possible links to the API you want, if there is
-        only one possible link you will go straight to that. ie using
-        the above example:</font><br>
+        only one possible link you will go straight to that. <font
+          size="-1">i.e.</font>i.e. using the above example:</font><br>
       <img alt="list" src="list.png" height="301" width="679"><br>
       <font size="-1"> Click the Link:</font><br>
       <img alt="selected" src="selectedlist.png" height="419"
@@ -305,6 +321,7 @@
                     size="-1">f you have installed GtkSu <font
                       size="-1">( <a
                         href="http://gtk-apps.org/content/show.php/GtkSu?content=158974">Available
+
 
                         here</a><font size="-1"> ) <font size="-1">then
                           gtksu will be used for authentication if not a
@@ -357,10 +374,13 @@ href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.21.tar.gz
         xdg-utils-1.1.0.<br>
         Autotools.<br>
         libunique-1.1.6<br>
-        webkitgtk-1.10.x. (optional)<br>
+        <br>
+        webkitgtk-1.10.x. (optional but recommended)<br>
         <font size="-1">a<font size="-1">spell-0.60.6.1.</font></font></font><font
         size="-1"><font size="-1"><font size="-1"><font size="-1">
-              (optional)<br>
+              (optional</font></font></font></font><font size="-1"><font
+          size="-1"><font size="-1"><font size="-1"><font size="-1"> but
+                recommended</font>)<br>
               <br>
             </font></font></font> webkit is is an optional dependency if
         you want to build the Gtk-Doc viewer disable by adding
@@ -373,17 +393,18 @@ href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.21.tar.gz
         you should have all(most) of these installed, if you use a
         prepackaged distro like debian and you have not compiled from
         source before you may have to install some development packages
-        ie for debian ( this is from memory ) the build-essential
-        package and the -dev packages for gtk2 and </font> <font
-        size="-1"><br>
+        <font size="-1">i.e.</font>i.e. for debian ( this is from memory
+        ) the build-essential package and the -dev packages for gtk2 and
+      </font> <font size="-1"><br>
         gtksourceview, check your distros documentation and you distros
         forums for general help on compiling software.</font> <br>
       <br>
       <b>Building</b><br>
-      <font size="-1">Unpack the tarball,cd into the KKEdit folder and
+      <font size="-1">Unpack the tar ball,cd into the KKEdit folder and
         run:<br>
         ./autogen.sh --prefix=/usr&nbsp; </font><font size="-1"><font
           size="-1"><font size="-1"><font size="-1"></font>--enable-aspell</font></font>&nbsp;
+
 
 
 

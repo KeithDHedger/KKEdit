@@ -65,12 +65,12 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 											sscanf((char*)&buffer,"%s",(char*)&strarg);
 											if(strcmp(strarg,"name")==0)
 												{
-													asprintf(&nameoftool,"%s",(char*)&buffer[5]);
+													nameoftool=strdup((char*)&buffer[5]);
 													if((nameoftool!=NULL) &&(strlen(nameoftool)>0) && (strcmp(nameoftool,text)==0))
 														{
 															if(selectedToolPath!=NULL)
 																g_free(selectedToolPath);
-															asprintf(&selectedToolPath,"%s",filepath);
+															selectedToolPath=strdup(filepath);
 															gtk_entry_set_text((GtkEntry*)toolNameWidget,nameoftool);
 														}
 												}
@@ -1146,8 +1146,7 @@ int showFunctionEntry(void)
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 	if(functionSearchText!=NULL)
 		g_free(functionSearchText);
-	asprintf(&functionSearchText,"%s",gtk_entry_get_text((GtkEntry*)entrybox));
-	
+	functionSearchText=strdup(gtk_entry_get_text((GtkEntry*)entrybox));
 	gtk_widget_destroy(dialog);
 
 	return(result);
