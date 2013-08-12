@@ -16,6 +16,9 @@ helpfiles_DATA = ../resources/help/*
 scriptfilesdir = $(pkgdatadir)/tools
 scriptfiles_SCRIPTS = ../resources/tools/*
 
+docfilesdir = $(pkgdatadir)/docs
+docfiles_DATA = ../resources/docs/*
+
 bin_PROGRAMS = kkedit
 
 install-exec-hook:

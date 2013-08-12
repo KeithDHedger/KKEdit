@@ -991,6 +991,8 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menutools);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
 
+gtk_menu_set_monitor((GtkMenu*)menufunc,1);
+
 	//gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menumanpage);
 
 	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)vbox);
