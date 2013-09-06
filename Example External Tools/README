@@ -2,4 +2,4 @@ Place the contents of the Scripts folder somewhere convenient ( ie ~/KKEditScrip
 Place the contents of the Tools folder in ~/.KKEdit/tools
 Then either manually correct the "command" path in the tools file or correct via the Tools->Manage Tools menu
 
-These are example tools and are supplied 'as is' just for informatioanl purposes.
+These are example tools and are supplied 'as is' just for informational purposes.

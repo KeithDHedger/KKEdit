@@ -123,7 +123,7 @@ void init(void)
 	depth=1;
 	singleUse=true;
 	fontAndSize=strdup("mono 10");
-	terminalCommand=strdup("xterm");
+	terminalCommand=strdup("xterm -e");
 	windowWidth=800;
 	windowHeight=400;
 	windowX=-1;
