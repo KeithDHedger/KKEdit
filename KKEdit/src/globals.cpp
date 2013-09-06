@@ -95,6 +95,7 @@ GtkWidget*		toolNameWidget;
 GtkWidget*		commandLineWidget;
 GtkWidget*		inTermWidget;
 GtkWidget*		inPopupWidget;
+GtkWidget*		alwaysPopupWidget;
 GtkWidget*		syncWidget;
 GtkWidget*		ignoreWidget;
 GtkWidget*		pasteWidget;
@@ -109,6 +110,7 @@ GtkWidget*		restoreBMs;
 
 bool			inTerm=false;
 bool			inPopup=false;
+bool			alwaysPopup=false;
 bool			runSync=true;
 bool			ignoreOut=true;
 bool			pasteOut=false;
@@ -577,6 +579,7 @@ void buildToolsList(void)
 	int				intermarg=0;
 	int				flagsarg=0;
 	int				inpopup=0;
+	int				alwayspopup=0;
 	char*			commandarg=NULL;
 	char*			menuname=NULL;
 
@@ -603,6 +606,7 @@ void buildToolsList(void)
 									intermarg=0;
 									flagsarg=0;
 									inpopup=0;
+									alwayspopup=0;
 
 									while(fgets(buffer,4096,fd))
 										{
@@ -618,6 +622,8 @@ void buildToolsList(void)
 												sscanf((char*)&buffer,"%*s %i",&flagsarg);
 											if(strcmp(strarg,"inpopup")==0)
 												sscanf((char*)&buffer,"%*s %i",&inpopup);
+											if(strcmp(strarg,"alwayspopup")==0)
+												sscanf((char*)&buffer,"%*s %i",&alwayspopup);
 										}
 
 									if((menuname!=NULL) &&(strlen(menuname)>0))
@@ -628,6 +634,7 @@ void buildToolsList(void)
 											tool->flags=flagsarg;
 											tool->inTerminal=(bool)intermarg;
 											tool->inPopUp=(bool)inpopup;
+											tool->alwaysPopup=(bool)alwayspopup;
 											tool->filePath=strdup(filepath);
 											toolsList=g_list_prepend(toolsList,(gpointer)tool);
 										}

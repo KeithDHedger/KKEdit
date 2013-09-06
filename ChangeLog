@@ -2,6 +2,8 @@
 Added check for installed manpageeditor, if succeeds menu item added in file menu.
 Code clean.
 Undo bugfix.
+Added Manpage Editor Icon for menuitem.
+Added 'Always Show In Popup Men' to external tools ( no selection needed ).
 
 0.0.21
 Added 'Split View' to tab menu, click once to split, again to un-split.

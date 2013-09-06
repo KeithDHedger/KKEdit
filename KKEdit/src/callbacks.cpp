@@ -473,6 +473,7 @@ void copyToClipboard(GtkWidget* widget,gpointer data)
 	gtk_clipboard_set_text(clipboard,(char*)data,-1);
 }
 
+
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 {
 	pageStruct*		page=getPageStructPtr(-1);
@@ -526,7 +527,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 					ptr=toolsList;
 					while(ptr!=NULL)
 						{
-							if(((toolStruct*)ptr->data)->inPopUp==true)
+							if((((toolStruct*)ptr->data)->inPopUp==true) && (((toolStruct*)ptr->data)->alwaysPopup==false))
 								{
 									menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
 									gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -536,6 +537,22 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 						}
 				}
 		}
+
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+	ptr=toolsList;
+	while(ptr!=NULL)
+		{
+			if((((toolStruct*)ptr->data)->alwaysPopup==true) && (((toolStruct*)ptr->data)->inPopUp==false))
+				{
+					menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
+					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
+				}
+			ptr=g_list_next(ptr);
+		}
+
 	gtk_widget_show_all((GtkWidget*)menu);
 }
 
@@ -891,6 +908,8 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 		inTerm=gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget);
 	if(strcmp(gtk_widget_get_name(widget),"inpopup")==0)
 		inPopup=gtk_toggle_button_get_active((GtkToggleButton*)inPopupWidget);
+	if(strcmp(gtk_widget_get_name(widget),"alwayspopup")==0)
+		alwaysPopup=gtk_toggle_button_get_active((GtkToggleButton*)alwaysPopupWidget);
 	if(strcmp(gtk_widget_get_name(widget),"sync")==0)
 		runSync=gtk_toggle_button_get_active((GtkToggleButton*)syncWidget);
 	if(strcmp(gtk_widget_get_name(widget),"ignore")==0)
@@ -948,6 +967,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 					fprintf(fd,"flags\t%i\n",flags);
 					fprintf(fd,"interm\t%i\n",(int)inTerm);
 					fprintf(fd,"inpopup\t%i\n",(int)inPopup);
+					fprintf(fd,"alwayspopup\t%i\n",(int)alwaysPopup);
 					fclose(fd);
 				}
 			g_free(dirname);

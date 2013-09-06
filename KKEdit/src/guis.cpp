@@ -39,6 +39,7 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 
 	int				intermarg=0;
 	int				inpopup=0;
+	int				alwayspopup=0;
 	int				flagsarg=0;
 
 	char*			text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
@@ -90,7 +91,9 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 					intermarg=0;
 					inpopup=0;
 					flagsarg=0;
+					alwayspopup=0;
 					gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,(bool)inpopup);
+					gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,(bool)alwayspopup);
 					gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,(bool)intermarg);
 
 					while(fgets(buffer,4096,fd))
@@ -105,6 +108,11 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 								{
 									sscanf((char*)&buffer,"%*s %i",&inpopup);
 									gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,(bool)inpopup);
+								}
+							if(strcmp(strarg,"alwayspopup")==0)
+								{
+									sscanf((char*)&buffer,"%*s %i",&alwayspopup);
+									gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,(bool)alwayspopup);
 								}
 							if(strcmp(strarg,"interm")==0)
 								{
@@ -177,7 +185,6 @@ void fillCombo(GtkComboBoxText* combo)
 											sscanf((char*)&buffer,"%s",(char*)&strarg);
 											if(strcmp(strarg,"name")==0)
 												asprintf(&menuname,"%.*s",(int)strlen(buffer)-5,(char*)&buffer[5]);
-
 										}
 									if((menuname!=NULL) &&(strlen(menuname)>0))
 										gtk_combo_box_text_append_text((GtkComboBoxText*)toolSelect,menuname);
@@ -241,6 +248,12 @@ void doMakeTool(void)
 	gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,inPopup);
 	gtk_box_pack_start(GTK_BOX(vbox),inPopupWidget,false,true,0);
 	g_signal_connect(G_OBJECT(inPopupWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
+//always show in popup
+	alwaysPopupWidget=gtk_check_button_new_with_label("Always Show Tool In Pop-Up Menu");
+	gtk_widget_set_name(alwaysPopupWidget,"alwayspopup");
+	gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,alwaysPopup);
+	gtk_box_pack_start(GTK_BOX(vbox),alwaysPopupWidget,false,true,0);
+	g_signal_connect(G_OBJECT(alwaysPopupWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags
 //snch/async
@@ -670,7 +683,6 @@ void buildMainGui(void)
 	g_signal_connect_after(G_OBJECT(liveSearchWidget),"key-release-event",G_CALLBACK(doLiveSearch),NULL);
 	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Live Search");
 
-
 //src format
 	sourceFormatButton=gtk_menu_tool_button_new(NULL,NULL);
 	gtk_toolbar_insert((GtkToolbar*)toolbar,sourceFormatButton,-1);
@@ -731,8 +743,8 @@ void buildMainGui(void)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newEditor),(void*)2);
 
 #ifdef _MANPAGEEDITOR_
+	image=gtk_image_new_from_file(DATADIR"/pixmaps/ManPageEditor.png");
 	menuitem=gtk_image_menu_item_new_with_label("Manpage Editor");
-	image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newEditor),(void*)3);

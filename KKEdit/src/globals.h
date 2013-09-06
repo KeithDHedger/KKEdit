@@ -83,6 +83,7 @@ struct toolStruct
 	int					flags;
 	bool				inTerminal;					
 	bool				inPopUp;
+	bool				alwaysPopup;
 };
 
 struct functionData
@@ -169,6 +170,7 @@ extern GtkWidget*		toolNameWidget;
 extern GtkWidget*		commandLineWidget;
 extern GtkWidget*		inTermWidget;
 extern GtkWidget*		inPopupWidget;
+extern GtkWidget*		alwaysPopupWidget;
 
 extern GtkWidget*		syncWidget;
 extern GtkWidget*		ignoreWidget;
@@ -185,6 +187,7 @@ extern GtkWidget*		restoreBMs;
 
 extern bool				inTerm;
 extern bool				inPopup;
+extern bool				alwaysPopup;
 extern bool				runSync;
 extern bool				ignoreOut;
 extern bool				pasteOut;
