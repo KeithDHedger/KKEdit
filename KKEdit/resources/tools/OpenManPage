@@ -1,8 +1,0 @@
-#!/bin/bash -e
-
-#©keithhedger Tue 30 Apr 19:25:22 BST 2013 kdhedger68713@gmail.com
-
-man2html $(man -w $KKEDIT_SELECTION) > "$KKEDIT_HTMLFILE"
-
-
-
