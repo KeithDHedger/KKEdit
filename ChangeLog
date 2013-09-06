@@ -1,3 +1,8 @@
+0.0.22
+Added check for installed manpageeditor, if succeeds menu item added in file menu.
+Code clean.
+Undo bugfix.
+
 0.0.21
 Added 'Split View' to tab menu, click once to split, again to un-split.
 'Live Search' is now always case insensitive.

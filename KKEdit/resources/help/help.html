@@ -207,19 +207,23 @@
                                       size="-1"><font size="-1"><font
                                           size="-1">/tmp/textfile</font></font></font></font></font></font></font></font></font>"|tail
 
+
                         -f'' WILL <font size="-1">work and show the
                           tail of the file but <font size="-1">WILL NOT
                             follow properly this is a <font size="-1">feature/problem
+
 
                               of xterm and beyond</font></font> my
                           control :(<br>
                           <br>
                         </font>For very </font></font></font></font></font></font></font></font>complex
 
+
         commands create a script and set 'command' to the filepath of
         your script. </font> <font size="-1"><br>
         Tools can be edited by selecting from the drop down list, if you
         attempt to edit a globally installed tool ( <font size="-1">i.e.</font>i.e.
+
 
         one in /usr/share/KKEdit/tools ) you must have root privileges.</font><br>
       <hr size="2" width="100%"><br>
@@ -332,6 +336,7 @@
 
 
 
+
                         here</a><font size="-1"> ) <font size="-1">then
                           gtksu will be used for authentication if not a
                           terminal will be used depending on your
@@ -372,7 +377,7 @@
       </font>
       <hr size="2" width="100%"><a name="getanc"></a><b>Get it here!</b><b><br>
       </b> <b><a
-href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.21.tar.gz">KKEdit</a></b><br>
+href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.22.tar.gz">KKEdit</a></b><br>
       <br>
       <font size="-1">Dependencies<br>
         <br>
@@ -390,7 +395,19 @@ href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.21.tar.gz
               (optional</font></font></font></font><font size="-1"><font
           size="-1"><font size="-1"><font size="-1"><font size="-1"> but
                 recommended</font>)<br>
-              <br>
+              Gtk<font size="-1">Su (</font></font></font></font></font><font
+        size="-1"><font size="-1"><font size="-1"><font size="-1"><font
+                size="-1"><font size="-1">optional but recommended)<br>
+                  <font size="-1">Manpage Editor </font></font></font></font></font></font></font><font
+        size="-1"><font size="-1"><font size="-1"><font size="-1"><font
+                size="-1"><font size="-1"><font size="-1"><font
+                      size="-1"><font size="-1"><font size="-1"><font
+                            size="-1"><font size="-1">(</font></font></font></font></font><font
+                      size="-1"><font size="-1"><font size="-1"><font
+                            size="-1"><font size="-1"><font size="-1">optional
+                                but recommended)<br>
+                                <br>
+                              </font></font></font></font></font></font></font></font></font>
             </font></font></font> webkit is is an optional dependency if
         you want to build the Gtk-Doc viewer disable by adding
         --disable-docviewer to ./configure or ./autogen.sh.<br>
@@ -398,6 +415,14 @@ href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.21.tar.gz
           be enabled with the '--enable-aspell' switch to ./configure or
           ./autogen.sh.<br>
           <br>
+          The presence of "GtkSu" <font size="-1">a</font>nd "Manpage
+          Editor" are detected at configure and if installed will be
+          used, in the case of GtkSu this is used to get admin priviles<font
+            size="-1"> when opening a root editor from the file menu<font
+              size="-1">, if Manpage Editor is detected a menu item is
+              added to the file menu, both can be downloaded from this
+              website.<br>
+            </font></font>&nbsp;<br>
         </font> If you use a source based distro like LFS or Slackware
         you should have all(most) of these installed, if you use a
         prepackaged distro like debian and you have not compiled from
@@ -418,11 +443,14 @@ href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.21.tar.gz
 
 
 
+
         --enable-docviewer<br>
         make<br>
         sudo make install<br>
-        See the 'INSTALL' file for full detail<font size="-1">s.</font><br>
-      </font>
+        <font size="-1">( ./configure can now be used instead of
+          ./autogen.sh - no need for autotools ).</font><br>
+        See the 'INSTALL' file for full detail<font size="-1">s.<br>
+        </font> </font>
       <hr size="2" width="100%"><b><font size="+3"><a
             href="http://keithhedger.hostingsiteforfree.com">Home</a></font></b><br>
       <hr size="2" width="100%"><br>
