@@ -163,7 +163,7 @@
         External tools can be created by hand or via the 'Tools-&gt;New'
         menu like so:</font><br>
       <br>
-      <img alt="exttool" src="newtool.png" height="451" width="626"><br>
+      <img alt="exttool" src="newtool.png" height="487" width="643"><br>
       <br>
       <font size="-1">The place holders are:<br>
         %t - Currently selected text, the same as the $KKEDIT_SELECTION
@@ -194,11 +194,16 @@
                         size="-1">Show Tool In Pop-Up Menu"</font>
                       selected will show up in the pop-up menu if you
                       have also<font size="-1"> selected some text.<br>
-                        <br>
-                        Commands can be 'comp<font size="-1">ound</font>'
-                        commands i.e. 'cat /tmp/textfile|head' but using
-                        pipes to a terminal may not always give what you
-                        want i.e. 'xterm -hold -e 'cat "</font></font></font></font></font></font></font></font></font><font
+                        Tools that have the "Always <font size="-1">show
+                          In Popup" selected will show in the popup menu
+                          regardless of w<font size="-1">hether any text
+                            is or is not selected.<br>
+                            <br>
+                          </font></font> Commands can be 'comp<font
+                          size="-1">ound</font>' commands i.e. 'cat
+                        /tmp/textfile|head' but using pipes to a
+                        terminal may not always give what you want i.e.
+                        'xterm -hold -e 'cat "</font></font></font></font></font></font></font></font></font><font
         size="-1"><font size="-1"><font size="-1"><font size="-1"><font
                 size="-1"><font size="-1"><font size="-1"><font
                       size="-1"><font size="-1"><font size="-1"><font
@@ -208,9 +213,11 @@
                                           size="-1">/tmp/textfile</font></font></font></font></font></font></font></font></font>"|tail
 
 
+
                         -f'' WILL <font size="-1">work and show the
                           tail of the file but <font size="-1">WILL NOT
                             follow properly this is a <font size="-1">feature/problem
+
 
 
                               of xterm and beyond</font></font> my
@@ -219,10 +226,12 @@
                         </font>For very </font></font></font></font></font></font></font></font>complex
 
 
+
         commands create a script and set 'command' to the filepath of
         your script. </font> <font size="-1"><br>
         Tools can be edited by selecting from the drop down list, if you
         attempt to edit a globally installed tool ( <font size="-1">i.e.</font>i.e.
+
 
 
         one in /usr/share/KKEdit/tools ) you must have root privileges.</font><br>
@@ -256,8 +265,8 @@
       <br>
       <a name="copyfilenameanc"></a><font size="-1">Right clicking on a
         tab allows copying of the document filename<font size="-1">,</font>
-        filepath or spell check the document.</font><br>
-      <img alt="tabmenu" src="tabmenu.png" height="377" width="674"><br>
+        filepath, spell check the document or split/insplit the view.</font><br>
+      <img alt="tabmenu" src="tabmenu.png" height="270" width="638"><br>
       <br>
       <br>
       <a name="copyfunctiondefine"></a><font size="-1">The document
@@ -337,6 +346,7 @@
 
 
 
+
                         here</a><font size="-1"> ) <font size="-1">then
                           gtksu will be used for authentication if not a
                           terminal will be used depending on your
@@ -405,6 +415,7 @@ href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.22.tar.gz
                             size="-1"><font size="-1">(</font></font></font></font></font><font
                       size="-1"><font size="-1"><font size="-1"><font
                             size="-1"><font size="-1"><font size="-1">optional
+
                                 but recommended)<br>
                                 <br>
                               </font></font></font></font></font></font></font></font></font>
@@ -438,6 +449,7 @@ href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.22.tar.gz
         run:<br>
         ./autogen.sh --prefix=/usr&nbsp; </font><font size="-1"><font
           size="-1"><font size="-1"><font size="-1"></font>--enable-aspell</font></font>&nbsp;
+
 
 
 
