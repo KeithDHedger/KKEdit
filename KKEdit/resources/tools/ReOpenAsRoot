@@ -1,4 +1,4 @@
 name	Re-Open As Root
-command	sudo kkedit -m %f
+command	if [ -e "$(which gtksux 2>/dev/null)" ];then gtksu -- kkedit -m %f;else xterm -e "sudo kkedit -m %f";fi
 flags	8
-interm	1
+interm	0

@@ -1,0 +1,6 @@
+name	Open Man Page
+command	man2html $(man -w $KKEDIT_SELECTION) > "$KKEDIT_HTMLFILE"
+flags	4
+interm	0
+inpopup	1
+alwayspopup	0
