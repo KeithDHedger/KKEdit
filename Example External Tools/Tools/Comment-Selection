@@ -1,0 +1,5 @@
+name	Comment Selection
+command	/home/keithhedger/KKEditScripts/CommentSelection
+flags	1
+interm	0
+inpopup	1
