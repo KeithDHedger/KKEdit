@@ -1,0 +1,6 @@
+name	Re-Open As Root
+command	sh -c 'if [ -e "$(which gtksu 2>/dev/null)" ];then gtksu -- kkedit -m %f;else xterm -e "sudo kkedit -m %f";fi'
+flags	8
+interm	0
+inpopup	0
+alwayspopup	1
