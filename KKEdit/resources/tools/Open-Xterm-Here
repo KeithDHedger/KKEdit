@@ -1,0 +1,6 @@
+name	Open Xterm Here
+command	xterm -e 'cd %d && /bin/bash'
+flags	8
+interm	0
+inpopup	0
+alwayspopup	1
