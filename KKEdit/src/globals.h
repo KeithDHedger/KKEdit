@@ -30,7 +30,7 @@
 
 #define MYEMAIL "kdhedger68713@gmail.com"
 #define MYWEBSITE "http://keithhedger.hostingsiteforfree.com"
-#define KKEDIT_VERSION "0.0.21"
+#define KKEDIT_VERSION "0.0.22"
 
 #define TOOL_ASYNC 8
 #define TOOL_IGNORE_OP 0
