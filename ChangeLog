@@ -4,6 +4,7 @@ Code clean.
 Undo bugfix.
 Added Manpage Editor Icon for menuitem.
 Added 'Always Show In Popup Men' to external tools ( no selection needed ).
+Redone some installed tools and example tools.
 
 0.0.21
 Added 'Split View' to tab menu, click once to split, again to un-split.
