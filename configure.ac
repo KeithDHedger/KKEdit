@@ -77,6 +77,17 @@ else
 	AC_MSG_NOTICE([Using gtksu for admin stuff!])
 fi
 
+AC_CHECK_PROG(MANPAGEEDITOR, manpageeditor ,true,false)
+if test $MANPAGEEDITOR = false; then
+	AC_MSG_NOTICE([No manpageeditor program found!])
+	AC_MSG_NOTICE([You can download it from here:])
+	AC_MSG_NOTICE([http://gtk-apps.org/content/show.php?content=160219])
+else
+	AC_DEFINE([_MANPAGEEDITOR_], [], [Manpage Editor])
+	AC_MSG_NOTICE([Including 'Manpage Editor' menu item])
+fi
+
+
 AC_OUTPUT(Makefile KKEdit/app/Makefile)
 
 

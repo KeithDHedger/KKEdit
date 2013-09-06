@@ -1072,6 +1072,12 @@ void newEditor(GtkWidget* widget,gpointer data)
 #endif
 	if((long)data==2)
 		system("kkedit -m");
+
+#ifdef _MANPAGEEDITOR_
+	if((long)data==3)
+		system("manpageeditor");
+#endif
+
 }
 
 void changeSourceStyle(GtkWidget* widget,gpointer data)
