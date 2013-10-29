@@ -1008,6 +1008,32 @@ void doAbout(GtkWidget* widget,gpointer data)
 	g_free(licence);
 }
 
+GtkSourceBuffer*	printBuffer;
+GtkSourceView*		printView;
+
+void doCombineBuffers(void)
+{
+	pageStruct*	page;
+	GtkTextIter	iter;
+	GtkTextIter	fromstart;
+	GtkTextIter	fromend;
+	
+	printBuffer=gtk_source_buffer_new(NULL);
+	printView=(GtkSourceView*)gtk_source_view_new_with_buffer(printBuffer);
+
+	gtk_text_buffer_get_start_iter((GtkTextBuffer*)printBuffer,&iter);
+
+	for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
+		{
+			page=getPageStructPtr(j);
+			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&fromstart);
+			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&fromend);
+			gtk_text_buffer_insert((GtkTextBuffer*)printBuffer,&iter,gtk_text_buffer_get_text((GtkTextBuffer *)page->buffer,&fromstart,&fromend,true),-1);
+			gtk_text_buffer_get_end_iter((GtkTextBuffer*)printBuffer,&iter);
+		}
+}
+
+
 void drawPage(GtkPrintOperation *operation,GtkPrintContext *context,gint page_nr,gpointer user_data)
 {
 	GtkSourcePrintCompositor *compositor;
@@ -1031,8 +1057,8 @@ void beginPrint(GtkPrintOperation *operation,GtkPrintContext *context,gpointer u
 
 void printFile(GtkWidget* widget,gpointer data)
 {
-	pageStruct*					page=getPageStructPtr(-1);
-	GtkSourcePrintCompositor*	printview=gtk_source_print_compositor_new_from_view(page->view);
+	doCombineBuffers();
+	GtkSourcePrintCompositor*	printview=gtk_source_print_compositor_new_from_view(printView);
 	GtkPrintOperation*			print;
 	GtkPrintOperationResult		result;
 
@@ -1051,11 +1077,6 @@ void printFile(GtkWidget* widget,gpointer data)
 	g_object_unref(print);
 	g_object_unref(printview);
 }
-
-//void recentFileMenu(GtkWidget* widget,char* filename)
-//{
-//	openFile(filename,0);
-//}
 
 void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 {
@@ -1080,12 +1101,12 @@ void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 
 void newEditor(GtkWidget* widget,gpointer data)
 {
+	char*	command=NULL;
 
 	if((long)data==1)
 #ifdef _GTKSU_
 		system("gtksu -- kkedit -m 2>/dev/null");
 #else
-		char*	command=NULL;
 		asprintf(&command,"%s sudo kkedit -m",terminalCommand);
 		system(command);
 		g_free(command);

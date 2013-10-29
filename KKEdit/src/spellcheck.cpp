@@ -213,8 +213,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 							return;
 						}
 					word_begin=line+token.offset+diff;
-///TODO
-//XXX
+
 					if(goodWord!=NULL)
 						{
 							goodwordlen=strlen(goodWord);
@@ -256,7 +255,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 				{
 					fputs(buffer,out);
 					fclose(out);
-					gtk_text_buffer_set_modified((GtkTextBuffer*)page->buffer,false);
+					gtk_text_buffer_set_modified((GtkTextBuffer*)page->buffer,true);
 				}
 		}
 
