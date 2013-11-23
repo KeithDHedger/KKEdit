@@ -209,7 +209,73 @@ void docSearchFromBar(GtkWidget* widget,gpointer data)
 	showDocView(NULL,(void*)text);
 }
 
+#include <regex.h>
+
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
+{
+	char*		searchtext;
+	char*		replacetext;
+	GtkTextIter	start,end;
+	pageStruct*	page=getPageStructPtr(-1);
+	char*		text=NULL;
+
+	regex_t regex;
+        int reti;
+        char msgbuf[100];
+		regmatch_t match;
+//		char	matchbuffer[1000]={0};
+	char*	matchbuffer;
+		int	cflags=REG_EXTENDED;
+	
+//	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)findBox));
+	searchtext=(char*)gtk_entry_get_text((GtkEntry*)findBox);
+	replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
+
+	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+
+	if(text!=NULL)
+		{
+		matchbuffer=(char*)calloc(1,strlen(text));
+		if(insensitiveSearch==true)
+			cflags=cflags|REG_ICASE;
+
+/* Compile regular expression */
+        reti = regcomp(&regex,searchtext, cflags);
+        if( reti )
+        	{
+        		fprintf(stderr, "Could not compile regex\n"); exit(1);
+        	}
+
+/* Execute regular expression */
+        reti = regexec(&regex,text, 1, &match, cflags);
+        if( !reti )
+        	{
+        		strncpy((char*)&matchbuffer[0],(char*)&text[(int)match.rm_so],(int)match.rm_eo-(int)match.rm_so);
+        		matchbuffer[(int)match.rm_eo-(int)match.rm_so+1]=0;
+        		printf("%s - regex=%s\n",matchbuffer,searchtext);
+       		//printf("regex=%s\n",(char*)regex);
+                puts("Match");
+                
+	        }
+        else if( reti == REG_NOMATCH ){
+                puts("No match");
+        }
+        else{
+                regerror(reti, &regex, msgbuf, sizeof(msgbuf));
+                fprintf(stderr, "Regex match failed: %s\n", msgbuf);
+                exit(1);
+        }
+
+/* Free compiled regular expression if you want to use the regex_t again */
+    regfree(&regex);			
+			g_free(text);
+		}
+
+}
+
+void doFindReplaceX(GtkDialog *dialog,gint response_id,gpointer user_data)
 {
 	pageStruct* 			page=getPageStructPtr(-1);
 	gchar*					selectedtext=NULL;
