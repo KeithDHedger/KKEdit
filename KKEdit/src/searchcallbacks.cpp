@@ -328,8 +328,49 @@ printf("count = %d\n", count);
 		}
 }
 
-
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
+{
+	char*		searchtext;
+	char*		replacetext;
+	GtkTextIter	start,end;
+	pageStruct*	page=getPageStructPtr(-1);
+	char*		text=NULL;
+
+	int			startpos,endpos;
+//	regex_t regex;
+ //       int reti;
+//        char msgbuf[100];
+//		regmatch_t match[4];
+//
+//	char*	matchbuffer;
+	
+	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)findBox));
+	replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
+
+	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&start,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+
+	GRegex		*regex;
+	GMatchInfo	*match_info;
+	GRegexCompileFlags	compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED);
+	GRegexMatchFlags	matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
+
+	regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,matchflags,NULL);
+	g_regex_match (regex, text,matchflags, &match_info);
+//	while (g_match_info_matches (match_info))
+//		{
+			gchar *word = g_match_info_fetch (match_info, 0);
+			g_match_info_fetch_pos(match_info,0,&startpos,&endpos);
+			g_print ("Found: %s at %i to %i\n", word,startpos,endpos);
+			g_free (word);
+//			g_match_info_next (match_info, NULL);
+//		}
+	g_match_info_free (match_info);
+	g_regex_unref (regex);
+}
+
+void doFindReplaceqqqqqqqqq(GtkDialog *dialog,gint response_id,gpointer user_data)
 {
 	char*		searchtext;
 	char*		replacetext;
@@ -345,11 +386,12 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	char*	matchbuffer;
 		int	cflags=REG_EXTENDED;
 	
-	//searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)findBox));
-	searchtext=(char*)gtk_entry_get_text((GtkEntry*)findBox);
+	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)findBox));
+	//searchtext=(char*)gtk_entry_get_text((GtkEntry*)findBox);
 	replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
 
-	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+//	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&start,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
 	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 //searchtext="^Added";
