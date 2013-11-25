@@ -347,9 +347,9 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)findBox));
 	replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
 
-	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&start,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
-	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+//	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&start,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+//	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+//	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 
 	GRegex		*regex;
 	GMatchInfo	*match_info;
@@ -357,17 +357,46 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	GRegexMatchFlags	matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
 
 	regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,matchflags,NULL);
+
+	switch (response_id)
+		{
+//forward search
+			case FINDNEXT:
+					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&start,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+					gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+					text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+
+					g_regex_match (regex,text,matchflags,&match_info);
+					g_match_info_fetch_pos(match_info,0,&startpos,&endpos);
+					gtk_text_iter_set_offset(&start,startpos);
+					gtk_text_iter_set_offset(&end,endpos);
+					gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&start,&end);
+					//gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&end);
+					page->match_end=end;
+					scrollToIterInPane(page,&start);
+					page->iter=end;
+		}
+
+/*
 	g_regex_match (regex, text,matchflags, &match_info);
 //	while (g_match_info_matches (match_info))
 //		{
+
+							
+
 			gchar *word = g_match_info_fetch (match_info, 0);
 			g_match_info_fetch_pos(match_info,0,&startpos,&endpos);
 			g_print ("Found: %s at %i to %i\n", word,startpos,endpos);
 			g_free (word);
+			gtk_text_iter_set_offset(&start,startpos);
+			gtk_text_iter_set_offset(&end,endpos);
+			gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&start,&end);
 //			g_match_info_next (match_info, NULL);
 //		}
+*/
 	g_match_info_free (match_info);
 	g_regex_unref (regex);
+
 }
 
 void doFindReplaceqqqqqqqqq(GtkDialog *dialog,gint response_id,gpointer user_data)
