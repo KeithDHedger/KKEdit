@@ -422,6 +422,11 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 					}
 				break;
 
+//replace and search
+			case REPLACE:
+				gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+				gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,replacetext,-1);
+				break;
 			default:
 				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 				page->isFirst=true;
