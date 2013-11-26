@@ -362,20 +362,33 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 		{
 //forward search
 			case FINDNEXT:
-					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&start,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+					if(!gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
+						gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+
+//					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->match_start,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+					gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 					gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
 					text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 
-					g_regex_match (regex,text,matchflags,&match_info);
+//					g_regex_match(regex,text,matchflags,&match_info);
+int off=gtk_text_iter_get_offset(&page->match_start);
+GError *error = NULL;
+printf("%i %i\n",off,strlen(text));
+
+					g_regex_match_full(regex,text,strlen(text),gtk_text_iter_get_offset(&page->match_end),matchflags,&match_info,&error);
 					g_match_info_fetch_pos(match_info,0,&startpos,&endpos);
-					gtk_text_iter_set_offset(&start,startpos);
-					gtk_text_iter_set_offset(&end,endpos);
-					gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&start,&end);
+
+					gtk_text_iter_set_offset(&page->match_start,startpos);
+					page->match_end=page->match_start;
+					//printf("XXXXXXXX %i %i\n",startpos,endpos);
+					gtk_text_iter_set_offset(&page->match_end,endpos);
+					gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 					//gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&end);
-					page->match_end=end;
-					scrollToIterInPane(page,&start);
-					page->iter=end;
+					//page->match_end=end;
+					scrollToIterInPane(page,&page->match_start);
+					page->iter=page->match_end;
 		}
+					//printf("YYYYYYYYY %i %i\n",startpos,endpos);
 
 /*
 	g_regex_match (regex, text,matchflags, &match_info);
@@ -394,8 +407,8 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 //			g_match_info_next (match_info, NULL);
 //		}
 */
-	g_match_info_free (match_info);
-	g_regex_unref (regex);
+//	g_match_info_free (match_info);
+//	g_regex_unref (regex);
 
 }
 
