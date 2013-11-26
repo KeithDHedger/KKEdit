@@ -432,15 +432,16 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 	if(match_info!=NULL)
 		g_match_info_free(match_info);
+
 	g_regex_unref(regex);
+
 	if(text!=NULL)
 		g_free(text);
-
-	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 
 	if(replacetext!=NULL)
 		g_free(replacetext);
 
+	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 }
 
 void doFindReplaceX(GtkDialog *dialog,gint response_id,gpointer user_data)
