@@ -588,7 +588,6 @@ void buildMainGui(void)
 	g_signal_connect(recent,"item_activated",G_CALLBACK(recentFileMenu),NULL);
 
 //open+recent
-
 	openButton=gtk_menu_tool_button_new_from_stock(GTK_STOCK_OPEN);
 	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(openButton),recent);
 	gtk_toolbar_insert((GtkToolbar*)toolbar,openButton,-1);
@@ -990,7 +989,6 @@ void buildFindReplace(void)
 
 	vbox=gtk_vbox_new(true,0);
 	hbox=gtk_hbox_new(false,0);
-
 
 	label=gtk_label_new("Find");
 	gtk_container_add(GTK_CONTAINER(content_area),label);
