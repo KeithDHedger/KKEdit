@@ -355,7 +355,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	GMatchInfo	*match_info;
 	GRegexCompileFlags	compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED);
 	GRegexMatchFlags	matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
-
+	gboolean			gotmatch=false;
 	regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,matchflags,NULL);
 
 	switch (response_id)
@@ -365,30 +365,25 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 					if(!gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
 						gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 
-//					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->match_start,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 					gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 					gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
 					text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 
-//					g_regex_match(regex,text,matchflags,&match_info);
-int off=gtk_text_iter_get_offset(&page->match_start);
-GError *error = NULL;
-printf("%i %i\n",off,strlen(text));
+					gotmatch=g_regex_match_full(regex,text,-1,gtk_text_iter_get_offset(&page->match_end),matchflags,&match_info,NULL);
+					if(gotmatch==true)
+						{
+							g_match_info_fetch_pos(match_info,0,&startpos,&endpos);
 
-					g_regex_match_full(regex,text,strlen(text),gtk_text_iter_get_offset(&page->match_end),matchflags,&match_info,&error);
-					g_match_info_fetch_pos(match_info,0,&startpos,&endpos);
+							gtk_text_iter_set_offset(&page->match_start,startpos);
+							page->match_end=page->match_start;
 
-					gtk_text_iter_set_offset(&page->match_start,startpos);
-					page->match_end=page->match_start;
-					//printf("XXXXXXXX %i %i\n",startpos,endpos);
-					gtk_text_iter_set_offset(&page->match_end,endpos);
-					gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-					//gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&end);
-					//page->match_end=end;
-					scrollToIterInPane(page,&page->match_start);
-					page->iter=page->match_end;
+							gtk_text_iter_set_offset(&page->match_end,endpos);
+							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+							scrollToIterInPane(page,&page->match_start);
+							page->iter=page->match_end;
+						}
 		}
-					//printf("YYYYYYYYY %i %i\n",startpos,endpos);
+
 
 /*
 	g_regex_match (regex, text,matchflags, &match_info);
@@ -407,8 +402,10 @@ printf("%i %i\n",off,strlen(text));
 //			g_match_info_next (match_info, NULL);
 //		}
 */
-//	g_match_info_free (match_info);
-//	g_regex_unref (regex);
+	g_match_info_free (match_info);
+	g_regex_unref (regex);
+	if(text!=NULL)
+		g_free(text);
 
 }
 
