@@ -209,125 +209,6 @@ void docSearchFromBar(GtkWidget* widget,gpointer data)
 	showDocView(NULL,(void*)text);
 }
 
-#include <regex.h>
-
-
-void doFindReplacezz(GtkDialog *dialog,gint response_id,gpointer user_data)
-{
-regex_t regex;
-        int reti;
-        char msgbuf[100];
-	char*		searchtext;
-	char*		replacetext;
-	GtkTextIter	start,end;
-	pageStruct*	page=getPageStructPtr(-1);
-	char*		text=NULL;
-
-	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)findBox));
-	replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
-
-	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
-	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
-	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
-
-/* Compile regular expression */
-        reti = regcomp(&regex, searchtext, 0);
-        if( reti ){ fprintf(stderr, "Could not compile regex\n"); exit(1); }
-
-printf("regex=%s\n",searchtext);
-/* Execute regular expression */
-        reti = regexec(&regex, text, 0, NULL, 0);
-        if( !reti ){
-                puts("Match");
-        }
-        else if( reti == REG_NOMATCH ){
-                puts("No match");
-        }
-        else{
-                regerror(reti, &regex, msgbuf, sizeof(msgbuf));
-                fprintf(stderr, "Regex match failed: %s\n", msgbuf);
-                exit(1);
-        }
-
-/* Free compiled regular expression if you want to use the regex_t again */
-    regfree(&regex);
-
-}
-
-char*	texttosearch=" \
-0.0.23 \
-Fixed bug when GtkSu not installed. \
-Set document dirty after spellcheck. \
-\
-0.0.22\
-Added check for installed manpageeditor, if succeeds menu item added in file menu.\
-Code clean.\
-Undo bugfix.\
-Added Manpage Editor Icon for menuitem.\
-Added Always Show In Popup Men to external tools ( no selection needed ).\
-Redone some installed tools and example tools.\
-\
-0.0.21\
-Added Split View to tab menu, click once to split, again to un-split.\
-Live Search is now always case insensitive.\
-Removed dirty flag from buffer when first opening as hexdump.\
-Added configure and associated files to archive so no longer needs auto-tools.\
-Updated INSTALL file for Debian/fedora users.\
-Added drop down for syntax highlighting.\
-Added New Editor to file menu.\
-Added New Admin Editor to file menu.\
-Updated help file.\
-Fixed close tab bug\
-Code clean.\
-Now allows pipes in external tool command.";
-
-
-void doFindReplacezzzzzzz(GtkDialog *dialog,gint response_id,gpointer user_data)
-{
-	char*		searchtext;
-	char*		replacetext;
-	GtkTextIter	starti,endi;
-	pageStruct*	page=getPageStructPtr(-1);
-	char*		buffer=NULL;
-
-	regmatch_t matches[2];
-	int start;
-	int end;  
-	regex_t re;
-	int count=-100;
-
-	searchtext=(char*)gtk_entry_get_text((GtkEntry*)findBox);
-	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&starti);
-	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&endi);
-	buffer=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&starti,&endi,false);
-	if(buffer!=NULL)
-		{
-		int reti = regcomp(&re, searchtext, REG_EXTENDED|REG_ICASE);
-			while (1) {
-  reti = regexec(&re, buffer, 2, matches, 0);
-
-  /* rm_so is the start index of the match */
-  start = matches[1].rm_so;
-  /* rm_eo is the end index of the match */
-  end = matches[1].rm_eo;
-  /* break if we didn't find a match */
-  if (reti) break;
-
-  /* print the substring that contains the match */
-  printf("%.*s, \n", (end - start), (buffer + start));
-  /* increment the count of matches */
-  count = count + 1;
-
-  /* This is really important!
-     Move the start of the string forward so we don't keep matching the same number! */
-  buffer = buffer + end;
-} 
-
-/* print the count */
-printf("count = %d\n", count);
-		}
-}
-
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 {
 	char*					searchtext=NULL;
@@ -336,7 +217,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	pageStruct*				page=getPageStructPtr(-1);
 	char*					text=NULL;
 	int						startpos,endpos;
-char* reptext;
+	char*					reptext;
 	GRegex*					regex;
 	GMatchInfo*				match_info=NULL;
 	GRegexCompileFlags		compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED);
@@ -345,7 +226,7 @@ char* reptext;
 
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 
-	if((replaceAll==true)
+	if(replaceAll==true)
 		replacetext=strdup((char*)gtk_entry_get_text((GtkEntry*)replaceBox));
 	else
 		replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
