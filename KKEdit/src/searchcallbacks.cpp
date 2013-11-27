@@ -336,7 +336,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	pageStruct*				page=getPageStructPtr(-1);
 	char*					text=NULL;
 	int						startpos,endpos;
-
+char* reptext;
 	GRegex*					regex;
 	GMatchInfo*				match_info=NULL;
 	GRegexCompileFlags		compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED);
@@ -345,7 +345,11 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 
-	replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
+	if((replaceAll==true)
+		replacetext=strdup((char*)gtk_entry_get_text((GtkEntry*)replaceBox));
+	else
+		replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
+
 	searchtext=(char*)gtk_entry_get_text((GtkEntry*)findBox);
 
 	if(insensitiveSearch==true)
@@ -424,9 +428,24 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 //replace and search
 			case REPLACE:
-				gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-				gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,replacetext,-1);
-				break;
+				if(replaceAll==true)
+					{
+						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+						gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+						text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+						reptext=g_regex_replace(regex,text,-1,gtk_text_iter_get_offset(&page->match_end),replacetext,matchflags,NULL);
+						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+						gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+						gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
+						gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,reptext,-1);
+					}
+				else
+					{
+						gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+						gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,replacetext,-1);
+					}
+					break;
+
 			default:
 				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 				page->isFirst=true;
