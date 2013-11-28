@@ -226,10 +226,10 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 
-	if(replaceAll==true)
+//	if(replaceAll==true)
 		replacetext=strdup((char*)gtk_entry_get_text((GtkEntry*)replaceBox));
-	else
-		replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
+//	else
+//		replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
 
 	searchtext=(char*)gtk_entry_get_text((GtkEntry*)findBox);
 
@@ -322,8 +322,12 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 					}
 				else
 					{
+						regex=g_regex_new(searchtext,(GRegexCompileFlags)(G_REGEX_CASELESS|G_REGEX_EXTENDED),(GRegexMatchFlags)0,NULL);
+						text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end,false);
+						reptext=g_regex_replace(regex,text,-1,0,replacetext,(GRegexMatchFlags)0,NULL);
+						printf("XXX%s -> ZZZ%s\n",text,reptext);
 						gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-						gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,replacetext,-1);
+						gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,reptext,-1);
 					}
 					break;
 
@@ -343,8 +347,8 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	if(text!=NULL)
 		g_free(text);
 
-	if(replacetext!=NULL)
-		g_free(replacetext);
+//	if(replacetext!=NULL)
+//		g_free(replacetext);
 
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 }
