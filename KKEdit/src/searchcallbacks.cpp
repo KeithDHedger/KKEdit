@@ -217,7 +217,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	pageStruct*				page=getPageStructPtr(-1);
 	char*					text=NULL;
 	int						startpos,endpos;
-	char*					reptext;
+	char*					reptext=NULL;
 	GRegex*					regex;
 	GMatchInfo*				match_info=NULL;
 	GRegexCompileFlags		compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED);
@@ -314,7 +314,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 						gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
 						text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
-						reptext=g_regex_replace(regex,text,-1,gtk_text_iter_get_offset(&page->match_end),replacetext,matchflags,NULL);
+						reptext=g_regex_replace(regex,text,-1,0,replacetext,matchflags,NULL);
 						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 						gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
 						gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
@@ -322,12 +322,14 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 					}
 				else
 					{
-						regex=g_regex_new(searchtext,(GRegexCompileFlags)(G_REGEX_CASELESS|G_REGEX_EXTENDED),(GRegexMatchFlags)0,NULL);
-						text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end,false);
-						reptext=g_regex_replace(regex,text,-1,0,replacetext,(GRegexMatchFlags)0,NULL);
-						printf("XXX%s -> ZZZ%s\n",text,reptext);
-						gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-						gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,reptext,-1);
+						if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
+							{
+								regex=g_regex_new(searchtext,(GRegexCompileFlags)(G_REGEX_CASELESS|G_REGEX_EXTENDED),(GRegexMatchFlags)0,NULL);
+								text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end,false);
+								reptext=g_regex_replace(regex,text,-1,0,replacetext,(GRegexMatchFlags)0,NULL);
+								gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+								gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,reptext,-1);
+							}
 					}
 					break;
 
@@ -347,8 +349,8 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	if(text!=NULL)
 		g_free(text);
 
-//	if(replacetext!=NULL)
-//		g_free(replacetext);
+	if(reptext!=NULL)
+		g_free(reptext);
 
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 }
