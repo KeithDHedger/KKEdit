@@ -1,3 +1,7 @@
+0.0.24
+Search/Replace now uses regex.
+Insensitive search now remembered on exit.
+
 0.0.23
 Fixed bug when GtkSu not installed.
 Set document 'dirty' after spellcheck.
