@@ -226,11 +226,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 
-//	if(replaceAll==true)
-		replacetext=strdup((char*)gtk_entry_get_text((GtkEntry*)replaceBox));
-//	else
-//		replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
-
+	replacetext=strdup((char*)gtk_entry_get_text((GtkEntry*)replaceBox));
 	searchtext=(char*)gtk_entry_get_text((GtkEntry*)findBox);
 
 	if(insensitiveSearch==true)
@@ -329,6 +325,9 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 								reptext=g_regex_replace(regex,text,-1,0,replacetext,(GRegexMatchFlags)0,NULL);
 								gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 								gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,reptext,-1);
+								
+								
+								doFindReplace(dialog,FINDNEXT,user_data);
 							}
 					}
 					break;

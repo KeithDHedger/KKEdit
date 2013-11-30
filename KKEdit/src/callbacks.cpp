@@ -713,6 +713,7 @@ void writeExitData(void)
 	if(fd!=NULL)
 		{
 			fprintf(fd,"windowsize	%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
+			fprintf(fd,"insenssearch	%i\n",(int)insensitiveSearch);
 			fclose(fd);
 		}
 	g_free(filename);

@@ -51,9 +51,6 @@ void readConfig(void)
 							highLight=(bool)atoi(strarg);
 					if(strcasecmp(name,"singleuse")==0)
 							singleUse=(bool)atoi(strarg);
-
-					if(strcasecmp(name,"insenssearch")==0)
-							insensitiveSearch=(bool)atoi(strarg);
 					if(strcasecmp(name,"wrapsearch")==0)
 							wrapSearch=(bool)atoi(strarg);
 
@@ -103,6 +100,8 @@ void readConfig(void)
 
 					if(strcasecmp(name,"windowsize")==0)
 						sscanf(buffer,"%*s %i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
+					if(strcasecmp(name,"insenssearch")==0)
+						insensitiveSearch=(bool)atoi(strarg);
 				}
 			fclose(fd);
 		}
