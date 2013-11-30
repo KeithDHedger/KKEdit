@@ -9,6 +9,7 @@ cd /tmp
 svn co file:///media/LinuxData/Development/SVN/KKEdit
 find KKEdit -name ".svn" -exec rm -r '{}' \; || true
 rm /tmp/KKEdit/makepkg
+rm /tmp/KKEdit/KKEdit.LFSBuild
 rm -r /tmp/KKEdit/artwork
 mv /tmp/KKEdit /tmp/KKEdit-${VERSION}
 
