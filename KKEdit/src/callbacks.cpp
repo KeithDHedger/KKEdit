@@ -715,6 +715,8 @@ void writeExitData(void)
 		{
 			fprintf(fd,"windowsize	%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
 			fprintf(fd,"insenssearch	%i\n",(int)insensitiveSearch);
+			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
+			fprintf(fd,"replaceall	%i\n",(int)replaceAll);
 			fclose(fd);
 		}
 	g_free(filename);
