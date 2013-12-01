@@ -125,6 +125,7 @@ int				windowY=-1;
 bool			wrapSearch;
 bool			insensitiveSearch;
 bool			replaceAll;
+bool			findInAllFiles;
 
 int				currentTabNumber;
 int 			untitledNumber=1;

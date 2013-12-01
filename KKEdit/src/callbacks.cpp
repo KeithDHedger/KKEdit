@@ -717,6 +717,7 @@ void writeExitData(void)
 			fprintf(fd,"insenssearch	%i\n",(int)insensitiveSearch);
 			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
 			fprintf(fd,"replaceall	%i\n",(int)replaceAll);
+			fprintf(fd,"allfiles	%i\n",(int)findInAllFiles);
 			fclose(fd);
 		}
 	g_free(filename);

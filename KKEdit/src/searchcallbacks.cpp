@@ -209,12 +209,19 @@ void docSearchFromBar(GtkWidget* widget,gpointer data)
 	showDocView(NULL,(void*)text);
 }
 
+int	currentFindPage=0;
+
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 {
 	char*					searchtext=NULL;
 	char*					replacetext=NULL;
 	GtkTextIter				start,end;
-	pageStruct*				page=getPageStructPtr(-1);
+	pageStruct*				page=NULL;
+	pageStruct*				tmppage=NULL;
+
+	currentFindPage=gtk_notebook_get_current_page(notebook);
+	page=getPageStructPtr(currentFindPage);
+
 	char*					text=NULL;
 	int						startpos,endpos;
 	char*					reptext=NULL;
@@ -241,27 +248,28 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 		{
 //forward search
 			case FINDNEXT:
-					if(!gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
-						gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+				if(!gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
+					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 
-					gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
-					gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
-					text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+				gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+				gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+				text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 
-					if(g_regex_match_full(regex,text,-1,gtk_text_iter_get_offset(&page->match_end),matchflags,&match_info,NULL))
-						{
-							g_match_info_fetch_pos(match_info,0,&startpos,&endpos);
+				if(g_regex_match_full(regex,text,-1,gtk_text_iter_get_offset(&page->match_end),matchflags,&match_info,NULL))
+					{
+						g_match_info_fetch_pos(match_info,0,&startpos,&endpos);
 
-							gtk_text_iter_set_offset(&page->match_start,startpos);
-							page->match_end=page->match_start;
+						gtk_text_iter_set_offset(&page->match_start,startpos);
+						page->match_end=page->match_start;
 
-							gtk_text_iter_set_offset(&page->match_end,endpos);
-							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-							scrollToIterInPane(page,&page->match_start);
-							page->iter=page->match_end;
-						}
-					else
-						if(wrapSearch==true)
+						gtk_text_iter_set_offset(&page->match_end,endpos);
+						gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+						scrollToIterInPane(page,&page->match_start);
+						page->iter=page->match_end;
+					}
+				else
+					{
+						if((wrapSearch==true) && (findInAllFiles==false))
 							{
 								gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_end);
 
@@ -276,7 +284,22 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 										page->iter=page->match_end;
 									}
 							}
-					break;
+						else
+							{
+								if(findInAllFiles==true)
+									{
+										currentFindPage++;
+										if(currentFindPage==gtk_notebook_get_n_pages(notebook))
+											currentFindPage=0;
+										gtk_notebook_set_current_page(notebook,currentFindPage);
+										tmppage=getPageStructPtr(currentFindPage);
+										gtk_text_buffer_get_start_iter((GtkTextBuffer*)tmppage->buffer,&tmppage->iter);
+										gtk_text_buffer_place_cursor((GtkTextBuffer*)tmppage->buffer,&tmppage->iter);
+										doFindReplace(dialog,FINDNEXT,user_data);
+									}
+							}
+					}
+				break;
 
 //backward search
 			case FINDPREV:
@@ -326,7 +349,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 								gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 								gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,reptext,-1);
 								
-								
 								doFindReplace(dialog,FINDNEXT,user_data);
 							}
 					}
@@ -352,6 +374,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 		g_free(reptext);
 
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+		
 }
 
 void find(GtkWidget* widget,gpointer data)
@@ -379,6 +402,9 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 					gtk_button_set_label((GtkButton*)button,"Replace");
 				else
 					gtk_button_set_label((GtkButton*)button,"Replace All");
+				break;
+			case 4:
+				findInAllFiles=gtk_toggle_button_get_active((GtkToggleButton*)widget);
 				break;
 		}
 }

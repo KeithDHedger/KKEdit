@@ -104,6 +104,8 @@ void readConfig(void)
 							wrapSearch=(bool)atoi(strarg);
 					if(strcasecmp(name,"replaceall")==0)
 							replaceAll=(bool)atoi(strarg);
+					if(strcasecmp(name,"allfiles")==0)
+							findInAllFiles=(bool)atoi(strarg);
 				}
 			fclose(fd);
 		}

@@ -201,6 +201,7 @@ extern int				windowY;
 extern bool				wrapSearch;
 extern bool				insensitiveSearch;
 extern bool				replaceAll;
+extern bool				findInAllFiles;
 
 extern int				currentTabNumber;
 extern int 				untitledNumber;
