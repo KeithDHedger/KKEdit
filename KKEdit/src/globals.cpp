@@ -259,7 +259,6 @@ void setLanguage(pageStruct* page)
 		g_free(mimetype);
 }
 
-
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 {
 	char*	command;
@@ -539,7 +538,6 @@ char* sliceLen(char* srcstring,int tmpstartchar,int len)
 	dest[endchar]=0;
 
 	return(dest);
-
 }
 
 char* sliceStrLen(char* srcstring,char* startstr,int len)
@@ -652,13 +650,3 @@ void buildToolsList(void)
 	g_free(datafolder[0]);
 	g_free(datafolder[1]);
 }
-
-
-
-
-
-
-
-
-
-
