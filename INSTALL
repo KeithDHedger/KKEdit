@@ -28,11 +28,18 @@ Add --enable-aspell if you have installed Aspell and want to include the spell c
 Debian install.
 
 sudo apt-get update
-sudo apt-get install build-essential
-sudo apt-get install glib-2.0-dev libgtk2.0-dev
-sudo apt-get install gtksourceview-2.0-dev
-sudo apt-get install unique-1.0-dev
-sudo apt-get install ctags
+sudo apt-get install build-essential 
+sudo apt-get install libglib2.0-dev libgtk2.0-dev
+sudo apt-get install libgtksourceview2.0-dev
+sudo apt-get install libunique-dev
+sudo apt-get install exuberant-ctags
+
+Optional installs:
+sudo apt-get aspell aspell-en libaspell-dev
+sudo apt-get libwebkitgtk-dev
+sudo apt-get install man2html-base
+
+aspell-en is the english dictionary change to suit your needs.
 
 ./configure --prefix=/usr
 make
