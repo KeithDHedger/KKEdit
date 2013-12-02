@@ -218,6 +218,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	GtkTextIter				start,end;
 	pageStruct*				page=NULL;
 	pageStruct*				tmppage=NULL;
+	int						pageloop;
 
 	currentFindPage=gtk_notebook_get_current_page(notebook);
 	page=getPageStructPtr(currentFindPage);
@@ -330,14 +331,35 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 			case REPLACE:
 				if(replaceAll==true)
 					{
-						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
-						gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
-						text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
-						reptext=g_regex_replace(regex,text,-1,0,replacetext,matchflags,NULL);
-						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
-						gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
-						gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
-						gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,reptext,-1);
+						if(findInAllFiles==true)
+							{
+								for(pageloop=0;pageloop<gtk_notebook_get_n_pages(notebook);pageloop++)
+									{
+										gtk_notebook_set_current_page(notebook,currentFindPage);
+										tmppage=getPageStructPtr(pageloop);
+										gtk_text_buffer_get_start_iter((GtkTextBuffer*)tmppage->buffer,&start);
+										gtk_text_buffer_get_end_iter((GtkTextBuffer*)tmppage->buffer,&end);
+										text=gtk_text_buffer_get_text((GtkTextBuffer*)tmppage->buffer,&start,&end,false);
+										reptext=g_regex_replace(regex,text,-1,0,replacetext,matchflags,NULL);
+										gtk_text_buffer_get_start_iter((GtkTextBuffer*)tmppage->buffer,&start);
+										gtk_text_buffer_get_end_iter((GtkTextBuffer*)tmppage->buffer,&end);
+										gtk_text_buffer_delete((GtkTextBuffer*)tmppage->buffer,&start,&end);
+										gtk_text_buffer_insert((GtkTextBuffer*)tmppage->buffer,&start,reptext,-1);
+										g_free(text);
+										text=NULL;
+									}
+							}
+						else
+							{
+								gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+								gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+								text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+								reptext=g_regex_replace(regex,text,-1,0,replacetext,matchflags,NULL);
+								gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+								gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+								gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
+								gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,reptext,-1);
+							}
 					}
 				else
 					{
