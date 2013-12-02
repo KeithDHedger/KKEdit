@@ -19,6 +19,7 @@
 #include "files.h"
 #include "guis.h"
 #include "navcallbacks.h"
+#include "callbacks.h"
 
 #ifdef BUILDDOCVIEWER
 void webKitGoBack(GtkWidget* widget,gpointer data)
@@ -329,9 +330,9 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 //replace and search
 			case REPLACE:
-				if(replaceAll==true)
+				if((findInAllFiles==true))
 					{
-						if(findInAllFiles==true)
+						if(yesNo("Do you want to replace in ALL open files?","")==GTK_RESPONSE_YES)
 							{
 								for(pageloop=0;pageloop<gtk_notebook_get_n_pages(notebook);pageloop++)
 									{
@@ -349,17 +350,19 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 										text=NULL;
 									}
 							}
-						else
-							{
-								gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
-								gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
-								text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
-								reptext=g_regex_replace(regex,text,-1,0,replacetext,matchflags,NULL);
-								gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
-								gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
-								gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
-								gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,reptext,-1);
-							}
+						break;
+					}
+			
+				if(replaceAll==true)
+					{
+						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+						gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+						text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+						reptext=g_regex_replace(regex,text,-1,0,replacetext,matchflags,NULL);
+						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+						gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+						gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
+						gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,reptext,-1);
 					}
 				else
 					{

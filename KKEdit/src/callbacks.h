@@ -44,5 +44,6 @@ void refreshMainWindow(void);
 gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data);
 void newEditor(GtkWidget* widget,gpointer data);
 void changeSourceStyle(GtkWidget* widget,gpointer data);
+int yesNo(char* question,char* file);
 
 #endif
