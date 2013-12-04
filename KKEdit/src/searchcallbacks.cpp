@@ -330,9 +330,9 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 //replace and search
 			case REPLACE:
-				if((findInAllFiles==true))
+				if((findInAllFiles==true) && (replaceAll==true))
 					{
-						if(yesNo("Do you want to replace in ALL open files?","")==GTK_RESPONSE_YES)
+						if(yesNo((char*)"Do you want to replace in ALL open files?",(char*)"")==GTK_RESPONSE_YES)
 							{
 								for(pageloop=0;pageloop<gtk_notebook_get_n_pages(notebook);pageloop++)
 									{
@@ -353,7 +353,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 						break;
 					}
 			
-				if(replaceAll==true)
+				if((replaceAll==true) && (findInAllFiles==false))
 					{
 						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 						gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
