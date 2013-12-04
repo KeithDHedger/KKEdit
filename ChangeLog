@@ -1,5 +1,7 @@
 0.0.25
 Search 'wrap' and 'replace all' settings saved on exit.
+Search in all files setting saved on exit.
+Added Search in all files.
 
 0.0.24
 Search/Replace now uses regex.

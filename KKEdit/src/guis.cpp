@@ -1039,6 +1039,9 @@ void buildFindReplace(void)
 	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,100);
 	image=gtk_image_new_from_stock(GTK_STOCK_FIND_AND_REPLACE,GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image((GtkButton*)replace,image);
+	
+	if(replaceAll==true)
+		gtk_button_set_label((GtkButton*)replace,"Replace All");
 
 	gtk_widget_show(findBox);
 	gtk_widget_show(replaceBox);
