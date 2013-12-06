@@ -1,4 +1,5 @@
 0.0.25
+fixed multibyte character find/replace bug.
 Search 'wrap' and 'replace all' settings saved on exit.
 Search in all files setting saved on exit.
 Added Search in all files.

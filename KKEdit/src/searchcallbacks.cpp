@@ -232,6 +232,8 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	GRegexCompileFlags		compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED);
 	GRegexMatchFlags		matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
 	GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
+	int						charstartpos;
+	int						charendpos;
 
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 
@@ -260,11 +262,12 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 				if(g_regex_match_full(regex,text,-1,gtk_text_iter_get_offset(&page->match_end),matchflags,&match_info,NULL))
 					{
 						g_match_info_fetch_pos(match_info,0,&startpos,&endpos);
-
-						gtk_text_iter_set_offset(&page->match_start,startpos);
+						charstartpos=g_utf8_pointer_to_offset(text,&text[startpos]);
+						charendpos=g_utf8_pointer_to_offset(text,&text[endpos]);
+						gtk_text_iter_set_offset(&page->match_start,charstartpos);
 						page->match_end=page->match_start;
 
-						gtk_text_iter_set_offset(&page->match_end,endpos);
+						gtk_text_iter_set_offset(&page->match_end,charendpos);
 						gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 						scrollToIterInPane(page,&page->match_start);
 						page->iter=page->match_end;
@@ -278,9 +281,12 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 								if(g_regex_match_full(regex,text,-1,gtk_text_iter_get_offset(&page->match_end),matchflags,&match_info,NULL))
 									{
 										g_match_info_fetch_pos(match_info,0,&startpos,&endpos);
-										gtk_text_iter_set_offset(&page->match_start,startpos);
+										charstartpos=g_utf8_pointer_to_offset(text,&text[startpos]);
+										charendpos=g_utf8_pointer_to_offset(text,&text[endpos]);
+
+										gtk_text_iter_set_offset(&page->match_start,charstartpos);
 										page->match_end=page->match_start;
-										gtk_text_iter_set_offset(&page->match_end,endpos);
+										gtk_text_iter_set_offset(&page->match_end,charendpos);
 										gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 										scrollToIterInPane(page,&page->match_start);
 										page->iter=page->match_end;
