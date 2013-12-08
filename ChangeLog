@@ -11,7 +11,7 @@ Insensitive search now remembered on exit.
 0.0.23
 Fixed bug when GtkSu not installed.
 Set document 'dirty' after spellcheck.
-
+remakesourcelist
 0.0.22
 Added check for installed manpageeditor, if succeeds menu item added in file menu.
 Code clean.
