@@ -151,8 +151,28 @@ void docSearch(GtkWidget* widget,gpointer data)
 
 void showDocView(GtkWidget* widget,gpointer data)
 {
+	pageStruct*	page=getPageStructPtr(-1);
+	GtkTextIter	start;
+	GtkTextIter	end;
+	char*		selection=NULL;
+
 	if(data==NULL)
 		docSearch(NULL,NULL);
+
+	if(strcasecmp("file://(null)",thePage)==0)
+		{
+			g_free(thePage);
+			if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+				{
+					selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+					//asprintf(&thePage,"xdg-open https://www.google.co.uk/search?q=%s",selection);
+					asprintf(&thePage,"https://www.google.co.uk/search?q=%s",selection);
+					webkit_web_view_load_uri(webView,thePage);
+					//g_free(thePage);
+					//g_free(selection);
+					//return;
+				}
+		}
 
 #ifdef BUILDDOCVIEWER
 	if(thePage!=NULL)

@@ -2,4 +2,4 @@
 
 #©keithhedger Sun 19 May 11:47:41 BST 2013 kdhedger68713@gmail.com
 
-echo "$KKEDIT_SELECTION"|tr "A-Z" "a-z"
+echo -n "$KKEDIT_SELECTION"|tr "A-Z" "a-z"
