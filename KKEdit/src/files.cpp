@@ -924,6 +924,16 @@ bool openFile(const gchar *filepath,int linenumber)
 	char*			recenturi;
 	int				linenum=linenumber-1;
 
+	gchar *contents;
+	gsize length;
+	GError *err = NULL;
+	const gchar *charset;
+//	gchar *str = NULL;
+//	GtkTextIter iter;
+	
+
+
+
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		return(false);
 	if(linenum<0)
@@ -938,6 +948,31 @@ bool openFile(const gchar *filepath,int linenumber)
 	label=makeNewTab(page->fileName,page->filePath,page);
 	setLanguage(page);
 
+
+g_file_get_contents(filepath, &contents, &length, &err);
+		charset = detect_charset(contents);
+		if (charset == NULL)
+			charset = get_default_charset();
+
+	if (length)
+		do {
+			if (err) {
+				charset = "ISO-8859-1";
+				g_error_free(err);
+				err = NULL;
+			}
+			str = g_convert(contents, -1, "UTF-8", charset, NULL, NULL, &err);
+		} while (err);
+	else
+		str = g_strdup("");
+	g_free(contents);
+//	gtk_text_buffer_insert(buffer, &iter, str, strlen(str));
+	gtk_source_buffer_begin_not_undoable_action(page->buffer);
+		gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
+gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str,strlen(str));
+				g_free(str);
+
+/*
 	g_file_get_contents(filepath,&buffer,(gsize*)&filelen,NULL);
 
 	gtk_source_buffer_begin_not_undoable_action(page->buffer);
@@ -953,6 +988,7 @@ bool openFile(const gchar *filepath,int linenumber)
 				gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,buffer,-1);
 				g_free(buffer);
 			}
+*/
 	gtk_source_buffer_end_not_undoable_action(page->buffer);
 
 	page->gFile=g_file_new_for_path(page->filePath);
