@@ -231,8 +231,8 @@ void docSearchFromBar(GtkWidget* widget,gpointer data)
 }
 
 int		currentFindPage=0;
-bool	checked=false;
-int		firstPage=0;
+//bool	checked=false;
+//int		firstPage=0;
 bool	foundIt=false;
 int		pagesChecked=0;
 
@@ -248,11 +248,11 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	currentFindPage=gtk_notebook_get_current_page(notebook);
 	page=getPageStructPtr(currentFindPage);
 
-	if(checked==false)
-		{
-			firstPage=currentFindPage;
-			checked=true;
-		}
+//	if(checked==false)
+//		{
+//			firstPage=currentFindPage;
+//			checked=true;
+//		}
 
 	char*					text=NULL;
 	int						startpos,endpos;
