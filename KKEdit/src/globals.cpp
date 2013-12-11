@@ -124,6 +124,7 @@ int				windowX=-1;
 int				windowY=-1;
 bool			wrapSearch;
 bool			insensitiveSearch;
+bool			useRegex;
 bool			replaceAll;
 bool			findInAllFiles;
 

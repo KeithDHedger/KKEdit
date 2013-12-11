@@ -1014,6 +1014,12 @@ void buildFindReplace(void)
 	gtk_widget_show(item);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)1);
 
+	item=gtk_check_button_new_with_label("Use Regex");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,useRegex);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
+	gtk_widget_show(item);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)5);
+
 	item=gtk_check_button_new_with_label("Wrap");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,wrapSearch);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);

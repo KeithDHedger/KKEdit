@@ -546,11 +546,11 @@ bool openFile(const gchar *filepath,int linenumber)
 	label=makeNewTab(page->fileName,page->filePath,page);
 	setLanguage(page);
 
-	g_file_get_contents(filepath, &contents, &length, &err);
+	g_file_get_contents(filepath,&contents,&length,&err);
 
-	charset = detect_charset(contents);
-	if (charset == NULL)
-		charset = get_default_charset();
+	charset=detect_charset(contents);
+	if (charset==NULL)
+		charset=get_default_charset();
 
 	br=length;
 

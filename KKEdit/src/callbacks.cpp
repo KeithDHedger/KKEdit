@@ -715,6 +715,7 @@ void writeExitData(void)
 		{
 			fprintf(fd,"windowsize	%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
 			fprintf(fd,"insenssearch	%i\n",(int)insensitiveSearch);
+			fprintf(fd,"useregex	%i\n",(int)useRegex);
 			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
 			fprintf(fd,"replaceall	%i\n",(int)replaceAll);
 			fprintf(fd,"allfiles	%i\n",(int)findInAllFiles);

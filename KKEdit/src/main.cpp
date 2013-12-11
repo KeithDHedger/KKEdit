@@ -100,6 +100,8 @@ void readConfig(void)
 						sscanf(buffer,"%*s %i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
 					if(strcasecmp(name,"insenssearch")==0)
 						insensitiveSearch=(bool)atoi(strarg);
+					if(strcasecmp(name,"useregex")==0)
+						useRegex=(bool)atoi(strarg);
 					if(strcasecmp(name,"wrapsearch")==0)
 							wrapSearch=(bool)atoi(strarg);
 					if(strcasecmp(name,"replaceall")==0)
@@ -133,6 +135,7 @@ void init(void)
 	windowY=-1;
 	wrapSearch=true;
 	insensitiveSearch=true;
+	useRegex=false;
 	replaceAll=false;
 	onExitSaveSession=false;
 	onExitSaveSession=false;

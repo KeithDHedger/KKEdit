@@ -267,8 +267,16 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 
-	replacetext=strdup((char*)gtk_entry_get_text((GtkEntry*)replaceBox));
-	searchtext=(char*)gtk_entry_get_text((GtkEntry*)findBox);
+	if(useRegex==true)
+		{
+			searchtext=strdup((char*)gtk_entry_get_text((GtkEntry*)findBox));
+			replacetext=strdup((char*)gtk_entry_get_text((GtkEntry*)replaceBox));
+		}
+	else
+		{
+			searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)findBox));
+			replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
+		}
 
 	if(insensitiveSearch==true)
 		{
@@ -329,14 +337,12 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 							{
 								if(findInAllFiles==true)
 									{
-										printf("XXXXXX%i\n",pagesChecked);
 										if(foundIt==false)
 											pagesChecked++;
 										else
 											foundIt=false;
 										if((pagesChecked>gtk_notebook_get_n_pages(notebook)))
 											{
-										printf("ZZZZZZZZZ%i\n",pagesChecked);
 												//if(foundIt==false)
 												//	{
 														pagesChecked=0;
@@ -475,6 +481,9 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	if(reptext!=NULL)
 		g_free(reptext);
 
+	g_free(searchtext);
+	g_free(replacetext);
+
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 		
 }
@@ -507,6 +516,9 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 				break;
 			case 4:
 				findInAllFiles=gtk_toggle_button_get_active((GtkToggleButton*)widget);
+				break;
+			case 5:
+				useRegex=gtk_toggle_button_get_active((GtkToggleButton*)widget);
 				break;
 		}
 }

@@ -1,3 +1,9 @@
+0.0.26
+Made Regex search optional and remembered.
+Replace unprintable characters in file with "". ( allows opening some files like .csv ).
+Scan and convert encoding to UTF8 now MUCH better.
+Fixed infinite loop bug in regex search when no match found.
+
 0.0.25
 fixed multibyte character find/replace bug.
 Search 'wrap' and 'replace all' settings saved on exit.
@@ -11,11 +17,11 @@ Insensitive search now remembered on exit.
 0.0.23
 Fixed bug when GtkSu not installed.
 Set document 'dirty' after spellcheck.
-remakesourcelist
+
 0.0.22
 Added check for installed manpageeditor, if succeeds menu item added in file menu.
 Code clean.
-Undo bugfix.
+Undo bug fix.
 Added Manpage Editor Icon for menuitem.
 Added 'Always Show In Popup Men' to external tools ( no selection needed ).
 Redone some installed tools and example tools.
@@ -32,7 +38,7 @@ Added 'New Admin Editor' to file menu.
 Updated help file.
 Fixed 'close tab' bug'
 Code clean.
-Now allow's pipes in external tool command.
+Now allows pipes in external tool command.
 
 0.0.20
 Added (optional) support for Aspell.
@@ -115,7 +121,7 @@ Added selected function def to popupmenu.
 Added show functions def in popupmenu.
 Fixed defines that contain : or / not displaying.
 Added version number to tarball.
-Strpped whitespace from bookmark label;
+Stripped whitespace from bookmark label;
 Go To Definition not shown in popup if not available.
 Selecting function def in popup copies def to clipboard.
 Added new icon.
@@ -130,7 +136,7 @@ Added 'Go To Definition' to popup menu in document.
 Added popup menu to tabs to copy filepath/name.
 
 0.0.9
-Added external tool creater GUI.
+Added external tool creator GUI.
 Bug fix crash on closing empty new tab.
 Set sensitive on save/saveas buttons menu items on startup.
 Completely redone external tools.

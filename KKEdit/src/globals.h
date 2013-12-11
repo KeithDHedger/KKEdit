@@ -200,6 +200,7 @@ extern int				windowX;
 extern int				windowY;
 extern bool				wrapSearch;
 extern bool				insensitiveSearch;
+extern bool				useRegex;
 extern bool				replaceAll;
 extern bool				findInAllFiles;
 
