@@ -237,6 +237,63 @@ int		pagesChecked=0;
 
 void regexFind(int dowhat)
 {
+	char*					searchtext=NULL;
+	char*					replacetext=NULL;
+	GtkTextIter				start,end;
+	pageStruct*				page=NULL;
+	pageStruct*				tmppage=NULL;
+	int						pageloop;
+
+	currentFindPage=gtk_notebook_get_current_page(notebook);
+	page=getPageStructPtr(currentFindPage);
+
+	char*					text=NULL;
+	int						startpos,endpos;
+	char*					reptext=NULL;
+	GRegex*					regex;
+	GMatchInfo*				match_info=NULL;
+	GRegexCompileFlags		compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED);
+	GRegexMatchFlags		matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
+	GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
+	int						charstartpos;
+	int						charendpos;
+
+	searchtext=(char*)gtk_entry_get_text((GtkEntry*)findBox);
+	replacetext=(char*)gtk_entry_get_text((GtkEntry*)replaceBox);
+
+	if(insensitiveSearch==true)
+		compileflags=(GRegexCompileFlags)(compileflags|G_REGEX_CASELESS);
+
+	regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,matchflags,NULL);
+
+	switch (dowhat)
+		{
+//forward search
+			case FINDNEXT:
+
+				if(!gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
+					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+
+				gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+				gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+				text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+
+				if(g_regex_match_full(regex,text,-1,gtk_text_iter_get_offset(&page->match_end),matchflags,&match_info,NULL))
+					{
+						g_match_info_fetch_pos(match_info,0,&startpos,&endpos);
+						charstartpos=g_utf8_pointer_to_offset(text,&text[startpos]);
+						charendpos=g_utf8_pointer_to_offset(text,&text[endpos]);
+						gtk_text_iter_set_offset(&page->match_start,charstartpos);
+						page->match_end=page->match_start;
+
+						gtk_text_iter_set_offset(&page->match_end,charendpos);
+						gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+						scrollToIterInPane(page,&page->match_start);
+						page->iter=page->match_end;
+					}
+				break;
+		}
+
 	return;
 }
 
@@ -455,6 +512,8 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 			case REPLACE:
 				if(useRegex==false)
 					basicFind(response_id);
+				else
+					regexFind(response_id);
 				break;
 		}
 
