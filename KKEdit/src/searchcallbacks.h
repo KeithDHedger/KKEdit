@@ -27,5 +27,6 @@ void doSearchPrefs(GtkWidget* widget,gpointer data);
 void docSearchFromBar(GtkWidget* widget,gpointer data);
 void defSearchFromBar(GtkWidget* widget,gpointer data);
 void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data);
+void basicFind(int dowhat);
 
 #endif

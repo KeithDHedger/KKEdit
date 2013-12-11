@@ -20,6 +20,7 @@
 #include "guis.h"
 #include "navcallbacks.h"
 #include "callbacks.h"
+#include "searchcallbacks.h"
 
 #ifdef BUILDDOCVIEWER
 void webKitGoBack(GtkWidget* widget,gpointer data)
@@ -231,9 +232,7 @@ void docSearchFromBar(GtkWidget* widget,gpointer data)
 }
 
 int		currentFindPage=-1;
-//bool	checked=false;
 int		firstPage=-1;
-//bool	foundIt=false;
 int		pagesChecked=0;
 
 void regexFind(int dowhat)
@@ -241,6 +240,55 @@ void regexFind(int dowhat)
 	return;
 }
 
+void doAllFiles(int dowhat,bool found)
+{
+	pageStruct*	page=NULL;
+
+	if((findInAllFiles==true) && (found==false))
+		{
+			if(dowhat==FINDNEXT)
+				{
+					currentFindPage=gtk_notebook_get_current_page(notebook)+1;
+					if(currentFindPage==gtk_notebook_get_n_pages(notebook))
+						currentFindPage=0;
+				}
+			else
+				{
+					currentFindPage=gtk_notebook_get_current_page(notebook)-1;
+					if(currentFindPage==-1)
+						currentFindPage=gtk_notebook_get_n_pages(notebook)-1;
+				}
+
+			pagesChecked++;
+			if(pagesChecked>gtk_notebook_get_n_pages(notebook))
+				{
+					currentFindPage=-1;
+					gtk_notebook_set_current_page(notebook,firstPage);
+					pagesChecked=0;
+					return;
+				}
+		}
+
+	gtk_notebook_set_current_page(notebook,currentFindPage);
+	page=getPageStructPtr(currentFindPage);
+
+	if(dowhat==FINDNEXT)
+		{
+			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
+			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_start);
+			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_end);
+			gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+		}
+	else
+		{
+			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&page->iter);
+			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&page->match_start);
+			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&page->match_end);
+			gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+		}
+
+	basicFind(dowhat);
+}
 
 void basicFind(int dowhat)
 {
@@ -259,9 +307,10 @@ void basicFind(int dowhat)
 			if(currentFindPage!=-1)
 				{
 					currentFindPage=gtk_notebook_get_current_page(notebook);
-					//pagesChecked=0;
 					firstPage=currentFindPage;
 				}
+			else
+				pagesChecked=0;
 		}
 
 	page=getPageStructPtr(currentFindPage);
@@ -298,35 +347,9 @@ void basicFind(int dowhat)
 									scrollToIterInPane(page,&page->match_start);
 									page->iter=page->match_end;
 								}
-						}
-
-					if((findInAllFiles==true) && (found==false))
-						{
-							currentFindPage=gtk_notebook_get_current_page(notebook)+1;
-							if(currentFindPage==gtk_notebook_get_n_pages(notebook))
-								currentFindPage=0;
-						}
-
-					pagesChecked++;
-					if(pagesChecked>gtk_notebook_get_n_pages(notebook))
-						{
-							currentFindPage=-1;
-							gtk_notebook_set_current_page(notebook,firstPage);
-							found=false;
-							pagesChecked=0;
 							return;
 						}
-					else
-						{
-							gtk_notebook_set_current_page(notebook,currentFindPage);
-							page=getPageStructPtr(currentFindPage);
-							gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
-							//gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_start);
-							//gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_end);
-							//gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->iter,&page->iter);
-							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&page->iter);
-							basicFind(dowhat);
-						}
+					doAllFiles(dowhat,found);
 				}
 		}
 
@@ -334,22 +357,26 @@ void basicFind(int dowhat)
 			{
 				if(gtk_source_iter_backward_search(&page->match_start,searchtext,flags,&page->match_start,&page->match_end,NULL))
 					{
+						found=true;
 						gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 						scrollToIterInPane(page,&page->match_start);
 						page->iter=page->match_start;
 					}
 				else
 					{
-						if(wrapSearch==true)
+						if((wrapSearch==true) && (findInAllFiles==false))
 							{
 								gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&page->iter);
 								if(gtk_source_iter_backward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
 									{
+										found=true;
 										gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 										scrollToIterInPane(page,&page->match_start);
 										page->iter=page->match_start;
 									}
+								return;
 							}
+						doAllFiles(dowhat,found);
 					}
 			}
 
