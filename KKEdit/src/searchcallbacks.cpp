@@ -233,7 +233,7 @@ void docSearchFromBar(GtkWidget* widget,gpointer data)
 int		currentFindPage=-1;
 //bool	checked=false;
 int		firstPage=-1;
-bool	foundIt=false;
+//bool	foundIt=false;
 int		pagesChecked=0;
 
 void regexFind(int dowhat)
@@ -259,7 +259,7 @@ void basicFind(int dowhat)
 			if(currentFindPage!=-1)
 				{
 					currentFindPage=gtk_notebook_get_current_page(notebook);
-					pagesChecked=0;
+					//pagesChecked=0;
 					firstPage=currentFindPage;
 				}
 		}
@@ -294,7 +294,7 @@ void basicFind(int dowhat)
 							if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
 								{
 									found=true;
-									foundIt=true;
+									//foundIt=true;
 									gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 									scrollToIterInPane(page,&page->match_start);
 									page->iter=page->match_end;
@@ -302,17 +302,20 @@ void basicFind(int dowhat)
 						}
 					if((findInAllFiles==true) && (found==false))
 						{
-							currentFindPage++;
+							currentFindPage=gtk_notebook_get_current_page(notebook)+1;
 							if(currentFindPage==gtk_notebook_get_n_pages(notebook))
 								currentFindPage=0;
 						}
-						
-							pagesChecked++;
+
+					pagesChecked++;
 					if(pagesChecked>gtk_notebook_get_n_pages(notebook))
 						{
 							currentFindPage=-1;
 							gtk_notebook_set_current_page(notebook,firstPage);
-							foundIt=false;
+							//foundIt=false;
+							found=false;
+							pagesChecked=0;
+							return;
 						}
 					else
 						{
@@ -325,6 +328,20 @@ void basicFind(int dowhat)
 							basicFind(dowhat);
 						}
 				}
+/*
+					pagesChecked++;
+						printf("XXX%i\n",pagesChecked);
+					if(pagesChecked>gtk_notebook_get_n_pages(notebook))
+						{
+						printf("XXX%i\n",pagesChecked);
+							currentFindPage=-1;
+							gtk_notebook_set_current_page(notebook,firstPage);
+							foundIt=false;
+							found=false;
+							pagesChecked=0;
+							return;
+						}
+*/
 		}
 
 		if(dowhat==FINDPREV)
@@ -412,7 +429,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 		}
 
 	return;
-
+#if 0
 	char*					searchtext=NULL;
 	char*					replacetext=NULL;
 	GtkTextIter				start,end;
@@ -685,7 +702,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	g_free(replacetext);
 
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
-		
+#endif	
 }
 
 void find(GtkWidget* widget,gpointer data)
