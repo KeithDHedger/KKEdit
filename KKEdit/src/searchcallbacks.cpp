@@ -294,12 +294,12 @@ void basicFind(int dowhat)
 							if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
 								{
 									found=true;
-									//foundIt=true;
 									gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 									scrollToIterInPane(page,&page->match_start);
 									page->iter=page->match_end;
 								}
 						}
+
 					if((findInAllFiles==true) && (found==false))
 						{
 							currentFindPage=gtk_notebook_get_current_page(notebook)+1;
@@ -312,7 +312,6 @@ void basicFind(int dowhat)
 						{
 							currentFindPage=-1;
 							gtk_notebook_set_current_page(notebook,firstPage);
-							//foundIt=false;
 							found=false;
 							pagesChecked=0;
 							return;
@@ -322,26 +321,13 @@ void basicFind(int dowhat)
 							gtk_notebook_set_current_page(notebook,currentFindPage);
 							page=getPageStructPtr(currentFindPage);
 							gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
-							gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_start);
-							gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_end);
-							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+							//gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_start);
+							//gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_end);
+							//gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->iter,&page->iter);
+							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&page->iter);
 							basicFind(dowhat);
 						}
 				}
-/*
-					pagesChecked++;
-						printf("XXX%i\n",pagesChecked);
-					if(pagesChecked>gtk_notebook_get_n_pages(notebook))
-						{
-						printf("XXX%i\n",pagesChecked);
-							currentFindPage=-1;
-							gtk_notebook_set_current_page(notebook,firstPage);
-							foundIt=false;
-							found=false;
-							pagesChecked=0;
-							return;
-						}
-*/
 		}
 
 		if(dowhat==FINDPREV)
