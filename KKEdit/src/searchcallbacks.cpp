@@ -347,6 +347,9 @@ void basicFind(int dowhat)
 									scrollToIterInPane(page,&page->match_start);
 									page->iter=page->match_end;
 								}
+							gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+							g_free(searchtext);
+							g_free(replacetext);
 							return;
 						}
 					doAllFiles(dowhat,found);
@@ -374,6 +377,9 @@ void basicFind(int dowhat)
 										scrollToIterInPane(page,&page->match_start);
 										page->iter=page->match_start;
 									}
+								gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+								g_free(searchtext);
+								g_free(replacetext);
 								return;
 							}
 						doAllFiles(dowhat,found);
