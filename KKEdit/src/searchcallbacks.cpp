@@ -303,11 +303,11 @@ void basicFind(int dowhat)
 					if((findInAllFiles==true) && (found==false))
 						{
 							currentFindPage++;
-							pagesChecked++;
 							if(currentFindPage==gtk_notebook_get_n_pages(notebook))
 								currentFindPage=0;
 						}
 						
+							pagesChecked++;
 					if(pagesChecked>gtk_notebook_get_n_pages(notebook))
 						{
 							currentFindPage=-1;
