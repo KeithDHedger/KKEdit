@@ -230,11 +230,17 @@ void docSearchFromBar(GtkWidget* widget,gpointer data)
 	showDocView(NULL,(void*)text);
 }
 
-int		currentFindPage=0;
+int		currentFindPage=-1;
 //bool	checked=false;
-//int		firstPage=0;
+int		firstPage=-1;
 bool	foundIt=false;
 int		pagesChecked=0;
+
+void regexFind(int dowhat)
+{
+	return;
+}
+
 
 void basicFind(int dowhat)
 {
@@ -244,6 +250,19 @@ void basicFind(int dowhat)
 	gchar*					selectedtext=NULL;
 	GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
 	bool					replaceAllFlag;
+	bool					found=false;
+
+	if(findInAllFiles==false)
+		currentFindPage=-1;
+	else
+		{
+			if(currentFindPage!=-1)
+				{
+					currentFindPage=gtk_notebook_get_current_page(notebook);
+					pagesChecked=0;
+					firstPage=currentFindPage;
+				}
+		}
 
 	page=getPageStructPtr(currentFindPage);
 
@@ -262,21 +281,48 @@ void basicFind(int dowhat)
 		{
 			if(gtk_source_iter_forward_search(&page->match_end,searchtext,flags,&page->match_start,&page->match_end,NULL))
 				{
+					found=true;
 					gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 					scrollToIterInPane(page,&page->match_start);
 					page->iter=page->match_end;
 				}
 			else
 				{
-					if(wrapSearch==true)
+					if((wrapSearch==true) && (findInAllFiles==false))
 						{
 							gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
 							if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
 								{
+									found=true;
+									foundIt=true;
 									gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 									scrollToIterInPane(page,&page->match_start);
 									page->iter=page->match_end;
 								}
+						}
+					if((findInAllFiles==true) && (found==false))
+						{
+							currentFindPage++;
+							pagesChecked++;
+							if(currentFindPage==gtk_notebook_get_n_pages(notebook))
+								currentFindPage=0;
+						}
+						
+					if(pagesChecked>gtk_notebook_get_n_pages(notebook))
+						{
+							currentFindPage=-1;
+							gtk_notebook_set_current_page(notebook,firstPage);
+							foundIt=false;
+						}
+					else
+						{
+							gtk_notebook_set_current_page(notebook,currentFindPage);
+							page=getPageStructPtr(currentFindPage);
+							gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
+							gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_start);
+							gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_end);
+							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+							basicFind(dowhat);
 						}
 				}
 		}
@@ -317,8 +363,6 @@ void basicFind(int dowhat)
 								scrollToIterInPane(page,&page->match_start);
 								page->iter=page->match_end;
 							}
-					//	else
-					//		continue;
 					}
 				else
 					replaceAllFlag=false;
