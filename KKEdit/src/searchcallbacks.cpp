@@ -266,10 +266,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	int						charendpos;
 	int						startpage=-1;
 
-
-
-
-
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 
 	replacetext=strdup((char*)gtk_entry_get_text((GtkEntry*)replaceBox));

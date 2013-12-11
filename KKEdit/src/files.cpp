@@ -25,6 +25,24 @@ GtkWidget*	vbox;
 char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
 bool		dropTextFile=false;
+char*		currentCharset=NULL;
+
+/*
+void getCharset(char* filename)
+{
+	char*	command=NULL;
+	char	buffer[1024];
+	FILE*	fp;
+
+	if(currentCharset!=NULL)
+		g_free(currentCharset);
+	
+	asprintf(&command,"file -bi \"%s\"|awk -F \"charset=\" '{print $2}'",filename);
+	fp=popen(command, "r");
+	fgets(buffer,1024,fp);
+	currentCharset=strdup(buffer);
+}
+*/
 
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
@@ -928,11 +946,6 @@ bool openFile(const gchar *filepath,int linenumber)
 	gsize length;
 	GError *err = NULL;
 	const gchar *charset;
-//	gchar *str = NULL;
-//	GtkTextIter iter;
-	
-
-
 
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		return(false);
@@ -950,9 +963,24 @@ bool openFile(const gchar *filepath,int linenumber)
 
 
 g_file_get_contents(filepath, &contents, &length, &err);
+	GRegex*					regex;
+	GMatchInfo*				match_info=NULL;
+	GRegexCompileFlags		compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED);
+	GRegexMatchFlags		matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
+	char*					reptext=NULL;
+	char*					searchtext=NULL;
+	char*					replacetext=NULL;
+
+			compileflags=(GRegexCompileFlags)(compileflags|G_REGEX_CASELESS);
+
+
 		charset = detect_charset(contents);
 		if (charset == NULL)
+//getCharset((char*)filepath);
 			charset = get_default_charset();
+//charset=currentCharset;
+gsize	br;
+	br=length;
 
 	if (length)
 		do {
@@ -961,11 +989,22 @@ g_file_get_contents(filepath, &contents, &length, &err);
 				g_error_free(err);
 				err = NULL;
 			}
-			str = g_convert(contents, -1, "UTF-8", charset, NULL, NULL, &err);
+			str = g_convert(contents,br, "UTF-8", charset, NULL, &br, &err);
 		} while (err);
 	else
 		str = g_strdup("");
 	g_free(contents);
+
+searchtext="[^[:print:]\n\r]";
+replacetext="";
+regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,matchflags,NULL);
+printf("QQQQQQQQQQQQQ\n");
+contents=strdup(str);
+str=g_regex_replace(regex,str,br,0,replacetext,matchflags,NULL);
+//str=g_regex_replace_full(regex,contents,br,0,replacetext,matchflags,&match_info,NULL);
+//str=g_regex_escape_nul(str,br);
+
+printf("ZZZZZZZZZZ%s\n%i\n",str,(int)br);
 //	gtk_text_buffer_insert(buffer, &iter, str, strlen(str));
 	gtk_source_buffer_begin_not_undoable_action(page->buffer);
 		gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
