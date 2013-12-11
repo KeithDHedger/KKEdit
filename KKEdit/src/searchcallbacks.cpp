@@ -386,7 +386,18 @@ void basicFind(int dowhat)
 					}
 			}
 
-		if(dowhat==REPLACE)
+		if((dowhat==REPLACE) && (findInAllFiles==true))
+			{
+				findInAllFiles=false;
+				for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
+					{
+						gtk_notebook_set_current_page(notebook,j);
+						basicFind(REPLACE);
+					}
+				findInAllFiles=true;
+			}
+
+		if((dowhat==REPLACE) && (findInAllFiles==false))
 			{
 				if(replaceAll==true)
 					{
