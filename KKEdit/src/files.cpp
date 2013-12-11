@@ -507,347 +507,30 @@ pageStruct* makeNewPage(void)
 	return(page);
 }
 
-
-guint get_encoding_code(void)
-{
-	static guint code = END_CODE;
-	const gchar *env;
-	guint i, j = 1;
-	
-	if (code == END_CODE) {
-		env = g_getenv("LC_ALL");
-		if (!env)
-			env = g_getenv("LANG");
-		if (env && strlen(env) >= 2)
-			while (code == END_CODE && j < END_CODE) {
-				for (i = 0; i < MAX_COUNTRY_NUM; i++) {
-					if (!country_table[j][i])
-						break;
-					if (strncmp(env, country_table[j][i], strlen(country_table[j][i])) == 0) {
-						code = j;
-						break;
-					}
-				}
-				j++;
-			}
-		if (code == END_CODE)
-			code = 0;
-	}
-	
-	return code;
-}
-
-EncArray *get_encoding_items(guint code)
-{
-	gint i;
-	static EncArray *array = NULL;
-	
-	if (!array) {
-		array = (EncArray*)g_malloc(sizeof(EncArray));
-		for (i = 0; i < ENCODING_MAX_ITEM_NUM; i++)
-			array->item[i] = encoding_table[code][i] ?
-				encoding_table[code][i] : NULL;
-	}
-	
-	return array;
-}
-
-
-static const gchar *detect_charset_cylillic(const gchar *text)
-{
-	guint8 c = *text;
-	gboolean noniso = FALSE;
-	guint32 xc = 0, xd = 0, xef = 0;
-	
-	const gchar *charset = get_encoding_items(get_encoding_code())->item[OPENI18N];
-	
-	while ((c = *text++) != '\0') {
-		if (c >= 0x80 && c <= 0x9F)
-			noniso = TRUE;
-		else if (c >= 0xC0 && c <= 0xCF)
-			xc++;
-		else if (c >= 0xD0 && c <= 0xDF)
-			xd++;
-		else if (c >= 0xE0)
-			xef++;
-	}
-	
-	if (!noniso && ((xc + xef) < xd))
-		charset = "ISO-8859-5";
-	else if ((xc + xd) < xef)
-		charset = "CP1251";
-	
-	return charset;
-}
-
-static const gchar *detect_charset_chinese(const gchar *text)
-{
-	guint8 c = *text;
-	
-	const gchar *charset = get_encoding_items(get_encoding_code())->item[IANA];
-	
-	while ((c = *text++) != '\0') {
-		if (c >= 0x81 && c <= 0x87) {
-			charset = "GB18030";
-			break;
-		}
-		else if (c >= 0x88 && c <= 0xA0) {
-			c = *text++;
-			if ((c >= 0x30 && c <= 0x39) || (c >= 0x80 && c <= 0xA0)) {
-				charset = "GB18030";
-				break;
-			} //else GBK/Big5-HKSCS cannot determine
-		}
-		else if ((c >= 0xA1 && c <= 0xC6) || (c >= 0xC9 && c <= 0xF9)) {
-			c = *text++;
-			if (c >= 0x40 && c <= 0x7E)
-				charset = "BIG5";
-			else if ((c >= 0x30 && c <= 0x39) || (c >= 0x80 && c <= 0xA0)) {
-				charset = "GB18030";
-				break;
-			}
-		}
-		else if (c >= 0xC7) {
-			c = *text++;
-			if ((c >= 0x30 && c <= 0x39) || (c >= 0x80 && c <= 0xA0)) {
-				charset = "GB18030";
-				break;
-			}
-		}
-	}
-	
-	return charset;
-}
-
-static const gchar *detect_charset_japanese(const gchar *text)
-{
-	guint8 c = *text;
-	gchar *charset = NULL;
-	
-	while (charset == NULL && (c = *text++) != '\0') {
-		if (c >= 0x81 && c <= 0x9F) {
-			if (c == 0x8E) /* SS2 */ {
-				c = *text++;
-				if ((c >= 0x40 && c <= 0xA0) || (c >= 0xE0 && c <= 0xFC))
-					charset = "CP932";
-			}
-			else if (c == 0x8F) /* SS3 */ {
-				c = *text++;
-				if (c >= 0x40 && c <= 0xA0)
-					charset = "CP932";
-				else if (c >= 0xFD)
-					break;
-			}
-			else
-				charset = "CP932";
-		}
-		else if (c >= 0xA1 && c <= 0xDF) {
-			c = *text++;
-			if (c <= 0x9F)
-				charset = "CP932";
-			else if (c >= 0xFD)
-				break;
-		}
-		else if (c >= 0xE0 && c <= 0xEF) {
-			c = *text++;
-			if (c >= 0x40 && c <= 0xA0)
-				charset = "CP932";
-			else if (c >= 0xFD)
-				break;
-		}
-		else if (c >= 0xF0)
-			break;
-	}
-	
-	if (charset == NULL)
-		charset = "EUC-JP";
-	
-	return charset;
-}
-
-static const gchar *detect_charset_korean(const gchar *text)
-{
-	guint8 c = *text;
-	gboolean noneuc = FALSE;
-	gboolean nonjohab = FALSE;
-	gchar *charset = NULL;
-	
-	while (charset == NULL && (c = *text++) != '\0') {
-		if (c >= 0x81 && c < 0x84) {
-			charset = "CP949";
-		}
-		else if (c >= 0x84 && c < 0xA1) {
-			noneuc = TRUE;
-			c = *text++;
-			if ((c > 0x5A && c < 0x61) || (c > 0x7A && c < 0x81))
-				charset = "CP1361";
-			else if (c == 0x52 || c == 0x72 || c == 0x92 || (c > 0x9D && c < 0xA1)
-				|| c == 0xB2 || (c > 0xBD && c < 0xC1) || c == 0xD2
-				|| (c > 0xDD && c < 0xE1) || c == 0xF2 || c == 0xFE)
-				charset = "CP949";
-		}
-		else if (c >= 0xA1 && c <= 0xC6) {
-			c = *text++;
-			if (c < 0xA1) {
-				noneuc = TRUE;
-				if ((c > 0x5A && c < 0x61) || (c > 0x7A && c < 0x81))
-					charset = "CP1361";
-				else if (c == 0x52 || c == 0x72 || c == 0x92 || (c > 0x9D && c < 0xA1))
-					charset = "CP949";
-				else if (c == 0xB2 || (c > 0xBD && c < 0xC1) || c == 0xD2
-					|| (c > 0xDD && c < 0xE1) || c == 0xF2 || c == 0xFE)
-					nonjohab = TRUE;
-			}
-		}
-		else if (c > 0xC6 && c <= 0xD3) {
-			c = *text++;
-			if (c < 0xA1)
-				charset = "CP1361";
-		}
-		else if (c > 0xD3 && c < 0xD8) {
-			nonjohab = TRUE;
-			c = *text++;
-		}
-		else if (c >= 0xD8) {
-			c = *text++;
-			if (c < 0xA1)
-				charset = "CP1361";
-		}
-		if (noneuc && nonjohab)
-			charset = "CP949";
-	}
-	
-	if (charset == NULL) {
-		if (noneuc)
-			charset = "CP949";
-		else
-			charset = "EUC-KR";
-	}
-	
-	return charset;
-}
-
-
-static gboolean detect_noniso(const gchar *text)
-{
-	guint8 c = *text;
-	
-	while ((c = *text++) != '\0') {
-		if (c >= 0x80 && c <= 0x9F)
-			return TRUE;
-	}
-	return FALSE;
-}
-
-
-const gchar *get_default_charset(void)
-{
-	const gchar *charset;
-	
-	g_get_charset(&charset);
-	
-	return charset;
-}
-
-const gchar *detect_charset(const gchar *text)
-{
-	guint8 c = *text;
-	const gchar *charset = NULL;
-	
-	if (g_utf8_validate(text, -1, NULL)) {
-		while ((c = *text++) != '\0') {
-			if (c > 0x7F) {
-				charset = "UTF-8";
-				break;
-			}
-			if (c == 0x1B) /* ESC */ {
-				c = *text++;
-				if (c == '$') {
-					c = *text++;
-					switch (c) {
-					case 'B': // JIS X 0208-1983
-					case '@': // JIS X 0208-1978
-						charset = "ISO-2022-JP";
-						continue;
-					case 'A': // GB2312-1980
-						charset = "ISO-2022-JP-2";
-						break;
-					case '(':
-						c = *text++;
-						switch (c) {
-						case 'C': // KSC5601-1987
-						case 'D': // JIS X 0212-1990
-							charset = "ISO-2022-JP-2";
-						}
-						break;
-					case ')':
-						c = *text++;
-						if (c == 'C')
-							charset = "ISO-2022-KR"; // KSC5601-1987
-					}
-					break;
-				}
-			}
-		}
-		if (!charset)
-			charset = get_default_charset();
-	}
-	
-	if (!charset) {
-		switch (get_encoding_code()) {
-		case LATINC:
-		case LATINC_UA:
-		case LATINC_TJ:
-			charset = detect_charset_cylillic(text); // fuzzy...
-			break;
-		case CHINESE_CN:
-		case CHINESE_TW:
-		case CHINESE_HK:
-			charset = detect_charset_chinese(text);
-			break;
-		case JAPANESE:
-			charset = detect_charset_japanese(text);
-			break;
-		case KOREAN:
-			charset = detect_charset_korean(text);
-			break;
-		case VIETNAMESE:
-		case THAI:
-		case GEORGIAN:
-			charset = get_encoding_items(get_encoding_code())->item[OPENI18N];
-			break;
-		default:
-			if (strcmp(get_default_charset(), "UTF-8") != 0)
-				charset = get_default_charset();
-			else if (detect_noniso(text))
-				charset = get_encoding_items(get_encoding_code())->item[CODEPAGE];
-			else
-				charset = get_encoding_items(get_encoding_code())->item[OPENI18N];
-			if (!charset)
-				charset = get_encoding_items(get_encoding_code())->item[IANA];					
-		}
-	}
-	
-	return charset;
-}
-
 bool openFile(const gchar *filepath,int linenumber)
 {
-	GtkTextIter		iter;
-	gchar*			buffer=NULL;
-	long			filelen;
-	GtkWidget*		label;
-	gchar*			filename=g_path_get_basename(filepath);
-	pageStruct*		page;
-	GtkTextMark*	scroll2mark=gtk_text_mark_new(NULL,true);
-	char*			str=NULL;
-	char*			recenturi;
-	int				linenum=linenumber-1;
+	GtkTextIter			iter;
 
-	gchar *contents;
-	gsize length;
-	GError *err = NULL;
-	const gchar *charset;
+
+	GtkWidget*			label;
+	gchar*				filename=g_path_get_basename(filepath);
+	pageStruct*			page;
+	GtkTextMark*		scroll2mark=gtk_text_mark_new(NULL,true);
+	char*				str=NULL;
+	char*				recenturi;
+	int					linenum=linenumber-1;
+
+	gchar*				contents;
+	gsize				length;
+	GError*				err=NULL;
+	const gchar*		charset;
+	gsize				br;
+	GRegex*				regex;
+	GRegexCompileFlags	compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED|G_REGEX_CASELESS);
+	GRegexMatchFlags	matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
+
+	char*				searchtext=NULL;
+	char*				replacetext=NULL;
 
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		return(false);
@@ -863,73 +546,43 @@ bool openFile(const gchar *filepath,int linenumber)
 	label=makeNewTab(page->fileName,page->filePath,page);
 	setLanguage(page);
 
+	g_file_get_contents(filepath, &contents, &length, &err);
 
-g_file_get_contents(filepath, &contents, &length, &err);
-	GRegex*					regex;
-	GMatchInfo*				match_info=NULL;
-	GRegexCompileFlags		compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED);
-	GRegexMatchFlags		matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
-	char*					reptext=NULL;
-	char*					searchtext=NULL;
-	char*					replacetext=NULL;
+	charset = detect_charset(contents);
+	if (charset == NULL)
+		charset = get_default_charset();
 
-			compileflags=(GRegexCompileFlags)(compileflags|G_REGEX_CASELESS);
-
-
-		charset = detect_charset(contents);
-		if (charset == NULL)
-//getCharset((char*)filepath);
-			charset = get_default_charset();
-//charset=currentCharset;
-gsize	br;
 	br=length;
 
-	if (length)
-		do {
-			if (err) {
-				charset = "ISO-8859-1";
-				g_error_free(err);
-				err = NULL;
+	if(length)
+		do
+			{
+				if(err)
+					{
+						charset="ISO-8859-1";
+						g_error_free(err);
+						err=NULL;
+					}
+				str=g_convert(contents,br,"UTF-8",charset,NULL,&br,&err);
 			}
-			str = g_convert(contents,br, "UTF-8", charset, NULL, &br, &err);
-		} while (err);
+		while(err);
 	else
-		str = g_strdup("");
+		{
+			str=g_strdup("");
+		}
+
 	g_free(contents);
 
-searchtext="[^[:print:]\n\r]";
-replacetext="";
-regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,matchflags,NULL);
-printf("QQQQQQQQQQQQQ\n");
-contents=strdup(str);
-str=g_regex_replace(regex,str,br,0,replacetext,matchflags,NULL);
-//str=g_regex_replace_full(regex,contents,br,0,replacetext,matchflags,&match_info,NULL);
-//str=g_regex_escape_nul(str,br);
+	searchtext=(char*)"[^[:print:]\n\r[:blank:]]";
+	replacetext=(char*)"";
 
-printf("ZZZZZZZZZZ%s\n%i\n",str,(int)br);
-//	gtk_text_buffer_insert(buffer, &iter, str, strlen(str));
-	gtk_source_buffer_begin_not_undoable_action(page->buffer);
-		gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
-gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str,strlen(str));
-				g_free(str);
-
-/*
-	g_file_get_contents(filepath,&buffer,(gsize*)&filelen,NULL);
+	regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,matchflags,NULL);
+	str=g_regex_replace(regex,str,br,0,replacetext,matchflags,NULL);
 
 	gtk_source_buffer_begin_not_undoable_action(page->buffer);
 		gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
-		if(g_utf8_validate(buffer,-1,NULL)==false)
-			{
-				str=g_locale_to_utf8(buffer,-1,NULL,NULL,NULL);
-				gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str,-1);
-				g_free(str);
-			}
-		else
-			{
-				gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,buffer,-1);
-				g_free(buffer);
-			}
-*/
+		gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str,strlen(str));
+		g_free(str);
 	gtk_source_buffer_end_not_undoable_action(page->buffer);
 
 	page->gFile=g_file_new_for_path(page->filePath);

@@ -264,7 +264,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
 	int						charstartpos;
 	int						charendpos;
-	int						startpage=-1;
 
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 
@@ -341,7 +340,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 												//if(foundIt==false)
 												//	{
 														pagesChecked=0;
-														foundIt==false;
+														foundIt=false;
 														break;
 													//}
 												//else
