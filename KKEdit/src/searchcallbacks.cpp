@@ -235,6 +235,57 @@ int		currentFindPage=-1;
 int		firstPage=-1;
 int		pagesChecked=0;
 
+
+void doAllFiles(int dowhat,bool found)
+{
+	pageStruct*	page=NULL;
+
+	if((findInAllFiles==true) && (found==false))
+		{
+			if(dowhat==FINDNEXT)
+				{
+					currentFindPage=gtk_notebook_get_current_page(notebook)+1;
+					if(currentFindPage==gtk_notebook_get_n_pages(notebook))
+						currentFindPage=0;
+				}
+			else
+				{
+					currentFindPage=gtk_notebook_get_current_page(notebook)-1;
+					if(currentFindPage==-1)
+						currentFindPage=gtk_notebook_get_n_pages(notebook)-1;
+				}
+
+			pagesChecked++;
+			if(pagesChecked>gtk_notebook_get_n_pages(notebook))
+				{
+					currentFindPage=-1;
+					gtk_notebook_set_current_page(notebook,firstPage);
+					pagesChecked=0;
+					return;
+				}
+		}
+
+	gtk_notebook_set_current_page(notebook,currentFindPage);
+	page=getPageStructPtr(currentFindPage);
+
+	if(dowhat==FINDNEXT)
+		{
+			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
+			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_start);
+			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_end);
+			gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+		}
+	else
+		{
+			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&page->iter);
+			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&page->match_start);
+			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&page->match_end);
+			gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+		}
+
+	basicFind(dowhat);
+}
+
 void regexFind(int dowhat)
 {
 	char*					searchtext=NULL;
@@ -291,60 +342,31 @@ void regexFind(int dowhat)
 						scrollToIterInPane(page,&page->match_start);
 						page->iter=page->match_end;
 					}
+				else
+					if((wrapSearch==true) && (findInAllFiles==false))
+									{
+										gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_end);
+
+										if(g_regex_match_full(regex,text,-1,gtk_text_iter_get_offset(&page->match_end),matchflags,&match_info,NULL))
+											{
+												//foundIt=true;
+												g_match_info_fetch_pos(match_info,0,&startpos,&endpos);
+												charstartpos=g_utf8_pointer_to_offset(text,&text[startpos]);
+												charendpos=g_utf8_pointer_to_offset(text,&text[endpos]);
+
+												gtk_text_iter_set_offset(&page->match_start,charstartpos);
+												page->match_end=page->match_start;
+												gtk_text_iter_set_offset(&page->match_end,charendpos);
+												gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+												scrollToIterInPane(page,&page->match_start);
+												page->iter=page->match_end;
+											}
+									}
+
 				break;
 		}
 
 	return;
-}
-
-void doAllFiles(int dowhat,bool found)
-{
-	pageStruct*	page=NULL;
-
-	if((findInAllFiles==true) && (found==false))
-		{
-			if(dowhat==FINDNEXT)
-				{
-					currentFindPage=gtk_notebook_get_current_page(notebook)+1;
-					if(currentFindPage==gtk_notebook_get_n_pages(notebook))
-						currentFindPage=0;
-				}
-			else
-				{
-					currentFindPage=gtk_notebook_get_current_page(notebook)-1;
-					if(currentFindPage==-1)
-						currentFindPage=gtk_notebook_get_n_pages(notebook)-1;
-				}
-
-			pagesChecked++;
-			if(pagesChecked>gtk_notebook_get_n_pages(notebook))
-				{
-					currentFindPage=-1;
-					gtk_notebook_set_current_page(notebook,firstPage);
-					pagesChecked=0;
-					return;
-				}
-		}
-
-	gtk_notebook_set_current_page(notebook,currentFindPage);
-	page=getPageStructPtr(currentFindPage);
-
-	if(dowhat==FINDNEXT)
-		{
-			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
-			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_start);
-			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->match_end);
-			gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-		}
-	else
-		{
-			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&page->iter);
-			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&page->match_start);
-			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&page->match_end);
-			gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-		}
-
-	basicFind(dowhat);
 }
 
 void basicFind(int dowhat)
