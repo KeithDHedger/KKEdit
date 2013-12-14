@@ -6,5 +6,4 @@ Comment=A GTK2 text editor inspired ( but not based on ) BBEdit.
 Terminal=false
 Type=Application
 Categories=Utility;
-Name[en_US]=KKEdit
-Exec=kkedit %F
+MimeType=text/plain
