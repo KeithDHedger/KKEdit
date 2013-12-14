@@ -1,4 +1,4 @@
 name	Run As Root Script
-command	/home/keithhedger/KKEditScripts/RunAsScript "root"
+command	../scripts/RunAsScript "root"
 flags	0
 interm	1

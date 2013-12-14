@@ -1,5 +1,5 @@
 name	To Upper Case
-command	/home/keithhedger/KKEditScripts/ToUpperCase
+command	../scripts/ToUpperCase
 flags	1
 interm	0
 inpopup 1

@@ -1,5 +1,5 @@
 name	Open Man Page
-command	%i/tools/OpenManPage
+command	../scripts/OpenManPage
 flags	4
 interm	0
 inpopup	1

@@ -1,5 +1,5 @@
 name	To Lower Case
-command	/home/keithhedger/KKEditScripts/ToLowerCase
+command	../scripts/ToLowerCase
 flags	1
 interm	0
 inpopup 1

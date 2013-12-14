@@ -1,5 +1,5 @@
 name	Run As Script
-command	/home/keithhedger/KKEditScripts/RunAsScript
+command	../scripts/RunAsScript
 flags	0
 interm	1
 inpopup	0
