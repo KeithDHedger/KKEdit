@@ -378,12 +378,100 @@ void regexFind(int dowhat)
 										scrollToIterInPane(page,&page->match_start);
 										page->iter=page->match_end;
 									}
+								else
+									break;
 							}
 					if((wrapSearch==true) || (findInAllFiles==true))
 						doAllFiles(dowhat,found);
+					}
+				break;
 
+			case REPLACE:
+				if((findInAllFiles==true) && (replaceAll==true))
+					{
+						if(yesNo((char*)"Do you want to replace in ALL open files?",(char*)"")==GTK_RESPONSE_YES)
+							{
+								for(pageloop=0;pageloop<gtk_notebook_get_n_pages(notebook);pageloop++)
+									{
+										gtk_notebook_set_current_page(notebook,currentFindPage);
+										tmppage=getPageStructPtr(pageloop);
+										gtk_text_buffer_get_start_iter((GtkTextBuffer*)tmppage->buffer,&start);
+										gtk_text_buffer_get_end_iter((GtkTextBuffer*)tmppage->buffer,&end);
+										text=gtk_text_buffer_get_text((GtkTextBuffer*)tmppage->buffer,&start,&end,false);
+										reptext=g_regex_replace(regex,text,-1,0,replacetext,matchflags,NULL);
+										if(strcmp(reptext,text)!=0)
+											{
+												gtk_text_buffer_get_start_iter((GtkTextBuffer*)tmppage->buffer,&start);
+												gtk_text_buffer_get_end_iter((GtkTextBuffer*)tmppage->buffer,&end);
+												gtk_text_buffer_delete((GtkTextBuffer*)tmppage->buffer,&start,&end);
+												gtk_text_buffer_insert((GtkTextBuffer*)tmppage->buffer,&start,reptext,-1);
+											}
+										g_free(text);
+										text=NULL;
+									}
+							}
 						break;
 					}
+			
+				if((replaceAll==true) && (findInAllFiles==false))
+					{
+						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+						gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+						text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+						reptext=g_regex_replace(regex,text,-1,0,replacetext,matchflags,NULL);
+						if(strcmp(reptext,text)!=0)
+							{
+								gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+								gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+								gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
+								gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,reptext,-1);
+							}
+						break;
+					}
+
+				if(replaceAll==false)
+					{
+						if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
+							{
+								regex=g_regex_new(searchtext,(GRegexCompileFlags)(G_REGEX_CASELESS|G_REGEX_EXTENDED),(GRegexMatchFlags)0,NULL);
+								text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end,false);
+								reptext=g_regex_replace(regex,text,-1,0,replacetext,(GRegexMatchFlags)0,NULL);
+								if(strcmp(reptext,text)!=0)
+									{
+										gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+										gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,reptext,-1);
+										regexFind(FINDNEXT);
+									}
+							}
+//						else
+//							{
+//	if(!gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
+//		gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+								
+//								doFindReplace(findReplaceDialog,FINDNEXT,NULL);
+//							}
+								//regexFind(FINDNEXT);
+						
+					}
+
+/*
+				else
+					{
+						if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
+							{
+								regex=g_regex_new(searchtext,(GRegexCompileFlags)(G_REGEX_CASELESS|G_REGEX_EXTENDED),(GRegexMatchFlags)0,NULL);
+								text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end,false);
+								reptext=g_regex_replace(regex,text,-1,0,replacetext,(GRegexMatchFlags)0,NULL);
+								if(strcmp(reptext,text)!=0)
+									{
+										gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+										gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,reptext,-1);
+									}
+								//doFindReplace(dialog,FINDNEXT,user_data);
+							}
+					}
+*/		
+				break;
 		}
 
 	return;
