@@ -381,7 +381,7 @@ void regexFind(int dowhat)
 								else
 									break;
 							}
-					if((wrapSearch==true) || (findInAllFiles==true))
+					if((wrapSearch==true) && (findInAllFiles==true))
 						doAllFiles(dowhat,found);
 					}
 				break;
