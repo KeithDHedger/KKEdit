@@ -1,3 +1,8 @@
+0.0.27
+Example tools now use releative paths.
+External tools can now use releative paths to command script.
+Fixed bug with external tools.
+
 0.0.26
 Fixed .desktop file.
 Fixed minor bug in example tools for case conversion ( thanks sadi! ).
