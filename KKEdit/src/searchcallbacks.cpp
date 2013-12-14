@@ -155,6 +155,11 @@ void showDocView(GtkWidget* widget,gpointer data)
 	if(data==NULL)
 		docSearch(NULL,NULL);
 
+	if(thePage!=NULL)
+printf("XXX%s\n",thePage);
+else
+printf("nopage\n");
+
 #ifdef BUILDDOCVIEWER
 	if(thePage!=NULL)
 		{
@@ -190,7 +195,7 @@ void showDocView(GtkWidget* widget,gpointer data)
 }
 
 
-
+#if 0
 void showDocViewXXX(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
@@ -254,6 +259,7 @@ if(thePage==NULL)
 		}
 #endif
 }
+#endif
 
 void defSearchFromBar(GtkWidget* widget,gpointer data)
 {

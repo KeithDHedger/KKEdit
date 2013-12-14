@@ -1,6 +1,6 @@
 /******************************************************
 *
-*     ©keithhedger Tue 16 Jul 20:46:19 BST 2013
+*     keithhedger Tue 16 Jul 20:46:19 BST 2013
 *     kdhedger68713@gmail.com
 *
 *     spellcheck.cpp
