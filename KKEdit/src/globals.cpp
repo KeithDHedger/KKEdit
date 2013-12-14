@@ -260,6 +260,7 @@ void setLanguage(pageStruct* page)
 		g_free(mimetype);
 }
 
+
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 {
 	char*	command;

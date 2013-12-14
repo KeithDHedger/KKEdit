@@ -152,6 +152,47 @@ void docSearch(GtkWidget* widget,gpointer data)
 
 void showDocView(GtkWidget* widget,gpointer data)
 {
+	if(data==NULL)
+		docSearch(NULL,NULL);
+
+#ifdef BUILDDOCVIEWER
+	if(thePage!=NULL)
+		{
+			webkit_web_view_load_uri(webView,thePage);
+			g_free(thePage);
+			thePage=NULL;
+		}
+	else
+		{
+			webKitGoHome(NULL,(void*)webView);
+		}
+	gtk_widget_show_all(docView);
+	gtk_window_present((GtkWindow*)docView);
+
+#else
+	char*	command;
+
+	if(thePage!=NULL)
+		{
+			asprintf(&command,"xdg-open %s",thePage);
+			g_spawn_command_line_async(command,NULL);
+			g_free(command);
+			g_free(thePage);
+			thePage=NULL;
+		}
+	else
+		{
+			asprintf(&command,"xdg-open %s",htmlURI);
+			g_spawn_command_line_async(command,NULL);
+			g_free(command);			
+		}
+#endif
+}
+
+
+
+void showDocViewXXX(GtkWidget* widget,gpointer data)
+{
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
@@ -160,8 +201,12 @@ void showDocView(GtkWidget* widget,gpointer data)
 	if(data==NULL)
 		docSearch(NULL,NULL);
 
+if(thePage==NULL)
+			printf("3333333333\n");
+	
 	if(strcasecmp("file://(null)",thePage)==0)
 		{
+			printf("11111\n");
 			g_free(thePage);
 			if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 				{
@@ -174,6 +219,7 @@ void showDocView(GtkWidget* widget,gpointer data)
 					//return;
 				}
 		}
+			printf("22222222\n");
 
 #ifdef BUILDDOCVIEWER
 	if(thePage!=NULL)

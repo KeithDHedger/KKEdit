@@ -5,7 +5,7 @@ These apps/libs are not necessary but are recommended.
 webkit 1.6.1
 aspell
 gktsu
-
+chdir
 Although webkit is an optional install for the internal docviewer which is enabled by default, if you don't wish to build the docviewer you MUST explicitly disable it using the option '--disable-docviewer' to configure otherwise the configure script will fail.
 
 Source based distros (slackware etc):

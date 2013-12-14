@@ -372,7 +372,8 @@ void externalTool(GtkWidget* widget,gpointer data)
 {
 	toolStruct*	tool=(toolStruct*)data;
 	pageStruct*	page=getPageStructPtr(-1);
-	char*		dirname;
+	char*		docdirname=NULL;
+	char*		tooldirname=NULL;
 	char*		text=NULL;
 	GtkTextIter	start;
 	GtkTextIter	end;
@@ -391,15 +392,16 @@ void externalTool(GtkWidget* widget,gpointer data)
 	tempCommand=g_string_new(tool->command);
 
 	if(page->filePath!=NULL)
-		dirname=g_path_get_dirname(page->filePath);
+		docdirname=g_path_get_dirname(page->filePath);
 	else
-		dirname=strdup(getenv("HOME"));
+		docdirname=strdup(getenv("HOME"));
 
-	chdir(dirname);
+	tooldirname=g_path_get_dirname(tool->filePath);
+	chdir(tooldirname);
 
 	setenv("KKEDIT_CURRENTFILE",page->filePath,1);
 	setenv("KKEDIT_HTMLFILE",htmlFile,1);
-	setenv("KKEDIT_CURRENTDIR",dirname,1);
+	setenv("KKEDIT_CURRENTDIR",docdirname,1);
 	setenv("KKEDIT_DATADIR",DATADIR,1);
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
@@ -410,7 +412,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 		selection=strdup("");
 
 	varData[0]=selection;
-	varData[2]=dirname;
+	varData[2]=docdirname;
 
 	while(vars[loop]!=NULL)
 		{
@@ -452,7 +454,8 @@ void externalTool(GtkWidget* widget,gpointer data)
 	unsetenv("KKEDIT_SELECTION");
 	unsetenv("KKEDIT_HTMLFILE");
 	g_free(text);
-	g_free(dirname);
+	g_free(docdirname);
+	g_free(tooldirname);
 }
 
 void openHelp(GtkWidget* widget,gpointer data)
