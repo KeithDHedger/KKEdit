@@ -1,4 +1,5 @@
 0.0.26
+Fixed .desktop file.
 Fixed minor bug in example tools for case conversion ( thanks sadi! ).
 Greyed out 'Back' button in find/replace when using regex as can't ( yet! ) do a backward regex search.
 Made Regex search optional and remembered.
