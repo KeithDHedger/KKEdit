@@ -1042,9 +1042,12 @@ void buildFindReplace(void)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 	gtk_box_pack_start(GTK_BOX(content_area),vbox,true,true,0);
 
-	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,100);
+	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACE);
 	image=gtk_image_new_from_stock(GTK_STOCK_FIND_AND_REPLACE,GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image((GtkButton*)replace,image);
+
+	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,FINDPREV);
+	gtk_widget_set_sensitive(replace,!useRegex);
 	
 	if(replaceAll==true)
 		gtk_button_set_label((GtkButton*)replace,"Replace All");

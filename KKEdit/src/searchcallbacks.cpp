@@ -1015,7 +1015,7 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 				break;
 			case 3:
 				replaceAll=gtk_toggle_button_get_active((GtkToggleButton*)widget);
-				button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,100);
+				button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACE);
 				if(replaceAll==false)
 					gtk_button_set_label((GtkButton*)button,"Replace");
 				else
@@ -1026,6 +1026,8 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 				break;
 			case 5:
 				useRegex=gtk_toggle_button_get_active((GtkToggleButton*)widget);
+				button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,FINDPREV);
+				gtk_widget_set_sensitive(button,!useRegex);
 				break;
 		}
 }
