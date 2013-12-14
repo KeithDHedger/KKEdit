@@ -1,6 +1,7 @@
 0.0.26
+Greyed out 'Back' button in find/replace when using regex as can't ( yet! ) do a backward regex search.
 Made Regex search optional and remembered.
-Replace unprintable characters in file with "". ( allows opening some files like .csv ).
+Replace unprintable characters in file with "". ( allows opening some files with binary data like .csv ).
 Scan and convert encoding to UTF8 now MUCH better.
 Fixed infinite loop bug in regex search when no match found.
 
