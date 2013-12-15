@@ -1,0 +1,6 @@
+name	Statistics
+command	../scripts/Statistics
+flags	8
+interm	0
+inpopup	0
+alwayspopup	1

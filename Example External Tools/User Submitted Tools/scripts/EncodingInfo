@@ -1,0 +1,13 @@
+#!/bin/bash -e
+
+#Submitted by:
+#©Sadi Yumuşak <sadiyumusak@gmail.com>
+#All comments and suggestions to the above.
+#Tweaked by me.
+
+CHARSET="$(file -bi "$KKEDIT_CURRENTFILE"|awk -F "=" '{print $2}')"
+zenity --info title="File Encoding" --text="The encoding of this file is:\n<big><b>"$CHARSET"</b></big>"
+
+#Original script:
+#CHARSET="$(file -bi "$KKEDIT_CURRENTFILE"|awk -F "=" '{print $2}')"
+#zenity --info title="File Encoding" --text="nnThe encoding of this file is:nn          <big><b>"$CHARSET"</b></big>"

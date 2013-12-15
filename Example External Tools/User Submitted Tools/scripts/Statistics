@@ -1,0 +1,41 @@
+#!/bin/bash -e
+
+#Adapted from Document Statistics tool in medit
+#Submitted by:
+#©Sadi Yumuşak <sadiyumusak@gmail.com>
+#All comments and suggestions to the above.
+#Tweaked by me.
+
+bytes=$( wc -c  "$KKEDIT_CURRENTFILE")
+chars=$( wc -m  "$KKEDIT_CURRENTFILE")
+words=$( wc -w  "$KKEDIT_CURRENTFILE")
+lines=$( wc -l  "$KKEDIT_CURRENTFILE")
+lngst=$( wc -L  "$KKEDIT_CURRENTFILE")
+
+zenity --list --title="Statistics" \
+--width=300 --height=220 \
+--text="Powered by wc and zenity" \
+--column "Sort" \
+"File size: ${bytes%% *}" \
+"Characters: ${chars%% *}" \
+"Words: ${words%% *}" \
+"Lines: ${lines%% *}" \
+"Longest Line: ${lngst%% *}" \
+"Filepath: $KKEDIT_CURRENTFILE"
+
+#Original script:
+#bytes=$( echo "$KKEDIT_SELECTION" | wc -c )
+#chars=$( echo "$KKEDIT_SELECTION" | wc -m )
+#words=$( echo "$KKEDIT_SELECTION" | wc -w )
+#lines=$( echo "$KKEDIT_SELECTION" | wc -l )
+#lngst=$( echo "$KKEDIT_SELECTION" | wc -L )
+#
+#zenity --list --title="Statistics" \
+#--width=200 --height=220 \
+#--text="Powered by wc and zenity" \
+#--column "Sort" \
+#"File size: ${bytes%% *}" \
+#"Characters: ${chars%% *}" \
+#"Words: ${words%% *}" \
+#"Lines: ${lines%% *}" \
+#"Longest Line: ${lngst%% *}"

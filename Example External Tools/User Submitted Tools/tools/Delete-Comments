@@ -1,0 +1,6 @@
+name	Delete Comments
+command	../scripts/RemoveComments
+flags	1
+interm	0
+inpopup	1
+alwayspopup	0

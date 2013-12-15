@@ -1,0 +1,6 @@
+#!/bin/bash -e
+
+echo -n "$KKEDIT_SELECTION"|sort -u
+
+#Original script:
+#echo -n "$KKEDIT_SELECTION"|sort -u
