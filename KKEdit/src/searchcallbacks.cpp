@@ -160,9 +160,23 @@ void showDocView(GtkWidget* widget,gpointer data)
 	if(data==NULL)
 		docSearch(NULL,NULL);
 
+	if(thePage==NULL)
+		{
+					if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+						{
+							selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+							asprintf(&thePage,"https://www.google.co.uk/search?q=%s",selection);
+							webkit_web_view_load_uri(webView,thePage);
+							g_free(selection);
+							g_free(thePage);
+							thePage=NULL;
+						}
+		}
+	
 #ifdef BUILDDOCVIEWER
 	if(thePage!=NULL)
 		{
+		printf("ZZZ%s\n",thePage);
 			if(strcasecmp("file://(null)",thePage)==0)
 				{
 					g_free(thePage);
