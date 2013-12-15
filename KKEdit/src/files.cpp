@@ -573,7 +573,8 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	g_free(contents);
 
-	searchtext=(char*)"[^[:print:]\n\r[:blank:]]";
+//	searchtext=(char*)"\\00[^[:print:]\n\r[:blank:]]";
+	searchtext=(char*)"\\00";
 	replacetext=(char*)"";
 
 	regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,matchflags,NULL);

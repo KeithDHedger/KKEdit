@@ -152,20 +152,36 @@ void docSearch(GtkWidget* widget,gpointer data)
 
 void showDocView(GtkWidget* widget,gpointer data)
 {
+	pageStruct*	page=getPageStructPtr(-1);
+	GtkTextIter	start;
+	GtkTextIter	end;
+	char*		selection=NULL;
+
 	if(data==NULL)
 		docSearch(NULL,NULL);
-
-	if(thePage!=NULL)
-printf("XXX%s\n",thePage);
-else
-printf("nopage\n");
 
 #ifdef BUILDDOCVIEWER
 	if(thePage!=NULL)
 		{
-			webkit_web_view_load_uri(webView,thePage);
-			g_free(thePage);
-			thePage=NULL;
+			if(strcasecmp("file://(null)",thePage)==0)
+				{
+					g_free(thePage);
+					if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+						{
+							selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+							asprintf(&thePage,"https://www.google.co.uk/search?q=%s",selection);
+							webkit_web_view_load_uri(webView,thePage);
+							g_free(selection);
+							g_free(thePage);
+							thePage=NULL;
+						}
+				}
+			else
+				{
+					webkit_web_view_load_uri(webView,thePage);
+					g_free(thePage);
+					thePage=NULL;
+				}
 		}
 	else
 		{
@@ -179,11 +195,29 @@ printf("nopage\n");
 
 	if(thePage!=NULL)
 		{
-			asprintf(&command,"xdg-open %s",thePage);
-			g_spawn_command_line_async(command,NULL);
-			g_free(command);
-			g_free(thePage);
-			thePage=NULL;
+			if(strcasecmp("file://(null)",thePage)==0)
+				{
+					g_free(thePage);
+					if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+						{
+							selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+							asprintf(&thePage,"https://www.google.co.uk/search?q=%s",selection);
+							asprintf(&command,"xdg-open %s",thePage);
+							g_spawn_command_line_async(command,NULL);
+							g_free(selection);
+							g_free(thePage);
+							thePage=NULL;
+							g_free(command);
+						}
+				}
+			else
+				{
+					asprintf(&command,"xdg-open %s",thePage);
+					g_spawn_command_line_async(command,NULL);
+					g_free(command);
+					g_free(thePage);
+					thePage=NULL;
+				}
 		}
 	else
 		{

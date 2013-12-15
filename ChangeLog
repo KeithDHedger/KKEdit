@@ -1,4 +1,5 @@
 0.0.27
+Fixed over enthusiastic utf8 conversion!
 Example tools now use releative paths.
 External tools can now use releative paths to command script.
 Fixed bug with external tools.
