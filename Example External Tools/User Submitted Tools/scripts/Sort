@@ -3,7 +3,9 @@
 #Submitted by:
 #©Sadi Yumuşak <sadiyumusak@gmail.com>
 #All comments and suggestions to the above.
-#Tweaked by me.
+#Script and tools options may have been tweaked by me.
+#
+#Sorts selection.
 
 echo -n "$KKEDIT_SELECTION"|sort
 
