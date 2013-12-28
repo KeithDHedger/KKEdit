@@ -87,39 +87,6 @@ else
 	AC_MSG_NOTICE([Including 'Manpage Editor' menu item])
 fi
 
-
-#AC_MSG_CHECKING([for glib-networking (glib TLS implementation)])
-#save_CFLAGS="$CFLAGS"
-#save_LIBS="$LIBS"
-#CFLAGS="$CFLAGS $GLIB_CFLAGS"
-#LIBS="$LIBS $GLIB_LIBS"
-AC_RUN_IFELSE([AC_LANG_PROGRAM([#include <gio/gio.h>],
-			       [int main() {
-    int supported;
-    g_type_init();
-    supported = g_tls_backend_supports_tls(g_tls_backend_get_default());
-
-    printf("%s\n", supported ? "YES" : "NO");
-}])],
-	      [have_glib_networking=yes],
-	      [have_glib_networking=no],
-	      [have_glib_networking="unknown (cross-compiling)"])
-CFLAGS="$save_CFLAGS"
-LIBS="$save_LIBS"
-AC_MSG_RESULT($have_glib_networking)
-#
-#AC_ARG_ENABLE(tls-check,
-#	      AS_HELP_STRING([--disable-tls-check], [Don't error out if glib-networking is unavailable]))
-#if test "$enable_tls_check" != "no" -a "$have_glib_networking" = "no"; then
-#	AC_MSG_ERROR([libsoup requires glib-networking for TLS support.
-
-
-
-#AC_CHECK_LIB(gio/modules/libgiognutls,[],[AC_DEFINE([_GLIBNETWORKING_], [], [glib-networking])])
-
-#GLIBNETWORKING_MODULES="gtksourceview-2.0 >= 2.9.9"
-#PKG_CHECK_MODULES(GTKSRC, $GTKSRC_MODULES)
-
 AC_OUTPUT(Makefile KKEdit/app/Makefile)
 
 
