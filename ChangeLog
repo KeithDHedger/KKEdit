@@ -1,4 +1,5 @@
 0.0.28
+Fixed minor bug in configure.ac script.
 Replaced simple font name and size entry box in prefs with font select button.
 Fixed Minor bug when using 'Go To Definition' from menu opens a new file jumping to wrong line number.
 Minor updates to user submitted scripts.
