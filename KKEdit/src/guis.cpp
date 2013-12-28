@@ -457,7 +457,6 @@ void doPrefs(void)
 	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
 
 //font button
-
 	hbox=gtk_hbox_new(true,0);
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Font And Size: "),true,true,0);
 	fontButton=gtk_font_button_new_with_font(fontAndSize);
