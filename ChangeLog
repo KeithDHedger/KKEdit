@@ -1,3 +1,8 @@
+0.0.28
+Fixed Minor bug when using 'Go To Definition' from menu opens a new file jumping to wrong line number.
+Minor updates to user submitted scripts.
+If glib networking is installed if selecting "Open Man page" or "Search in GTK-Docs" can't find anything appropriate a google search is performed.
+
 0.0.27
 Fixed over enthusiastic utf8 conversion!
 Example tools now use releative paths.

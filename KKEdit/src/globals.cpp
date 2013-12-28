@@ -376,7 +376,7 @@ functionData* getFunctionByName(char* name,bool recurse)
 											fdata=(functionData*)malloc(sizeof(functionData));
 											fdata->name=strdup(funcname);
 											fdata->file=strdup(filepath);
-											fdata->line=linenumber;
+											fdata->line=linenumber+1;
 											fdata->type=NULL;
 											fdata->define=NULL;
 											fdata->intab=-1;
