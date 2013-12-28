@@ -149,7 +149,7 @@ extern bool				showFindAPI;
 extern bool				showFindDef;
 extern bool				showLiveSearch;
 
-extern GtkWidget*		fontBox;
+extern GtkWidget*		fontButton;
 extern GtkWidget*		terminalBox;
 extern bool				tmpIndent;
 extern bool				tmpLineNumbers;

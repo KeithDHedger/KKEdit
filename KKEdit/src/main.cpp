@@ -73,8 +73,10 @@ void readConfig(void)
 
 					if(strcasecmp(name,"font")==0)
 						{
-							sscanf(buffer,"%*s %s %i",(char*)&strarg,(int*)&intarg);
-							asprintf(&fontAndSize,"%s %i",strarg,intarg);
+//							sscanf(buffer,"%*s %s %i",(char*)&strarg,(int*)&intarg);
+//							asprintf(&fontAndSize,"%s %i",strarg,intarg);
+							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
+							fontAndSize=strdup(strarg);
 						}
 					if(strcasecmp(name,"terminalcommand")==0)
 						{

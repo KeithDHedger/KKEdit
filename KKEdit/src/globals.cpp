@@ -75,7 +75,7 @@ bool			showFindAPI;
 bool			showFindDef;
 bool			showLiveSearch;
 
-GtkWidget*		fontBox;
+GtkWidget*		fontButton;
 GtkWidget*		terminalBox;
 bool			tmpIndent;
 bool			tmpLineNumbers;

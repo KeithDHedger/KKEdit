@@ -456,13 +456,14 @@ void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
 
-//font
-	fontBox=gtk_entry_new();
+//font button
+
 	hbox=gtk_hbox_new(true,0);
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Font And Size: "),true,true,0);
-	gtk_container_add(GTK_CONTAINER(hbox),fontBox);
+	fontButton=gtk_font_button_new_with_font(fontAndSize);
+	gtk_box_pack_start(GTK_BOX(hbox),fontButton,true,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
-	gtk_entry_set_text((GtkEntry*)fontBox,fontAndSize);
+	gtk_widget_set_name(fontButton,"fontbutton");
 
 //terminalcommand
 	terminalBox=gtk_entry_new();

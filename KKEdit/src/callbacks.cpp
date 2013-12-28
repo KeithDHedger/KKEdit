@@ -855,6 +855,9 @@ void setPrefs(GtkWidget* widget,gpointer data)
 		tmpShowLiveSearch=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
 
+//	if(strcmp(gtk_widget_get_name(widget),"fontbutton")==0)
+//		tmpShowLiveSearch=gtk_toggle_button_get_active((GtkToggleButton*)data);
+
 	gtk_widget_set_sensitive(restoreBMs,tmpSaveSessionOnExit);
 
 	if(strcmp(gtk_widget_get_name(widget),"tabs")==0)
@@ -891,10 +894,11 @@ void setPrefs(GtkWidget* widget,gpointer data)
 					terminalCommand=strdup(gtk_entry_get_text((GtkEntry*)terminalBox));
 				}
 
+			
 			if(fontAndSize!=NULL)
 				{
 					g_free(fontAndSize);
-					fontAndSize=strdup(gtk_entry_get_text((GtkEntry*)fontBox));
+					fontAndSize=strdup(gtk_font_button_get_font_name((GtkFontButton*)fontButton));
 				}
 
 			tabWidth=tmpTabWidth;
