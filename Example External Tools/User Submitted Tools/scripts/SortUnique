@@ -8,6 +8,3 @@
 #Sorts selection and removes duplicate lines.
 
 echo -n "$KKEDIT_SELECTION"|sort -u
-
-#Original script:
-#echo -n "$KKEDIT_SELECTION"|sort -u

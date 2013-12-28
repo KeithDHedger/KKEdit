@@ -1,5 +1,5 @@
 name	Delete Comments
-command	../scripts/RemoveComments
+command	../scripts/DeleteComments
 flags	1
 interm	0
 inpopup	1

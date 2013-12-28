@@ -8,6 +8,3 @@
 #Removes extraneous spaces from selection.
 
 echo -n "$KKEDIT_SELECTION"|sed -e 's/\&nbsp;/ /g' -e 's/\s\s\s*/ /g' -e 's/\s\s*$//g' -e 's/^\s\s*//g'
-
-#Original script:
-#echo -n "$KKEDIT_SELECTION"|sed -e 's/\&nbsp;/ /g' -e 's/\s\s\s*/ /g' -e 's/\s\s*$//g' -e 's/^\s\s*//g'

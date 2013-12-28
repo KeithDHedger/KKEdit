@@ -8,6 +8,3 @@
 #Removes blank lines from selected text.
 
 echo -n "$KKEDIT_SELECTION"|sed -e '/^\s*$/d'
-
-#Original script:
-#echo -n "$KKEDIT_SELECTION"|sed -e '/^\s*$/d'

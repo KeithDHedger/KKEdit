@@ -4,8 +4,8 @@ include ../sources
 
 kkedit_SOURCES = $(COMMONSRC)
 
-kkedit_CFLAGS = -O3 -export-dynamic
-kkedit_CXXFLAGS = -O3 -export-dynamic
+kkedit_CFLAGS = -ggdb -O0 -export-dynamic
+kkedit_CXXFLAGS =  -ggdb -O0 -export-dynamic
 
 pixfilesdir = $(pkgdatadir)/pixmaps
 pixfiles_DATA = ../resources/pixmaps/*

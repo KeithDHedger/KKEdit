@@ -6,7 +6,7 @@
 #All comments and suggestions to the above.
 #Script and tools options may have been tweaked by me.
 #
-#Shows document information requires zenity or yad, always shows in popup and needs no selection.
+#Shows document information, requires zenity or yad, always shows in popup and needs no selection.
 
 bytes=$( wc -c  "$KKEDIT_CURRENTFILE")
 chars=$( wc -m  "$KKEDIT_CURRENTFILE")
@@ -24,20 +24,3 @@ zenity --list --title="Statistics" \
 "Lines: ${lines%% *}" \
 "Longest Line: ${lngst%% *}" \
 "Filepath: $KKEDIT_CURRENTFILE"
-
-#Original script:
-#bytes=$( echo "$KKEDIT_SELECTION" | wc -c )
-#chars=$( echo "$KKEDIT_SELECTION" | wc -m )
-#words=$( echo "$KKEDIT_SELECTION" | wc -w )
-#lines=$( echo "$KKEDIT_SELECTION" | wc -l )
-#lngst=$( echo "$KKEDIT_SELECTION" | wc -L )
-#
-#zenity --list --title="Statistics" \
-#--width=200 --height=220 \
-#--text="Powered by wc and zenity" \
-#--column "Sort" \
-#"File size: ${bytes%% *}" \
-#"Characters: ${chars%% *}" \
-#"Words: ${words%% *}" \
-#"Lines: ${lines%% *}" \
-#"Longest Line: ${lngst%% *}"

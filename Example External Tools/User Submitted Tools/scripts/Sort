@@ -8,6 +8,3 @@
 #Sorts selection.
 
 echo -n "$KKEDIT_SELECTION"|sort
-
-#Original script:
-#echo -n "$KKEDIT_SELECTION"|sort
