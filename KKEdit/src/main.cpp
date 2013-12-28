@@ -29,7 +29,6 @@ void readConfig(void)
 	char*	filename;
 	char	buffer[1024];
 	char	name[256];
-	int		intarg;
 	char	strarg[256];
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
