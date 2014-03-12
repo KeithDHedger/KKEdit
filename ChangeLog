@@ -1,3 +1,8 @@
+0.0.29
+Fixed infinite loop bug when no find text in find/replace dialog.
+Fixed find/replace buttons not being labelled/dimmed correctly.
+Fixed not showing replace in all files confirmation when not using regex.
+
 0.0.28
 Fixed minor bug in configure.ac script.
 Replaced simple font name and size entry box in prefs with font select button.

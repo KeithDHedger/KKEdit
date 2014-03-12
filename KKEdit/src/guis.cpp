@@ -976,6 +976,7 @@ void buildFindReplace(void)
 {
 	GtkWidget*	content_area;
 	GtkWidget*	replace;
+	GtkWidget*	goback;
 	GtkWidget*	image;
 	GtkWidget*	label;
 	GtkWidget*	vbox;
@@ -1046,9 +1047,10 @@ void buildFindReplace(void)
 	image=gtk_image_new_from_stock(GTK_STOCK_FIND_AND_REPLACE,GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image((GtkButton*)replace,image);
 
-	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,FINDPREV);
-	gtk_widget_set_sensitive(replace,!useRegex);
+	goback=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,FINDPREV);
+	gtk_widget_set_sensitive(goback,!useRegex);
 	
+	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACE);
 	if(replaceAll==true)
 		gtk_button_set_label((GtkButton*)replace,"Replace All");
 

@@ -409,6 +409,9 @@ void regexFind(int dowhat)
 	int						charendpos;
 	bool					found=false;
 
+	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
+		return;
+
 	if(findInAllFiles==false)
 		currentFindPage=-1;
 	else
@@ -572,6 +575,10 @@ void basicFind(int dowhat)
 	bool					replaceAllFlag;
 	bool					found=false;
 
+
+	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
+		return;
+
 	if(findInAllFiles==false)
 		currentFindPage=-1;
 	else
@@ -675,13 +682,15 @@ void basicFind(int dowhat)
 
 		if((dowhat==REPLACE) && (findInAllFiles==true) && (replaceAll==true))
 			{
-				findInAllFiles=false;
-				for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
-					{
-						gtk_notebook_set_current_page(notebook,j);
-						basicFind(REPLACE);
-					}
-				findInAllFiles=true;
+				if(yesNo((char*)"Do you want to replace in ALL open files?",(char*)"")==GTK_RESPONSE_CANCEL)
+					return;
+						findInAllFiles=false;
+						for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
+							{
+								gtk_notebook_set_current_page(notebook,j);
+								basicFind(REPLACE);
+							}
+						findInAllFiles=true;
 			}
 
 		if((dowhat==REPLACE) && (replaceAll==true))
