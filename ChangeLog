@@ -1,3 +1,7 @@
+0.0.30
+fixed bug in determining mime type of file.
+Fixed debian install instructions in INSTALL file.
+
 0.0.29
 Fixed infinite loop bug when no find text in find/replace dialog.
 Fixed find/replace buttons not being labelled/dimmed correctly.
