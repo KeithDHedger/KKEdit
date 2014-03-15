@@ -683,7 +683,7 @@ void buildMainGui(void)
 	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Live Search");
 
 //src format
-	sourceFormatButton=gtk_menu_tool_button_new(NULL,NULL);
+	sourceFormatButton=gtk_menu_tool_button_new(NULL,"Highlighting");
 	gtk_toolbar_insert((GtkToolbar*)toolbar,sourceFormatButton,-1);
 
 	lm=gtk_source_language_manager_get_default();
@@ -697,7 +697,8 @@ void buildMainGui(void)
 			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 			cnt++;
 		}
-
+	
+gtk_menu_set_screen((GtkMenu*)menu,gdk_screen_get_default());
 	gtk_widget_show_all(menu);
 	gtk_menu_tool_button_set_menu((GtkMenuToolButton*)sourceFormatButton,menu);
 

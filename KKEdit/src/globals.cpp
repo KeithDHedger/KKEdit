@@ -213,6 +213,77 @@ void setLanguage(pageStruct* page)
 	GtkSourceLanguage*			lang=NULL;
 	GtkSourceLanguageManager*	lm=NULL;
 	char*						mimetype;
+	char*						command;
+	char						line[1024];
+	FILE*						fp;
+	GFile*						gfile;
+	GFileInfo*					gfileinfo;
+	const char*					content_type;
+
+	lm=gtk_source_language_manager_new();
+
+	g_object_ref(lm);
+	g_object_set_data_full(G_OBJECT(page->buffer),"languages-manager",lm,(GDestroyNotify)g_object_unref);
+	lm=gtk_source_language_manager_get_default();
+
+	gfile=g_file_new_for_path(page->filePath);
+    gfileinfo=g_file_query_info(gfile,"standard::*",(GFileQueryInfoFlags)0,NULL,NULL);
+
+    content_type=g_file_info_get_content_type(gfileinfo);
+	mimetype=g_content_type_get_mime_type(content_type);
+
+	if(mimetype==NULL)
+		{
+			char*	hold=NULL;
+
+			mimetype=NULL;
+
+			asprintf(&command,"xdg-mime query filetype \"%s\"",page->filePath);
+			fp=popen(command,"r");
+			fgets(line,1024,fp);
+			hold=strdup(line);
+			if(strchr(line,';')!=NULL)
+				asprintf(&mimetype,"%s",sliceBetween(line,(char*)"",(char*)";"));
+			else
+				mimetype=strndup(line,strlen(line)-1);
+
+			free(hold);
+			pclose(fp);
+		}
+
+	lang=gtk_source_language_manager_guess_language(lm,page->filePath,mimetype);
+
+	if (lang==NULL)
+		{
+			getMimeType((char*)page->filePath,&mimetype);
+			lang=gtk_source_language_manager_guess_language(lm,page->filePath,mimetype);
+			//g_print("Language: [%s]\n", gtk_source_language_get_name(lang));
+			if (lang!=NULL)
+				gtk_source_buffer_set_language(page->buffer,lang);
+		}
+	else
+		{
+			//g_print("Language: [%s]\n", gtk_source_language_get_name(lang));
+			gtk_source_buffer_set_language(page->buffer,lang);
+		}
+
+	if(lang!=NULL)
+		page->lang=gtk_source_language_get_name(lang);
+
+	g_object_unref(gfile);
+	g_object_unref(gfileinfo);
+
+	if(mimetype!=NULL)
+		g_free(mimetype);
+}
+
+
+
+void XXsetLanguage(pageStruct* page)
+{
+	GtkSourceLanguage*			lang=NULL;
+	GtkSourceLanguageManager*	lm=NULL;
+	char*						mimetype;
 	gboolean					result_uncertain;
 	char*						command;
 	char						line[1024];
