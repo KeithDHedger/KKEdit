@@ -388,25 +388,6 @@ void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
-//style
-	int cnt=0;
-	int foundname=0;
-	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(gtk_source_style_scheme_manager_get_default());
-	item=gtk_combo_box_text_new();
-	gtk_widget_set_name(item,"style");
-	
-	while(ids[cnt]!=NULL)
-	{
-		gtk_combo_box_text_append_text((GtkComboBoxText*)item,ids[cnt]);
-		if(strcmp(ids[cnt],styleName)==0)
-			foundname=cnt;
-		cnt++;
-	}
-	gtk_combo_box_set_active((GtkComboBox*)item,foundname);
-	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"changed",G_CALLBACK(setPrefs),(void*)item);
-
-
 //single instance
 	item=gtk_check_button_new_with_label("Use single Instance");
 	gtk_widget_set_name(item,"single");
@@ -475,6 +456,30 @@ void doPrefs(void)
 	gtk_container_add(GTK_CONTAINER(hbox),item);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
+
+//style
+	int cnt=0;
+	int foundname=0;
+	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(gtk_source_style_scheme_manager_get_default());
+
+	hbox=gtk_hbox_new(true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Theme: "),true,true,0);
+
+	item=gtk_combo_box_text_new();
+	gtk_widget_set_name(item,"style");
+	
+	while(ids[cnt]!=NULL)
+	{
+		gtk_combo_box_text_append_text((GtkComboBoxText*)item,ids[cnt]);
+		if(strcmp(ids[cnt],styleName)==0)
+			foundname=cnt;
+		cnt++;
+	}
+	gtk_combo_box_set_active((GtkComboBox*)item,foundname);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
+
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+	g_signal_connect(G_OBJECT(item),"changed",G_CALLBACK(setPrefs),(void*)item);
 
 //font button
 	hbox=gtk_hbox_new(true,0);

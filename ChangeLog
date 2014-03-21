@@ -1,3 +1,6 @@
+0.0.31
+Added "Theme" to prefs
+ 
 0.0.30
 fixed bug in determining mime type of file.
 Fixed debian install instructions in INSTALL file.
