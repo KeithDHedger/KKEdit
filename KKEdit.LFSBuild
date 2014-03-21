@@ -4,13 +4,13 @@
 
 PKGNAME="KKEdit"
 TARNAME="$PKGNAME"
-VERSION="0.0.28"
+VERSION="0.0.31"
 BUILD=1
 SECTION="DESKTOP"
 SUFFIX="LFSPKG"
 TARBALL="${TARNAME}-${VERSION}.tar.gz"
 
-wget --no-check-certificate -c "https://googledrive.com/host/0B3Xh0P904QQhckctbTkyekhza0k" -O ${TARBALL}
+#wget --no-check-certificate -c "https://googledrive.com/host/0B3Xh0P904QQhckctbTkyekhza0k" -O ${TARBALL}
 
 PKG="${OUTPUT}/${PKGNAME}"
 
