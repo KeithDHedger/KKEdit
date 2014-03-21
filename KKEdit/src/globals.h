@@ -11,6 +11,7 @@
 #include <sys/stat.h>
 #include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourceview.h>
+#include <gtksourceview/gtksourcestyleschememanager.h>
 
 #include "config.h"
 #ifdef BUILDDOCVIEWER
@@ -72,6 +73,7 @@ struct pageStruct
 	bool				isSplit;
 	const char*			lang;
 	GtkWidget*			tabVbox;
+	bool				showingChanged;
 };
 
 struct toolStruct
@@ -226,6 +228,9 @@ extern char*			functionSearchText;
 extern char*			thePage;
 extern char*			htmlFile;
 extern char*			htmlURI;
+
+extern GtkSourceStyleSchemeManager*	schemeManager;
+extern GtkSourceStyleScheme*		styleScheme;
 
 #ifdef BUILDDOCVIEWER
 extern GtkWidget*		docView;

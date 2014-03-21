@@ -87,12 +87,12 @@ void setFilePrefs(GtkSourceView* sourceview)
 void resetAllFilePrefs(void)
 {
 	pageStruct*	page;
-	GtkSourceStyleScheme*	stylescheme=gtk_source_style_scheme_manager_get_scheme(gtk_source_style_scheme_manager_get_default(),styleName);
+	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
 	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
 		{
 			page=getPageStructPtr(loop);
-			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,stylescheme);
+			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 			setFilePrefs(page->view);
 		}
 }
@@ -446,9 +446,11 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 
 	if(G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT==event_type)
 		{
-			if(page->itsMe==false)
+			if((page->itsMe==false) && (page->showingChanged==false))
 				{
+					page->showingChanged=true;
 					answer=showFileChanged(page->fileName);
+					page->showingChanged=false;
 					if(answer==GTK_RESPONSE_YES)
 						{
 							g_file_get_contents(page->filePath,&buffer,(gsize*)&filelen,NULL);
@@ -501,6 +503,7 @@ pageStruct* makeNewPage(void)
 	page->isSplit=false;
 	page->lang=NULL;
 	page->tabVbox=NULL;
+	page->showingChanged=false;
 //dnd
 	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);
@@ -536,12 +539,6 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	char*					searchtext=NULL;
 	char*					replacetext=NULL;
-
-	char*	path;
-	GtkSourceStyleSchemeManager* schemeManager=gtk_source_style_scheme_manager_get_default();
-	asprintf(&path,"%s/.gnome2/gedit/styles",getenv("HOME"));
-	gtk_source_style_scheme_manager_append_search_path(schemeManager,path);
-	GtkSourceStyleScheme*	stylescheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		return(false);
@@ -631,7 +628,7 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
 
-	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,stylescheme);
+	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
 	gtk_widget_show_all((GtkWidget*)notebook);
 
@@ -644,13 +641,6 @@ void newFile(GtkWidget* widget,gpointer data)
 	GtkWidget*	label;
 	pageStruct*	page;
 
-
-	char*	path;
-	GtkSourceStyleSchemeManager* schemeManager=gtk_source_style_scheme_manager_get_default();
-	asprintf(&path,"%s/.gnome2/gedit/styles",getenv("HOME"));
-	gtk_source_style_scheme_manager_append_search_path(schemeManager,path);
-	GtkSourceStyleScheme*	stylescheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
-
 	page=makeNewPage();
 	page->tabVbox=gtk_vbox_new(true,4);
 	page->filePath=NULL;
@@ -659,7 +649,7 @@ void newFile(GtkWidget* widget,gpointer data)
 	untitledNumber++;
 
 	label=makeNewTab(page->fileName,NULL,page);
-	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,stylescheme);
+	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
     /* move cursor to the beginning */
 	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&iter);

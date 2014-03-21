@@ -831,6 +831,7 @@ void doShutdown(GtkWidget* widget,gpointer data)
 void setPrefs(GtkWidget* widget,gpointer data)
 {
 	char*	stylename;
+	pageStruct* tpage=getPageStructPtr(-1);
 
 	if(strcmp(gtk_widget_get_name(widget),"indent")==0)
 		tmpIndent=gtk_toggle_button_get_active((GtkToggleButton*)data);
@@ -861,6 +862,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			if(tmpStyleName!=NULL)
 				g_free(tmpStyleName);
 			tmpStyleName=gtk_combo_box_text_get_active_text((GtkComboBoxText*)data);
+			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)tpage->buffer,gtk_source_style_scheme_manager_get_scheme(schemeManager,tmpStyleName));
 		}
 
 	gtk_widget_set_sensitive(restoreBMs,tmpSaveSessionOnExit);
@@ -872,7 +874,10 @@ void setPrefs(GtkWidget* widget,gpointer data)
 		tmpDepth=(int)gtk_spin_button_get_value((GtkSpinButton*)data);
 
 	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
-		gtk_widget_destroy(prefswin);
+		{
+			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)tpage->buffer,styleScheme);
+			gtk_widget_destroy(prefswin);
+		}
 
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{

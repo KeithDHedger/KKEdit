@@ -13,6 +13,7 @@
 #include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
+#include <gtksourceview/gtksourcestyleschememanager.h>
 
 #include "config.h"
 #ifdef BUILDDOCVIEWER
@@ -150,6 +151,9 @@ char*			functionSearchText=NULL;
 char*			thePage=NULL;
 char*			htmlFile=NULL;
 char*			htmlURI=NULL;
+
+GtkSourceStyleSchemeManager*	schemeManager;
+GtkSourceStyleScheme*			styleScheme;
 
 #ifdef BUILDDOCVIEWER
 GtkWidget*		docView;

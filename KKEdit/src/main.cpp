@@ -158,7 +158,14 @@ void init(void)
 	g_mkdir_with_parents(filename,493);
 	g_free(filename);
 
+	schemeManager=gtk_source_style_scheme_manager_get_default();
+	asprintf(&filename,"%s/.gnome2/gedit/styles",getenv("HOME"));
+	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
+	g_free(filename);
+
 	readConfig();
+
+	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
 	tmpIndent=indent;
 	tmpLineNumbers=lineNumbers;

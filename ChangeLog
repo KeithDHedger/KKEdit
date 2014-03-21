@@ -1,4 +1,6 @@
 0.0.31
+Fixed multple wanrings that file has changed on disk.
+Added 'live' preview of style scheme to prefs, 'Cancel' resets style and 'Apply' sets style.
 Added local search path to styles so now also looks in ~/.gnome2/gedit/styles.
 Added "Theme" to prefs.
 

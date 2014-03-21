@@ -438,6 +438,7 @@ void doPrefs(void)
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
 //tabwidth  -- CLEAN
+
 	GtkObject*	adj=gtk_adjustment_new(tmpTabWidth,1,64,1,1,0);
 	hbox=gtk_hbox_new(true,0);
 	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
@@ -460,11 +461,6 @@ void doPrefs(void)
 //style
 	int cnt=0;
 	int foundname=0;
-	char* path;
-
-	GtkSourceStyleSchemeManager* schemeManager=gtk_source_style_scheme_manager_get_default();
-	asprintf(&path,"%s/.gnome2/gedit/styles",getenv("HOME"));
-	gtk_source_style_scheme_manager_append_search_path(schemeManager,path);
 	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(schemeManager);
 
 	hbox=gtk_hbox_new(true,0);
