@@ -23,7 +23,6 @@ pushd "${TARNAME}-${VERSION}"
 	CFLAGS="$LFSFLAGS" CXXFLAGS="$LFSFLAGS" ./configure ${CONFIGOPTIONS} --enable-aspell --enable-docviewer
 	make $MAKEFLAGS || exit 1
 	make $MAKEFLAGS install DESTDIR=$PKG || exit 1
-	noblastlink "$PKG"
 popd
 
 if [ "$CHECKETC" -eq 1 ];then
