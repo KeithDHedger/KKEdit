@@ -858,7 +858,8 @@ void setPrefs(GtkWidget* widget,gpointer data)
 
 	if(strcmp(gtk_widget_get_name(widget),"style")==0)
 		{
-			//g_free(tmpStyleName);
+			if(tmpStyleName!=NULL)
+				g_free(tmpStyleName);
 			tmpStyleName=gtk_combo_box_text_get_active_text((GtkComboBoxText*)data);
 		}
 
@@ -881,7 +882,11 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			highLight=tmpHighLight;
 			g_free(styleName);
 			if(styleName!=NULL)
-				styleName=strdup(tmpStyleName);
+				{
+					styleName=strdup(tmpStyleName);
+					g_free(tmpStyleName);
+					tmpStyleName=NULL;
+				}
 			singleUse=tmpSingleUse;
 			onExitSaveSession=tmpSaveSessionOnExit;
 			restoreBookmarks=tmpRestoreBookmarks;

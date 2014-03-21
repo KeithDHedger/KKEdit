@@ -537,7 +537,11 @@ bool openFile(const gchar *filepath,int linenumber)
 	char*					searchtext=NULL;
 	char*					replacetext=NULL;
 
-	GtkSourceStyleScheme*	stylescheme=gtk_source_style_scheme_manager_get_scheme(gtk_source_style_scheme_manager_get_default(),styleName);
+	char*	path;
+	GtkSourceStyleSchemeManager* schemeManager=gtk_source_style_scheme_manager_get_default();
+	asprintf(&path,"%s/.gnome2/gedit/styles",getenv("HOME"));
+	gtk_source_style_scheme_manager_append_search_path(schemeManager,path);
+	GtkSourceStyleScheme*	stylescheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		return(false);
@@ -639,7 +643,13 @@ void newFile(GtkWidget* widget,gpointer data)
 	GtkTextIter	iter;
 	GtkWidget*	label;
 	pageStruct*	page;
-	GtkSourceStyleScheme*	stylescheme=gtk_source_style_scheme_manager_get_scheme(gtk_source_style_scheme_manager_get_default(),styleName);
+
+
+	char*	path;
+	GtkSourceStyleSchemeManager* schemeManager=gtk_source_style_scheme_manager_get_default();
+	asprintf(&path,"%s/.gnome2/gedit/styles",getenv("HOME"));
+	gtk_source_style_scheme_manager_append_search_path(schemeManager,path);
+	GtkSourceStyleScheme*	stylescheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
 	page=makeNewPage();
 	page->tabVbox=gtk_vbox_new(true,4);

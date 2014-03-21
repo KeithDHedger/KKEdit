@@ -460,7 +460,12 @@ void doPrefs(void)
 //style
 	int cnt=0;
 	int foundname=0;
-	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(gtk_source_style_scheme_manager_get_default());
+	char* path;
+
+	GtkSourceStyleSchemeManager* schemeManager=gtk_source_style_scheme_manager_get_default();
+	asprintf(&path,"%s/.gnome2/gedit/styles",getenv("HOME"));
+	gtk_source_style_scheme_manager_append_search_path(schemeManager,path);
+	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(schemeManager);
 
 	hbox=gtk_hbox_new(true,0);
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Theme: "),true,true,0);

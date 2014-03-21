@@ -174,7 +174,7 @@ void init(void)
 	tmpShowFindAPI=showFindAPI;
 	tmpShowFindDef=showFindDef;
 	tmpShowLiveSearch=showLiveSearch;
-	tmpStyleName=styleName;
+	tmpStyleName=strdup(styleName);
 
 	filename=tempnam(NULL,"KKEdit");
 	asprintf(&htmlFile,"%s.html",filename);

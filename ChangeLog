@@ -1,6 +1,7 @@
 0.0.31
-Added "Theme" to prefs
- 
+Added local search path to styles so now also looks in ~/.gnome2/gedit/styles.
+Added "Theme" to prefs.
+
 0.0.30
 fixed bug in determining mime type of file.
 Fixed debian install instructions in INSTALL file.
