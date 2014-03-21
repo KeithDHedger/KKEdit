@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <meta content="text/html; charset=ISO-8859-1"
+    <meta content="text/html; charset=windows-1252"
       http-equiv="Content-Type">
     <title>KKEdit Linux Coders Text Editor Help Page</title>
     <meta content="K.D.Hedger" name="author">
@@ -201,6 +201,7 @@
 
 
 
+
                           In Popup" selected will show in the popup menu
                           regardless of w<font size="-1">hether any text
                             is or is not selected.<br>
@@ -226,9 +227,11 @@
 
 
 
+
                         -f'' WILL <font size="-1">work and show the
                           tail of the file but <font size="-1">WILL NOT
                             follow properly this is a <font size="-1">feature/problem
+
 
 
 
@@ -242,6 +245,7 @@
                           control :(<br>
                           <br>
                         </font>For very </font></font></font></font></font></font></font></font>complex
+
 
 
 
@@ -266,17 +270,29 @@
 
 
 
+
         one in /usr/share/KKEdit/tools ) you must have root privileges.</font><br>
       <hr size="2" width="100%"><br>
       <b><a name="prefsanc"></a></b><b>Preferences</b><br>
       <br>
-      <img alt="prefs" src="prefs.png" height="590" width="343"><br>
+      <img alt="prefs" src="prefs.png" height="560" width="543"><br>
       <br>
       <font size="-1">The Prefs file is created ~/.KKEdit/kkedit.rc and
         will be created/recreated when quitting KKEdit.<br>
         Preferences should be set from 'Edit-&gt;Preferences'<br>
         You can set the command to run an external tool in a terminal
-        from here.</font><br>
+        from here.<br>
+        <br>
+        The 'Theme' can be set for the prefs via the drop down, update
+        of the current page is 'live', click 'Apply' to set the theme
+        globally or 'Cancel' to ignore changes.<br>
+        Themes are stored in "/usr/share/gtksourceview-2.0/styles" (
+        default installed themes ) or locally in ~/.gnome2/gedit/styles,
+        for compatability with gedit as most gktsourceview themes seem
+        to be gedit-centric ;)<br>
+        <img alt="" src="style.png" height="396" width="572"><br>
+        <br>
+      </font>
       <hr size="2" width="100%"><br>
       <a name="featanc"></a><b>Other Features </b><br>
       <br>
@@ -385,6 +401,7 @@
 
 
 
+
                         here</a><font size="-1"> ) <font size="-1">then
                           gtksu will be used for authentication if not a
                           terminal will be used depending on your
@@ -411,7 +428,9 @@
 
 
 
+
                                                   the <font size="-1">toolbar
+
 
 
 
@@ -422,6 +441,7 @@
                                                       size="-1">
                                                       searching
                                                       backwards </font>can
+
 
 
 
@@ -448,7 +468,9 @@
 
 
 
+
                                                         <font size="-1">A</font>ll'
+
 
 
 
@@ -465,6 +487,7 @@
 
 
 
+
                                                           'Wrap<font
                                                           size="-1">'
                                                           option to
@@ -476,6 +499,7 @@
                                                     </font><br>
                                                   </font></font></font></font></font></font></font></font></font></font></font></font></font><br>
                         </font></font></font></font></font></font></font></font></font>You
+
 
 
 
@@ -547,6 +571,7 @@ href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.28.tar.gz
 
 
 
+
                                 but recommended)<br>
                                 Glib-Networking </font></font></font></font></font></font></font></font></font></font></font></font></font><font
         size="-1"><font size="-1"><font size="-1"><font size="-1"><font
@@ -574,10 +599,12 @@ href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.28.tar.gz
 
 
 
+
                                                           but
                                                           recommended)<br>
                                                           <br>
                                                         </font></font></font></font></font></font></font></font></font></font></font></font></font>&nbsp;</font></font></font></font></font></font></font></font></font></font></font></font>webkit
+
 
         is is an optional dependency if you want to build the Gtk-Doc
         viewer disable by adding --disable-docviewer to ./configure or
@@ -621,6 +648,7 @@ href="http://keithhedger.hostingsiteforfree.com/zips/kkedit/KKEdit-0.0.28.tar.gz
         run:<br>
         ./autogen.sh --prefix=/usr&nbsp; </font><font size="-1"><font
           size="-1"><font size="-1"><font size="-1"></font>--enable-aspell</font></font>&nbsp;
+
 
 
 
