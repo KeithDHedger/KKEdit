@@ -830,7 +830,6 @@ void doShutdown(GtkWidget* widget,gpointer data)
 
 void setPrefs(GtkWidget* widget,gpointer data)
 {
-	char*	stylename;
 	pageStruct* tpage=getPageStructPtr(-1);
 
 	if(strcmp(gtk_widget_get_name(widget),"indent")==0)
