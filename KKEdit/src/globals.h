@@ -148,6 +148,7 @@ extern bool				showJumpToLine;
 extern bool				showFindAPI;
 extern bool				showFindDef;
 extern bool				showLiveSearch;
+extern char*			styleName;
 
 extern GtkWidget*		fontButton;
 extern GtkWidget*		terminalBox;
@@ -164,6 +165,7 @@ extern bool				tmpShowJumpToLine;
 extern bool				tmpShowFindAPI;
 extern bool				tmpShowFindDef;
 extern bool				tmpShowLiveSearch;
+extern char*			tmpStyleName;
 
 extern GtkWidget*		toolNameWidget;
 extern GtkWidget*		commandLineWidget;

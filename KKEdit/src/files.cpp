@@ -22,6 +22,9 @@
 #include "navcallbacks.h"
 #include "encoding.h"
 
+
+#include <gtksourceview/gtksourcestyleschememanager.h>
+
 GtkWidget*	vbox;
 char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
@@ -77,15 +80,19 @@ void setFilePrefs(GtkSourceView* sourceview)
 	font_desc=pango_font_description_from_string(fontAndSize);
 	gtk_widget_modify_font((GtkWidget*)sourceview,font_desc);
 	pango_font_description_free(font_desc);
+
+	
 }
 
 void resetAllFilePrefs(void)
 {
 	pageStruct*	page;
+	GtkSourceStyleScheme*	stylescheme=gtk_source_style_scheme_manager_get_scheme(gtk_source_style_scheme_manager_get_default(),styleName);
 
 	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
 		{
 			page=getPageStructPtr(loop);
+			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,stylescheme);
 			setFilePrefs(page->view);
 		}
 }
@@ -509,28 +516,28 @@ pageStruct* makeNewPage(void)
 
 bool openFile(const gchar *filepath,int linenumber)
 {
-	GtkTextIter			iter;
+	GtkTextIter				iter;
+	GtkWidget*				label;
+	gchar*					filename=g_path_get_basename(filepath);
+	pageStruct*				page;
+	GtkTextMark*			scroll2mark=gtk_text_mark_new(NULL,true);
+	char*					str=NULL;
+	char*					recenturi;
+	int						linenum=linenumber-1;
 
+	gchar*					contents;
+	gsize					length;
+	GError*					err=NULL;
+	const gchar*			charset;
+	gsize					br;
+	GRegex*					regex;
+	GRegexCompileFlags		compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED|G_REGEX_CASELESS);
+	GRegexMatchFlags		matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
 
-	GtkWidget*			label;
-	gchar*				filename=g_path_get_basename(filepath);
-	pageStruct*			page;
-	GtkTextMark*		scroll2mark=gtk_text_mark_new(NULL,true);
-	char*				str=NULL;
-	char*				recenturi;
-	int					linenum=linenumber-1;
+	char*					searchtext=NULL;
+	char*					replacetext=NULL;
 
-	gchar*				contents;
-	gsize				length;
-	GError*				err=NULL;
-	const gchar*		charset;
-	gsize				br;
-	GRegex*				regex;
-	GRegexCompileFlags	compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED|G_REGEX_CASELESS);
-	GRegexMatchFlags	matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
-
-	char*				searchtext=NULL;
-	char*				replacetext=NULL;
+	GtkSourceStyleScheme*	stylescheme=gtk_source_style_scheme_manager_get_scheme(gtk_source_style_scheme_manager_get_default(),styleName);
 
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		return(false);
@@ -620,6 +627,8 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
 
+	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,stylescheme);
+
 	gtk_widget_show_all((GtkWidget*)notebook);
 
 	return TRUE;
@@ -630,6 +639,7 @@ void newFile(GtkWidget* widget,gpointer data)
 	GtkTextIter	iter;
 	GtkWidget*	label;
 	pageStruct*	page;
+	GtkSourceStyleScheme*	stylescheme=gtk_source_style_scheme_manager_get_scheme(gtk_source_style_scheme_manager_get_default(),styleName);
 
 	page=makeNewPage();
 	page->tabVbox=gtk_vbox_new(true,4);
@@ -639,6 +649,7 @@ void newFile(GtkWidget* widget,gpointer data)
 	untitledNumber++;
 
 	label=makeNewTab(page->fileName,NULL,page);
+	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,stylescheme);
 
     /* move cursor to the beginning */
 	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&iter);

@@ -749,6 +749,7 @@ void writeConfig(void)
 			fprintf(fd,"showlinenumbers	%i\n",(int)lineNumbers);
 			fprintf(fd,"wrapline	%i\n",(int)lineWrap);
 			fprintf(fd,"highlightcurrentline	%i\n",(int)highLight);
+			fprintf(fd,"stylename	%s\n",styleName);
 			fprintf(fd,"singleuse	%i\n",(int)singleUse);
 			fprintf(fd,"insenssearch	%i\n",(int)insensitiveSearch);
 			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
@@ -829,6 +830,7 @@ void doShutdown(GtkWidget* widget,gpointer data)
 
 void setPrefs(GtkWidget* widget,gpointer data)
 {
+	char*	stylename;
 
 	if(strcmp(gtk_widget_get_name(widget),"indent")==0)
 		tmpIndent=gtk_toggle_button_get_active((GtkToggleButton*)data);
@@ -854,9 +856,11 @@ void setPrefs(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"livesearch")==0)
 		tmpShowLiveSearch=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
-
-//	if(strcmp(gtk_widget_get_name(widget),"fontbutton")==0)
-//		tmpShowLiveSearch=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"style")==0)
+		{
+			//g_free(tmpStyleName);
+			tmpStyleName=gtk_combo_box_text_get_active_text((GtkComboBoxText*)data);
+		}
 
 	gtk_widget_set_sensitive(restoreBMs,tmpSaveSessionOnExit);
 
@@ -875,6 +879,9 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			lineNumbers=tmpLineNumbers;
 			lineWrap=tmpLineWrap;
 			highLight=tmpHighLight;
+			g_free(styleName);
+			if(styleName!=NULL)
+				styleName=strdup(tmpStyleName);
 			singleUse=tmpSingleUse;
 			onExitSaveSession=tmpSaveSessionOnExit;
 			restoreBookmarks=tmpRestoreBookmarks;

@@ -74,6 +74,7 @@ bool			showJumpToLine;
 bool			showFindAPI;
 bool			showFindDef;
 bool			showLiveSearch;
+char*			styleName;
 
 GtkWidget*		fontButton;
 GtkWidget*		terminalBox;
@@ -90,6 +91,7 @@ bool			tmpShowJumpToLine;
 bool			tmpShowFindAPI;
 bool			tmpShowFindDef;
 bool			tmpShowLiveSearch;
+char*			tmpStyleName;
 
 GtkWidget*		toolNameWidget;
 GtkWidget*		commandLineWidget;

@@ -51,6 +51,14 @@ void readConfig(void)
 					if(strcasecmp(name,"singleuse")==0)
 							singleUse=(bool)atoi(strarg);
 
+					if(strcasecmp(name,"stylename")==0)
+						{
+							if(styleName!=NULL)
+								g_free(styleName);
+							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
+							styleName=strdup(strarg);
+						}
+
 					if(strcasecmp(name,"savesessiononexit")==0)
 							onExitSaveSession=(bool)atoi(strarg);
 					if(strcasecmp(name,"restorebookmarks")==0)
@@ -144,6 +152,7 @@ void init(void)
 	showFindAPI=true;
 	showFindDef=true;
 	showLiveSearch=true;
+	styleName=strdup("classic");
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
@@ -165,6 +174,7 @@ void init(void)
 	tmpShowFindAPI=showFindAPI;
 	tmpShowFindDef=showFindDef;
 	tmpShowLiveSearch=showLiveSearch;
+	tmpStyleName=styleName;
 
 	filename=tempnam(NULL,"KKEdit");
 	asprintf(&htmlFile,"%s.html",filename);
