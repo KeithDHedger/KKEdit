@@ -861,7 +861,8 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			if(tmpStyleName!=NULL)
 				g_free(tmpStyleName);
 			tmpStyleName=gtk_combo_box_text_get_active_text((GtkComboBoxText*)data);
-			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)tpage->buffer,gtk_source_style_scheme_manager_get_scheme(schemeManager,tmpStyleName));
+			if(tpage!=NULL)
+				gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)tpage->buffer,gtk_source_style_scheme_manager_get_scheme(schemeManager,tmpStyleName));
 		}
 
 	gtk_widget_set_sensitive(restoreBMs,tmpSaveSessionOnExit);
