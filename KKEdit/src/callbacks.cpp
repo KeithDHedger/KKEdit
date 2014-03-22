@@ -875,7 +875,8 @@ void setPrefs(GtkWidget* widget,gpointer data)
 
 	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
 		{
-			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)tpage->buffer,styleScheme);
+			if(tpage!=NULL)
+				gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)tpage->buffer,styleScheme);
 			gtk_widget_destroy(prefswin);
 		}
 
