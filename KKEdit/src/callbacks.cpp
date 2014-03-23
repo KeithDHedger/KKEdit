@@ -1138,16 +1138,16 @@ void newEditor(GtkWidget* widget,gpointer data)
 #ifdef _GTKSU_
 		system("gtksu -- kkedit -m 2>/dev/null");
 #else
-		asprintf(&command,"%s sudo kkedit -m",terminalCommand);
+		asprintf(&command,"%s sudo kkedit -m &",terminalCommand);
 		system(command);
 		g_free(command);
 #endif
 	if((long)data==2)
-		system("kkedit -m");
+		system("kkedit -m &");
 
 #ifdef _MANPAGEEDITOR_
 	if((long)data==3)
-		system("manpageeditor");
+		system("manpageeditor &");
 #endif
 
 }
