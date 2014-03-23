@@ -1,3 +1,8 @@
+0.0.32
+Fixed 'New Editor' not running as new proccess.
+Fixed 'Manpage Editor' not running as new proccess.
+Fixed Automake warning about new subdir-objects not set.
+
 0.0.31
 Updated 'Help' files.
 Fixed multiple warnings that file has changed on disk.
