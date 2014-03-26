@@ -599,12 +599,28 @@ void doSplitView(GtkWidget *widget,gpointer user_data)
 
 	gtk_widget_show_all(page->pane);
 }
-void changeSourceStyle(GtkWidget* widget,gpointer data);
+
+void changeSourceStyle(GtkWidget* widget,gpointer data)
+{
+	pageStruct*					page=getPageStructPtr(-1);
+	GtkSourceLanguageManager*	lm=gtk_source_language_manager_get_default();
+	const gchar* const*			ids=gtk_source_language_manager_get_language_ids(lm);
+	GtkSourceLanguage*			lang=gtk_source_language_manager_get_language(lm,ids[(long)data]);
+
+	gtk_source_buffer_set_language(page->buffer,lang);
+	page->lang=strdup(ids[(long)data]);
+}
+
 bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 {
-	pageStruct* page;
-	GtkWidget*	menuitem;
-	GtkWidget*	image;
+	pageStruct*					 page;
+	GtkWidget*					menuitem;
+	GtkWidget*					image;
+	GtkWidget*					submenu;
+	GtkWidget*					menuids;
+	GtkSourceLanguageManager*	lm;
+	const gchar* const*			ids;
+	int							cnt=0;
 
 	if(event->button==3 && event->type==GDK_BUTTON_PRESS)
 	    {
@@ -644,33 +660,26 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doSplitView),(void*)page);
 
-//source
-GtkWidget* menurecent;
-GtkWidget* mid;
+//source highlighting
+			lm=gtk_source_language_manager_get_default();
+			ids=gtk_source_language_manager_get_language_ids(lm);
 
-	GtkSourceLanguageManager*	lm;
-	const gchar* const*			ids;
-	int							cnt=0;
-	lm=gtk_source_language_manager_get_default();
-	ids=gtk_source_language_manager_get_language_ids(lm);
+			image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
+			menuitem=gtk_image_menu_item_new_with_label("Source Highlight");
+			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
+			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 
-		image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
-		menuitem=gtk_image_menu_item_new_with_label("Source Highlight");
-		gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
-		gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
+			submenu=gtk_menu_new();
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),submenu);
 
-		menurecent=gtk_menu_new();
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
-
-	while(ids[cnt]!=NULL)
-		{
-			
-			mid=gtk_menu_item_new_with_label(ids[cnt]);
-			gtk_signal_connect(GTK_OBJECT(mid),"activate",G_CALLBACK(changeSourceStyle),(void*)(long)cnt);
-			gtk_menu_shell_append(GTK_MENU_SHELL(menurecent),mid);
-			cnt++;
-		}
-	gtk_widget_show_all(menuitem);
+			while(ids[cnt]!=NULL)
+				{
+					menuids=gtk_menu_item_new_with_label(ids[cnt]);
+					gtk_signal_connect(GTK_OBJECT(menuids),"activate",G_CALLBACK(changeSourceStyle),(void*)(long)cnt);
+					gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuids);
+					cnt++;
+				}
+			gtk_widget_show_all(menuitem);
 
 			gtk_menu_attach_to_widget(GTK_MENU(tabMenu),widget,NULL);
 			gtk_menu_popup(GTK_MENU(tabMenu),NULL,NULL,NULL,NULL,event->button,event->time);
@@ -1175,16 +1184,6 @@ void newEditor(GtkWidget* widget,gpointer data)
 
 }
 
-void changeSourceStyle(GtkWidget* widget,gpointer data)
-{
-	pageStruct*					page=getPageStructPtr(-1);
-	GtkSourceLanguageManager*	lm=gtk_source_language_manager_get_default();
-	const gchar* const*			ids=gtk_source_language_manager_get_language_ids(lm);
-	GtkSourceLanguage*			lang=gtk_source_language_manager_get_language(lm,ids[(long)data]);
-
-	gtk_source_buffer_set_language(page->buffer,lang);
-	page->lang=strdup(ids[(long)data]);
-}
 
 
 
