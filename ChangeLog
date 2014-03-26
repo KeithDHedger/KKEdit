@@ -1,4 +1,6 @@
 0.0.32
+Added new menu icons for 'New Editor' and 'New Admin Editor'.
+Hidden languages no longer shown.
 Source highlighting dropdown list now display language names properly.
 Source highlighting dropdown list now definitely sorted.
 Added 'Bug Reporting' link to help file as suggested.
