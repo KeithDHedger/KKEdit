@@ -565,10 +565,6 @@ void buildMainGui(void)
 	GtkRecentFilter*			filter;
 	GtkWidget*					menurecent;
 
-	GtkSourceLanguageManager*	lm;
-	const gchar* const*			ids;
-	int							cnt=0;
-
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size((GtkWindow*)window,windowWidth,windowHeight);
 	if(windowX!=-1 && windowY!=-1)
