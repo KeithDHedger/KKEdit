@@ -707,7 +707,17 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 
 			for(int j=0;j<cnt;j++)
 				{
-					menuids=gtk_menu_item_new_with_label(idsort[j]);
+					if(strcmp(page->lang,idsort[j])==0)
+						{
+							image=gtk_image_new_from_stock(GTK_STOCK_APPLY,GTK_ICON_SIZE_MENU);
+							menuids=gtk_image_menu_item_new_with_label(idsort[j]);
+							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuids,image);
+						}
+					else
+						{
+							menuids=gtk_menu_item_new_with_label(idsort[j]);
+						}
+					
 					gtk_signal_connect(GTK_OBJECT(menuids),"activate",G_CALLBACK(changeSourceStyle),(void*)(long)idnum[j]);
 					gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuids);
 				}
