@@ -606,9 +606,10 @@ void changeSourceStyle(GtkWidget* widget,gpointer data)
 	GtkSourceLanguageManager*	lm=gtk_source_language_manager_get_default();
 	const gchar* const*			ids=gtk_source_language_manager_get_language_ids(lm);
 	GtkSourceLanguage*			lang=gtk_source_language_manager_get_language(lm,ids[(long)data]);
+	const char*					langname=gtk_source_language_get_name(lang);
 
 	gtk_source_buffer_set_language(page->buffer,lang);
-	page->lang=lang;
+	page->lang=langname;
 }
 
 bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
@@ -710,21 +711,24 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 			for(int j=0;j<cnt;j++)
 				{
 					lang=gtk_source_language_manager_get_language(lm,idsort[j]);
-					langname=gtk_source_language_get_name(lang);
-
-					if(strcmp(page->lang,langname)==0)
+					if(gtk_source_language_get_hidden(lang)!=true)
 						{
-							image=gtk_image_new_from_stock(GTK_STOCK_APPLY,GTK_ICON_SIZE_MENU);
-							menuids=gtk_image_menu_item_new_with_label(langname);
-							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuids,image);
+							langname=gtk_source_language_get_name(lang);
+
+							if(strcmp(page->lang,langname)==0)
+								{
+									image=gtk_image_new_from_stock(GTK_STOCK_APPLY,GTK_ICON_SIZE_MENU);
+									menuids=gtk_image_menu_item_new_with_label(langname);
+									gtk_image_menu_item_set_image((GtkImageMenuItem *)menuids,image);
+								}
+							else
+								{	
+									menuids=gtk_menu_item_new_with_label(langname);
+								}
+
+							gtk_signal_connect(GTK_OBJECT(menuids),"activate",G_CALLBACK(changeSourceStyle),(void*)(long)idnum[j]);
+							gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuids);
 						}
-					else
-						{	
-							menuids=gtk_menu_item_new_with_label(langname);
-						}
-					
-					gtk_signal_connect(GTK_OBJECT(menuids),"activate",G_CALLBACK(changeSourceStyle),(void*)(long)idnum[j]);
-					gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuids);
 				}
 			gtk_widget_show_all(menuitem);
 

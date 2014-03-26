@@ -1,4 +1,5 @@
 0.0.32
+Source highlighting dropdown list now display language names properly.
 Source highlighting dropdown list now definitely sorted.
 Added 'Bug Reporting' link to help file as suggested.
 Moved source higlighting selector to page tab from toolbar.
