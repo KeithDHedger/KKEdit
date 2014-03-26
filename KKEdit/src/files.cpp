@@ -581,7 +581,6 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	g_free(contents);
 
-//	searchtext=(char*)"\\00[^[:print:]\n\r[:blank:]]";
 	searchtext=(char*)"\\00";
 	replacetext=(char*)"";
 

@@ -715,7 +715,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 						{
 							langname=gtk_source_language_get_name(lang);
 
-							if(strcmp(page->lang,langname)==0)
+							if((page->lang!=NULL) && (strcmp(page->lang,langname)==0))
 								{
 									image=gtk_image_new_from_stock(GTK_STOCK_APPLY,GTK_ICON_SIZE_MENU);
 									menuids=gtk_image_menu_item_new_with_label(langname);

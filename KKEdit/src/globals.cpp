@@ -274,6 +274,8 @@ void setLanguage(pageStruct* page)
 
 	if(lang!=NULL)
 		page->lang=gtk_source_language_get_name(lang);
+		else
+			page->lang=NULL;
 
 	g_object_unref(gfile);
 	g_object_unref(gfileinfo);
