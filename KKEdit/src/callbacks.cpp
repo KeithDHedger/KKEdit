@@ -608,7 +608,7 @@ void changeSourceStyle(GtkWidget* widget,gpointer data)
 	GtkSourceLanguage*			lang=gtk_source_language_manager_get_language(lm,ids[(long)data]);
 
 	gtk_source_buffer_set_language(page->buffer,lang);
-	page->lang=strdup(ids[(long)data]);
+	page->lang=ids[(long)data];
 }
 
 bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
@@ -626,6 +626,8 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 	char*						holdstr=NULL;
 	int							holdidnum;
 	bool						flag=true;
+	GtkSourceLanguage*			lang;
+	const char*					langname;
 
 	if(event->button==3 && event->type==GDK_BUTTON_PRESS)
 	    {
@@ -704,27 +706,20 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 								}
 						}
 				}
-GtkSourceLanguage*			lang;
-const char*	langname;
 
 			for(int j=0;j<cnt;j++)
 				{
-				//GtkSourceLanguage*			lang=gtk_source_language_manager_get_language(lm,idsort[j]);
-							//printf("%s\n",gtk_source_language_get_name(lang));
-				
-					if(strcmp(page->lang,idsort[j])==0)
+					lang=gtk_source_language_manager_get_language(lm,idsort[j]);
+					langname=gtk_source_language_get_name(lang);
+
+					if(strcmp(page->lang,langname)==0)
 						{
 							image=gtk_image_new_from_stock(GTK_STOCK_APPLY,GTK_ICON_SIZE_MENU);
-							lang=gtk_source_language_manager_get_language(lm,idsort[j]);
-							langname=gtk_source_language_get_name(lang);
 							menuids=gtk_image_menu_item_new_with_label(langname);
 							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuids,image);
 						}
 					else
 						{	
-							lang=gtk_source_language_manager_get_language(lm,idsort[j]);
-							langname=gtk_source_language_get_name(lang);
-
 							menuids=gtk_menu_item_new_with_label(langname);
 						}
 					
