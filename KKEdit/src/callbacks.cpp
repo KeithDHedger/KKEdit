@@ -608,7 +608,7 @@ void changeSourceStyle(GtkWidget* widget,gpointer data)
 	GtkSourceLanguage*			lang=gtk_source_language_manager_get_language(lm,ids[(long)data]);
 
 	gtk_source_buffer_set_language(page->buffer,lang);
-	page->lang=ids[(long)data];
+	page->lang=lang;
 }
 
 bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
