@@ -738,20 +738,21 @@ void buildMainGui(void)
 
 //extras
 	menuitem=gtk_image_menu_item_new_with_label("New Admin Editor");
-	image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
+//	image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
+	image=gtk_image_new_from_file(DATADIR"/pixmaps/ROOTKKEdit.png");
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newEditor),(void*)1);
 
 	menuitem=gtk_image_menu_item_new_with_label("New Editor");
-	image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
+//	image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
+	image=gtk_image_new_from_file(DATADIR"/pixmaps/MenuKKEdit.png");
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newEditor),(void*)2);
 
 #ifdef _MANPAGEEDITOR_
 	image=gtk_image_new_from_file(DATADIR"/pixmaps/ManPageEditor.png");
-	printf("XXXXXXXXXX%sXXXXXXX\n",DATADIR"/pixmaps/ManPageEditor.png");
 	menuitem=gtk_image_menu_item_new_with_label("Manpage Editor");
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
