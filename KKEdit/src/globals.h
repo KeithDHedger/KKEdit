@@ -218,7 +218,6 @@ extern GtkToolItem*		saveasButton;
 extern GtkToolItem*		closeButton;
 extern GtkToolItem*		redoButton;
 extern GtkToolItem*		undoButton;
-extern GtkToolItem*		sourceFormatButton;
 
 extern GtkWidget*		findReplaceDialog;
 extern GtkWidget*		findBox;

@@ -1,4 +1,5 @@
 0.0.32
+Moved source higlighting selector to page tab from toolbar.
 Fixed 'New Editor' not running as new proccess.
 Fixed 'Manpage Editor' not running as new proccess.
 Fixed Automake warning about new subdir-objects not set.

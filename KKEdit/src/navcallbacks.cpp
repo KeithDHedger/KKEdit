@@ -197,15 +197,18 @@ void jumpToMark(GtkWidget* widget,gpointer glist)
 	pageStruct*		page;
 	GtkTextIter		iter;
 	int				thistab=currentTabNumber;
-
+//	bookMarkStruct*	bookmark=(bookMarkStruct*)glist;
+//	int						modkey=((GdkEventKey*)event)->state;
+//
+//printf("XXX%s\n",(char*)glist);
 	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
 		{
 			page=getPageStructPtr(loop);
 			mark=gtk_text_buffer_get_mark((GtkTextBuffer*)page->buffer,(char*)glist);
+			
 			if(mark!=NULL)
 				{
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
-					//gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
 					scrollToIterInPane(page,&iter);
 					gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 					if(thistab!=loop)

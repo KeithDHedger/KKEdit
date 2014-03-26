@@ -4,6 +4,7 @@
  *
 */
 
+
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <string.h>
@@ -707,26 +708,6 @@ void buildMainGui(void)
 	gtk_toolbar_insert((GtkToolbar*)toolbar,toolbutton,-1);
 	g_signal_connect_after(G_OBJECT(liveSearchWidget),"key-release-event",G_CALLBACK(doLiveSearch),NULL);
 	gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Live Search");
-
-//src format
-	sourceFormatButton=gtk_menu_tool_button_new(NULL,"Highlighting");
-	gtk_toolbar_insert((GtkToolbar*)toolbar,sourceFormatButton,-1);
-
-	lm=gtk_source_language_manager_get_default();
-	ids=gtk_source_language_manager_get_language_ids(lm);
-
-	menu=gtk_menu_new();
-	while(ids[cnt]!=NULL)
-		{
-			menuitem=gtk_menu_item_new_with_label(ids[cnt]);
-			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(changeSourceStyle),(void*)(long)cnt);
-			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-			cnt++;
-		}
-	
-gtk_menu_set_screen((GtkMenu*)menu,gdk_screen_get_default());
-	gtk_widget_show_all(menu);
-	gtk_menu_tool_button_set_menu((GtkMenuToolButton*)sourceFormatButton,menu);
 
 //menus
 //file menu

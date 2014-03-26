@@ -141,7 +141,6 @@ GtkToolItem*	saveasButton;
 GtkToolItem*	closeButton;
 GtkToolItem*	redoButton;
 GtkToolItem*	undoButton;
-GtkToolItem*	sourceFormatButton;
 
 GtkWidget*		findReplaceDialog;
 GtkWidget*		findBox;
