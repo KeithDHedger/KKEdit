@@ -669,7 +669,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 			lm=gtk_source_language_manager_get_default();
 			ids=gtk_source_language_manager_get_language_ids(lm);
 
-			image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
+			image=gtk_image_new_from_stock(GTK_STOCK_SELECT_COLOR,GTK_ICON_SIZE_MENU);
 			menuitem=gtk_image_menu_item_new_with_label("Source Highlight");
 			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
@@ -704,18 +704,28 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 								}
 						}
 				}
+GtkSourceLanguage*			lang;
+const char*	langname;
 
 			for(int j=0;j<cnt;j++)
 				{
+				//GtkSourceLanguage*			lang=gtk_source_language_manager_get_language(lm,idsort[j]);
+							//printf("%s\n",gtk_source_language_get_name(lang));
+				
 					if(strcmp(page->lang,idsort[j])==0)
 						{
 							image=gtk_image_new_from_stock(GTK_STOCK_APPLY,GTK_ICON_SIZE_MENU);
-							menuids=gtk_image_menu_item_new_with_label(idsort[j]);
+							lang=gtk_source_language_manager_get_language(lm,idsort[j]);
+							langname=gtk_source_language_get_name(lang);
+							menuids=gtk_image_menu_item_new_with_label(langname);
 							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuids,image);
 						}
 					else
-						{
-							menuids=gtk_menu_item_new_with_label(idsort[j]);
+						{	
+							lang=gtk_source_language_manager_get_language(lm,idsort[j]);
+							langname=gtk_source_language_get_name(lang);
+
+							menuids=gtk_menu_item_new_with_label(langname);
 						}
 					
 					gtk_signal_connect(GTK_OBJECT(menuids),"activate",G_CALLBACK(changeSourceStyle),(void*)(long)idnum[j]);
