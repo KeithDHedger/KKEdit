@@ -613,7 +613,7 @@ void changeSourceStyle(GtkWidget* widget,gpointer data)
 
 bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 {
-	pageStruct*					 page;
+	pageStruct*					page;
 	GtkWidget*					menuitem;
 	GtkWidget*					image;
 	GtkWidget*					submenu;
@@ -621,6 +621,11 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 	GtkSourceLanguageManager*	lm;
 	const gchar* const*			ids;
 	int							cnt=0;
+	char*						idsort[1000];
+	int							idnum[1000];
+	char*						holdstr=NULL;
+	int							holdidnum;
+	bool						flag=true;
 
 	if(event->button==3 && event->type==GDK_BUTTON_PRESS)
 	    {
@@ -672,12 +677,39 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 			submenu=gtk_menu_new();
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),submenu);
 
+			cnt=0;
 			while(ids[cnt]!=NULL)
 				{
-					menuids=gtk_menu_item_new_with_label(ids[cnt]);
-					gtk_signal_connect(GTK_OBJECT(menuids),"activate",G_CALLBACK(changeSourceStyle),(void*)(long)cnt);
-					gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuids);
+					idsort[cnt]=strdup(ids[cnt]);
+					idnum[cnt]=cnt;
 					cnt++;
+				}
+			idsort[cnt]=NULL;
+	
+			flag=true;
+			while(flag==true)
+				{
+					flag=false;
+					for(int j=0;j<cnt;j++)
+						{
+							if((idsort[j+1]!=NULL) && (strcmp(idsort[j],idsort[j+1])>0))
+								{
+									flag=true;
+									holdstr=idsort[j];
+									idsort[j]=idsort[j+1];
+									idsort[j+1]=holdstr;
+									holdidnum=idnum[j];
+									idnum[j]=idnum[j+1];
+									idnum[j+1]=holdidnum;
+								}
+						}
+				}
+
+			for(int j=0;j<cnt;j++)
+				{
+					menuids=gtk_menu_item_new_with_label(idsort[j]);
+					gtk_signal_connect(GTK_OBJECT(menuids),"activate",G_CALLBACK(changeSourceStyle),(void*)(long)idnum[j]);
+					gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuids);
 				}
 			gtk_widget_show_all(menuitem);
 
@@ -686,8 +718,6 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 			gtk_widget_show_all((GtkWidget*)tabMenu);
 
 			return(true);
-
-
 		}
 	else
 		return(false);
