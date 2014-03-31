@@ -803,7 +803,6 @@ void writeExitData(void)
 			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
 			fprintf(fd,"replaceall	%i\n",(int)replaceAll);
 			fprintf(fd,"allfiles	%i\n",(int)findInAllFiles);
-			fprintf(fd,"nagscreen	%s\n",nagScreen);
 			fclose(fd);
 		}
 	g_free(filename);
@@ -841,6 +840,7 @@ void writeConfig(void)
 			fprintf(fd,"showfindapi	%i\n",(int)showFindAPI);
 			fprintf(fd,"showfinddef	%i\n",(int)showFindDef);
 			fprintf(fd,"showlivesearch	%i\n",(int)showLiveSearch);
+			fprintf(fd,"nagscreen	%i\n",nagScreen);
 
 			fprintf(fd,"tabwidth	%i\n",tabWidth);
 			fprintf(fd,"depth	%i\n",depth);
@@ -938,6 +938,9 @@ void setPrefs(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"livesearch")==0)
 		tmpShowLiveSearch=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
+	if(strcmp(gtk_widget_get_name(widget),"ihavedonated")==0)
+		tmpNagScreen=gtk_toggle_button_get_active((GtkToggleButton*)data);
+
 	if(strcmp(gtk_widget_get_name(widget),"style")==0)
 		{
 			if(tmpStyleName!=NULL)
@@ -987,6 +990,8 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			showHideWidget(findApiWidget,showFindAPI);
 			showHideWidget(findDefWidget,showFindDef);
 			showHideWidget(liveSearchWidget,showLiveSearch);
+
+			nagScreen=tmpNagScreen;
 
 			if(terminalCommand!=NULL)
 				{

@@ -78,6 +78,8 @@ void readConfig(void)
 							tabWidth=atoi(strarg);
 					if(strcasecmp(name,"depth")==0)
 							depth=atoi(strarg);
+					if(strcasecmp(name,"nagscreen")==0)
+						nagScreen=(bool)atoi(strarg);
 
 					if(strcasecmp(name,"font")==0)
 						{
@@ -117,11 +119,6 @@ void readConfig(void)
 							replaceAll=(bool)atoi(strarg);
 					if(strcasecmp(name,"allfiles")==0)
 							findInAllFiles=(bool)atoi(strarg);
-					if(strcasecmp(name,"nagscreen")==0)
-						{
-							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
-							nagScreen=strdup(strarg);
-						}
 				}
 			fclose(fd);
 		}
@@ -159,6 +156,7 @@ void init(void)
 	showFindDef=true;
 	showLiveSearch=true;
 	styleName=strdup("classic");
+	nagScreen=false;
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
@@ -188,6 +186,8 @@ void init(void)
 	tmpShowFindDef=showFindDef;
 	tmpShowLiveSearch=showLiveSearch;
 	tmpStyleName=strdup(styleName);
+
+	tmpNagScreen=nagScreen;
 
 	filename=tempnam(NULL,"KKEdit");
 	asprintf(&htmlFile,"%s.html",filename);
@@ -225,14 +225,8 @@ int main(int argc,char **argv)
 	UniqueResponse 		response;
 	UniqueBackend*		back;
 	char*				dbusname;
-	tm*					timedata;
-	time_t				now;
-	char				makenum[10]={0,};
 
 	gtk_init(&argc,&argv);
-
-	time(&now);
-	timedata=localtime(&now);
 
 	back=unique_backend_create();
 	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace(back));
@@ -240,32 +234,9 @@ int main(int argc,char **argv)
 	message=unique_message_data_new();
 
 	init();
-	
 
-	for(int j=0;j<9;j++)
-		makenum[j]=nagScreen[j];
-
-printf("%i\n",makeCheckDigit(&makenum[0]));
-	if((nagScreen[9]-48)!=makeCheckDigit(&makenum[0]))
-		{
-		printf("XXXX\n");
-			if(nagScreen[0]=='X')
-				{
-					nagScreen=strdup("aaaaaaaaaa");
-					doNagScreen();
-				}
-			else
-				{
-					if((timedata->tm_mon==7)||(timedata->tm_mon==0))
-						nagScreen=strdup("aaaaaaaaaa");
-
-					if((nagScreen[0]=='a') && ((timedata->tm_mon==6)||(timedata->tm_mon==11)))
-						{
-							nagScreen=strdup("bbbbbbbbbb");;
-							doNagScreen();
-						}
-				}
-		}
+	if((nagScreen==false))
+		doNagScreen();
 
 	if((argc>1) && (strcmp(argv[1],"-m")==0))
 		singleOverRide=true;

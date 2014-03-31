@@ -27,7 +27,6 @@ void goToDefine(functionData* fdata)
 		openFile(fdata->file,fdata->line-1);
 	else
 		{
-
 			page=getPageStructPtr(fdata->intab);
 			gtk_notebook_set_current_page(notebook,fdata->intab);
 			gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,fdata->line-1,0);

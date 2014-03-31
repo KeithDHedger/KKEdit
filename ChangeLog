@@ -1,3 +1,7 @@
+0.1.0
+Added plea for money.
+Fixed not jumping to line when selecting goto define and file is not already open.
+
 0.0.32
 Added new menu icons for 'New Editor' and 'New Admin Editor'.
 Hidden languages no longer shown.

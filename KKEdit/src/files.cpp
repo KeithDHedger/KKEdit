@@ -616,7 +616,14 @@ bool openFile(const gchar *filepath,int linenumber)
 	currentPage++;
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 
-   /* move cursor to the linenumber */
+	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
+
+	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
+
+	gtk_widget_show_all((GtkWidget*)notebook);
+	
+	
+  /* move cursor to the linenumber */
 	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,linenum,0);
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
@@ -624,12 +631,7 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark,&iter);  
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
 	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
-
-	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
-
-	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
-
-	gtk_widget_show_all((GtkWidget*)notebook);
+	
 
 	return TRUE;
 }
