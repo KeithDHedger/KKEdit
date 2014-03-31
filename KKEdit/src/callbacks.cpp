@@ -1243,4 +1243,42 @@ void newEditor(GtkWidget* widget,gpointer data)
 
 
 
+void line_mark_activated (GtkSourceGutter *gutter,GtkTextIter *iter,GdkEventButton  *ev,pageStruct* page)
+{
+	GtkSourceBuffer *buffer;
+	GSList *mark_list;
+	const gchar *mark_type;
+
+
+	if (ev->button == 1)
+		mark_type = MARK_TYPE_1;
+//	else
+//		mark_type = MARK_TYPE_2;
+
+	buffer = GTK_SOURCE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (page->view)));
+
+	/* get the marks already in the line */
+	mark_list = gtk_source_buffer_get_source_marks_at_line (buffer,
+								gtk_text_iter_get_line (iter),
+								mark_type);
+	if (mark_list != NULL)
+	{
+		/* just take the first and delete it */
+		gtk_text_buffer_delete_mark (GTK_TEXT_BUFFER (buffer),
+					     GTK_TEXT_MARK (mark_list->data));
+	}
+	else
+	{
+		/* no mark found: create one */
+		gtk_source_buffer_create_source_mark (buffer,
+						      NULL,
+						      mark_type,
+						      iter);
+	}
+
+	g_slist_free (mark_list);
+}
+
+
+
 

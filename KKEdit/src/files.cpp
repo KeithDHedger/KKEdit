@@ -517,6 +517,36 @@ pageStruct* makeNewPage(void)
 	return(page);
 }
 
+
+static void
+add_source_mark_pixbufs (GtkSourceView *view)
+{
+	GdkColor color;
+
+	gdk_color_parse ("lightgreen", &color);
+	gtk_source_view_set_mark_category_background (view, MARK_TYPE_1, &color);
+	gtk_source_view_set_mark_category_icon_from_stock (view, MARK_TYPE_1,GTK_STOCK_FIND);
+	gtk_source_view_set_mark_category_priority (view, MARK_TYPE_1, 1);
+//	gtk_source_view_set_mark_category_tooltip_func (view,
+//							MARK_TYPE_1,
+//							mark_tooltip_func,
+//							NULL,
+//							NULL);
+
+	gdk_color_parse ("pink", &color);
+	gtk_source_view_set_mark_category_background (view, MARK_TYPE_2, &color);
+	gtk_source_view_set_mark_category_icon_from_stock (view, MARK_TYPE_2, GTK_STOCK_NO);
+	gtk_source_view_set_mark_category_priority (view, MARK_TYPE_2, 2);
+//	gtk_source_view_set_mark_category_tooltip_markup_func (view,
+//							       MARK_TYPE_2,
+//							       mark_tooltip_func,
+//							       NULL,
+//							       NULL);
+}
+
+
+
+
 bool openFile(const gchar *filepath,int linenumber)
 {
 	GtkTextIter				iter;
@@ -632,7 +662,9 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
 	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
 	
-
+gtk_source_view_set_show_line_marks (page->view,true);
+g_signal_connect (page->view, "line-mark-activated", G_CALLBACK (line_mark_activated),page);
+	add_source_mark_pixbufs (GTK_SOURCE_VIEW (page->view));
 	return TRUE;
 }
 
