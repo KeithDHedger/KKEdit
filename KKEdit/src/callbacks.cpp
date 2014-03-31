@@ -1270,14 +1270,26 @@ void line_mark_activated (GtkSourceGutter *gutter,GtkTextIter *iter,GdkEventButt
 	else
 	{
 		/* no mark found: create one */
-		gtk_source_buffer_create_source_mark (buffer,
-						      NULL,
-						      mark_type,
-						      iter);
+			newBookMarksList=g_list_append(newBookMarksList,malloc(sizeof(bookMarksNew)));
+			//gtk_source_buffer_create_source_mark (buffer,NULL,mark_type,iter);
+			((bookMarksNew*)newBookMarksList->data)->page=page;
+			((bookMarksNew*)newBookMarksList->data)->mark=gtk_source_buffer_create_source_mark (buffer,NULL,mark_type,iter);
 	}
 
 	g_slist_free (mark_list);
 }
+
+void toggleBookMarkBar(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page;
+
+	page=getPageStructPtr(-1);
+
+	if(page!=NULL)
+		gtk_source_view_set_show_line_marks(page->view,!gtk_source_view_get_show_line_marks (page->view));
+}
+
+
 
 
 

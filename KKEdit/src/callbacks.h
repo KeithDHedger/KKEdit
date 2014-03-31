@@ -47,5 +47,6 @@ void changeSourceStyle(GtkWidget* widget,gpointer data);
 int yesNo(char* question,char* file);
 
 void line_mark_activated (GtkSourceGutter *gutter,GtkTextIter *iter,GdkEventButton  *ev,pageStruct* page);
+void toggleBookMarkBar(GtkWidget* widget,gpointer data);
 
 #endif

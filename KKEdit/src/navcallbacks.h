@@ -25,4 +25,8 @@ void functionSearch(GtkWidget* widget,gpointer data);
 void addBookmark(GtkWidget* widget,gpointer data);
 void gotoLine(GtkWidget* widget,gpointer data);
 
+
+void addBookmarkNew(GtkWidget* widget,gpointer data);
+
+
 #endif

@@ -39,6 +39,11 @@ GtkWidget*		menutools;
 GtkWidget*		menuhelp;
 GtkWidget*		menumanpage;
 
+GList*			newBookMarksList=NULL;
+GtkWidget*		menubookmarknew;
+GtkWidget*		menubookmarksubnew;
+
+
 GtkWidget*		menubookmark;
 GtkWidget*		menubookmarksub;
 GtkWidget*		menuprint;

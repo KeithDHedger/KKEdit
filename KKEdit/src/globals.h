@@ -106,8 +106,21 @@ struct bookMarkStruct
 	GtkTextMark*		mark;
 };
 
+struct bookMarksNew
+{
+	pageStruct*			page;
+	char*				label;
+	GtkSourceMark*		mark;
+	char*				markName;
+};
+
 extern GtkWidget*		window;
 extern GtkNotebook*		notebook;
+
+
+extern GList*			newBookMarksList;
+extern GtkWidget*		menubookmarknew;
+extern GtkWidget*		menubookmarksubnew;
 
 extern GtkWidget*		menubar;
 extern GtkWidget*		menufile;

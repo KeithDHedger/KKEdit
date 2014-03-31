@@ -662,7 +662,7 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
 	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
 	
-gtk_source_view_set_show_line_marks (page->view,true);
+//gtk_source_view_set_show_line_marks (page->view,true);
 g_signal_connect (page->view, "line-mark-activated", G_CALLBACK (line_mark_activated),page);
 	add_source_mark_pixbufs (GTK_SOURCE_VIEW (page->view));
 	return TRUE;

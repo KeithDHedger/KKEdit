@@ -273,3 +273,8 @@ void removeBookmark(GtkWidget* widget,gpointer data)
 {
 	printf("removeBookmark\n");
 }
+
+
+void addBookmarkNew(GtkWidget* widget,gpointer data)
+{
+}
