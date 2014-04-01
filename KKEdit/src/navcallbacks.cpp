@@ -319,10 +319,10 @@ void addBookmark(GtkWidget* widget,gpointer data)
 
 	bookmark->mark=gtk_text_buffer_create_mark((GtkTextBuffer*)page->buffer,name,&iter,true);
 	menuitem=gtk_menu_item_new_with_label(bookmark->label);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);	
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);	
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)name);
 	marknum++;
-	gtk_widget_show_all(menubookmark);
+	gtk_widget_show_all(menuBookMark);
 }
 
 void removeBookmark(GtkWidget* widget,gpointer data)

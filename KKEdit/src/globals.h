@@ -120,8 +120,8 @@ extern GtkNotebook*		notebook;
 
 
 extern GList*			newBookMarksList;
-extern GtkWidget*		menubookmarknew;
-extern GtkWidget*		menubookmarksubnew;
+extern GtkWidget*		menuBookMark;
+extern GtkWidget*		menuBookMarkSubMenu;
 
 extern GtkWidget*		menubar;
 extern GtkWidget*		menufile;
@@ -129,8 +129,7 @@ extern GtkWidget*		menuedit;
 extern GtkWidget*		menufunc;
 extern GtkWidget*		menunav;
 extern GtkWidget*		menutools;
-extern GtkWidget*		menubookmark;
-extern GtkWidget*		menubookmarksub;
+
 extern GtkWidget*		menuhelp;
 extern GtkWidget*		menuprint;
 extern GtkWidget*		menuclose;
