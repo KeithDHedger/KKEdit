@@ -190,6 +190,60 @@ void functionSearch(GtkWidget* widget,gpointer data)
 		}
 }
 
+
+void jumpToMarkNew(GtkWidget* widget,gpointer data)
+{
+	GtkTextMark*	mark;
+	pageStruct*		page;
+	pageStruct*		checkpage;
+	GtkTextIter		iter;
+	int				thistab=currentTabNumber;
+	
+//	bookMarkStruct*	bookmark=(bookMarkStruct*)glist;
+//	int						modkey=((GdkEventKey*)event)->state;
+//
+//printf("XXX%s\n",(char*)glist);
+
+printf("XXX%sXXX\n",((bookMarksNew*)data)->label);
+//return;
+	page=(pageStruct*)((bookMarksNew*)data)->page;
+	mark=(GtkTextMark*)((bookMarksNew*)data)->mark;
+	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+	scrollToIterInPane(page,&iter);
+	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+//		if(thistab!=loop)
+//						gtk_notebook_set_current_page(notebook,loop);
+
+	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
+		{
+			checkpage=getPageStructPtr(loop);
+			if(checkpage==page)
+				{
+					gtk_notebook_set_current_page(notebook,loop);
+					return;
+				}
+		}
+
+return;
+
+	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
+		{
+			page=getPageStructPtr(loop);
+			mark=gtk_text_buffer_get_mark((GtkTextBuffer*)page->buffer,(char*)data);
+			
+			if(mark!=NULL)
+				{
+					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+					scrollToIterInPane(page,&iter);
+					gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+					if(thistab!=loop)
+						gtk_notebook_set_current_page(notebook,loop);
+				}
+		}
+}
+
+
+
 void jumpToMark(GtkWidget* widget,gpointer glist)
 {
 	GtkTextMark*	mark;

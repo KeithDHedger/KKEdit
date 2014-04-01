@@ -24,7 +24,7 @@ void jumpToLineFromBar(GtkWidget* widget,gpointer data);
 void functionSearch(GtkWidget* widget,gpointer data);
 void addBookmark(GtkWidget* widget,gpointer data);
 void gotoLine(GtkWidget* widget,gpointer data);
-
+void jumpToMarkNew(GtkWidget* widget,gpointer glist);
 
 void addBookmarkNew(GtkWidget* widget,gpointer data);
 

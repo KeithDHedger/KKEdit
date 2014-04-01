@@ -112,6 +112,7 @@ struct bookMarksNew
 	char*				label;
 	GtkSourceMark*		mark;
 	char*				markName;
+	int					line;
 };
 
 extern GtkWidget*		window;

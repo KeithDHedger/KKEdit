@@ -1243,38 +1243,79 @@ void newEditor(GtkWidget* widget,gpointer data)
 
 
 
-void line_mark_activated (GtkSourceGutter *gutter,GtkTextIter *iter,GdkEventButton  *ev,pageStruct* page)
+void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButton* ev,pageStruct* page)
 {
-	GtkSourceBuffer *buffer;
-	GSList *mark_list;
-	const gchar *mark_type;
+//	GtkSourceBuffer*	buffer;
+	GSList*			mark_list;
+	const gchar*	mark_type;
+	int				line;
+	GtkTextIter		startprev,endprev;
+	char*			previewtext;
+	char*			starttext;
+	char*			endtext;
+	GtkWidget*		menuitem;
+	gpointer		thisentry;
 
+	bookMarksNew*	bookmarkdata;
 
-	if (ev->button == 1)
-		mark_type = MARK_TYPE_1;
-//	else
-//		mark_type = MARK_TYPE_2;
+	if(ev->button==1)
+		mark_type=MARK_TYPE_1;
 
-	buffer = GTK_SOURCE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (page->view)));
+//	buffer = GTK_SOURCE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (page->view)));
 
 	/* get the marks already in the line */
-	mark_list = gtk_source_buffer_get_source_marks_at_line (buffer,
-								gtk_text_iter_get_line (iter),
-								mark_type);
-	if (mark_list != NULL)
-	{
+	mark_list=gtk_source_buffer_get_source_marks_at_line(page->buffer,gtk_text_iter_get_line(iter),mark_type);
+
+	if (mark_list!=NULL)
+		{
 		/* just take the first and delete it */
-		gtk_text_buffer_delete_mark (GTK_TEXT_BUFFER (buffer),
-					     GTK_TEXT_MARK (mark_list->data));
-	}
+			gtk_text_buffer_delete_mark (GTK_TEXT_BUFFER(page->buffer),GTK_TEXT_MARK(mark_list->data));
+		}
 	else
-	{
+		{
 		/* no mark found: create one */
-			newBookMarksList=g_list_append(newBookMarksList,malloc(sizeof(bookMarksNew)));
+			//thisentry=newBookMarksList;
+//			newBookMarksList=g_list_append(newBookMarksList,malloc(sizeof(bookMarksNew)));
+			bookmarkdata=(bookMarksNew*)malloc(sizeof(bookMarksNew));
+			//if(thisentry==NULL)
+			//	thisentry=newBookMarksList;
 			//gtk_source_buffer_create_source_mark (buffer,NULL,mark_type,iter);
-			((bookMarksNew*)newBookMarksList->data)->page=page;
-			((bookMarksNew*)newBookMarksList->data)->mark=gtk_source_buffer_create_source_mark (buffer,NULL,mark_type,iter);
-	}
+//			((bookMarksNew*)newBookMarksList->data)->page=page;
+//			((bookMarksNew*)newBookMarksList->data)->mark=gtk_source_buffer_create_source_mark (page->buffer,NULL,mark_type,iter);
+			bookmarkdata->page=page;
+			bookmarkdata->mark=gtk_source_buffer_create_source_mark (page->buffer,NULL,mark_type,iter);
+
+//			gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+			line=gtk_text_iter_get_line(iter);
+
+			gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&startprev,line);
+			gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&endprev,line+1);
+			previewtext=gtk_text_iter_get_text(&startprev,&endprev);
+
+			previewtext[strlen(previewtext)-1]=0;
+			g_strchug(previewtext);
+			g_strchomp(previewtext);
+
+			if(strlen(previewtext)>BOOKMAXMARKMENULEN)
+				{
+					starttext=sliceLen(previewtext,-1,BOOKMAXMARKMENULEN/2);
+					endtext=sliceLen(previewtext,strlen(previewtext)-BOOKMAXMARKMENULEN/2,-1);
+					g_free(previewtext);
+					asprintf(&previewtext,"%s...%s",starttext,endtext);
+				}
+
+			printf("%s\n",previewtext);
+	
+//			((bookMarksNew*)newBookMarksList->data)->label=previewtext;	
+			bookmarkdata->label=previewtext;	
+//			menuitem=gtk_menu_item_new_with_label(((bookMarksNew*)newBookMarksList->data)->label);
+			menuitem=gtk_menu_item_new_with_label(bookmarkdata->label);
+			gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksubnew),menuitem);	
+//			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMarkNew),(void*)newBookMarksList->data);
+			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMarkNew),(void*)bookmarkdata);
+//	marknum++;
+			gtk_widget_show_all(menubookmarknew);
+		}
 
 	g_slist_free (mark_list);
 }
