@@ -33,7 +33,7 @@ void toggleBookmark(GtkWidget*,GtkTextIter* titer)
 	pageStruct*		page=getPageStructPtr(-1);
 	GtkWidget*		menuitem;
 	GtkTextMark*	mark;
-	GtkTextIter*		iter;
+	GtkTextIter*	iter;
 	GtkTextIter		siter;
 	int				line;
 	GtkTextIter		startprev,endprev;
