@@ -65,11 +65,14 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 void setFilePrefs(GtkSourceView* sourceview)
 {
 	PangoFontDescription*	font_desc;
+	GdkColor				color;
 
 	gtk_source_view_set_auto_indent(sourceview,indent);
 	gtk_source_view_set_show_line_numbers(sourceview,lineNumbers);
 	gtk_source_view_set_highlight_current_line(sourceview,highLight);
 	gtk_source_view_set_show_line_marks(sourceview,showBMBar);
+	gdk_color_parse(highlightColour,&color);
+	gtk_source_view_set_mark_category_background(sourceview,MARK_TYPE_1,&color);
 
 	if(lineWrap==true)
 		gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_WORD_CHAR);

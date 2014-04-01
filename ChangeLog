@@ -1,4 +1,5 @@
 0.1.0
+Can now change bookmark highlight colour.
 Fixed double free bug in prefs.
 Toggle bookmark bar now affects all open files and is remembered in the prefs.
 Bookmarks can now be added/deleted by clicking on the icon in the bookmark bar.

@@ -498,13 +498,22 @@ void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 	gtk_widget_set_name(fontButton,"fontbutton");
 
-//terminalcommand
+//bm highlight colour
 	terminalBox=gtk_entry_new();
 	hbox=gtk_hbox_new(true,0);
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Terminal Command: "),true,true,0);
 	gtk_container_add(GTK_CONTAINER(hbox),terminalBox);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 	gtk_entry_set_text((GtkEntry*)terminalBox,terminalCommand);
+	gtk_widget_show_all(hbox);
+
+//terminalcommand
+	bmHighlightBox=gtk_entry_new();
+	hbox=gtk_hbox_new(true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Bookmark highlight colour: "),true,true,0);
+	gtk_container_add(GTK_CONTAINER(hbox),bmHighlightBox);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+	gtk_entry_set_text((GtkEntry*)bmHighlightBox,highlightColour);
 	gtk_widget_show_all(hbox);
 
 //nag

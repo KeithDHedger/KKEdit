@@ -995,6 +995,12 @@ void setPrefs(GtkWidget* widget,gpointer data)
 
 			nagScreen=tmpNagScreen;
 
+			if(highlightColour!=NULL)
+				{
+					g_free(highlightColour);
+					highlightColour=strdup(gtk_entry_get_text((GtkEntry*)bmHighlightBox));
+				}
+			
 			if(terminalCommand!=NULL)
 				{
 					g_free(terminalCommand);
@@ -1256,7 +1262,8 @@ void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButto
 
 	if(ev->button==1)
 		mark_type=MARK_TYPE_1;
-
+	else
+		return;
 	/* get the marks already in the line */
 	mark_list=gtk_source_buffer_get_source_marks_at_line(page->buffer,gtk_text_iter_get_line(iter),mark_type);
 

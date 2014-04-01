@@ -47,6 +47,7 @@ char*			highlightColour;
 char*			tmpHighlightColour;
 bool			showBMBar;
 bool			tmpShowBMBar;
+GtkWidget*		bmHighlightBox;
 
 GtkWidget*		menuprint;
 GtkWidget*		menuclose;
