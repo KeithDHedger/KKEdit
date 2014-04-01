@@ -1277,6 +1277,7 @@ void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButto
 			//thisentry=newBookMarksList;
 //			newBookMarksList=g_list_append(newBookMarksList,malloc(sizeof(bookMarksNew)));
 			bookmarkdata=(bookMarksNew*)malloc(sizeof(bookMarksNew));
+			newBookMarksList=g_list_prepend(newBookMarksList,(gpointer)bookmarkdata);
 			//if(thisentry==NULL)
 			//	thisentry=newBookMarksList;
 			//gtk_source_buffer_create_source_mark (buffer,NULL,mark_type,iter);

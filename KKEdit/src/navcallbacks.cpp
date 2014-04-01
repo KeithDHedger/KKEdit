@@ -197,22 +197,41 @@ void jumpToMarkNew(GtkWidget* widget,gpointer data)
 	pageStruct*		page;
 	pageStruct*		checkpage;
 	GtkTextIter		iter;
-	int				thistab=currentTabNumber;
-	
-//	bookMarkStruct*	bookmark=(bookMarkStruct*)glist;
-//	int						modkey=((GdkEventKey*)event)->state;
-//
-//printf("XXX%s\n",(char*)glist);
+	GList* ptr=NULL;
 
-printf("XXX%sXXX\n",((bookMarksNew*)data)->label);
-//return;
+/*
+if(newBookMarksList!=NULL)
+{
+	printf("%s\n",((bookMarksNew*)newBookMarksList->data)->label);
+	nextlist=newBookMarksList->next;
+while(nextlist->next!=NULL)
+{
+	nextlist=nextlist->next;
+	printf("%s\n",((bookMarksNew*)newBookMarksList->data)->label);
+}
+	printf("%s\n",((bookMarksNew*)newBookMarksList->data)->label);
+}
+*/
+
+	ptr=newBookMarksList;
+	while(ptr!=NULL)
+		{
+			printf("%s\n",((bookMarksNew*)ptr->data)->label);
+			//menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
+			//gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+			//gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
+			ptr=g_list_next(ptr);
+		}
+
+
+//printf("XXX%sXXX\n",((bookMarksNew*)data)->label);
+
 	page=(pageStruct*)((bookMarksNew*)data)->page;
 	mark=(GtkTextMark*)((bookMarksNew*)data)->mark;
 	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
 	scrollToIterInPane(page,&iter);
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-//		if(thistab!=loop)
-//						gtk_notebook_set_current_page(notebook,loop);
+
 
 	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
 		{
@@ -221,23 +240,6 @@ printf("XXX%sXXX\n",((bookMarksNew*)data)->label);
 				{
 					gtk_notebook_set_current_page(notebook,loop);
 					return;
-				}
-		}
-
-return;
-
-	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
-		{
-			page=getPageStructPtr(loop);
-			mark=gtk_text_buffer_get_mark((GtkTextBuffer*)page->buffer,(char*)data);
-			
-			if(mark!=NULL)
-				{
-					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
-					scrollToIterInPane(page,&iter);
-					gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-					if(thistab!=loop)
-						gtk_notebook_set_current_page(notebook,loop);
 				}
 		}
 }
