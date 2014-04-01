@@ -1255,6 +1255,7 @@ void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButto
 	char*			endtext;
 	GtkWidget*		menuitem;
 	gpointer		thisentry;
+			GList* ptr=NULL;
 
 	bookMarksNew*	bookmarkdata;
 
@@ -1268,11 +1269,29 @@ void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButto
 
 	if (mark_list!=NULL)
 		{
+			ptr=newBookMarksList;
+			while(ptr!=NULL)
+				{
+					if((gpointer)((bookMarksNew*)ptr->data)->mark==(gpointer)GTK_TEXT_MARK(mark_list->data))
+						{
+						printf("%s\n",((bookMarksNew*)ptr->data)->label);
+						newBookMarksList=g_list_remove(newBookMarksList,ptr->data);
+						gtk_text_buffer_delete_mark (GTK_TEXT_BUFFER(page->buffer),GTK_TEXT_MARK(mark_list->data));
+						break;
+						}
+					ptr=g_list_next(ptr);
+				}
+	//}
+
 		/* just take the first and delete it */
-			gtk_text_buffer_delete_mark (GTK_TEXT_BUFFER(page->buffer),GTK_TEXT_MARK(mark_list->data));
+		//	gtk_text_buffer_delete_mark (GTK_TEXT_BUFFER(page->buffer),GTK_TEXT_MARK(mark_list->data));
 		}
 	else
 		{
+		
+		
+		
+
 		/* no mark found: create one */
 			//thisentry=newBookMarksList;
 //			newBookMarksList=g_list_append(newBookMarksList,malloc(sizeof(bookMarksNew)));
@@ -1316,6 +1335,20 @@ void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButto
 			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMarkNew),(void*)bookmarkdata);
 //	marknum++;
 			gtk_widget_show_all(menubookmarknew);
+
+
+			ptr=newBookMarksList;
+			printf("these are the bms :\n");
+			while(ptr!=NULL)
+		{
+			printf("%s\n",((bookMarksNew*)ptr->data)->label);
+			//menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
+			//gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+			//gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
+			ptr=g_list_next(ptr);
+		}
+		printf("\n\n");
+
 		}
 
 	g_slist_free (mark_list);
