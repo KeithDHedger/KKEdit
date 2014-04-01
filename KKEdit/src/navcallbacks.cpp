@@ -190,7 +190,6 @@ void functionSearch(GtkWidget* widget,gpointer data)
 		}
 }
 
-
 void jumpToMark(GtkWidget* widget,gpointer data)
 {
 	GtkTextMark*	mark;

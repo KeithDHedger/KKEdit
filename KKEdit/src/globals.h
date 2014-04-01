@@ -122,6 +122,10 @@ extern GtkNotebook*		notebook;
 extern GList*			newBookMarksList;
 extern GtkWidget*		menuBookMark;
 extern GtkWidget*		menuBookMarkSubMenu;
+extern char*			highlightColour;
+extern char*			tmpHighlightColour;
+extern bool				showBMBar;
+extern bool				tmpShowBMBar;
 
 extern GtkWidget*		menubar;
 extern GtkWidget*		menufile;

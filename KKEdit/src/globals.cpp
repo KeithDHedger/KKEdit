@@ -43,6 +43,10 @@ GtkWidget*		menumanpage;
 GList*			newBookMarksList=NULL;
 GtkWidget*		menuBookMark;
 GtkWidget*		menuBookMarkSubMenu;
+char*			highlightColour;
+char*			tmpHighlightColour;
+bool			showBMBar;
+bool			tmpShowBMBar;
 
 GtkWidget*		menuprint;
 GtkWidget*		menuclose;

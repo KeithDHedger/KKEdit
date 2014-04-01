@@ -389,6 +389,13 @@ void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
+//show bookmark bar
+	item=gtk_check_button_new_with_label("Show Bookmark Bar");
+	gtk_widget_set_name(item,"showbmbar");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,showBMBar);
+	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+
 //single instance
 	item=gtk_check_button_new_with_label("Use single Instance");
 	gtk_widget_set_name(item,"single");

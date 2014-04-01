@@ -81,6 +81,15 @@ void readConfig(void)
 					if(strcasecmp(name,"nagscreen")==0)
 						nagScreen=(bool)atoi(strarg);
 
+					if(strcasecmp(name,"showbmbar")==0)
+						showBMBar=(bool)atoi(strarg);
+
+					if(strcasecmp(name,"higlightcolour")==0)
+						{
+							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
+							highlightColour=strdup(strarg);
+						}
+
 					if(strcasecmp(name,"font")==0)
 						{
 							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
@@ -157,6 +166,8 @@ void init(void)
 	showLiveSearch=true;
 	styleName=strdup("classic");
 	nagScreen=false;
+	highlightColour=strdup("Gray 75");
+	showBMBar=false;
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
@@ -188,6 +199,8 @@ void init(void)
 	tmpStyleName=strdup(styleName);
 
 	tmpNagScreen=nagScreen;
+	tmpHighlightColour=highlightColour;
+	tmpShowBMBar=showBMBar;
 
 	filename=tempnam(NULL,"KKEdit");
 	asprintf(&htmlFile,"%s.html",filename);

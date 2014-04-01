@@ -835,6 +835,10 @@ void writeConfig(void)
 			fprintf(fd,"showfinddef	%i\n",(int)showFindDef);
 			fprintf(fd,"showlivesearch	%i\n",(int)showLiveSearch);
 			fprintf(fd,"nagscreen	%i\n",nagScreen);
+			fprintf(fd,"nagscreen	%i\n",nagScreen);
+
+			fprintf(fd,"showbmbar	%i\n",(int)showBMBar);
+			fprintf(fd,"higlightcolour	%s\n",highlightColour);
 
 			fprintf(fd,"tabwidth	%i\n",tabWidth);
 			fprintf(fd,"depth	%i\n",depth);
@@ -923,6 +927,9 @@ void setPrefs(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"marks")==0)
 		tmpRestoreBookmarks=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
+	if(strcmp(gtk_widget_get_name(widget),"showbmbar")==0)
+		tmpShowBMBar=gtk_toggle_button_get_active((GtkToggleButton*)data);
+
 	if(strcmp(gtk_widget_get_name(widget),"jtolintool")==0)
 		tmpShowJumpToLine=gtk_toggle_button_get_active((GtkToggleButton*)data);
 	if(strcmp(gtk_widget_get_name(widget),"findapiintool")==0)
@@ -965,13 +972,14 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			lineNumbers=tmpLineNumbers;
 			lineWrap=tmpLineWrap;
 			highLight=tmpHighLight;
-			g_free(styleName);
+			showBMBar=tmpShowBMBar;
+
 			if(styleName!=NULL)
 				{
+					g_free(styleName);
 					styleName=strdup(tmpStyleName);
-					g_free(tmpStyleName);
-					tmpStyleName=NULL;
 				}
+
 			singleUse=tmpSingleUse;
 			onExitSaveSession=tmpSaveSessionOnExit;
 			restoreBookmarks=tmpRestoreBookmarks;
@@ -1320,12 +1328,8 @@ void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButto
 
 void toggleBookMarkBar(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page;
-
-	page=getPageStructPtr(-1);
-
-	if(page!=NULL)
-		gtk_source_view_set_show_line_marks(page->view,!gtk_source_view_get_show_line_marks (page->view));
+	showBMBar=!showBMBar;
+	resetAllFilePrefs();
 }
 
 
