@@ -1,4 +1,6 @@
 0.1.0
+Bookmarks now toggled rather than added.
+Added 'Toggle Bookmark' to context menu.
 Can now change bookmark highlight colour.
 Fixed double free bug in prefs.
 Toggle bookmark bar now affects all open files and is remembered in the prefs.

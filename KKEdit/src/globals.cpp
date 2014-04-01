@@ -701,9 +701,9 @@ void rebuildBookMarkMenu(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookMarkBar),NULL);
 
-	menuitem=gtk_menu_item_new_with_label("Add Bookmark");
+	menuitem=gtk_menu_item_new_with_label("Toggle Bookmark");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(addBookmark),NULL);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
