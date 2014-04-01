@@ -236,14 +236,27 @@ void closeAllTabs(GtkWidget* widget,gpointer data)
 			closeTab(NULL,0);
 		}
 
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuBookMark),NULL);
-	menuBookMarkSubMenu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuBookMark),menuBookMarkSubMenu);
-	menuitem=gtk_menu_item_new_with_label("Add Bookmark");
-	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(addBookmark),NULL);
-	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+
+
+//rebuild bookmark menu
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuBookMark),NULL);
+			menuBookMarkSubMenu=gtk_menu_new();
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuBookMark),menuBookMarkSubMenu);
+			menuitem=gtk_menu_item_new_with_label("Toggle Bookmark");
+			gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookMarkBar),NULL);
+			menuitem=gtk_separator_menu_item_new();
+			gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+
+
+//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuBookMark),NULL);
+//	menuBookMarkSubMenu=gtk_menu_new();
+//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuBookMark),menuBookMarkSubMenu);
+//	menuitem=gtk_menu_item_new_with_label("Add Bookmark");
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(addBookmark),NULL);
+//	menuitem=gtk_separator_menu_item_new();
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
 	gtk_widget_show_all(menuBookMark);
 }
 
@@ -1240,13 +1253,8 @@ void newEditor(GtkWidget* widget,gpointer data)
 
 }
 
-
-
-
-
 void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButton* ev,pageStruct* page)
 {
-//	GtkSourceBuffer*	buffer;
 	GSList*			mark_list;
 	const gchar*	mark_type;
 	int				line;
@@ -1255,98 +1263,65 @@ void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButto
 	char*			starttext;
 	char*			endtext;
 	GtkWidget*		menuitem;
-	gpointer		thisentry;
-			GList* ptr=NULL;
-
+	GList*			ptr=NULL;
 	bookMarksNew*	bookmarkdata;
+	GtkWidget*		submenu;
 
 	if(ev->button==1)
 		mark_type=MARK_TYPE_1;
-
-//	buffer = GTK_SOURCE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (page->view)));
 
 	/* get the marks already in the line */
 	mark_list=gtk_source_buffer_get_source_marks_at_line(page->buffer,gtk_text_iter_get_line(iter),mark_type);
 
 	if (mark_list!=NULL)
 		{
+			//remove entry from bookmark list
 			ptr=newBookMarksList;
 			while(ptr!=NULL)
 				{
 					if((gpointer)((bookMarksNew*)ptr->data)->mark==(gpointer)GTK_TEXT_MARK(mark_list->data))
 						{
-						printf("%s\n",((bookMarksNew*)ptr->data)->label);
-						newBookMarksList=g_list_remove(newBookMarksList,ptr->data);
-						gtk_text_buffer_delete_mark (GTK_TEXT_BUFFER(page->buffer),GTK_TEXT_MARK(mark_list->data));
-						break;
+							newBookMarksList=g_list_remove(newBookMarksList,ptr->data);
+							gtk_text_buffer_delete_mark (GTK_TEXT_BUFFER(page->buffer),GTK_TEXT_MARK(mark_list->data));
+							break;
 						}
 					ptr=g_list_next(ptr);
 				}
-	//}
 
-/*
-//newbookmarks
-	menubookmarknew=gtk_menu_item_new_with_label("Bookmarks");
-	menubookmarksubnew=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menubookmarknew),menubookmarksubnew);
-	menuitem=gtk_menu_item_new_with_label("Toggle Bookmark");
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksubnew),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookMarkBar),NULL);
-
-	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksubnew),menuitem);
-
-*/
 		/* just take the first and delete it */
-		//	gtk_text_buffer_delete_mark (GTK_TEXT_BUFFER(page->buffer),GTK_TEXT_MARK(mark_list->data));
-			GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menuBookMark);
-			//GtkWidget* bmSubMenu;
-			GtkWidget*	menuitem;
-			if (submenu!=NULL)
+			submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menuBookMark);
+			if(submenu!=NULL)
 				gtk_menu_item_set_submenu((GtkMenuItem*)menuBookMark,NULL);
 
-				menuBookMarkSubMenu=gtk_menu_new();
-				gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuBookMark),menuBookMarkSubMenu);
-				menuitem=gtk_menu_item_new_with_label("Toggle Bookmark");
-				gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
-				gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookMarkBar),NULL);
-				menuitem=gtk_separator_menu_item_new();
-				gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+//rebuild bookmark menu
+			menuBookMarkSubMenu=gtk_menu_new();
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuBookMark),menuBookMarkSubMenu);
+			menuitem=gtk_menu_item_new_with_label("Toggle Bookmark");
+			gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookMarkBar),NULL);
+			menuitem=gtk_separator_menu_item_new();
+			gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
 
-				//gtk_menu_item_set_submenu(GTK_MENU_ITEM(menubookmarknew),bmSubMenu);
-				ptr=newBookMarksList;
-					while(ptr!=NULL)
-						{
-							menuitem=gtk_image_menu_item_new_with_label(((bookMarksNew*)ptr->data)->label);
-							gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
-							//gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
-							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMarkNew),(void*)ptr->data);
-							ptr=g_list_next(ptr);
-						}
-	refreshMainWindow();
+			ptr=newBookMarksList;
+			while(ptr!=NULL)
+				{
+					menuitem=gtk_image_menu_item_new_with_label(((bookMarksNew*)ptr->data)->label);
+					gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMarkNew),(void*)ptr->data);
+					ptr=g_list_next(ptr);
+				}
+			gtk_widget_show_all(menuBookMark);
 		}
 	else
 		{
-		
-		
-		
-
 		/* no mark found: create one */
-			//thisentry=newBookMarksList;
-//			newBookMarksList=g_list_append(newBookMarksList,malloc(sizeof(bookMarksNew)));
 			bookmarkdata=(bookMarksNew*)malloc(sizeof(bookMarksNew));
 			newBookMarksList=g_list_append(newBookMarksList,(gpointer)bookmarkdata);
-			//if(thisentry==NULL)
-			//	thisentry=newBookMarksList;
-			//gtk_source_buffer_create_source_mark (buffer,NULL,mark_type,iter);
-//			((bookMarksNew*)newBookMarksList->data)->page=page;
-//			((bookMarksNew*)newBookMarksList->data)->mark=gtk_source_buffer_create_source_mark (page->buffer,NULL,mark_type,iter);
 			bookmarkdata->page=page;
-			bookmarkdata->mark=gtk_source_buffer_create_source_mark (page->buffer,NULL,mark_type,iter);
+			bookmarkdata->mark=gtk_source_buffer_create_source_mark(page->buffer,NULL,mark_type,iter);
 
-//			gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+//preview text for menu
 			line=gtk_text_iter_get_line(iter);
-
 			gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&startprev,line);
 			gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&endprev,line+1);
 			previewtext=gtk_text_iter_get_text(&startprev,&endprev);
@@ -1363,34 +1338,14 @@ void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButto
 					asprintf(&previewtext,"%s...%s",starttext,endtext);
 				}
 
-			printf("%s\n",previewtext);
-	
-//			((bookMarksNew*)newBookMarksList->data)->label=previewtext;	
 			bookmarkdata->label=previewtext;	
-//			menuitem=gtk_menu_item_new_with_label(((bookMarksNew*)newBookMarksList->data)->label);
 			menuitem=gtk_menu_item_new_with_label(bookmarkdata->label);
 			gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);	
-//			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMarkNew),(void*)newBookMarksList->data);
 			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMarkNew),(void*)bookmarkdata);
-//	marknum++;
 			gtk_widget_show_all(menuBookMark);
-
-
-			ptr=newBookMarksList;
-			printf("these are the bms :\n");
-			while(ptr!=NULL)
-		{
-			printf("%s\n",((bookMarksNew*)ptr->data)->label);
-			//menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
-			//gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-			//gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
-			ptr=g_list_next(ptr);
-		}
-		printf("\n\n");
-
 		}
 
-	g_slist_free (mark_list);
+	g_slist_free(mark_list);
 }
 
 void toggleBookMarkBar(GtkWidget* widget,gpointer data)

@@ -944,19 +944,6 @@ void buildMainGui(void)
 //function menu
 	menufunc=gtk_menu_item_new_with_label("Functions");
 
-/*
-//bookmarks
-	menubookmark=gtk_menu_item_new_with_label("Bookmarks");
-	menubookmarksub=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menubookmark),menubookmarksub);
-	menuitem=gtk_menu_item_new_with_label("Add Bookmark");
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(addBookmark),NULL);
-
-	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubookmarksub),menuitem);
-*/
-
 //newbookmarks
 	menuBookMark=gtk_menu_item_new_with_label("Bookmarks");
 	menuBookMarkSubMenu=gtk_menu_new();
@@ -991,7 +978,6 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menunav);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufunc);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuBookMark);
-//	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menubookmarknew);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menutools);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
 

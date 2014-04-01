@@ -370,6 +370,7 @@ void saveSession(GtkWidget* widget,gpointer data)
 		}
 }
 
+//TOBE REDONE
 void restoreSession(GtkWidget* widget,gpointer data)
 {
 	FILE*		fd=NULL;
@@ -400,7 +401,7 @@ void restoreSession(GtkWidget* widget,gpointer data)
 									gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
 									intarg++;
 									gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
-									addBookmark(NULL,NULL);
+									//addBookmark(NULL,NULL);
 								}
 							fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
