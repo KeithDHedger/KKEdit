@@ -27,6 +27,7 @@
 #include "globals.h"
 #include "searchcallbacks.h"
 #include "callbacks.h"
+#include "navcallbacks.h"
 
 GtkWidget*		window=NULL;
 GtkNotebook*	notebook=NULL;
@@ -678,4 +679,27 @@ void buildToolsList(void)
 		}
 	g_free(datafolder[0]);
 	g_free(datafolder[1]);
+}
+
+void rebuildBookMarkMenu(void)
+{
+	GtkWidget*	menuitem;
+	GtkWidget*	submenu;
+
+	submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menuBookMark);
+	if(submenu!=NULL)
+		gtk_menu_item_set_submenu((GtkMenuItem*)menuBookMark,NULL);
+
+	menuBookMarkSubMenu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuBookMark),menuBookMarkSubMenu);
+	menuitem=gtk_menu_item_new_with_label("Toggle Bookmark Bar");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookMarkBar),NULL);
+
+	menuitem=gtk_menu_item_new_with_label("Add Bookmark");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(addBookmark),NULL);
+
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
 }

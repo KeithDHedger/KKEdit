@@ -946,15 +946,7 @@ void buildMainGui(void)
 
 //newbookmarks
 	menuBookMark=gtk_menu_item_new_with_label("Bookmarks");
-	menuBookMarkSubMenu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuBookMark),menuBookMarkSubMenu);
-	menuitem=gtk_menu_item_new_with_label("Toggle Bookmark");
-	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookMarkBar),NULL);
-
-	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
-
+	rebuildBookMarkMenu();
 
 //external tools
 	menutools=gtk_menu_item_new_with_label("Tools");
