@@ -374,7 +374,7 @@ void saveSession(GtkWidget* widget,gpointer data)
 					mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
 					linenumber=gtk_text_iter_get_line(&iter);
-					fprintf(fd,"%i %s\n",linenumber,page->filePath);
+					fprintf(fd,"%i %s\n",linenumber+1,page->filePath);
 
 					ptr=newBookMarksList;
 					while(ptr!=NULL)
@@ -431,7 +431,7 @@ void restoreSession(GtkWidget* widget,gpointer data)
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 						}
 
-					gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,currentline-1);
+					gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,currentline);
 					gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
 					scrollToIterInPane(page,&markiter);
 				}
