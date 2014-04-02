@@ -166,7 +166,7 @@ void init(void)
 	showLiveSearch=true;
 	styleName=strdup("classic");
 	nagScreen=false;
-	highlightColour=strdup("Gray 75");
+	highlightColour=strdup("#A3ACFF");
 	showBMBar=false;
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
