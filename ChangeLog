@@ -1,4 +1,5 @@
 0.1.0
+Fixed restoring file name with spaces ( again! )
 Redone save/restore session.
 Bookmarks now toggled rather than added.
 Added 'Toggle Bookmark' to context menu.
