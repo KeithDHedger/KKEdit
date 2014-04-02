@@ -374,7 +374,7 @@ void saveSession(GtkWidget* widget,gpointer data)
 					mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
 					linenumber=gtk_text_iter_get_line(&iter);
-					fprintf(fd,"%i %s\n",linenumber+1,page->filePath);
+					fprintf(fd,"%i %s\n",linenumber,page->filePath);
 
 					ptr=newBookMarksList;
 					while(ptr!=NULL)
