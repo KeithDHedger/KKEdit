@@ -1,7 +1,9 @@
 0.1.0
+Redone save/restore session.
 Bookmarks now toggled rather than added.
 Added 'Toggle Bookmark' to context menu.
 Can now change bookmark highlight colour.
+Added bookmark icon.
 Fixed double free bug in prefs.
 Toggle bookmark bar now affects all open files and is remembered in the prefs.
 Bookmarks can now be added/deleted by clicking on the icon in the bookmark bar.
