@@ -248,9 +248,6 @@ int main(int argc,char **argv)
 
 	init();
 
-	if((nagScreen==false))
-		doNagScreen();
-
 	if((argc>1) && (strcmp(argv[1],"-m")==0))
 		singleOverRide=true;
 
@@ -297,6 +294,9 @@ int main(int argc,char **argv)
 			unique_app_watch_window(app,(GtkWindow*)window);
 			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
 			setSensitive();
+
+			if((nagScreen==false))
+				doNagScreen();
 
 			gtk_main();
 		}
