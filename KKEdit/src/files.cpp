@@ -83,8 +83,6 @@ void setFilePrefs(GtkSourceView* sourceview)
 	font_desc=pango_font_description_from_string(fontAndSize);
 	gtk_widget_modify_font((GtkWidget*)sourceview,font_desc);
 	pango_font_description_free(font_desc);
-
-	
 }
 
 void resetAllFilePrefs(void)
@@ -416,7 +414,6 @@ void restoreSession(GtkWidget* widget,gpointer data)
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
 					sscanf(buffer,"%i %"VALIDFILENAMECHARS"s",(int*)&currentline,(char*)&strarg);
-					fprintf(stderr,"line %i path %s\n",intarg,strarg);
 					openFile(strarg,currentline);
 					fgets(buffer,2048,fd);
 					sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
@@ -499,6 +496,21 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 		}
 }
 
+void add_source_mark_pixbufs (GtkSourceView *view)
+{
+	GdkColor	color;
+	GtkImage*	image;
+	GdkPixbuf*	pbuf;
+
+	image=(GtkImage*)gtk_image_new_from_file(DATADIR"/pixmaps/BookMark.png");
+	pbuf=gtk_image_get_pixbuf(image);
+
+	gdk_color_parse(highlightColour,&color);
+	gtk_source_view_set_mark_category_background(view,MARK_TYPE_1,&color);
+	gtk_source_view_set_mark_category_icon_from_pixbuf (view,MARK_TYPE_1,pbuf);
+	gtk_source_view_set_mark_category_priority(view,MARK_TYPE_1,1);
+}
+
 pageStruct* makeNewPage(void)
 {
 	pageStruct*		page;
@@ -546,22 +558,10 @@ pageStruct* makeNewPage(void)
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 
+	g_signal_connect(page->view, "line-mark-activated",G_CALLBACK(line_mark_activated),page);
+	add_source_mark_pixbufs(GTK_SOURCE_VIEW(page->view));
+
 	return(page);
-}
-
-void add_source_mark_pixbufs (GtkSourceView *view)
-{
-	GdkColor	color;
-	GtkImage*	image;
-	GdkPixbuf*	pbuf;
-
-	image=(GtkImage*)gtk_image_new_from_file(DATADIR"/pixmaps/BookMark.png");
-	pbuf=gtk_image_get_pixbuf(image);
-
-	gdk_color_parse(highlightColour,&color);
-	gtk_source_view_set_mark_category_background(view,MARK_TYPE_1,&color);
-	gtk_source_view_set_mark_category_icon_from_pixbuf (view,MARK_TYPE_1,pbuf);
-	gtk_source_view_set_mark_category_priority(view,MARK_TYPE_1,1);
 }
 
 bool openFile(const gchar *filepath,int linenumber)
@@ -679,8 +679,8 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
 	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
 
-	g_signal_connect(page->view, "line-mark-activated",G_CALLBACK(line_mark_activated),page);
-	add_source_mark_pixbufs(GTK_SOURCE_VIEW(page->view));
+//	g_signal_connect(page->view, "line-mark-activated",G_CALLBACK(line_mark_activated),page);
+//	add_source_mark_pixbufs(GTK_SOURCE_VIEW(page->view));
 	return TRUE;
 }
 
