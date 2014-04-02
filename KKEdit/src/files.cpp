@@ -376,7 +376,7 @@ void saveSession(GtkWidget* widget,gpointer data)
 					mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
 					linenumber=gtk_text_iter_get_line(&iter);
-					fprintf(fd,"%s %i\n",page->filePath,linenumber);
+					fprintf(fd,"%i %s\n",linenumber,page->filePath);
 
 					ptr=newBookMarksList;
 					while(ptr!=NULL)
@@ -406,6 +406,7 @@ void restoreSession(GtkWidget* widget,gpointer data)
 	char		strarg[2048];
 	pageStruct*	page;
 	GtkTextIter	markiter;
+	int			currentline;
 
 	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
 	fd=fopen(filename,"r");
@@ -414,8 +415,9 @@ void restoreSession(GtkWidget* widget,gpointer data)
 			closeAllTabs(NULL,NULL);
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
-					sscanf(buffer,"%s %i",(char*)&strarg,(int*)&intarg);
-					openFile(strarg,intarg);
+					sscanf(buffer,"%i %"VALIDFILENAMECHARS"s",(int*)&currentline,(char*)&strarg);
+					fprintf(stderr,"line %i path %s\n",intarg,strarg);
+					openFile(strarg,currentline);
 					fgets(buffer,2048,fd);
 					sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 					page=getPageStructPtr(currentPage-1);
@@ -425,13 +427,16 @@ void restoreSession(GtkWidget* widget,gpointer data)
 							if((bool)data==true)
 								{
 									gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
-									intarg++;
 									gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
 									toggleBookmark(NULL,&markiter);
 								}
 							fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 						}
+
+					gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,currentline-1);
+					gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
+					scrollToIterInPane(page,&markiter);
 				}
 			fclose(fd);
 			g_free(filename);
