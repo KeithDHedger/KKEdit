@@ -668,8 +668,7 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
 	gtk_widget_show_all((GtkWidget*)notebook);
-	
-	
+
   /* move cursor to the linenumber */
 	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,linenum,0);
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
@@ -679,8 +678,6 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
 	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
 
-//	g_signal_connect(page->view, "line-mark-activated",G_CALLBACK(line_mark_activated),page);
-//	add_source_mark_pixbufs(GTK_SOURCE_VIEW(page->view));
 	return TRUE;
 }
 
