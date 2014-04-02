@@ -44,7 +44,6 @@ void toggleBookmark(GtkWidget*,GtkTextIter* titer)
 	const gchar*	mark_type;
 	GList*			ptr=NULL;
 	bookMarksNew*	bookmarkdata;
-	char*			markname=NULL;
 
 	if(page==NULL)
 		return;

@@ -22,7 +22,6 @@
 #include "navcallbacks.h"
 #include "encoding.h"
 
-
 #include <gtksourceview/gtksourcestyleschememanager.h>
 
 GtkWidget*	vbox;
@@ -361,9 +360,7 @@ void saveSession(GtkWidget* widget,gpointer data)
 	GtkTextMark*	mark;
 	GtkTextIter		iter;
 	int				linenumber;
-	GList*			listelement;
 	GtkTextIter		markiter;
-	gpointer		retval=NULL;
 	GList*			ptr;
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
@@ -381,49 +378,18 @@ void saveSession(GtkWidget* widget,gpointer data)
 					linenumber=gtk_text_iter_get_line(&iter);
 					fprintf(fd,"%s %i\n",page->filePath,linenumber);
 
-#if 0
-					//	printf("ZZZZZZZZ\n");
-
-					retval=findMark(page->buffer);
-					//printf("zzzzzz%s\n",((bookMarksNew*)retval)->markName);
-					while(retval!=NULL)
-						{
-					//	printf("AAAAAAA\n");
-						//printf("XXXXXXXXX%s\n",((bookMarksNew*)ptr)->markName);
-							gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&markiter,(GtkTextMark*)((bookMarksNew*)retval)->mark);
-							fprintf(stderr,"%i ",gtk_text_iter_get_line(&markiter));
-							fprintf(stderr,"%s\n",((bookMarksNew*)retval)->label);
-			
-							retval=findMark(page->buffer);
-						}
-/*
-					if(page->markList!=NULL)
-						{
-							listelement=page->markList;
-							for(int loop2=0;loop2<(int)g_list_length(page->markList);loop2++)
-								{
-									gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&markiter,((bookMarkStruct*)listelement->data)->mark);
-									fprintf(fd,"%i ",gtk_text_iter_get_line(&markiter));
-									fprintf(fd,"%s\n",((bookMarkStruct*)listelement->data)->label);
-									listelement=g_list_next(listelement);
-								}
-						}
-*/
-					fprintf(fd,"-1 endmarks\n");
-#endif
-
 					ptr=newBookMarksList;
 					while(ptr!=NULL)
 						{
 							if(((bookMarksNew*)ptr->data)->page==page)
 								{
-					//fprintf(fd,"%s\n",((bookMarksNew*)ptr->data)->page->filePath);
 									gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&markiter,(GtkTextMark*)((bookMarksNew*)ptr->data)->mark);
 									fprintf(fd,"%i ",gtk_text_iter_get_line(&markiter));
 									fprintf(fd,"%s\n",((bookMarksNew*)ptr->data)->label);
 								}
 							ptr=g_list_next(ptr);
 						}
+					fprintf(fd,"-1 endmarks\n");
 				}
 		
 			fclose(fd);
@@ -431,7 +397,6 @@ void saveSession(GtkWidget* widget,gpointer data)
 		}
 }
 
-//TOBE REDONE
 void restoreSession(GtkWidget* widget,gpointer data)
 {
 	FILE*		fd=NULL;
@@ -462,7 +427,7 @@ void restoreSession(GtkWidget* widget,gpointer data)
 									gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
 									intarg++;
 									gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
-									//addBookmark(NULL,NULL);
+									toggleBookmark(NULL,&markiter);
 								}
 							fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
