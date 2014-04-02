@@ -44,6 +44,7 @@ void toggleBookmark(GtkWidget*,GtkTextIter* titer)
 	const gchar*	mark_type;
 	GList*			ptr=NULL;
 	bookMarksNew*	bookmarkdata;
+	char*			markname=NULL;
 
 	if(page==NULL)
 		return;
@@ -67,8 +68,9 @@ void toggleBookmark(GtkWidget*,GtkTextIter* titer)
 				{
 					if((gpointer)((bookMarksNew*)ptr->data)->mark==(gpointer)GTK_TEXT_MARK(mark_list->data))
 						{
+							free(((bookMarksNew*)ptr->data)->markName);
 							newBookMarksList=g_list_remove(newBookMarksList,ptr->data);
-							gtk_text_buffer_delete_mark (GTK_TEXT_BUFFER(page->buffer),GTK_TEXT_MARK(mark_list->data));
+							gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),GTK_TEXT_MARK(mark_list->data));
 							break;
 						}
 					ptr=g_list_next(ptr);
@@ -95,8 +97,8 @@ void toggleBookmark(GtkWidget*,GtkTextIter* titer)
 			bookmarkdata=(bookMarksNew*)malloc(sizeof(bookMarksNew));
 			newBookMarksList=g_list_append(newBookMarksList,(gpointer)bookmarkdata);
 			bookmarkdata->page=page;
-			bookmarkdata->mark=gtk_source_buffer_create_source_mark(page->buffer,NULL,mark_type,iter);
-
+			asprintf(&bookmarkdata->markName,"Bookmark-%i",bmMarkNumber++);
+			bookmarkdata->mark=gtk_source_buffer_create_source_mark(page->buffer,bookmarkdata->markName,mark_type,iter);
 //preview text for menu
 			line=gtk_text_iter_get_line(iter);
 			gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&startprev,line);

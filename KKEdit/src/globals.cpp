@@ -48,6 +48,7 @@ char*			tmpHighlightColour;
 bool			showBMBar;
 bool			tmpShowBMBar;
 GtkWidget*		bmHighlightBox;
+int				bmMarkNumber=0;
 
 GtkWidget*		menuprint;
 GtkWidget*		menuclose;

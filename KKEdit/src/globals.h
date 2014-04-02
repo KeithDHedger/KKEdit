@@ -127,6 +127,7 @@ extern char*			tmpHighlightColour;
 extern bool				showBMBar;
 extern bool				tmpShowBMBar;
 extern GtkWidget*		bmHighlightBox;
+extern int				bmMarkNumber;
 
 extern GtkWidget*		menubar;
 extern GtkWidget*		menufile;
