@@ -460,7 +460,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
-	const char*	vars[]={"%t","%f","%d","%i",NULL};
+	const char*	vars[]={"%t","%f","%d","%i","%h",NULL};
 	char*		ptr;
 	long		pos;
 	int			loop=0;
@@ -469,7 +469,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	if(page==NULL || tool==NULL)
 		return;
 
-	const char*		varData[]={NULL,page->filePath,NULL,DATADIR};
+	const char*		varData[]={NULL,page->filePath,NULL,DATADIR,htmlFile};
 
 	tempCommand=g_string_new(tool->command);
 
@@ -496,6 +496,12 @@ void externalTool(GtkWidget* widget,gpointer data)
 	varData[0]=selection;
 	varData[2]=docdirname;
 
+	bool continueflag=false;
+	loop=0;
+	while(continueflag==false)
+	{
+	continueflag=true;
+	loop=0;
 	while(vars[loop]!=NULL)
 		{
 			ptr=strstr(tempCommand->str,vars[loop]);
@@ -504,10 +510,14 @@ void externalTool(GtkWidget* widget,gpointer data)
 					pos=(long)ptr-(long)tempCommand->str;
 					tempCommand=g_string_erase(tempCommand,pos,2);
 					tempCommand=g_string_insert(tempCommand,pos,varData[loop]);
+					continueflag=false;
 				}
 			loop++;
 		}
+		
+		}
 
+//fprintf(stderr,"XXX\n%sXXX\n",tempCommand->str);
 	runCommand(tempCommand->str,&text,tool->inTerminal,tool->flags);
 	g_free(selection);
 
