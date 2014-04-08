@@ -1,5 +1,7 @@
 0.1.1
-comments now appear as tooltips in the 'Tools' menu and the context menu.
+Fixed tool not apearing in popup if both popup options selected.
+Fixed not creating new tool if ~/.KKEdit/tools folder doesn't exist.
+Comments now appear as tooltips in the 'Tools' menu and the context menu.
 Added optional comments to external tools.
 Fixed crash when repeatedly deleting tools from the 'Manage External Tools' menu.
 Added a couple of source view styles (one grey and one brown).

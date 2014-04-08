@@ -641,7 +641,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	ptr=toolsList;
 	while(ptr!=NULL)
 		{
-			if((((toolStruct*)ptr->data)->alwaysPopup==true) && (((toolStruct*)ptr->data)->inPopUp==false))
+			if((((toolStruct*)ptr->data)->alwaysPopup==true))
 				{
 					menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
 					if(((toolStruct*)ptr->data)->comment!=NULL)

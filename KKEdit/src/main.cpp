@@ -169,7 +169,7 @@ void init(void)
 	highlightColour=strdup("#A3ACFF");
 	showBMBar=false;
 
-	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
+	asprintf(&filename,"%s/.KKEdit/tools",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	g_free(filename);
 
