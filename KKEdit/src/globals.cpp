@@ -107,6 +107,7 @@ char*			tmpStyleName=NULL;
 
 GtkWidget*		toolNameWidget;
 GtkWidget*		commandLineWidget;
+GtkWidget*		commentWidget;
 GtkWidget*		inTermWidget;
 GtkWidget*		inPopupWidget;
 GtkWidget*		alwaysPopupWidget;
@@ -616,6 +617,7 @@ void buildToolsList(void)
 	int				inpopup=0;
 	int				alwayspopup=0;
 	char*			commandarg=NULL;
+	char*			commentarg=NULL;
 	char*			menuname=NULL;
 
 	if(toolsList!=NULL)
@@ -651,6 +653,8 @@ void buildToolsList(void)
 												asprintf(&menuname,"%.*s",(int)strlen(buffer)-5,(char*)&buffer[5]);
 											if(strcmp(strarg,"command")==0)
 												asprintf(&commandarg,"%.*s",(int)strlen(buffer)-8,(char*)&buffer[8]);
+											if(strcmp(strarg,"comment")==0)
+												asprintf(&commentarg,"%.*s",(int)strlen(buffer)-8,(char*)&buffer[8]);
 											if(strcmp(strarg,"interm")==0)
 												sscanf((char*)&buffer,"%*s %i",&intermarg);
 											if(strcmp(strarg,"flags")==0)
@@ -671,12 +675,18 @@ void buildToolsList(void)
 											tool->inPopUp=(bool)inpopup;
 											tool->alwaysPopup=(bool)alwayspopup;
 											tool->filePath=strdup(filepath);
+											if(commentarg!=NULL)
+												tool->comment=strdup(commentarg);
+											else
+												tool->comment=NULL;
 											toolsList=g_list_prepend(toolsList,(gpointer)tool);
 										}
 									g_free(menuname);
 									g_free(commandarg);
+									g_free(commentarg);
 									menuname=NULL;
 									commandarg=NULL;
+									commentarg=NULL;
 									fclose(fd);
 								}
 							entry=g_dir_read_name(folder);

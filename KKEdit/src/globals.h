@@ -88,6 +88,7 @@ struct toolStruct
 	bool				inTerminal;					
 	bool				inPopUp;
 	bool				alwaysPopup;
+	char*				comment;
 };
 
 struct functionData
@@ -195,6 +196,7 @@ extern char*			tmpStyleName;
 
 extern GtkWidget*		toolNameWidget;
 extern GtkWidget*		commandLineWidget;
+extern GtkWidget*		commentWidget;
 extern GtkWidget*		inTermWidget;
 extern GtkWidget*		inPopupWidget;
 extern GtkWidget*		alwaysPopupWidget;

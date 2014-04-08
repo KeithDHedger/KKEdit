@@ -1,6 +1,10 @@
 0.1.1
-Added a couple of source view styles.
-Added external tool to look up QT5 definition (docs must be in "/usr/share/doc/qt5" if not change the search directory in the tool).
+comments now appear as tooltips in the 'Tools' menu and the context menu.
+Added optional comments to external tools.
+Fixed crash when repeatedly deleting tools from the 'Manage External Tools' menu.
+Added a couple of source view styles (one grey and one brown).
+Added external tool to look up QT5 definition (docs must be in "/usr/share/doc/qt5" if not change the search directory in the tool),
+works the same as 'Open Manpage' just select a define 'QWidget' forinstance and then select 'QT5 Search' from the tools or context menu.
 Compacted the prefs dialog, and grouped the functions.
 Fixedbug in tools where only the first use of a place holder was being set. 
 Fixed bug in external tools where %h was not being set. 

@@ -4,3 +4,4 @@ flags	8
 interm	0
 inpopup	0
 alwayspopup	1
+comment Open an xterm in the documents folder.

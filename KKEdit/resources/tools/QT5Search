@@ -4,3 +4,4 @@ flags	4
 interm	0
 inpopup	1
 alwayspopup	0
+comment Find definition in installed QT5 docs.

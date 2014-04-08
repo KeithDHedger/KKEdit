@@ -96,7 +96,7 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 					gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,(bool)inpopup);
 					gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,(bool)alwayspopup);
 					gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,(bool)intermarg);
-
+					gtk_entry_set_text((GtkEntry*)commentWidget,"");
 					while(fgets(buffer,4096,fd))
 						{
 							buffer[strlen(buffer)-1]=0;
@@ -105,6 +105,8 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 								gtk_entry_set_text((GtkEntry*)toolNameWidget,(char*)&buffer[5]);
 							if(strcmp(strarg,"command")==0)
 								gtk_entry_set_text((GtkEntry*)commandLineWidget,(char*)&buffer[8]);
+							if(strcmp(strarg,"comment")==0)
+								gtk_entry_set_text((GtkEntry*)commentWidget,(char*)&buffer[8]);
 							if(strcmp(strarg,"inpopup")==0)
 								{
 									sscanf((char*)&buffer,"%*s %i",&inpopup);
@@ -233,6 +235,15 @@ void doMakeTool(void)
 	gtk_widget_show(commandLineWidget);
 	gtk_entry_set_text((GtkEntry*)commandLineWidget,"");
 
+//comment
+	commentWidget=gtk_entry_new();
+	hbox=gtk_hbox_new(false,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Comment: "),false,true,0);
+	gtk_container_add(GTK_CONTAINER(hbox),commentWidget);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
+	gtk_widget_show(commentWidget);
+	gtk_entry_set_text((GtkEntry*)commentWidget,"");
+
 //info
 	infolabel=gtk_label_new(PLACEHOLDERINFO);
 	gtk_label_set_selectable((GtkLabel*)infolabel,true);
@@ -349,6 +360,8 @@ void buildTools(void)
 			menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
 			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
+			if(((toolStruct*)ptr->data)->comment!=NULL)
+				gtk_widget_set_tooltip_text((GtkWidget*)menuitem,((toolStruct*)ptr->data)->comment);
 			ptr=g_list_next(ptr);
 		}
 }
@@ -541,7 +554,6 @@ void doPrefs(void)
 	GtkObject*	adjdepth=gtk_adjustment_new(tmpDepth,1,64,1,1,0);
 	hbox2=gtk_hbox_new(false,0);
 	item=gtk_spin_button_new((GtkAdjustment*)adjdepth,1,0);
-	//gtk_widget_set_size_request((GtkWidget*)item,72,-1);
 	gtk_widget_set_name(item,"depth");
 	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Tag File Search Depth: "),true,true,0);
 	gtk_container_add(GTK_CONTAINER(hbox2),item);
@@ -551,7 +563,7 @@ void doPrefs(void)
 //terminalcommand
 	terminalBox=gtk_entry_new();
 	hbox2=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Terminal Command: "),true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Terminal Command: "),false,false,0);
 	gtk_container_add(GTK_CONTAINER(hbox2),terminalBox);
 	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
 	gtk_entry_set_text((GtkEntry*)terminalBox,terminalCommand);

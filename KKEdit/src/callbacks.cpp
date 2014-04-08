@@ -624,6 +624,9 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 							if((((toolStruct*)ptr->data)->inPopUp==true) && (((toolStruct*)ptr->data)->alwaysPopup==false))
 								{
 									menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
+									if(((toolStruct*)ptr->data)->comment!=NULL)
+										gtk_widget_set_tooltip_text((GtkWidget*)menuitem,((toolStruct*)ptr->data)->comment);
+
 									gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 									gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
 								}
@@ -641,6 +644,8 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 			if((((toolStruct*)ptr->data)->alwaysPopup==true) && (((toolStruct*)ptr->data)->inPopUp==false))
 				{
 					menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
+					if(((toolStruct*)ptr->data)->comment!=NULL)
+						gtk_widget_set_tooltip_text((GtkWidget*)menuitem,((toolStruct*)ptr->data)->comment);
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
 				}
@@ -1138,6 +1143,9 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 	char	toolpath[2048];
 	char*	text;
 
+	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
+		gtk_widget_hide((GtkWidget*)data);
+
 	if(strcmp(gtk_widget_get_name(widget),"interm")==0)
 		inTerm=gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget);
 	if(strcmp(gtk_widget_get_name(widget),"inpopup")==0)
@@ -1198,6 +1206,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 				{
 					fprintf(fd,"name\t%s\n",gtk_entry_get_text((GtkEntry*)toolNameWidget));
 					fprintf(fd,"command\t%s\n",gtk_entry_get_text((GtkEntry*)commandLineWidget));
+					fprintf(fd,"comment\t%s\n",gtk_entry_get_text((GtkEntry*)commentWidget));
 					fprintf(fd,"flags\t%i\n",flags);
 					fprintf(fd,"interm\t%i\n",(int)inTerm);
 					fprintf(fd,"inpopup\t%i\n",(int)inPopup);
@@ -1205,6 +1214,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 					fclose(fd);
 				}
 			g_free(dirname);
+			gtk_widget_hide((GtkWidget*)data);
 			gtk_widget_destroy((GtkWidget*)data);
 
 			buildTools();
@@ -1217,15 +1227,12 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 				{
 						asprintf(&dirname,"rm %s",selectedToolPath);
 						system(dirname);
+						gtk_widget_hide((GtkWidget*)data);
 						buildTools();
 						gtk_widget_show_all(menutools);
 						g_free(dirname);
 				}
-			gtk_widget_destroy((GtkWidget*)data);
 		}
-
-	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
-		gtk_widget_destroy((GtkWidget*)data);
 }
 
 void doAbout(GtkWidget* widget,gpointer data)
