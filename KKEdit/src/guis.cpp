@@ -357,6 +357,7 @@ void doPrefs(void)
 {
 	GtkWidget*	vbox;
 	GtkWidget*	hbox;
+	GtkWidget*	hbox2;
 	GtkWidget*	item;
 	GtkWidget*	label;
 
@@ -366,7 +367,7 @@ void doPrefs(void)
 	hbox=gtk_hbox_new(false,8);
 	
 //appearence 1
-	label=gtk_label_new("<b>APPEARANCE</b>");
+	label=gtk_label_new("<b>General Appearance</b>");
 	gtk_label_set_use_markup((GtkLabel*)label,true);
 	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
 
@@ -398,7 +399,7 @@ void doPrefs(void)
 
 //end appearance 1
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
-	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
+//	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
 //apperance 2
 	hbox=gtk_hbox_new(false,8);
@@ -434,52 +435,55 @@ void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
+//toolbar appearance 3
+	label=gtk_label_new("<b>Toolbar Widgets</b>");
+	gtk_label_set_use_markup((GtkLabel*)label,true);
+	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
+	hbox=gtk_hbox_new(false,8);
 //show goto line on toolbar
-	item=gtk_check_button_new_with_label("Show 'Jump To Line' in toolbar");
+	item=gtk_check_button_new_with_label("Show 'Jump To Line'");
 	gtk_widget_set_name(item,"jtolintool");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,showJumpToLine);
-	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
 //find api in toolbar
-	item=gtk_check_button_new_with_label("Show 'Find API' in toolbar");
+	item=gtk_check_button_new_with_label("Show 'Find API'");
 	gtk_widget_set_name(item,"findapiintool");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,showFindAPI);
-	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
 //show search definition in toolbar
-	item=gtk_check_button_new_with_label("Show 'Search For Define' in toolbar");
+	item=gtk_check_button_new_with_label("Show 'Search For Define'");
 	gtk_widget_set_name(item,"searchdef");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,showFindDef);
-	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 //show live search in toolbar
-	item=gtk_check_button_new_with_label("Show 'Live Search' in toolbar");
+	item=gtk_check_button_new_with_label("Show 'Live Search'");
 	gtk_widget_set_name(item,"livesearch");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,showLiveSearch);
-	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+//end appearance 3
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
-//tabwidth  -- CLEAN
+//text appearence
+	label=gtk_label_new("<b>Text Style</b>");
+	gtk_label_set_use_markup((GtkLabel*)label,true);
+	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
+	hbox=gtk_hbox_new(false,8);
 
+//tabwidth
 	GtkObject*	adj=gtk_adjustment_new(tmpTabWidth,1,64,1,1,0);
-	hbox=gtk_hbox_new(true,0);
+	hbox2=gtk_hbox_new(false,0);
 	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
 	gtk_widget_set_name(item,"tabs");
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Tab width: "),true,true,0);
-	gtk_container_add(GTK_CONTAINER(hbox),item);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
-	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
-
-//function search depth
-	GtkObject*	adjdepth=gtk_adjustment_new(tmpDepth,1,64,1,1,0);
-	hbox=gtk_hbox_new(true,0);
-	item=gtk_spin_button_new((GtkAdjustment*)adjdepth,1,0);
-	gtk_widget_set_name(item,"depth");
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Tag File Search Depth: "),true,true,0);
-	gtk_container_add(GTK_CONTAINER(hbox),item);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Tab width: "),true,true,0);
+	gtk_container_add(GTK_CONTAINER(hbox2),item);
+	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
 	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
 
 //style
@@ -487,8 +491,8 @@ void doPrefs(void)
 	int foundname=0;
 	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(schemeManager);
 
-	hbox=gtk_hbox_new(true,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Theme: "),true,true,0);
+	hbox2=gtk_hbox_new(false,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Theme: "),true,true,0);
 
 	item=gtk_combo_box_text_new();
 	gtk_widget_set_name(item,"style");
@@ -501,43 +505,78 @@ void doPrefs(void)
 		cnt++;
 	}
 	gtk_combo_box_set_active((GtkComboBox*)item,foundname);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),item,true,true,0);
 
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
 	g_signal_connect(G_OBJECT(item),"changed",G_CALLBACK(setPrefs),(void*)item);
 
 //font button
-	hbox=gtk_hbox_new(true,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Font And Size: "),true,true,0);
+	hbox2=gtk_hbox_new(false,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Font: "),true,true,0);
 	fontButton=gtk_font_button_new_with_font(fontAndSize);
-	gtk_box_pack_start(GTK_BOX(hbox),fontButton,true,true,0);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),fontButton,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
 	gtk_widget_set_name(fontButton,"fontbutton");
 
 //bm highlight colour
-	terminalBox=gtk_entry_new();
-	hbox=gtk_hbox_new(true,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Terminal Command: "),true,true,0);
-	gtk_container_add(GTK_CONTAINER(hbox),terminalBox);
+	bmHighlightBox=gtk_entry_new();
+	gtk_widget_set_size_request((GtkWidget*)bmHighlightBox,72,-1);
+	hbox2=gtk_hbox_new(false,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("BM Highlight Colour: "),true,true,0);
+	gtk_container_add(GTK_CONTAINER(hbox2),bmHighlightBox);
+	gtk_box_pack_start(GTK_BOX(hbox),hbox2,false,false,0);
+	gtk_entry_set_text((GtkEntry*)bmHighlightBox,highlightColour);
+	gtk_widget_show_all(hbox2);
+
+//end style
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
-	gtk_entry_set_text((GtkEntry*)terminalBox,terminalCommand);
-	gtk_widget_show_all(hbox);
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
+
+//admin
+	label=gtk_label_new("<b>Administration</b>");
+	gtk_label_set_use_markup((GtkLabel*)label,true);
+	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
+	hbox=gtk_hbox_new(false,8);
+//function search depth
+	GtkObject*	adjdepth=gtk_adjustment_new(tmpDepth,1,64,1,1,0);
+	hbox2=gtk_hbox_new(false,0);
+	item=gtk_spin_button_new((GtkAdjustment*)adjdepth,1,0);
+	//gtk_widget_set_size_request((GtkWidget*)item,72,-1);
+	gtk_widget_set_name(item,"depth");
+	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Tag File Search Depth: "),true,true,0);
+	gtk_container_add(GTK_CONTAINER(hbox2),item);
+	gtk_box_pack_start(GTK_BOX(hbox),hbox2,false,false,0);
+	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
 
 //terminalcommand
-	bmHighlightBox=gtk_entry_new();
-	hbox=gtk_hbox_new(true,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Bookmark highlight colour: "),true,true,0);
-	gtk_container_add(GTK_CONTAINER(hbox),bmHighlightBox);
+	terminalBox=gtk_entry_new();
+	hbox2=gtk_hbox_new(false,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Terminal Command: "),true,true,0);
+	gtk_container_add(GTK_CONTAINER(hbox2),terminalBox);
+	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
+	gtk_entry_set_text((GtkEntry*)terminalBox,terminalCommand);
+	gtk_widget_show_all(hbox2);
+//end admin
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
-	gtk_entry_set_text((GtkEntry*)bmHighlightBox,highlightColour);
-	gtk_widget_show_all(hbox);
 
 //nag
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
+
+	label=gtk_label_new("<b>Be Kind To Poor Programmers</b>");
+	gtk_label_set_use_markup((GtkLabel*)label,true);
+	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
+	hbox=gtk_hbox_new(true,0);
+
 	item=gtk_check_button_new_with_label("I have donated");
 	gtk_widget_set_name(item,"ihavedonated");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,nagScreen);
-	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_alignment_new(0,0,1,0),true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_alignment_new(0,0,1,0),true,true,0);
+	gtk_widget_show_all(hbox);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_label_new("I have really donated some some money to the author.\nMy conscience is clear and my Karma is squeaky clean :)"),false,false,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
