@@ -1,3 +1,10 @@
+0.1.1
+Added a couple of source view styles.
+Added external tool to look up QT5 definition (docs must be in "/usr/share/doc/qt5" if not change the search directory in the tool).
+Compacted the prefs dialog, and grouped the functions.
+Fixedbug in tools where only the first use of a place holder was being set. 
+Fixed bug in external tools where %h was not being set. 
+
 0.1.0
 Fixed restoring file name with spaces ( again! )
 Redone save/restore session.

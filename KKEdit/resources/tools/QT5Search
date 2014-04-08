@@ -1,0 +1,6 @@
+name	QT5 Search
+command	cat $(find /usr/share/doc/qt5/ -iname "%t.html") > %h;sed -i "s@<head>@&<base href=\""file://$(dirname $(find /usr/share/doc/qt5/ -iname "%t.html"))"/\">@" %h
+flags	4
+interm	0
+inpopup	1
+alwayspopup	0
