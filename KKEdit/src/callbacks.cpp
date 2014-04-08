@@ -465,6 +465,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	long		pos;
 	int			loop=0;
 	GString*	tempCommand;
+	bool		continueflag;
 
 	if(page==NULL || tool==NULL)
 		return;
@@ -496,28 +497,25 @@ void externalTool(GtkWidget* widget,gpointer data)
 	varData[0]=selection;
 	varData[2]=docdirname;
 
-	bool continueflag=false;
-	loop=0;
+	continueflag=false;
 	while(continueflag==false)
-	{
-	continueflag=true;
-	loop=0;
-	while(vars[loop]!=NULL)
 		{
-			ptr=strstr(tempCommand->str,vars[loop]);
-			if(ptr!=NULL)
+			continueflag=true;
+			loop=0;
+			while(vars[loop]!=NULL)
 				{
-					pos=(long)ptr-(long)tempCommand->str;
-					tempCommand=g_string_erase(tempCommand,pos,2);
-					tempCommand=g_string_insert(tempCommand,pos,varData[loop]);
-					continueflag=false;
+					ptr=strstr(tempCommand->str,vars[loop]);
+					if(ptr!=NULL)
+						{
+							pos=(long)ptr-(long)tempCommand->str;
+							tempCommand=g_string_erase(tempCommand,pos,2);
+							tempCommand=g_string_insert(tempCommand,pos,varData[loop]);
+							continueflag=false;
+						}
+					loop++;
 				}
-			loop++;
-		}
-		
 		}
 
-//fprintf(stderr,"XXX\n%sXXX\n",tempCommand->str);
 	runCommand(tempCommand->str,&text,tool->inTerminal,tool->flags);
 	g_free(selection);
 
