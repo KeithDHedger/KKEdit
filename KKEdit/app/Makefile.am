@@ -22,7 +22,7 @@ docfilesdir = $(pkgdatadir)/docs
 docfiles_DATA = ../resources/docs/*
 
 stylefilesdir = $(pkgdatadir)/styles
-stylefiles_DATA =../resources/styles
+stylefiles_DATA =../resources/styles/*
 
 bin_PROGRAMS = kkedit
 
