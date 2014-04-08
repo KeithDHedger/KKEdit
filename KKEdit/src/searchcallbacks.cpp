@@ -176,7 +176,6 @@ void showDocView(GtkWidget* widget,gpointer data)
 #ifdef BUILDDOCVIEWER
 	if(thePage!=NULL)
 		{
-		printf("ZZZ%s\n",thePage);
 			if(strcasecmp("file://(null)",thePage)==0)
 				{
 					g_free(thePage);
