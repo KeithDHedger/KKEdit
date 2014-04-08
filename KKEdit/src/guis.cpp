@@ -358,64 +358,81 @@ void doPrefs(void)
 	GtkWidget*	vbox;
 	GtkWidget*	hbox;
 	GtkWidget*	item;
+	GtkWidget*	label;
 
 	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)prefswin,"Preferences");
 	vbox=gtk_vbox_new(false,8);
+	hbox=gtk_hbox_new(false,8);
+	
+//appearence 1
+	label=gtk_label_new("<b>APPEARANCE</b>");
+	gtk_label_set_use_markup((GtkLabel*)label,true);
+	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
+
 //indent
 	item=gtk_check_button_new_with_label("Auto Indent Lines");
 	gtk_widget_set_name(item,"indent");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,indent);
-	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 //linenumbers
 	item=gtk_check_button_new_with_label("Show Line Numbers");
 	gtk_widget_set_name(item,"show");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,lineNumbers);
-	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 //wraplines
 	item=gtk_check_button_new_with_label("Wrap Lines");
 	gtk_widget_set_name(item,"wrap");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,lineWrap);
-	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
 //highlite
 	item=gtk_check_button_new_with_label("Highlight Current Line");
 	gtk_widget_set_name(item,"high");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,highLight);
-	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
+//end appearance 1
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
+
+//apperance 2
+	hbox=gtk_hbox_new(false,8);
 //show bookmark bar
-	item=gtk_check_button_new_with_label("Show Bookmark Bar");
+	item=gtk_check_button_new_with_label("Show BM Bar");
 	gtk_widget_set_name(item,"showbmbar");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,showBMBar);
-	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
 //single instance
-	item=gtk_check_button_new_with_label("Use single Instance");
+	item=gtk_check_button_new_with_label("Use Single Instance");
 	gtk_widget_set_name(item,"single");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,singleUse);
-	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
 //auto save session
-	item=gtk_check_button_new_with_label("Save/Restore session on exit/startup");
+	item=gtk_check_button_new_with_label("Auto Save/Restore Session");
 	gtk_widget_set_name(item,"save");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,onExitSaveSession);
-	gtk_box_pack_start(GTK_BOX(vbox),item,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
 //auto restore bookmarks
-	restoreBMs=gtk_check_button_new_with_label("Restore bookmarks with session");
+	restoreBMs=gtk_check_button_new_with_label("Restore Session Bookmarks");
 	gtk_widget_set_name(restoreBMs,"marks");
 	gtk_toggle_button_set_active((GtkToggleButton*)restoreBMs,restoreBookmarks);
-	gtk_box_pack_start(GTK_BOX(vbox),restoreBMs,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),restoreBMs,true,true,0);
 	g_signal_connect(G_OBJECT(restoreBMs),"toggled",G_CALLBACK(setPrefs),(void*)restoreBMs);
 	gtk_widget_set_sensitive(restoreBMs,onExitSaveSession);
+//end apperance 2
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
 //show goto line on toolbar
 	item=gtk_check_button_new_with_label("Show 'Jump To Line' in toolbar");
