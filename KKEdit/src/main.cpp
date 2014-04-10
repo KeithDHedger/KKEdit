@@ -90,6 +90,12 @@ void readConfig(void)
 							highlightColour=strdup(strarg);
 						}
 
+					if(strcasecmp(name,"toolbarlayout")==0)
+						{
+							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
+							toolBarLayout=strdup(strarg);
+						}
+
 					if(strcasecmp(name,"font")==0)
 						{
 							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
@@ -180,6 +186,9 @@ void init(void)
 	asprintf(&filename,"%s/styles",DATADIR);
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
 	g_free(filename);
+
+//toolbar layout
+	toolBarLayout=strdup("NOSsXCPsURsFGsLADl");
 
 	readConfig();
 

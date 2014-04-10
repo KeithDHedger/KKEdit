@@ -414,6 +414,8 @@ void restoreSession(GtkWidget* widget,gpointer data)
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
 					sscanf(buffer,"%i %"VALIDFILENAMECHARS"s",(int*)&currentline,(char*)&strarg);
+					fprintf(stderr,"buffer=%s\n",buffer);
+					fprintf(stderr,"strarg=%s linenum=%i\n",strarg,currentline);
 					openFile(strarg,currentline);
 					fgets(buffer,2048,fd);
 					sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);

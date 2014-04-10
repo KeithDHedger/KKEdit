@@ -212,9 +212,9 @@ void setSensitive(void)
 	if(page==NULL)
 		{
 //toolbar
-			gtk_widget_set_sensitive((GtkWidget*)undoButton,false);
-			gtk_widget_set_sensitive((GtkWidget*)redoButton,false);
-			gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
+//			gtk_widget_set_sensitive((GtkWidget*)undoButton,false);
+//			gtk_widget_set_sensitive((GtkWidget*)redoButton,false);
+//			gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
 //menu
 			gtk_widget_set_sensitive((GtkWidget*)undoMenu,false);
 			gtk_widget_set_sensitive((GtkWidget*)redoMenu,false);
@@ -233,9 +233,9 @@ void setSensitive(void)
 		{
 			text=gtk_label_get_text((GtkLabel*)page->tabName);
 //toolbar
-			gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
-			gtk_widget_set_sensitive((GtkWidget*)redoButton,gtk_source_buffer_can_redo(page->buffer));
-			gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
+//			gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
+//			gtk_widget_set_sensitive((GtkWidget*)redoButton,gtk_source_buffer_can_redo(page->buffer));
+//			gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
 
 //menu
 			gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));
@@ -957,6 +957,9 @@ void writeConfig(void)
 			fprintf(fd,"depth	%i\n",depth);
 			fprintf(fd,"font	%s\n",fontAndSize);
 			fprintf(fd,"terminalcommand	%s\n",terminalCommand);
+
+			fprintf(fd,"toolbarlayout	%s\n",toolBarLayout);
+
 			fclose(fd);
 		}
 	g_free(filename);

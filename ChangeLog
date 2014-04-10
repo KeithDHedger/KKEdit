@@ -1,3 +1,6 @@
+0.1.2
+Fixed bug when loading session where file has weird characters in the name.
+
 0.1.1
 Fixed tool not apearing in popup if both popup options selected.
 Fixed not creating new tool if ~/.KKEdit/tools folder doesn't exist.

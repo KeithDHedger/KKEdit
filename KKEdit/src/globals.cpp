@@ -50,6 +50,10 @@ bool			tmpShowBMBar;
 GtkWidget*		bmHighlightBox;
 int				bmMarkNumber=0;
 
+char*			toolBarLayout=NULL;
+char*			tmpToolBarLayout=NULL;
+GtkWidget*		toolBar;
+
 GtkWidget*		menuprint;
 GtkWidget*		menuclose;
 GtkWidget*		menucloseall;

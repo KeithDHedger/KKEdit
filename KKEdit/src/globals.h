@@ -40,8 +40,8 @@
 #define	TOOL_INSERT_MASK 3
 
 #define VALIDCHARS "[]a-zA-Z0-9:/@ ()_-,.*#;[\"]"
-#define VALIDFILENAMECHARS "[A-Za-z0-9_-./ ]"
-#define VALIDFUNCTIONCHARS "[A-Za-z0-9_*]"
+#define VALIDFILENAMECHARS "[A-Za-z0-9_-./ <>]"
+#define VALIDFUNCTIONCHARS "[A-Za-z0-9_*:/@ ()-,.#;[\"]"
 
 #define BOOKMAXMARKMENULEN 40
 #define MAXRECENT 10
@@ -129,6 +129,10 @@ extern bool				showBMBar;
 extern bool				tmpShowBMBar;
 extern GtkWidget*		bmHighlightBox;
 extern int				bmMarkNumber;
+
+extern char*			toolBarLayout;
+extern char*			tmpToolBarLayout;
+extern GtkWidget*		toolBar;
 
 extern GtkWidget*		menubar;
 extern GtkWidget*		menufile;
