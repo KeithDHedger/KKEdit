@@ -157,6 +157,11 @@ GtkToolItem*	saveasButton;
 GtkToolItem*	closeButton;
 GtkToolItem*	redoButton;
 GtkToolItem*	undoButton;
+GtkToolItem*	cutButton;
+GtkToolItem*	copyButton;
+GtkToolItem*	pasteButton;
+GtkToolItem*	findButton;
+GtkToolItem*	gotoDefButton;
 
 GtkWidget*		findReplaceDialog;
 GtkWidget*		findBox;

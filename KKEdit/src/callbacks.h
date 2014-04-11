@@ -49,5 +49,6 @@ int yesNo(char* question,char* file);
 void line_mark_activated (GtkSourceGutter *gutter,GtkTextIter *iter,GdkEventButton  *ev,pageStruct* page);
 void toggleBookmark(GtkWidget*,GtkTextIter* titer);
 void toggleBookMarkBar(GtkWidget* widget,gpointer data);
+void setToobarSensitive(void);
 
 #endif

@@ -448,41 +448,6 @@ void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
-//toolbar appearance 3
-	label=gtk_label_new("<b>Toolbar Widgets</b>");
-	gtk_label_set_use_markup((GtkLabel*)label,true);
-	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
-	hbox=gtk_hbox_new(false,8);
-//show goto line on toolbar
-	item=gtk_check_button_new_with_label("Show 'Jump To Line'");
-	gtk_widget_set_name(item,"jtolintool");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,showJumpToLine);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-
-//find api in toolbar
-	item=gtk_check_button_new_with_label("Show 'Find API'");
-	gtk_widget_set_name(item,"findapiintool");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,showFindAPI);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-
-//show search definition in toolbar
-	item=gtk_check_button_new_with_label("Show 'Search For Define'");
-	gtk_widget_set_name(item,"searchdef");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,showFindDef);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-//show live search in toolbar
-	item=gtk_check_button_new_with_label("Show 'Live Search'");
-	gtk_widget_set_name(item,"livesearch");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,showLiveSearch);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-//end appearance 3
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
-	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
-
 //text appearence
 	label=gtk_label_new("<b>Text Style</b>");
 	gtk_label_set_use_markup((GtkLabel*)label,true);
@@ -683,24 +648,24 @@ void setUpToolBar(void)
 						break;
 					case 'X':
 //cut
-						toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_CUT);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
-						gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(cutToClip),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Cut");
+						cutButton=gtk_tool_button_new_from_stock(GTK_STOCK_CUT);
+						gtk_toolbar_insert((GtkToolbar*)toolBar,cutButton,-1);
+						gtk_signal_connect(GTK_OBJECT(cutButton),"clicked",G_CALLBACK(cutToClip),NULL);
+						gtk_widget_set_tooltip_text((GtkWidget*)cutButton,"Cut");
 						break;
 					case 'C':
 //copy
-						toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_COPY);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
-						gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(copyToClip),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Copy");
+						copyButton=gtk_tool_button_new_from_stock(GTK_STOCK_COPY);
+						gtk_toolbar_insert((GtkToolbar*)toolBar,copyButton,-1);
+						gtk_signal_connect(GTK_OBJECT(copyButton),"clicked",G_CALLBACK(copyToClip),NULL);
+						gtk_widget_set_tooltip_text((GtkWidget*)copyButton,"Copy");
 						break;
 					case 'P':
 //paste
-						toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_PASTE);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
-						gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(pasteFromClip),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Paste");
+						pasteButton=gtk_tool_button_new_from_stock(GTK_STOCK_PASTE);
+						gtk_toolbar_insert((GtkToolbar*)toolBar,pasteButton,-1);
+						gtk_signal_connect(GTK_OBJECT(pasteButton),"clicked",G_CALLBACK(pasteFromClip),NULL);
+						gtk_widget_set_tooltip_text((GtkWidget*)pasteButton,"Paste");
 						break;
 					case 'U':
 //undo
@@ -718,17 +683,17 @@ void setUpToolBar(void)
 						break;
 					case 'F':
 //find
-						toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_FIND);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
-						gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(find),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Find/Replace");
+						findButton=gtk_tool_button_new_from_stock(GTK_STOCK_FIND);
+						gtk_toolbar_insert((GtkToolbar*)toolBar,findButton,-1);
+						gtk_signal_connect(GTK_OBJECT(findButton),"clicked",G_CALLBACK(find),NULL);
+						gtk_widget_set_tooltip_text((GtkWidget*)findButton,"Find/Replace");
 						break;
 					case 'G':
 //navigation
-						toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_DIALOG_QUESTION);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
-						gtk_signal_connect(GTK_OBJECT(toolbutton),"clicked",G_CALLBACK(goToDefinition),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Go To Definition");
+						gotoDefButton=gtk_tool_button_new_from_stock(GTK_STOCK_DIALOG_QUESTION);
+						gtk_toolbar_insert((GtkToolbar*)toolBar,gotoDefButton,-1);
+						gtk_signal_connect(GTK_OBJECT(gotoDefButton),"clicked",G_CALLBACK(goToDefinition),NULL);
+						gtk_widget_set_tooltip_text((GtkWidget*)gotoDefButton,"Go To Definition");
 						break;
 					case 'L':
 						lineNumberWidget=gtk_entry_new();

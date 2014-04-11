@@ -414,8 +414,6 @@ void restoreSession(GtkWidget* widget,gpointer data)
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
 					sscanf(buffer,"%i %"VALIDFILENAMECHARS"s",(int*)&currentline,(char*)&strarg);
-					fprintf(stderr,"buffer=%s\n",buffer);
-					fprintf(stderr,"strarg=%s linenum=%i\n",strarg,currentline);
 					openFile(strarg,currentline);
 					fgets(buffer,2048,fd);
 					sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
@@ -440,11 +438,6 @@ void restoreSession(GtkWidget* widget,gpointer data)
 			fclose(fd);
 			g_free(filename);
 		}
-
-		showHideWidget(lineNumberWidget,showJumpToLine);
-		showHideWidget(findApiWidget,showFindAPI);
-		showHideWidget(findDefWidget,showFindDef);
-		showHideWidget(liveSearchWidget,showLiveSearch);
 }
 
 int showFileChanged(char* filename)
@@ -679,7 +672,7 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark,&iter);  
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
 	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
-
+	setToobarSensitive();
 	return TRUE;
 }
 
@@ -710,6 +703,7 @@ void newFile(GtkWidget* widget,gpointer data)
 	gtk_notebook_append_page(notebook,page->tabVbox,label);
 	gtk_notebook_set_tab_reorderable(notebook,page->tabVbox,true);
 	gtk_notebook_set_current_page(notebook,currentPage);
+	setToobarSensitive();
 	currentPage++;
 	gtk_widget_show_all((GtkWidget*)notebook);
 

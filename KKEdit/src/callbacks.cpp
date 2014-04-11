@@ -28,6 +28,107 @@ GtkWidget*			tabMenu;
 char				defineText[1024];
 GtkPrintSettings*	settings=NULL;
 
+void setToobarSensitive(void)
+{
+	pageStruct*	page=getPageStructPtr(currentTabNumber);
+	GtkTextIter	start;
+	GtkTextIter	end;
+
+	for(int j=0;j<(int)strlen(toolBarLayout);j++)
+		{
+			switch(toolBarLayout[j])
+				{
+					case 'N':
+//newnewButton
+						gtk_widget_set_sensitive((GtkWidget*)newButton,true);
+						break;
+					case 'O':
+//open+recent
+						gtk_widget_set_sensitive((GtkWidget*)openButton,true);
+						break;
+					case 'S':
+//save
+						if(page!=NULL)
+							gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
+						else
+							gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
+						break;
+					case 'X':
+//cut
+						if(page!=NULL)
+							gtk_widget_set_sensitive((GtkWidget*)cutButton,true);
+						else
+							gtk_widget_set_sensitive((GtkWidget*)cutButton,false);
+						break;
+					case 'C':
+//copy
+						if(page!=NULL)
+							gtk_widget_set_sensitive((GtkWidget*)copyButton,true);
+						else
+							gtk_widget_set_sensitive((GtkWidget*)copyButton,false);
+						break;
+					case 'P':
+//paste
+						if(page!=NULL)
+							gtk_widget_set_sensitive((GtkWidget*)pasteButton,true);
+						else
+							gtk_widget_set_sensitive((GtkWidget*)pasteButton,false);
+						break;
+					case 'U':
+//undo
+						if(page!=NULL)
+							gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
+						break;
+					case 'R':
+//redo
+						if(page!=NULL)
+							gtk_widget_set_sensitive((GtkWidget*)redoButton,gtk_source_buffer_can_redo(page->buffer));
+						break;
+					case 'F':
+//find
+						if(page!=NULL)
+							gtk_widget_set_sensitive((GtkWidget*)findButton,true);
+						else
+							gtk_widget_set_sensitive((GtkWidget*)findButton,false);
+						break;
+					case 'G':
+//navigation
+						if(page!=NULL)
+							gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,true);
+						else
+							gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,false);
+						break;
+					case 'A':
+//find in gtkdoc
+//						findApiWidget=gtk_entry_new();
+//						toolbutton=gtk_tool_item_new();
+//						gtk_container_add((GtkContainer *)toolbutton,findApiWidget);
+//						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
+//						g_signal_connect_after(G_OBJECT(findApiWidget),"activate",G_CALLBACK(docSearchFromBar),(void*)findApiWidget);
+//						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Find API In Gtk Docs");
+						break;
+					case 'D':
+//find in function def
+//						findDefWidget=gtk_entry_new();
+//						toolbutton=gtk_tool_item_new();
+//						gtk_container_add((GtkContainer *)toolbutton,findDefWidget);
+//						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
+//						g_signal_connect_after(G_OBJECT(findDefWidget),"activate",G_CALLBACK(defSearchFromBar),(void*)findDefWidget);
+//						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Search For Define");
+						break;
+					case 'l':
+//livesearch
+//						liveSearchWidget=gtk_entry_new();
+//						toolbutton=gtk_tool_item_new();
+//						gtk_container_add((GtkContainer *)toolbutton,liveSearchWidget);
+//						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
+//						g_signal_connect_after(G_OBJECT(liveSearchWidget),"key-release-event",G_CALLBACK(doLiveSearch),NULL);
+//						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Live Search");
+						break;
+				}
+		}
+}
+
 void toggleBookmark(GtkWidget*,GtkTextIter* titer)
 {
 	pageStruct*		page=getPageStructPtr(-1);
@@ -135,10 +236,10 @@ void showHideWidget(GtkWidget* widget,bool show)
 void refreshMainWindow(void)
 {
 	gtk_widget_show_all(window);
-	showHideWidget(lineNumberWidget,showJumpToLine);
-	showHideWidget(findApiWidget,showFindAPI);
-	showHideWidget(findDefWidget,showFindDef);
-	showHideWidget(liveSearchWidget,showLiveSearch);
+//	showHideWidget(lineNumberWidget,showJumpToLine);
+//	showHideWidget(findApiWidget,showFindAPI);
+//	showHideWidget(findDefWidget,showFindDef);
+//	showHideWidget(liveSearchWidget,showLiveSearch);
 }
 
 int yesNo(char* question,char* file)
@@ -209,12 +310,10 @@ void setSensitive(void)
 	char*			newlabel;
 	int				offset=0;
 
+	setToobarSensitive();
+
 	if(page==NULL)
 		{
-//toolbar
-//			gtk_widget_set_sensitive((GtkWidget*)undoButton,false);
-//			gtk_widget_set_sensitive((GtkWidget*)redoButton,false);
-//			gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
 //menu
 			gtk_widget_set_sensitive((GtkWidget*)undoMenu,false);
 			gtk_widget_set_sensitive((GtkWidget*)redoMenu,false);
@@ -242,7 +341,7 @@ void setSensitive(void)
 			gtk_widget_set_sensitive((GtkWidget*)redoMenu,gtk_source_buffer_can_redo(page->buffer));
 			gtk_widget_set_sensitive((GtkWidget*)saveMenu,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
 //tab
-			gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
+//			gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
 			if(text[0]=='*')
 				offset=1;
 
