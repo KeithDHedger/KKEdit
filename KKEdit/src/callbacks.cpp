@@ -31,8 +31,6 @@ GtkPrintSettings*	settings=NULL;
 void setToobarSensitive(void)
 {
 	pageStruct*	page=getPageStructPtr(currentTabNumber);
-	GtkTextIter	start;
-	GtkTextIter	end;
 
 	for(int j=0;j<(int)strlen(toolBarLayout);j++)
 		{
@@ -106,13 +104,6 @@ void setToobarSensitive(void)
 							gtk_widget_set_sensitive((GtkWidget*)findApiButton,false);
 						break;
 		
-//						findApiWidget=gtk_entry_new();
-//						toolbutton=gtk_tool_item_new();
-//						gtk_container_add((GtkContainer *)toolbutton,findApiWidget);
-//						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
-//						g_signal_connect_after(G_OBJECT(findApiWidget),"activate",G_CALLBACK(docSearchFromBar),(void*)findApiWidget);
-//						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Find API In Gtk Docs");
-//						break;
 //					case 'D':
 //find in function def
 //						findDefWidget=gtk_entry_new();
@@ -129,14 +120,6 @@ void setToobarSensitive(void)
 						else
 							gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,false);
 						break;
-
-//						liveSearchWidget=gtk_entry_new();
-//						toolbutton=gtk_tool_item_new();
-//						gtk_container_add((GtkContainer *)toolbutton,liveSearchWidget);
-//						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
-//						g_signal_connect_after(G_OBJECT(liveSearchWidget),"key-release-event",G_CALLBACK(doLiveSearch),NULL);
-//						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Live Search");
-//						break;
 				}
 		}
 }
