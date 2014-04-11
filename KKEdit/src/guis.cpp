@@ -766,6 +766,13 @@ void setUpToolBar(void)
 						g_signal_connect_after(G_OBJECT(liveSearchWidget),"key-release-event",G_CALLBACK(doLiveSearch),NULL);
 						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Live Search");
 						break;
+					case 'E':
+//expander
+						toolbutton=gtk_separator_tool_item_new();
+						gtk_tool_item_set_expand(toolbutton,true);
+						gtk_separator_tool_item_set_draw((GtkSeparatorToolItem*)toolbutton,false);
+						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
+						break;
 				}
 		}
 }

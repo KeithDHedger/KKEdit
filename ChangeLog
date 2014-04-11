@@ -1,4 +1,6 @@
 0.1.2
+Added expander to toolbar items.
+Added configurable toolbar.
 Fixed bug when loading session where file has weird characters in the name.
 
 0.1.1
