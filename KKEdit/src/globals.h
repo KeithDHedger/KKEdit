@@ -253,6 +253,8 @@ extern GtkToolItem*		copyButton;
 extern GtkToolItem*		pasteButton;
 extern GtkToolItem*		findButton;
 extern GtkToolItem*		gotoDefButton;
+extern GtkToolItem*		findApiButton;
+extern GtkToolItem*		liveSearchButton;
 
 extern GtkWidget*		findReplaceDialog;
 extern GtkWidget*		findBox;

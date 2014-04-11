@@ -326,8 +326,11 @@ void defSearchFromBar(GtkWidget* widget,gpointer data)
 void docSearchFromBar(GtkWidget* widget,gpointer data)
 {
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
-	docSearch(NULL,(void*)text);
-	showDocView(NULL,(void*)text);
+	if(text!=NULL && strlen(text)>0)
+		{
+			docSearch(NULL,(void*)text);
+			showDocView(NULL,(void*)text);
+		}
 }
 
 int		currentFindPage=-1;

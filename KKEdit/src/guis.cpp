@@ -707,11 +707,11 @@ void setUpToolBar(void)
 					case 'A':
 //find in gtkdoc
 						findApiWidget=gtk_entry_new();
-						toolbutton=gtk_tool_item_new();
-						gtk_container_add((GtkContainer *)toolbutton,findApiWidget);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
+						findApiButton=gtk_tool_item_new();
+						gtk_container_add((GtkContainer *)findApiButton,findApiWidget);
+						gtk_toolbar_insert((GtkToolbar*)toolBar,findApiButton,-1);
 						g_signal_connect_after(G_OBJECT(findApiWidget),"activate",G_CALLBACK(docSearchFromBar),(void*)findApiWidget);
-						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Find API In Gtk Docs");
+						gtk_widget_set_tooltip_text((GtkWidget*)findApiButton,"Find API In Gtk Docs");
 						break;
 					case 'D':
 //find in function def
@@ -725,11 +725,11 @@ void setUpToolBar(void)
 					case 'l':
 //livesearch
 						liveSearchWidget=gtk_entry_new();
-						toolbutton=gtk_tool_item_new();
-						gtk_container_add((GtkContainer *)toolbutton,liveSearchWidget);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
+						liveSearchButton=gtk_tool_item_new();
+						gtk_container_add((GtkContainer *)liveSearchButton,liveSearchWidget);
+						gtk_toolbar_insert((GtkToolbar*)toolBar,liveSearchButton,-1);
 						g_signal_connect_after(G_OBJECT(liveSearchWidget),"key-release-event",G_CALLBACK(doLiveSearch),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Live Search");
+						gtk_widget_set_tooltip_text((GtkWidget*)liveSearchButton,"Live Search");
 						break;
 					case 'E':
 //expander
