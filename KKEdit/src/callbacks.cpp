@@ -135,7 +135,7 @@ void setToobarSensitive(void)
 		}
 }
 
-void toggleBookmark(GtkWidget*,GtkTextIter* titer)
+void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 {
 	pageStruct*		page=getPageStructPtr(-1);
 	GtkWidget*		menuitem;

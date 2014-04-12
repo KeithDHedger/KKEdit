@@ -188,7 +188,7 @@ void init(void)
 	g_free(filename);
 
 //toolbar layout
-	toolBarLayout=strdup("NOSsXCPsURsFGsELADl");
+	toolBarLayout=strdup("NOSsXCPsURsFGsE9ADL");
 
 	readConfig();
 

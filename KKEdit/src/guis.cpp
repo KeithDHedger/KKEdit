@@ -366,6 +366,204 @@ void buildTools(void)
 		}
 }
 
+static GtkWidget *mywindow = NULL;
+      GtkWidget *icon_view;
+
+enum
+{
+  COL_TEXT,
+  NUM_COLS
+};
+
+
+static void
+fill_store (GtkListStore *store)
+{
+  GtkTreeIter iter;
+  const gchar *text[] = { "Red", "Green", "Blue", "Yellow" };
+  gint i;
+
+  /* First clear the store */
+  gtk_list_store_clear (store);
+
+  for (i = 0; i < 4; i++)
+    {
+      gtk_list_store_append (store, &iter);
+      gtk_list_store_set (store, &iter, COL_TEXT, text[i], -1);
+    }
+}
+
+static GtkListStore *
+create_store (void)
+{
+  GtkListStore *store;
+
+  store = gtk_list_store_new (NUM_COLS, G_TYPE_STRING);
+
+  return store;
+}
+
+static void
+set_cell_color (GtkCellLayout   *cell_layout,
+		GtkCellRenderer *cell,
+		GtkTreeModel    *tree_model,
+		GtkTreeIter     *iter,
+		gpointer         data)
+{
+  gchar *text;
+  GdkColor color;
+  guint32 pixel = 0;
+  GdkPixbuf *pixbuf;
+
+  gtk_tree_model_get (tree_model, iter, COL_TEXT, &text, -1);
+  if (gdk_color_parse (text, &color))
+    pixel =
+      (color.red   >> 8) << 24 |
+      (color.green >> 8) << 16 |
+      (color.blue  >> 8) << 8;
+
+  g_free (text);
+
+  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, 24, 24);
+  gdk_pixbuf_fill (pixbuf, pixel);
+
+  g_object_set (cell, "pixbuf", pixbuf, NULL);
+
+  g_object_unref (pixbuf);
+}
+
+static void
+edited (GtkCellRendererText *cell,
+	gchar               *path_string,
+	gchar               *text,
+	gpointer             data)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+
+  model = gtk_icon_view_get_model (GTK_ICON_VIEW (data));
+  path = gtk_tree_path_new_from_string (path_string);
+
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+		      COL_TEXT, text, -1);
+
+  gtk_tree_path_free (path);
+}
+
+void dodata(GtkWidget* widget,gpointer data)
+{
+  GtkTreeIter iter;
+  GtkTreePath *path;
+ gboolean	valid;
+  gint row_count = 0;
+  GtkTreeModel *model;
+model = gtk_icon_view_get_model (GTK_ICON_VIEW (data));
+
+valid =  gtk_tree_model_get_iter_first(model,&iter);
+   while (valid)
+    {
+      /* Walk through the list, reading each row */
+      gchar *str_data;
+      gint   int_data;
+      /* Make sure you terminate calls to gtk_tree_model_get()
+       * with a '-1' value
+       */
+      gtk_tree_model_get (model, &iter,
+                          COL_TEXT, &str_data,-1);
+      /* Do something with the data */
+      g_print ("Row %d: (%s,%d)\n", row_count, str_data, int_data);
+      g_free (str_data);
+      row_count ++;
+      valid = gtk_tree_model_iter_next (model, &iter);
+    }
+
+}
+
+GtkWidget *
+do_iconview_edit (GtkWidget *do_widget)
+{
+	GtkWidget*	item;
+	GtkWidget*	vbox;
+
+
+
+	vbox=gtk_vbox_new(false,8);
+
+  if (!mywindow)
+    {
+      GtkListStore *store;
+      GtkCellRenderer *renderer;
+
+      mywindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+      gtk_window_set_screen (GTK_WINDOW (mywindow),
+			     gtk_widget_get_screen (do_widget));
+      gtk_window_set_title (GTK_WINDOW (mywindow), "Editing and Drag-and-Drop");
+
+      g_signal_connect (mywindow, "destroy",
+			G_CALLBACK (gtk_widget_destroyed), &mywindow);
+
+      store = create_store ();
+      fill_store (store);
+
+      icon_view = gtk_icon_view_new_with_model (GTK_TREE_MODEL (store));
+      g_object_unref (store);
+
+      gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (icon_view),
+					GTK_SELECTION_SINGLE);
+      gtk_icon_view_set_orientation (GTK_ICON_VIEW (icon_view),
+				     GTK_ORIENTATION_HORIZONTAL);
+      gtk_icon_view_set_columns (GTK_ICON_VIEW (icon_view), 2);
+      gtk_icon_view_set_reorderable (GTK_ICON_VIEW (icon_view), TRUE);
+
+      renderer = gtk_cell_renderer_pixbuf_new ();
+      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (icon_view),
+				  renderer, TRUE);
+      gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (icon_view),
+					  renderer,
+					  set_cell_color,
+					  NULL, NULL);
+
+      renderer = gtk_cell_renderer_text_new ();
+      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (icon_view),
+				  renderer, TRUE);
+      g_object_set (renderer, "editable", TRUE, NULL);
+      g_signal_connect (renderer, "edited", G_CALLBACK (edited), icon_view);
+      gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (icon_view),
+				      renderer,
+				      "text", COL_TEXT,
+				      NULL);
+
+//      gtk_container_add (GTK_CONTAINER (mywindow), icon_view);
+
+//gtk_container_add (GTK_CONTAINER (vbox), icon_view);
+	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)icon_view,true,true,0);
+
+	item=gtk_button_new_with_label("data");
+	gtk_box_pack_start(GTK_BOX(vbox),item,true,false,2);
+		g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(dodata),icon_view);
+
+ 	//gtk_box_pack_start(mywindow,vbox,true,true,0);
+  gtk_container_add(GTK_CONTAINER(mywindow),(GtkWidget*)vbox);   
+    }
+
+  if (!gtk_widget_get_visible (mywindow))
+    gtk_widget_show_all (mywindow);
+  else
+    {
+      gtk_widget_destroy (mywindow);
+      mywindow = NULL;
+    }
+
+  return mywindow;
+}
+void doDnD(void)
+{
+	mywindow=do_iconview_edit(prefswin);
+}
+
 void doPrefs(void)
 {
 	GtkWidget*	vbox;
@@ -378,7 +576,14 @@ void doPrefs(void)
 	gtk_window_set_title((GtkWindow*)prefswin,"Preferences");
 	vbox=gtk_vbox_new(false,8);
 	hbox=gtk_hbox_new(false,8);
-	
+
+
+//toolbar dnd
+	item=gtk_button_new_with_label("Set Up Tool Bar");
+	gtk_box_pack_start(GTK_BOX(vbox),item,true,false,2);
+	gtk_widget_set_name(item,"Set Up Tool Bar");
+	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(doDnD),NULL);
+
 //appearence 1
 	label=gtk_label_new("<b>General Appearance</b>");
 	gtk_label_set_use_markup((GtkLabel*)label,true);
@@ -412,7 +617,6 @@ void doPrefs(void)
 
 //end appearance 1
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
-//	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
 //apperance 2
 	hbox=gtk_hbox_new(false,8);
