@@ -369,6 +369,11 @@ void buildTools(void)
 static GtkWidget *mywindow = NULL;
       GtkWidget *icon_view;
 
+GtkIconView*	iconView=NULL;
+GtkListStore*	listStore=NULL;
+
+enum {PIXBUF_COLUMN,TEXT_COLUMN,FILE_NAME};
+
 enum
 {
   COL_TEXT,
@@ -390,7 +395,43 @@ fill_store (GtkListStore *store)
     {
       gtk_list_store_append (store, &iter);
       gtk_list_store_set (store, &iter, COL_TEXT, text[i], -1);
+//	gtk_list_store_set(previewBox[whatBox].store,&iter,PIXBUF_COLUMN,pixbuf,TEXT_COLUMN,iconName,FILE_NAME,dbPath,-1);
     }
+}
+
+void populateStore(void)
+{
+	GtkImage*	image;
+	GdkPixbuf*	pbuf;
+	GtkTreeIter iter;
+
+	gtk_list_store_clear(listStore);
+
+	gtk_list_store_append (listStore, &iter);
+	image=NULL;
+	image=(GtkImage*)gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
+	if(image==NULL)
+		printf("XXXXXXXXXX\n");
+	gtk_widget_show((GtkWidget*)image);
+	pbuf=gdk_pixbuf_new_from_file            ("/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/pixmaps/MenuKKEdit.png",
+                                                         NULL);
+//	pbuf=gtk_image_get_pixbuf(image);
+	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"O",FILE_NAME,"XX",-1);
+	g_object_unref(pbuf);
+
+/*
+	gtk_list_store_append (listStore, &iter);
+	image=(GtkImage*)gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
+	pbuf=gtk_image_get_pixbuf(image);
+	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"O",FILE_NAME,"XX",-1);
+	g_object_unref(pbuf);
+
+	gtk_list_store_append (listStore, &iter);
+	image=(GtkImage*)gtk_image_new_from_stock(GTK_STOCK_SAVE,GTK_ICON_SIZE_MENU);
+	pbuf=gtk_image_get_pixbuf(image);
+	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"O",FILE_NAME,"XX",-1);
+	g_object_unref(pbuf);
+*/
 }
 
 static GtkListStore *
@@ -398,7 +439,10 @@ create_store (void)
 {
   GtkListStore *store;
 
-  store = gtk_list_store_new (1, G_TYPE_STRING);
+//  store = gtk_list_store_new (1, G_TYPE_STRING);
+store=gtk_list_store_new(3,GDK_TYPE_PIXBUF,G_TYPE_STRING,G_TYPE_STRING);
+//gtk_icon_view_set_pixbuf_column(GTK_ICON_VIEW(previewBox[j].iconView),PIXBUF_COLUMN);
+//			gtk_icon_view_set_text_column(GTK_ICON_VIEW(previewBox[j].iconView),TEXT_COLUMN);
 
   return store;
 }
@@ -505,33 +549,62 @@ do_iconview_edit (GtkWidget *do_widget)
       g_signal_connect (mywindow, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &mywindow);
 
-      store = create_store ();
-      fill_store (store);
 
-      icon_view = gtk_icon_view_new_with_model (GTK_TREE_MODEL (store));
-      g_object_unref (store);
+		listStore=gtk_list_store_new(3,GDK_TYPE_PIXBUF,G_TYPE_STRING,G_TYPE_STRING);
+		iconView=(GtkIconView*)gtk_icon_view_new();
+		gtk_icon_view_set_pixbuf_column(GTK_ICON_VIEW(iconView),PIXBUF_COLUMN);
+		gtk_icon_view_set_text_column(GTK_ICON_VIEW(iconView),TEXT_COLUMN);
+		gtk_icon_view_set_model(GTK_ICON_VIEW(iconView),GTK_TREE_MODEL(listStore));
 
-      gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (icon_view),
+		populateStore();
+
+ //     store = create_store ();
+ //     icon_view = gtk_icon_view_new_with_model (GTK_TREE_MODEL (store));
+     
+//      fill_store (store);
+
+/*
+			previewBox[j].iconView=(GtkIconView*)gtk_icon_view_new();
+			previewBox[j].itemCnt=0;
+			previewBox[j].partIter=NULL;
+			previewBox[j].store=gtk_list_store_new(3,GDK_TYPE_PIXBUF,G_TYPE_STRING,G_TYPE_STRING);
+
+			gtk_icon_view_set_item_width(previewBox[j].iconView,itemSize);
+			gtk_icon_view_set_item_padding(previewBox[j].iconView,0);
+			gtk_icon_view_set_column_spacing(previewBox[j].iconView,0);
+			gtk_icon_view_set_spacing(previewBox[j].iconView,0);
+
+			gtk_icon_view_set_pixbuf_column(GTK_ICON_VIEW(previewBox[j].iconView),PIXBUF_COLUMN);
+			gtk_icon_view_set_text_column(GTK_ICON_VIEW(previewBox[j].iconView),TEXT_COLUMN);
+
+			gtk_icon_view_set_model(GTK_ICON_VIEW(previewBox[j].iconView),GTK_TREE_MODEL(previewBox[j].store));
+
+*/
+
+
+//       g_object_unref (store);
+
+      gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (iconView),
 					GTK_SELECTION_SINGLE);
-      gtk_icon_view_set_orientation (GTK_ICON_VIEW (icon_view),
+      gtk_icon_view_set_orientation (GTK_ICON_VIEW (iconView),
 				     GTK_ORIENTATION_HORIZONTAL);
-      gtk_icon_view_set_columns (GTK_ICON_VIEW (icon_view), 4);
-      gtk_icon_view_set_reorderable (GTK_ICON_VIEW (icon_view), TRUE);
+      gtk_icon_view_set_columns (GTK_ICON_VIEW (iconView), 4);
+      gtk_icon_view_set_reorderable (GTK_ICON_VIEW (iconView), TRUE);
 
       renderer = gtk_cell_renderer_pixbuf_new ();
-      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (icon_view),
+      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (iconView),
 				  renderer, TRUE);
-      gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (icon_view),
-					  renderer,
-					  set_cell_color,
-					  NULL, NULL);
+ //     gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (icon_view),
+//					  renderer,
+//					  set_cell_color,
+//					  NULL, NULL);
 
       renderer = gtk_cell_renderer_text_new ();
-      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (icon_view),
+      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (iconView),
 				  renderer, TRUE);
       g_object_set (renderer, "editable", TRUE, NULL);
-      g_signal_connect (renderer, "edited", G_CALLBACK (edited), icon_view);
-      gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (icon_view),
+      g_signal_connect (renderer, "edited", G_CALLBACK (edited), iconView);
+      gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (iconView),
 				      renderer,
 				      "text", COL_TEXT,
 				      NULL);
@@ -539,11 +612,11 @@ do_iconview_edit (GtkWidget *do_widget)
 //      gtk_container_add (GTK_CONTAINER (mywindow), icon_view);
 
 //gtk_container_add (GTK_CONTAINER (vbox), icon_view);
-	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)icon_view,true,true,0);
+	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)iconView,true,true,0);
 
 	item=gtk_button_new_with_label("data");
 	gtk_box_pack_start(GTK_BOX(vbox),item,true,false,2);
-		g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(dodata),icon_view);
+		g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(dodata),listStore);
 
  	//gtk_box_pack_start(mywindow,vbox,true,true,0);
   gtk_container_add(GTK_CONTAINER(mywindow),(GtkWidget*)vbox);   
