@@ -76,11 +76,15 @@ void setToobarSensitive(void)
 //undo
 						if(page!=NULL)
 							gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
+						else
+							gtk_widget_set_sensitive((GtkWidget*)undoButton,false);
 						break;
 					case 'R':
 //redo
 						if(page!=NULL)
 							gtk_widget_set_sensitive((GtkWidget*)redoButton,gtk_source_buffer_can_redo(page->buffer));
+						else
+							gtk_widget_set_sensitive((GtkWidget*)redoButton,false);
 						break;
 					case 'F':
 //find
@@ -96,6 +100,14 @@ void setToobarSensitive(void)
 						else
 							gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,false);
 						break;
+					case '9':
+//find in gtkdoc
+						if(page!=NULL)
+							gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,true);
+						else
+							gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,false);
+						break;
+		
 					case 'A':
 //find in gtkdoc
 						if(page!=NULL)
@@ -104,16 +116,15 @@ void setToobarSensitive(void)
 							gtk_widget_set_sensitive((GtkWidget*)findApiButton,false);
 						break;
 		
-//					case 'D':
+					case 'D':
 //find in function def
-//						findDefWidget=gtk_entry_new();
-//						toolbutton=gtk_tool_item_new();
-//						gtk_container_add((GtkContainer *)toolbutton,findDefWidget);
-//						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
-//						g_signal_connect_after(G_OBJECT(findDefWidget),"activate",G_CALLBACK(defSearchFromBar),(void*)findDefWidget);
-//						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Search For Define");
+						if(page!=NULL)
+							gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,true);
+						else
+							gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,false);
 						break;
-					case 'l':
+						break;
+					case 'L':
 //livesearch
 						if(page!=NULL)
 							gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,true);
@@ -326,17 +337,11 @@ void setSensitive(void)
 	else
 		{
 			text=gtk_label_get_text((GtkLabel*)page->tabName);
-//toolbar
-//			gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
-//			gtk_widget_set_sensitive((GtkWidget*)redoButton,gtk_source_buffer_can_redo(page->buffer));
-//			gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
-
 //menu
 			gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));
 			gtk_widget_set_sensitive((GtkWidget*)redoMenu,gtk_source_buffer_can_redo(page->buffer));
 			gtk_widget_set_sensitive((GtkWidget*)saveMenu,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
 //tab
-//			gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
 			if(text[0]=='*')
 				offset=1;
 

@@ -1,4 +1,5 @@
 0.1.2
+Fixed greying out of unsuable toolbar buttons ( e.g. can't 'cut' when no page visible etc ).
 Added expander to toolbar items.
 Added configurable toolbar.
 Fixed bug when loading session where file has weird characters in the name.

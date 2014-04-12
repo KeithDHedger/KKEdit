@@ -695,14 +695,14 @@ void setUpToolBar(void)
 						gtk_signal_connect(GTK_OBJECT(gotoDefButton),"clicked",G_CALLBACK(goToDefinition),NULL);
 						gtk_widget_set_tooltip_text((GtkWidget*)gotoDefButton,"Go To Definition");
 						break;
-					case 'L':
+					case '9':
 						lineNumberWidget=gtk_entry_new();
-						toolbutton=gtk_tool_item_new();
-						gtk_container_add((GtkContainer *)toolbutton,lineNumberWidget);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
+						gotoLineButton=gtk_tool_item_new();
+						gtk_container_add((GtkContainer *)gotoLineButton,lineNumberWidget);
+						gtk_toolbar_insert((GtkToolbar*)toolBar,gotoLineButton,-1);
 						g_signal_connect_after(G_OBJECT(lineNumberWidget),"key-release-event",G_CALLBACK(jumpToLineFromBar),NULL);
-						gtk_widget_set_size_request((GtkWidget*)toolbutton,48,-1);
-						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Go To Line");
+						gtk_widget_set_size_request((GtkWidget*)gotoLineButton,48,-1);
+						gtk_widget_set_tooltip_text((GtkWidget*)gotoLineButton,"Go To Line");
 						break;
 					case 'A':
 //find in gtkdoc
@@ -716,13 +716,13 @@ void setUpToolBar(void)
 					case 'D':
 //find in function def
 						findDefWidget=gtk_entry_new();
-						toolbutton=gtk_tool_item_new();
-						gtk_container_add((GtkContainer *)toolbutton,findDefWidget);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
+						findFuncDefButton=gtk_tool_item_new();
+						gtk_container_add((GtkContainer *)findFuncDefButton,findDefWidget);
+						gtk_toolbar_insert((GtkToolbar*)toolBar,findFuncDefButton,-1);
 						g_signal_connect_after(G_OBJECT(findDefWidget),"activate",G_CALLBACK(defSearchFromBar),(void*)findDefWidget);
-						gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Search For Define");
+						gtk_widget_set_tooltip_text((GtkWidget*)findFuncDefButton,"Search For Define");
 						break;
-					case 'l':
+					case 'L':
 //livesearch
 						liveSearchWidget=gtk_entry_new();
 						liveSearchButton=gtk_tool_item_new();

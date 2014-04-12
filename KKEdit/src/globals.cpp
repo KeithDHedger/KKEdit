@@ -162,7 +162,9 @@ GtkToolItem*	copyButton;
 GtkToolItem*	pasteButton;
 GtkToolItem*	findButton;
 GtkToolItem*	gotoDefButton;
+GtkToolItem*	gotoLineButton;
 GtkToolItem*	findApiButton;
+GtkToolItem*	findFuncDefButton;
 GtkToolItem*	liveSearchButton;
 
 GtkWidget*		findReplaceDialog;
