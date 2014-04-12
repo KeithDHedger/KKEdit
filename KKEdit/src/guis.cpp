@@ -398,7 +398,7 @@ create_store (void)
 {
   GtkListStore *store;
 
-  store = gtk_list_store_new (NUM_COLS, G_TYPE_STRING);
+  store = gtk_list_store_new (1, G_TYPE_STRING);
 
   return store;
 }
@@ -515,7 +515,7 @@ do_iconview_edit (GtkWidget *do_widget)
 					GTK_SELECTION_SINGLE);
       gtk_icon_view_set_orientation (GTK_ICON_VIEW (icon_view),
 				     GTK_ORIENTATION_HORIZONTAL);
-      gtk_icon_view_set_columns (GTK_ICON_VIEW (icon_view), 2);
+      gtk_icon_view_set_columns (GTK_ICON_VIEW (icon_view), 4);
       gtk_icon_view_set_reorderable (GTK_ICON_VIEW (icon_view), TRUE);
 
       renderer = gtk_cell_renderer_pixbuf_new ();
