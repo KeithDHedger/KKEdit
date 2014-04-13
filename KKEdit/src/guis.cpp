@@ -27,6 +27,8 @@
 #include <webkit/webkit.h>
 #endif
 
+GtkWidget*	recent;
+
 void selectToolOptions(GtkWidget* widget,gpointer data)
 {
 	char*			datafolder[2];
@@ -153,6 +155,218 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 					}
 		}
 	g_free(text);
+}
+
+//	toolBarLayout=strdup("NORSsXCPsUrsFGs");
+void setUpToolBar(GtkToolbar* theToolBar,char* theLayout,bool flag)
+{
+	GtkToolItem*	toolbutton;
+
+	for(int j=0;j<(int)strlen(toolBarLayout);j++)
+		{
+			switch(toolBarLayout[j])
+				{
+					case 'N':
+//new
+						if(flag==true)
+							{
+								newButton=gtk_tool_button_new_from_stock(GTK_STOCK_NEW);
+								gtk_toolbar_insert(theToolBar,newButton,-1);
+								gtk_signal_connect(GTK_OBJECT(newButton),"clicked",G_CALLBACK(newFile),NULL);
+								gtk_widget_set_tooltip_text((GtkWidget*)newButton,"New File");
+							}
+						else
+							{
+								toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_NEW);
+								gtk_toolbar_insert(theToolBar,toolbutton,-1);
+								gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"New File");
+							}
+						break;
+					case 'O':
+//open+recent
+						if(flag==true)
+							{
+								openButton=gtk_menu_tool_button_new_from_stock(GTK_STOCK_OPEN);
+								gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(openButton),recent);
+								gtk_signal_connect(GTK_OBJECT(openButton),"clicked",G_CALLBACK(doOpenFile),NULL);
+								gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(openButton),"Open Recent File");
+								gtk_toolbar_insert(theToolBar,openButton,-1);
+								gtk_widget_set_tooltip_text((GtkWidget*)openButton,"Open File");
+							}
+						else
+							{
+								toolbutton=gtk_menu_tool_button_new_from_stock(GTK_STOCK_OPEN);
+								gtk_toolbar_insert(theToolBar,toolbutton,-1);
+								gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Open File");
+							}
+						break;
+					case 'S':
+//save
+						if(flag==true)
+							{
+								saveButton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE);
+								gtk_signal_connect(GTK_OBJECT(saveButton),"clicked",G_CALLBACK(saveFile),NULL);
+								gtk_toolbar_insert(theToolBar,saveButton,-1);
+								gtk_widget_set_tooltip_text((GtkWidget*)saveButton,"Save File");
+							}
+						else
+							{
+								toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE);
+								gtk_toolbar_insert(theToolBar,toolbutton,-1);
+								gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Save File");
+							}
+						break;
+					case 's':
+						gtk_toolbar_insert(theToolBar,gtk_separator_tool_item_new(),-1);
+						break;
+					case 'X':
+//cut
+						if(flag==true)
+							{
+								cutButton=gtk_tool_button_new_from_stock(GTK_STOCK_CUT);
+								gtk_signal_connect(GTK_OBJECT(cutButton),"clicked",G_CALLBACK(cutToClip),NULL);
+								gtk_toolbar_insert(theToolBar,cutButton,-1);
+								gtk_widget_set_tooltip_text((GtkWidget*)cutButton,"Cut");
+							}
+						else
+							{
+								toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_CUT);
+								gtk_toolbar_insert(theToolBar,toolbutton,-1);
+								gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Cut");
+							}
+						break;
+					case 'C':
+//copy
+						if(flag==true)
+							{
+								copyButton=gtk_tool_button_new_from_stock(GTK_STOCK_COPY);
+								gtk_toolbar_insert(theToolBar,copyButton,-1);
+								gtk_signal_connect(GTK_OBJECT(copyButton),"clicked",G_CALLBACK(copyToClip),NULL);
+								gtk_widget_set_tooltip_text((GtkWidget*)copyButton,"Copy");
+							}
+						else
+							{
+								toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_COPY);
+								gtk_toolbar_insert(theToolBar,toolbutton,-1);
+								gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Copy");
+							}
+						break;
+					case 'P':
+//paste
+						if(flag==true)
+							{
+								pasteButton=gtk_tool_button_new_from_stock(GTK_STOCK_PASTE);
+								gtk_toolbar_insert(theToolBar,pasteButton,-1);
+								gtk_signal_connect(GTK_OBJECT(pasteButton),"clicked",G_CALLBACK(pasteFromClip),NULL);
+								gtk_widget_set_tooltip_text((GtkWidget*)pasteButton,"Paste");
+							}
+						else
+							{
+								toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_PASTE);
+								gtk_toolbar_insert(theToolBar,toolbutton,-1);
+								gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Paste");
+							}
+						break;
+					case 'U':
+//undo
+						if(flag==true)
+							{
+								undoButton=gtk_tool_button_new_from_stock(GTK_STOCK_UNDO);
+								gtk_toolbar_insert(theToolBar,undoButton,-1);
+								gtk_signal_connect(GTK_OBJECT(undoButton),"clicked",G_CALLBACK(undo),NULL);
+								gtk_widget_set_tooltip_text((GtkWidget*)undoButton,"Undo");
+							}
+						e;se
+							{
+								toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_UNDO);
+								gtk_toolbar_insert(theToolBar,toolbutton,-1);
+								gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Undo");
+							}
+						break;
+					case 'R':
+//redo
+						if(flag==true)
+							{
+								redoButton=gtk_tool_button_new_from_stock(GTK_STOCK_REDO);
+								gtk_toolbar_insert(theToolBar,redoButton,-1);
+								gtk_signal_connect(GTK_OBJECT(redoButton),"clicked",G_CALLBACK(redo),NULL);
+								gtk_widget_set_tooltip_text((GtkWidget*)redoButton,"Redo");
+							}
+						else
+							{
+								toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_REDO);
+								gtk_toolbar_insert(theToolBar,toolbutton,-1);
+								gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Redo");
+							}
+						break;
+					case 'F':
+//find
+						if(flag==true)
+							{
+								findButton=gtk_tool_button_new_from_stock(GTK_STOCK_FIND);
+								gtk_toolbar_insert(theToolBar,findButton,-1);
+								gtk_signal_connect(GTK_OBJECT(findButton),"clicked",G_CALLBACK(find),NULL);
+								gtk_widget_set_tooltip_text((GtkWidget*)findButton,"Find/Replace");
+							}
+						else
+							{
+								toolbutton=gtk_tool_button_new_from_stock(GTK_STOCK_FIND);
+								gtk_toolbar_insert(theToolBar,toolbutton,-1);
+								gtk_widget_set_tooltip_text((GtkWidget*)toolbutton,"Find/Replace");
+							}
+						break;
+					case 'G':
+//navigation
+						gotoDefButton=gtk_tool_button_new_from_stock(GTK_STOCK_DIALOG_QUESTION);
+						gtk_toolbar_insert(theToolBar,gotoDefButton,-1);
+						gtk_signal_connect(GTK_OBJECT(gotoDefButton),"clicked",G_CALLBACK(goToDefinition),NULL);
+						gtk_widget_set_tooltip_text((GtkWidget*)gotoDefButton,"Go To Definition");
+						break;
+					case '9':
+						lineNumberWidget=gtk_entry_new();
+						gotoLineButton=gtk_tool_item_new();
+						gtk_container_add((GtkContainer *)gotoLineButton,lineNumberWidget);
+						gtk_toolbar_insert(theToolBar,gotoLineButton,-1);
+						g_signal_connect_after(G_OBJECT(lineNumberWidget),"key-release-event",G_CALLBACK(jumpToLineFromBar),NULL);
+						gtk_widget_set_size_request((GtkWidget*)gotoLineButton,48,-1);
+						gtk_widget_set_tooltip_text((GtkWidget*)gotoLineButton,"Go To Line");
+						break;
+					case 'A':
+//find in gtkdoc
+						findApiWidget=gtk_entry_new();
+						findApiButton=gtk_tool_item_new();
+						gtk_container_add((GtkContainer *)findApiButton,findApiWidget);
+						gtk_toolbar_insert(theToolBar,findApiButton,-1);
+						g_signal_connect_after(G_OBJECT(findApiWidget),"activate",G_CALLBACK(docSearchFromBar),(void*)findApiWidget);
+						gtk_widget_set_tooltip_text((GtkWidget*)findApiButton,"Find API In Gtk Docs");
+						break;
+					case 'D':
+//find in function def
+						findDefWidget=gtk_entry_new();
+						findFuncDefButton=gtk_tool_item_new();
+						gtk_container_add((GtkContainer *)findFuncDefButton,findDefWidget);
+						gtk_toolbar_insert(theToolBar,findFuncDefButton,-1);
+						g_signal_connect_after(G_OBJECT(findDefWidget),"activate",G_CALLBACK(defSearchFromBar),(void*)findDefWidget);
+						gtk_widget_set_tooltip_text((GtkWidget*)findFuncDefButton,"Search For Define");
+						break;
+					case 'L':
+//livesearch
+						liveSearchWidget=gtk_entry_new();
+						liveSearchButton=gtk_tool_item_new();
+						gtk_container_add((GtkContainer *)liveSearchButton,liveSearchWidget);
+						gtk_toolbar_insert(theToolBar,liveSearchButton,-1);
+						g_signal_connect_after(G_OBJECT(liveSearchWidget),"key-release-event",G_CALLBACK(doLiveSearch),NULL);
+						gtk_widget_set_tooltip_text((GtkWidget*)liveSearchButton,"Live Search");
+						break;
+					case 'E':
+//expander
+						toolbutton=gtk_separator_tool_item_new();
+						gtk_tool_item_set_expand(toolbutton,true);
+						gtk_separator_tool_item_set_draw((GtkSeparatorToolItem*)toolbutton,false);
+						gtk_toolbar_insert(theToolBar,toolbutton,-1);
+						break;
+				}
+		}
 }
 
 void fillCombo(GtkComboBoxText* combo)
@@ -428,13 +642,49 @@ void populateStore(void)
 	g_object_unref(pbuf);
 
 	gtk_list_store_append (listStore, &iter);
-	image=(GtkImage*)gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
-	pbuf=gtk_image_get_pixbuf(image);
+	image=(GtkImage*)gtk_image_new_from_stock(GTK_STOCK_OPEN ,GTK_ICON_SIZE_LARGE_TOOLBAR);
+//	gtk_widget_show((GtkWidget*)image);
+//	pbuf=gtk_image_get_pixbuf(image);
+GtkWidget* widgdata;//=(GtkWidget*)gtk_tool_button_new_from_stock(GTK_STOCK_NEW);;
+ gchar* stock_id;
+GtkIconSize size;
+widgdata=(GtkWidget*)gtk_tool_button_new_from_stock(GTK_STOCK_NEW);
+
+//gtk_image_get_stock (image, &stock_id, &size);
+
+pbuf=gtk_widget_render_icon((GtkWidget *)widgdata,GTK_STOCK_NEW ,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
+
+
 	if(pbuf!=NULL)
 	{
 	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"O",FILE_NAME,"XX",-1);
 //	g_object_unref(pbuf);
 }
+	gtk_list_store_append (listStore, &iter);
+widgdata=(GtkWidget*)gtk_tool_button_new_from_stock(GTK_STOCK_SAVE);
+
+//gtk_image_get_stock (image, &stock_id, &size);
+
+pbuf=gtk_widget_render_icon((GtkWidget *)widgdata,GTK_STOCK_SAVE ,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
+
+
+	if(pbuf!=NULL)
+	{
+	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"O",FILE_NAME,"XX",-1);
+//	g_object_unref(pbuf);
+}
+
+GtkIconTheme *itheme=gtk_icon_theme_get_for_screen(gdk_screen_get_default());
+itheme = gtk_icon_theme_get_default ();
+
+	gtk_list_store_append (listStore, &iter);
+pbuf=gtk_icon_theme_load_icon(itheme,GTK_STOCK_CUT,32,(GtkIconLookupFlags)0,NULL);
+	if(pbuf!=NULL)
+	{
+	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"X",FILE_NAME,"XX",-1);
+//	g_object_unref(pbuf);
+}
+
 /*
 	gtk_list_store_append (listStore, &iter);
 	image=(GtkImage*)gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
@@ -621,6 +871,7 @@ do_iconview_edit (GtkWidget *do_widget)
 
   return mywindow;
 }
+
 void doDnD(void)
 {
 	mywindow=do_iconview_edit(prefswin);
@@ -633,6 +884,7 @@ void doPrefs(void)
 	GtkWidget*	hbox2;
 	GtkWidget*	item;
 	GtkWidget*	label;
+	GtkToolbar*	customToolbar;
 
 	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)prefswin,"Preferences");
@@ -641,10 +893,14 @@ void doPrefs(void)
 
 
 //toolbar dnd
-	item=gtk_button_new_with_label("Set Up Tool Bar");
-	gtk_box_pack_start(GTK_BOX(vbox),item,true,false,2);
-	gtk_widget_set_name(item,"Set Up Tool Bar");
-	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(doDnD),NULL);
+	
+//	item=gtk_button_new_with_label("Set Up Tool Bar");
+//	gtk_box_pack_start(GTK_BOX(vbox),item,true,false,2);
+//	gtk_widget_set_name(item,"Set Up Tool Bar");
+//	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(doDnD),NULL);
+	customToolbar=(GtkToolbar*)gtk_toolbar_new();
+	setUpToolBar(customToolbar,"NOSsXCPsURsFGsE9ADL");
+	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)customToolbar,true,false,2);
 
 //appearence 1
 	label=gtk_label_new("<b>General Appearance</b>");
@@ -843,8 +1099,6 @@ void doPrefs(void)
 	gtk_widget_show_all(prefswin);
 }
 
-GtkWidget*	recent;
-
 void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 {
 	GList*		itemlist=NULL;
@@ -873,137 +1127,6 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(recentFileMenu),(void*)filename);
 					g_free (uri);
-				}
-		}
-}
-//	toolBarLayout=strdup("NORSsXCPsUrsFGs");
-void setUpToolBar(void)
-{
-	GtkToolItem*	toolbutton;
-
-	for(int j=0;j<(int)strlen(toolBarLayout);j++)
-		{
-			switch(toolBarLayout[j])
-				{
-					case 'N':
-//new
-						newButton=gtk_tool_button_new_from_stock(GTK_STOCK_NEW);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,newButton,-1);
-						gtk_signal_connect(GTK_OBJECT(newButton),"clicked",G_CALLBACK(newFile),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)newButton,"New File");
-						break;
-					case 'O':
-//open+recent
-						openButton=gtk_menu_tool_button_new_from_stock(GTK_STOCK_OPEN);
-						gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(openButton),recent);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,openButton,-1);
-						gtk_signal_connect(GTK_OBJECT(openButton),"clicked",G_CALLBACK(doOpenFile),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)openButton,"Open File");
-						gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(openButton),"Open Recent File");
-						break;
-					case 'S':
-//save
-						saveButton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,saveButton,-1);
-						gtk_signal_connect(GTK_OBJECT(saveButton),"clicked",G_CALLBACK(saveFile),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)saveButton,"Save File");
-
-						break;
-					case 's':
-						gtk_toolbar_insert((GtkToolbar*)toolBar,gtk_separator_tool_item_new(),-1);
-						break;
-					case 'X':
-//cut
-						cutButton=gtk_tool_button_new_from_stock(GTK_STOCK_CUT);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,cutButton,-1);
-						gtk_signal_connect(GTK_OBJECT(cutButton),"clicked",G_CALLBACK(cutToClip),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)cutButton,"Cut");
-						break;
-					case 'C':
-//copy
-						copyButton=gtk_tool_button_new_from_stock(GTK_STOCK_COPY);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,copyButton,-1);
-						gtk_signal_connect(GTK_OBJECT(copyButton),"clicked",G_CALLBACK(copyToClip),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)copyButton,"Copy");
-						break;
-					case 'P':
-//paste
-						pasteButton=gtk_tool_button_new_from_stock(GTK_STOCK_PASTE);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,pasteButton,-1);
-						gtk_signal_connect(GTK_OBJECT(pasteButton),"clicked",G_CALLBACK(pasteFromClip),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)pasteButton,"Paste");
-						break;
-					case 'U':
-//undo
-						undoButton=gtk_tool_button_new_from_stock(GTK_STOCK_UNDO);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,undoButton,-1);
-						gtk_signal_connect(GTK_OBJECT(undoButton),"clicked",G_CALLBACK(undo),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)undoButton,"Undo");
-						break;
-					case 'R':
-//redo
-						redoButton=gtk_tool_button_new_from_stock(GTK_STOCK_REDO);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,redoButton,-1);
-						gtk_signal_connect(GTK_OBJECT(redoButton),"clicked",G_CALLBACK(redo),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)redoButton,"Redo");
-						break;
-					case 'F':
-//find
-						findButton=gtk_tool_button_new_from_stock(GTK_STOCK_FIND);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,findButton,-1);
-						gtk_signal_connect(GTK_OBJECT(findButton),"clicked",G_CALLBACK(find),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)findButton,"Find/Replace");
-						break;
-					case 'G':
-//navigation
-						gotoDefButton=gtk_tool_button_new_from_stock(GTK_STOCK_DIALOG_QUESTION);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,gotoDefButton,-1);
-						gtk_signal_connect(GTK_OBJECT(gotoDefButton),"clicked",G_CALLBACK(goToDefinition),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)gotoDefButton,"Go To Definition");
-						break;
-					case '9':
-						lineNumberWidget=gtk_entry_new();
-						gotoLineButton=gtk_tool_item_new();
-						gtk_container_add((GtkContainer *)gotoLineButton,lineNumberWidget);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,gotoLineButton,-1);
-						g_signal_connect_after(G_OBJECT(lineNumberWidget),"key-release-event",G_CALLBACK(jumpToLineFromBar),NULL);
-						gtk_widget_set_size_request((GtkWidget*)gotoLineButton,48,-1);
-						gtk_widget_set_tooltip_text((GtkWidget*)gotoLineButton,"Go To Line");
-						break;
-					case 'A':
-//find in gtkdoc
-						findApiWidget=gtk_entry_new();
-						findApiButton=gtk_tool_item_new();
-						gtk_container_add((GtkContainer *)findApiButton,findApiWidget);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,findApiButton,-1);
-						g_signal_connect_after(G_OBJECT(findApiWidget),"activate",G_CALLBACK(docSearchFromBar),(void*)findApiWidget);
-						gtk_widget_set_tooltip_text((GtkWidget*)findApiButton,"Find API In Gtk Docs");
-						break;
-					case 'D':
-//find in function def
-						findDefWidget=gtk_entry_new();
-						findFuncDefButton=gtk_tool_item_new();
-						gtk_container_add((GtkContainer *)findFuncDefButton,findDefWidget);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,findFuncDefButton,-1);
-						g_signal_connect_after(G_OBJECT(findDefWidget),"activate",G_CALLBACK(defSearchFromBar),(void*)findDefWidget);
-						gtk_widget_set_tooltip_text((GtkWidget*)findFuncDefButton,"Search For Define");
-						break;
-					case 'L':
-//livesearch
-						liveSearchWidget=gtk_entry_new();
-						liveSearchButton=gtk_tool_item_new();
-						gtk_container_add((GtkContainer *)liveSearchButton,liveSearchWidget);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,liveSearchButton,-1);
-						g_signal_connect_after(G_OBJECT(liveSearchWidget),"key-release-event",G_CALLBACK(doLiveSearch),NULL);
-						gtk_widget_set_tooltip_text((GtkWidget*)liveSearchButton,"Live Search");
-						break;
-					case 'E':
-//expander
-						toolbutton=gtk_separator_tool_item_new();
-						gtk_tool_item_set_expand(toolbutton,true);
-						gtk_separator_tool_item_set_draw((GtkSeparatorToolItem*)toolbutton,false);
-						gtk_toolbar_insert((GtkToolbar*)toolBar,toolbutton,-1);
-						break;
 				}
 		}
 }
@@ -1059,7 +1182,7 @@ void buildMainGui(void)
 	gtk_recent_chooser_set_filter(GTK_RECENT_CHOOSER(recent),filter);
 	g_signal_connect(recent,"item_activated",G_CALLBACK(recentFileMenu),NULL);
 
-	setUpToolBar();
+	setUpToolBar((GtkToolbar*)toolBar,toolBarLayout,true);
 
 //menus
 //file menu
