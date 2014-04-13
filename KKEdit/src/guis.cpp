@@ -427,7 +427,14 @@ void populateStore(void)
 	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"S",FILE_NAME,"XX",-1);
 	g_object_unref(pbuf);
 
-
+	gtk_list_store_append (listStore, &iter);
+	image=(GtkImage*)gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
+	pbuf=gtk_image_get_pixbuf(image);
+	if(pbuf!=NULL)
+	{
+	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"O",FILE_NAME,"XX",-1);
+//	g_object_unref(pbuf);
+}
 /*
 	gtk_list_store_append (listStore, &iter);
 	image=(GtkImage*)gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
