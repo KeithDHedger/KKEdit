@@ -419,6 +419,15 @@ void populateStore(void)
 	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"O",FILE_NAME,"XX",-1);
 	g_object_unref(pbuf);
 
+	gtk_list_store_append (listStore, &iter);
+
+	pbuf=gdk_pixbuf_new_from_file            ("/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/pixmaps/ROOTKKEdit.png",
+                                                         NULL);
+//	pbuf=gtk_image_get_pixbuf(image);
+	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"S",FILE_NAME,"XX",-1);
+	g_object_unref(pbuf);
+
+
 /*
 	gtk_list_store_append (listStore, &iter);
 	image=(GtkImage*)gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
@@ -447,34 +456,6 @@ store=gtk_list_store_new(3,GDK_TYPE_PIXBUF,G_TYPE_STRING,G_TYPE_STRING);
   return store;
 }
 
-static void
-set_cell_color (GtkCellLayout   *cell_layout,
-		GtkCellRenderer *cell,
-		GtkTreeModel    *tree_model,
-		GtkTreeIter     *iter,
-		gpointer         data)
-{
-  gchar *text;
-  GdkColor color;
-  guint32 pixel = 0;
-  GdkPixbuf *pixbuf;
-
-  gtk_tree_model_get (tree_model, iter, COL_TEXT, &text, -1);
-  if (gdk_color_parse (text, &color))
-    pixel =
-      (color.red   >> 8) << 24 |
-      (color.green >> 8) << 16 |
-      (color.blue  >> 8) << 8;
-
-  g_free (text);
-
-  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, 24, 24);
-  gdk_pixbuf_fill (pixbuf, pixel);
-
-  g_object_set (cell, "pixbuf", pixbuf, NULL);
-
-  g_object_unref (pixbuf);
-}
 
 static void
 edited (GtkCellRendererText *cell,
@@ -503,7 +484,7 @@ void dodata(GtkWidget* widget,gpointer data)
  gboolean	valid;
   gint row_count = 0;
   GtkTreeModel *model;
-model = gtk_icon_view_get_model (GTK_ICON_VIEW (data));
+model = gtk_icon_view_get_model (GTK_ICON_VIEW (iconView));
 
 valid =  gtk_tree_model_get_iter_first(model,&iter);
    while (valid)
@@ -515,10 +496,11 @@ valid =  gtk_tree_model_get_iter_first(model,&iter);
        * with a '-1' value
        */
       gtk_tree_model_get (model, &iter,
-                          COL_TEXT, &str_data,-1);
+                          TEXT_COLUMN, &str_data,-1);
+              printf("XXX%sXXX\n",str_data);
       /* Do something with the data */
-      g_print ("Row %d: (%s,%d)\n", row_count, str_data, int_data);
-      g_free (str_data);
+     // g_print ("Row %d: (%s,%d)\n", row_count, str_data, int_data);
+      //g_free (str_data);
       row_count ++;
       valid = gtk_tree_model_iter_next (model, &iter);
     }
@@ -553,7 +535,7 @@ do_iconview_edit (GtkWidget *do_widget)
 		listStore=gtk_list_store_new(3,GDK_TYPE_PIXBUF,G_TYPE_STRING,G_TYPE_STRING);
 		iconView=(GtkIconView*)gtk_icon_view_new();
 		gtk_icon_view_set_pixbuf_column(GTK_ICON_VIEW(iconView),PIXBUF_COLUMN);
-		gtk_icon_view_set_text_column(GTK_ICON_VIEW(iconView),TEXT_COLUMN);
+		//gtk_icon_view_set_text_column(GTK_ICON_VIEW(iconView),TEXT_COLUMN);
 		gtk_icon_view_set_model(GTK_ICON_VIEW(iconView),GTK_TREE_MODEL(listStore));
 
 		populateStore();
@@ -602,12 +584,12 @@ do_iconview_edit (GtkWidget *do_widget)
       renderer = gtk_cell_renderer_text_new ();
       gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (iconView),
 				  renderer, TRUE);
-      g_object_set (renderer, "editable", TRUE, NULL);
-      g_signal_connect (renderer, "edited", G_CALLBACK (edited), iconView);
-      gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (iconView),
-				      renderer,
-				      "text", COL_TEXT,
-				      NULL);
+// //     g_object_set (renderer, "editable", TRUE, NULL);
+//      g_signal_connect (renderer, "edited", G_CALLBACK (edited), iconView);
+//      gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (iconView),
+//				      renderer,
+//				      "text", COL_TEXT,
+//				      NULL);
 
 //      gtk_container_add (GTK_CONTAINER (mywindow), icon_view);
 
