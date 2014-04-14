@@ -683,8 +683,8 @@ gtk_drag_dest_set (toHBox,
      //               NULL);
 // 	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 //	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);
-	gtk_drag_dest_add_text_targets((GtkWidget*)toHBox);
-	gtk_drag_dest_add_image_targets     ((GtkWidget*)toHBox);
+//	gtk_drag_dest_add_text_targets((GtkWidget*)toHBox);
+//	gtk_drag_dest_add_image_targets     ((GtkWidget*)toHBox);
 	g_signal_connect(G_OBJECT(toHBox),"drag-data-received",G_CALLBACK(dropstuff),NULL);
    	g_signal_connect(G_OBJECT(toHBox),"selection-received",G_CALLBACK(dropstuff),NULL);
                                  
