@@ -676,7 +676,7 @@ GtkWidget*	evbox=gtk_event_box_new();
 
 gtk_drag_dest_set (toHBox,
                    GTK_DEST_DEFAULT_ALL,
-                   target_table, 3,
+                   NULL, 0,
                    GDK_ACTION_COPY);
  //gtk_signal_connect (GTK_OBJECT (toHBox), "drag-data-received",
    //                 GTK_SIGNAL_FUNC (target_drag_data_received),
