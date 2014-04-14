@@ -262,6 +262,10 @@ extern GtkWidget*		findReplaceDialog;
 extern GtkWidget*		findBox;
 extern GtkWidget*		replaceBox;
 
+//custom toolbar
+extern GtkWidget*		toHBox;
+extern GtkWidget*		fromHBox;
+
 extern char*			functionSearchText;
 extern char*			thePage;
 extern char*			htmlFile;

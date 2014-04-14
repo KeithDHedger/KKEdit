@@ -171,6 +171,10 @@ GtkWidget*		findReplaceDialog;
 GtkWidget*		findBox;
 GtkWidget*		replaceBox;
 
+//custom toolbar
+GtkWidget*		toHBox;
+GtkWidget*		fromHBox;
+
 char*			functionSearchText=NULL;
 char*			thePage=NULL;
 char*			htmlFile=NULL;
