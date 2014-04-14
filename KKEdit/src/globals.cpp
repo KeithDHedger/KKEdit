@@ -174,6 +174,7 @@ GtkWidget*		replaceBox;
 //custom toolbar
 GtkWidget*		toHBox;
 GtkWidget*		fromHBox;
+GtkWidget*		iconViewBox;
 
 char*			functionSearchText=NULL;
 char*			thePage=NULL;

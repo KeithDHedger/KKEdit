@@ -265,6 +265,7 @@ extern GtkWidget*		replaceBox;
 //custom toolbar
 extern GtkWidget*		toHBox;
 extern GtkWidget*		fromHBox;
+extern GtkWidget*		iconViewBox;
 
 extern char*			functionSearchText;
 extern char*			thePage;

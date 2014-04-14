@@ -629,7 +629,7 @@ source_drag_data_get  (GtkWidget          *widget,
         char string[] = "Some String!";
         gtk_selection_data_set (selection_data,
                                 selection_data->target,
-                                8, (const guchar*)string, sizeof(string));
+                                8, (const guchar*)data, sizeof(string));
 }
 static void  
 target_drag_data_received  (GtkWidget          *widget,
@@ -651,61 +651,142 @@ void dropstuff(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelect
 	array=gtk_selection_data_get_uris(selection_data);
 
 fprintf(stderr,"ZZZZZZZZZZZ\n");
+fprintf(stderr,"Got: %s\n",(char*)selection_data->data);
 gtk_drag_finish (context,true,true,time);
+}
+
+void setDragData(GtkWidget *widget, GdkDragContext *context, GtkSelectionData *selection_data, guint info, guint time, gpointer data)
+{
+	gtk_selection_data_set(selection_data,selection_data->target,8,(const guchar*)data,sizeof((char*)data));
+}
+
+void addIcon(char* icon,char* data)
+{
+	GtkWidget*		image;
+	GtkWidget*		evbox;
+
+	image=gtk_image_new_from_stock(icon,GTK_ICON_SIZE_LARGE_TOOLBAR);
+	evbox=gtk_event_box_new();
+	gtk_container_add(GTK_CONTAINER(evbox),image);
+	gtk_box_pack_start(GTK_BOX(fromHBox),evbox,false,false,2);
+	gtk_drag_source_set(evbox,GDK_BUTTON1_MASK,NULL,0,GDK_ACTION_COPY);
+	gtk_drag_source_add_text_targets((GtkWidget*)evbox);
+	gtk_signal_connect(GTK_OBJECT(evbox),"drag-data-get",GTK_SIGNAL_FUNC (setDragData),(void*)data);
+}
+
+void currentToolBar(void)
+{
+	GtkWidget*		image;
+
+	for(int j=0;j<(int)strlen(toolBarLayout);j++)
+		{
+			image=NULL;
+			switch(toolBarLayout[j])
+				{
+					case 'N':
+//new
+						image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_LARGE_TOOLBAR);
+						break;
+					case 'O':
+//open+recent
+						image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_LARGE_TOOLBAR);
+						break;
+					case 'S':
+//save
+						image=gtk_image_new_from_stock(GTK_STOCK_SAVE,GTK_ICON_SIZE_LARGE_TOOLBAR);
+						break;
+					case 's':
+						image=gtk_vseparator_new();
+						break;
+					case 'X':
+//cut
+						image=gtk_image_new_from_stock(GTK_STOCK_CUT,GTK_ICON_SIZE_LARGE_TOOLBAR);
+						break;
+					case 'C':
+//copy
+						image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_LARGE_TOOLBAR);
+						break;
+					case 'P':
+//paste
+						image=gtk_image_new_from_stock(GTK_STOCK_PASTE,GTK_ICON_SIZE_LARGE_TOOLBAR);
+						break;
+					case 'U':
+//undo
+						image=gtk_image_new_from_stock(GTK_STOCK_UNDO,GTK_ICON_SIZE_LARGE_TOOLBAR);
+						break;
+					case 'R':
+//redo
+						image=gtk_image_new_from_stock(GTK_STOCK_REDO,GTK_ICON_SIZE_LARGE_TOOLBAR);
+						break;
+					case 'F':
+//find
+						image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_LARGE_TOOLBAR);
+						break;
+					case 'G':
+//navigation
+						image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_LARGE_TOOLBAR);
+						break;
+					case '9':
+						image=gtk_entry_new();
+						gtk_widget_set_size_request(image,16,-1);
+						break;
+					case 'A':
+//find in gtkdoc
+						image=gtk_entry_new();
+						gtk_widget_set_size_request(image,24,-1);
+						break;
+					case 'D':
+//find in function def
+						image=gtk_entry_new();
+						gtk_widget_set_size_request(image,24,-1);
+						break;
+					case 'L':
+//livesearch
+						image=gtk_entry_new();
+						gtk_widget_set_size_request(image,24,-1);
+						break;
+					case 'E':
+//expander
+						image=(GtkWidget*)gtk_separator_tool_item_new();
+						gtk_tool_item_set_expand((GtkToolItem*)image,true);
+						gtk_separator_tool_item_set_draw((GtkSeparatorToolItem*)image,false);
+						break;
+				}
+			if(image!=NULL)
+				gtk_box_pack_start(GTK_BOX(toHBox),image,false,false,2);
+		}
 }
 
 void populateDnD(void)
 {
-	GtkWidget*	image;
+	GtkWidget*		image;
 	GtkTargetList*	targ;
-	GtkWidget*	hbox=gtk_hbox_new(false,0);
+	GtkWidget*		evbox;
 
-	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_LARGE_TOOLBAR);
-	gtk_box_pack_start(GTK_BOX(toHBox),image,false,false,2);
-	
-	image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_LARGE_TOOLBAR);
-GtkWidget*	evbox=gtk_event_box_new();
-	//gtk_box_pack_start(GTK_BOX(evbox),image,false,false,2);
-	gtk_container_add(GTK_CONTAINER(evbox),image);
-//gtk_container_add(GTK_CONTAINER(hbox),evbox);
-//	gtk_target_list_add_text_targets(targ,666);
-//
-	//gtk_container_add(GTK_CONTAINER(evbox),hbox);
-	gtk_box_pack_start(GTK_BOX(fromHBox),evbox,false,false,2);
-	gtk_widget_show(image);
-
-gtk_drag_dest_set (toHBox,
-                   GTK_DEST_DEFAULT_ALL,
-                   NULL, 0,
-                   GDK_ACTION_COPY);
- //gtk_signal_connect (GTK_OBJECT (toHBox), "drag-data-received",
-   //                 GTK_SIGNAL_FUNC (target_drag_data_received),
-     //               NULL);
-// 	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
-//	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);
-//	gtk_drag_dest_add_text_targets((GtkWidget*)toHBox);
-//	gtk_drag_dest_add_image_targets     ((GtkWidget*)toHBox);
+	currentToolBar();
+	gtk_drag_dest_set(toHBox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
+	gtk_drag_dest_add_text_targets((GtkWidget*)toHBox);
 	g_signal_connect(G_OBJECT(toHBox),"drag-data-received",G_CALLBACK(dropstuff),NULL);
-   	g_signal_connect(G_OBJECT(toHBox),"selection-received",G_CALLBACK(dropstuff),NULL);
-                                 
-gtk_drag_source_set (evbox,
-                     GDK_BUTTON1_MASK,
-                     NULL, 0,
-                     GDK_ACTION_COPY);
 
-	gtk_drag_source_add_text_targets((GtkWidget*)evbox);
-	gtk_drag_source_add_image_targets     ((GtkWidget*)evbox);
-
-
-
-gtk_signal_connect (GTK_OBJECT (evbox), "drag-data-get",
-                    GTK_SIGNAL_FUNC (source_drag_data_get),
-                    NULL);
-                 
-//	gtk_drag_source_set(image,GDK_BUTTON1_MASK,(const GtkTargetEntry*)&targ,1,GDK_ACTION_DEFAULT);
+	addIcon(GTK_STOCK_NEW,"N");
+	addIcon(GTK_STOCK_OPEN,"O");
+	addIcon(GTK_STOCK_SAVE,"S");
+	addIcon(GTK_STOCK_CUT,"X");
+	addIcon(GTK_STOCK_COPY,"C");
+	addIcon(GTK_STOCK_PASTE,"P");
+	addIcon(GTK_STOCK_UNDO,"U");
+	addIcon(GTK_STOCK_REDO,"R");
+	addIcon(GTK_STOCK_FIND,"F");
+	addIcon(GTK_STOCK_DIALOG_QUESTION,"G");
+	addIcon(GTK_STOCK_ADD,"9");
+	addIcon(GTK_STOCK_BOLD,"A");
+	addIcon(GTK_STOCK_BOLD,"D");
+	addIcon(GTK_STOCK_BOLD,"L");
+	addIcon(GTK_STOCK_JUSTIFY_FILL,"s");
+	addIcon(GTK_STOCK_FULLSCREEN,"E");
 }
 
-void populateStore(void)
+void populateStoreXXX(void)
 {
 	GtkImage*	image;
 	GdkPixbuf*	pbuf;
@@ -887,7 +968,7 @@ do_iconview_edit (GtkWidget *do_widget)
 		//gtk_icon_view_set_text_column(GTK_ICON_VIEW(iconView),TEXT_COLUMN);
 		gtk_icon_view_set_model(GTK_ICON_VIEW(iconView),GTK_TREE_MODEL(listStore));
 
-		populateStore();
+////////		populateStore();
 
  //     store = create_store ();
  //     icon_view = gtk_icon_view_new_with_model (GTK_TREE_MODEL (store));
@@ -969,6 +1050,219 @@ void doDnD(void)
 	mywindow=do_iconview_edit(prefswin);
 }
 
+void dropOnIconView(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
+{
+	GtkWidget*	image;
+	GdkPixbuf*	pbuf;
+	gchar**			array=NULL;
+	array=gtk_selection_data_get_uris(selection_data);
+
+fprintf(stderr,"qqqqqqqqqq\n");
+fprintf(stderr,"Got: %s\n",(char*)selection_data->data);
+
+
+	GtkTreeIter iter;
+
+	gtk_list_store_append (listStore, &iter);
+	image=NULL;
+//	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
+//	if(image==NULL)
+//		printf("XXXXXXXXXX\n");
+//	gtk_widget_show(image);
+	pbuf=gdk_pixbuf_new_from_file            ("/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/pixmaps/MenuKKEdit.png",
+                                                         NULL);
+//	pbuf=gtk_image_get_pixbuf(image);
+	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"Q",FILE_NAME,"XX",-1);
+
+
+
+gtk_drag_finish (context,true,true,time);
+}
+
+void populateStore(void)
+{
+	GdkPixbuf*	pbuf;
+	GtkWidget*	image;
+	GtkTreeIter iter;
+
+	image=(GtkWidget*)newButton;
+	for(int j=0;j<(int)strlen(toolBarLayout);j++)
+		{
+			switch(toolBarLayout[j])
+				{
+					case 'N':
+//new
+						gtk_list_store_append (listStore, &iter);
+						pbuf=gtk_widget_render_icon(image,GTK_STOCK_NEW,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
+						if(pbuf!=NULL)
+							{
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								g_object_unref(pbuf);
+							}
+						break;
+					case 'O':
+//open+recent
+						gtk_list_store_append (listStore, &iter);
+						pbuf=gtk_widget_render_icon(image,GTK_STOCK_OPEN,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
+						if(pbuf!=NULL)
+							{
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								g_object_unref(pbuf);
+							}
+						break;
+					case 'S':
+//save
+						gtk_list_store_append (listStore, &iter);
+						pbuf=gtk_widget_render_icon(image,GTK_STOCK_SAVE,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
+						if(pbuf!=NULL)
+							{
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								g_object_unref(pbuf);
+							}
+						break;
+
+//					case 's':
+//						image=gtk_vseparator_new();
+//						break;
+					case 'X':
+//cut
+						gtk_list_store_append (listStore, &iter);
+						pbuf=gtk_widget_render_icon(image,GTK_STOCK_CUT,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
+						if(pbuf!=NULL)
+							{
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								g_object_unref(pbuf);
+							}
+						break;
+					case 'C':
+//copy
+						gtk_list_store_append (listStore, &iter);
+						pbuf=gtk_widget_render_icon(image,GTK_STOCK_COPY,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
+						if(pbuf!=NULL)
+							{
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								g_object_unref(pbuf);
+							}
+						break;
+					case 'P':
+//paste
+						gtk_list_store_append (listStore, &iter);
+						pbuf=gtk_widget_render_icon(image,GTK_STOCK_PASTE,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
+						if(pbuf!=NULL)
+							{
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								g_object_unref(pbuf);
+							}
+						break;
+					case 'U':
+//undo
+						gtk_list_store_append (listStore, &iter);
+						pbuf=gtk_widget_render_icon(image,GTK_STOCK_UNDO,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
+						if(pbuf!=NULL)
+							{
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								g_object_unref(pbuf);
+							}
+						break;
+					case 'R':
+//redo
+						gtk_list_store_append (listStore, &iter);
+						pbuf=gtk_widget_render_icon(image,GTK_STOCK_REDO,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
+						if(pbuf!=NULL)
+							{
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								g_object_unref(pbuf);
+							}
+						break;
+					case 'F':
+//find
+						gtk_list_store_append (listStore, &iter);
+						pbuf=gtk_widget_render_icon(image,GTK_STOCK_FIND,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
+						if(pbuf!=NULL)
+							{
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								g_object_unref(pbuf);
+							}
+						break;
+					case 'G':
+//navigation
+						gtk_list_store_append (listStore, &iter);
+						pbuf=gtk_widget_render_icon(image,GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
+						if(pbuf!=NULL)
+							{
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								g_object_unref(pbuf);
+							}
+						break;
+#if 0
+					case '9':
+						image=gtk_entry_new();
+						gtk_widget_set_size_request(image,16,-1);
+						break;
+					case 'A':
+//find in gtkdoc
+						image=gtk_entry_new();
+						gtk_widget_set_size_request(image,24,-1);
+						break;
+					case 'D':
+//find in function def
+						image=gtk_entry_new();
+						gtk_widget_set_size_request(image,24,-1);
+						break;
+					case 'L':
+//livesearch
+						image=gtk_entry_new();
+						gtk_widget_set_size_request(image,24,-1);
+						break;
+					case 'E':
+//expander
+						image=(GtkWidget*)gtk_separator_tool_item_new();
+						gtk_tool_item_set_expand((GtkToolItem*)image,true);
+						gtk_separator_tool_item_set_draw((GtkSeparatorToolItem*)image,false);
+						break;
+#endif
+				}
+//			if(image!=NULL)
+	//			gtk_box_pack_start(GTK_BOX(toHBox),image,false,false,2);
+		}
+}
+
+void doIconView(void)
+{
+	GtkWidget*	item;
+	GtkWidget*	vbox;
+
+	vbox=gtk_vbox_new(false,0);
+
+	GtkListStore *store;
+	GtkCellRenderer *renderer;
+
+	listStore=gtk_list_store_new(3,GDK_TYPE_PIXBUF,G_TYPE_STRING,G_TYPE_STRING);
+	iconView=(GtkIconView*)gtk_icon_view_new();
+	gtk_icon_view_set_pixbuf_column(GTK_ICON_VIEW(iconView),PIXBUF_COLUMN);
+	gtk_icon_view_set_model(GTK_ICON_VIEW(iconView),GTK_TREE_MODEL(listStore));
+	gtk_icon_view_set_item_padding(GTK_ICON_VIEW(iconView),0);
+	
+	populateStore();
+
+	gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (iconView),GTK_SELECTION_SINGLE);
+	gtk_icon_view_set_orientation (GTK_ICON_VIEW (iconView),GTK_ORIENTATION_HORIZONTAL);
+	gtk_icon_view_set_columns (GTK_ICON_VIEW (iconView),24);
+	gtk_icon_view_set_reorderable(GTK_ICON_VIEW(iconView),TRUE);
+
+	renderer=gtk_cell_renderer_pixbuf_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(iconView),renderer,TRUE);
+
+	renderer=gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(iconView),renderer,TRUE);
+
+	gtk_box_pack_start(GTK_BOX(iconViewBox),(GtkWidget*)iconView,true,false,2);
+
+//	gtk_drag_dest_set((GtkWidget*)iconView,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
+//	gtk_drag_dest_add_text_targets((GtkWidget*)iconView);
+//	g_signal_connect(G_OBJECT(iconView),"drag-data-received",G_CALLBACK(dropOnIconView),NULL);
+}
+
 void doPrefs(void)
 {
 	GtkWidget*	vbox;
@@ -983,18 +1277,26 @@ void doPrefs(void)
 	vbox=gtk_vbox_new(false,8);
 	hbox=gtk_hbox_new(true,8);
 
-
+//mywindow=do_iconview_edit(prefswin);
 //toolbar dnd
 
 	toHBox=gtk_hbox_new(false,8);
+	iconViewBox=gtk_hbox_new(false,8);
 	fromHBox=gtk_hbox_new(false,8);
 	gtk_box_pack_start(GTK_BOX(vbox),toHBox,true,false,2);
+	gtk_box_pack_start(GTK_BOX(vbox),iconViewBox,true,false,2);
 	gtk_box_pack_start(GTK_BOX(vbox),fromHBox,true,false,2);
 	item=gtk_button_new_with_label("Set Up Tool Bar");
 	gtk_box_pack_start(GTK_BOX(hbox),item,false,false,2);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,false,2);
 
 	populateDnD();
+	doIconView();
+
+	gtk_drag_dest_set((GtkWidget*)iconViewBox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
+	gtk_drag_dest_add_text_targets((GtkWidget*)iconViewBox);
+	g_signal_connect(G_OBJECT(iconViewBox),"drag-data-received",G_CALLBACK(dropOnIconView),NULL);
+
 //	item=gtk_button_new_with_label("Set Up Tool Bar");
 
 //	gtk_box_pack_start(GTK_BOX(vbox),item,true,false,2);
