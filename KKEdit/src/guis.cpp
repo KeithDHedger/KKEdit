@@ -931,6 +931,49 @@ void dropOnIconView(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkS
 	gtk_drag_finish (context,true,true,time);
 }
 
+void doDeleteItem(GtkIconView *iconview,GtkTreePath *path,gpointer user_data)
+{
+	GdkModifierType	mask;
+	gdk_window_get_pointer(NULL,NULL,NULL,&mask);
+	if (GDK_CONTROL_MASK & mask )
+		{
+			printf("control click\n");
+			return;
+		}
+
+	printf("%s\n",gtk_tree_path_to_string(path));
+}
+
+gboolean clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
+{
+	GtkTreePath* path=NULL;
+	GdkModifierType	mask;
+	GtkTreeIter	iter;
+
+//			printf("control click\n");
+	gdk_window_get_pointer(NULL,NULL,NULL,&mask);
+//	if (GDK_CONTROL_MASK & mask )
+//		{
+//			printf("control click\n");
+//		}
+
+//	gdk_window_set_cursor (gdkWindow,watchCursor); 
+//
+	path=gtk_icon_view_get_path_at_pos((GtkIconView *)widget,event->button.x,event->button.y);
+	if ((GDK_CONTROL_MASK & mask) && (path!=NULL))
+		{
+			printf("control click %s\n",gtk_tree_path_to_string(path));
+			
+			gtk_tree_model_get_iter((GtkTreeModel*)listStore,&iter,path);
+			gtk_list_store_remove((GtkListStore*)listStore,&iter);
+//			//themeIconCallback((GtkIconView *)widget,(void*)data);
+		}
+//
+//	gdk_window_set_cursor(gdkWindow,NULL); 
+
+	return(false);
+}
+
 void doIconView(void)
 {
 //	GtkWidget*	item;
@@ -961,7 +1004,8 @@ void doIconView(void)
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(iconView),renderer,false);
 
 	gtk_box_pack_start(GTK_BOX(iconViewBox),(GtkWidget*)iconView,false,false,2);
-	g_signal_connect(G_OBJECT(iconView),"item-activated",G_CALLBACK(dropDelete),NULL);
+//	g_signal_connect(G_OBJECT(iconView),"item-activated",G_CALLBACK(doDeleteItem),NULL);
+	g_signal_connect(G_OBJECT(iconView),"button-press-event",G_CALLBACK(clickIt),(void*)1);
 //	gtk_drag_dest_set((GtkWidget*)iconView,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 //	gtk_drag_dest_add_text_targets((GtkWidget*)iconView);
 //	g_signal_connect(G_OBJECT(iconView),"drag-data-received",G_CALLBACK(dropOnIconView),NULL);
