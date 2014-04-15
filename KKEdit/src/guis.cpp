@@ -906,9 +906,13 @@ void populateStore(void)
 
 					case 'E':
 //expander
-						image=(GtkWidget*)gtk_separator_tool_item_new();
-						gtk_tool_item_set_expand((GtkToolItem*)image,true);
-						gtk_separator_tool_item_set_draw((GtkSeparatorToolItem*)image,false);
+						gtk_list_store_append (listStore, &iter);
+						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/expander.png",NULL);
+						if(pbuf!=NULL)
+							{
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								g_object_unref(pbuf);
+							}
 						break;
 
 				}
