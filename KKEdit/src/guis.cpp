@@ -580,8 +580,8 @@ void buildTools(void)
 		}
 }
 
-static GtkWidget *mywindow = NULL;
-      GtkWidget *icon_view;
+
+GtkWidget *icon_view;
 
 GtkIconView*	iconView=NULL;
 GtkListStore*	listStore=NULL;
@@ -594,73 +594,12 @@ enum
   NUM_COLS
 };
 
-
-static void
-fill_store (GtkListStore *store)
-{
-  GtkTreeIter iter;
-  const gchar *text[] = { "Red", "Green", "Blue", "Yellow" };
-  gint i;
-
-  /* First clear the store */
-  gtk_list_store_clear (store);
-
-  for (i = 0; i < 4; i++)
-    {
-      gtk_list_store_append (store, &iter);
-      gtk_list_store_set (store, &iter, COL_TEXT, text[i], -1);
-//	gtk_list_store_set(previewBox[whatBox].store,&iter,PIXBUF_COLUMN,pixbuf,TEXT_COLUMN,iconName,FILE_NAME,dbPath,-1);
-    }
-}
-static GtkTargetEntry target_table[] = {
-        { "text/plain", 0, 0 },
-        { "", 0, 0 },
-       { "image/png", 0, 0 }
-};
-
-static void  
-source_drag_data_get  (GtkWidget          *widget,
-                       GdkDragContext     *context,
-                       GtkSelectionData   *selection_data,
-                       guint               info,
-                       guint               time,
-                       gpointer            data)
-{
-        char string[] = "Some String!";
-        gtk_selection_data_set (selection_data,
-                                selection_data->target,
-                                8, (const guchar*)data, sizeof(string));
-}
-static void  
-target_drag_data_received  (GtkWidget          *widget,
-                            GdkDragContext     *context,
-                            gint                x,
-                            gint                y,
-                            GtkSelectionData   *data,
-                            guint               info,
-                            guint               time)
-{
-printf("XXXXXXXXXX\n");
-        g_print("Got: %s\n",data->data);
-}
-
-
-void dropstuff(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
-{
-	gchar**			array=NULL;
-	array=gtk_selection_data_get_uris(selection_data);
-
-fprintf(stderr,"ZZZZZZZZZZZ\n");
-fprintf(stderr,"Got: %s\n",(char*)selection_data->data);
-gtk_drag_finish (context,true,true,time);
-}
-
 void setDragData(GtkWidget *widget, GdkDragContext *context, GtkSelectionData *selection_data, guint info, guint time, gpointer data)
 {
 	gtk_selection_data_set(selection_data,selection_data->target,8,(const guchar*)data,sizeof((char*)data));
 }
 
-void addIcon(char* icon,char* data)
+void addIcon(const char* icon,const char* data)
 {
 	GtkWidget*		image;
 	GtkWidget*		evbox;
@@ -759,14 +698,7 @@ void currentToolBar(void)
 
 void populateDnD(void)
 {
-	GtkWidget*		image;
-	GtkTargetList*	targ;
-	GtkWidget*		evbox;
-
 	currentToolBar();
-	gtk_drag_dest_set(toHBox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
-	gtk_drag_dest_add_text_targets((GtkWidget*)toHBox);
-	g_signal_connect(G_OBJECT(toHBox),"drag-data-received",G_CALLBACK(dropstuff),NULL);
 
 	addIcon(GTK_STOCK_NEW,"N");
 	addIcon(GTK_STOCK_OPEN,"O");
@@ -786,131 +718,10 @@ void populateDnD(void)
 	addIcon(GTK_STOCK_FULLSCREEN,"E");
 }
 
-void populateStoreXXX(void)
-{
-	GtkImage*	image;
-	GdkPixbuf*	pbuf;
-	GtkTreeIter iter;
-
-	gtk_list_store_clear(listStore);
-
-	gtk_list_store_append (listStore, &iter);
-	image=NULL;
-	image=(GtkImage*)gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
-	if(image==NULL)
-		printf("XXXXXXXXXX\n");
-	gtk_widget_show((GtkWidget*)image);
-	pbuf=gdk_pixbuf_new_from_file            ("/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/pixmaps/MenuKKEdit.png",
-                                                         NULL);
-//	pbuf=gtk_image_get_pixbuf(image);
-	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"O",FILE_NAME,"XX",-1);
-	g_object_unref(pbuf);
-
-	gtk_list_store_append (listStore, &iter);
-
-	pbuf=gdk_pixbuf_new_from_file            ("/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/pixmaps/ROOTKKEdit.png",
-                                                         NULL);
-//	pbuf=gtk_image_get_pixbuf(image);
-	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"S",FILE_NAME,"XX",-1);
-	g_object_unref(pbuf);
-
-	gtk_list_store_append (listStore, &iter);
-	image=(GtkImage*)gtk_image_new_from_stock(GTK_STOCK_OPEN ,GTK_ICON_SIZE_LARGE_TOOLBAR);
-//	gtk_widget_show((GtkWidget*)image);
-//	pbuf=gtk_image_get_pixbuf(image);
-GtkWidget* widgdata;//=(GtkWidget*)gtk_tool_button_new_from_stock(GTK_STOCK_NEW);;
- gchar* stock_id;
-GtkIconSize size;
-widgdata=(GtkWidget*)gtk_tool_button_new_from_stock(GTK_STOCK_NEW);
-
-//gtk_image_get_stock (image, &stock_id, &size);
-
-pbuf=gtk_widget_render_icon((GtkWidget *)widgdata,GTK_STOCK_NEW ,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
-
-
-	if(pbuf!=NULL)
-	{
-	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"O",FILE_NAME,"XX",-1);
-//	g_object_unref(pbuf);
-}
-	gtk_list_store_append (listStore, &iter);
-widgdata=(GtkWidget*)gtk_tool_button_new_from_stock(GTK_STOCK_SAVE);
-
-//gtk_image_get_stock (image, &stock_id, &size);
-
-pbuf=gtk_widget_render_icon((GtkWidget *)widgdata,GTK_STOCK_SAVE ,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
-
-
-	if(pbuf!=NULL)
-	{
-	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"O",FILE_NAME,"XX",-1);
-//	g_object_unref(pbuf);
-}
-
-GtkIconTheme *itheme=gtk_icon_theme_get_for_screen(gdk_screen_get_default());
-itheme = gtk_icon_theme_get_default ();
-
-	gtk_list_store_append (listStore, &iter);
-pbuf=gtk_icon_theme_load_icon(itheme,GTK_STOCK_CUT,32,(GtkIconLookupFlags)0,NULL);
-	if(pbuf!=NULL)
-	{
-	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"X",FILE_NAME,"XX",-1);
-//	g_object_unref(pbuf);
-}
-
-/*
-	gtk_list_store_append (listStore, &iter);
-	image=(GtkImage*)gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
-	pbuf=gtk_image_get_pixbuf(image);
-	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"O",FILE_NAME,"XX",-1);
-	g_object_unref(pbuf);
-
-	gtk_list_store_append (listStore, &iter);
-	image=(GtkImage*)gtk_image_new_from_stock(GTK_STOCK_SAVE,GTK_ICON_SIZE_MENU);
-	pbuf=gtk_image_get_pixbuf(image);
-	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"O",FILE_NAME,"XX",-1);
-	g_object_unref(pbuf);
-*/
-}
-
-static GtkListStore *
-create_store (void)
-{
-  GtkListStore *store;
-
-//  store = gtk_list_store_new (1, G_TYPE_STRING);
-store=gtk_list_store_new(3,GDK_TYPE_PIXBUF,G_TYPE_STRING,G_TYPE_STRING);
-//gtk_icon_view_set_pixbuf_column(GTK_ICON_VIEW(previewBox[j].iconView),PIXBUF_COLUMN);
-//			gtk_icon_view_set_text_column(GTK_ICON_VIEW(previewBox[j].iconView),TEXT_COLUMN);
-
-  return store;
-}
-
-
-static void
-edited (GtkCellRendererText *cell,
-	gchar               *path_string,
-	gchar               *text,
-	gpointer             data)
-{
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  GtkTreePath *path;
-
-  model = gtk_icon_view_get_model (GTK_ICON_VIEW (data));
-  path = gtk_tree_path_new_from_string (path_string);
-
-  gtk_tree_model_get_iter (model, &iter, path);
-  gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-		      COL_TEXT, text, -1);
-
-  gtk_tree_path_free (path);
-}
-
 void dodata(GtkWidget* widget,gpointer data)
 {
   GtkTreeIter iter;
-  GtkTreePath *path;
+//  GtkTreePath *path;
  gboolean	valid;
   gint row_count = 0;
   GtkTreeModel *model;
@@ -921,7 +732,7 @@ valid =  gtk_tree_model_get_iter_first(model,&iter);
     {
       /* Walk through the list, reading each row */
       gchar *str_data;
-      gint   int_data;
+ //     gint   int_data;
       /* Make sure you terminate calls to gtk_tree_model_get()
        * with a '-1' value
        */
@@ -935,148 +746,6 @@ valid =  gtk_tree_model_get_iter_first(model,&iter);
       valid = gtk_tree_model_iter_next (model, &iter);
     }
 
-}
-
-GtkWidget *
-do_iconview_edit (GtkWidget *do_widget)
-{
-	GtkWidget*	item;
-	GtkWidget*	vbox;
-
-
-
-	vbox=gtk_vbox_new(false,8);
-
-  if (!mywindow)
-    {
-      GtkListStore *store;
-      GtkCellRenderer *renderer;
-
-      mywindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
-      gtk_window_set_screen (GTK_WINDOW (mywindow),
-			     gtk_widget_get_screen (do_widget));
-      gtk_window_set_title (GTK_WINDOW (mywindow), "Editing and Drag-and-Drop");
-
-      g_signal_connect (mywindow, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &mywindow);
-
-
-		listStore=gtk_list_store_new(3,GDK_TYPE_PIXBUF,G_TYPE_STRING,G_TYPE_STRING);
-		iconView=(GtkIconView*)gtk_icon_view_new();
-		gtk_icon_view_set_pixbuf_column(GTK_ICON_VIEW(iconView),PIXBUF_COLUMN);
-		//gtk_icon_view_set_text_column(GTK_ICON_VIEW(iconView),TEXT_COLUMN);
-		gtk_icon_view_set_model(GTK_ICON_VIEW(iconView),GTK_TREE_MODEL(listStore));
-
-////////		populateStore();
-
- //     store = create_store ();
- //     icon_view = gtk_icon_view_new_with_model (GTK_TREE_MODEL (store));
-     
-//      fill_store (store);
-
-/*
-			previewBox[j].iconView=(GtkIconView*)gtk_icon_view_new();
-			previewBox[j].itemCnt=0;
-			previewBox[j].partIter=NULL;
-			previewBox[j].store=gtk_list_store_new(3,GDK_TYPE_PIXBUF,G_TYPE_STRING,G_TYPE_STRING);
-
-			gtk_icon_view_set_item_width(previewBox[j].iconView,itemSize);
-			gtk_icon_view_set_item_padding(previewBox[j].iconView,0);
-			gtk_icon_view_set_column_spacing(previewBox[j].iconView,0);
-			gtk_icon_view_set_spacing(previewBox[j].iconView,0);
-
-			gtk_icon_view_set_pixbuf_column(GTK_ICON_VIEW(previewBox[j].iconView),PIXBUF_COLUMN);
-			gtk_icon_view_set_text_column(GTK_ICON_VIEW(previewBox[j].iconView),TEXT_COLUMN);
-
-			gtk_icon_view_set_model(GTK_ICON_VIEW(previewBox[j].iconView),GTK_TREE_MODEL(previewBox[j].store));
-
-*/
-
-
-//       g_object_unref (store);
-
-      gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (iconView),
-					GTK_SELECTION_SINGLE);
-      gtk_icon_view_set_orientation (GTK_ICON_VIEW (iconView),
-				     GTK_ORIENTATION_HORIZONTAL);
-      gtk_icon_view_set_columns (GTK_ICON_VIEW (iconView), 4);
-      gtk_icon_view_set_reorderable (GTK_ICON_VIEW (iconView), TRUE);
-
-      renderer = gtk_cell_renderer_pixbuf_new ();
-      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (iconView),
-				  renderer, TRUE);
- //     gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (icon_view),
-//					  renderer,
-//					  set_cell_color,
-//					  NULL, NULL);
-
-      renderer = gtk_cell_renderer_text_new ();
-      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (iconView),
-				  renderer, TRUE);
-// //     g_object_set (renderer, "editable", TRUE, NULL);
-//      g_signal_connect (renderer, "edited", G_CALLBACK (edited), iconView);
-//      gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (iconView),
-//				      renderer,
-//				      "text", COL_TEXT,
-//				      NULL);
-
-//      gtk_container_add (GTK_CONTAINER (mywindow), icon_view);
-
-//gtk_container_add (GTK_CONTAINER (vbox), icon_view);
-	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)iconView,true,true,0);
-
-	item=gtk_button_new_with_label("data");
-	gtk_box_pack_start(GTK_BOX(vbox),item,true,false,2);
-		g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(dodata),listStore);
-
- 	//gtk_box_pack_start(mywindow,vbox,true,true,0);
-  gtk_container_add(GTK_CONTAINER(mywindow),(GtkWidget*)vbox);   
-    }
-
-  if (!gtk_widget_get_visible (mywindow))
-    gtk_widget_show_all (mywindow);
-  else
-    {
-      gtk_widget_destroy (mywindow);
-      mywindow = NULL;
-    }
-
-  return mywindow;
-}
-
-void doDnD(void)
-{
-	mywindow=do_iconview_edit(prefswin);
-}
-
-void dropOnIconView(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
-{
-	GtkWidget*	image;
-	GdkPixbuf*	pbuf;
-	gchar**			array=NULL;
-	array=gtk_selection_data_get_uris(selection_data);
-
-fprintf(stderr,"qqqqqqqqqq\n");
-fprintf(stderr,"Got: %s\n",(char*)selection_data->data);
-
-
-	GtkTreeIter iter;
-
-	gtk_list_store_append (listStore, &iter);
-	image=NULL;
-//	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
-//	if(image==NULL)
-//		printf("XXXXXXXXXX\n");
-//	gtk_widget_show(image);
-	pbuf=gdk_pixbuf_new_from_file            ("/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/pixmaps/MenuKKEdit.png",
-                                                         NULL);
-//	pbuf=gtk_image_get_pixbuf(image);
-	gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,"Q",FILE_NAME,"XX",-1);
-
-
-
-gtk_drag_finish (context,true,true,time);
 }
 
 void populateStore(void)
@@ -1227,14 +896,28 @@ void populateStore(void)
 		}
 }
 
+void dropOnIconView(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
+{
+	char*	holddata=toolBarLayout;
+
+	fprintf(stderr,"qqqqqqqqqq\n");
+	fprintf(stderr,"Got: %s\n",(char*)selection_data->data);
+
+	toolBarLayout=(char*)selection_data->data;
+	populateStore();
+	toolBarLayout=holddata;
+
+	gtk_drag_finish (context,true,true,time);
+}
+
 void doIconView(void)
 {
-	GtkWidget*	item;
-	GtkWidget*	vbox;
+//	GtkWidget*	item;
+//	GtkWidget*	vbox;
 
-	vbox=gtk_vbox_new(false,0);
+//	vbox=gtk_vbox_new(false,0);
 
-	GtkListStore *store;
+//	GtkListStore *store;
 	GtkCellRenderer *renderer;
 
 	listStore=gtk_list_store_new(3,GDK_TYPE_PIXBUF,G_TYPE_STRING,G_TYPE_STRING);
@@ -1270,7 +953,7 @@ void doPrefs(void)
 	GtkWidget*	hbox2;
 	GtkWidget*	item;
 	GtkWidget*	label;
-	GtkToolbar*	customToolbar;
+//	GtkToolbar*	customToolbar;
 
 	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)prefswin,"Preferences");
@@ -1543,8 +1226,6 @@ void buildMainGui(void)
 	GtkWidget*					vbox;
 	GtkWidget*					menuitem;
 	GtkWidget*					menu;
-
-	GtkToolItem*				toolbutton;
 	GtkAccelGroup*				accgroup;
 	GtkWidget*					image;
 
