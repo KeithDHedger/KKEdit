@@ -613,6 +613,33 @@ void addIcon(const char* icon,const char* data)
 	gtk_signal_connect(GTK_OBJECT(evbox),"drag-data-get",GTK_SIGNAL_FUNC (setDragData),(void*)data);
 }
 
+/*
+						gtk_list_store_append (listStore, &iter);
+						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/num.png",NULL);
+						if(pbuf!=NULL)
+							{
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								g_object_unref(pbuf);
+							}
+
+*/
+void addPixbuf(char* pixbuf,const char* data)
+{
+	GtkWidget*		image;
+	GtkWidget*		evbox;
+
+	//image=gtk_image_new_from_stock(icon,GTK_ICON_SIZE_LARGE_TOOLBAR);
+	image=gtk_image_new_from_file(pixbuf);
+
+
+	evbox=gtk_event_box_new();
+	gtk_container_add(GTK_CONTAINER(evbox),image);
+	gtk_box_pack_start(GTK_BOX(fromHBox),evbox,false,false,2);
+	gtk_drag_source_set(evbox,GDK_BUTTON1_MASK,NULL,0,GDK_ACTION_COPY);
+	gtk_drag_source_add_text_targets((GtkWidget*)evbox);
+	gtk_signal_connect(GTK_OBJECT(evbox),"drag-data-get",GTK_SIGNAL_FUNC (setDragData),(void*)data);
+}
+
 void currentToolBar(void)
 {
 	GtkWidget*		image;
@@ -731,12 +758,12 @@ void populateDnD(void)
 	addIcon(GTK_STOCK_REDO,"R");
 	addIcon(GTK_STOCK_FIND,"F");
 	addIcon(GTK_STOCK_DIALOG_QUESTION,"G");
-	addIcon(GTK_STOCK_ADD,"9");
-	addIcon(GTK_STOCK_BOLD,"A");
-	addIcon(GTK_STOCK_BOLD,"D");
-	addIcon(GTK_STOCK_BOLD,"L");
-	addIcon(GTK_STOCK_JUSTIFY_FILL,"s");
-	addIcon(GTK_STOCK_FULLSCREEN,"E");
+	addPixbuf(DATADIR"/pixmaps/num.png","9");
+	addPixbuf(DATADIR"/pixmaps/num.png","A");
+	addPixbuf(DATADIR"/pixmaps/num.png","D");
+	addPixbuf(DATADIR"/pixmaps/num.png","L");
+	addPixbuf(DATADIR"/pixmaps/sep.png","s");
+	addPixbuf(DATADIR"/pixmaps/expand.png","E");
 }
 
 void dodata(GtkWidget* widget,gpointer data)
