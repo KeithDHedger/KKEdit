@@ -961,7 +961,7 @@ void doIconView(void)
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(iconView),renderer,false);
 
 	gtk_box_pack_start(GTK_BOX(iconViewBox),(GtkWidget*)iconView,false,false,2);
-
+	g_signal_connect(G_OBJECT(iconView),"item-activated",G_CALLBACK(dropDelete),NULL);
 //	gtk_drag_dest_set((GtkWidget*)iconView,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 //	gtk_drag_dest_add_text_targets((GtkWidget*)iconView);
 //	g_signal_connect(G_OBJECT(iconView),"drag-data-received",G_CALLBACK(dropOnIconView),NULL);
