@@ -696,31 +696,29 @@ void currentToolBar(void)
 		}
 }
 
-GtkWidget*		delbox;
-
 void dropDelete(GtkWidget *widget, GdkDragContext *context, GtkSelectionData *selection_data, guint info, guint time, gpointer data)
 {
 printf("XXXXXXXXXX\n");
 }
-void seticonviewdata(GtkWidget *widget, GdkDragContext *context, GtkSelectionData *selection_data, guint info, guint time, gpointer data1);
+
 void populateDnD(void)
 {
 	currentToolBar();
 
 //	addIcon(GTK_STOCK_DELETE,"*");
 	GtkWidget*		image;
-//	GtkWidget*		evbox;
+	GtkWidget*		evbox;
 
 	image=gtk_image_new_from_stock(GTK_STOCK_DELETE,GTK_ICON_SIZE_LARGE_TOOLBAR);
-	delbox=gtk_event_box_new();
-	gtk_container_add(GTK_CONTAINER(delbox),image);
-	gtk_box_pack_start(GTK_BOX(fromHBox),delbox,false,false,2);
+	evbox=gtk_event_box_new();
+	gtk_container_add(GTK_CONTAINER(evbox),image);
+	gtk_box_pack_start(GTK_BOX(fromHBox),evbox,false,false,2);
 //	gtk_drag_source_set(evbox,GDK_BUTTON1_MASK,NULL,0,GDK_ACTION_COPY);
 //	gtk_drag_source_add_text_targets((GtkWidget*)evbox);
 //	gtk_signal_connect(GTK_OBJECT(evbox),"drag-data-get",GTK_SIGNAL_FUNC (setDragData),(void*)"*");
-	gtk_drag_dest_set((GtkWidget*)delbox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
-	gtk_drag_dest_add_text_targets((GtkWidget*)delbox);
-	g_signal_connect(G_OBJECT(delbox),"drag-data-received",G_CALLBACK(dropDelete),NULL);
+	gtk_drag_dest_set((GtkWidget*)evbox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
+	gtk_drag_dest_add_text_targets((GtkWidget*)evbox);
+	g_signal_connect(G_OBJECT(evbox),"drag-data-received",G_CALLBACK(dropDelete),NULL);
 
 
 	addIcon(GTK_STOCK_NEW,"N");
@@ -969,23 +967,11 @@ void doIconView(void)
 //	g_signal_connect(G_OBJECT(iconView),"drag-data-received",G_CALLBACK(dropOnIconView),NULL);
 }
 
-void seticonviewdata(GtkWidget *widget, GdkDragContext *context, GtkSelectionData *selection_data, guint info, guint time, gpointer data1)
+void seticonviewdata(GtkWidget *widget, GdkDragContext *context, GtkSelectionData *selection_data, guint info, guint time, gpointer data)
 {
-printf("AAAAAAAA\n");
-GtkSelectionData data;
-GtkTreeModel *tree_model;
-GtkTreePath *path;
- GtkTreeModel *src_model = NULL;
-   GtkTreePath *src_path = NULL;
-   
-gtk_tree_drag_source_drag_data_get((GtkTreeDragSource*)listStore,(GtkTreePath *)context,selection_data);
-
-//gtk_tree_get_row_drag_data (&data,&src_model,&src_path);
-
-//printf("%s\n",gtk_tree_path_to_string(src_path));
-printf("BBBBBBBBBBBB\n");
-
-
+gtk_tree_drag_source_drag_data_get((GtkTreeDragSource*)widget,
+                                                         (GtkTreePath *)context,
+                                                         selection_data);
 }
 
 void doPrefs(void)
@@ -1017,16 +1003,13 @@ void doPrefs(void)
 
 	populateDnD();
 	doIconView();
-gtk_drag_source_set((GtkWidget *)iconView,GDK_BUTTON1_MASK,NULL,0,GDK_ACTION_COPY);
-gtk_drag_source_add_text_targets((GtkWidget*)iconView);
-//gtk_signal_connect(GTK_OBJECT(iconView),"drag-data-get",GTK_SIGNAL_FUNC (iconView),NULL);
-//	gtk_signal_connect((GtkObject*)listStore,"drag-data-received",GTK_SIGNAL_FUNC (setDragData),(void*)1234);
+	gtk_signal_connect(GTK_OBJECT(iconViewBox),"drag-data-get",GTK_SIGNAL_FUNC (setDragData),(void*)1234);
 //	gtk_drag_source_set((GtkWidget*)iconViewBox,GDK_BUTTON1_MASK,NULL,0,GDK_ACTION_COPY);
-	gtk_signal_connect(GTK_OBJECT(iconView),"drag-data-get",GTK_SIGNAL_FUNC (seticonviewdata),NULL);
+//	gtk_signal_connect(GTK_OBJECT(iconView),"drag-data-get",GTK_SIGNAL_FUNC (seticonviewdata),NULL);
 
-////	gtk_drag_dest_set((GtkWidget*)iconViewBox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
-////	gtk_drag_dest_add_text_targets((GtkWidget*)iconViewBox);
-//	g_signal_connect(G_OBJECT(iconViewBox),"drag-data-get",G_CALLBACK(seticonviewdata),NULL);
+	gtk_drag_dest_set((GtkWidget*)iconViewBox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
+	gtk_drag_dest_add_text_targets((GtkWidget*)iconViewBox);
+	g_signal_connect(G_OBJECT(iconViewBox),"drag-data-received",G_CALLBACK(dropOnIconView),NULL);
 
 //	item=gtk_button_new_with_label("Set Up Tool Bar");
 
