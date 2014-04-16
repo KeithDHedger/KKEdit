@@ -26,4 +26,5 @@ int showFunctionEntry(void);
 void buildGtkDocViewer(void);
 #endif
 void setUpToolBar(GtkToolbar* theToolBar,char* theLayout);
+char* makeToolBarList(void);
 #endif

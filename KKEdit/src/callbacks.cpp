@@ -1229,6 +1229,12 @@ void setPrefs(GtkWidget* widget,gpointer data)
 					fontAndSize=strdup(gtk_font_button_get_font_name((GtkFontButton*)fontButton));
 				}
 
+			if(toolBarLayout!=NULL)
+				{
+					g_free(toolBarLayout);
+					toolBarLayout=makeToolBarList();
+				}
+
 			tabWidth=tmpTabWidth;
 			depth=tmpDepth;
 			gtk_widget_destroy(prefswin);

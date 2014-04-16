@@ -27,8 +27,12 @@
 #include <webkit/webkit.h>
 #endif
 
+enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
+
 GtkWidget*		recent;
 GtkToolItem*	tool[16];
+GtkIconView*	iconView=NULL;
+GtkListStore*	listStore=NULL;
 
 void selectToolOptions(GtkWidget* widget,gpointer data)
 {
@@ -158,7 +162,6 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 	g_free(text);
 }
 
-//	toolBarLayout=strdup("NORSsXCPsUrsFGs");
 void setUpToolBar(GtkToolbar* theToolBar,char* theLayout,bool flag)
 {
 	GtkToolItem*	toolbutton;
@@ -581,25 +584,6 @@ void buildTools(void)
 		}
 }
 
-
-GtkWidget *icon_view;
-
-GtkIconView*	iconView=NULL;
-GtkListStore*	listStore=NULL;
-
-enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
-
-enum
-{
-  COL_TEXT,
-  NUM_COLS
-};
-
-void setDragData(GtkWidget *widget, GdkDragContext *context, GtkSelectionData *selection_data, guint info, guint time, gpointer data)
-{
-	gtk_selection_data_set(selection_data,selection_data->target,8,(const guchar*)data,sizeof((char*)data));
-}
-
 void populateStore(void)
 {
 	GdkPixbuf*	pbuf;
@@ -798,36 +782,22 @@ void addToToolBar(GtkWidget* widget,gpointer ptr)
 	char*	holddata=toolBarLayout;
 	char*	type;
 
-	printf("%s\n",(char*)ptr);
 	type=strndup((char*)ptr,1);
-	
 	toolBarLayout=type;
 	populateStore();
 	toolBarLayout=holddata;
 	free(type);
-	
 }
 
 void addIcon(const char* icon,const char* data,int toolnumber)
 {
-//	GtkWidget*		image;
-//	GtkWidget*		evbox;
-
 	tool[toolnumber]=gtk_tool_button_new_from_stock(icon);
 	gtk_box_pack_start(GTK_BOX(fromHBox),(GtkWidget*)tool[toolnumber],false,false,2);
 	gtk_signal_connect(GTK_OBJECT(tool[toolnumber]),"clicked",G_CALLBACK(addToToolBar),(void*)data);
 	//gtk_widget_set_tooltip_text((GtkWidget*)newButton,"New File");
-
-//	image=gtk_image_new_from_stock(icon,GTK_ICON_SIZE_LARGE_TOOLBAR);
-//	evbox=gtk_event_box_new();
-//	gtk_container_add(GTK_CONTAINER(evbox),image);
-//	gtk_box_pack_start(GTK_BOX(fromHBox),evbox,false,false,2);
-//	gtk_drag_source_set(evbox,GDK_BUTTON1_MASK,NULL,0,GDK_ACTION_COPY);
-//	gtk_drag_source_add_text_targets((GtkWidget*)evbox);
-//	gtk_signal_connect(GTK_OBJECT(evbox),"drag-data-get",GTK_SIGNAL_FUNC (setDragData),(void*)data);
 }
 
-void addPixbuf(char* pixbuf,const char* data,int toolnumber)
+void addPixbuf(const char* pixbuf,const char* data,int toolnumber)
 {
 	GtkWidget*		image;
 	image=gtk_image_new_from_file(pixbuf);
@@ -839,7 +809,6 @@ void addPixbuf(char* pixbuf,const char* data,int toolnumber)
 
 void populateDnD(void)
 {
-
 	addIcon(GTK_STOCK_NEW,"N",0);
 	addIcon(GTK_STOCK_OPEN,"O",1);
 	addIcon(GTK_STOCK_SAVE,"S",2);
@@ -858,106 +827,48 @@ void populateDnD(void)
 	addPixbuf(DATADIR"/pixmaps/expand.png","E",15);
 }
 
-void dodata(GtkWidget* widget,gpointer data)
+char* makeToolBarList(void)
 {
-  GtkTreeIter iter;
-//  GtkTreePath *path;
- gboolean	valid;
-  gint row_count = 0;
-  GtkTreeModel *model;
-model = gtk_icon_view_get_model (GTK_ICON_VIEW (iconView));
+	GtkTreeIter iter;
+	gboolean	valid;
+	gchar*		str_data;
+	gint		row_count=0;
+	GString*	str=g_string_new("");
 
-valid =  gtk_tree_model_get_iter_first(model,&iter);
-   while (valid)
-    {
-      /* Walk through the list, reading each row */
-      gchar *str_data;
- //     gint   int_data;
-      /* Make sure you terminate calls to gtk_tree_model_get()
-       * with a '-1' value
-       */
-      gtk_tree_model_get (model, &iter,
-                          TEXT_COLUMN, &str_data,-1);
-              printf("XXX%sXXX\n",str_data);
-      /* Do something with the data */
-     // g_print ("Row %d: (%s,%d)\n", row_count, str_data, int_data);
-      //g_free (str_data);
-      row_count ++;
-      valid = gtk_tree_model_iter_next (model, &iter);
-    }
-
-}
-
-void dropOnIconView(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
-{
-	char*	holddata=toolBarLayout;
-
-	fprintf(stderr,"qqqqqqqqqq\n");
-	fprintf(stderr,"Got: %s\n",(char*)selection_data->data);
-
-	toolBarLayout=(char*)selection_data->data;
-	populateStore();
-	toolBarLayout=holddata;
-
-	gtk_drag_finish (context,true,true,time);
-}
-
-void doDeleteItem(GtkIconView *iconview,GtkTreePath *path,gpointer user_data)
-{
-	GdkModifierType	mask;
-	gdk_window_get_pointer(NULL,NULL,NULL,&mask);
-	if (GDK_CONTROL_MASK & mask )
+	valid=gtk_tree_model_get_iter_first((GtkTreeModel *)listStore,&iter);
+	while(valid)
 		{
-			printf("control click\n");
-			return;
+			gtk_tree_model_get((GtkTreeModel *)listStore,&iter,TEXT_COLUMN,&str_data,-1);
+			g_string_append_c(str,str_data[0]);
+			row_count++;
+			valid=gtk_tree_model_iter_next((GtkTreeModel *)listStore,&iter);
+			free(str_data);
 		}
-
-	printf("%s\n",gtk_tree_path_to_string(path));
+	return(g_string_free(str,false));
 }
 
-/*
-	model=gtk_icon_view_get_model(view);
-	path=(GtkTreePath *)selected->data;
-	gtk_tree_model_get_iter(model,&iter,path);
-	gtk_tree_path_free(path);
-
-	gtk_tree_model_get(model,&iter,FILE_NAME,&text,-1);
-
-*/
-gboolean clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
+void clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 {
-	GtkTreePath* path=NULL;
+	GtkTreePath*	path=NULL;
 	GdkModifierType	mask;
-	GtkTreeIter	iter;
-	char*		text;
-	int			button;
+	GtkTreeIter		iter;
+	int				button;
 
 	gdk_window_get_pointer(NULL,NULL,NULL,&mask);
 	path=gtk_icon_view_get_path_at_pos((GtkIconView *)widget,event->button.x,event->button.y);
 
 	if ((GDK_CONTROL_MASK & mask) && (path!=NULL))
 		{
-			printf("control click %s\n",gtk_tree_path_to_string(path));
-			
 			gtk_tree_model_get_iter((GtkTreeModel*)listStore,&iter,path);
-			gtk_tree_model_get((GtkTreeModel*)listStore,&iter,TEXT_COLUMN,&text,-1);
-			printf("control click data %s\n",text);
+//			gtk_tree_model_get((GtkTreeModel*)listStore,&iter,TEXT_COLUMN,&text,-1);
 			gtk_tree_model_get((GtkTreeModel*)listStore,&iter,BUTTON_NUM,&button,-1);
-			printf("control click buttn %i\n",button);
 			gtk_widget_set_sensitive((GtkWidget*)tool[button],true);
 			gtk_list_store_remove((GtkListStore*)listStore,&iter);
 		}
-	return(false);
 }
 
 void doIconView(void)
 {
-//	GtkWidget*	item;
-//	GtkWidget*	vbox;
-
-//	vbox=gtk_vbox_new(false,0);
-
-//	GtkListStore *store;
 	GtkCellRenderer *renderer;
 
 	listStore=gtk_list_store_new(3,GDK_TYPE_PIXBUF,G_TYPE_STRING,G_TYPE_INT);
@@ -980,18 +891,7 @@ void doIconView(void)
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(iconView),renderer,false);
 
 	gtk_box_pack_start(GTK_BOX(iconViewBox),(GtkWidget*)iconView,false,false,2);
-//	g_signal_connect(G_OBJECT(iconView),"item-activated",G_CALLBACK(doDeleteItem),NULL);
 	g_signal_connect(G_OBJECT(iconView),"button-press-event",G_CALLBACK(clickIt),NULL);
-//	gtk_drag_dest_set((GtkWidget*)iconView,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
-//	gtk_drag_dest_add_text_targets((GtkWidget*)iconView);
-//	g_signal_connect(G_OBJECT(iconView),"drag-data-received",G_CALLBACK(dropOnIconView),NULL);
-}
-
-void seticonviewdata(GtkWidget *widget, GdkDragContext *context, GtkSelectionData *selection_data, guint info, guint time, gpointer data)
-{
-gtk_tree_drag_source_drag_data_get((GtkTreeDragSource*)widget,
-                                                         (GtkTreePath *)context,
-                                                         selection_data);
 }
 
 void doPrefs(void)
@@ -1001,20 +901,21 @@ void doPrefs(void)
 	GtkWidget*	hbox2;
 	GtkWidget*	item;
 	GtkWidget*	label;
-//	GtkToolbar*	customToolbar;
+
 
 	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)prefswin,"Preferences");
 	vbox=gtk_vbox_new(false,8);
 	hbox=gtk_hbox_new(false,8);
 
-//mywindow=do_iconview_edit(prefswin);
 //toolbar dnd
-
-	toHBox=gtk_hbox_new(false,0);
 	iconViewBox=gtk_hbox_new(false,0);
 	fromHBox=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(vbox),toHBox,true,false,2);
+
+	label=gtk_label_new("<b>Customize Tool Bar</b>");
+	gtk_label_set_use_markup((GtkLabel*)label,true);
+	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
+
 	gtk_box_pack_start(GTK_BOX(vbox),iconViewBox,true,false,2);
 	gtk_box_pack_start(GTK_BOX(vbox),fromHBox,true,false,2);
 	item=gtk_button_new_with_label("Set Up Tool Bar");
@@ -1023,23 +924,9 @@ void doPrefs(void)
 
 	populateDnD();
 	doIconView();
-//	gtk_signal_connect(GTK_OBJECT(iconViewBox),"drag-data-get",GTK_SIGNAL_FUNC (setDragData),(void*)1234);
-//	gtk_drag_source_set((GtkWidget*)iconViewBox,GDK_BUTTON1_MASK,NULL,0,GDK_ACTION_COPY);
-//	gtk_signal_connect(GTK_OBJECT(iconView),"drag-data-get",GTK_SIGNAL_FUNC (seticonviewdata),NULL);
-
-	gtk_drag_dest_set((GtkWidget*)iconViewBox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
-	gtk_drag_dest_add_text_targets((GtkWidget*)iconViewBox);
-	g_signal_connect(G_OBJECT(iconViewBox),"drag-data-received",G_CALLBACK(dropOnIconView),NULL);
-
-//	item=gtk_button_new_with_label("Set Up Tool Bar");
-
-//	gtk_box_pack_start(GTK_BOX(vbox),item,true,false,2);
-//	gtk_widget_set_name(item,"Set Up Tool Bar");
-//	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(doDnD),NULL);
-
-//	customToolbar=(GtkToolbar*)gtk_toolbar_new();
-//	setUpToolBar(customToolbar,"NOSsXCPsURsFGsE9ADL",false);
-//	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)customToolbar,true,false,2);
+	
+//end customize
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
 	hbox=gtk_hbox_new(false,8);
 

@@ -263,7 +263,6 @@ extern GtkWidget*		findBox;
 extern GtkWidget*		replaceBox;
 
 //custom toolbar
-extern GtkWidget*		toHBox;
 extern GtkWidget*		fromHBox;
 extern GtkWidget*		iconViewBox;
 

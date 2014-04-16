@@ -172,7 +172,6 @@ GtkWidget*		findBox;
 GtkWidget*		replaceBox;
 
 //custom toolbar
-GtkWidget*		toHBox;
 GtkWidget*		fromHBox;
 GtkWidget*		iconViewBox;
 
