@@ -1025,7 +1025,7 @@ gboolean clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 
 	if ((GDK_CONTROL_MASK & mask) && (path!=NULL))
 		{
-			printf("control click %s\n",gtk_tree_path_to_string(path));
+			printf("control click %s %s\n",gtk_tree_path_to_string(path),data);
 			
 			gtk_tree_model_get_iter((GtkTreeModel*)listStore,&iter,path);
 			gtk_list_store_remove((GtkListStore*)listStore,&iter);
