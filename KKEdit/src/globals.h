@@ -132,7 +132,8 @@ extern int				bmMarkNumber;
 
 extern char*			toolBarLayout;
 extern char*			tmpToolBarLayout;
-extern GtkWidget*		toolBar;
+extern GtkToolbar*		toolBar;
+extern GtkWidget*		toolBarBox;
 
 extern GtkWidget*		menubar;
 extern GtkWidget*		menufile;
@@ -148,6 +149,7 @@ extern GtkWidget*		menucloseall;
 extern GtkWidget*		menusaveall;
 extern GtkWidget*		menurevert;
 extern GtkWidget*		menumanpage;
+extern GtkWidget*		menuItemOpen;
 
 extern GtkWidget*		redoMenu;
 extern GtkWidget*		undoMenu;
@@ -175,10 +177,6 @@ extern char*			terminalCommand;
 extern int				depth;
 extern bool				onExitSaveSession;
 extern bool				restoreBookmarks;
-extern bool				showJumpToLine;
-extern bool				showFindAPI;
-extern bool				showFindDef;
-extern bool				showLiveSearch;
 extern char*			styleName;
 
 extern GtkWidget*		fontButton;
@@ -192,10 +190,6 @@ extern int				tmpTabWidth;
 extern int				tmpDepth;
 extern bool				tmpSaveSessionOnExit;
 extern bool				tmpRestoreBookmarks;
-extern bool				tmpShowJumpToLine;
-extern bool				tmpShowFindAPI;
-extern bool				tmpShowFindDef;
-extern bool				tmpShowLiveSearch;
 extern char*			tmpStyleName;
 
 extern GtkWidget*		toolNameWidget;

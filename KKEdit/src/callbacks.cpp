@@ -38,98 +38,135 @@ void setToobarSensitive(void)
 				{
 					case 'N':
 //newnewButton
-						gtk_widget_set_sensitive((GtkWidget*)newButton,true);
+						if(newButton!=NULL)
+							gtk_widget_set_sensitive((GtkWidget*)newButton,true);
 						break;
 					case 'O':
 //open+recent
-						gtk_widget_set_sensitive((GtkWidget*)openButton,true);
+						if(openButton!=NULL)
+							gtk_widget_set_sensitive((GtkWidget*)openButton,true);
 						break;
 					case 'S':
 //save
-						if(page!=NULL)
-							gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
-						else
-							gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
+						if(saveButton!=NULL)
+							{
+								if(page!=NULL)
+									gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
+								else
+									gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
+							}
 						break;
 					case 'X':
 //cut
-						if(page!=NULL)
-							gtk_widget_set_sensitive((GtkWidget*)cutButton,true);
-						else
-							gtk_widget_set_sensitive((GtkWidget*)cutButton,false);
+						if(cutButton!=NULL)
+							{
+								if(page!=NULL)
+									gtk_widget_set_sensitive((GtkWidget*)cutButton,true);
+								else
+									gtk_widget_set_sensitive((GtkWidget*)cutButton,false);
+							}
 						break;
 					case 'C':
 //copy
-						if(page!=NULL)
-							gtk_widget_set_sensitive((GtkWidget*)copyButton,true);
-						else
-							gtk_widget_set_sensitive((GtkWidget*)copyButton,false);
+						if(copyButton!=NULL)
+							{
+								if(page!=NULL)
+									gtk_widget_set_sensitive((GtkWidget*)copyButton,true);
+								else
+									gtk_widget_set_sensitive((GtkWidget*)copyButton,false);
+							}
 						break;
 					case 'P':
 //paste
-						if(page!=NULL)
-							gtk_widget_set_sensitive((GtkWidget*)pasteButton,true);
-						else
-							gtk_widget_set_sensitive((GtkWidget*)pasteButton,false);
+						if(pasteButton!=NULL)
+							{
+								if(page!=NULL)
+									gtk_widget_set_sensitive((GtkWidget*)pasteButton,true);
+								else
+									gtk_widget_set_sensitive((GtkWidget*)pasteButton,false);
+							}
 						break;
 					case 'U':
 //undo
-						if(page!=NULL)
-							gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
-						else
-							gtk_widget_set_sensitive((GtkWidget*)undoButton,false);
+						if(undoButton!=NULL)
+							{
+								if(page!=NULL)
+									gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
+								else
+									gtk_widget_set_sensitive((GtkWidget*)undoButton,false);
+							}
 						break;
 					case 'R':
 //redo
-						if(page!=NULL)
-							gtk_widget_set_sensitive((GtkWidget*)redoButton,gtk_source_buffer_can_redo(page->buffer));
-						else
-							gtk_widget_set_sensitive((GtkWidget*)redoButton,false);
+						if(redoButton!=NULL)
+							{
+								if(page!=NULL)
+									gtk_widget_set_sensitive((GtkWidget*)redoButton,gtk_source_buffer_can_redo(page->buffer));
+								else
+									gtk_widget_set_sensitive((GtkWidget*)redoButton,false);
+							}
 						break;
 					case 'F':
 //find
-						if(page!=NULL)
-							gtk_widget_set_sensitive((GtkWidget*)findButton,true);
-						else
-							gtk_widget_set_sensitive((GtkWidget*)findButton,false);
+						if(findButton!=NULL)
+							{
+								if(page!=NULL)
+									gtk_widget_set_sensitive((GtkWidget*)findButton,true);
+								else
+									gtk_widget_set_sensitive((GtkWidget*)findButton,false);
+							}
 						break;
 					case 'G':
 //navigation
-						if(page!=NULL)
-							gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,true);
-						else
-							gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,false);
+						if(gotoDefButton!=NULL)
+							{
+								if(page!=NULL)
+									gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,true);
+								else
+									gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,false);
+							}
 						break;
 					case '9':
 //find in gtkdoc
-						if(page!=NULL)
-							gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,true);
-						else
-							gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,false);
+						if(gotoLineButton!=NULL)
+							{
+								if(page!=NULL)
+									gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,true);
+								else
+									gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,false);
+							}
 						break;
 		
 					case 'A':
 //find in gtkdoc
-						if(page!=NULL)
-							gtk_widget_set_sensitive((GtkWidget*)findApiButton,true);
-						else
-							gtk_widget_set_sensitive((GtkWidget*)findApiButton,false);
+						if(findApiButton!=NULL)
+							{
+								if(page!=NULL)
+									gtk_widget_set_sensitive((GtkWidget*)findApiButton,true);
+								else
+									gtk_widget_set_sensitive((GtkWidget*)findApiButton,false);
+							}
 						break;
 		
 					case 'D':
 //find in function def
-						if(page!=NULL)
-							gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,true);
-						else
-							gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,false);
-						break;
+						if(findFuncDefButton!=NULL)
+							{
+								if(page!=NULL)
+									gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,true);
+								else
+									gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,false);
+							}
 						break;
 					case 'L':
 //livesearch
-						if(page!=NULL)
-							gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,true);
-						else
-							gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,false);
+						if(liveSearchButton!=NULL)
+							{
+								if(page!=NULL)
+									gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,true);
+								else
+									gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,false);
+							}
 						break;
 				}
 		}
@@ -242,10 +279,6 @@ void showHideWidget(GtkWidget* widget,bool show)
 void refreshMainWindow(void)
 {
 	gtk_widget_show_all(window);
-//	showHideWidget(lineNumberWidget,showJumpToLine);
-//	showHideWidget(findApiWidget,showFindAPI);
-//	showHideWidget(findDefWidget,showFindDef);
-//	showHideWidget(liveSearchWidget,showLiveSearch);
 }
 
 int yesNo(char* question,char* file)
@@ -1043,10 +1076,6 @@ void writeConfig(void)
 			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
 			fprintf(fd,"savesessiononexit	%i\n",(int)onExitSaveSession);
 			fprintf(fd,"restorebookmarks	%i\n",(int)restoreBookmarks);
-			fprintf(fd,"showjtoline	%i\n",(int)showJumpToLine);
-			fprintf(fd,"showfindapi	%i\n",(int)showFindAPI);
-			fprintf(fd,"showfinddef	%i\n",(int)showFindDef);
-			fprintf(fd,"showlivesearch	%i\n",(int)showLiveSearch);
 			fprintf(fd,"nagscreen	%i\n",nagScreen);
 
 			fprintf(fd,"showbmbar	%i\n",(int)showBMBar);
@@ -1145,15 +1174,6 @@ void setPrefs(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"showbmbar")==0)
 		tmpShowBMBar=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
-	if(strcmp(gtk_widget_get_name(widget),"jtolintool")==0)
-		tmpShowJumpToLine=gtk_toggle_button_get_active((GtkToggleButton*)data);
-	if(strcmp(gtk_widget_get_name(widget),"findapiintool")==0)
-		tmpShowFindAPI=gtk_toggle_button_get_active((GtkToggleButton*)data);
-	if(strcmp(gtk_widget_get_name(widget),"searchdef")==0)
-		tmpShowFindDef=gtk_toggle_button_get_active((GtkToggleButton*)data);
-	if(strcmp(gtk_widget_get_name(widget),"livesearch")==0)
-		tmpShowLiveSearch=gtk_toggle_button_get_active((GtkToggleButton*)data);
-
 	if(strcmp(gtk_widget_get_name(widget),"ihavedonated")==0)
 		tmpNagScreen=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
@@ -1198,15 +1218,6 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			singleUse=tmpSingleUse;
 			onExitSaveSession=tmpSaveSessionOnExit;
 			restoreBookmarks=tmpRestoreBookmarks;
-			showJumpToLine=tmpShowJumpToLine;
-			showFindAPI=tmpShowFindAPI;
-			showFindDef=tmpShowFindDef;
-			showLiveSearch=tmpShowLiveSearch;
-
-			showHideWidget(lineNumberWidget,showJumpToLine);
-			showHideWidget(findApiWidget,showFindAPI);
-			showHideWidget(findDefWidget,showFindDef);
-			showHideWidget(liveSearchWidget,showLiveSearch);
 
 			nagScreen=tmpNagScreen;
 
@@ -1233,6 +1244,10 @@ void setPrefs(GtkWidget* widget,gpointer data)
 				{
 					g_free(toolBarLayout);
 					toolBarLayout=makeToolBarList();
+					gtk_widget_destroy((GtkWidget*)toolBar);
+					toolBar=(GtkToolbar*)gtk_toolbar_new();
+					gtk_box_pack_start(GTK_BOX(toolBarBox),(GtkWidget*)toolBar,true,true,0);
+					setUpToolBar();
 				}
 
 			tabWidth=tmpTabWidth;
@@ -1240,6 +1255,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			gtk_widget_destroy(prefswin);
 			resetAllFilePrefs();
 			writeConfig();
+			refreshMainWindow();
 		}
 }
 

@@ -39,6 +39,7 @@ GtkWidget*		menunav;
 GtkWidget*		menutools;
 GtkWidget*		menuhelp;
 GtkWidget*		menumanpage;
+GtkWidget*		menuItemOpen=NULL;
 
 GList*			newBookMarksList=NULL;
 GtkWidget*		menuBookMark;
@@ -52,7 +53,8 @@ int				bmMarkNumber=0;
 
 char*			toolBarLayout=NULL;
 char*			tmpToolBarLayout=NULL;
-GtkWidget*		toolBar;
+GtkToolbar*		toolBar;
+GtkWidget*		toolBarBox;
 
 GtkWidget*		menuprint;
 GtkWidget*		menuclose;
@@ -86,10 +88,6 @@ char*			terminalCommand;
 int				depth;
 bool			onExitSaveSession;
 bool			restoreBookmarks;
-bool			showJumpToLine;
-bool			showFindAPI;
-bool			showFindDef;
-bool			showLiveSearch;
 char*			styleName=NULL;
 
 GtkWidget*		fontButton;
@@ -103,10 +101,6 @@ int				tmpTabWidth;
 int				tmpDepth;
 bool			tmpSaveSessionOnExit;
 bool			tmpRestoreBookmarks;
-bool			tmpShowJumpToLine;
-bool			tmpShowFindAPI;
-bool			tmpShowFindDef;
-bool			tmpShowLiveSearch;
 char*			tmpStyleName=NULL;
 
 GtkWidget*		toolNameWidget;
@@ -150,22 +144,22 @@ bool			findInAllFiles;
 int				currentTabNumber;
 int 			untitledNumber=1;
 
-GtkToolItem*	newButton;
-GtkToolItem*	openButton;
-GtkToolItem*	saveButton;
-GtkToolItem*	saveasButton;
-GtkToolItem*	closeButton;
-GtkToolItem*	redoButton;
-GtkToolItem*	undoButton;
-GtkToolItem*	cutButton;
-GtkToolItem*	copyButton;
-GtkToolItem*	pasteButton;
-GtkToolItem*	findButton;
-GtkToolItem*	gotoDefButton;
-GtkToolItem*	gotoLineButton;
-GtkToolItem*	findApiButton;
-GtkToolItem*	findFuncDefButton;
-GtkToolItem*	liveSearchButton;
+GtkToolItem*	newButton=NULL;
+GtkToolItem*	openButton=NULL;
+GtkToolItem*	saveButton=NULL;
+GtkToolItem*	saveasButton=NULL;
+GtkToolItem*	closeButton=NULL;
+GtkToolItem*	redoButton=NULL;
+GtkToolItem*	undoButton=NULL;
+GtkToolItem*	cutButton=NULL;
+GtkToolItem*	copyButton=NULL;
+GtkToolItem*	pasteButton=NULL;
+GtkToolItem*	findButton=NULL;
+GtkToolItem*	gotoDefButton=NULL;
+GtkToolItem*	gotoLineButton=NULL;
+GtkToolItem*	findApiButton=NULL;
+GtkToolItem*	findFuncDefButton=NULL;
+GtkToolItem*	liveSearchButton=NULL;
 
 GtkWidget*		findReplaceDialog;
 GtkWidget*		findBox;

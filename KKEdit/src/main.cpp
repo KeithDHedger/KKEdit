@@ -65,15 +65,6 @@ void readConfig(void)
 					if(strcasecmp(name,"restorebookmarks")==0)
 							restoreBookmarks=(bool)atoi(strarg);
 
-					if(strcasecmp(name,"showjtoline")==0)
-							showJumpToLine=(bool)atoi(strarg);
-					if(strcasecmp(name,"showfindapi")==0)
-							showFindAPI=(bool)atoi(strarg);
-					if(strcasecmp(name,"showfinddef")==0)
-							showFindDef=(bool)atoi(strarg);
-					if(strcasecmp(name,"showlivesearch")==0)
-							showLiveSearch=(bool)atoi(strarg);
-
 					if(strcasecmp(name,"tabwidth")==0)
 							tabWidth=atoi(strarg);
 					if(strcasecmp(name,"depth")==0)
@@ -166,10 +157,6 @@ void init(void)
 	onExitSaveSession=false;
 	onExitSaveSession=false;
 	restoreBookmarks=false;
-	showJumpToLine=true;
-	showFindAPI=true;
-	showFindDef=true;
-	showLiveSearch=true;
 	styleName=strdup("classic");
 	nagScreen=false;
 	highlightColour=strdup("#A3ACFF");
@@ -203,11 +190,6 @@ void init(void)
 	tmpDepth=depth;
 	tmpSaveSessionOnExit=onExitSaveSession;
 	tmpRestoreBookmarks=restoreBookmarks;
-
-	tmpShowJumpToLine=showJumpToLine;
-	tmpShowFindAPI=showFindAPI;
-	tmpShowFindDef=showFindDef;
-	tmpShowLiveSearch=showLiveSearch;
 	tmpStyleName=strdup(styleName);
 
 	tmpNagScreen=nagScreen;
