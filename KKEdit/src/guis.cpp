@@ -605,10 +605,12 @@ void populateStore(void)
 	GdkPixbuf*	pbuf;
 	GtkWidget*	image;
 	GtkTreeIter iter;
-	
+	char*		type;
+
 	image=(GtkWidget*)newButton;
 	for(int j=0;j<(int)strlen(toolBarLayout);j++)
 		{
+			type=strndup((char*)&toolBarLayout[j],1);
 			switch(toolBarLayout[j])
 				{
 					case 'N':
@@ -617,7 +619,7 @@ void populateStore(void)
 						pbuf=gtk_widget_render_icon(image,GTK_STOCK_NEW,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[0],false);
@@ -628,7 +630,7 @@ void populateStore(void)
 						pbuf=gtk_widget_render_icon(image,GTK_STOCK_OPEN,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[1],false);
@@ -639,7 +641,7 @@ void populateStore(void)
 						pbuf=gtk_widget_render_icon(image,GTK_STOCK_SAVE,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[2],false);
@@ -651,7 +653,7 @@ void populateStore(void)
 						pbuf=gtk_widget_render_icon(image,GTK_STOCK_CUT,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[3],false);
@@ -662,7 +664,7 @@ void populateStore(void)
 						pbuf=gtk_widget_render_icon(image,GTK_STOCK_COPY,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[4],false);
@@ -673,7 +675,7 @@ void populateStore(void)
 						pbuf=gtk_widget_render_icon(image,GTK_STOCK_PASTE,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[5],false);
@@ -684,7 +686,7 @@ void populateStore(void)
 						pbuf=gtk_widget_render_icon(image,GTK_STOCK_UNDO,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[6],false);
@@ -695,7 +697,7 @@ void populateStore(void)
 						pbuf=gtk_widget_render_icon(image,GTK_STOCK_REDO,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[7],false);
@@ -706,7 +708,7 @@ void populateStore(void)
 						pbuf=gtk_widget_render_icon(image,GTK_STOCK_FIND,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[8],false);
@@ -717,7 +719,7 @@ void populateStore(void)
 						pbuf=gtk_widget_render_icon(image,GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[9],false);
@@ -728,7 +730,7 @@ void populateStore(void)
 						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/num.png",NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[10],false);
@@ -738,7 +740,7 @@ void populateStore(void)
 						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/num.png",NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[11],false);
@@ -748,7 +750,7 @@ void populateStore(void)
 						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/num.png",NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[12],false);
@@ -758,7 +760,7 @@ void populateStore(void)
 						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/num.png",NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[13],false);
@@ -769,7 +771,7 @@ void populateStore(void)
 						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/sep.png",NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 					break;
@@ -780,12 +782,13 @@ void populateStore(void)
 						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/expand.png",NULL);
 						if(pbuf!=NULL)
 							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,(char*)&toolBarLayout[j],FILE_NAME,"XX",-1);
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,FILE_NAME,"XX",-1);
 								g_object_unref(pbuf);
 							}
 						break;
 
 				}
+			free(type);
 		}
 }
 
@@ -1014,20 +1017,32 @@ void doDeleteItem(GtkIconView *iconview,GtkTreePath *path,gpointer user_data)
 	printf("%s\n",gtk_tree_path_to_string(path));
 }
 
+/*
+	model=gtk_icon_view_get_model(view);
+	path=(GtkTreePath *)selected->data;
+	gtk_tree_model_get_iter(model,&iter,path);
+	gtk_tree_path_free(path);
+
+	gtk_tree_model_get(model,&iter,FILE_NAME,&text,-1);
+
+*/
 gboolean clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 {
 	GtkTreePath* path=NULL;
 	GdkModifierType	mask;
 	GtkTreeIter	iter;
+	char*		text;
 
 	gdk_window_get_pointer(NULL,NULL,NULL,&mask);
 	path=gtk_icon_view_get_path_at_pos((GtkIconView *)widget,event->button.x,event->button.y);
 
 	if ((GDK_CONTROL_MASK & mask) && (path!=NULL))
 		{
-			printf("control click %s %s\n",gtk_tree_path_to_string(path),data);
+			printf("control click %s\n",gtk_tree_path_to_string(path));
 			
 			gtk_tree_model_get_iter((GtkTreeModel*)listStore,&iter,path);
+			gtk_tree_model_get((GtkTreeModel*)listStore,&iter,TEXT_COLUMN,&text,-1);
+			printf("control click data%s\n",text);
 			gtk_list_store_remove((GtkListStore*)listStore,&iter);
 		}
 	return(false);
@@ -1064,7 +1079,7 @@ void doIconView(void)
 
 	gtk_box_pack_start(GTK_BOX(iconViewBox),(GtkWidget*)iconView,false,false,2);
 //	g_signal_connect(G_OBJECT(iconView),"item-activated",G_CALLBACK(doDeleteItem),NULL);
-	g_signal_connect(G_OBJECT(iconView),"button-press-event",G_CALLBACK(clickIt),(void*)1);
+	g_signal_connect(G_OBJECT(iconView),"button-press-event",G_CALLBACK(clickIt),NULL);
 //	gtk_drag_dest_set((GtkWidget*)iconView,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 //	gtk_drag_dest_add_text_targets((GtkWidget*)iconView);
 //	g_signal_connect(G_OBJECT(iconView),"drag-data-received",G_CALLBACK(dropOnIconView),NULL);
