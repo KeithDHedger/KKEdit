@@ -72,9 +72,6 @@ void readConfig(void)
 					if(strcasecmp(name,"nagscreen")==0)
 						nagScreen=(bool)atoi(strarg);
 
-					if(strcasecmp(name,"showbmbar")==0)
-						showBMBar=(bool)atoi(strarg);
-
 					if(strcasecmp(name,"higlightcolour")==0)
 						{
 							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
@@ -125,6 +122,10 @@ void readConfig(void)
 							replaceAll=(bool)atoi(strarg);
 					if(strcasecmp(name,"allfiles")==0)
 							findInAllFiles=(bool)atoi(strarg);
+					if(strcasecmp(name,"showbmbar")==0)
+						showBMBar=(bool)atoi(strarg);
+					if(strcasecmp(name,"showtoolbar")==0)
+						showToolBar=(bool)atoi(strarg);
 				}
 			fclose(fd);
 		}
@@ -194,7 +195,6 @@ void init(void)
 
 	tmpNagScreen=nagScreen;
 	tmpHighlightColour=highlightColour;
-	tmpShowBMBar=showBMBar;
 
 	filename=tempnam(NULL,"KKEdit");
 	asprintf(&htmlFile,"%s.html",filename);

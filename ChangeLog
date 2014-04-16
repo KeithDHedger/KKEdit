@@ -1,4 +1,9 @@
 0.1.2
+Removed 'Show BM Bar' from prefs ( now automatic ).
+Carried over visibility of Bookmark Bar and Tool Bar from previous session.
+Moved 'Toggle Bookmark Bar' to 'View' Menu.
+Added 'Toggle Tool Bar' to 'View' menu.
+Added new 'View' menu.
 Fixed greying out of unsuable toolbar buttons ( e.g. can't 'cut' when no page visible etc ).
 Added expander to toolbar items.
 Added configurable toolbar.

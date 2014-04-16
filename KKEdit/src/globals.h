@@ -126,7 +126,6 @@ extern GtkWidget*		menuBookMarkSubMenu;
 extern char*			highlightColour;
 extern char*			tmpHighlightColour;
 extern bool				showBMBar;
-extern bool				tmpShowBMBar;
 extern GtkWidget*		bmHighlightBox;
 extern int				bmMarkNumber;
 
@@ -141,6 +140,7 @@ extern GtkWidget*		menuedit;
 extern GtkWidget*		menufunc;
 extern GtkWidget*		menunav;
 extern GtkWidget*		menutools;
+extern GtkWidget*		menuView;
 
 extern GtkWidget*		menuhelp;
 extern GtkWidget*		menuprint;
@@ -259,6 +259,7 @@ extern GtkWidget*		replaceBox;
 //custom toolbar
 extern GtkWidget*		fromHBox;
 extern GtkWidget*		iconViewBox;
+extern bool				showToolBar;
 
 extern char*			functionSearchText;
 extern char*			thePage;

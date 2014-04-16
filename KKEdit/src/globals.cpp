@@ -40,6 +40,7 @@ GtkWidget*		menutools;
 GtkWidget*		menuhelp;
 GtkWidget*		menumanpage;
 GtkWidget*		menuItemOpen=NULL;
+GtkWidget*		menuView=NULL;
 
 GList*			newBookMarksList=NULL;
 GtkWidget*		menuBookMark;
@@ -47,7 +48,6 @@ GtkWidget*		menuBookMarkSubMenu;
 char*			highlightColour;
 char*			tmpHighlightColour;
 bool			showBMBar;
-bool			tmpShowBMBar;
 GtkWidget*		bmHighlightBox;
 int				bmMarkNumber=0;
 
@@ -168,6 +168,7 @@ GtkWidget*		replaceBox;
 //custom toolbar
 GtkWidget*		fromHBox;
 GtkWidget*		iconViewBox;
+bool			showToolBar=true;
 
 char*			functionSearchText=NULL;
 char*			thePage=NULL;
@@ -719,9 +720,6 @@ void rebuildBookMarkMenu(void)
 
 	menuBookMarkSubMenu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuBookMark),menuBookMarkSubMenu);
-	menuitem=gtk_menu_item_new_with_label("Toggle Bookmark Bar");
-	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookMarkBar),NULL);
 
 	menuitem=gtk_menu_item_new_with_label("Toggle Bookmark");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);

@@ -279,6 +279,11 @@ void showHideWidget(GtkWidget* widget,bool show)
 void refreshMainWindow(void)
 {
 	gtk_widget_show_all(window);
+
+	if(showToolBar)
+		gtk_widget_show((GtkWidget*)toolBarBox);
+	else
+		gtk_widget_hide((GtkWidget*)toolBarBox);
 }
 
 int yesNo(char* question,char* file)
@@ -1043,6 +1048,8 @@ void writeExitData(void)
 			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
 			fprintf(fd,"replaceall	%i\n",(int)replaceAll);
 			fprintf(fd,"allfiles	%i\n",(int)findInAllFiles);
+			fprintf(fd,"showbmbar	%i\n",(int)showBMBar);
+			fprintf(fd,"showtoolbar	%i\n",(int)showToolBar);
 			fclose(fd);
 		}
 	g_free(filename);
@@ -1171,9 +1178,6 @@ void setPrefs(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"marks")==0)
 		tmpRestoreBookmarks=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
-	if(strcmp(gtk_widget_get_name(widget),"showbmbar")==0)
-		tmpShowBMBar=gtk_toggle_button_get_active((GtkToggleButton*)data);
-
 	if(strcmp(gtk_widget_get_name(widget),"ihavedonated")==0)
 		tmpNagScreen=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
@@ -1207,7 +1211,6 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			lineNumbers=tmpLineNumbers;
 			lineWrap=tmpLineWrap;
 			highLight=tmpHighLight;
-			showBMBar=tmpShowBMBar;
 
 			if(styleName!=NULL)
 				{
@@ -1499,6 +1502,12 @@ void toggleBookMarkBar(GtkWidget* widget,gpointer data)
 {
 	showBMBar=!showBMBar;
 	resetAllFilePrefs();
+}
+
+void toggleToolBar(GtkWidget* widget,gpointer data)
+{
+	showToolBar=!showToolBar;
+	refreshMainWindow();
 }
 
 

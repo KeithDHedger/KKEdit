@@ -834,7 +834,6 @@ void doPrefs(void)
 	GtkWidget*	item;
 	GtkWidget*	label;
 
-
 	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)prefswin,"Preferences");
 	vbox=gtk_vbox_new(false,8);
@@ -896,11 +895,11 @@ void doPrefs(void)
 //apperance 2
 	hbox=gtk_hbox_new(false,8);
 //show bookmark bar
-	item=gtk_check_button_new_with_label("Show BM Bar");
-	gtk_widget_set_name(item,"showbmbar");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,showBMBar);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+//	item=gtk_check_button_new_with_label("Show BM Bar");
+//	gtk_widget_set_name(item,"showbmbar");
+///	gtk_toggle_button_set_active((GtkToggleButton*)item,showBMBar);
+//	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
+//	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
 //single instance
 	item=gtk_check_button_new_with_label("Use Single Instance");
@@ -1317,6 +1316,19 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doPrefs),NULL);
 
+//view menu
+	menuView=gtk_menu_item_new_with_label("View");
+	menu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuView),menu);
+//toggle bookmark bar
+	menuitem=gtk_menu_item_new_with_label("Toggle Bookmarks Bar");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookMarkBar),NULL);
+//toggle toolbar bar
+	menuitem=gtk_menu_item_new_with_label("Toggle Tool Bar");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleToolBar),NULL);
+
 //navigation menu
 	menunav=gtk_menu_item_new_with_label("Navigation");
 	menu=gtk_menu_new();
@@ -1381,6 +1393,7 @@ void buildMainGui(void)
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufile);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuedit);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuView);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menunav);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufunc);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuBookMark);
