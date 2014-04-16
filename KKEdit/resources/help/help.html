@@ -17,7 +17,7 @@
       <font size="+3">Source code text editor</font><br>
       <br>
       <hr size="2" width="100%"><img alt="main" src="main.png"
-        width="883" height="692"><br>
+        width="883" height="640"><br>
       <hr size="2" width="100%">
       <div align="center"><b><font size="+1">Why another text editor?</font></b><br>
         <br>
@@ -96,11 +96,10 @@
         To Definition' KKEdit will then look in open files for the
         definition and switch to that page and highlight the appropriate
         line like so:</font> <br>
+      <img alt="gotodefine" src="gotodefine.png" width="608"
+        height="420"><br>
       <br>
-      <img alt="gotodefine" src="gotodefine.png" width="500"
-        height="309"><br>
-      <br>
-      <img alt="define" src="define.png" width="507" height="476"><br>
+      <img alt="define" src="founddefine.png" width="408" height="430"><br>
       <font size="-1">As you can see as the definition was not in an
         open file KKEdit looks for the definition recursively starting
         from the folder where the file was opened from and if found
@@ -113,8 +112,8 @@
         <br>
         You can also open an include file just highlight the line and
         select&nbsp; Open Include File like so:</font> <br>
-      <img alt="openinclude" src="openinclude.png" width="464"
-        height="386"><br>
+      <img alt="openinclude" src="openinclude.png" width="492"
+        height="332"><br>
       <font size="-1">Include files are looked for in either
         /usr/include or the directory the current document is in,
         depending whether the file name is surrounded by '&lt;&gt;' or '
@@ -133,7 +132,7 @@
         to jump to the appropriate function definition just select it
         from the menu like so:<br>
       </font> <br>
-      <img alt="funcmenu" src="functions.png" width="806" height="586"><br>
+      <img alt="funcmenu" src="functions.png" width="750" height="566"><br>
       <font size="-1"> The Functions menu will be updated after saving a
         file or switching tabs.</font><br>
       <br>
@@ -144,7 +143,7 @@
         i.e. to open a terminal with the working directory set to the
         folder where the current file is open:</font><br>
       <br>
-      <img alt="openterm" src="toolsmenu.png" width="638" height="264"><br>
+      <img alt="openterm" src="toolsmenu.png" width="614" height="610"><br>
       <br>
       <font size="-1">External tools can either be added globally to
         /usr/share/KKEdit/tools (if you have installed with
@@ -162,8 +161,7 @@
         More variables may be defined later.<br>
         External tools can be created by hand or via the 'Tools-&gt;New'
         menu like so:</font><br>
-      <br>
-      <img alt="exttool" src="newtool.png" width="643" height="487"><br>
+      <img alt="exttool" src="newtool.png" width="640" height="518"><br>
       <br>
       <font size="-1">The place holders are:<br>
         %t - Currently selected text, the same as the $KKEDIT_SELECTION
@@ -195,6 +193,9 @@
                       selected will show up in the pop-up menu if you
                       have also<font size="-1"> selected some text.<br>
                         Tools that have the "Always <font size="-1">show
+
+
+
 
 
 
@@ -240,9 +241,15 @@
 
 
 
+
+
+
                         -f'' WILL <font size="-1">work and show the
                           tail of the file but <font size="-1">WILL NOT
                             follow properly this is a <font size="-1">feature/problem
+
+
+
 
 
 
@@ -263,6 +270,9 @@
                           control :(<br>
                           <br>
                         </font>For very </font></font></font></font></font></font></font></font>complex
+
+
+
 
 
 
@@ -301,11 +311,14 @@
 
 
 
+
+
+
         one in /usr/share/KKEdit/tools ) you must have root privileges.</font><br>
       <hr size="2" width="100%"><br>
       <b><a name="prefsanc"></a></b><b>Preferences</b><br>
       <br>
-      <img alt="prefs" src="prefs.png" width="692" height="455"><br>
+      <img alt="prefs" src="prefs.png" width="688" height="514"><br>
       <br>
       <font size="-1">The Prefs file is created ~/.KKEdit/kkedit.rc and
         will be created/recreated when quitting KKEdit.<br>
@@ -322,8 +335,23 @@
         default installed themes ) or locally in ~/.gnome2/gedit/styles,
         for compatability with gedit as most gktsourceview themes seem
         to be gedit-centric ;)<br>
-        <img alt="" src="style.png" width="572" height="396"><br>
+        <img alt="" src="style.png" width="688" height="514"><br>
         <br>
+        You can customize what appears on the tool bar by simply
+        clicking on a button to add it to the menu like so:<br>
+        <img alt="" src="addtoolbutton.png" width="688" height="151"><br>
+        And then drag it to where you want it to appear on the toolbar
+        like so:<br>
+        <img alt="" src="dragtoolbutton.png" width="688" height="151"><br>
+        To remove an item from the toolbar just hold 'CONTROL' and click
+        on it and it will be removed.<br>
+        <img alt="" src="removetoolitem.png" width="688" height="150"><br>
+        Some items can only be added once 'Save', 'Open' etc when they
+        have been added they will be greyed out and can't be added
+        again, removing them makes them addable again, the seperator and
+        the expander can be used multiple times.<br>
+        You can also choose to hide/show the toobar from the 'View'
+        menu.<br>
       </font>
       <hr size="2" width="100%"><br>
       <a name="featanc"></a><b>Other Features </b><br>
@@ -346,8 +374,9 @@
       <br>
       <a name="copyfilenameanc"></a><font size="-1">Right clicking on a
         tab allows copying of the document file name<font size="-1">,</font>
-        file path, spell check the document or split/insplit the view.</font><br>
-      <img alt="tabmenu" src="tabmenu.png" width="638" height="270"><br>
+        file path, spell check the document ,split/insplit the view and
+        set the source highlighting.</font><br>
+      <img alt="tabmenu" src="tabmenu.png" width="564" height="314"><br>
       <br>
       <br>
       <a name="copyfunctiondefine"></a><font size="-1">The document
@@ -356,16 +385,15 @@
         Selecting the definition will copy it to the clipboard.<br>
         If there is no valid definition selected the menu item will not
         be shown.</font><br>
-      <img src="contextgoto.png" alt="context" width="849" height="543"><br>
-      <br>
+      <img src="contextgoto.png" alt="context" width="546" height="468"><br>
       <br>
       <font size="-1">The right click context menu<font size="-1">:<br>
-          <img alt="popup" src="popup.png" width="726" height="605"><br>
+          <img alt="popup" src="popup.png" width="606" height="640"><br>
           <br>
         </font></font><font size="-1"><a name="spellchk"></a>Spell
         checker dialog:</font><br>
-      <img alt="spellcheck" src="spellcheck.png" width="347"
-        height="154"><br>
+      <img alt="spellcheck" src="spellcheck.png" width="336"
+        height="143"><br>
       <br>
       <a name="bookmarkanc"></a><font size="-1">Any amount of bookmarks
         can be added, selecting one will switch to that document and
@@ -378,33 +406,28 @@
         menu from the main menu or the main context menu, you can also
         just click in the bookmarks bar to toggle a mark on or off ( you
         will see a little bookmark icon ).<br>
-        The bookmark bar can be toggled on or off from the menu or the
-        prefs, hiding the bookmark bar does not interfere with toggling
-        bookmarks it just means you can't click to toggle them, they
-        will stiil be highlighted.<br>
-      </font> <img alt="boomark" src="bookmark.png" width="589"
-        height="310"><br>
+      </font> <img alt="boomark" src="bookmark.png" width="584"
+        height="550"><br>
       <br>
       <a name="hexdumpanc"></a><font size="-1">You can open a file as a
         hex dump like so:</font><br>
-      <img alt="hexdump" src="hexdump.png" width="669" height="288"><br>
+      <img alt="hexdump" src="hexdump.png" width="720" height="268"><br>
       <br>
       <a name="findapi"></a><font size="-1">You can look up an API
         declaration from any installed gtk-doc's installed by selecting
         all or part of an API name like so:</font><br>
-      <img alt="selectapi" src="selectapi.png" width="560" height="169"><br>
+      <img alt="selectapi" src="selectapi.png" width="694" height="114"><br>
       <font size="-1">And then selecting 'Search In Gtk-Docs' form the
         Navigation menu or from the right click pop-up menu like so:</font><br>
-      <img alt="apimenu" src="gotodefine.png" width="500" height="309"><br>
+      <img alt="apimenu" src="gotoapi.png" width="480" height="296"><br>
       <font size="-1">And if you have built with the --enable-docviewer
         option to configure ( the default ) you will get a window pop-up
         with a list of possible links to the API you want, if there is
-        only one possible link you will go straight to that. <font
-          size="-1">i.e.</font>i.e. using the above example:</font><br>
-      <img alt="list" src="list.png" width="679" height="301"><br>
+        only one possible link you will go straight to that.</font><br>
+      <img alt="list" src="list.png" width="798" height="330"><br>
       <font size="-1"> Click the Link:</font><br>
-      <img alt="selected" src="selectedlist.png" width="796"
-        height="419"><br>
+      <img alt="selected" src="selectedlist.png" width="798"
+        height="378"><br>
       <font size="-1">Links can be clicked and followed in the Gtk doc
         viewer, and functions etc can be copied and pasted into your
         document.<br>
@@ -433,6 +456,9 @@
                     size="-1">f you have installed GtkSu <font
                       size="-1">( <a
                         href="http://gtk-apps.org/content/show.php/GtkSu?content=158974">Available
+
+
+
 
 
 
@@ -484,7 +510,13 @@
 
 
 
+
+
+
                                                   the <font size="-1">toolbar
+
+
+
 
 
 
@@ -502,6 +534,9 @@
                                                       size="-1">
                                                       searching
                                                       backwards </font>can
+
+
+
 
 
 
@@ -542,7 +577,13 @@
 
 
 
+
+
+
                                                         <font size="-1">A</font>ll'
+
+
+
 
 
 
@@ -561,6 +602,9 @@
                                                         confirm the
                                                         action.<br>
                                                         <font size="-1">The
+
+
+
 
 
 
@@ -596,19 +640,20 @@
 
 
 
+
+
+
         can jump to a line using the toolbar entry:</font><br>
-      <img alt="jumptoline" src="gotolinefromtoolbar.png" width="614"
-        height="497"><br>
-      <font size="-1">You can search the installed Gtk-docs for an api
-        via the toolbar entry box:</font><br>
-      <img alt="apisearch" src="findapifromtoolbar.png" width="684"
-        height="264"><br>
+      <img alt="jumptoline" src="gotolinefromtoolbar.png" width="736"
+        height="358"><br>
+      <font size="-1">You can do a 'live' search by just typing into the
+        toobar&nbsp; search box::</font><br>
+      <img alt="apisearch" src="livesearch.png" width="882" height="452"><br>
       <br>
       <font size="-1">Split view mode:</font><br>
-      <img alt="splitscreen" src="spliscreen.png" width="680"
-        height="664"><br>
+      <img alt="splitscreen" src="spliscreen.png" width="560"
+        height="412"><br>
       <font size="-1"><br>
-        <br>
         <font size="-1">The current <font size="-1">source <font
               size="-1">syntax colouring is now selectable via the 'tab'
               context menu</font></font> like so</font>:<br>
@@ -668,6 +713,9 @@
 
 
 
+
+
+
                                 but recommended)<br>
                                 Glib-Networking </font></font></font></font></font></font></font></font></font></font></font></font></font><font
         size="-1"><font size="-1"><font size="-1"><font size="-1"><font
@@ -702,10 +750,16 @@
 
 
 
+
+
+
                                                           but
                                                           recommended)<br>
                                                           <br>
                                                         </font></font></font></font></font></font></font></font></font></font></font></font></font>&nbsp;</font></font></font></font></font></font></font></font></font></font></font></font>webkit
+
+
+
 
 
 
