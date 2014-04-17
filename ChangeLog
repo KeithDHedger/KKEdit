@@ -1,4 +1,6 @@
 0.1.2
+Redone help files.
+Removed unnecessary options from prefs.
 Removed 'Show BM Bar' from prefs ( now automatic ).
 Carried over visibility of Bookmark Bar and Tool Bar from previous session.
 Moved 'Toggle Bookmark Bar' to 'View' Menu.
