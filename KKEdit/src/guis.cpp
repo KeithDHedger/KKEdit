@@ -27,8 +27,6 @@
 #include <webkit/webkit.h>
 #endif
 
-enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
-
 GtkWidget*		recent;
 GtkToolItem*	tool[16];
 GtkIconView*	iconView=NULL;
@@ -894,12 +892,6 @@ void doPrefs(void)
 
 //apperance 2
 	hbox=gtk_hbox_new(false,8);
-//show bookmark bar
-//	item=gtk_check_button_new_with_label("Show BM Bar");
-//	gtk_widget_set_name(item,"showbmbar");
-///	gtk_toggle_button_set_active((GtkToggleButton*)item,showBMBar);
-//	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-//	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
 //single instance
 	item=gtk_check_button_new_with_label("Use Single Instance");
@@ -922,8 +914,25 @@ void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(hbox),restoreBMs,true,true,0);
 	g_signal_connect(G_OBJECT(restoreBMs),"toggled",G_CALLBACK(setPrefs),(void*)restoreBMs);
 	gtk_widget_set_sensitive(restoreBMs,onExitSaveSession);
+
 //end apperance 2
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+
+//sort functions
+	label=gtk_label_new("<b>Function List Sorting</b>");
+	gtk_label_set_use_markup((GtkLabel*)label,true);
+	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
+
+	funcListDrop=gtk_combo_box_text_new();
+	gtk_widget_set_name(item,"sortfunc");
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Type/Alphabetic");
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Type/Line");
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Line");
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Alphabetic");
+
+	gtk_combo_box_set_active((GtkComboBox*)funcListDrop,listFunction);
+	gtk_box_pack_start(GTK_BOX(vbox),funcListDrop,true,true,0);
+
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
 //text appearence

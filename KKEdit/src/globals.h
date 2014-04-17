@@ -51,6 +51,8 @@
 #define MARK_TYPE_1      "one"
 #define MARK_TYPE_2      "two"
 
+enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
+
 struct pageStruct
 {
 	GtkWidget*			pane;
@@ -260,6 +262,9 @@ extern GtkWidget*		replaceBox;
 extern GtkWidget*		fromHBox;
 extern GtkWidget*		iconViewBox;
 extern bool				showToolBar;
+
+extern int				listFunction;
+extern GtkWidget*		funcListDrop;
 
 extern char*			functionSearchText;
 extern char*			thePage;

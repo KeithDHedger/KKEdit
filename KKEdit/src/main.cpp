@@ -78,6 +78,9 @@ void readConfig(void)
 							highlightColour=strdup(strarg);
 						}
 
+					if(strcasecmp(name,"funcsort")==0)
+						listFunction=(int)atoi(strarg);
+
 					if(strcasecmp(name,"toolbarlayout")==0)
 						{
 							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
@@ -162,6 +165,7 @@ void init(void)
 	nagScreen=false;
 	highlightColour=strdup("#A3ACFF");
 	showBMBar=false;
+	listFunction=0;
 
 	asprintf(&filename,"%s/.KKEdit/tools",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);

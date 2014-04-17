@@ -1094,6 +1094,7 @@ void writeConfig(void)
 			fprintf(fd,"terminalcommand	%s\n",terminalCommand);
 
 			fprintf(fd,"toolbarlayout	%s\n",toolBarLayout);
+			fprintf(fd,"funcsort	%i\n",listFunction);
 
 			fclose(fd);
 		}
@@ -1255,6 +1256,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 
 			tabWidth=tmpTabWidth;
 			depth=tmpDepth;
+			listFunction=gtk_combo_box_get_active((GtkComboBox*)funcListDrop);
 			gtk_widget_destroy(prefswin);
 			resetAllFilePrefs();
 			writeConfig();

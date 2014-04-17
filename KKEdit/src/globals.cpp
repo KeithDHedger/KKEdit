@@ -170,6 +170,9 @@ GtkWidget*		fromHBox;
 GtkWidget*		iconViewBox;
 bool			showToolBar=true;
 
+int				listFunction=0;
+GtkWidget*		funcListDrop=NULL;
+
 char*			functionSearchText=NULL;
 char*			thePage=NULL;
 char*			htmlFile=NULL;
@@ -495,6 +498,20 @@ void getRecursiveTagListFileName(char* filepath,void* ptr)
 	g_free(command);
 }
 
+/*
+sort alpha and by type var->func
+sort  -k 2rb,2rb -k 1b,1b
+
+sort type var->func and line num
+sort  -k 2rb,2rb -k 3n,3n
+
+sort by line num
+sort  -k 3n
+
+sort by name
+sort
+*/
+
 void getRecursiveTagList(char* filepath,void* ptr)
 {
 	FILE*		fp;
@@ -502,11 +519,28 @@ void getRecursiveTagList(char* filepath,void* ptr)
 	GString*	str=g_string_new(NULL);
 	char*		command;
 	char*		newstr=NULL;
+	char*		sort=NULL;
 
 	if(filepath==NULL)
 		return;
 
-	asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - -x",filepath,depth);
+	switch (listFunction)
+		{
+			case 0:
+				asprintf(&sort,"sort -k 2rb,2rb -k 1b,1b");
+				break;
+			case 1:
+				asprintf(&sort,"sort -k 2rb,2rb -k 3n,3n");
+				break;
+			case 2:
+				asprintf(&sort,"sort -k 3n");
+				break;
+			default:
+				asprintf(&sort,"sort");
+				break;
+		}
+
+	asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - -x|%s",filepath,depth,sort);
 
 	fp=popen(command, "r");
 	while(fgets(line,1024,fp))
@@ -520,6 +554,7 @@ void getRecursiveTagList(char* filepath,void* ptr)
 	*((char**)ptr)=str->str;
 	g_string_free(str,false);
 	g_free(command);
+	g_free(sort);
 }
 
 //string slicing
