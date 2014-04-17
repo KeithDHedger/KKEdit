@@ -82,6 +82,7 @@
       </b> <b><a href="#funcanc">Functions Menu</a></b><b><br>
       </b> <b><a href="#toolsanc">Tools Menu</a></b><b><br>
       </b> <b><a href="#prefsanc">Preferences</a></b><b><br>
+        <a href="#customtoolbar">Customize The Tool Bar</a><br>
       </b> <b><a href="#featanc">Other Features</a></b><b><br>
       </b> <b><a href="#getanc">Get It And Build It</a></b><br>
       <b><a href="#bugs">Bug Reporting</a></b><br>
@@ -130,8 +131,7 @@
       <font size="-1">The Functions menu contains a list of all defined
         functions, variables and defines that are visible in this file,
         to jump to the appropriate function definition just select it
-        from the menu like so:<br>
-      </font> <br>
+        from the menu like so:</font><br>
       <img alt="funcmenu" src="functions.png" width="750" height="566"><br>
       <font size="-1"> The Functions menu will be updated after saving a
         file or switching tabs.</font><br>
@@ -142,7 +142,6 @@
       <font size="-1">The Tools menu allow you to run an external script
         i.e. to open a terminal with the working directory set to the
         folder where the current file is open:</font><br>
-      <br>
       <img alt="openterm" src="toolsmenu.png" width="614" height="610"><br>
       <br>
       <font size="-1">External tools can either be added globally to
@@ -209,6 +208,7 @@
 
 
 
+
                           In Popup" selected will show in the popup menu
                           regardless of w<font size="-1">hether any text
                             is or is not selected.<br>
@@ -225,6 +225,7 @@
                                   size="-1"><font size="-1"><font
                                       size="-1"><font size="-1"><font
                                           size="-1">/tmp/textfile</font></font></font></font></font></font></font></font></font>"|tail
+
 
 
 
@@ -266,10 +267,12 @@
 
 
 
+
                               of xterm and beyond</font></font> my
                           control :(<br>
                           <br>
                         </font>For very </font></font></font></font></font></font></font></font>complex
+
 
 
 
@@ -314,6 +317,7 @@
 
 
 
+
         one in /usr/share/KKEdit/tools ) you must have root privileges.</font><br>
       <hr size="2" width="100%"><br>
       <b><a name="prefsanc"></a></b><b>Preferences</b><br>
@@ -337,20 +341,26 @@
         to be gedit-centric ;)<br>
         <img alt="" src="style.png" width="688" height="514"><br>
         <br>
+        <br>
+        <a name="customtoolbar"></a></font><b>Customize The Tool Bar</b><font
+        size="-1"><br>
+        <br>
         You can customize what appears on the tool bar by simply
         clicking on a button to add it to the menu like so:<br>
         <img alt="" src="addtoolbutton.png" width="688" height="151"><br>
+        <br>
         And then drag it to where you want it to appear on the toolbar
         like so:<br>
-        <img alt="" src="dragtoolbutton.png" width="688" height="151"><br>
+        <img alt="" src="dragtoolbutton.png" width="688" height="151"></font><br>
+      <font size="-1"><br>
         To remove an item from the toolbar just hold 'CONTROL' and click
-        on it and it will be removed.<br>
+        on item to be removed.<br>
         <img alt="" src="removetoolitem.png" width="688" height="150"><br>
         Some items can only be added once 'Save', 'Open' etc when they
         have been added they will be greyed out and can't be added
-        again, removing them makes them addable again, the seperator and
-        the expander can be used multiple times.<br>
-        You can also choose to hide/show the toobar from the 'View'
+        again, removing them makes them available again, the separator
+        and the expander can be used multiple times.<br>
+        You can also choose to hide/show the toolbar from the 'View'
         menu.<br>
       </font>
       <hr size="2" width="100%"><br>
@@ -378,7 +388,6 @@
         set the source highlighting.</font><br>
       <img alt="tabmenu" src="tabmenu.png" width="564" height="314"><br>
       <br>
-      <br>
       <a name="copyfunctiondefine"></a><font size="-1">The document
         context menu also contains the&nbsp; 'Go To Definition' function
         for convenience.<br>
@@ -390,14 +399,17 @@
       <font size="-1">The right click context menu<font size="-1">:<br>
           <img alt="popup" src="popup.png" width="606" height="640"><br>
           <br>
-        </font></font><font size="-1"><a name="spellchk"></a>Spell
-        checker dialog:</font><br>
+        </font></font><font size="-1"><a name="spellchk"></a></font><b>Spell
+
+        checker dialog</b><br>
+      <br>
       <img alt="spellcheck" src="spellcheck.png" width="336"
         height="143"><br>
       <br>
-      <a name="bookmarkanc"></a><font size="-1">Any amount of bookmarks
-        can be added, selecting one will switch to that document and
-        line.<br>
+      <b><a name="bookmarkanc"></a></b><b>Bookmarks</b><br>
+      <br>
+      <font size="-1">Any amount of bookmarks can be added, selecting
+        one will switch to that document and line.<br>
         Bookmarks are stored with the 'Save Session' and can be restored
         with the 'Restore Session With Bookmarks' menu.<br>
         Bookmarks are now toggled so if you place the cursor on a line
@@ -410,24 +422,31 @@
         height="550"><br>
       <br>
       <a name="hexdumpanc"></a><font size="-1">You can open a file as a
-        hex dump like so:</font><br>
+        hex dump ( this is NOT a hex editor though that may change later
+        ) like so:</font><br>
       <img alt="hexdump" src="hexdump.png" width="720" height="268"><br>
       <br>
-      <a name="findapi"></a><font size="-1">You can look up an API
-        declaration from any installed gtk-doc's installed by selecting
-        all or part of an API name like so:</font><br>
-      <img alt="selectapi" src="selectapi.png" width="694" height="114"><br>
+      <a name="findapi"></a><b>Look up Gtk API</b><br>
+      <br>
+      <font size="-1">You can look up an API declaration from any
+        installed gtk-doc's installed by selecting all or part of an API
+        name like so:</font><br>
+      <img alt="selectapi" src="selectapi.png" width="689" height="114"><br>
+      <br>
       <font size="-1">And then selecting 'Search In Gtk-Docs' form the
         Navigation menu or from the right click pop-up menu like so:</font><br>
       <img alt="apimenu" src="gotoapi.png" width="480" height="296"><br>
+      <br>
       <font size="-1">And if you have built with the --enable-docviewer
         option to configure ( the default ) you will get a window pop-up
         with a list of possible links to the API you want, if there is
         only one possible link you will go straight to that.</font><br>
       <img alt="list" src="list.png" width="798" height="330"><br>
+      <br>
       <font size="-1"> Click the Link:</font><br>
       <img alt="selected" src="selectedlist.png" width="798"
         height="378"><br>
+      <br>
       <font size="-1">Links can be clicked and followed in the Gtk doc
         viewer, and functions etc can be copied and pasted into your
         document.<br>
@@ -477,6 +496,7 @@
 
 
 
+
                         here</a><font size="-1"> ) <font size="-1">then
                           gtksu will be used for authentication if not a
                           terminal will be used depending on your
@@ -486,6 +506,7 @@
                             incorrectly.</font><br>
                         </font></font></font></font></font></font></font></font></font></font><br>
       <img alt="" src="find.png" width="367" height="177"><br>
+      <br>
       <font size="-1"><font size="-1"><font size="-1"><font size="-1"><font
                 size="-1"><font size="-1"><font size="-1"><font
                       size="-1"><font size="-1"><font size="-1"><font
@@ -498,6 +519,7 @@
                                               uses regex expressions<font
                                                 size="-1">, the quick
                                                 search <font size="-1">on
+
 
 
 
@@ -530,10 +552,12 @@
 
 
 
+
                                                     does not,<font
                                                       size="-1">
                                                       searching
                                                       backwards </font>can
+
 
 
 
@@ -580,7 +604,9 @@
 
 
 
+
                                                         <font size="-1">A</font>ll'
+
 
 
 
@@ -602,6 +628,7 @@
                                                         confirm the
                                                         action.<br>
                                                         <font size="-1">The
+
 
 
 
@@ -643,9 +670,11 @@
 
 
 
+
         can jump to a line using the toolbar entry:</font><br>
       <img alt="jumptoline" src="gotolinefromtoolbar.png" width="736"
         height="358"><br>
+      <br>
       <font size="-1">You can do a 'live' search by just typing into the
         toobar&nbsp; search box::</font><br>
       <img alt="apisearch" src="livesearch.png" width="882" height="452"><br>
@@ -667,7 +696,6 @@
         <img alt="hilite" src="sourcehilite.png" width="797"
           height="462"><br>
         <br>
-        <font size="-1"></font><br>
       </font>
       <hr size="2" width="100%"><a name="getanc"></a><b>Get it here!</b><b><br>
       </b> <b><a
@@ -699,6 +727,7 @@
                             size="-1"><font size="-1">(</font></font></font></font></font><font
                       size="-1"><font size="-1"><font size="-1"><font
                             size="-1"><font size="-1"><font size="-1">optional
+
 
 
 
@@ -753,10 +782,12 @@
 
 
 
+
                                                           but
                                                           recommended)<br>
                                                           <br>
                                                         </font></font></font></font></font></font></font></font></font></font></font></font></font>&nbsp;</font></font></font></font></font></font></font></font></font></font></font></font>webkit
+
 
 
 
