@@ -481,6 +481,13 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	char		tmpstr[1024];
 	char*		lineptr;
 	bool		onefunc=false;
+	int			numtypes=0;
+	char*		typenames[50]={NULL,};
+	bool		flag;
+	char*		newstr=NULL;
+	GtkWidget*	whattypemenu;
+	GtkWidget*	typesubmenus[50]={NULL,};
+	GtkWidget*	submenu;
 
 	if(arg1==NULL)
 		return;
@@ -489,34 +496,13 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	if(page==NULL)
 		return;
 
-	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menufunc);
+	submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menufunc);
 	if (submenu!=NULL)
 		gtk_menu_item_set_submenu((GtkMenuItem*)menufunc,NULL);
 
 	currentTabNumber=thispage;
 
 	page->rebuildMenu=false;
-
-	int			numtypes=0;
-	char*		types[50]={NULL,};
-	bool		flag;
-	char*		newstr=NULL;
-	GtkWidget*	catmenu[50]={NULL,};
-
-//			newstr=sliceBetween(line," "," ");
-//			flag=false;
-//			for(int j=0;j<numtypes;j++)
-//				{
-//					if (strcmp(newstr,types[j])==0)
-//						flag=true;
-//				}
-//			if(flag==false)
-//				{
-//					types[numtypes]=strdup(newstr);
-//					numtypes++;
-//				}
-//			free(newstr);
-
 
 	getRecursiveTagList(page->filePath,&functions);
 	lineptr=functions;
@@ -529,59 +515,58 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 		{
 			tmpstr[0]=0;
 			sscanf (lineptr,"%*s %*s %i %"VALIDCHARS"s",&linenum,tmpstr);
+
+			if(strlen(tmpstr)>0)
+				{
+					if(listFunction==4)
+						{
+							newstr=NULL;
+							newstr=sliceBetween(lineptr,(char*)" ",(char*)" ");
+							if(newstr!=NULL)
+								{
+									flag=false;
+									for(int j=0;j<numtypes;j++)
+										{
+											if (strcmp(newstr,typenames[j])==0)
+												{
+													whattypemenu=typesubmenus[j];
+													flag=true;
+													break;
+												}
+										}
+
+									if(flag==false)
+										{
+											typenames[numtypes]=strdup(newstr);
+											submenu=gtk_image_menu_item_new_with_label(typenames[numtypes]);
+											typesubmenus[numtypes]=gtk_menu_new();
+											gtk_menu_item_set_submenu(GTK_MENU_ITEM(submenu),typesubmenus[numtypes]);
+											gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),submenu);
+											whattypemenu=typesubmenus[numtypes];
+											numtypes++;
+										}
+
+									free(newstr);
+
+									onefunc=true;
+									menuitem=gtk_image_menu_item_new_with_label(tmpstr);
+									gtk_menu_shell_append(GTK_MENU_SHELL(whattypemenu),menuitem);
+									gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
+								}
+						}
+					else
+						{
+							onefunc=true;
+							menuitem=gtk_image_menu_item_new_with_label(tmpstr);
+							gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
+							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
+						}
+				}
 			lineptr=strchr(lineptr,'\n');
 			if (lineptr!=NULL)
 				lineptr++;
-			if(strlen(tmpstr)>0)
-				{
-					newstr=NULL;
-					newstr=sliceBetween(lineptr," "," ");
-					if(newstr!=NULL)
-					{
-					flag=false;
-					for(int j=0;j<numtypes;j++)
-						{
-							if (strcmp(newstr,types[j])==0)
-								flag=true;
-						}
-
-GtkWidget*	ms;
-/*
-//recent menu
-	menuitem=gtk_image_menu_item_new_with_label("Recent Files");
-	menurecent=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
-	addRecentToMenu((GtkRecentChooser*)recent,menurecent);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
-*/
-
-					if(flag==false)
-						{
-						//fprintf(stderr,"%s\n",newstr);
-
-							types[numtypes]=strdup(newstr);
-							catmenu[numtypes]=gtk_image_menu_item_new_with_label(types[numtypes]);
-							ms=gtk_menu_new();
-							gtk_menu_item_set_submenu(GTK_MENU_ITEM(catmenu[numtypes]),ms);
-							gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),catmenu[numtypes]);
-						//catmenu[numtypes]=gtk_menu_new();
-							//gtk_menu_set_title((GtkMenu*)catmenu[numtypes],types[numtypes]);
-							//catmenu[numtypes]=gtk_image_menu_item_new_with_label(types[numtypes]);
-							//gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufunc),catmenu[numtypes]);
-
-							numtypes++;
-
-						}
-					if(newstr!=NULL)
-						free(newstr);
-					}
-					onefunc=true;
-					menuitem=gtk_image_menu_item_new_with_label(tmpstr);
-					gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
-					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
-				}
 		}
+
 	gtk_window_set_title((GtkWindow*)window,page->fileName);
 	refreshMainWindow();
 	if(functions!=NULL)
@@ -1320,9 +1305,14 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			tabWidth=tmpTabWidth;
 			depth=tmpDepth;
 			listFunction=gtk_combo_box_get_active((GtkComboBox*)funcListDrop);
+
+			if(tpage!=NULL)
+				switchPage(notebook,tpage->tabVbox,currentTabNumber,NULL);
+
 			gtk_widget_destroy(prefswin);
 			resetAllFilePrefs();
 			writeConfig();
+			setSensitive();
 			refreshMainWindow();
 		}
 }

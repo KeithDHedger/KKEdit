@@ -249,7 +249,7 @@ bool saveFile(GtkWidget* widget,gpointer data)
 		}
 	if(page->lang==NULL)
 		setLanguage(page);
-	switchPage(notebook,NULL,currentTabNumber,NULL);
+	switchPage(notebook,page->tabVbox,currentTabNumber,NULL);
 	setSensitive();
 	return(true);
 }

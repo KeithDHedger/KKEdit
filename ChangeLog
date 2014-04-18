@@ -1,4 +1,7 @@
 0.1.3
+Fixed 'Functions' menu sorting changes to reflect prefs immediately.
+Fixed 'Functions' menu not being updated on save.
+Added 'Categorised' submenus to 'Functions' menu sorting.
 Added Function list sorting to prefs.
 
 0.1.2
@@ -9,22 +12,22 @@ Carried over visibility of Bookmark Bar and Tool Bar from previous session.
 Moved 'Toggle Bookmark Bar' to 'View' Menu.
 Added 'Toggle Tool Bar' to 'View' menu.
 Added new 'View' menu.
-Fixed greying out of unsuable toolbar buttons ( e.g. can't 'cut' when no page visible etc ).
+Fixed greying out of unusable toolbar buttons ( e.g. can't 'cut' when no page visible etc ).
 Added expander to toolbar items.
 Added configurable toolbar.
 Fixed bug when loading session where file has weird characters in the name.
 
 0.1.1
-Fixed tool not apearing in popup if both popup options selected.
+Fixed tool not appearing in popup if both popup options selected.
 Fixed not creating new tool if ~/.KKEdit/tools folder doesn't exist.
 Comments now appear as tooltips in the 'Tools' menu and the context menu.
 Added optional comments to external tools.
 Fixed crash when repeatedly deleting tools from the 'Manage External Tools' menu.
 Added a couple of source view styles (one grey and one brown).
 Added external tool to look up QT5 definition (docs must be in "/usr/share/doc/qt5" if not change the search directory in the tool),
-works the same as 'Open Manpage' just select a define 'QWidget' forinstance and then select 'QT5 Search' from the tools or context menu.
+works the same as 'Open Manpage' just select a define 'QWidget' for instance and then select 'QT5 Search' from the tools or context menu.
 Compacted the prefs dialog, and grouped the functions.
-Fixedbug in tools where only the first use of a place holder was being set. 
+Fixed bug in tools where only the first use of a place holder was being set. 
 Fixed bug in external tools where %h was not being set. 
 
 0.1.0
@@ -77,8 +80,8 @@ If glib networking is installed if selecting "Open Man page" or "Search in GTK-D
 
 0.0.27
 Fixed over enthusiastic utf8 conversion!
-Example tools now use releative paths.
-External tools can now use releative paths to command script.
+Example tools now use relative paths.
+External tools can now use relative paths to command script.
 Fixed bug with external tools.
 
 0.0.26
@@ -207,7 +210,7 @@ Added selected function def to popupmenu.
 Added show functions def in popupmenu.
 Fixed defines that contain : or / not displaying.
 Added version number to tarball.
-Stripped whitespace from bookmark label;
+Stripped white space from bookmark label;
 Go To Definition not shown in popup if not available.
 Selecting function def in popup copies def to clipboard.
 Added new icon.
