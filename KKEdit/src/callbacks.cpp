@@ -497,6 +497,27 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 
 	page->rebuildMenu=false;
 
+	int			numtypes=0;
+	char*		types[50]={NULL,};
+	bool		flag;
+	char*		newstr=NULL;
+	GtkWidget*	catmenu[50]={NULL,};
+
+//			newstr=sliceBetween(line," "," ");
+//			flag=false;
+//			for(int j=0;j<numtypes;j++)
+//				{
+//					if (strcmp(newstr,types[j])==0)
+//						flag=true;
+//				}
+//			if(flag==false)
+//				{
+//					types[numtypes]=strdup(newstr);
+//					numtypes++;
+//				}
+//			free(newstr);
+
+
 	getRecursiveTagList(page->filePath,&functions);
 	lineptr=functions;
 
@@ -513,6 +534,48 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 				lineptr++;
 			if(strlen(tmpstr)>0)
 				{
+					newstr=NULL;
+					newstr=sliceBetween(lineptr," "," ");
+					if(newstr!=NULL)
+					{
+					flag=false;
+					for(int j=0;j<numtypes;j++)
+						{
+							if (strcmp(newstr,types[j])==0)
+								flag=true;
+						}
+
+GtkWidget*	ms;
+/*
+//recent menu
+	menuitem=gtk_image_menu_item_new_with_label("Recent Files");
+	menurecent=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
+	addRecentToMenu((GtkRecentChooser*)recent,menurecent);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+*/
+
+					if(flag==false)
+						{
+						//fprintf(stderr,"%s\n",newstr);
+
+							types[numtypes]=strdup(newstr);
+							catmenu[numtypes]=gtk_image_menu_item_new_with_label(types[numtypes]);
+							ms=gtk_menu_new();
+							gtk_menu_item_set_submenu(GTK_MENU_ITEM(catmenu[numtypes]),ms);
+							gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),catmenu[numtypes]);
+						//catmenu[numtypes]=gtk_menu_new();
+							//gtk_menu_set_title((GtkMenu*)catmenu[numtypes],types[numtypes]);
+							//catmenu[numtypes]=gtk_image_menu_item_new_with_label(types[numtypes]);
+							//gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufunc),catmenu[numtypes]);
+
+							numtypes++;
+
+						}
+					if(newstr!=NULL)
+						free(newstr);
+					}
 					onefunc=true;
 					menuitem=gtk_image_menu_item_new_with_label(tmpstr);
 					gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);

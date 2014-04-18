@@ -515,11 +515,14 @@ sort
 void getRecursiveTagList(char* filepath,void* ptr)
 {
 	FILE*		fp;
-	char		line[1024];
+	char		line[2048];
 	GString*	str=g_string_new(NULL);
 	char*		command;
 	char*		newstr=NULL;
 	char*		sort=NULL;
+//	int			numtypes=0;
+//	char*		types[50];
+//	bool		flag;
 
 	if(filepath==NULL)
 		return;
@@ -535,19 +538,35 @@ void getRecursiveTagList(char* filepath,void* ptr)
 			case 2:
 				asprintf(&sort,"sort -k 3n");
 				break;
+			case 4:
+				break;
 			default:
 				asprintf(&sort,"sort");
 				break;
 		}
 
-	asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - -x|%s",filepath,depth,sort);
+//	asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - -x|%s|sed 's@ \\+@ @g'",filepath,depth,sort);
+	asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - -x|%s|sed 's@ \\+@ @g'",filepath,depth,sort);
 
 	fp=popen(command, "r");
-	while(fgets(line,1024,fp))
+	while(fgets(line,2048,fp))
 		{
 			newstr=deleteSlice(line,filepath);
 			g_string_append_printf(str,"%s",newstr);
 			g_free(newstr);
+//			newstr=sliceBetween(line," "," ");
+//			flag=false;
+//			for(int j=0;j<numtypes;j++)
+//				{
+//					if (strcmp(newstr,types[j])==0)
+//						flag=true;
+//				}
+//			if(flag==false)
+//				{
+//					types[numtypes]=strdup(newstr);
+//					numtypes++;
+//				}
+//			free(newstr);
 		}
 	pclose(fp);
 

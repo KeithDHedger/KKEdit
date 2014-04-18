@@ -929,6 +929,7 @@ void doPrefs(void)
 	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Type/Line");
 	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Line");
 	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Alphabetic");
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Categorised");
 
 	gtk_combo_box_set_active((GtkComboBox*)funcListDrop,listFunction);
 	gtk_box_pack_start(GTK_BOX(vbox),funcListDrop,true,true,0);
