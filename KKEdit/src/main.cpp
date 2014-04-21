@@ -236,6 +236,7 @@ int main(int argc,char **argv)
 	UniqueResponse 		response;
 	UniqueBackend*		back;
 	char*				dbusname;
+	int					w,h;
 
 	gtk_init(&argc,&argv);
 
@@ -297,6 +298,9 @@ int main(int argc,char **argv)
 
 			setSensitive();
 
+			gtk_window_get_size((GtkWindow*)window,&w,&h);
+			gtk_paned_set_position((GtkPaned*)mainVPane,h-120);
+			gtk_widget_hide(toolOutVBox);
 			gtk_main();
 		}
 }

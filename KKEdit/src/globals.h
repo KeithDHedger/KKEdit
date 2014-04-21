@@ -215,6 +215,7 @@ extern GtkWidget*		mainVPane;
 extern bool				showToolOutWin;
 extern GtkWidget*		toolOutputView;
 extern GtkTextBuffer*	toolOutputBuffer;
+extern GtkWidget*		toolOutVBox;
 
 extern char*			selectedToolPath;
 extern GList*			toolsList;

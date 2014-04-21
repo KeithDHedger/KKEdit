@@ -121,6 +121,7 @@ GtkWidget*		mainVPane=NULL;
 bool			showToolOutWin=false;
 GtkWidget*		toolOutputView=NULL;
 GtkTextBuffer*	toolOutputBuffer=NULL;
+GtkWidget*		toolOutVBox=NULL;
 
 char*			selectedToolPath=NULL;
 GList*			toolsList=NULL;
@@ -333,7 +334,7 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 		}
 	else
 		{
-			asprintf(&command,"%s 2>&1",commandtorun);
+			asprintf(&command,"%s",commandtorun);
 		}
 
 	if((flags & TOOL_VIEW_OP)==TOOL_VIEW_OP)
@@ -353,7 +354,7 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 				}
 			g_free(command);
 			return;
-}
+		}
 
 	if((flags & TOOL_ASYNC)==TOOL_ASYNC)
 		{

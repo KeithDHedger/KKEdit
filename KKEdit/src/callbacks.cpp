@@ -281,6 +281,11 @@ void refreshMainWindow(void)
 {
 	gtk_widget_show_all(window);
 
+	if(showToolOutWin)
+		gtk_widget_show(toolOutVBox);
+	else
+		gtk_widget_hide(toolOutVBox);
+
 	if(showToolBar)
 		gtk_widget_show((GtkWidget*)toolBarBox);
 	else
@@ -1360,12 +1365,14 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 			gtk_widget_set_sensitive(ignoreWidget,false);
 			gtk_widget_set_sensitive(pasteWidget,false);
 			gtk_widget_set_sensitive(replaceWidget,false);
+			gtk_widget_set_sensitive(outputWidget,false);
 		}
 	else
 		{
 			gtk_widget_set_sensitive(ignoreWidget,true);
 			gtk_widget_set_sensitive(pasteWidget,true);
 			gtk_widget_set_sensitive(replaceWidget,true);
+			gtk_widget_set_sensitive(outputWidget,true);
 
 			if(ignoreOut==true)
 				flags=TOOL_IGNORE_OP;
@@ -1385,6 +1392,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 			gtk_widget_set_sensitive(ignoreWidget,false);
 			gtk_widget_set_sensitive(pasteWidget,false);
 			gtk_widget_set_sensitive(replaceWidget,false);
+			gtk_widget_set_sensitive(outputWidget,false);
 		}
 
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
@@ -1569,13 +1577,13 @@ void toggleToolOutput(GtkWidget* widget,gpointer data)
 	showToolOutWin=!showToolOutWin;
 	if(showToolOutWin)
 		{
+			gtk_widget_show(toolOutVBox);
 			gtk_menu_item_set_label((GtkMenuItem*)widget,"Hide Tool Output");
-			gtk_paned_set_position((GtkPaned*)mainVPane,500);
 		}
 	else
 		{
+			gtk_widget_hide(toolOutVBox);
 			gtk_menu_item_set_label((GtkMenuItem*)widget,"Show Tool Output");
-			gtk_paned_set_position((GtkPaned*)mainVPane,50000);
 	}
 }
 

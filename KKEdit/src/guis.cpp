@@ -452,7 +452,7 @@ void doMakeTool(void)
 	g_signal_connect(G_OBJECT(replaceWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags - view
-	outputWidget=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)ignoreWidget,"Output To View");
+	outputWidget=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)ignoreWidget,"View Output");
 	gtk_widget_set_name(outputWidget,"outtoview");
 	gtk_toggle_button_set_active((GtkToggleButton*)outputWidget,viewOut);
 	gtk_box_pack_start(GTK_BOX(vbox),outputWidget,false,true,0);
@@ -1440,18 +1440,17 @@ void buildMainGui(void)
 	gtk_paned_add1(GTK_PANED (mainVPane),vbox);
 	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)mainVPane);
   
-	vbox=gtk_vbox_new(false,0);
-	
-	gtk_paned_add2(GTK_PANED(mainVPane),vbox);
+	toolOutVBox=gtk_vbox_new(false,0);
+
+	gtk_paned_add2(GTK_PANED(mainVPane),toolOutVBox);
 	scrollbox=gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy((GtkScrolledWindow*)scrollbox,GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	toolOutputBuffer=gtk_text_buffer_new(NULL);
 	toolOutputView=gtk_text_view_new_with_buffer(toolOutputBuffer);
 	gtk_container_add(GTK_CONTAINER(scrollbox),(GtkWidget*)toolOutputView);
 
-	gtk_container_add(GTK_CONTAINER(vbox),(GtkWidget*)scrollbox);
+	gtk_container_add(GTK_CONTAINER(toolOutVBox),(GtkWidget*)scrollbox);
 
-	gtk_paned_set_position((GtkPaned*)mainVPane,50000);
 	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 }
 
