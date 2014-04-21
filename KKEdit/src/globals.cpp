@@ -113,8 +113,14 @@ GtkWidget*		syncWidget;
 GtkWidget*		ignoreWidget;
 GtkWidget*		pasteWidget;
 GtkWidget*		replaceWidget;
+GtkWidget*		outputWidget;
 GtkWidget*		showDocWidget;
 GtkWidget*		toolSelect;
+//view tool output
+GtkWidget*		mainVPane=NULL;
+bool			showToolOutWin=false;
+GtkWidget*		toolOutputView=NULL;
+GtkTextBuffer*	toolOutputBuffer=NULL;
 
 char*			selectedToolPath=NULL;
 GList*			toolsList=NULL;
@@ -128,6 +134,7 @@ bool			runSync=true;
 bool			ignoreOut=true;
 bool			pasteOut=false;
 bool			replaceOut=false;
+bool			viewOut=false;
 bool			showDoc=false;
 bool			editTool=false;
 
@@ -317,6 +324,7 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 	FILE*	fp=NULL;
 	GString*	str=NULL;
 	char		line[1024];
+	GtkTextIter	iter;
 
 	if(interm==true)
 		{
@@ -324,7 +332,28 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 			flags=8;
 		}
 	else
-		command=strdup(commandtorun);
+		{
+			asprintf(&command,"%s 2>&1",commandtorun);
+		}
+
+	if((flags & TOOL_VIEW_OP)==TOOL_VIEW_OP)
+		{
+			fp=popen(command,"r");
+			if(fp!=NULL)
+				{
+					while(fgets(line,1024,fp))
+						{
+							gtk_text_buffer_insert_at_cursor(toolOutputBuffer,line,strlen(line));
+							while (gtk_events_pending())
+	 							gtk_main_iteration();
+	 						gtk_text_buffer_get_end_iter(toolOutputBuffer,&iter);
+	 						gtk_text_view_scroll_to_iter((GtkTextView*)toolOutputView,&iter,0,true,0,0);
+						}
+					pclose(fp);
+				}
+			g_free(command);
+			return;
+}
 
 	if((flags & TOOL_ASYNC)==TOOL_ASYNC)
 		{

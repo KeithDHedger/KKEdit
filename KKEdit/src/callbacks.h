@@ -51,5 +51,6 @@ void toggleBookmark(GtkWidget*,GtkTextIter* titer);
 void toggleBookMarkBar(GtkWidget* widget,gpointer data);
 void setToobarSensitive(void);
 void toggleToolBar(GtkWidget* widget,gpointer data);
+void toggleToolOutput(GtkWidget* widget,gpointer data);
 
 #endif

@@ -143,6 +143,8 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 
 									if((flagsarg & TOOL_INSERT_MASK)==TOOL_IGNORE_OP)
 										gtk_toggle_button_set_active((GtkToggleButton*)ignoreWidget,true);
+									if((flagsarg & TOOL_INSERT_MASK)==TOOL_VIEW_OP)
+										gtk_toggle_button_set_active((GtkToggleButton*)outputWidget,true);
 									if((flagsarg & TOOL_INSERT_MASK)==TOOL_PASTE_OP)
 										gtk_toggle_button_set_active((GtkToggleButton*)pasteWidget,true);
 									if((flagsarg & TOOL_INSERT_MASK)==TOOL_REPLACE_OP)
@@ -448,6 +450,13 @@ void doMakeTool(void)
 	gtk_toggle_button_set_active((GtkToggleButton*)replaceWidget,replaceOut);
 	gtk_box_pack_start(GTK_BOX(vbox),replaceWidget,false,true,0);
 	g_signal_connect(G_OBJECT(replaceWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
+
+//flags - view
+	outputWidget=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)ignoreWidget,"Output To View");
+	gtk_widget_set_name(outputWidget,"outtoview");
+	gtk_toggle_button_set_active((GtkToggleButton*)outputWidget,viewOut);
+	gtk_box_pack_start(GTK_BOX(vbox),outputWidget,false,true,0);
+	g_signal_connect(G_OBJECT(outputWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //buttons
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),false,false,0);
@@ -1099,12 +1108,13 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 
 void buildMainGui(void)
 {
-	GtkWidget*					vbox;
-	GtkWidget*					menuitem;
-	GtkWidget*					menu;
-	GtkAccelGroup*				accgroup;
-	GtkWidget*					image;
-	GtkWidget*					menurecent;
+	GtkWidget*		vbox;
+	GtkWidget*		menuitem;
+	GtkWidget*		menu;
+	GtkAccelGroup*	accgroup;
+	GtkWidget*		image;
+	GtkWidget*		menurecent;
+	GtkWidget*		scrollbox;
 
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size((GtkWindow*)window,windowWidth,windowHeight);
@@ -1345,6 +1355,13 @@ void buildMainGui(void)
 		menuitem=gtk_menu_item_new_with_label("Show Tool Bar");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleToolBar),NULL);
+//tooloutput
+	if(showToolOutWin)
+		menuitem=gtk_menu_item_new_with_label("Hide Tool Output");
+	else
+		menuitem=gtk_menu_item_new_with_label("Show Tool Output");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleToolOutput),NULL);
 
 //navigation menu
 	menunav=gtk_menu_item_new_with_label("Navigation");
@@ -1417,7 +1434,24 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menutools);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
 
-	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)vbox);
+//tooloutputwindow
+	mainVPane=gtk_vpaned_new();
+	gtk_container_set_border_width(GTK_CONTAINER(mainVPane),0);
+	gtk_paned_add1(GTK_PANED (mainVPane),vbox);
+	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)mainVPane);
+  
+	vbox=gtk_vbox_new(false,0);
+	
+	gtk_paned_add2(GTK_PANED(mainVPane),vbox);
+	scrollbox=gtk_scrolled_window_new(NULL,NULL);
+	gtk_scrolled_window_set_policy((GtkScrolledWindow*)scrollbox,GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+	toolOutputBuffer=gtk_text_buffer_new(NULL);
+	toolOutputView=gtk_text_view_new_with_buffer(toolOutputBuffer);
+	gtk_container_add(GTK_CONTAINER(scrollbox),(GtkWidget*)toolOutputView);
+
+	gtk_container_add(GTK_CONTAINER(vbox),(GtkWidget*)scrollbox);
+
+	gtk_paned_set_position((GtkPaned*)mainVPane,50000);
 	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 }
 

@@ -1349,6 +1349,8 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 		pasteOut=gtk_toggle_button_get_active((GtkToggleButton*)pasteWidget);
 	if(strcmp(gtk_widget_get_name(widget),"replace")==0)
 		replaceOut=gtk_toggle_button_get_active((GtkToggleButton*)replaceWidget);
+	if(strcmp(gtk_widget_get_name(widget),"outtoview")==0)
+		viewOut=gtk_toggle_button_get_active((GtkToggleButton*)outputWidget);
 	if(strcmp(gtk_widget_get_name(widget),"showdoc")==0)
 		showDoc=gtk_toggle_button_get_active((GtkToggleButton*)showDocWidget);
 
@@ -1371,6 +1373,8 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 				flags=TOOL_PASTE_OP;
 			if(replaceOut==true)
 				flags=TOOL_REPLACE_OP;				
+			if(viewOut==true)
+				flags=TOOL_VIEW_OP;				
 		}
 
 	if(showDoc==true)
@@ -1558,6 +1562,21 @@ void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButto
 		return;
 
 	toggleBookmark(NULL,iter);
+}
+
+void toggleToolOutput(GtkWidget* widget,gpointer data)
+{
+	showToolOutWin=!showToolOutWin;
+	if(showToolOutWin)
+		{
+			gtk_menu_item_set_label((GtkMenuItem*)widget,"Hide Tool Output");
+			gtk_paned_set_position((GtkPaned*)mainVPane,500);
+		}
+	else
+		{
+			gtk_menu_item_set_label((GtkMenuItem*)widget,"Show Tool Output");
+			gtk_paned_set_position((GtkPaned*)mainVPane,50000);
+	}
 }
 
 void toggleBookMarkBar(GtkWidget* widget,gpointer data)

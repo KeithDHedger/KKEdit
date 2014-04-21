@@ -37,7 +37,9 @@
 #define TOOL_PASTE_OP 1
 #define TOOL_REPLACE_OP 2
 #define TOOL_SHOW_DOC 4
-#define	TOOL_INSERT_MASK 3
+#define	TOOL_INSERT_MASK 0b10111
+#define	TOOL_VIEW_OP 16
+
 
 #define VALIDCHARS "[]a-zA-Z0-9:/@ ()_-,.*#;[\"]"
 #define VALIDFILENAMECHARS "[A-Za-z0-9_-./ <>]"
@@ -205,8 +207,14 @@ extern GtkWidget*		syncWidget;
 extern GtkWidget*		ignoreWidget;
 extern GtkWidget*		pasteWidget;
 extern GtkWidget*		replaceWidget;
+extern GtkWidget*		outputWidget;
 extern GtkWidget*		showDocWidget;
 extern GtkWidget*		toolSelect;
+//view tool output
+extern GtkWidget*		mainVPane;
+extern bool				showToolOutWin;
+extern GtkWidget*		toolOutputView;
+extern GtkTextBuffer*	toolOutputBuffer;
 
 extern char*			selectedToolPath;
 extern GList*			toolsList;
@@ -221,6 +229,7 @@ extern bool				runSync;
 extern bool				ignoreOut;
 extern bool				pasteOut;
 extern bool				replaceOut;
+extern bool				viewOut;
 extern bool				showDoc;
 extern bool				editTool;
 
