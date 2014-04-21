@@ -1330,12 +1330,19 @@ void buildMainGui(void)
 	menuView=gtk_menu_item_new_with_label("View");
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuView),menu);
+
 //toggle bookmark bar
-	menuitem=gtk_menu_item_new_with_label("Toggle Bookmarks Bar");
+	if(showBMBar)
+		menuitem=gtk_menu_item_new_with_label("Hide Bookmarks Bar");
+	else
+		menuitem=gtk_menu_item_new_with_label("Show Bookmarks Bar");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookMarkBar),NULL);
 //toggle toolbar bar
-	menuitem=gtk_menu_item_new_with_label("Toggle Tool Bar");
+	if(showToolBar)
+		menuitem=gtk_menu_item_new_with_label("Hide Tool Bar");
+	else
+		menuitem=gtk_menu_item_new_with_label("Show Tool Bar");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleToolBar),NULL);
 

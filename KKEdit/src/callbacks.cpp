@@ -10,6 +10,7 @@
 #include <gtksourceview/gtksourceiter.h>
 #include <unique/unique.h>
 #include <gtksourceview/gtksourceprintcompositor.h>
+#include <ctype.h>
 
 #include "config.h"
 #ifdef BUILDDOCVIEWER
@@ -538,7 +539,13 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 									if(flag==false)
 										{
 											typenames[numtypes]=strdup(newstr);
-											submenu=gtk_image_menu_item_new_with_label(typenames[numtypes]);
+											free(newstr);
+											if(typenames[numtypes][strlen(typenames[numtypes])-1]=='s')
+												asprintf(&newstr,"%s's",typenames[numtypes]);
+											else
+												asprintf(&newstr,"%ss",typenames[numtypes]);
+											newstr[0]=toupper(newstr[0]);
+											submenu=gtk_image_menu_item_new_with_label(newstr);
 											typesubmenus[numtypes]=gtk_menu_new();
 											gtk_menu_item_set_submenu(GTK_MENU_ITEM(submenu),typesubmenus[numtypes]);
 											gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),submenu);
@@ -1556,12 +1563,20 @@ void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButto
 void toggleBookMarkBar(GtkWidget* widget,gpointer data)
 {
 	showBMBar=!showBMBar;
+	if(showBMBar)
+		gtk_menu_item_set_label((GtkMenuItem*)widget,"Hide Bookmarks Bar");
+	else
+		gtk_menu_item_set_label((GtkMenuItem*)widget,"Show Bookmarks Bar");
 	resetAllFilePrefs();
 }
 
 void toggleToolBar(GtkWidget* widget,gpointer data)
 {
 	showToolBar=!showToolBar;
+	if(showToolBar)
+		gtk_menu_item_set_label((GtkMenuItem*)widget,"Hide Tool Bar");
+	else
+		gtk_menu_item_set_label((GtkMenuItem*)widget,"Show Tool Bar");
 	refreshMainWindow();
 }
 
