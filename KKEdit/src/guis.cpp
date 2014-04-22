@@ -313,50 +313,6 @@ void fillCombo(GtkComboBoxText* combo)
 	g_list_foreach(toolsList,addToolToDrop,NULL);
 }
 
-void fillComboX(GtkComboBoxText* combo)
-{
-	GDir*			folder;
-	const gchar*	entry=NULL;
-	FILE*			fd=NULL;
-	char*			filepath;
-	char			buffer[4096];
-	char*			datafolder[2];
-	char			strarg[1024];
-	char*			menuname=NULL;
-
-	asprintf(&datafolder[0],"%s/tools/",DATADIR);
-	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));
-
-	for(int loop=0;loop<2;loop++)
-		{
-			folder=g_dir_open(datafolder[loop],0,NULL);
-
-			if(folder!=NULL)
-				{
-					entry=g_dir_read_name(folder);
-					while(entry!=NULL)
-						{
-							asprintf(&filepath,"%s%s",datafolder[loop],entry);
-							fd=fopen(filepath,"r");
-							if(fd!=NULL)
-								{
-									while(fgets(buffer,4096,fd))
-										{
-											buffer[strlen(buffer)-1]=0;
-											sscanf((char*)&buffer,"%s",(char*)&strarg);
-											if(strcmp(strarg,"name")==0)
-												asprintf(&menuname,"%.*s",(int)strlen(buffer)-5,(char*)&buffer[5]);
-										}
-									if((menuname!=NULL) &&(strlen(menuname)>0))
-										gtk_combo_box_text_append_text((GtkComboBoxText*)toolSelect,menuname);
-									fclose(fd);
-								}
-							entry=g_dir_read_name(folder);
-						}
-				}
-		}
-}
-
 void doMakeTool(void)
 {
 	GtkWidget*	vbox;
