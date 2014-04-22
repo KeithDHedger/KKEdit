@@ -124,7 +124,7 @@
         in a definition or part of a definition and will try to find it
         in the usual places opening a file if necessary, the search is
         case insensitive.</font> <br>
-      &nbsp;<br>
+      <br>
       <hr size="2" width="100%"><br>
       <a name="funcanc"></a><b>Functions Menu</b><br>
       <br>
@@ -132,17 +132,18 @@
         functions, variables and defines that are visible in this file,
         to jump to the appropriate function definition just select it
         from the menu like so:</font><br>
-      <img alt="funcmenu" src="functions.png" width="750" height="566"><br>
+      <img alt="funcmenu" src="functions.png" width="869" height="465"><br>
       <font size="-1"> The Functions menu will be updated after saving a
-        file or switching tabs.</font><br>
-      <br>
+        file or switching tabs.<br>
+        You can select how the functions menu is displayed/sorted from
+        the preferences.</font><br>
       <hr size="2" width="100%"><br>
       <a name="toolsanc"></a><b>Tools Menu</b><br>
       <br>
       <font size="-1">The Tools menu allow you to run an external script
         i.e. to open a terminal with the working directory set to the
         folder where the current file is open:</font><br>
-      <img alt="openterm" src="toolsmenu.png" width="614" height="610"><br>
+      <img alt="openterm" src="toolsmenu.png" width="888" height="572"><br>
       <br>
       <font size="-1">External tools can either be added globally to
         /usr/share/KKEdit/tools (if you have installed with
@@ -155,12 +156,14 @@
         KKEDIT_DATADIR - Directory of global folder ( e.g.
         /usr/share/KKEdit ). <br>
       </font><font size="-1">KKEDIT_HTMLFILE</font><font size="-1">-
-        Temporary file for displaying html in doc viewer<br>
+        Temporary file for displaying html in doc viewer</font><br>
+      <font size="-1">More variables may be defined later.<br>
         <br>
-        More variables may be defined later.<br>
+      </font><font size="-1">External tools are sorted by name in the
+        menu and edit tools dialog.<br>
         External tools can be created by hand or via the 'Tools-&gt;New'
         menu like so:</font><br>
-      <img alt="exttool" src="newtool.png" width="640" height="518"><br>
+      <img alt="exttool" src="newtool.png" width="640" height="545"><br>
       <br>
       <font size="-1">The place holders are:<br>
         %t - Currently selected text, the same as the $KKEDIT_SELECTION
@@ -177,6 +180,17 @@
         as the $KKEDIT_HTMLFILE environment variable passed to the
         command .<br>
         <br>
+        Selecting 'View Output' will send the output of the tool to a
+        pane in at the bottom of the editor, you can alter the size by
+        dragging the handle and hide/show the pane from the 'View' menu,
+        only stdout is captured from the output of the tool if you want
+        to capture stderr you must redirect it to stdout, you can not
+        capture stdin, if you need to interact with the tool use the '
+        Run Tool In Terminal' option.<br>
+        The output pane will be shown automatically for any tool that
+        has this option selected, like so:<br>
+        <img alt="" src="outview.png" width="452" height="441"><br>
+        <br>
         <font size="-1">Selecting <font size="-1">'Show HTML Doc' will
             display the file </font></font></font><font size="-1"><font
           size="-1"><font size="-1"><font size="-1">$KKEDIT_HTMLFILE in
@@ -192,6 +206,7 @@
                       selected will show up in the pop-up menu if you
                       have also<font size="-1"> selected some text.<br>
                         Tools that have the "Always <font size="-1">show
+
 
 
 
@@ -245,9 +260,11 @@
 
 
 
+
                         -f'' WILL <font size="-1">work and show the
                           tail of the file but <font size="-1">WILL NOT
                             follow properly this is a <font size="-1">feature/problem
+
 
 
 
@@ -272,6 +289,7 @@
                           control :(<br>
                           <br>
                         </font>For very </font></font></font></font></font></font></font></font>complex
+
 
 
 
@@ -318,11 +336,12 @@
 
 
 
+
         one in /usr/share/KKEdit/tools ) you must have root privileges.</font><br>
       <hr size="2" width="100%"><br>
       <b><a name="prefsanc"></a></b><b>Preferences</b><br>
       <br>
-      <img alt="prefs" src="prefs.png" width="688" height="514"><br>
+      <img alt="prefs" src="prefs.png" width="688" height="570"><br>
       <br>
       <font size="-1">The Prefs file is created ~/.KKEdit/kkedit.rc and
         will be created/recreated when quitting KKEdit.<br>
@@ -401,6 +420,7 @@
           <br>
         </font></font><font size="-1"><a name="spellchk"></a></font><b>Spell
 
+
         checker dialog</b><br>
       <br>
       <img alt="spellcheck" src="spellcheck.png" width="336"
@@ -418,8 +438,10 @@
         menu from the main menu or the main context menu, you can also
         just click in the bookmarks bar to toggle a mark on or off ( you
         will see a little bookmark icon ).<br>
-      </font> <img alt="boomark" src="bookmark.png" width="584"
-        height="550"><br>
+        You can also remove all bookmarks from all open documents by
+        selecting 'Remove All Bookmarks' from the menu.<br>
+      </font> <img alt="boomark" src="bookmark.png" width="612"
+        height="306"><br>
       <br>
       <a name="hexdumpanc"></a><font size="-1">You can open a file as a
         hex dump ( this is NOT a hex editor though that may change later
@@ -497,6 +519,7 @@
 
 
 
+
                         here</a><font size="-1"> ) <font size="-1">then
                           gtksu will be used for authentication if not a
                           terminal will be used depending on your
@@ -535,7 +558,9 @@
 
 
 
+
                                                   the <font size="-1">toolbar
+
 
 
 
@@ -557,6 +582,7 @@
                                                       size="-1">
                                                       searching
                                                       backwards </font>can
+
 
 
 
@@ -605,7 +631,9 @@
 
 
 
+
                                                         <font size="-1">A</font>ll'
+
 
 
 
@@ -644,6 +672,7 @@
 
 
 
+
                                                           'Wrap<font
                                                           size="-1">'
                                                           option to
@@ -655,6 +684,7 @@
                                                     </font><br>
                                                   </font></font></font></font></font></font></font></font></font></font></font></font></font><br>
                         </font></font></font></font></font></font></font></font></font>You
+
 
 
 
@@ -745,6 +775,7 @@
 
 
 
+
                                 but recommended)<br>
                                 Glib-Networking </font></font></font></font></font></font></font></font></font></font></font></font></font><font
         size="-1"><font size="-1"><font size="-1"><font size="-1"><font
@@ -783,10 +814,12 @@
 
 
 
+
                                                           but
                                                           recommended)<br>
                                                           <br>
                                                         </font></font></font></font></font></font></font></font></font></font></font></font></font>&nbsp;</font></font></font></font></font></font></font></font></font></font></font></font>webkit
+
 
 
 
