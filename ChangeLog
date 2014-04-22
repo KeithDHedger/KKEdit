@@ -1,4 +1,5 @@
 0.1.3
+Added 'Remove All Bookmarks' to bokkmark menu.
 Tweaked a few external tools to take advantage of the new 'View Output' option.
 Entry's now sorted in 'Tools' menu and 'Manage External Tools' drop down.
 Fixed a couple of tools.
