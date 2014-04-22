@@ -1,6 +1,7 @@
 name	Statistics
 command	../scripts/Statistics
-flags	8
+comment	Show file statistics in output pane.
+flags	16
 interm	0
 inpopup	0
 alwayspopup	1

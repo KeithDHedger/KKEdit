@@ -5,22 +5,23 @@
 #©Sadi Yumuşak <sadiyumusak@gmail.com>
 #All comments and suggestions to the above.
 #Script and tools options may have been tweaked by me.
+#This script was combined with the 'File Encoding' script also submitted by Sadi.
 #
-#Shows document information, requires zenity or yad, always shows in popup and needs no selection.
+#Shows document information, always shows in popup and needs no selection.
 
 bytes=$( wc -c  "$KKEDIT_CURRENTFILE")
 chars=$( wc -m  "$KKEDIT_CURRENTFILE")
 words=$( wc -w  "$KKEDIT_CURRENTFILE")
 lines=$( wc -l  "$KKEDIT_CURRENTFILE")
 lngst=$( wc -L  "$KKEDIT_CURRENTFILE")
+CHARSET="$(file -bi "$KKEDIT_CURRENTFILE"|awk -F "=" '{print $2}')"
 
-zenity --list --title="Statistics" \
---width=300 --height=220 \
---text="Powered by wc and zenity" \
---column "Sort" \
-"File size: ${bytes%% *}" \
-"Characters: ${chars%% *}" \
-"Words: ${words%% *}" \
-"Lines: ${lines%% *}" \
-"Longest Line: ${lngst%% *}" \
-"Filepath: $KKEDIT_CURRENTFILE"
+echo
+echo "File size: ${bytes%% *}"
+echo "Characters: ${chars%% *}"
+echo "Words: ${words%% *}"
+echo "Lines: ${lines%% *}"
+echo "Longest Line: ${lngst%% *}"
+echo "File Encoding: $CHARSET" 
+echo "Filepath: $KKEDIT_CURRENTFILE"
+echo 
