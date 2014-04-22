@@ -161,7 +161,10 @@ void init(void)
 	onExitSaveSession=false;
 	onExitSaveSession=false;
 	restoreBookmarks=false;
-	styleName=strdup("classic");
+	if(getuid()!=0)
+		styleName=strdup("classic");
+	else
+		styleName=strdup("Root Source");
 	nagScreen=false;
 	highlightColour=strdup("#A3ACFF");
 	showBMBar=false;
