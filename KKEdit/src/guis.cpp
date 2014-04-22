@@ -898,16 +898,20 @@ void doPrefs(void)
 	gtk_label_set_use_markup((GtkLabel*)label,true);
 	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
 
+	hbox=gtk_hbox_new(false,8);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,true,0);
 	funcListDrop=gtk_combo_box_text_new();
 	gtk_widget_set_name(item,"sortfunc");
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Type/Alphabetic");
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Type/Line");
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Line");
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Alphabetic");
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Categorised");
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Display functions etc in menu by type and alphabetically");
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Display functions etc in menu by type and file position");
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Display functions etc in menu by file position");
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Display functions etc in menu alphabetically");
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Display functions etc in menu in categorised format");
 
 	gtk_combo_box_set_active((GtkComboBox*)funcListDrop,listFunction);
-	gtk_box_pack_start(GTK_BOX(vbox),funcListDrop,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),funcListDrop,false,false,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,true,0);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,false,0);
 
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
