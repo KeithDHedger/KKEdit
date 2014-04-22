@@ -1297,7 +1297,6 @@ void setPrefs(GtkWidget* widget,gpointer data)
 					terminalCommand=strdup(gtk_entry_get_text((GtkEntry*)terminalBox));
 				}
 
-			
 			if(fontAndSize!=NULL)
 				{
 					g_free(fontAndSize);
