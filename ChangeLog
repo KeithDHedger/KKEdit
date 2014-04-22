@@ -2,8 +2,8 @@
 Tweaked a few external tools to take advantage of the new 'View Output' option.
 Entry's now sorted in 'Tools' menu and 'Manage External Tools' drop down.
 Fixed a couple of tools.
-Added a 'View Output' option to tool flags.
 Added 'Show/Hide Tool Output' to 'View' menu.
+Added a 'View Output' option to tool flags.
 Changed 'Toggle' in 'View' menu to 'Show/Hide'.
 Fixed 'Functions' menu sorting changes to reflect prefs immediately.
 Fixed 'Functions' menu not being updated on save.

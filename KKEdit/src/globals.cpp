@@ -781,6 +781,10 @@ void rebuildBookMarkMenu(void)
 	menuBookMarkSubMenu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuBookMark),menuBookMarkSubMenu);
 
+	menuitem=gtk_menu_item_new_with_label("Remove All Bookmarks");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(removeAllBookmarks),NULL);
+
 	menuitem=gtk_menu_item_new_with_label("Toggle Bookmark");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);

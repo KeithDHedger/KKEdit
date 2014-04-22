@@ -173,6 +173,32 @@ void setToobarSensitive(void)
 		}
 }
 
+void destroyBMData(gpointer data)
+{
+	free(((bookMarksNew*)data)->markName);
+}
+
+void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer)
+{
+	pageStruct*	page=NULL;
+	int			numpages;
+	GtkTextIter	startiter;
+	GtkTextIter	enditer;
+
+	numpages=gtk_notebook_get_n_pages(notebook);
+	for(int j=0;j<numpages;j++)
+		{
+			page=getPageStructPtr(j);
+			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
+			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
+			gtk_source_buffer_remove_source_marks(page->buffer,&startiter,&enditer,NULL);
+		}
+	g_list_free_full(newBookMarksList,destroyBMData);
+	newBookMarksList=NULL;
+	rebuildBookMarkMenu();
+	gtk_widget_show_all(menuBookMark);
+}
+
 void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 {
 	pageStruct*		page=getPageStructPtr(-1);
