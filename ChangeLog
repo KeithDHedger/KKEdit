@@ -1,7 +1,7 @@
 0.1.3
 Automatically chooses the 'Root Source' style when using a root window if the style has not been set.
 Added a 'Root' gtksourcestyle for using a root editor.
-Added 'Remove All Bookmarks' to bokkmark menu.
+Added 'Remove All Bookmarks' to bookmark menu.
 Tweaked a few external tools to take advantage of the new 'View Output' option.
 Entry's now sorted in 'Tools' menu and 'Manage External Tools' drop down.
 Fixed a couple of tools.
@@ -59,9 +59,9 @@ Hidden languages no longer shown.
 Source highlighting dropdown list now display language names properly.
 Source highlighting dropdown list now definitely sorted.
 Added 'Bug Reporting' link to help file as suggested.
-Moved source higlighting selector to page tab from toolbar.
-Fixed 'New Editor' not running as new proccess.
-Fixed 'Manpage Editor' not running as new proccess.
+Moved source highlighting selector to page tab from toolbar.
+Fixed 'New Editor' not running as new process.
+Fixed 'Manpage Editor' not running as new process.
 Fixed Automake warning about new subdir-objects not set.
 
 0.0.31
