@@ -1,4 +1,6 @@
 0.1.3
+Entry's now sorted in 'Tools' menu.
+Fixed a couple of tools.
 Added a 'View Output' option to tool flags.
 Added 'Show/Hide Tool Output' to 'View' menu.
 Changed 'Toggle' in 'View' menu to 'Show/Hide'.

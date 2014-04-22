@@ -41,6 +41,7 @@ GtkWidget*		menuhelp;
 GtkWidget*		menumanpage;
 GtkWidget*		menuItemOpen=NULL;
 GtkWidget*		menuView=NULL;
+GtkWidget*		menuToolOut=NULL;
 
 GList*			newBookMarksList=NULL;
 GtkWidget*		menuBookMark;
@@ -337,25 +338,6 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 			asprintf(&command,"%s",commandtorun);
 		}
 
-	if((flags & TOOL_VIEW_OP)==TOOL_VIEW_OP)
-		{
-			fp=popen(command,"r");
-			if(fp!=NULL)
-				{
-					while(fgets(line,1024,fp))
-						{
-							gtk_text_buffer_insert_at_cursor(toolOutputBuffer,line,strlen(line));
-							while (gtk_events_pending())
-	 							gtk_main_iteration();
-	 						gtk_text_buffer_get_end_iter(toolOutputBuffer,&iter);
-	 						gtk_text_view_scroll_to_iter((GtkTextView*)toolOutputView,&iter,0,true,0,0);
-						}
-					pclose(fp);
-				}
-			g_free(command);
-			return;
-		}
-
 	if((flags & TOOL_ASYNC)==TOOL_ASYNC)
 		{
 			g_spawn_command_line_async(command,NULL);
@@ -365,13 +347,30 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 			fp=popen(command,"r");
 			if(fp!=NULL)
 				{
-					str=g_string_new(NULL);
-					while(fgets(line,1024,fp))
-						 g_string_append(str,line);
+					if((flags & TOOL_VIEW_OP)==TOOL_VIEW_OP)
+						{
+							showToolOutWin=true;
+							gtk_widget_show(toolOutVBox);
+							gtk_menu_item_set_label((GtkMenuItem*)menuToolOut,"Hide Tool Output");
+							while(fgets(line,1024,fp))
+								{
+									gtk_text_buffer_insert_at_cursor(toolOutputBuffer,line,strlen(line));
+									while (gtk_events_pending())
+	 									gtk_main_iteration();
+	 								gtk_text_buffer_get_end_iter(toolOutputBuffer,&iter);
+	 								gtk_text_view_scroll_to_iter((GtkTextView*)toolOutputView,&iter,0,true,0,0);
+								}
+						}
+					else
+						{
+							str=g_string_new(NULL);
+							while(fgets(line,1024,fp))
+								 g_string_append(str,line);
+							if(ptr!=NULL)
+								*((char**)ptr)=str->str;
+							g_string_free(str,false);
+						}
 					pclose(fp);
-					if(ptr!=NULL)
-						*((char**)ptr)=str->str;
-					g_string_free(str,false);
 				}
 		}
 
@@ -667,6 +666,11 @@ void destroyTool(gpointer data)
 	g_free(data);
 }
 
+gint sortTools(gconstpointer a,gconstpointer b)
+{
+	return(strcasecmp(((toolStruct*)a)->menuName,((toolStruct*)b)->menuName));
+}
+
 void buildToolsList(void)
 {
 	GDir*			folder;
@@ -761,6 +765,8 @@ void buildToolsList(void)
 		}
 	g_free(datafolder[0]);
 	g_free(datafolder[1]);
+
+	toolsList=g_list_sort(toolsList,sortTools);
 }
 
 void rebuildBookMarkMenu(void)

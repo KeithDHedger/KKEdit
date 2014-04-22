@@ -303,7 +303,17 @@ void setUpToolBar(void)
 		}
 }
 
+void addToolToDrop(gpointer data,gpointer user_data)
+{
+	gtk_combo_box_text_append_text((GtkComboBoxText*)toolSelect,((toolStruct*)data)->menuName);
+}
+
 void fillCombo(GtkComboBoxText* combo)
+{
+	g_list_foreach(toolsList,addToolToDrop,NULL);
+}
+
+void fillComboX(GtkComboBoxText* combo)
 {
 	GDir*			folder;
 	const gchar*	entry=NULL;
@@ -1357,11 +1367,11 @@ void buildMainGui(void)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleToolBar),NULL);
 //tooloutput
 	if(showToolOutWin)
-		menuitem=gtk_menu_item_new_with_label("Hide Tool Output");
+		menuToolOut=gtk_menu_item_new_with_label("Hide Tool Output");
 	else
-		menuitem=gtk_menu_item_new_with_label("Show Tool Output");
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleToolOutput),NULL);
+		menuToolOut=gtk_menu_item_new_with_label("Show Tool Output");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuToolOut);
+	gtk_signal_connect(GTK_OBJECT(menuToolOut),"activate",G_CALLBACK(toggleToolOutput),NULL);
 
 //navigation menu
 	menunav=gtk_menu_item_new_with_label("Navigation");

@@ -154,6 +154,7 @@ extern GtkWidget*		menusaveall;
 extern GtkWidget*		menurevert;
 extern GtkWidget*		menumanpage;
 extern GtkWidget*		menuItemOpen;
+extern GtkWidget*		menuToolOut;
 
 extern GtkWidget*		redoMenu;
 extern GtkWidget*		undoMenu;
