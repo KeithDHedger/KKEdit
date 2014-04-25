@@ -9,7 +9,7 @@
 <!-- COLORS -->
 	<color name="comment_color" value="#e1d5e3"/>
 	<color name="number_color" value="#0012ca"/>
-	<color name="string_color" value="#1aad00"/>
+	<color name="string_color" value="#ffffff"/>
 	<color name="boolean_color" value="#ffaa00"/>
 	<color name="keyword_color" value="#000000"/>
 	<color name="error_color" value="#ff0000"/>
@@ -22,7 +22,7 @@
 	<style name="cursor" foreground="error_color"/>
 	<style name="current-line" background="line_highlight"/>
 	<style name="line-numbers" foreground="text_bg" background="keyword_color"/>
-	<style name="selection" foreground="text_fg" background="keyword_color"/>
+	<style name="selection" foreground="#ffffff" background="keyword_color"/>
 
 <!-- Bracket Matching -->
 	<style name="bracket-match" foreground="text_bg" background="keyword_color"/>
