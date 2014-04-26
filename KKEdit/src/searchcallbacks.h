@@ -29,5 +29,6 @@ void defSearchFromBar(GtkWidget* widget,gpointer data);
 void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data);
 void basicFind(int dowhat);
 void regexFind(int dowhat);
+void searchQT5Docs(GtkWidget* widget,gpointer data);
 
 #endif

@@ -1,3 +1,7 @@
+0.1.4
+
+Minor fix to root style.
+
 0.1.3
 Automatically chooses the 'Root Source' style when using a root window if the style has not been set.
 Added a 'Root' gtksourcestyle for using a root editor.
