@@ -164,6 +164,7 @@ void showDocView(GtkWidget* widget,gpointer data)
 	if(data==NULL)
 		docSearch(NULL,NULL);
 
+#ifdef BUILDDOCVIEWER
 	if(thePage==NULL)
 		{
 			if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
@@ -177,7 +178,6 @@ void showDocView(GtkWidget* widget,gpointer data)
 				}
 		}
 	
-#ifdef BUILDDOCVIEWER
 	if(thePage!=NULL)
 		{
 			if(strcasecmp("file://(null)",thePage)==0)
