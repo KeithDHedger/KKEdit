@@ -22,6 +22,10 @@
 #include "callbacks.h"
 #include "searchcallbacks.h"
 
+int currentFindPage=-1;
+int firstPage=-1;
+int pagesChecked=0;
+
 #ifdef BUILDDOCVIEWER
 
 void webKitGoBack(GtkWidget* widget,gpointer data)
@@ -159,7 +163,8 @@ void showDocView(int howtodisplay,char* text)
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
-
+	char*		command=NULL;
+				printf("XXX%sXXX\n",thePage);
 //	if(data==NULL)
 //		docSearch(NULL,NULL);
 
@@ -180,9 +185,44 @@ void showDocView(int howtodisplay,char* text)
 				}
 		}
 
+	if(howtodisplay==USEFILE)
+		{
+			webkit_web_view_load_uri(webView,htmlURI);
+			gtk_widget_show_all(docView);
+			gtk_window_present((GtkWindow*)docView);
+		}
+
 	gtk_widget_show_all(docView);
 	gtk_window_present((GtkWindow*)docView);
-	free(thePage);
+
+#else
+				printf("XXX%sXXX\n",thePage);
+
+	if(howtodisplay==USEURI)
+		{
+				printf("XXX%sXXX\n",thePage);
+			if(strcasecmp(thePage,"file://(null)")!=0)
+				{
+					asprintf(&command,"xdg-open %s",thePage);
+					g_spawn_command_line_async(command,NULL);
+					g_free(command);
+				}
+			else
+				asprintf(&command,"xdg-open https://www.google.co.uk/search?q=%s",text);
+		}
+
+	if(howtodisplay==USEFILE)
+		{
+			asprintf(&command,"xdg-open %s",htmlFile);
+			g_spawn_command_line_async(command,NULL);
+			g_free(command);
+		}
+#endif
+
+	if(thePage!=NULL)
+		free(thePage);
+	thePage=NULL;
+
 	return;
 		
 
@@ -271,7 +311,7 @@ void showDocView(int howtodisplay,char* text)
 	gtk_widget_show_all(docView);
 	gtk_window_present((GtkWindow*)docView);
 
-#else
+
 	char*	command;
 
 	if(thePage!=NULL)
@@ -307,7 +347,6 @@ void showDocView(int howtodisplay,char* text)
 			g_free(command);			
 		}
 #endif
-#endif
 }
 
 void seachGtkDocs(GtkWidget* widget,gpointer data)
@@ -328,8 +367,9 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 	char*		link;
 	int			cnt=0;
 
+#ifdef BUILDDOCVIEWER
 	gtk_window_set_title((GtkWindow*)docView,"Gtk Docs");
-
+#endif
 	for(int loop=0;loop<2048;loop++)
 		{
 			searchdata[loop][0]=NULL;
@@ -413,6 +453,7 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 #ifdef BUILDDOCVIEWER
 			showDocView(USEURI,selection);
 #else
+				printf("XXX%sXXX\n",command);
 			asprintf(&command,"xdg-open %s &",thePage);
 			system(command);
 			free(command);
@@ -445,8 +486,9 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 	char*		func=NULL;
 	int			cnt=0;
 
+#ifdef BUILDDOCVIEWER
 	gtk_window_set_title((GtkWindow*)docView,"Qt5 Docs");
-
+#endif
 	if(data!=NULL)
 		{
 			selection=strdup((char*)data);
@@ -525,7 +567,9 @@ void docSearchFromBar(GtkWidget* widget,gpointer data)
 {
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
+#ifdef BUILDDOCVIEWER
 	gtk_window_set_title((GtkWindow*)docView,"Gtk Docs");
+#endif
 	if(text!=NULL && strlen(text)>0)
 		seachGtkDocs(NULL,(void*)text);
 }
@@ -534,15 +578,12 @@ void qt5DocSearchFromBar(GtkWidget* widget,gpointer data)
 {
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
+#ifdef BUILDDOCVIEWER
 	gtk_window_set_title((GtkWindow*)docView,"Qt5 Docs");
+#endif
 	if(text!=NULL && strlen(text)>0)
 		searchQT5Docs(NULL,(void*)text);
 }
-
-int		currentFindPage=-1;
-int		firstPage=-1;
-int		pagesChecked=0;
-
 
 void doAllFiles(int dowhat,bool found)
 {
