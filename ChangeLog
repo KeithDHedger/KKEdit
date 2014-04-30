@@ -1,6 +1,5 @@
 0.1.4
-
-Fixed compiloe error when using --disable-docviewer
+Fixed compile error when using --disable-docviewer
 Minor fix to root style.
 
 0.1.3
