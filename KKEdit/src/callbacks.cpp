@@ -775,7 +775,7 @@ void openHelp(GtkWidget* widget,gpointer data)
 {
 #ifdef BUILDDOCVIEWER
 	asprintf(&thePage,"file://%s/help/help.html",DATADIR);
-	showDocView(NULL,(void*)1);
+	showDocView(NULL,(void*)-1);
 #else
 	char*	runhelp;
 	asprintf(&runhelp,"xdg-open %s/help/help.html",DATADIR);

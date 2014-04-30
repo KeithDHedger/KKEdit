@@ -167,6 +167,16 @@ void showDocView(GtkWidget* widget,gpointer data)
 		docSearch(NULL,NULL);
 
 #ifdef BUILDDOCVIEWER
+
+	if((long)data==-1)
+		{
+			webkit_web_view_load_uri(webView,htmlURI);
+			gtk_window_set_title((GtkWindow*)docView,"External Tool");
+			gtk_widget_show_all(docView);
+			gtk_window_present((GtkWindow*)docView);
+			return;
+		}
+
 	if(thePage==NULL)
 		{
 			if(data==NULL)

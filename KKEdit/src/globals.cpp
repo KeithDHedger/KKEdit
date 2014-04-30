@@ -377,7 +377,7 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 		}
 
 	if(flags & TOOL_SHOW_DOC)
-		showDocView(NULL,(void*)1);
+		showDocView(NULL,(void*)-1);
 
 	g_free(command);
 }
