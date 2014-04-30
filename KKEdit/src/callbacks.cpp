@@ -824,11 +824,6 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
 						}
-					menuitem=gtk_image_menu_item_new_with_label("Search In Gtk Docs");
-					image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
-					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(showDocView),NULL);
 
 					menuitem=gtk_image_menu_item_new_with_label("Search In Qt5 Docs");
 					image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
@@ -836,6 +831,11 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(searchQT5Docs),NULL);
 
+					menuitem=gtk_image_menu_item_new_with_label("Search In Gtk Docs");
+					image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
+					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(showDocView),NULL);
 #ifdef _ASPELL_
 //spell check
 					menuitem=gtk_image_menu_item_new_with_label("Check Spellling");

@@ -40,10 +40,6 @@ void webKitGoHome(GtkWidget* widget,gpointer data)
 }
 #endif
 
-void searchQT5Docs(GtkWidget* widget,gpointer data)
-{
-}
-
 void docSearch(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
@@ -245,72 +241,82 @@ void showDocView(GtkWidget* widget,gpointer data)
 #endif
 }
 
+//cat $(find /usr/share/doc/qt5/ -iname "%t.html") > %h;sed -i "s@<head>@&<base href=\""file://$(dirname $(find /usr/share/doc/qt5/ -iname "%t.html"))"/%t.html\"/>@" %h
 
-#if 0
-void showDocViewXXX(GtkWidget* widget,gpointer data)
+//cat $(find /usr/share/doc/qt5/ -iname "%t.html") > %h;sed -i "s@<head>@&<base href=\""file://$(dirname $(find /usr/share/doc/qt5/ -iname "%t.html"))"/%t.html\"/>@" %h
+
+void searchQT5Docs(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
+	FILE*		fp;
+	FILE*		fd;
+	char*		command=NULL;
+	GString*	str;
+	char		line[1024];
+	char*		func=NULL;
+	int			cnt=0;
 
-	if(data==NULL)
-		docSearch(NULL,NULL);
-
-if(thePage==NULL)
-			printf("3333333333\n");
-	
-	if(strcasecmp("file://(null)",thePage)==0)
+	if(data!=NULL)
 		{
-			printf("11111\n");
-			g_free(thePage);
+			selection=(char*)data;
+		}
+	else
+		{
 			if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 				{
 					selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
-					//asprintf(&thePage,"xdg-open https://www.google.co.uk/search?q=%s",selection);
-					asprintf(&thePage,"https://www.google.co.uk/search?q=%s",selection);
-					webkit_web_view_load_uri(webView,thePage);
-					//g_free(thePage);
-					//g_free(selection);
-					//return;
 				}
 		}
-			printf("22222222\n");
+
+	if(selection!=NULL)
+		{
+			str=g_string_new(selection);
+			str=g_string_ascii_down(str);
+
+			asprintf(&command,"find /usr/share/doc/qt5/ -maxdepth 2 -iname \"%s*.html\"|sed 's/.html$//'|sort",str->str);
+
+			fd=fopen(htmlFile,"w");
+			if(fd!=NULL)
+				{								
+					fprintf(fd,"<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
+					fprintf(fd,"<html>\n");
+					fprintf(fd,"<body>\n");
+
+					fp=popen(command,"r");
+					while(fgets(line,1024,fp))
+						{
+							func=g_path_get_basename(line);
+							if((func !=NULL) && (strcasecmp(func,"")!=0))
+								{
+									cnt++;
+									fprintf(fd,"<a href=\"%s.html\">%s</a><br>\n",line,func);
+								}
+						}
+					}
+					fprintf(fd,"</body>\n");
+					fprintf(fd,"</html>\n");
+					fclose(fd);
+					fclose(fp);
+					if(cnt==0)
+						asprintf(&thePage,"https://www.google.co.uk/search?q=%s",str->str);
+					else
+						thePage=strdup(htmlURI);
 
 #ifdef BUILDDOCVIEWER
-	if(thePage!=NULL)
-		{
-			webkit_web_view_load_uri(webView,thePage);
-			g_free(thePage);
-			thePage=NULL;
-		}
-	else
-		{
-			webKitGoHome(NULL,(void*)webView);
-		}
-	gtk_widget_show_all(docView);
-	gtk_window_present((GtkWindow*)docView);
-
+			showDocView(NULL,(gpointer)1);
 #else
-	char*	command;
-
-	if(thePage!=NULL)
-		{
-			asprintf(&command,"xdg-open %s",thePage);
-			g_spawn_command_line_async(command,NULL);
-			g_free(command);
-			g_free(thePage);
-			thePage=NULL;
-		}
-	else
-		{
-			asprintf(&command,"xdg-open %s",htmlURI);
-			g_spawn_command_line_async(command,NULL);
-			g_free(command);			
-		}
+			asprintf(&command,"xdg-open %s &",thePage);
+			system(command);
+			free(command);
 #endif
+			g_string_free(str,true);
+			free(thePage);
+			free(selection);
+		}
 }
-#endif
 
 void defSearchFromBar(GtkWidget* widget,gpointer data)
 {
