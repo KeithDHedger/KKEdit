@@ -773,11 +773,12 @@ void externalTool(GtkWidget* widget,gpointer data)
 
 void openHelp(GtkWidget* widget,gpointer data)
 {
-#ifdef BUILDDOCVIEWER
 	asprintf(&thePage,"file://%s/help/help.html",DATADIR);
-	showDocView(NULL,(void*)-1);
+#ifdef BUILDDOCVIEWER
+	gtk_window_set_title((GtkWindow*)docView,"KKEdit Help");
+	showDocView(USEURI,(char*)"KKEdit");
+
 #else
-	char*	runhelp;
 	asprintf(&runhelp,"xdg-open %s/help/help.html",DATADIR);
 	runCommand(runhelp,NULL,false,8);
 	g_free(runhelp);

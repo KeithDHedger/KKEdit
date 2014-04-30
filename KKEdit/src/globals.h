@@ -53,6 +53,9 @@
 #define MARK_TYPE_1      "one"
 #define MARK_TYPE_2      "two"
 
+#define USEURI			-1
+#define USEFILE			-2
+
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 
 struct pageStruct
