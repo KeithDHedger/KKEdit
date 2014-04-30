@@ -23,6 +23,8 @@
 #include "searchcallbacks.h"
 
 #ifdef BUILDDOCVIEWER
+bool	isGtk;
+
 void webKitGoBack(GtkWidget* widget,gpointer data)
 {
 	webkit_web_view_go_back((WebKitWebView*)data);
@@ -57,6 +59,8 @@ void docSearch(GtkWidget* widget,gpointer data)
 	char*		tempstr;
 	char*		link;
 	int			cnt=0;
+
+	isGtk=true;
 
 	for(int loop=0;loop<2048;loop++)
 		{
@@ -157,7 +161,10 @@ void showDocView(GtkWidget* widget,gpointer data)
 	GtkTextIter	end;
 	char*		selection=NULL;
 
-	if(data==NULL)
+//	if(!gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer))
+//		return;
+
+	if((data==NULL) && (gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true))
 		docSearch(NULL,NULL);
 
 #ifdef BUILDDOCVIEWER
@@ -172,6 +179,8 @@ void showDocView(GtkWidget* widget,gpointer data)
 					g_free(thePage);
 					thePage=NULL;
 				}
+			else
+				return;
 		}
 	
 	if(thePage!=NULL)
@@ -188,6 +197,8 @@ void showDocView(GtkWidget* widget,gpointer data)
 							g_free(thePage);
 							thePage=NULL;
 						}
+					else
+						return;
 				}
 			else
 				{
@@ -200,6 +211,10 @@ void showDocView(GtkWidget* widget,gpointer data)
 		{
 			webKitGoHome(NULL,(void*)webView);
 		}
+	if(isGtk==true)
+		gtk_window_set_title((GtkWindow*)docView,"Search Gtk Docs");
+	else
+		gtk_window_set_title((GtkWindow*)docView,"Search Qt5 Docs");
 	gtk_widget_show_all(docView);
 	gtk_window_present((GtkWindow*)docView);
 
@@ -241,10 +256,6 @@ void showDocView(GtkWidget* widget,gpointer data)
 #endif
 }
 
-//cat $(find /usr/share/doc/qt5/ -iname "%t.html") > %h;sed -i "s@<head>@&<base href=\""file://$(dirname $(find /usr/share/doc/qt5/ -iname "%t.html"))"/%t.html\"/>@" %h
-
-//cat $(find /usr/share/doc/qt5/ -iname "%t.html") > %h;sed -i "s@<head>@&<base href=\""file://$(dirname $(find /usr/share/doc/qt5/ -iname "%t.html"))"/%t.html\"/>@" %h
-
 void searchQT5Docs(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
@@ -258,6 +269,8 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 	char		line[1024];
 	char*		func=NULL;
 	int			cnt=0;
+
+	isGtk=false;
 
 	if(data!=NULL)
 		{
@@ -300,6 +313,7 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 					fprintf(fd,"</html>\n");
 					fclose(fd);
 					fclose(fp);
+					free(command);
 					if(cnt==0)
 						asprintf(&thePage,"https://www.google.co.uk/search?q=%s",str->str);
 					else

@@ -1,4 +1,8 @@
 0.1.4
+Fixed minor bug when selecting "Search In Gtk Docs" from 'Navigation' menu when no selection.
+Added "Search In Qt5 Docs" to 'Navigation' menu.
+Added "Search In Qt5 Docs" to context menu.
+Removed QT Search from external tools.
 Fixed compile error when using --disable-docviewer
 Minor fix to root style.
 
