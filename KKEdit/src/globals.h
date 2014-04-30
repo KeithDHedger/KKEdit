@@ -163,6 +163,7 @@ extern GtkWidget*		saveAsMenu;
 
 extern GtkWidget*		lineNumberWidget;
 extern GtkWidget*		findApiWidget;
+extern GtkWidget*		findQtApiWidget;
 extern GtkWidget*		findDefWidget;
 extern GtkWidget*		liveSearchWidget;
 
@@ -262,6 +263,7 @@ extern GtkToolItem*		findButton;
 extern GtkToolItem*		gotoDefButton;
 extern GtkToolItem*		gotoLineButton;
 extern GtkToolItem*		findApiButton;
+extern GtkToolItem*		findQtApiButton;
 extern GtkToolItem*		findFuncDefButton;
 extern GtkToolItem*		liveSearchButton;
 

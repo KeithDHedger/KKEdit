@@ -70,7 +70,7 @@ void docSearch(GtkWidget* widget,gpointer data)
 
 	if(data!=NULL)
 		{
-			selection=(char*)data;
+			selection=strdup((char*)data);
 		}
 	else
 		{
@@ -154,6 +154,8 @@ void docSearch(GtkWidget* widget,gpointer data)
 		g_free(selection);
 }
 
+//seriously needs cleaning!!!
+
 void showDocView(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
@@ -161,15 +163,14 @@ void showDocView(GtkWidget* widget,gpointer data)
 	GtkTextIter	end;
 	char*		selection=NULL;
 
-//	if(!gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer))
-//		return;
-
-	if((data==NULL) && (gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true))
+	if(data==NULL)
 		docSearch(NULL,NULL);
 
 #ifdef BUILDDOCVIEWER
 	if(thePage==NULL)
 		{
+			if(data==NULL)
+			{
 			if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 				{
 					selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
@@ -181,6 +182,15 @@ void showDocView(GtkWidget* widget,gpointer data)
 				}
 			else
 				return;
+			}
+			else
+				{
+					
+					asprintf(&thePage,"https://www.google.co.uk/search?q=%s",(char*)data);
+					webkit_web_view_load_uri(webView,thePage);
+					g_free(thePage);
+					thePage=NULL;
+				}
 		}
 	
 	if(thePage!=NULL)
@@ -188,6 +198,9 @@ void showDocView(GtkWidget* widget,gpointer data)
 			if(strcasecmp("file://(null)",thePage)==0)
 				{
 					g_free(thePage);
+					
+			if(data==NULL)
+			{
 					if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 						{
 							selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
@@ -199,6 +212,16 @@ void showDocView(GtkWidget* widget,gpointer data)
 						}
 					else
 						return;
+			}
+			else
+				{
+					
+					asprintf(&thePage,"https://www.google.co.uk/search?q=%s",(char*)data);
+					webkit_web_view_load_uri(webView,thePage);
+					g_free(thePage);
+					thePage=NULL;
+				}
+			
 				}
 			else
 				{
@@ -274,7 +297,7 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 
 	if(data!=NULL)
 		{
-			selection=(char*)data;
+			selection=strdup((char*)data);
 		}
 	else
 		{
@@ -355,6 +378,13 @@ void docSearchFromBar(GtkWidget* widget,gpointer data)
 			docSearch(NULL,(void*)text);
 			showDocView(NULL,(void*)text);
 		}
+}
+
+void qt5DocSearchFromBar(GtkWidget* widget,gpointer data)
+{
+	const char* text=gtk_entry_get_text((GtkEntry*)data);
+	if(text!=NULL && strlen(text)>0)
+		searchQT5Docs(NULL,(void*)text);
 }
 
 int		currentFindPage=-1;

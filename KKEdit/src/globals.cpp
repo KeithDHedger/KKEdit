@@ -70,6 +70,7 @@ GtkWidget*		saveAsMenu;
 
 GtkWidget*		lineNumberWidget;
 GtkWidget*		findApiWidget;
+GtkWidget*		findQtApiWidget;
 GtkWidget*		findDefWidget;
 GtkWidget*		liveSearchWidget;
 
@@ -167,6 +168,7 @@ GtkToolItem*	findButton=NULL;
 GtkToolItem*	gotoDefButton=NULL;
 GtkToolItem*	gotoLineButton=NULL;
 GtkToolItem*	findApiButton=NULL;
+GtkToolItem*	findQtApiButton=NULL;
 GtkToolItem*	findFuncDefButton=NULL;
 GtkToolItem*	liveSearchButton=NULL;
 

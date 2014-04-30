@@ -28,7 +28,7 @@
 #endif
 
 GtkWidget*		recent;
-GtkToolItem*	tool[16];
+GtkToolItem*	tool[17]={NULL,};
 GtkIconView*	iconView=NULL;
 GtkListStore*	listStore=NULL;
 
@@ -273,6 +273,16 @@ void setUpToolBar(void)
 						gtk_toolbar_insert(toolBar,findApiButton,-1);
 						g_signal_connect_after(G_OBJECT(findApiWidget),"activate",G_CALLBACK(docSearchFromBar),(void*)findApiWidget);
 						gtk_widget_set_tooltip_text((GtkWidget*)findApiButton,"Find API In Gtk Docs");
+						break;
+
+					case 'Q':
+//find in qt5doc
+						findQtApiWidget=gtk_entry_new();
+						findQtApiButton=gtk_tool_item_new();
+						gtk_container_add((GtkContainer *)findQtApiButton,findQtApiWidget);
+						gtk_toolbar_insert(toolBar,findQtApiButton,-1);
+						g_signal_connect_after(G_OBJECT(findQtApiWidget),"activate",G_CALLBACK(qt5DocSearchFromBar),(void*)findQtApiWidget);
+						gtk_widget_set_tooltip_text((GtkWidget*)findQtApiButton,"Find API In Qt5 Docs");
 						break;
 					case 'D':
 //find in function def
@@ -634,6 +644,16 @@ void populateStore(void)
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[11],false);
 						break;
+					case 'Q':
+						gtk_list_store_append (listStore, &iter);
+						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/qtapi.png",NULL);
+						if(pbuf!=NULL)
+							{
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,16,-1);
+								g_object_unref(pbuf);
+							}
+						gtk_widget_set_sensitive((GtkWidget*)tool[16],false);
+						break;
 					case 'D':
 						gtk_list_store_append (listStore, &iter);
 						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/finddef.png",NULL);
@@ -726,6 +746,7 @@ void populateDnD(void)
 	addIcon(GTK_STOCK_DIALOG_QUESTION,"G",9,"Go To Definition");
 	addPixbuf(DATADIR"/pixmaps/num.png","9",10,"Go To Line");
 	addPixbuf(DATADIR"/pixmaps/api.png","A",11,"Find API In Gtk Docs");
+	addPixbuf(DATADIR"/pixmaps/qtapi.png","Q",16,"Find API In Qt5 Docs");
 	addPixbuf(DATADIR"/pixmaps/finddef.png","D",12,"Search For Define");
 	addPixbuf(DATADIR"/pixmaps/live.png","L",13,"Live Search");
 	addPixbuf(DATADIR"/pixmaps/sep.png","s",14,"Separator");
