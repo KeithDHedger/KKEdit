@@ -23,7 +23,6 @@
 #include "searchcallbacks.h"
 
 #ifdef BUILDDOCVIEWER
-bool	isGtk;
 
 void webKitGoBack(GtkWidget* widget,gpointer data)
 {
@@ -59,8 +58,6 @@ void docSearch(GtkWidget* widget,gpointer data)
 	char*		tempstr;
 	char*		link;
 	int			cnt=0;
-
-	isGtk=true;
 
 	for(int loop=0;loop<2048;loop++)
 		{
@@ -331,7 +328,7 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 	char*		link;
 	int			cnt=0;
 
-	isGtk=true;
+	gtk_window_set_title((GtkWindow*)docView,"Gtk Docs");
 
 	for(int loop=0;loop<2048;loop++)
 		{
@@ -412,7 +409,16 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 				{
 					asprintf(&thePage,"file://%s",searchdata[0][1]);
 				}
+
+#ifdef BUILDDOCVIEWER
+			showDocView(USEURI,selection);
+#else
+			asprintf(&command,"xdg-open %s &",thePage);
+			system(command);
+			free(command);
+#endif
 		}
+
 
 	for(int loop=0;loop<cnt;loop++)
 		{
@@ -439,7 +445,7 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 	char*		func=NULL;
 	int			cnt=0;
 
-	isGtk=false;
+	gtk_window_set_title((GtkWindow*)docView,"Qt5 Docs");
 
 	if(data!=NULL)
 		{
@@ -484,19 +490,18 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 					fclose(fp);
 					free(command);
 					if(cnt==0)
-						asprintf(&thePage,"https://www.google.co.uk/search?q=%s",str->str);
+						asprintf(&thePage,"file://(null)");
 					else
 						thePage=strdup(htmlURI);
 
 #ifdef BUILDDOCVIEWER
-			showDocView(0,(char*)"");
+			showDocView(USEURI,(char*)str->str);
 #else
 			asprintf(&command,"xdg-open %s &",thePage);
 			system(command);
 			free(command);
 #endif
 			g_string_free(str,true);
-			free(thePage);
 			free(selection);
 		}
 }
@@ -519,16 +524,17 @@ void defSearchFromBar(GtkWidget* widget,gpointer data)
 void docSearchFromBar(GtkWidget* widget,gpointer data)
 {
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
+
+	gtk_window_set_title((GtkWindow*)docView,"Gtk Docs");
 	if(text!=NULL && strlen(text)>0)
-		{
-			seachGtkDocs(NULL,(void*)text);
-			showDocView(USEURI,(char*)text);
-		}
+		seachGtkDocs(NULL,(void*)text);
 }
 
 void qt5DocSearchFromBar(GtkWidget* widget,gpointer data)
 {
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
+
+	gtk_window_set_title((GtkWindow*)docView,"Qt5 Docs");
 	if(text!=NULL && strlen(text)>0)
 		searchQT5Docs(NULL,(void*)text);
 }
