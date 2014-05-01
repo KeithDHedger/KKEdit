@@ -1638,7 +1638,7 @@ void buildGtkDocViewer(void)
 
 	docView=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(docView),800,600);
-	gtk_window_set_title((GtkWindow*)docView,"Search Gtk Docs");
+	gtk_window_set_title((GtkWindow*)docView,"Doc Viewer");
 
 	vbox=gtk_vbox_new(false,0);
 	hbox=gtk_hbox_new(true,0);

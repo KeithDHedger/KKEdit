@@ -739,6 +739,10 @@ void externalTool(GtkWidget* widget,gpointer data)
 				}
 		}
 
+#ifdef BUILDDOCVIEWER
+	gtk_window_set_title((GtkWindow*)docView,tool->menuName);
+#endif
+
 	runCommand(tempCommand->str,&text,tool->inTerminal,tool->flags);
 	g_free(selection);
 

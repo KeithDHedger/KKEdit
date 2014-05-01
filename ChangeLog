@@ -1,4 +1,5 @@
 0.1.4
+Set the title of the docviewer correctly.
 Cleaned the docviewer code.
 Added a "Find API In Qt5 Docs" entry box to toolbar.
 Fixed minor bug when selecting "Search In Gtk Docs" from 'Navigation' menu when no selection.
