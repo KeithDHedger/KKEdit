@@ -47,35 +47,22 @@ void webKitGoHome(GtkWidget* widget,gpointer data)
 
 void showDocView(int howtodisplay,char* text)
 {
-	pageStruct*	page=getPageStructPtr(-1);
-	GtkTextIter	start;
-	GtkTextIter	end;
-	char*		selection=NULL;
-	char*		command=NULL;
+	char*		command;
 
 #ifdef BUILDDOCVIEWER
 
 	if(howtodisplay==USEURI)
 		{
-			if(strcasecmp(thePage,"file://(null)")!=0)
+			if(strcasecmp(thePage,"file://(null)")==0)
 				{
-					webkit_web_view_load_uri(webView,thePage);
-					gtk_widget_show_all(docView);
-					gtk_window_present((GtkWindow*)docView);
-				}
-			else
-				{
+					free(thePage);
 					asprintf(&thePage,"https://www.google.co.uk/search?q=%s",text);
-					webkit_web_view_load_uri(webView,thePage);
 				}
+			webkit_web_view_load_uri(webView,thePage);
 		}
 
 	if(howtodisplay==USEFILE)
-		{
-			webkit_web_view_load_uri(webView,htmlURI);
-			gtk_widget_show_all(docView);
-			gtk_window_present((GtkWindow*)docView);
-		}
+		webkit_web_view_load_uri(webView,htmlURI);
 
 	gtk_widget_show_all(docView);
 	gtk_window_present((GtkWindow*)docView);
@@ -85,19 +72,13 @@ void showDocView(int howtodisplay,char* text)
 	if(howtodisplay==USEURI)
 		{
 			if(strcasecmp(thePage,"file://(null)")!=0)
-				{
-					asprintf(&command,"xdg-open %s &",thePage);
-				}
+				asprintf(&command,"xdg-open %s &",thePage);
 			else
-				{
-					asprintf(&command,"xdg-open https://www.google.co.uk/search?q=%s",text);
-				}
+				asprintf(&command,"xdg-open https://www.google.co.uk/search?q=%s",text);
 		}
 
 	if(howtodisplay==USEFILE)
-		{
-			asprintf(&command,"xdg-open %s",htmlURI);
-		}
+		asprintf(&command,"xdg-open %s",htmlURI);
 
 	if(command!=NULL)
 		{
@@ -141,15 +122,11 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 		}
 
 	if(data!=NULL)
-		{
-			selection=strdup((char*)data);
-		}
+		selection=strdup((char*)data);
 	else
 		{
 			if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
-				{
-					selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
-				}
+				selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 		}
 
 	if(selection!=NULL)
@@ -246,15 +223,11 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 	gtk_window_set_title((GtkWindow*)docView,"Qt5 Docs");
 #endif
 	if(data!=NULL)
-		{
-			selection=strdup((char*)data);
-		}
+		selection=strdup((char*)data);
 	else
 		{
 			if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
-				{
-					selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
-				}
+				selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 		}
 
 	if(selection!=NULL)
@@ -262,7 +235,7 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 			str=g_string_new(selection);
 			str=g_string_ascii_down(str);
 
-			asprintf(&command,"find /usr/share/doc/qt5/ -maxdepth 2 -iname \"%s*.html\"|sed 's/.html$//'|sort",str->str);
+			asprintf(&command,"find %s -maxdepth 2 -iname \"%s*.html\"|sed 's/.html$//'|sort",QT5DOCSDIR,str->str);
 
 			fd=fopen(htmlFile,"w");
 			if(fd!=NULL)
@@ -281,17 +254,16 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 									fprintf(fd,"<a href=\"%s.html\">%s</a><br>\n",line,func);
 								}
 						}
-					}
 					fprintf(fd,"</body>\n");
 					fprintf(fd,"</html>\n");
 					fclose(fd);
 					fclose(fp);
 					free(command);
-					if(cnt==0)
-						asprintf(&thePage,"file://(null)");
-					else
-						thePage=strdup(htmlURI);
-
+				}
+			if(cnt==0)
+				asprintf(&thePage,"file://(null)");
+			else
+				thePage=strdup(htmlURI);
 
 			showDocView(USEURI,(char*)str->str);
 

@@ -7,7 +7,8 @@ AM_CPPFLAGS =	-I$(top_srcdir) \
 			-DPREFIX=\""${prefix}\"" \
 			-DDATADIR=\""${pkgdatadir}"\" \
 			-DSYSCONFDIR=\""${sysconfdir}/${PACKAGE}"\" \
-			-DLIBDIR=\""${libdir}/${PACKAGE}"\"
+			-DLIBDIR=\""${libdir}/${PACKAGE}"\" \
+			-DQT5DOCSDIR=\""${with_qt5_docdir}"\"
 
 LIBS =	$(GTK_LIBS) \
 	$(GTKSRC_LIBS) \

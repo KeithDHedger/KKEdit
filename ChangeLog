@@ -1,4 +1,5 @@
 0.1.4
+Added switch to configure to set directory of installed Qt5 docs ( default "/usr/share/doc/qt5" ).
 Set the title of the docviewer correctly.
 Cleaned the docviewer code.
 Added a "Find API In Qt5 Docs" entry box to toolbar.

@@ -37,8 +37,7 @@ AC_SUBST(UNIQ_CFLAGS)
 AC_SUBST(UNIQ_LIBS)
 
 AC_MSG_CHECKING(whether to build gtk-doc viewer)
-AC_ARG_ENABLE(docviewer,
-    [  --enable-docviewer         Build the Gtk-Doc viewer.],
+AC_ARG_ENABLE(docviewer,AS_HELP_STRING([--enable-docviewer],[Build the Gtk-Doc viewer]),
     [enable_docviewer=$enableval],
     [enable_docviewer="yes"])
 AC_MSG_RESULT($enable_docviewer)
@@ -50,9 +49,15 @@ if test "$enable_docviewer" = "yes"; then
 	AC_DEFINE([BUILDDOCVIEWER], [], [Build gtk-doc viewer])
 fi
 
+AC_ARG_WITH(qt5-docdir,AS_HELP_STRING([ --with-qt5-docdir],[Installtion DIR for Qt5 documentation]),
+    [with_qt5_docdir=$withval],
+    [with_qt5_docdir="/usr/share/doc/qt5"])
+
+AC_SUBST(with_qt5_docdir)
+AC_MSG_RESULT([Setting Qt5 Docs directory to $with_qt5_docdir])
+
 AC_MSG_CHECKING(whether to include spell checker (aspell))
-AC_ARG_ENABLE(aspell,
-    [  --enable-aspell         Include spellchecker.],
+AC_ARG_ENABLE(aspell,AS_HELP_STRING([--enable-aspell],[Include spellchecker]),
     [enable_aspell=$enableval],
     [enable_aspell="no"])
 AC_MSG_RESULT($enable_aspell)
