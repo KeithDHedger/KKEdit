@@ -156,6 +156,9 @@ void docSearch(GtkWidget* widget,gpointer data)
 }
 
 //seriously needs cleaning!!!
+//			asprintf(&command,"xdg-open %s &",thePage);
+//			system(command);
+//			free(command);
 
 void showDocView(int howtodisplay,char* text)
 {
@@ -164,7 +167,7 @@ void showDocView(int howtodisplay,char* text)
 	GtkTextIter	end;
 	char*		selection=NULL;
 	char*		command=NULL;
-				printf("XXX%sXXX\n",thePage);
+
 //	if(data==NULL)
 //		docSearch(NULL,NULL);
 
@@ -196,33 +199,35 @@ void showDocView(int howtodisplay,char* text)
 	gtk_window_present((GtkWindow*)docView);
 
 #else
-				printf("XXX%sXXX\n",thePage);
-
+	command=NULL;
 	if(howtodisplay==USEURI)
 		{
-				printf("XXX%sXXX\n",thePage);
 			if(strcasecmp(thePage,"file://(null)")!=0)
 				{
-					asprintf(&command,"xdg-open %s",thePage);
-					g_spawn_command_line_async(command,NULL);
-					g_free(command);
+					asprintf(&command,"xdg-open %s &",thePage);
 				}
 			else
-				asprintf(&command,"xdg-open https://www.google.co.uk/search?q=%s",text);
+				{
+					asprintf(&command,"xdg-open https://www.google.co.uk/search?q=%s",text);
+				}
 		}
 
 	if(howtodisplay==USEFILE)
 		{
-			asprintf(&command,"xdg-open %s",htmlFile);
-			g_spawn_command_line_async(command,NULL);
-			g_free(command);
+			asprintf(&command,"xdg-open %s",htmlURI);
+		}
+
+	if(command!=NULL)
+		{
+			system(command);
+			free(command);
 		}
 #endif
 
 	if(thePage!=NULL)
 		free(thePage);
 	thePage=NULL;
-
+		
 	return;
 		
 
@@ -450,14 +455,14 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 					asprintf(&thePage,"file://%s",searchdata[0][1]);
 				}
 
-#ifdef BUILDDOCVIEWER
+//#ifdef BUILDDOCVIEWER
 			showDocView(USEURI,selection);
-#else
-				printf("XXX%sXXX\n",command);
-			asprintf(&command,"xdg-open %s &",thePage);
-			system(command);
-			free(command);
-#endif
+//#else
+//				printf("XXX%sXXX\n",command);
+//			asprintf(&command,"xdg-open %s &",thePage);
+//			system(command);
+//			free(command);
+//#endif
 		}
 
 
@@ -536,13 +541,13 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 					else
 						thePage=strdup(htmlURI);
 
-#ifdef BUILDDOCVIEWER
+//#ifdef BUILDDOCVIEWER
 			showDocView(USEURI,(char*)str->str);
-#else
-			asprintf(&command,"xdg-open %s &",thePage);
-			system(command);
-			free(command);
-#endif
+//#else
+//			asprintf(&command,"xdg-open %s &",thePage);
+//			system(command);
+//			free(command);
+//#endif
 			g_string_free(str,true);
 			free(selection);
 		}
