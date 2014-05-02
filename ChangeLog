@@ -1,7 +1,7 @@
 0.1.4
 Fixed 'New Admin Editor' not running as new process.
 Fixed segfault when trying to open file without read permissions.
-Added switch to configure to set directory of installed Qt5 docs ( default "/usr/share/doc/qt5" ).
+Added switch to ./configure to set directory of installed Qt5 docs ( default "/usr/share/doc/qt5" ).
 Set the title of the docviewer correctly.
 Cleaned the docviewer code.
 Added a "Find API In Qt5 Docs" entry box to toolbar.
