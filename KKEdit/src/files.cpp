@@ -7,9 +7,12 @@
 */
 
 #include <stdlib.h>
-#include <gtk/gtk.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+#include <gtk/gtk.h>
 #include <glib.h>
 
 #include <gtksourceview/gtksourceview.h>
@@ -579,11 +582,27 @@ bool openFile(const gchar *filepath,int linenumber)
 	GRegexCompileFlags		compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED|G_REGEX_CASELESS);
 	GRegexMatchFlags		matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
 
+	GtkWidget*				dialog;
+
 	char*					searchtext=NULL;
 	char*					replacetext=NULL;
 
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
-		return(false);
+		{
+			dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"File '%s' doesn't exist :(",filepath);
+			gtk_dialog_run(GTK_DIALOG(dialog));
+			gtk_widget_destroy(dialog);
+			return(false);
+		}
+
+	if(access(filepath,R_OK)!=0)
+		{
+			dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"Can't open file '%s' :(",filepath);
+			gtk_dialog_run(GTK_DIALOG(dialog));
+			gtk_widget_destroy(dialog);
+			return(false);
+		}
+
 	if(linenum<0)
 		linenum=0;
 

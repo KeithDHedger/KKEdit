@@ -1584,7 +1584,7 @@ void newEditor(GtkWidget* widget,gpointer data)
 
 	if((long)data==1)
 #ifdef _GTKSU_
-		system("gtksu -- kkedit -m 2>/dev/null");
+		system("gtksu -- kkedit -m 2>/dev/null &");
 #else
 		asprintf(&command,"%s sudo kkedit -m &",terminalCommand);
 		system(command);

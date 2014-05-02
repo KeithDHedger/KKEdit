@@ -284,8 +284,10 @@ int main(int argc,char **argv)
 				restoreSession(NULL,(void*)restoreBookmarks);
 
 			for(int j=1;j<argc;j++)
-				openFile(argv[j],0);
-
+				{
+					if(strncasecmp(argv[j],"-m",2)!=0)
+						openFile(argv[j],0);
+				}
 			refreshMainWindow();
 
 			buildFindReplace();

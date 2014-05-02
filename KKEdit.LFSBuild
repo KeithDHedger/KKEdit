@@ -20,7 +20,7 @@ mkdir -p "$PKG"
 tar -xvf "$TARBALL"
 
 pushd "${TARNAME}-${VERSION}"
-	CFLAGS="$LFSFLAGS" CXXFLAGS="$LFSFLAGS" ./configure ${CONFIGOPTIONS} --enable-aspell --enable-docviewer
+	CFLAGS="$LFSFLAGS" CXXFLAGS="$LFSFLAGS" ./configure ${CONFIGOPTIONS} --enable-aspell --enable-docviewer --with-qt5-docdir=/usr/share/doc/qt5
 	make $MAKEFLAGS ||make|| exit 1
 	make $MAKEFLAGS install DESTDIR=$PKG || exit 1
 popd
