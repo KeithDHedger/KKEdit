@@ -715,7 +715,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
-	const char*	vars[]={"%t","%f","%d","%i","%h",NULL};
+	const char*	vars[]={"%t","%f","%d","%i","%h","%l",NULL};
 	char*		ptr;
 	long		pos;
 	int			loop=0;
@@ -725,7 +725,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	if(page==NULL || tool==NULL)
 		return;
 
-	const char*		varData[]={NULL,page->filePath,NULL,DATADIR,htmlFile};
+	const char*		varData[]={NULL,page->filePath,NULL,DATADIR,htmlFile,page->lang};
 
 	tempCommand=g_string_new(tool->command);
 
@@ -741,6 +741,8 @@ void externalTool(GtkWidget* widget,gpointer data)
 	setenv("KKEDIT_HTMLFILE",htmlFile,1);
 	setenv("KKEDIT_CURRENTDIR",docdirname,1);
 	setenv("KKEDIT_DATADIR",DATADIR,1);
+	setenv("KKEDIT_SOURCE_LANG",page->lang,1);
+	
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
@@ -751,6 +753,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 
 	varData[0]=selection;
 	varData[2]=docdirname;
+	//varData[5]=page->lang;
 
 	continueflag=false;
 	while(continueflag==false)
@@ -1433,6 +1436,8 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 		viewOut=gtk_toggle_button_get_active((GtkToggleButton*)outputWidget);
 	if(strcmp(gtk_widget_get_name(widget),"showdoc")==0)
 		showDoc=gtk_toggle_button_get_active((GtkToggleButton*)showDocWidget);
+	if(strcmp(gtk_widget_get_name(widget),"clearview")==0)
+		clearView=gtk_toggle_button_get_active((GtkToggleButton*)clearViewWidget);
 
 	if(runSync==false)
 		{
@@ -1487,6 +1492,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 					fprintf(fd,"interm\t%i\n",(int)inTerm);
 					fprintf(fd,"inpopup\t%i\n",(int)inPopup);
 					fprintf(fd,"alwayspopup\t%i\n",(int)alwaysPopup);
+					fprintf(fd,"clearview\t%i\n",(int)clearView);
 					fclose(fd);
 				}
 			g_free(dirname);

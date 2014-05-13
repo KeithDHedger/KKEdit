@@ -48,7 +48,7 @@
 #define BOOKMAXMARKMENULEN 40
 #define MAXRECENT 10
 
-#define PLACEHOLDERINFO "PLACEHOLDERS:\n%t - Currently selected text. Passed to command as $KKEDIT_SELECTION\n%f - Filepath of the current document. Passed to command as $KKEDIT_CURRENTFILE\n%d - Directory of the current document or $HOME. Passed to command as $KKEDIT_CURRENTDIR\n%i -The location of the globally installed tools. Passed to command as $KKEDIT_DATADIR\n%h - Tempory file for displaying html in doc viewer. Passed to command as $KKEDIT_HTMLFILE"
+#define PLACEHOLDERINFO "PLACEHOLDERS:\n%t - Currently selected text. Passed to command as $KKEDIT_SELECTION\n%f - Filepath of the current document. Passed to command as $KKEDIT_CURRENTFILE\n%d - Directory of the current document or $HOME. Passed to command as $KKEDIT_CURRENTDIR\n%i - The location of the globally installed tools. Passed to command as $KKEDIT_DATADIR\n%h - Tempory file for displaying html in doc viewer. Passed to command as $KKEDIT_HTMLFILE\n%l - Highlihting language. Passed to command as $KKEDIT_SOURCE_LANG"
 
 #define MARK_TYPE_1		"one"
 #define MARK_TYPE_2		"two"
@@ -98,6 +98,7 @@ struct toolStruct
 	bool				inTerminal;					
 	bool				inPopUp;
 	bool				alwaysPopup;
+	bool				clearView;
 	char*				comment;
 };
 
@@ -224,6 +225,8 @@ extern GtkWidget*		replaceWidget;
 extern GtkWidget*		outputWidget;
 extern GtkWidget*		showDocWidget;
 extern GtkWidget*		toolSelect;
+extern GtkWidget*		clearViewWidget;
+
 //view tool output
 extern GtkWidget*		mainVPane;
 extern bool				showToolOutWin;
@@ -247,6 +250,7 @@ extern bool				replaceOut;
 extern bool				viewOut;
 extern bool				showDoc;
 extern bool				editTool;
+extern bool				clearView;
 
 extern int				windowWidth;
 extern int				windowHeight;

@@ -124,6 +124,8 @@ GtkWidget*		replaceWidget;
 GtkWidget*		outputWidget;
 GtkWidget*		showDocWidget;
 GtkWidget*		toolSelect;
+GtkWidget*		clearViewWidget;
+
 //view tool output
 GtkWidget*		mainVPane=NULL;
 bool			showToolOutWin=false;
@@ -146,6 +148,7 @@ bool			replaceOut=false;
 bool			viewOut=false;
 bool			showDoc=false;
 bool			editTool=false;
+bool			clearView=false;
 
 int				windowWidth;
 int				windowHeight;
@@ -694,6 +697,7 @@ void buildToolsList(void)
 	int				flagsarg=0;
 	int				inpopup=0;
 	int				alwayspopup=0;
+	int				clearview=0;
 	char*			commandarg=NULL;
 	char*			commentarg=NULL;
 	char*			menuname=NULL;
@@ -741,6 +745,8 @@ void buildToolsList(void)
 												sscanf((char*)&buffer,"%*s %i",&inpopup);
 											if(strcmp(strarg,"alwayspopup")==0)
 												sscanf((char*)&buffer,"%*s %i",&alwayspopup);
+											if(strcmp(strarg,"clearview")==0)
+												sscanf((char*)&buffer,"%*s %i",&clearview);
 										}
 
 									if((menuname!=NULL) &&(strlen(menuname)>0))
@@ -753,6 +759,7 @@ void buildToolsList(void)
 											tool->inPopUp=(bool)inpopup;
 											tool->alwaysPopup=(bool)alwayspopup;
 											tool->filePath=strdup(filepath);
+											tool->clearView=(bool)clearview;
 											if(commentarg!=NULL)
 												tool->comment=strdup(commentarg);
 											else

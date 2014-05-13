@@ -406,6 +406,13 @@ void doMakeTool(void)
 	gtk_box_pack_start(GTK_BOX(vbox),showDocWidget,false,true,0);
 	g_signal_connect(G_OBJECT(showDocWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
+//flags - clear view first
+	clearViewWidget=gtk_check_button_new_with_label("Clear Tool Output");
+	gtk_widget_set_name(clearViewWidget,"clearview");
+	gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,clearView);
+	gtk_box_pack_start(GTK_BOX(vbox),clearViewWidget,false,true,0);
+	g_signal_connect(G_OBJECT(clearViewWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
+
 //flags - ignore
 	ignoreWidget=gtk_radio_button_new_with_label(NULL,"Ignore Output");
 	gtk_widget_set_name(ignoreWidget,"ignore");
