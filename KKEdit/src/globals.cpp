@@ -65,6 +65,12 @@ GtkWidget*		menurevert;
 
 GtkWidget*		redoMenu;
 GtkWidget*		undoMenu;
+GtkWidget*		redoAllMenu;
+GtkWidget*		undoAllMenu;
+GtkWidget*		cutMenu;
+GtkWidget*		copyMenu;
+GtkWidget*		pasteMenu;
+
 GtkWidget*		saveMenu;
 GtkWidget*		saveAsMenu;
 

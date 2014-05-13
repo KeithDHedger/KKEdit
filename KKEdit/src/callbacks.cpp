@@ -393,6 +393,11 @@ void setSensitive(void)
 //menu
 			gtk_widget_set_sensitive((GtkWidget*)undoMenu,false);
 			gtk_widget_set_sensitive((GtkWidget*)redoMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)cutMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)copyMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)pasteMenu,false);
 			gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 			gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
 			gtk_widget_set_sensitive((GtkWidget*)menuBookMark,false);
@@ -410,6 +415,8 @@ void setSensitive(void)
 //menu
 			gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));
 			gtk_widget_set_sensitive((GtkWidget*)redoMenu,gtk_source_buffer_can_redo(page->buffer));
+			gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,gtk_source_buffer_can_undo(page->buffer));
+			gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,gtk_source_buffer_can_redo(page->buffer));
 			gtk_widget_set_sensitive((GtkWidget*)saveMenu,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
 //tab
 			if(text[0]=='*')
@@ -422,6 +429,9 @@ void setSensitive(void)
 
 			gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)newlabel);
 			g_free(newlabel);
+			gtk_widget_set_sensitive((GtkWidget*)cutMenu,true);
+			gtk_widget_set_sensitive((GtkWidget*)copyMenu,true);
+			gtk_widget_set_sensitive((GtkWidget*)pasteMenu,true);
 			gtk_widget_set_sensitive((GtkWidget*)menuBookMark,true);
 			gtk_widget_set_sensitive((GtkWidget*)menunav,true);
 			gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
@@ -645,6 +655,28 @@ void undo(GtkWidget* widget,gpointer data)
 			setSensitive();
 		}
 }
+
+void unRedoAll(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=getPageStructPtr(-1);
+
+	if(page!=NULL)
+		{
+			if((long)data==0)
+				{
+					while(gtk_source_buffer_can_undo(page->buffer))
+						gtk_source_buffer_undo(page->buffer);
+				}
+			else
+				{
+					while(gtk_source_buffer_can_redo(page->buffer))
+						gtk_source_buffer_redo(page->buffer);
+				}
+			page->isFirst=true;
+			setSensitive();
+		}
+}
+
 
 void redo(GtkWidget* widget,gpointer data)
 {

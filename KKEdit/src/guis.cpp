@@ -1289,26 +1289,41 @@ void buildMainGui(void)
 	gtk_signal_connect(GTK_OBJECT(redoMenu),"activate",G_CALLBACK(redo),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)redoMenu,"activate",accgroup,'Z',(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
 
+//undoall
+	image=gtk_image_new_from_stock(GTK_STOCK_UNDO,GTK_ICON_SIZE_MENU);
+	undoAllMenu=gtk_image_menu_item_new_with_label("Undo All");
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)undoAllMenu,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),undoAllMenu);
+	gtk_signal_connect(GTK_OBJECT(undoAllMenu),"activate",G_CALLBACK(unRedoAll),(void*)0);
+
+
+//redoall
+	image=gtk_image_new_from_stock(GTK_STOCK_REDO,GTK_ICON_SIZE_MENU);
+	redoAllMenu=gtk_image_menu_item_new_with_label("Redo All");
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)redoAllMenu,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),redoAllMenu);
+	gtk_signal_connect(GTK_OBJECT(redoAllMenu),"activate",G_CALLBACK(unRedoAll),(void*)1);
+
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //cut
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_CUT,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(cutToClip),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'X',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+	cutMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_CUT,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),cutMenu);
+	gtk_signal_connect(GTK_OBJECT(cutMenu),"activate",G_CALLBACK(cutToClip),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)cutMenu,"activate",accgroup,'X',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 //copy
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_COPY,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(copyToClip),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'C',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+	copyMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_COPY,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),copyMenu);
+	gtk_signal_connect(GTK_OBJECT(copyMenu),"activate",G_CALLBACK(copyToClip),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)copyMenu,"activate",accgroup,'C',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 //paste
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_PASTE,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(pasteFromClip),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'V',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+	pasteMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_PASTE,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),pasteMenu);
+	gtk_signal_connect(GTK_OBJECT(pasteMenu),"activate",G_CALLBACK(pasteFromClip),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)pasteMenu,"activate",accgroup,'V',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);

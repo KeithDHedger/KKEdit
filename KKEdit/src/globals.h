@@ -164,6 +164,12 @@ extern GtkWidget*		menuToolOut;
 
 extern GtkWidget*		redoMenu;
 extern GtkWidget*		undoMenu;
+extern GtkWidget*		redoAllMenu;
+extern GtkWidget*		undoAllMenu;
+extern GtkWidget*		cutMenu;
+extern GtkWidget*		copyMenu;
+extern GtkWidget*		pasteMenu;
+
 extern GtkWidget*		saveMenu;
 extern GtkWidget*		saveAsMenu;
 

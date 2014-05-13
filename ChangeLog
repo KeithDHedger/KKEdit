@@ -1,3 +1,8 @@
+0.1.5
+Set Edit->Cut/copy/Paste sensitive.
+Added redo all.
+Added undo all.
+
 0.1.4
 Fixed 'New Admin Editor' not running as new process.
 Fixed segfault when trying to open file without read permissions.
