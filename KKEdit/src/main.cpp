@@ -209,6 +209,8 @@ void init(void)
 	g_free(filename);
 
 #ifdef _ASPELL_
+	spellChecker=NULL;
+	aspellConfig=NULL;
 	aspellConfig=new_aspell_config();
 	possible_err=new_aspell_speller(aspellConfig);
 

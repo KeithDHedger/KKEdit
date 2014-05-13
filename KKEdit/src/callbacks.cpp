@@ -876,11 +876,14 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(seachGtkDocs),NULL);
 #ifdef _ASPELL_
 //spell check
-					menuitem=gtk_image_menu_item_new_with_label("Check Spellling");
-					image=gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK,GTK_ICON_SIZE_MENU);
-					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(checkWord),NULL);
+					if((spellChecker!=NULL) && (aspellConfig!=NULL))
+						{
+							menuitem=gtk_image_menu_item_new_with_label("Check Spellling");
+							image=gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK,GTK_ICON_SIZE_MENU);
+							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(checkWord),NULL);
+						}
 #endif
 					menuitem=gtk_separator_menu_item_new();
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -1025,11 +1028,14 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 
 #ifdef _ASPELL_
 //check document
-			image=gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK,GTK_ICON_SIZE_MENU);
-			menuitem=gtk_image_menu_item_new_with_label("Spell Check Document");
-			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
-			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
-			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doSpellCheckDoc),(void*)page->filePath);
+			if((spellChecker!=NULL) && (aspellConfig!=NULL))
+				{
+					image=gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK,GTK_ICON_SIZE_MENU);
+					menuitem=gtk_image_menu_item_new_with_label("Spell Check Document");
+					gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
+					gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
+					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doSpellCheckDoc),(void*)page->filePath);
+				}
 #endif
 
 //paned view

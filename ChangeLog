@@ -1,4 +1,5 @@
 0.1.5
+Spell check menus no longer shown if no language packs installed or other aspell problems.
 Set Edit->Cut/copy/Paste sensitive.
 Added redo all.
 Added undo all.
