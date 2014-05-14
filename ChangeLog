@@ -1,5 +1,6 @@
 0.1.5
 Added 'Clear tool output first' option to external tools prefs. 
+Changed example tool 'Comment Selection' to take advantage of the $KKEDIT_SOURCE_LANG env var.
 Pass highlighting language to external tools, "%l" placeholder and $KKEDIT_SOURCE_LANG env var.
 Spell check menus no longer shown if no language packs installed or other aspell problems.
 Set Edit->Cut/copy/Paste sensitive.
