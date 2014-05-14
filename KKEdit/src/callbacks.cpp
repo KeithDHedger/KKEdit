@@ -778,6 +778,11 @@ void externalTool(GtkWidget* widget,gpointer data)
 	gtk_window_set_title((GtkWindow*)docView,tool->menuName);
 #endif
 
+	if(tool->clearView==true)
+		{
+			gtk_text_buffer_set_text(toolOutputBuffer,"",0);
+		}
+
 	runCommand(tempCommand->str,&text,tool->inTerminal,tool->flags);
 	g_free(selection);
 

@@ -46,6 +46,7 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 	int				intermarg=0;
 	int				inpopup=0;
 	int				alwayspopup=0;
+	int				clearview=0;
 	int				flagsarg=0;
 
 	char*			text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
@@ -101,6 +102,7 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 					gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,(bool)inpopup);
 					gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,(bool)alwayspopup);
 					gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,(bool)intermarg);
+					gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,(bool)clearview);
 					gtk_entry_set_text((GtkEntry*)commentWidget,"");
 					while(fgets(buffer,4096,fd))
 						{
@@ -121,6 +123,11 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 								{
 									sscanf((char*)&buffer,"%*s %i",&alwayspopup);
 									gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,(bool)alwayspopup);
+								}
+							if(strcmp(strarg,"clearview")==0)
+								{
+									sscanf((char*)&buffer,"%*s %i",&clearview);
+									gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,(bool)clearview);
 								}
 							if(strcmp(strarg,"interm")==0)
 								{
@@ -407,7 +414,7 @@ void doMakeTool(void)
 	g_signal_connect(G_OBJECT(showDocWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags - clear view first
-	clearViewWidget=gtk_check_button_new_with_label("Clear Tool Output");
+	clearViewWidget=gtk_check_button_new_with_label("Clear Tool Output First");
 	gtk_widget_set_name(clearViewWidget,"clearview");
 	gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,clearView);
 	gtk_box_pack_start(GTK_BOX(vbox),clearViewWidget,false,true,0);
