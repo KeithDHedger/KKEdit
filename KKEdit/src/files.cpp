@@ -534,7 +534,6 @@ pageStruct* makeNewPage(void)
 
 	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
 	page->view2=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
-//	g_signal_connect_after(G_OBJECT(page->view),"paste-clipboard",G_CALLBACK(testcallback),NULL);
 
 	setFilePrefs(page->view);
 
@@ -553,6 +552,7 @@ pageStruct* makeNewPage(void)
 	page->lang=NULL;
 	page->tabVbox=NULL;
 	page->showingChanged=false;
+//	page->lastLine=NULL;
 //dnd
 	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);

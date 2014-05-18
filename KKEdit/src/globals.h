@@ -85,6 +85,7 @@ struct pageStruct
 	const char*			lang;
 	GtkWidget*			tabVbox;
 	bool				showingChanged;
+	GtkTextIter			lastLine;
 //	GtkWidget*			toolOutVBox;
 //	GtkWidget*			toolOutputBuffer;
 //	GtkWidget*			toolOutputView;
@@ -131,7 +132,6 @@ struct bookMarksNew
 
 extern GtkWidget*		window;
 extern GtkNotebook*		notebook;
-
 
 extern GList*			newBookMarksList;
 extern GtkWidget*		menuBookMark;
@@ -340,7 +340,7 @@ void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
 //extern GtkAdjustment * ha2;
 //extern GtkAdjustment * va2;
 //
-//void testcallback(GtkWidget* widget,gpointer data);
+void testcallback(GtkWidget* widget,gpointer data);
 
 #endif
 

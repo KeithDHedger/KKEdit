@@ -817,9 +817,33 @@ void rebuildBookMarkMenu(void)
 //GtkAdjustment * ha2;
 //GtkAdjustment * va2;
 //
-//void testcallback(GtkWidget* widget,gpointer data)
-//{
-//		pageStruct*		page=getPageStructPtr(-1);
+void testcallback(GtkWidget* widget,gpointer data)
+{
+	pageStruct*		page=getPageStructPtr(-1);
+
+	GtkTextMark*	tmark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+	GtkTextIter		titer;
+	GtkTextMark*			scroll2mark=gtk_text_mark_new(NULL,true);
+	int						linenum=0;
+
+	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->lastLine,tmark);
+	
+	
+	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&page->lastLine);
+	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->lastLine,0,true,0,0.5);
+	gtk_text_iter_set_line(&page->lastLine,linenum);
+	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark,&page->lastLine);  
+	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
+	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
+
+	
+//	if(page->lastLine!=NULL)
+//		{
+//			printf("XXXXXXXXXXn");
+//			page->lastLine=tmark;
+//			gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->lastLine,0,true,0,0.5);
+//			gtk_text_view_scroll_to_mark((GtkTextView*)page->view2,page->lastLine,0,true,0,0.5);
+//		}
 //GtkAdjustment * lha;
 //GtkAdjustment * lva;
 //GtkAdjustment * lha2;
@@ -840,4 +864,4 @@ void rebuildBookMarkMenu(void)
 ////	gtk_scrolled_window_set_vadjustment (page->pageWindow2,va2);
 ////	printf("%f %fn",gtk_adjustment_get_value(ha),gtk_adjustment_get_value(va));
 //
-//}
+}

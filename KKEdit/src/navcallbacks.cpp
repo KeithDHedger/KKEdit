@@ -43,6 +43,13 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 	char*			selection=NULL;
 	functionData*	fdata=NULL;
 
+//	page->lastLine=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+	GtkTextMark*	tmark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+	GtkTextIter		titer;
+
+	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->lastLine,tmark);
+
+
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
