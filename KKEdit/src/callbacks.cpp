@@ -856,26 +856,6 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	GtkWidget*		image;
 	GList*			ptr;
 
-//int t=g_signal_handlers_block_matched     (G_OBJECT(entry),G_SIGNAL_MATCH_DETAIL,0,g_quark_from_string("paste-clipboard"),NULL,NULL,NULL);
-//gtk_text_view_popup
-//printf("%i - %i\n",t,g_signal_lookup("paste-clipboard",G_TYPE_OBJECT));
-//g_signal_connect(G_OBJECT(entry),"paste-clipboard",G_CALLBACK(testcallback),NULL);
-//ha=gtk_scrolled_window_get_hadjustment (page->pageWindow);
-//va=gtk_scrolled_window_get_vadjustment (page->pageWindow);
-//ha2=gtk_scrolled_window_get_hadjustment (page->pageWindow2);
-//va2=gtk_scrolled_window_get_vadjustment (page->pageWindow2);
-//
-//printf("%f %fn",gtk_adjustment_get_value(ha),gtk_adjustment_get_value(va));
-
-//gtk_widget_get_parent
-//gchar* path;
-//gchar* pathr;
-//
-//guint pl;
-//
-//gtk_widget_path((GtkWidget *)menu,&pl,&path,&pathr);
-//printf("%sn",path);
-
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 
