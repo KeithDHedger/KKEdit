@@ -219,6 +219,9 @@ bool saveFile(GtkWidget* widget,gpointer data)
 				{
 					saveFilePath=page->filePath;
 					saveFileName=page->fileName;
+					if(page->dirName!=NULL)
+						free(page->dirName);
+					page->dirName=g_path_get_dirname(page->filePath);
 				}
 
 			saveFileName=page->fileName;
@@ -230,6 +233,9 @@ bool saveFile(GtkWidget* widget,gpointer data)
 				{
 					page->filePath=saveFilePath;
 					page->fileName=saveFileName;
+					if(page->dirName!=NULL)
+						free(page->dirName);
+					page->dirName=g_path_get_dirname(page->filePath);
 
 					gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,FALSE);
 
@@ -528,6 +534,7 @@ pageStruct* makeNewPage(void)
 
 	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
 	page->view2=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
+//	g_signal_connect_after(G_OBJECT(page->view),"paste-clipboard",G_CALLBACK(testcallback),NULL);
 
 	setFilePrefs(page->view);
 
@@ -611,6 +618,7 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	page->filePath=strdup(filepath);
 	page->fileName=strdup(filename);
+	page->dirName=g_path_get_dirname(filepath);
 
 	label=makeNewTab(page->fileName,page->filePath,page);
 	setLanguage(page);
@@ -704,6 +712,7 @@ void newFile(GtkWidget* widget,gpointer data)
 	page=makeNewPage();
 	page->tabVbox=gtk_vbox_new(true,4);
 	page->filePath=NULL;
+	page->dirName=NULL;
 
 	asprintf(&page->fileName,"Untitled-%i",untitledNumber);
 	untitledNumber++;

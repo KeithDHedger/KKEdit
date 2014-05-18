@@ -67,6 +67,7 @@ struct pageStruct
 	GtkSourceView*		view;
 	GtkSourceView*		view2;
 	char*				filePath;
+	char*				dirName;
 	GtkMenuItem*		navSubMenu;
 	bool				rebuildMenu;
 	GtkWidget*			tabName;
@@ -100,6 +101,7 @@ struct toolStruct
 	bool				alwaysPopup;
 	bool				clearView;
 	char*				comment;
+	bool				global;
 };
 
 struct functionData
@@ -332,6 +334,13 @@ void buildToolsList(void);
 char* deleteSlice(char* srcstring,char* delstr);
 void getRecursiveTagListFileName(char* filepath,void* ptr);
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
+
+//extern GtkAdjustment * ha;
+//extern GtkAdjustment * va;
+//extern GtkAdjustment * ha2;
+//extern GtkAdjustment * va2;
+//
+//void testcallback(GtkWidget* widget,gpointer data);
 
 #endif
 

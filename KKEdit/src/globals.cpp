@@ -764,6 +764,11 @@ void buildToolsList(void)
 												tool->comment=strdup(commentarg);
 											else
 												tool->comment=NULL;
+											if(loop==0)
+												tool->global=true;
+											else
+												tool->global=false;
+
 											toolsList=g_list_prepend(toolsList,(gpointer)tool);
 										}
 									g_free(menuname);
@@ -807,3 +812,32 @@ void rebuildBookMarkMenu(void)
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
 }
+//GtkAdjustment * ha;
+//GtkAdjustment * va;
+//GtkAdjustment * ha2;
+//GtkAdjustment * va2;
+//
+//void testcallback(GtkWidget* widget,gpointer data)
+//{
+//		pageStruct*		page=getPageStructPtr(-1);
+//GtkAdjustment * lha;
+//GtkAdjustment * lva;
+//GtkAdjustment * lha2;
+//GtkAdjustment * lva2;
+//
+//lha=gtk_scrolled_window_get_hadjustment (page->pageWindow);
+//lva=gtk_scrolled_window_get_vadjustment (page->pageWindow);
+//lha2=gtk_scrolled_window_get_hadjustment (page->pageWindow2);
+//lva2=gtk_scrolled_window_get_vadjustment (page->pageWindow2);
+//
+//
+//	printf("XXXXXXXXXXXXn");
+//printf("%f %fn",gtk_adjustment_get_value(lha),gtk_adjustment_get_value(lva));
+//
+////	gtk_scrolled_window_set_hadjustment (page->pageWindow,ha);
+////	gtk_scrolled_window_set_vadjustment (page->pageWindow,va);
+////	gtk_scrolled_window_set_hadjustment (page->pageWindow2,ha2);
+////	gtk_scrolled_window_set_vadjustment (page->pageWindow2,va2);
+////	printf("%f %fn",gtk_adjustment_get_value(ha),gtk_adjustment_get_value(va));
+//
+//}

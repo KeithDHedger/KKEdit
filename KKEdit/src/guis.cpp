@@ -322,7 +322,8 @@ void setUpToolBar(void)
 
 void addToolToDrop(gpointer data,gpointer user_data)
 {
-	gtk_combo_box_text_append_text((GtkComboBoxText*)toolSelect,((toolStruct*)data)->menuName);
+	if(((toolStruct*)data)->global==false)
+		gtk_combo_box_text_append_text((GtkComboBoxText*)toolSelect,((toolStruct*)data)->menuName);
 }
 
 void fillCombo(GtkComboBoxText* combo)
@@ -502,11 +503,31 @@ void buildTools(void)
 	ptr=toolsList;
 	while(ptr!=NULL)
 		{
-			menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
-			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
-			if(((toolStruct*)ptr->data)->comment!=NULL)
-				gtk_widget_set_tooltip_text((GtkWidget*)menuitem,((toolStruct*)ptr->data)->comment);
+			if( ((toolStruct*)ptr->data)->global==true)
+				{
+					menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
+					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
+					if(((toolStruct*)ptr->data)->comment!=NULL)
+						gtk_widget_set_tooltip_text((GtkWidget*)menuitem,((toolStruct*)ptr->data)->comment);
+				}
+			ptr=g_list_next(ptr);
+		}
+
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+	ptr=toolsList;
+	while(ptr!=NULL)
+		{
+			if( ((toolStruct*)ptr->data)->global==false)
+				{
+					menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
+					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
+					if(((toolStruct*)ptr->data)->comment!=NULL)
+						gtk_widget_set_tooltip_text((GtkWidget*)menuitem,((toolStruct*)ptr->data)->comment);
+				}
 			ptr=g_list_next(ptr);
 		}
 }

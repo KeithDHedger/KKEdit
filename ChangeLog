@@ -1,4 +1,8 @@
 0.1.5
+Added 'Copy Folder Path' to tab popup menu.
+Globally installed tools are not usually editable and so don't show in the 'Edit External Tools' dialog.
+Globally installed tools are now shown at the top of the 'Tools' menu.
+Minor 'Paste' bugfix.
 Added 'Clear tool output first' option to external tools prefs. 
 Changed example tool 'Comment Selection' to take advantage of the $KKEDIT_SOURCE_LANG env var.
 Pass highlighting language to external tools, "%l" placeholder and $KKEDIT_SOURCE_LANG env var.

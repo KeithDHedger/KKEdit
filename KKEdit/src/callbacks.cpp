@@ -639,8 +639,16 @@ void cutToClip(GtkWidget* widget,gpointer data)
 
 void pasteFromClip(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getPageStructPtr(-1);
-	gtk_text_buffer_paste_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),NULL,true);
+	pageStruct*		page=getPageStructPtr(-1);
+	char*			clipdata=NULL;
+	GtkClipboard*	mainclipboard;
+
+	mainclipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+	clipdata=gtk_clipboard_wait_for_text(mainclipboard);
+	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+		gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)clipdata,-1);
+
+	gtk_text_buffer_end_user_action   ((GtkTextBuffer*)page->buffer);
 	setSensitive();
 }
 
@@ -753,7 +761,6 @@ void externalTool(GtkWidget* widget,gpointer data)
 
 	varData[0]=selection;
 	varData[2]=docdirname;
-	//varData[5]=page->lang;
 
 	continueflag=false;
 	while(continueflag==false)
@@ -836,7 +843,6 @@ void copyToClipboard(GtkWidget* widget,gpointer data)
 	gtk_clipboard_set_text(clipboard,(char*)data,-1);
 }
 
-
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 {
 	pageStruct*		page=getPageStructPtr(-1);
@@ -846,6 +852,26 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	GtkWidget*		menuitem;
 	GtkWidget*		image;
 	GList*			ptr;
+
+//int t=g_signal_handlers_block_matched     (G_OBJECT(entry),G_SIGNAL_MATCH_DETAIL,0,g_quark_from_string("paste-clipboard"),NULL,NULL,NULL);
+//gtk_text_view_popup
+//printf("%i - %i\n",t,g_signal_lookup("paste-clipboard",G_TYPE_OBJECT));
+//g_signal_connect(G_OBJECT(entry),"paste-clipboard",G_CALLBACK(testcallback),NULL);
+//ha=gtk_scrolled_window_get_hadjustment (page->pageWindow);
+//va=gtk_scrolled_window_get_vadjustment (page->pageWindow);
+//ha2=gtk_scrolled_window_get_hadjustment (page->pageWindow2);
+//va2=gtk_scrolled_window_get_vadjustment (page->pageWindow2);
+//
+//printf("%f %fn",gtk_adjustment_get_value(ha),gtk_adjustment_get_value(va));
+
+//gtk_widget_get_parent
+//gchar* path;
+//gchar* pathr;
+//
+//guint pl;
+//
+//gtk_widget_path((GtkWidget *)menu,&pl,&path,&pathr);
+//printf("%sn",path);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
@@ -971,6 +997,8 @@ void doSplitView(GtkWidget *widget,gpointer user_data)
 			page->view2 = (GtkSourceView*)gtk_source_view_new_with_buffer (page->buffer);
 			g_signal_connect(G_OBJECT(page->view2),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
 			setFilePrefs((GtkSourceView*)page->view2);
+//	g_signal_connect(G_OBJECT(page->view2),"paste-clipboard",G_CALLBACK(testcallback),NULL);
+
 
 			gtk_paned_add2(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow2);
 			gtk_container_add(GTK_CONTAINER((GtkWidget*)page->pageWindow2),(GtkWidget*)page->view2);
@@ -1021,6 +1049,12 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 			tabMenu=gtk_menu_new();
 			page=(pageStruct*)user_data;
 
+//copy dirname
+			image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
+			menuitem=gtk_image_menu_item_new_with_label("Copy Folder Path");
+			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
+			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
+			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doTabMenu),(void*)page->dirName);
 //copy filepath
 			image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
 			menuitem=gtk_image_menu_item_new_with_label("Copy Filepath");
