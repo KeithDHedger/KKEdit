@@ -480,6 +480,7 @@ void buildTools(void)
 	GtkWidget*		menu;
 	GtkWidget*		image;
 	GList*			ptr;
+	bool			gotglobal=false;
 
 	buildToolsList();
 
@@ -505,6 +506,7 @@ void buildTools(void)
 		{
 			if( ((toolStruct*)ptr->data)->global==true)
 				{
+					gotglobal=true;
 					menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
@@ -514,8 +516,11 @@ void buildTools(void)
 			ptr=g_list_next(ptr);
 		}
 
-	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	if(gotglobal==true)
+		{
+			menuitem=gtk_separator_menu_item_new();
+			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+		}
 
 	ptr=toolsList;
 	while(ptr!=NULL)

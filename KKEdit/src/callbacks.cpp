@@ -642,12 +642,15 @@ void pasteFromClip(GtkWidget* widget,gpointer data)
 	pageStruct*		page=getPageStructPtr(-1);
 	char*			clipdata=NULL;
 	GtkClipboard*	mainclipboard;
+	GtkTextIter		start;
+	GtkTextIter		end;
 
 	mainclipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
 	clipdata=gtk_clipboard_wait_for_text(mainclipboard);
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+		if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+		gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
 		gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)clipdata,-1);
-
 	gtk_text_buffer_end_user_action   ((GtkTextBuffer*)page->buffer);
 	setSensitive();
 }
