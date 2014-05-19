@@ -1457,7 +1457,7 @@ void buildMainGui(void)
 //go back
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_GO_BACK,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(testcallback),NULL);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goBack),NULL);
 
 //function menu
 	menufunc=gtk_menu_item_new_with_label("Functions");

@@ -812,11 +812,42 @@ void rebuildBookMarkMenu(void)
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
 }
+
+
+
 //GtkAdjustment * ha;
 //GtkAdjustment * va;
 //GtkAdjustment * ha2;
 //GtkAdjustment * va2;
 //
+
+//lineMarkStruc* getCurrentMark(void)
+//{
+////	lineMarkStruc*	lms=(lineMarkStruc*)malloc(sizeof(lineMarkStruc));
+////	GtkTextMark*	cursor;
+////
+////	cursor=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+////	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&lms->iter,cursor);
+////	return(lms);
+//}
+
+void goBack(GtkWidget* widget,gpointer data)
+{
+	pageStruct*		page=getPageStructPtr(-1);
+	GtkTextIter		iter;
+	GtkTextIter		currentiter;
+	GtkTextMark*	cursor;
+
+	cursor=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&currentiter,cursor);
+
+	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
+	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+	scrollToIterInPane(page,&iter);
+
+	gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)page->buffer,"back-mark",&currentiter);
+}
+
 void testcallback(GtkWidget* widget,gpointer data)
 {
 	pageStruct*		page=getPageStructPtr(-1);
@@ -850,52 +881,52 @@ void testcallback(GtkWidget* widget,gpointer data)
 ////	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
 
 return;
-
-
-
-
-
-	GtkTextMark*	tmark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
-	GtkTextIter		titer;
-//	GtkTextMark*			scroll2mark=gtk_text_mark_new(NULL,true);
-	int						linenum=0;
-
-	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&titer,tmark);
-	
-	
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&page->lastLine);
-	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->lastLine,0,true,0,0.5);
-//	gtk_text_iter_set_line(&page->lastLine,linenum);
-//	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark,&page->lastLine);  
-//	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
-//	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
-page->lastLine=titer;
-	
-//	if(page->lastLine!=NULL)
-//		{
-//			printf("XXXXXXXXXXn");
-//			page->lastLine=tmark;
-//			gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->lastLine,0,true,0,0.5);
-//			gtk_text_view_scroll_to_mark((GtkTextView*)page->view2,page->lastLine,0,true,0,0.5);
-//		}
-//GtkAdjustment * lha;
-//GtkAdjustment * lva;
-//GtkAdjustment * lha2;
-//GtkAdjustment * lva2;
-//
-//lha=gtk_scrolled_window_get_hadjustment (page->pageWindow);
-//lva=gtk_scrolled_window_get_vadjustment (page->pageWindow);
-//lha2=gtk_scrolled_window_get_hadjustment (page->pageWindow2);
-//lva2=gtk_scrolled_window_get_vadjustment (page->pageWindow2);
 //
 //
-//	printf("XXXXXXXXXXXXn");
-//printf("%f %fn",gtk_adjustment_get_value(lha),gtk_adjustment_get_value(lva));
 //
-////	gtk_scrolled_window_set_hadjustment (page->pageWindow,ha);
-////	gtk_scrolled_window_set_vadjustment (page->pageWindow,va);
-////	gtk_scrolled_window_set_hadjustment (page->pageWindow2,ha2);
-////	gtk_scrolled_window_set_vadjustment (page->pageWindow2,va2);
-////	printf("%f %fn",gtk_adjustment_get_value(ha),gtk_adjustment_get_value(va));
 //
+//
+//	GtkTextMark*	tmark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+//	GtkTextIter		titer;
+////	GtkTextMark*			scroll2mark=gtk_text_mark_new(NULL,true);
+//	int						linenum=0;
+//
+//	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&titer,tmark);
+//	
+//	
+//	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&page->lastLine);
+//	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&page->lastLine,0,true,0,0.5);
+////	gtk_text_iter_set_line(&page->lastLine,linenum);
+////	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark,&page->lastLine);  
+////	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
+////	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
+//page->lastLine=titer;
+//	
+////	if(page->lastLine!=NULL)
+////		{
+////			printf("XXXXXXXXXXn");
+////			page->lastLine=tmark;
+////			gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->lastLine,0,true,0,0.5);
+////			gtk_text_view_scroll_to_mark((GtkTextView*)page->view2,page->lastLine,0,true,0,0.5);
+////		}
+////GtkAdjustment * lha;
+////GtkAdjustment * lva;
+////GtkAdjustment * lha2;
+////GtkAdjustment * lva2;
+////
+////lha=gtk_scrolled_window_get_hadjustment (page->pageWindow);
+////lva=gtk_scrolled_window_get_vadjustment (page->pageWindow);
+////lha2=gtk_scrolled_window_get_hadjustment (page->pageWindow2);
+////lva2=gtk_scrolled_window_get_vadjustment (page->pageWindow2);
+////
+////
+////	printf("XXXXXXXXXXXXn");
+////printf("%f %fn",gtk_adjustment_get_value(lha),gtk_adjustment_get_value(lva));
+////
+//////	gtk_scrolled_window_set_hadjustment (page->pageWindow,ha);
+//////	gtk_scrolled_window_set_vadjustment (page->pageWindow,va);
+//////	gtk_scrolled_window_set_hadjustment (page->pageWindow2,ha2);
+//////	gtk_scrolled_window_set_vadjustment (page->pageWindow2,va2);
+//////	printf("%f %fn",gtk_adjustment_get_value(ha),gtk_adjustment_get_value(va));
+
 }

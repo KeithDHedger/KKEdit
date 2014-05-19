@@ -58,6 +58,13 @@
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 
+struct lineMarkStruc
+{
+	GtkTextMark*		mark;
+	GtkTextIter			iter;
+	int					line;
+};
+
 struct pageStruct
 {
 	GtkWidget*			pane;
@@ -85,7 +92,6 @@ struct pageStruct
 	const char*			lang;
 	GtkWidget*			tabVbox;
 	bool				showingChanged;
-	GtkTextIter			lastLine;
 	GtkTextMark*		backMark=NULL;
 //	GtkWidget*			toolOutVBox;
 //	GtkWidget*			toolOutputBuffer;
@@ -114,12 +120,6 @@ struct functionData
 	char*				file;
 	char*				define;
 	int					intab;
-};
-
-struct bookMarkStruct
-{
-	char*				label;
-	GtkTextMark*		mark;
 };
 
 struct bookMarksNew
@@ -335,6 +335,7 @@ void buildToolsList(void);
 char* deleteSlice(char* srcstring,char* delstr);
 void getRecursiveTagListFileName(char* filepath,void* ptr);
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
+void goBack(GtkWidget* widget,gpointer data);
 
 //extern GtkAdjustment * ha;
 //extern GtkAdjustment * va;
