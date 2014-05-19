@@ -552,7 +552,7 @@ pageStruct* makeNewPage(void)
 	page->lang=NULL;
 	page->tabVbox=NULL;
 	page->showingChanged=false;
-//	page->lastLine=NULL;
+	page->backMark=gtk_text_mark_new("back-mark",true);;
 //dnd
 	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);
@@ -575,7 +575,7 @@ bool openFile(const gchar *filepath,int linenumber)
 	GtkWidget*				label;
 	gchar*					filename=g_path_get_basename(filepath);
 	pageStruct*				page;
-	GtkTextMark*			scroll2mark=gtk_text_mark_new(NULL,true);
+//	GtkTextMark*			scroll2mark=gtk_text_mark_new(NULL,true);
 	char*					str=NULL;
 	char*					recenturi;
 	int						linenum=linenumber-1;
@@ -696,9 +696,12 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
 	gtk_text_iter_set_line(&iter,linenum);
-	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark,&iter);  
-	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
-	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
+//	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark,&iter);  
+//	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,scroll2mark,0,true,0,0.5);
+	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),page->backMark,&iter);  
+	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
+
+//	gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),scroll2mark);
 	setToobarSensitive();
 	return TRUE;
 }

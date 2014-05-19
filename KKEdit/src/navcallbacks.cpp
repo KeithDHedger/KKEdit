@@ -42,16 +42,25 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 	GtkTextIter		end;
 	char*			selection=NULL;
 	functionData*	fdata=NULL;
-
+	
 //	page->lastLine=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
-	GtkTextMark*	tmark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+//	GtkTextMark*	tmark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 	GtkTextIter		titer;
+//
 
-	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->lastLine,tmark);
+//	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&titer,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+//	gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)page->buffer,"back-mark",&titer);
+/*
+					mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+					linenumber=gtk_text_iter_get_line(&iter);
 
+*/
+//	page->backMark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
+	gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)page->buffer,"back-mark",&start);
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 			if(selection==NULL)
 				return;

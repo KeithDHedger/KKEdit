@@ -86,6 +86,7 @@ struct pageStruct
 	GtkWidget*			tabVbox;
 	bool				showingChanged;
 	GtkTextIter			lastLine;
+	GtkTextMark*		backMark=NULL;
 //	GtkWidget*			toolOutVBox;
 //	GtkWidget*			toolOutputBuffer;
 //	GtkWidget*			toolOutputView;
