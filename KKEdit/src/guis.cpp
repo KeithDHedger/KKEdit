@@ -28,7 +28,7 @@
 #endif
 
 GtkWidget*		recent;
-GtkToolItem*	tool[17]={NULL,};
+GtkToolItem*	tool[18]={NULL,};
 GtkIconView*	iconView=NULL;
 GtkListStore*	listStore=NULL;
 
@@ -263,6 +263,14 @@ void setUpToolBar(void)
 						gtk_signal_connect(GTK_OBJECT(gotoDefButton),"clicked",G_CALLBACK(goToDefinition),NULL);
 						gtk_widget_set_tooltip_text((GtkWidget*)gotoDefButton,"Go To Definition");
 						break;
+//go back
+					case 'B':
+						backButton=gtk_tool_button_new_from_stock(GTK_STOCK_GO_BACK);
+						gtk_toolbar_insert(toolBar,backButton,-1);
+						gtk_signal_connect(GTK_OBJECT(backButton),"clicked",G_CALLBACK(goBack),NULL);
+						gtk_widget_set_tooltip_text((GtkWidget*)backButton,"Go Back");
+						break;
+
 					case '9':
 						lineNumberWidget=gtk_entry_new();
 						gotoLineButton=gtk_tool_item_new();
@@ -662,6 +670,17 @@ void populateStore(void)
 							}
 						gtk_widget_set_sensitive((GtkWidget*)tool[9],false);
 						break;
+//go back
+					case 'B':
+						gtk_list_store_append (listStore, &iter);
+						pbuf=gtk_widget_render_icon(image,GTK_STOCK_GO_BACK,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
+						if(pbuf!=NULL)
+							{
+								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,17,-1);
+								g_object_unref(pbuf);
+							}
+						gtk_widget_set_sensitive((GtkWidget*)tool[17],false);
+						break;
 
 					case '9':
 						gtk_list_store_append (listStore, &iter);
@@ -784,6 +803,8 @@ void populateDnD(void)
 	addIcon(GTK_STOCK_REDO,"R",7,"Redo");
 	addIcon(GTK_STOCK_FIND,"F",8,"Find");
 	addIcon(GTK_STOCK_DIALOG_QUESTION,"G",9,"Go To Definition");
+	addIcon(GTK_STOCK_GO_BACK,"B",17,"Go Back");
+
 	addPixbuf(DATADIR"/pixmaps/num.png","9",10,"Go To Line");
 	addPixbuf(DATADIR"/pixmaps/api.png","A",11,"Find API In Gtk Docs");
 	addPixbuf(DATADIR"/pixmaps/qtapi.png","Q",16,"Find API In Qt5 Docs");

@@ -280,6 +280,7 @@ extern GtkToolItem*		copyButton;
 extern GtkToolItem*		pasteButton;
 extern GtkToolItem*		findButton;
 extern GtkToolItem*		gotoDefButton;
+extern GtkToolItem*		backButton;
 extern GtkToolItem*		gotoLineButton;
 extern GtkToolItem*		findApiButton;
 extern GtkToolItem*		findQtApiButton;

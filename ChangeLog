@@ -1,4 +1,5 @@
 0.1.5
+Added 'Back' button to toolbar and 'Navigation' menu.
 Added 'Copy Folder Path' to tab popup menu.
 Globally installed tools are not usually editable and so don't show in the 'Edit External Tools' dialog.
 Globally installed tools are now shown at the top of the 'Tools' menu.

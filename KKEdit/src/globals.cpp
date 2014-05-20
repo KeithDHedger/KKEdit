@@ -175,6 +175,7 @@ GtkToolItem*	copyButton=NULL;
 GtkToolItem*	pasteButton=NULL;
 GtkToolItem*	findButton=NULL;
 GtkToolItem*	gotoDefButton=NULL;
+GtkToolItem*	backButton=NULL;
 GtkToolItem*	gotoLineButton=NULL;
 GtkToolItem*	findApiButton=NULL;
 GtkToolItem*	findQtApiButton=NULL;
