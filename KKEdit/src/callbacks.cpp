@@ -127,6 +127,19 @@ void setToobarSensitive(void)
 									gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,false);
 							}
 						break;
+
+					case 'B':
+//go back
+						if(backButton!=NULL)
+							{
+								if(page!=NULL)
+									gtk_widget_set_sensitive((GtkWidget*)backButton,true);
+								else
+									gtk_widget_set_sensitive((GtkWidget*)backButton,false);
+							}
+						break;
+
+
 					case '9':
 //find in gtkdoc
 						if(gotoLineButton!=NULL)
