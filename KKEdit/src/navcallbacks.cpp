@@ -41,7 +41,6 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 	GtkTextIter		end;
 	char*			selection=NULL;
 	functionData*	fdata=NULL;
-	GtkTextIter		titer;
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
