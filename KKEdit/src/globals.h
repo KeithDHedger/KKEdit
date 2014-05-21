@@ -92,7 +92,7 @@ struct pageStruct
 	const char*			lang;
 	GtkWidget*			tabVbox;
 	bool				showingChanged;
-	GtkTextMark*		backMark=NULL;
+	GtkTextMark*		backMark;
 //	GtkWidget*			toolOutVBox;
 //	GtkWidget*			toolOutputBuffer;
 //	GtkWidget*			toolOutputView;
