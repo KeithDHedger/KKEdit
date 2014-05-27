@@ -29,11 +29,10 @@ bin_PROGRAMS = kkedit
 install-exec-hook:
 	install -D ../resources/pixmaps/KKEdit.png $(DESTDIR)${prefix}/share/pixmaps/KKEdit.png
 	install -D ../resources/pixmaps/KKEdit.desktop $(DESTDIR)${prefix}/share/applications/KKEdit.desktop
-
-	echo Icon=KKEdit.png >> $(DESTDIR)${prefix}/share/applications/KKEdit.desktop
-	echo Exec=kkedit %f >> $(DESTDIR)${prefix}/share/applications/KKEdit.desktop
+	cp ../resources/pixmaps/KKEdit.png $(DESTDIR)${prefix}/share/icons/hicolor/256x256/apps
+	gtk-update-icon-cache --ignore-theme-index --force /usr/share/icons/hicolor
 
 uninstall-hook:
-	rm -f $(DESTDIR)${prefix}/share/applications/KKEdit.desktop $(DESTDIR)${prefix}/share/pixmaps/KKEdit.png
+	rm -f $(DESTDIR)${prefix}/share/applications/KKEdit.desktop $(DESTDIR)${prefix}/share/pixmaps/KKEdit.png $(DESTDIR)${prefix}/share/icons/hicolor/256x256/apps/KKEdit.png
 	rm -fr $(pkgdatadir)
 

@@ -1,3 +1,7 @@
+0.1.6
+Redone .desktop file.
+Set window icon properly.
+
 0.1.5
 Added 'Back' button to toolbar and 'Navigation' menu.
 Added 'Copy Folder Path' to tab popup menu.

@@ -42,15 +42,15 @@ void readConfig(void)
 					sscanf(buffer,"%s %s",(char*)&name,(char*)&strarg);
 
 					if(strcasecmp(name,"indentcode")==0)
-							indent=(bool)atoi(strarg);
+						indent=(bool)atoi(strarg);
 					if(strcasecmp(name,"showlinenumbers")==0)
-							lineNumbers=(bool)atoi(strarg);
+						lineNumbers=(bool)atoi(strarg);
 					if(strcasecmp(name,"wrapline")==0)
-							lineWrap=(bool)atoi(strarg);
+						lineWrap=(bool)atoi(strarg);
 					if(strcasecmp(name,"highlightcurrentline")==0)
-							highLight=(bool)atoi(strarg);
+						highLight=(bool)atoi(strarg);
 					if(strcasecmp(name,"singleuse")==0)
-							singleUse=(bool)atoi(strarg);
+						singleUse=(bool)atoi(strarg);
 
 					if(strcasecmp(name,"stylename")==0)
 						{
@@ -61,14 +61,14 @@ void readConfig(void)
 						}
 
 					if(strcasecmp(name,"savesessiononexit")==0)
-							onExitSaveSession=(bool)atoi(strarg);
+						onExitSaveSession=(bool)atoi(strarg);
 					if(strcasecmp(name,"restorebookmarks")==0)
-							restoreBookmarks=(bool)atoi(strarg);
+						restoreBookmarks=(bool)atoi(strarg);
 
 					if(strcasecmp(name,"tabwidth")==0)
-							tabWidth=atoi(strarg);
+						tabWidth=atoi(strarg);
 					if(strcasecmp(name,"depth")==0)
-							depth=atoi(strarg);
+						depth=atoi(strarg);
 					if(strcasecmp(name,"nagscreen")==0)
 						nagScreen=(bool)atoi(strarg);
 
@@ -120,11 +120,11 @@ void readConfig(void)
 					if(strcasecmp(name,"useregex")==0)
 						useRegex=(bool)atoi(strarg);
 					if(strcasecmp(name,"wrapsearch")==0)
-							wrapSearch=(bool)atoi(strarg);
+						wrapSearch=(bool)atoi(strarg);
 					if(strcasecmp(name,"replaceall")==0)
-							replaceAll=(bool)atoi(strarg);
+						replaceAll=(bool)atoi(strarg);
 					if(strcasecmp(name,"allfiles")==0)
-							findInAllFiles=(bool)atoi(strarg);
+						findInAllFiles=(bool)atoi(strarg);
 					if(strcasecmp(name,"showbmbar")==0)
 						showBMBar=(bool)atoi(strarg);
 					if(strcasecmp(name,"showtoolbar")==0)
@@ -267,7 +267,7 @@ int main(int argc,char **argv)
 					command=UNIQUE_OPEN;
 					unique_message_data_set_uris(message,argv);
 					response=unique_app_send_message(app,command,message);
-					}
+				}
 
 			g_object_unref(app);
 			unique_message_data_free(message);
@@ -276,7 +276,7 @@ int main(int argc,char **argv)
 				return 0;
 			else
 				printf("FAIL\n");
-				//handle_fail_or_user_cancel();
+			//handle_fail_or_user_cancel();
 		}
 	else
 		{
@@ -285,7 +285,7 @@ int main(int argc,char **argv)
 			if(onExitSaveSession==true)
 				restoreSession(NULL,(void*)restoreBookmarks);
 
-			for(int j=1;j<argc;j++)
+			for(int j=1; j<argc; j++)
 				{
 					if(strncasecmp(argv[j],"-m",2)!=0)
 						openFile(argv[j],0);
@@ -305,9 +305,11 @@ int main(int argc,char **argv)
 
 			setSensitive();
 
+			gtk_window_set_default_icon_name(PACKAGE);
 			gtk_window_get_size((GtkWindow*)window,&w,&h);
 			gtk_paned_set_position((GtkPaned*)mainVPane,h-120);
 			gtk_widget_hide(toolOutVBox);
 			gtk_main();
 		}
 }
+
