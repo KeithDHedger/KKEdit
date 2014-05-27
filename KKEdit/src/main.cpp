@@ -294,6 +294,7 @@ int main(int argc,char **argv)
 
 			buildFindReplace();
 
+
 #ifdef BUILDDOCVIEWER
 			buildGtkDocViewer();
 #endif
