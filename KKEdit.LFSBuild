@@ -4,7 +4,7 @@
 
 PKGNAME="KKEdit"
 TARNAME="$PKGNAME"
-VERSION="0.1.5"
+VERSION="0.1.6"
 BUILD=5
 SECTION="DESKTOP"
 SUFFIX="LFSPKG"
@@ -21,6 +21,7 @@ tar -xvf "$TARBALL"
 
 pushd "${TARNAME}-${VERSION}"
 	CFLAGS="$LFSFLAGS" CXXFLAGS="$LFSFLAGS" ./configure ${CONFIGOPTIONS} --enable-aspell --enable-docviewer --with-qt5-docdir=/usr/share/doc/qt5
+	mkdir -vp $PKG/usr/share/icons/hicolor/128x128/apps
 	make $MAKEFLAGS ||make|| exit 1
 	make $MAKEFLAGS install DESTDIR=$PKG || exit 1
 popd
