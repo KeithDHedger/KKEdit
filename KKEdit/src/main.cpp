@@ -305,10 +305,19 @@ int main(int argc,char **argv)
 
 			setSensitive();
 
-			gtk_window_set_default_icon_name(PACKAGE);
 			gtk_window_get_size((GtkWindow*)window,&w,&h);
 			gtk_paned_set_position((GtkPaned*)mainVPane,h-120);
 			gtk_widget_hide(toolOutVBox);
+			if(getuid()!=0)
+				{
+					gtk_window_set_default_icon_name(PACKAGE);
+					gtk_window_set_icon_name((GtkWindow*)window,PACKAGE);
+				}
+			else
+				{
+					gtk_window_set_default_icon_name(PACKAGE "Root");
+					gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
+				}
 			gtk_main();
 		}
 }
