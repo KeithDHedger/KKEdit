@@ -1563,6 +1563,7 @@ void buildFindReplace(void)
 	GtkWidget*	hbox;
 	GtkWidget*	item;
 
+
 	findReplaceDialog=gtk_dialog_new_with_buttons("Find/Replace",(GtkWindow*)window, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_GO_FORWARD,FINDNEXT,GTK_STOCK_GO_BACK,FINDPREV,"Replace",REPLACE,NULL);
 	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,GTK_RESPONSE_OK);
 	g_signal_connect(G_OBJECT(findReplaceDialog),"response",G_CALLBACK(doFindReplace),NULL);
@@ -1575,6 +1576,11 @@ void buildFindReplace(void)
 	gtk_container_add(GTK_CONTAINER(content_area),label);
 	gtk_widget_show(label);
 
+	findDropBox=gtk_combo_box_text_new();
+	g_signal_connect_after(G_OBJECT(findDropBox),"changed",G_CALLBACK(pasteFRClip),(void*)0);
+	gtk_container_add(GTK_CONTAINER(content_area),findDropBox);
+	gtk_widget_show(findDropBox);
+
 	findBox=gtk_entry_new();
 	gtk_entry_set_text((GtkEntry*)findBox,"");
 	gtk_entry_set_activates_default((GtkEntry*)findBox,true);
@@ -1583,6 +1589,11 @@ void buildFindReplace(void)
 	label=gtk_label_new("Replace With");
 	gtk_container_add(GTK_CONTAINER(content_area),label);
 	gtk_widget_show(label);
+
+	replaceDropBox=gtk_combo_box_text_new();
+	g_signal_connect_after(G_OBJECT(replaceDropBox),"changed",G_CALLBACK(pasteFRClip),(void*)1);
+	gtk_container_add(GTK_CONTAINER(content_area),replaceDropBox);
+	gtk_widget_show(replaceDropBox);
 
 	replaceBox=gtk_entry_new();
 	gtk_entry_set_text((GtkEntry*)replaceBox,"");

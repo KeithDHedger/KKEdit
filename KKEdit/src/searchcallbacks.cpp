@@ -710,8 +710,71 @@ void basicFind(int dowhat)
 	g_free(replacetext);
 }
 
+void pasteFRClip(GtkWidget* widget,gpointer data)
+{
+	char* clipdata=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
+
+	if((long)data==0)
+		gtk_entry_set_text((GtkEntry*)findBox,clipdata);
+	else
+		gtk_entry_set_text((GtkEntry*)replaceBox,clipdata);
+}
+
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 {
+	bool		flag=false;
+	GSList*		tlist;
+	const char*	edata;
+	GtkWidget*	entry;
+	GtkWidget*	drop;
+	GSList*		list;
+
+	if(response_id==FINDNEXT)
+		{
+			drop=findDropBox;
+			entry=findBox;
+			list=findList;
+		}
+	else
+		{
+			entry=replaceBox;
+			drop=replaceDropBox;
+			list=replaceList;
+		}
+
+	edata=gtk_entry_get_text((GtkEntry*)entry);
+
+	if(list==NULL)
+		{
+			list=g_slist_append(list,strdup(edata));
+			gtk_combo_box_text_append_text((GtkComboBoxText*)drop,(const char*)list->data);
+			gtk_combo_box_set_active((GtkComboBox*)drop,0);
+		}
+	else
+		{
+			tlist=list;
+			flag=false;
+			do
+				{
+					if(strcmp((const gchar*)tlist->data,edata)==0)
+						flag=true;
+					tlist=tlist->next;
+				}
+			while(tlist!=NULL);
+
+			if(flag==false)
+				{
+					list=g_slist_prepend(list,strdup(edata));
+					gtk_combo_box_text_append_text((GtkComboBoxText*)drop,(const char*)list->data);
+					gtk_combo_box_set_active((GtkComboBox*)drop,g_slist_length(list)-1);
+				}
+		}
+
+	if(response_id==FINDNEXT)
+		findList=list;
+	else
+		replaceList=list;
+
 	if(useRegex==false)
 		basicFind(response_id);
 	else

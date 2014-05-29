@@ -33,5 +33,6 @@ void searchQT5Docs(GtkWidget* widget,gpointer data);
 void qt5DocSearchFromBar(GtkWidget* widget,gpointer data);
 void seachGtkDocs(GtkWidget* widget,gpointer data);
 void showDocView(int howtodisplay,char* text);
+void pasteFRClip(GtkWidget* widget,gpointer data);
 
 #endif

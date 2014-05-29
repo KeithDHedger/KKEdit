@@ -291,9 +291,14 @@ extern GtkToolItem*		findQtApiButton;
 extern GtkToolItem*		findFuncDefButton;
 extern GtkToolItem*		liveSearchButton;
 
+//find replace
 extern GtkWidget*		findReplaceDialog;
 extern GtkWidget*		findBox;
 extern GtkWidget*		replaceBox;
+extern GtkWidget*		findDropBox;
+extern GtkWidget*		replaceDropBox;
+extern GSList*			findList;
+extern GSList*			replaceList;
 
 //custom toolbar
 extern GtkWidget*		fromHBox;

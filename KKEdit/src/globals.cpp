@@ -186,9 +186,14 @@ GtkToolItem*	findQtApiButton=NULL;
 GtkToolItem*	findFuncDefButton=NULL;
 GtkToolItem*	liveSearchButton=NULL;
 
+//find replace
 GtkWidget*		findReplaceDialog;
 GtkWidget*		findBox;
 GtkWidget*		replaceBox;
+GtkWidget*		findDropBox=NULL;
+GtkWidget*		replaceDropBox;
+GSList*			findList=NULL;
+GSList*			replaceList=NULL;
 
 //custom toolbar
 GtkWidget*		fromHBox;
