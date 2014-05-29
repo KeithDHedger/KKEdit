@@ -1,4 +1,6 @@
 0.1.6
+Added history drop down for 'Replace'.
+Added history drop down for 'Find'.
 Added 'Don't Warn On File Change' to prefs.
 Added 'Don't Open Duplicate File' to Prefs.
 Fixed minor prefs bug.

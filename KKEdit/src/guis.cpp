@@ -1576,12 +1576,12 @@ void buildFindReplace(void)
 	gtk_container_add(GTK_CONTAINER(content_area),label);
 	gtk_widget_show(label);
 
+	findBox=gtk_entry_new();
 	findDropBox=gtk_combo_box_text_new();
-	g_signal_connect_after(G_OBJECT(findDropBox),"changed",G_CALLBACK(pasteFRClip),(void*)0);
+	g_signal_connect_after(G_OBJECT(findDropBox),"changed",G_CALLBACK(pasteFRClip),findBox);
 	gtk_container_add(GTK_CONTAINER(content_area),findDropBox);
 	gtk_widget_show(findDropBox);
 
-	findBox=gtk_entry_new();
 	gtk_entry_set_text((GtkEntry*)findBox,"");
 	gtk_entry_set_activates_default((GtkEntry*)findBox,true);
 	gtk_container_add(GTK_CONTAINER(content_area),findBox);
@@ -1590,12 +1590,12 @@ void buildFindReplace(void)
 	gtk_container_add(GTK_CONTAINER(content_area),label);
 	gtk_widget_show(label);
 
+	replaceBox=gtk_entry_new();
 	replaceDropBox=gtk_combo_box_text_new();
-	g_signal_connect_after(G_OBJECT(replaceDropBox),"changed",G_CALLBACK(pasteFRClip),(void*)1);
+	g_signal_connect_after(G_OBJECT(replaceDropBox),"changed",G_CALLBACK(pasteFRClip),replaceBox);
 	gtk_container_add(GTK_CONTAINER(content_area),replaceDropBox);
 	gtk_widget_show(replaceDropBox);
 
-	replaceBox=gtk_entry_new();
 	gtk_entry_set_text((GtkEntry*)replaceBox,"");
 	gtk_entry_set_activates_default((GtkEntry*)replaceBox,true);
 	gtk_container_add(GTK_CONTAINER(content_area),replaceBox);

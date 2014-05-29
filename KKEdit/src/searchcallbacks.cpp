@@ -712,12 +712,7 @@ void basicFind(int dowhat)
 
 void pasteFRClip(GtkWidget* widget,gpointer data)
 {
-	char* clipdata=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
-
-	if((long)data==0)
-		gtk_entry_set_text((GtkEntry*)findBox,clipdata);
-	else
-		gtk_entry_set_text((GtkEntry*)replaceBox,clipdata);
+	gtk_entry_set_text((GtkEntry*)data,gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget));
 }
 
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
