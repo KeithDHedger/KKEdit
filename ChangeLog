@@ -1,4 +1,5 @@
 0.1.6
+TODO run tool as admin
 Added user command for GUI root privileges.
 Added history drop down for 'Replace'.
 Added history drop down for 'Find'.
