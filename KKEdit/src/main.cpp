@@ -103,6 +103,12 @@ void readConfig(void)
 							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
 							terminalCommand=strdup(strarg);
 						}
+					
+					if(strcasecmp(name,"rootcommand")==0)
+						{
+							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
+							rootCommand=strdup(strarg);
+						}
 				}
 			fclose(fd);
 		}
@@ -154,6 +160,7 @@ void init(void)
 	singleUse=true;
 	fontAndSize=strdup("mono 10");
 	terminalCommand=strdup("xterm -e");
+	rootCommand=strdup("");
 	windowWidth=800;
 	windowHeight=400;
 	windowX=-1;

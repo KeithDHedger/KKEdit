@@ -196,6 +196,7 @@ extern bool				singleUse;
 extern int				tabWidth;
 extern char*			fontAndSize;
 extern char*			terminalCommand;
+extern char*			rootCommand;
 extern int				depth;
 extern bool				onExitSaveSession;
 extern bool				restoreBookmarks;
@@ -207,6 +208,8 @@ extern bool				tmpNoWarnings;
 
 extern GtkWidget*		fontButton;
 extern GtkWidget*		terminalBox;
+extern GtkWidget*		rootCommandBox;
+
 extern bool				tmpIndent;
 extern bool				tmpLineNumbers;
 extern bool				tmpLineWrap;

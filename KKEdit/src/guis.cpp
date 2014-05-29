@@ -1101,6 +1101,17 @@ void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
 	gtk_entry_set_text((GtkEntry*)terminalBox,terminalCommand);
 	gtk_widget_show_all(hbox2);
+
+//root command
+	rootCommandBox=gtk_entry_new();
+	hbox2=gtk_hbox_new(false,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Run As Root Command: "),false,false,0);
+	gtk_container_add(GTK_CONTAINER(hbox2),rootCommandBox);
+	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
+	if(rootCommand!=NULL)
+		gtk_entry_set_text((GtkEntry*)rootCommandBox,rootCommand);
+	gtk_widget_show_all(hbox2);
+
 //end admin
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 

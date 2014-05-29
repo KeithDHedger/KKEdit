@@ -1268,6 +1268,7 @@ void writeConfig(void)
 			fprintf(fd,"depth	%i\n",depth);
 			fprintf(fd,"font	%s\n",fontAndSize);
 			fprintf(fd,"terminalcommand	%s\n",terminalCommand);
+			fprintf(fd,"rootcommand	%s\n",rootCommand);
 
 			fprintf(fd,"toolbarlayout	%s\n",toolBarLayout);
 			fprintf(fd,"funcsort	%i\n",listFunction);
@@ -1418,6 +1419,12 @@ void setPrefs(GtkWidget* widget,gpointer data)
 				{
 					g_free(terminalCommand);
 					terminalCommand=strdup(gtk_entry_get_text((GtkEntry*)terminalBox));
+				}
+
+			if(rootCommand!=NULL)
+				{
+					g_free(rootCommand);
+					rootCommand=strdup(gtk_entry_get_text((GtkEntry*)rootCommandBox));
 				}
 
 			if(fontAndSize!=NULL)
@@ -1670,14 +1677,29 @@ void newEditor(GtkWidget* widget,gpointer data)
 {
 	char*	command=NULL;
 
+	if((long)data==2)
+		{
+			system("kkedit -m &");
+		}
+
 	if((long)data==1)
-#ifdef _GTKSU_
-		system("gtksu -- kkedit -m 2>/dev/null &");
-#else
-		asprintf(&command,"%s sudo kkedit -m &",terminalCommand);
-		system(command);
-		g_free(command);
-#endif
+		{
+			if(strcmp(rootCommand,"")!=0)
+				asprintf(&command,"%s kkedit -m &",rootCommand);
+			else
+				asprintf(&command,"%s sudo kkedit -m &",terminalCommand);
+			system(command);
+			g_free(command);
+		}
+//
+//	if((long)data==1)
+//#ifdef _GTKSU_
+//		system("gtksu -- kkedit -m 2>/dev/null &");
+//#else
+//		asprintf(&command,"%s sudo kkedit -m &",terminalCommand);
+//		system(command);
+//		g_free(command);
+//#endif
 	if((long)data==2)
 		system("kkedit -m &");
 

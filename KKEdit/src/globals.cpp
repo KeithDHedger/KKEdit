@@ -93,6 +93,7 @@ bool			singleUse;
 int				tabWidth;
 char*			fontAndSize;
 char*			terminalCommand;
+char*			rootCommand;
 int				depth;
 bool			onExitSaveSession;
 bool			restoreBookmarks;
@@ -104,6 +105,8 @@ bool			tmpNoWarnings;
 
 GtkWidget*		fontButton;
 GtkWidget*		terminalBox;
+GtkWidget*		rootCommandBox;
+
 bool			tmpIndent;
 bool			tmpLineNumbers;
 bool			tmpLineWrap;
