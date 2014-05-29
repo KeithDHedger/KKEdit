@@ -1,4 +1,7 @@
 0.1.6
+Added 'Don't Warn On File Change' to prefs.
+Added 'Don't Open Duplicate File' to Prefs.
+Fixed minor prefs bug.
 Set 'Root' window icon (red).
 Redone .desktop file.
 Set window icon properly.

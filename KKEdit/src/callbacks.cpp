@@ -1258,6 +1258,8 @@ void writeConfig(void)
 			fprintf(fd,"savesessiononexit	%i\n",(int)onExitSaveSession);
 			fprintf(fd,"restorebookmarks	%i\n",(int)restoreBookmarks);
 			fprintf(fd,"nagscreen	%i\n",nagScreen);
+			fprintf(fd,"noduplicates	%i\n",noDuplicates);
+			fprintf(fd,"warning	%i\n",noWarnings);
 
 			fprintf(fd,"showbmbar	%i\n",(int)showBMBar);
 			fprintf(fd,"higlightcolour	%s\n",highlightColour);
@@ -1353,6 +1355,11 @@ void setPrefs(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"marks")==0)
 		tmpRestoreBookmarks=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
+	if(strcmp(gtk_widget_get_name(widget),"duplicates")==0)
+		tmpNoDuplicates=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"warning")==0)
+		tmpNoWarnings=gtk_toggle_button_get_active((GtkToggleButton*)data);
+
 	if(strcmp(gtk_widget_get_name(widget),"ihavedonated")==0)
 		tmpNagScreen=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
@@ -1386,6 +1393,8 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			lineNumbers=tmpLineNumbers;
 			lineWrap=tmpLineWrap;
 			highLight=tmpHighLight;
+			noDuplicates=tmpNoDuplicates;
+			noWarnings=tmpNoWarnings;
 
 			if(styleName!=NULL)
 				{

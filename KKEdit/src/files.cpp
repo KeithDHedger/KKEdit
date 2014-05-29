@@ -482,7 +482,12 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 			if((page->itsMe==false) && (page->showingChanged==false))
 				{
 					page->showingChanged=true;
-					answer=showFileChanged(page->fileName);
+
+					if(noWarnings==false)
+						answer=showFileChanged(page->fileName);
+					else
+						answer=GTK_RESPONSE_YES;
+
 					page->showingChanged=false;
 					if(answer==GTK_RESPONSE_YES)
 						{
@@ -595,6 +600,16 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	char*					searchtext=NULL;
 	char*					replacetext=NULL;
+
+	for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
+		{
+			page=getPageStructPtr(j);
+			if((page->filePath!=NULL) && (noDuplicates==true) && (strcmp(page->filePath,filepath)==0))
+				{
+					gtk_notebook_set_current_page(notebook,j);
+					return(true);
+				}
+		}
 
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		{

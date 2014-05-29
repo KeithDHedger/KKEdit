@@ -975,6 +975,26 @@ void doPrefs(void)
 //end apperance 2
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 
+//apperance 3
+	hbox=gtk_hbox_new(false,8);
+
+//no duplicates
+	item=gtk_check_button_new_with_label("Don't Open Duplicate File");
+	gtk_widget_set_name(item,"duplicates");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,noDuplicates);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+
+//turn off warnings
+	item=gtk_check_button_new_with_label("Don't Warn On File Change");
+	gtk_widget_set_name(item,"warning");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,noWarnings);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+
+//end apperance 3
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+
 //sort functions
 	label=gtk_label_new("<b>Function List Sorting</b>");
 	gtk_label_set_use_markup((GtkLabel*)label,true);
@@ -983,7 +1003,6 @@ void doPrefs(void)
 	hbox=gtk_hbox_new(false,8);
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,true,0);
 	funcListDrop=gtk_combo_box_text_new();
-	gtk_widget_set_name(item,"sortfunc");
 	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Display functions etc in menu by type and alphabetically");
 	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Display functions etc in menu by type and file position");
 	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,"Display functions etc in menu by file position");

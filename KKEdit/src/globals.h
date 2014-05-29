@@ -200,6 +200,10 @@ extern int				depth;
 extern bool				onExitSaveSession;
 extern bool				restoreBookmarks;
 extern char*			styleName;
+extern bool				noDuplicates;
+extern bool				tmpNoDuplicates;
+extern bool				noWarnings;
+extern bool				tmpNoWarnings;
 
 extern GtkWidget*		fontButton;
 extern GtkWidget*		terminalBox;

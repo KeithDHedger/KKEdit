@@ -51,6 +51,10 @@ void readConfig(void)
 						highLight=(bool)atoi(strarg);
 					if(strcasecmp(name,"singleuse")==0)
 						singleUse=(bool)atoi(strarg);
+					if(strcasecmp(name,"noduplicates")==0)
+						noDuplicates=(bool)atoi(strarg);
+					if(strcasecmp(name,"warning")==0)
+						noWarnings=(bool)atoi(strarg);
 
 					if(strcasecmp(name,"stylename")==0)
 						{
@@ -161,6 +165,9 @@ void init(void)
 	onExitSaveSession=false;
 	onExitSaveSession=false;
 	restoreBookmarks=false;
+	noDuplicates=false;
+	noWarnings=false;
+
 	if(getuid()!=0)
 		styleName=strdup("classic");
 	else
@@ -199,6 +206,8 @@ void init(void)
 	tmpSaveSessionOnExit=onExitSaveSession;
 	tmpRestoreBookmarks=restoreBookmarks;
 	tmpStyleName=strdup(styleName);
+	tmpNoDuplicates=noDuplicates;
+	tmpNoWarnings=noWarnings;
 
 	tmpNagScreen=nagScreen;
 	tmpHighlightColour=highlightColour;
@@ -318,6 +327,7 @@ int main(int argc,char **argv)
 					gtk_window_set_default_icon_name(PACKAGE "Root");
 					gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
 				}
+
 			gtk_main();
 		}
 }

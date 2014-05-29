@@ -97,6 +97,10 @@ int				depth;
 bool			onExitSaveSession;
 bool			restoreBookmarks;
 char*			styleName=NULL;
+bool			noDuplicates;
+bool			tmpNoDuplicates;
+bool			noWarnings;
+bool			tmpNoWarnings;
 
 GtkWidget*		fontButton;
 GtkWidget*		terminalBox;
