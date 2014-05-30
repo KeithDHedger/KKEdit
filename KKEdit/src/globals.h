@@ -316,6 +316,9 @@ extern char*			thePage;
 extern char*			htmlFile;
 extern char*			htmlURI;
 
+//runtime deps
+extern bool				gotManEditor;
+
 extern GtkSourceStyleSchemeManager*	schemeManager;
 extern GtkSourceStyleScheme*		styleScheme;
 

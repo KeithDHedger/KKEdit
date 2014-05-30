@@ -1677,6 +1677,27 @@ void newEditor(GtkWidget* widget,gpointer data)
 {
 	char*	command=NULL;
 
+	switch((long)data)
+		{
+			case 1:
+				if(strcmp(rootCommand,"")!=0)
+					asprintf(&command,"%s kkedit -m &",rootCommand);
+				else
+					asprintf(&command,"%s sudo kkedit -m &",terminalCommand);
+				system(command);
+				free(command);
+				break;
+			case 2:
+				system("kkedit -m &");
+				break;
+			case 3:
+				if(gotManEditor==true)
+					system("manpageeditor &");
+				break;
+		}
+
+return;
+
 	if((long)data==2)
 		{
 			system("kkedit -m &");

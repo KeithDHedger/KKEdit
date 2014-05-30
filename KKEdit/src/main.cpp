@@ -174,6 +174,7 @@ void init(void)
 	restoreBookmarks=false;
 	noDuplicates=false;
 	noWarnings=false;
+	gotManEditor=false;
 
 	if(getuid()!=0)
 		styleName=strdup("classic");

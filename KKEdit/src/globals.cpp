@@ -211,6 +211,9 @@ char*			thePage=NULL;
 char*			htmlFile=NULL;
 char*			htmlURI=NULL;
 
+//runtime deps
+bool			gotManEditor;
+
 GtkSourceStyleSchemeManager*	schemeManager;
 GtkSourceStyleScheme*			styleScheme;
 
