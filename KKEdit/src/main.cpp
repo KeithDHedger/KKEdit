@@ -147,7 +147,9 @@ void readConfig(void)
 
 void init(void)
 {
-	char*				filename;
+	char*	filename;
+	int		exitstatus;
+
 #ifdef _ASPELL_
 	AspellCanHaveError*	possible_err;
 #endif
@@ -174,7 +176,9 @@ void init(void)
 	restoreBookmarks=false;
 	noDuplicates=false;
 	noWarnings=false;
-	gotManEditor=false;
+
+	exitstatus=system("which manpageeditor &>/dev/null");
+	gotManEditor=WEXITSTATUS(exitstatus);
 
 	if(getuid()!=0)
 		styleName=strdup("classic");

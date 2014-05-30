@@ -317,7 +317,7 @@ extern char*			htmlFile;
 extern char*			htmlURI;
 
 //runtime deps
-extern bool				gotManEditor;
+extern int				gotManEditor;
 
 extern GtkSourceStyleSchemeManager*	schemeManager;
 extern GtkSourceStyleScheme*		styleScheme;

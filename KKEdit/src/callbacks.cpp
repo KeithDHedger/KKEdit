@@ -1681,54 +1681,20 @@ void newEditor(GtkWidget* widget,gpointer data)
 		{
 			case 1:
 				if(strcmp(rootCommand,"")!=0)
-					asprintf(&command,"%s kkedit -m &",rootCommand);
+					asprintf(&command,"%s kkedit -m &>/dev/null &",rootCommand);
 				else
-					asprintf(&command,"%s sudo kkedit -m &",terminalCommand);
+					asprintf(&command,"%s sudo kkedit -m &>/dev/null &",terminalCommand);
 				system(command);
 				free(command);
 				break;
 			case 2:
-				system("kkedit -m &");
+				system("kkedit -m &>/dev/null &");
 				break;
 			case 3:
-				if(gotManEditor==true)
-					system("manpageeditor &");
+				if(gotManEditor==0)
+					system("manpageeditor &>/dev/null &");
 				break;
 		}
-
-return;
-
-	if((long)data==2)
-		{
-			system("kkedit -m &");
-		}
-
-	if((long)data==1)
-		{
-			if(strcmp(rootCommand,"")!=0)
-				asprintf(&command,"%s kkedit -m &",rootCommand);
-			else
-				asprintf(&command,"%s sudo kkedit -m &",terminalCommand);
-			system(command);
-			g_free(command);
-		}
-//
-//	if((long)data==1)
-//#ifdef _GTKSU_
-//		system("gtksu -- kkedit -m 2>/dev/null &");
-//#else
-//		asprintf(&command,"%s sudo kkedit -m &",terminalCommand);
-//		system(command);
-//		g_free(command);
-//#endif
-	if((long)data==2)
-		system("kkedit -m &");
-
-#ifdef _MANPAGEEDITOR_
-	if((long)data==3)
-		system("manpageeditor &");
-#endif
-
 }
 
 void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButton* ev,pageStruct* page)

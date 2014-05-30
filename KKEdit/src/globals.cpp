@@ -212,7 +212,7 @@ char*			htmlFile=NULL;
 char*			htmlURI=NULL;
 
 //runtime deps
-bool			gotManEditor;
+int				gotManEditor;
 
 GtkSourceStyleSchemeManager*	schemeManager;
 GtkSourceStyleScheme*			styleScheme;
