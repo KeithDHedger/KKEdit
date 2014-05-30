@@ -425,8 +425,7 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot)
 	if(flags & TOOL_SHOW_DOC)
 		showDocView(USEFILE,(char*)"");
 
-	printf("%s\n",command);
-	g_free(command);
+	free(command);
 	free(asroot);
 }
 
@@ -766,6 +765,8 @@ void buildToolsList(void)
 									flagsarg=0;
 									inpopup=0;
 									alwayspopup=0;
+									rootarg=0;
+									clearview=0;
 
 									while(fgets(buffer,4096,fd))
 										{
