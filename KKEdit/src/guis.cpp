@@ -48,6 +48,7 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 	int				alwayspopup=0;
 	int				clearview=0;
 	int				flagsarg=0;
+	int				runasroot=0;
 
 	char*			text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
 
@@ -99,10 +100,12 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 					inpopup=0;
 					flagsarg=0;
 					alwayspopup=0;
+					runasroot=0;
 					gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,(bool)inpopup);
 					gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,(bool)alwayspopup);
 					gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,(bool)intermarg);
 					gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,(bool)clearview);
+					gtk_toggle_button_set_active((GtkToggleButton*)runAsRootWidget,(bool)runasroot);
 					gtk_entry_set_text((GtkEntry*)commentWidget,"");
 					while(fgets(buffer,4096,fd))
 						{
@@ -128,6 +131,11 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 								{
 									sscanf((char*)&buffer,"%*s %i",&clearview);
 									gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,(bool)clearview);
+								}
+							if(strcmp(strarg,"runasroot")==0)
+								{
+									sscanf((char*)&buffer,"%*s %i",&runasroot);
+									gtk_toggle_button_set_active((GtkToggleButton*)runAsRootWidget,(bool)runasroot);
 								}
 							if(strcmp(strarg,"interm")==0)
 								{
@@ -428,6 +436,13 @@ void doMakeTool(void)
 	gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,clearView);
 	gtk_box_pack_start(GTK_BOX(vbox),clearViewWidget,false,true,0);
 	g_signal_connect(G_OBJECT(clearViewWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
+
+//flags - run as root
+	runAsRootWidget=gtk_check_button_new_with_label("Run Tool As Root");
+	gtk_widget_set_name(runAsRootWidget,"runasroot");
+	gtk_toggle_button_set_active((GtkToggleButton*)runAsRootWidget,clearView);
+	gtk_box_pack_start(GTK_BOX(vbox),runAsRootWidget,false,true,0);
+	g_signal_connect(G_OBJECT(runAsRootWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags - ignore
 	ignoreWidget=gtk_radio_button_new_with_label(NULL,"Ignore Output");

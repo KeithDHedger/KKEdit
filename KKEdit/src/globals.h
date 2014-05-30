@@ -110,6 +110,7 @@ struct toolStruct
 	bool				clearView;
 	char*				comment;
 	bool				global;
+	bool				runAsRoot;
 };
 
 struct functionData
@@ -236,6 +237,7 @@ extern GtkWidget*		outputWidget;
 extern GtkWidget*		showDocWidget;
 extern GtkWidget*		toolSelect;
 extern GtkWidget*		clearViewWidget;
+extern GtkWidget*		runAsRootWidget;
 
 //view tool output
 extern GtkWidget*		mainVPane;
@@ -261,6 +263,7 @@ extern bool				viewOut;
 extern bool				showDoc;
 extern bool				editTool;
 extern bool				clearView;
+extern bool				runAsRoot;
 
 extern int				windowWidth;
 extern int				windowHeight;
@@ -339,7 +342,7 @@ extern AspellSpeller*	spellChecker;
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
-void runCommand(char* commandtorun,void* ptr,bool interm,int flags);
+void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot);
 functionData* getFunctionByName(char* name,bool recurse);
 void destroyData(functionData* fdata);
 void getRecursiveTagList(char* filepath,void* ptr);

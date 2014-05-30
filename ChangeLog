@@ -1,7 +1,9 @@
 0.1.6
 TODO run tool as admin
+Fixed bug when user terminal command empty.
 External Manpage editor program installed now checked at runtime instead of compile time.
 Added user command for getting root privileges via a GUI in prefs.
+Removed forced use of external app GtkSu for getting root privilege.
 Added history drop down for 'Replace'.
 Added history drop down for 'Find'.
 Added 'Don't Warn On File Change' to prefs.

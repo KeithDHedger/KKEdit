@@ -806,7 +806,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 			gtk_text_buffer_set_text(toolOutputBuffer,"",0);
 		}
 
-	runCommand(tempCommand->str,&text,tool->inTerminal,tool->flags);
+	runCommand(tempCommand->str,&text,tool->inTerminal,tool->flags,tool->runAsRoot);
 	g_free(selection);
 
 	if(text!=NULL)
@@ -1489,6 +1489,8 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 		showDoc=gtk_toggle_button_get_active((GtkToggleButton*)showDocWidget);
 	if(strcmp(gtk_widget_get_name(widget),"clearview")==0)
 		clearView=gtk_toggle_button_get_active((GtkToggleButton*)clearViewWidget);
+	if(strcmp(gtk_widget_get_name(widget),"runasroot")==0)
+		runAsRoot=gtk_toggle_button_get_active((GtkToggleButton*)runAsRootWidget);
 
 	if(runSync==false)
 		{
@@ -1544,6 +1546,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 					fprintf(fd,"inpopup\t%i\n",(int)inPopup);
 					fprintf(fd,"alwayspopup\t%i\n",(int)alwaysPopup);
 					fprintf(fd,"clearview\t%i\n",(int)clearView);
+					fprintf(fd,"runasroot\t%i\n",(int)runAsRoot);
 					fclose(fd);
 				}
 			g_free(dirname);

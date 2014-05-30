@@ -132,6 +132,7 @@ GtkWidget*		outputWidget;
 GtkWidget*		showDocWidget;
 GtkWidget*		toolSelect;
 GtkWidget*		clearViewWidget;
+GtkWidget*		runAsRootWidget;
 
 //view tool output
 GtkWidget*		mainVPane=NULL;
@@ -156,6 +157,7 @@ bool			viewOut=false;
 bool			showDoc=false;
 bool			editTool=false;
 bool			clearView=false;
+bool			runAsRoot=false;
 
 int				windowWidth;
 int				windowHeight;
@@ -347,22 +349,41 @@ void setLanguage(pageStruct* page)
 		g_free(mimetype);
 }
 
-void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
+
+//				if(strcmp(rootCommand,"")!=0)
+//					asprintf(&command,"%s kkedit -m &>/dev/null &",rootCommand);
+//				else
+//					asprintf(&command,"%s sudo kkedit -m &>/dev/null &",terminalCommand);
+
+
+void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot)
 {
-	char*	command;
-	FILE*	fp=NULL;
+	char*		command;
+	FILE*		fp=NULL;
 	GString*	str=NULL;
 	char		line[1024];
 	GtkTextIter	iter;
+	char*		asroot=strdup("");
+
+	if(useroot==true)
+		{
+			if(strcmp(rootCommand,"")!=0)
+				asprintf(&asroot,"%s ",rootCommand);
+			else
+				{
+					asprintf(&asroot,"sudo ");
+					interm=true;
+				}
+		}
 
 	if(interm==true)
 		{
-			asprintf(&command,"%s %s",terminalCommand,commandtorun);
+			asprintf(&command,"%s %s %s",terminalCommand,asroot,commandtorun);
 			flags=8;
 		}
 	else
 		{
-			asprintf(&command,"%s",commandtorun);
+			asprintf(&command,"%s%s",asroot,commandtorun);
 		}
 
 	if((flags & TOOL_ASYNC)==TOOL_ASYNC)
@@ -404,7 +425,9 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags)
 	if(flags & TOOL_SHOW_DOC)
 		showDocView(USEFILE,(char*)"");
 
+	printf("%s\n",command);
 	g_free(command);
+	free(asroot);
 }
 
 functionData* getFunctionByName(char* name,bool recurse)
@@ -717,6 +740,7 @@ void buildToolsList(void)
 	char*			commandarg=NULL;
 	char*			commentarg=NULL;
 	char*			menuname=NULL;
+	int				rootarg=0;
 
 	if(toolsList!=NULL)
 		{
@@ -763,6 +787,8 @@ void buildToolsList(void)
 												sscanf((char*)&buffer,"%*s %i",&alwayspopup);
 											if(strcmp(strarg,"clearview")==0)
 												sscanf((char*)&buffer,"%*s %i",&clearview);
+											if(strcmp(strarg,"runasroot")==0)
+												sscanf((char*)&buffer,"%*s %i",&rootarg);
 										}
 
 									if((menuname!=NULL) &&(strlen(menuname)>0))
@@ -776,6 +802,7 @@ void buildToolsList(void)
 											tool->alwaysPopup=(bool)alwayspopup;
 											tool->filePath=strdup(filepath);
 											tool->clearView=(bool)clearview;
+											tool->runAsRoot=(bool)rootarg;
 											if(commentarg!=NULL)
 												tool->comment=strdup(commentarg);
 											else

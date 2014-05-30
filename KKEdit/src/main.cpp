@@ -38,6 +38,8 @@ void readConfig(void)
 		{
 			while(feof(fd)==0)
 				{
+					buffer[0]=0;
+					strarg[0]=0;
 					fgets(buffer,1024,fd);
 					sscanf(buffer,"%s %s",(char*)&name,(char*)&strarg);
 
@@ -99,15 +101,22 @@ void readConfig(void)
 
 					if(strcasecmp(name,"terminalcommand")==0)
 						{
-							g_free(terminalCommand);
 							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
-							terminalCommand=strdup(strarg);
+							if(strlen(strarg)>0)
+								{
+									free(terminalCommand);
+									terminalCommand=strdup(strarg);
+								}
 						}
 					
 					if(strcasecmp(name,"rootcommand")==0)
 						{
 							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
-							rootCommand=strdup(strarg);
+							if(strlen(strarg)>0)
+								{
+									free(rootCommand);
+									rootCommand=strdup(strarg);
+								}
 						}
 				}
 			fclose(fd);
