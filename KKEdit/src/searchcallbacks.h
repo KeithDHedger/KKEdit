@@ -20,7 +20,7 @@ void webKitGoBack(GtkWidget* widget,gpointer data);
 void webKitGoForward(GtkWidget* widget,gpointer data);
 void webKitGoHome(GtkWidget* widget,gpointer data);
 #endif
-//void showDocView(GtkWidget* widget,gpointer data);
+
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data);
 void find(GtkWidget* widget,gpointer data);
 void doSearchPrefs(GtkWidget* widget,gpointer data);
