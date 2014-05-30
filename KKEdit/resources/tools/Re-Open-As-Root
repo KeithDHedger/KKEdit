@@ -1,7 +1,9 @@
 name	Re-Open As Root
-command	sh -c 'if [ -e "$(which gtksu 2>/dev/null)" ];then gtksu -- kkedit -m %f;else xterm -e "sudo kkedit -m %f";fi'
+command	kkedit -m "%f"
+comment	Re-Open the current document as root
 flags	8
 interm	0
 inpopup	0
 alwayspopup	1
-comment Re-Open the current document as root.
+clearview	0
+runasroot	1

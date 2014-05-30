@@ -386,8 +386,6 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot)
 			asprintf(&command,"%ssh -c \"%s\"",asroot,commandtorun);
 		}
 
-fprintf(stderr,"%s\n",command);
-
 	if((flags & TOOL_ASYNC)==TOOL_ASYNC)
 		{
 			g_spawn_command_line_async(command,NULL);
