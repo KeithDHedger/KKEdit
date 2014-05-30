@@ -1,5 +1,5 @@
 name	Run As Script
-command	%f
+command	"%f"
 comment	
 flags	16
 interm	0
