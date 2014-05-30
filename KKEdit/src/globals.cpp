@@ -378,13 +378,15 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot)
 
 	if(interm==true)
 		{
-			asprintf(&command,"%s %s %s",terminalCommand,asroot,commandtorun);
+			asprintf(&command,"%s %s sh -c \"%s\"",terminalCommand,asroot,commandtorun);
 			flags=8;
 		}
 	else
 		{
-			asprintf(&command,"%s%s",asroot,commandtorun);
+			asprintf(&command,"%ssh -c \"%s\"",asroot,commandtorun);
 		}
+
+fprintf(stderr,"%s\n",command);
 
 	if((flags & TOOL_ASYNC)==TOOL_ASYNC)
 		{

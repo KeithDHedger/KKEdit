@@ -1,5 +1,6 @@
 0.1.6
-TODO run tool as admin
+Now if no GUI for getting root priviliges specified ALL root actions are run in terminal.
+Added 'Run Tool As Root' to tool options.
 Fixed bug when user terminal command empty.
 External Manpage editor program installed now checked at runtime instead of compile time.
 Added user command for getting root privileges via a GUI in prefs.
