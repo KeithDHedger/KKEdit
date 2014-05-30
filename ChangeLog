@@ -1,4 +1,5 @@
 0.1.6
+Updated example tools that need root to use new features.
 Now if no GUI for getting root priviliges specified ALL root actions are run in terminal.
 Added 'Run Tool As Root' to tool options.
 Fixed bug when user terminal command empty.

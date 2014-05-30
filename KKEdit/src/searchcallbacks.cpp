@@ -724,7 +724,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	GtkWidget*	drop;
 	GSList*		list;
 
-	if(response_id==FINDNEXT)
+	if(response_id!=REPLACE)
 		{
 			drop=findDropBox;
 			entry=findBox;
@@ -765,7 +765,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 				}
 		}
 
-	if(response_id==FINDNEXT)
+	if(response_id!=REPLACE)
 		findList=list;
 	else
 		replaceList=list;
