@@ -40,6 +40,7 @@ void readConfig(void)
 				{
 					buffer[0]=0;
 					strarg[0]=0;
+					name[0]=0;
 					fgets(buffer,1024,fd);
 					sscanf(buffer,"%s %s",(char*)&name,(char*)&strarg);
 
@@ -347,8 +348,8 @@ int main(int argc,char **argv)
 				{
 					gtk_window_set_default_icon_name(PACKAGE "Root");
 					gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
-				}
 
+			}
 			gtk_main();
 		}
 }
