@@ -54,5 +54,6 @@ void toggleToolBar(GtkWidget* widget,gpointer data);
 void toggleToolOutput(GtkWidget* widget,gpointer data);
 void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer);
 void unRedoAll(GtkWidget* widget,gpointer data);
+gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data);
 
 #endif

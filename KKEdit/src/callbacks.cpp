@@ -11,6 +11,7 @@
 #include <unique/unique.h>
 #include <gtksourceview/gtksourceprintcompositor.h>
 #include <ctype.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "config.h"
 #ifdef BUILDDOCVIEWER
@@ -1742,6 +1743,43 @@ void toggleToolBar(GtkWidget* widget,gpointer data)
 	else
 		gtk_menu_item_set_label((GtkMenuItem*)widget,"Show Tool Bar");
 	refreshMainWindow();
+}
+
+void doKeyShortCut(pageStruct* page,int what)
+{
+	switch(what)
+		{
+			case 0:
+				break;
+			case 1:
+				break;
+		}
+}
+
+gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
+{
+	int		loop=0;
+	bool	gotKey=false;
+
+	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
+		{
+			do
+				{
+					if(event->keyval==shortCuts[loop][0])
+						{
+							gotKey=true;
+							break;
+						}
+					loop++;
+				}while(shortCuts[loop][0]!=-1);
+			if(gotKey==true)
+				{
+					printf("key=%i func=%i\n",shortCuts[loop][0],shortCuts[loop][1]);
+					doKeyShortCut((pageStruct*)data,loop);
+				}
+		}
+
+	return FALSE;
 }
 
 

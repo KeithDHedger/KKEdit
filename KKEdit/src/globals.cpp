@@ -14,6 +14,7 @@
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <gtksourceview/gtksourcestyleschememanager.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "config.h"
 #ifdef BUILDDOCVIEWER
@@ -234,6 +235,11 @@ AspellConfig*	aspellConfig;
 AspellSpeller*	spellChecker=0;
 #endif
 
+int			shortCuts[100][2]={
+								{GDK_y,1},
+								{GDK_z,2},
+								{-1,-1}
+};
 
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 {
