@@ -1745,11 +1745,26 @@ void toggleToolBar(GtkWidget* widget,gpointer data)
 	refreshMainWindow();
 }
 
+//gtk_text_buffer_get_iter_at_mark(buffer,
+//     &iter, gtk_text_buffer_get_insert(buffer));
+//
+// row = gtk_text_iter_get_line(&iter);
+// col = gtk_text_iter_get_line_offset(&iter);
+ 
 void doKeyShortCut(pageStruct* page,int what)
 {
+	GtkTextIter	start,end;
+
 	switch(what)
 		{
+//delete line
 			case 0:
+				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&start,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&end,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+				gtk_text_iter_forward_visible_line(&end);
+				gtk_text_iter_set_line_offset(&start,0);
+				gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
+				
 				break;
 			case 1:
 				break;
