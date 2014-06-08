@@ -1798,7 +1798,7 @@ void doKeyShortCut(pageStruct* page,int what)
 //select line ^l
 			case 5:
 				buf->selectLine((GtkTextBuffer*)page->buffer);
-				gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&buf->startLine,&buf->endLine);
+				buf->selectRange((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->lineEnd);
 				break;
 		}
 	delete buf;
