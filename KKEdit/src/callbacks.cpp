@@ -1755,8 +1755,11 @@ void toggleToolBar(GtkWidget* widget,gpointer data)
 void doKeyShortCut(pageStruct* page,int what)
 {
 	GtkTextIter	start,end;
-	TextBuffer *buf;
-	buf = new TextBuffer;
+	TextBuffer*	buf;
+	char*		text;
+
+	buf=new TextBuffer;
+
 	switch(what)
 		{
 //delete line ^Y
@@ -1780,6 +1783,18 @@ void doKeyShortCut(pageStruct* page,int what)
 			case 3:
 				if(buf->selectWord((GtkTextBuffer*)page->buffer))
 					gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->cursorPos);
+				break;
+//duplictae line ^D
+			case 4:
+				buf->selectLine((GtkTextBuffer*)page->buffer);
+				buf->getCursorIter((GtkTextBuffer*)page->buffer);
+				text=buf->getSelectedText((GtkTextBuffer*)page->buffer);
+				gtk_text_iter_backward_lines(&buf->cursorPos,-1);
+				gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+					gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&buf->cursorPos,text,-1);
+					free(text);
+				gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+
 				break;
 		}
 	delete buf;
