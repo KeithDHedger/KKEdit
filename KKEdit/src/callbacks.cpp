@@ -1771,6 +1771,37 @@ void doKeyShortCut(pageStruct* page,int what)
 		}
 }
 
+void loadKeybindings(void)
+{
+	FILE*	fd=NULL;
+	char*	filename;
+	char	buffer[1024];
+	char	key[256];
+	char	func[256];
+	int		keycnt=0;
+
+	asprintf(&filename,"%s/.KKEdit/keybindings",getenv("HOME"));
+	fd=fopen(filename,"r");
+	if(fd!=NULL)
+		{
+			while(feof(fd)==0)
+				{
+					buffer[0]=0;
+					key[0]=0;
+					func[0]=0;
+					fgets(buffer,1024,fd);
+					sscanf(buffer,"%s %s",&key,&func);
+
+					shortCuts[keycnt][0]=(int)atoi(key);
+					shortCuts[keycnt][1]=(int)atoi(func);
+					keycnt++;
+				}
+			fclose(fd);
+		}
+	shortCuts[keycnt][0]=-1;
+	shortCuts[keycnt][1]=-1;
+}
+
 gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 {
 	int		loop=0;
@@ -1778,6 +1809,7 @@ gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 
 	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
 		{
+printf("raw code = %i\n",event->keyval);
 			do
 				{
 					if(event->keyval==shortCuts[loop][0])

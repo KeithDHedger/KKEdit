@@ -215,6 +215,7 @@ void init(void)
 	toolBarLayout=strdup("NOSsXCPsURsFGsE9ADL");
 
 	readConfig();
+	loadKeybindings();
 
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
