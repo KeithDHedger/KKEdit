@@ -1759,18 +1759,27 @@ void doKeyShortCut(pageStruct* page,int what)
 	buf = new TextBuffer;
 	switch(what)
 		{
-//delete line
+//delete line ^Y
 			case 0:
-				//gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&start,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-				//gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&end,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-				//gtk_text_iter_forward_visible_line(&end);
-				//gtk_text_iter_set_line_offset(&start,0);
 				buf->selectLine((GtkTextBuffer*)page->buffer);
-//				gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
 				gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->lineEnd);
 				break;
+//delete from cursor to end of line ^k
 			case 1:
-				
+				buf->selectToLineEnd((GtkTextBuffer*)page->buffer);
+				if(!gtk_text_iter_ends_line(&buf->cursorPos))
+					buf->deleteFromCursor((GtkTextBuffer*)page->buffer,&buf->lineEnd);
+				break;
+//delete from cursor to beginning of line ^?
+			case 2:
+				buf->selectToLineStart((GtkTextBuffer*)page->buffer);
+				if(!gtk_text_iter_starts_line(&buf->cursorPos))
+					buf->deleteToCursor((GtkTextBuffer*)page->buffer,&buf->lineStart);
+				break;
+//delete word under cursor ^h
+			case 3:
+				if(buf->selectWord((GtkTextBuffer*)page->buffer))
+					gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->cursorPos);
 				break;
 		}
 	delete buf;
