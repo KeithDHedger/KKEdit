@@ -1764,9 +1764,9 @@ void doKeyShortCut(pageStruct* page,int what)
 				gtk_text_iter_forward_visible_line(&end);
 				gtk_text_iter_set_line_offset(&start,0);
 				gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
-				
 				break;
 			case 1:
+				
 				break;
 		}
 }
