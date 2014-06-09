@@ -149,6 +149,9 @@ void readConfig(void)
 						showBMBar=(bool)atoi(strarg);
 					if(strcasecmp(name,"showtoolbar")==0)
 						showToolBar=(bool)atoi(strarg);
+//status bar
+					if(strcasecmp(name,"showstatusbar")==0)
+						showStatus=(bool)atoi(strarg);
 				}
 			fclose(fd);
 		}
@@ -198,6 +201,7 @@ void init(void)
 	highlightColour=strdup("#A3ACFF");
 	showBMBar=false;
 	listFunction=0;
+	showStatus=true;
 
 	asprintf(&filename,"%s/.KKEdit/tools",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);

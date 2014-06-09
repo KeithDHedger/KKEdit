@@ -526,6 +526,7 @@ pageStruct* makeNewPage(void)
 	GtkTextIter		iter;
 
 	page=(pageStruct*)malloc(sizeof(pageStruct));
+	page->buffer=NULL;
 
 	page->pane=gtk_vpaned_new();
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
@@ -574,7 +575,8 @@ pageStruct* makeNewPage(void)
 
 	g_signal_connect(page->view, "line-mark-activated",G_CALLBACK(line_mark_activated),page);
 	add_source_mark_pixbufs(GTK_SOURCE_VIEW(page->view));
-
+//status bar
+	g_signal_connect_after(G_OBJECT(page->buffer),"mark_set",G_CALLBACK(updateStatuBar),(void*)page);
 	return(page);
 }
 

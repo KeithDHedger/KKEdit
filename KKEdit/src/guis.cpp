@@ -896,6 +896,43 @@ void doIconView(void)
 	g_signal_connect(G_OBJECT(iconView),"button-press-event",G_CALLBACK(clickIt),NULL);
 }
 
+void setKeyCuts(GtkWidget* widget,gpointer data)
+{
+}
+
+void buildKeys()
+{
+	GtkWidget*	vbox;
+	GtkWidget*	item;
+	GtkWidget*	label;
+	GtkWidget*	hbox;
+
+	keysWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_title((GtkWindow*)keysWindow,"Define Keyboard Shortcuts");
+	vbox=gtk_vbox_new(false,8);
+	hbox=gtk_hbox_new(false,8);
+
+//buttons
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
+
+	hbox=gtk_hbox_new(true,4);
+	item=gtk_button_new_from_stock(GTK_STOCK_APPLY);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
+	gtk_widget_set_name(item,"apply");
+	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setKeyCuts),(void*)item);	
+
+	item=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
+	gtk_widget_set_name(item,"cancel");
+	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setKeyCuts),(void*)item);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,2);
+
+//show it
+	gtk_container_add(GTK_CONTAINER(keysWindow),(GtkWidget*)vbox);
+	gtk_widget_show_all(keysWindow);
+
+}
+
 void doPrefs(void)
 {
 	GtkWidget*	vbox;
@@ -1126,6 +1163,14 @@ void doPrefs(void)
 	if(rootCommand!=NULL)
 		gtk_entry_set_text((GtkEntry*)rootCommandBox,rootCommand);
 	gtk_widget_show_all(hbox2);
+//show keybindings dialog
+	hbox2=gtk_hbox_new(false,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Customize Keyboard Shortcuts: "),false,false,0);
+	item=gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
+	gtk_box_pack_start(GTK_BOX(hbox2),item,false,false,2);
+	gtk_widget_set_name(item,"makekeys");
+	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
+	gtk_box_pack_start(GTK_BOX(vbox),hbox2,false,false,0);
 
 //end admin
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
@@ -1212,7 +1257,9 @@ void buildMainGui(void)
 	GtkWidget*		image;
 	GtkWidget*		menurecent;
 	GtkWidget*		scrollbox;
+	GtkWidget*		mainwindowbox;
 
+	mainwindowbox=gtk_vbox_new(false,0);
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size((GtkWindow*)window,windowWidth,windowHeight);
 	if(windowX!=-1 && windowY!=-1)
@@ -1475,6 +1522,13 @@ void buildMainGui(void)
 		menuToolOut=gtk_menu_item_new_with_label("Show Tool Output");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuToolOut);
 	gtk_signal_connect(GTK_OBJECT(menuToolOut),"activate",G_CALLBACK(toggleToolOutput),NULL);
+//toggle statusbar
+	if(showStatus)
+		menuStatusBar=gtk_menu_item_new_with_label("Hide Status Bar");
+	else
+		menuStatusBar=gtk_menu_item_new_with_label("Show Status Bar");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuStatusBar);
+	gtk_signal_connect(GTK_OBJECT(menuStatusBar),"activate",G_CALLBACK(toggleStatusBar),NULL);
 
 //navigation menu
 	menunav=gtk_menu_item_new_with_label("Navigation");
@@ -1563,8 +1617,11 @@ void buildMainGui(void)
 	mainVPane=gtk_vpaned_new();
 	gtk_container_set_border_width(GTK_CONTAINER(mainVPane),0);
 	gtk_paned_add1(GTK_PANED (mainVPane),vbox);
-	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)mainVPane);
-  
+
+	gtk_container_add(GTK_CONTAINER(mainwindowbox),(GtkWidget*)mainVPane);
+	
+	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)mainwindowbox);
+
 	toolOutVBox=gtk_vbox_new(false,0);
 
 	gtk_paned_add2(GTK_PANED(mainVPane),toolOutVBox);
@@ -1575,6 +1632,10 @@ void buildMainGui(void)
 	gtk_container_add(GTK_CONTAINER(scrollbox),(GtkWidget*)toolOutputView);
 
 	gtk_container_add(GTK_CONTAINER(toolOutVBox),(GtkWidget*)scrollbox);
+
+//add status bar
+	statusWidget=gtk_statusbar_new();
+	gtk_box_pack_end(GTK_BOX(mainwindowbox),statusWidget,false,true,0);
 
 	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 }

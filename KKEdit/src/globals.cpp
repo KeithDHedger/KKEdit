@@ -43,6 +43,7 @@ GtkWidget*		menumanpage;
 GtkWidget*		menuItemOpen=NULL;
 GtkWidget*		menuView=NULL;
 GtkWidget*		menuToolOut=NULL;
+GtkWidget*		menuStatusBar=NULL;
 
 GList*			newBookMarksList=NULL;
 GtkWidget*		menuBookMark;
@@ -108,6 +109,9 @@ GtkWidget*		fontButton;
 GtkWidget*		terminalBox;
 GtkWidget*		rootCommandBox;
 
+//key short cuts
+GtkWidget*		keysWindow=NULL;
+
 bool			tmpIndent;
 bool			tmpLineNumbers;
 bool			tmpLineWrap;
@@ -141,6 +145,8 @@ bool			showToolOutWin=false;
 GtkWidget*		toolOutputView=NULL;
 GtkTextBuffer*	toolOutputBuffer=NULL;
 GtkWidget*		toolOutVBox=NULL;
+bool			showStatus;
+GtkWidget*		statusWidget=NULL;
 
 char*			selectedToolPath=NULL;
 GList*			toolsList=NULL;

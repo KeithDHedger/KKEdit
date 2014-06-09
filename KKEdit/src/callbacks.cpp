@@ -327,6 +327,11 @@ void refreshMainWindow(void)
 	else
 		gtk_widget_hide(toolOutVBox);
 
+	if(showStatus)
+		gtk_widget_show(statusWidget);
+	else
+		gtk_widget_hide(statusWidget);
+
 	if(showToolBar)
 		gtk_widget_show((GtkWidget*)toolBarBox);
 	else
@@ -1226,6 +1231,7 @@ void writeExitData(void)
 			fprintf(fd,"allfiles	%i\n",(int)findInAllFiles);
 			fprintf(fd,"showbmbar	%i\n",(int)showBMBar);
 			fprintf(fd,"showtoolbar	%i\n",(int)showToolBar);
+			fprintf(fd,"showstatusbar	%i\n",(int)showStatus);
 			fclose(fd);
 		}
 	g_free(filename);
@@ -1745,12 +1751,33 @@ void toggleToolBar(GtkWidget* widget,gpointer data)
 		gtk_menu_item_set_label((GtkMenuItem*)widget,"Show Tool Bar");
 	refreshMainWindow();
 }
+//toggleStatusBar
+void toggleStatusBar(GtkWidget* widget,gpointer data)
+{
+	showStatus=!showStatus;
+	if(showStatus)
+		gtk_menu_item_set_label((GtkMenuItem*)widget,"Hide Status Bar");
+	else
+		gtk_menu_item_set_label((GtkMenuItem*)widget,"Show Status Bar");
+	refreshMainWindow();
+}
 
-//gtk_text_buffer_get_iter_at_mark(buffer,
-//     &iter, gtk_text_buffer_get_insert(buffer));
-//
-// row = gtk_text_iter_get_line(&iter);
-// col = gtk_text_iter_get_line_offset(&iter);
+void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data)
+{
+	pageStruct* page=(pageStruct*)data;
+	TextBuffer*	buf;
+	char*		message=NULL;
+
+	if((page==NULL) || (showStatus==false))
+		return;
+
+	buf=new TextBuffer(textbuffer);
+
+	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
+	asprintf(&message,"Line %i Column %i \t\tHightlight Syntax %s\t\tFilePath %s",buf->lineNum,buf->column,page->lang,page->filePath);
+	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
+	free(message);
+}
  
 void doKeyShortCut(pageStruct* page,int what)
 {

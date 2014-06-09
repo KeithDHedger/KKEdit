@@ -56,5 +56,6 @@ void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer);
 void unRedoAll(GtkWidget* widget,gpointer data);
 gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data);
 void loadKeybindings(void);
-
+void toggleStatusBar(GtkWidget* widget,gpointer data);
+void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data);
 #endif

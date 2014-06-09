@@ -166,6 +166,7 @@ extern GtkWidget*		menurevert;
 extern GtkWidget*		menumanpage;
 extern GtkWidget*		menuItemOpen;
 extern GtkWidget*		menuToolOut;
+extern GtkWidget*		menuStatusBar;
 
 extern GtkWidget*		redoMenu;
 extern GtkWidget*		undoMenu;
@@ -211,6 +212,9 @@ extern GtkWidget*		fontButton;
 extern GtkWidget*		terminalBox;
 extern GtkWidget*		rootCommandBox;
 
+//key short cuts
+extern GtkWidget*		keysWindow;
+
 extern bool				tmpIndent;
 extern bool				tmpLineNumbers;
 extern bool				tmpLineWrap;
@@ -245,6 +249,8 @@ extern bool				showToolOutWin;
 extern GtkWidget*		toolOutputView;
 extern GtkTextBuffer*	toolOutputBuffer;
 extern GtkWidget*		toolOutVBox;
+extern bool				showStatus;
+extern GtkWidget*		statusWidget;
 
 extern char*			selectedToolPath;
 extern GList*			toolsList;
