@@ -1814,7 +1814,7 @@ void doKeyShortCut(int what)
 				break;
 //duplictae line ^D
 			case 4:
-				buf->selectLine();
+				//buf->selectLine();
 				buf->getCursorIter();
 				text=buf->getSelectedText();
 				gtk_text_iter_backward_lines(&buf->cursorPos,-1);
@@ -1825,7 +1825,7 @@ void doKeyShortCut(int what)
 				break;
 //select line ^l
 			case 5:
-				buf->selectLine();
+				//buf->selectLine();
 				buf->selectRange(&buf->lineStart,&buf->lineEnd);
 				break;
 //Move Current Line Up ^m
