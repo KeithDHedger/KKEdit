@@ -56,6 +56,8 @@
 #define USEURI			-1
 #define USEFILE			-2
 
+#define NUMSHORTCUTS	7
+
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 
 struct lineMarkStruc

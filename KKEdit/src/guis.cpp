@@ -31,6 +31,8 @@ GtkWidget*		recent;
 GtkToolItem*	tool[18]={NULL,};
 GtkIconView*	iconView=NULL;
 GtkListStore*	listStore=NULL;
+GtkWidget*		entries[NUMSHORTCUTS];
+const char* 	shortcuttext[NUMSHORTCUTS]={"Delete Current Line","Delete To End Of Line","Delete To Beginning Of Line","Delete Word Under Cursor","Duplicate Current Line","Select Current Line","Move Current Line Up"};
 
 void selectToolOptions(GtkWidget* widget,gpointer data)
 {
@@ -898,7 +900,47 @@ void doIconView(void)
 
 void setKeyCuts(GtkWidget* widget,gpointer data)
 {
+	const char*		text;
+	FILE*			fd=NULL;
+	char*			filename;
+
 	printf("%s\n",gtk_widget_get_name(widget));
+	if(strcasecmp(gtk_widget_get_name(widget),"cancel")==0)
+		gtk_widget_hide(keysWindow);
+
+	if(strcasecmp(gtk_widget_get_name(widget),"apply")==0)
+		{
+			for(int j=0;j<NUMSHORTCUTS;j++)
+				{
+					text=gtk_entry_get_text((GtkEntry*)entries[j]);
+					shortCuts[j][0]=gdk_keyval_from_name(text);
+					shortCuts[j][1]=j;
+				}
+			
+			gtk_widget_hide(keysWindow);
+
+			asprintf(&filename,"%s/.KKEdit/keybindings",getenv("HOME"));
+			fd=fopen(filename,"w");
+			if(fd!=NULL)
+				{
+					for(int j=0;j<NUMSHORTCUTS;j++)
+						{
+							fprintf(fd,"%i %i ^%c %s\n",shortCuts[j][0],shortCuts[j][1],shortCuts[j][0],shortcuttext[j]);
+						}
+					fclose(fd);
+				}
+		}
+}
+
+gboolean setKeyInEntry(GtkEntry* widget,GdkEventKey* event,gpointer data)
+{
+	int entrynum=(int)(long)data;
+
+	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
+		{
+			gtk_entry_set_text(widget,gdk_keyval_name(event->keyval));
+		}
+	return(true);
 }
 
 void buildKeys()
@@ -907,31 +949,51 @@ void buildKeys()
 	GtkWidget*	item;
 	GtkWidget*	label;
 	GtkWidget*	hbox;
+	char		keystring[32];
+	int			loop=0;
 
-	keysWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title((GtkWindow*)keysWindow,"Define Keyboard Shortcuts");
-	vbox=gtk_vbox_new(false,8);
-	hbox=gtk_hbox_new(false,8);
+	if(keysWindow==NULL)
+		{
+			keysWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+			gtk_window_set_title((GtkWindow*)keysWindow,"Define Keyboard Shortcuts");
+			vbox=gtk_vbox_new(false,8);
 
+//functions
+			do
+				{
+					hbox=gtk_hbox_new(true,0);
+					gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(shortcuttext[loop]),true,true,0);
+					entries[loop]=gtk_entry_new();
+					g_signal_connect(G_OBJECT(entries[loop]),"key-press-event",G_CALLBACK(setKeyInEntry),NULL);
+					gtk_box_pack_start(GTK_BOX(hbox),entries[loop],true,true,0);
+					gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+					loop++;
+				}while(shortCuts[loop][0]!=-1);
 //buttons
-	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
+			gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
-	hbox=gtk_hbox_new(true,4);
-	item=gtk_button_new_from_stock(GTK_STOCK_APPLY);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
-	gtk_widget_set_name(item,"apply");
-	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setKeyCuts),(void*)item);	
+			hbox=gtk_hbox_new(true,4);
+			item=gtk_button_new_from_stock(GTK_STOCK_APPLY);
+			gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
+			gtk_widget_set_name(item,"apply");
+			g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setKeyCuts),(void*)item);	
 
-	item=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
-	gtk_widget_set_name(item,"cancel");
-	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setKeyCuts),(void*)item);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,2);
+			item=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+			gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
+			gtk_widget_set_name(item,"cancel");
+			g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setKeyCuts),(void*)item);
+			gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,2);
 
 //show it
-	gtk_container_add(GTK_CONTAINER(keysWindow),(GtkWidget*)vbox);
-	gtk_widget_show_all(keysWindow);
+			gtk_container_add(GTK_CONTAINER(keysWindow),(GtkWidget*)vbox);
+		}
 
+	for(int j=0;j<NUMSHORTCUTS;j++)
+		{
+			sprintf(&keystring[0],"%s",gdk_keyval_name(shortCuts[j][0]));
+			gtk_entry_set_text((GtkEntry*)entries[j],(char*)&keystring);
+		}
+	gtk_widget_show_all(keysWindow);
 }
 
 void doPrefs(void)
@@ -1267,6 +1329,8 @@ void buildMainGui(void)
 		gtk_window_move((GtkWindow *)window,windowX,windowY);
 
 	g_signal_connect(G_OBJECT(window),"delete-event",G_CALLBACK(doShutdown),NULL);
+	g_signal_connect(G_OBJECT(window),"key-press-event",G_CALLBACK(keyShortCut),NULL);
+
 	accgroup=gtk_accel_group_new();
 	gtk_window_add_accel_group((GtkWindow*)window,accgroup);
 

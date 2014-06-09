@@ -1779,11 +1779,12 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 	free(message);
 }
  
-void doKeyShortCut(pageStruct* page,int what)
+void doKeyShortCut(int what)
 {
 	GtkTextIter	start,end;
 	TextBuffer*	buf;
 	char*		text;
+	pageStruct*	page=getPageStructPtr(-1);
 
 	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 
@@ -1851,10 +1852,12 @@ void loadKeybindings(void)
 					func[0]=0;
 					fgets(buffer,1024,fd);
 					sscanf(buffer,"%s %s",&key,&func);
-
-					shortCuts[keycnt][0]=(int)atoi(key);
-					shortCuts[keycnt][1]=(int)atoi(func);
-					keycnt++;
+					if(strlen(buffer)>3)
+						{
+							shortCuts[keycnt][0]=(int)atoi(key);
+							shortCuts[keycnt][1]=(int)atoi(func);
+							keycnt++;
+						}
 				}
 			fclose(fd);
 		}
@@ -1864,26 +1867,22 @@ void loadKeybindings(void)
 
 gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 {
-	int		loop=0;
+	int		loop;
 	bool	gotKey=false;
 
 	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
 		{
-printf("raw code = %i char=%c\n",event->keyval,gdk_unicode_to_keyval(event->keyval));
-			do
+			for(loop=0;loop<NUMSHORTCUTS;loop++)
 				{
 					if(event->keyval==shortCuts[loop][0])
 						{
 							gotKey=true;
 							break;
 						}
-					loop++;
-				}while(shortCuts[loop][0]!=-1);
-			if(gotKey==true)
-				{
-					printf("key=%i func=%i\n",shortCuts[loop][0],shortCuts[loop][1]);
-					doKeyShortCut((pageStruct*)data,loop);
 				}
+
+			if(gotKey==true)
+				doKeyShortCut(loop);
 		}
 
 	return FALSE;

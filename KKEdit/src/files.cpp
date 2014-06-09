@@ -718,7 +718,7 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_buffer_move_mark((GtkTextBuffer*)page->buffer,page->backMark,&iter);
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
 
-	g_signal_connect(G_OBJECT(window),"key-press-event",G_CALLBACK(keyShortCut),page);
+//	g_signal_connect(G_OBJECT(window),"key-press-event",G_CALLBACK(keyShortCut),page);
 	setToobarSensitive();
 
 	return TRUE;
