@@ -1758,37 +1758,37 @@ void doKeyShortCut(pageStruct* page,int what)
 	TextBuffer*	buf;
 	char*		text;
 
-	buf=new TextBuffer;
+	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 
 	switch(what)
 		{
 //delete line ^Y
 			case 0:
-				buf->selectLine((GtkTextBuffer*)page->buffer);
+				buf->selectLine();
 				gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->lineEnd);
 				break;
 //delete from cursor to end of line ^k
 			case 1:
-				buf->selectToLineEnd((GtkTextBuffer*)page->buffer);
+				buf->selectToLineEnd();
 				if(!gtk_text_iter_ends_line(&buf->cursorPos))
-					buf->deleteFromCursor((GtkTextBuffer*)page->buffer,&buf->lineEnd);
+					buf->deleteFromCursor(&buf->lineEnd);
 				break;
 //delete from cursor to beginning of line ^?
 			case 2:
-				buf->selectToLineStart((GtkTextBuffer*)page->buffer);
+				buf->selectToLineStart();
 				if(!gtk_text_iter_starts_line(&buf->cursorPos))
-					buf->deleteToCursor((GtkTextBuffer*)page->buffer,&buf->lineStart);
+					buf->deleteToCursor(&buf->lineStart);
 				break;
 //delete word under cursor ^h
 			case 3:
-				if(buf->selectWord((GtkTextBuffer*)page->buffer))
+				if(buf->selectWord())
 					gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->cursorPos);
 				break;
 //duplictae line ^D
 			case 4:
-				buf->selectLine((GtkTextBuffer*)page->buffer);
-				buf->getCursorIter((GtkTextBuffer*)page->buffer);
-				text=buf->getSelectedText((GtkTextBuffer*)page->buffer);
+				buf->selectLine();
+				buf->getCursorIter();
+				text=buf->getSelectedText();
 				gtk_text_iter_backward_lines(&buf->cursorPos,-1);
 				gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 					gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&buf->cursorPos,text,-1);
@@ -1797,8 +1797,8 @@ void doKeyShortCut(pageStruct* page,int what)
 				break;
 //select line ^l
 			case 5:
-				buf->selectLine((GtkTextBuffer*)page->buffer);
-				buf->selectRange((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->lineEnd);
+				buf->selectLine();
+				buf->selectRange(&buf->lineStart,&buf->lineEnd);
 				break;
 		}
 	delete buf;
@@ -1842,7 +1842,7 @@ gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 
 	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
 		{
-printf("raw code = %i\n",event->keyval);
+printf("raw code = %i char=%c\n",event->keyval,gdk_unicode_to_keyval(event->keyval));
 			do
 				{
 					if(event->keyval==shortCuts[loop][0])
