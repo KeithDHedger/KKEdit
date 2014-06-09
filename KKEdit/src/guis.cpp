@@ -898,6 +898,7 @@ void doIconView(void)
 
 void setKeyCuts(GtkWidget* widget,gpointer data)
 {
+	printf("%s\n",gtk_widget_get_name(widget));
 }
 
 void buildKeys()
