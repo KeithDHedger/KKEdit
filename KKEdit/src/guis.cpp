@@ -904,7 +904,6 @@ void setKeyCuts(GtkWidget* widget,gpointer data)
 	FILE*			fd=NULL;
 	char*			filename;
 
-	printf("%s\n",gtk_widget_get_name(widget));
 	if(strcasecmp(gtk_widget_get_name(widget),"cancel")==0)
 		gtk_widget_hide(keysWindow);
 
@@ -937,9 +936,8 @@ gboolean setKeyInEntry(GtkEntry* widget,GdkEventKey* event,gpointer data)
 	int entrynum=(int)(long)data;
 
 	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
-		{
-			gtk_entry_set_text(widget,gdk_keyval_name(event->keyval));
-		}
+		gtk_entry_set_text(widget,gdk_keyval_name(event->keyval));
+
 	return(true);
 }
 
@@ -950,7 +948,7 @@ void buildKeys()
 	GtkWidget*	label;
 	GtkWidget*	hbox;
 	char		keystring[32];
-	int			loop=0;
+	int			loop;
 
 	if(keysWindow==NULL)
 		{
@@ -959,7 +957,7 @@ void buildKeys()
 			vbox=gtk_vbox_new(false,8);
 
 //functions
-			do
+			for(loop=0;loop<NUMSHORTCUTS;loop++)
 				{
 					hbox=gtk_hbox_new(true,0);
 					gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(shortcuttext[loop]),true,true,0);
@@ -967,8 +965,7 @@ void buildKeys()
 					g_signal_connect(G_OBJECT(entries[loop]),"key-press-event",G_CALLBACK(setKeyInEntry),NULL);
 					gtk_box_pack_start(GTK_BOX(hbox),entries[loop],true,true,0);
 					gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
-					loop++;
-				}while(shortCuts[loop][0]!=-1);
+				}
 //buttons
 			gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
@@ -990,8 +987,11 @@ void buildKeys()
 
 	for(int j=0;j<NUMSHORTCUTS;j++)
 		{
-			sprintf(&keystring[0],"%s",gdk_keyval_name(shortCuts[j][0]));
-			gtk_entry_set_text((GtkEntry*)entries[j],(char*)&keystring);
+			if(gdk_keyval_name(shortCuts[j][0])!=NULL)
+				{
+					sprintf(&keystring[0],"%s",gdk_keyval_name(shortCuts[j][0]));
+					gtk_entry_set_text((GtkEntry*)entries[j],(char*)&keystring);
+				}
 		}
 	gtk_widget_show_all(keysWindow);
 }

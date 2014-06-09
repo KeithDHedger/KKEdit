@@ -1828,6 +1828,18 @@ void doKeyShortCut(int what)
 				buf->selectLine();
 				buf->selectRange(&buf->lineStart,&buf->lineEnd);
 				break;
+//Move Current Line Up ^m
+			case 6:
+				text=buf->getSelectedText();
+				gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+					gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->lineEnd);
+					buf->getCursorIter();
+					gtk_text_iter_backward_visible_line(&buf->cursorPos);
+					gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&buf->cursorPos,text,-1);
+					gtk_text_iter_backward_visible_line(&buf->cursorPos);
+					gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&buf->cursorPos);
+				gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+				break;
 		}
 	delete buf;
 }
