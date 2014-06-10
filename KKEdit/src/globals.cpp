@@ -254,7 +254,7 @@ int				shortCuts[100][2]={
 	{93,9},
 	{91,10},
 	{39,11},
-	{47,12}
+	{64,12}
 };
 //121 0 ^y Delete Current Line
 //63 1 ^? Delete To End Of Line
@@ -265,6 +265,10 @@ int				shortCuts[100][2]={
 //108 6 ^l Select Current Line
 //109 7 ^m Move Current Line Up
 //77 8 ^M Move Current Line Down
+//93 9 ^] Select From Cursor To End Of Line
+//91 10 ^[ Select From Beginning Of Line To Cursor
+//39 11 ^' Move Selection Up
+//64 12 ^@ Move Selection Down
 
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 {
