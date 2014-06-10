@@ -404,14 +404,25 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 	pageStruct* page=(pageStruct*)data;
 	TextBuffer*	buf;
 	char*		message=NULL;
+	char*		path;
+	const char*	lang;
 
 	if((page==NULL) || (showStatus==false))
 		return;
 
+	path=page->filePath;
+	lang=page->lang;
+
+	if(path==NULL)
+		path="";
+
+	if(lang==NULL)
+		lang="";
+
 	buf=new TextBuffer(textbuffer);
 
 	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
-	asprintf(&message,"Line %i Column %i \t\tHightlight Syntax %s\t\tFilePath %s",buf->lineNum,buf->column,page->lang,page->filePath);
+	asprintf(&message,"Line %i Column %i \t\tSyntax Highlighting %s\t\tFilePath %s",buf->lineNum,buf->column,lang,path);
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
 	free(message);
 	delete buf;
