@@ -1,4 +1,5 @@
 0.1.7
+Status bar now doesn't show '(null)' if no syntax highlighting or filepath.
 Added more shortcuts.
 Update status bar on tab switch.
 Added 'Show/Hide Status Bar' to 'View' menu. 

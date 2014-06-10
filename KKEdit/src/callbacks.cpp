@@ -1874,6 +1874,24 @@ void doKeyShortCut(int what)
 			case 10:
 				buf->selectToLineStart();
 				break;
+//Move Selection Up
+			case 11:
+				if(gtk_text_buffer_get_selection_bounds(buf->textBuffer,&buf->lineStart,&buf->lineEnd))
+					{
+						gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+							text=gtk_text_buffer_get_text(buf->textBuffer,&buf->lineStart,&buf->lineEnd,true);
+							gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->lineEnd);
+							buf->getCursorIter();
+							gtk_text_iter_backward_visible_line(&buf->cursorPos);
+							gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&buf->cursorPos,text,-1);
+							gtk_text_iter_backward_visible_line(&buf->cursorPos);
+							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&buf->cursorPos);
+						gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+					}
+				break;
+//Move Selection Down
+			case 12:
+				break;
 		}
 	delete buf;
 }
