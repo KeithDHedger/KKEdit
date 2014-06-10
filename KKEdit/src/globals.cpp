@@ -251,8 +251,8 @@ int				shortCuts[100][2]={
 	{108,6},
 	{109,7},
 	{77,8},
-	{0,9},
-	{0,10}
+	{93,9},
+	{91,10}
 };
 //121 0 ^y Delete Current Line
 //63 1 ^? Delete To End Of Line

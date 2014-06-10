@@ -1855,9 +1855,11 @@ void doKeyShortCut(int what)
 					gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&buf->cursorPos);
 				gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 				break;
+//Select From Cursor To End Of Line
 			case 9:
 				buf->selectToLineEnd();
 				break;
+//Select From Beginning Of Line To Cursor
 			case 10:
 				buf->selectToLineStart();
 				break;
