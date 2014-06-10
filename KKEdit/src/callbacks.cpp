@@ -1840,6 +1840,19 @@ void doKeyShortCut(int what)
 					gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&buf->cursorPos);
 				gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 				break;
+//Move Current Line Down
+			case 7:
+				text=buf->getSelectedText();
+				gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+					gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->lineEnd);
+					buf->getCursorIter();
+					gtk_text_iter_forward_visible_line(&buf->cursorPos);
+					gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&buf->cursorPos,text,-1);
+					buf->getCursorIter();
+					gtk_text_iter_forward_visible_line(&buf->cursorPos);
+					gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&buf->cursorPos);
+				gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+				break;
 		}
 	delete buf;
 }
@@ -1873,8 +1886,6 @@ void loadKeybindings(void)
 				}
 			fclose(fd);
 		}
-	shortCuts[keycnt][0]=-1;
-	shortCuts[keycnt][1]=-1;
 }
 
 gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)

@@ -241,13 +241,25 @@ AspellConfig*	aspellConfig;
 AspellSpeller*	spellChecker=0;
 #endif
 
-//int			shortCuts[100][2]={
-//								{GDK_y,1},
-//								{GDK_z,2},
-//								{-1,-1}
-//};
-//
-int			shortCuts[100][2]={{-1,-1},};
+int				shortCuts[100][2]={
+	{121,0},
+	{63,1},
+	{107,2},
+	{104,3},
+	{68,4},
+	{108,5},
+	{109,6},
+	{77,7}
+};
+
+//121 0 ^y Delete Current Line
+//63 1 ^? Delete To End Of Line
+//107 2 ^k Delete To Beginning Of Line
+//104 3 ^h Delete Word Under Cursor
+//68 4 ^D Duplicate Current Line
+//108 5 ^l Select Current Line
+//109 6 ^m Move Current Line Up
+//77 7 ^M Move Current Line Down
 
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 {
