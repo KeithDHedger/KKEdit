@@ -1794,10 +1794,11 @@ void toggleStatusBar(GtkWidget* widget,gpointer data)
 
 void doKeyShortCut(int what)
 {
-	GtkTextIter	start,end;
-	TextBuffer*	buf;
-	char*		text;
-	pageStruct*	page=getPageStructPtr(-1);
+	GtkTextIter		start,end;
+	TextBuffer*		buf;
+	char*			text;
+	pageStruct*		page=getPageStructPtr(-1);
+	GtkTextMark*	mark;
 
 	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 
@@ -1883,7 +1884,12 @@ void doKeyShortCut(int what)
 							gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->lineEnd);
 							buf->getCursorIter();
 							gtk_text_iter_backward_visible_line(&buf->cursorPos);
+							mark=gtk_text_buffer_create_mark((GtkTextBuffer*)page->buffer,"moveup",&buf->cursorPos,true);
 							gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&buf->cursorPos,text,-1);
+							gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&buf->cursorPos,mark);
+							
+							
+							
 							gtk_text_iter_backward_visible_line(&buf->cursorPos);
 							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&buf->cursorPos);
 						gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
