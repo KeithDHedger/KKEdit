@@ -399,6 +399,24 @@ int show_question(char* filename)
 	return(result);
 }
 
+void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data)
+{
+	pageStruct* page=(pageStruct*)data;
+	TextBuffer*	buf;
+	char*		message=NULL;
+
+	if((page==NULL) || (showStatus==false))
+		return;
+
+	buf=new TextBuffer(textbuffer);
+
+	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
+	asprintf(&message,"Line %i Column %i \t\tHightlight Syntax %s\t\tFilePath %s",buf->lineNum,buf->column,page->lang,page->filePath);
+	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
+	free(message);
+	delete buf;
+}
+
 void setSensitive(void)
 {
 	pageStruct*		page=getPageStructPtr(currentTabNumber);
@@ -431,6 +449,7 @@ void setSensitive(void)
 		}
 	else
 		{
+			updateStatuBar((GtkTextBuffer*)page->buffer,NULL,NULL,page);
 			text=gtk_label_get_text((GtkLabel*)page->tabName);
 //menu
 			gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));
@@ -1762,24 +1781,6 @@ void toggleStatusBar(GtkWidget* widget,gpointer data)
 	refreshMainWindow();
 }
 
-void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data)
-{
-	pageStruct* page=(pageStruct*)data;
-	TextBuffer*	buf;
-	char*		message=NULL;
-
-	if((page==NULL) || (showStatus==false))
-		return;
-
-	buf=new TextBuffer(textbuffer);
-
-	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
-	asprintf(&message,"Line %i Column %i \t\tHightlight Syntax %s\t\tFilePath %s",buf->lineNum,buf->column,page->lang,page->filePath);
-	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
-	free(message);
-}
-
-
 void doKeyShortCut(int what)
 {
 	GtkTextIter	start,end;
@@ -1809,6 +1810,8 @@ void doKeyShortCut(int what)
 				break;
 //Select Word Under Cursor
 			case 3:
+				if(buf->selectWord())
+					buf->selectRange(&buf->lineStart,&buf->cursorPos);
 				break;
 //delete word under cursor ^h
 			case 4:

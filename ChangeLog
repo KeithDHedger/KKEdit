@@ -1,3 +1,10 @@
+0.1.7
+Update status bar on tab switch.
+Added 'Show/Hide Status Bar' to 'View' menu. 
+Added status bar.
+Added customising  dialog for keyboard shortcuts.
+Added keyboard shortcuts.
+
 0.1.6
 Updated example tools that need root to use new features.
 Now if no GUI for getting root priviliges specified ALL root actions are run in terminal.
