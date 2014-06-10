@@ -1794,19 +1794,17 @@ void doKeyShortCut(int what)
 		{
 //delete line ^Y
 			case 0:
-				gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->lineEnd);
+				gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
 				break;
 //delete from cursor to end of line ^k
 			case 1:
-				buf->selectToLineEnd();
-				if(!gtk_text_iter_ends_line(&buf->cursorPos))
-					buf->deleteFromCursor(&buf->lineEnd);
+				buf->getToVisibleLineEnd();
+				buf->deleteFromCursor(&buf->visibleLineEnd);
 				break;
 //delete from cursor to beginning of line ^?
 			case 2:
-				buf->selectToLineStart();
-				if(!gtk_text_iter_starts_line(&buf->cursorPos))
-					buf->deleteToCursor(&buf->lineStart);
+				buf->getToLineStart();
+				buf->deleteToCursor(&buf->lineStart);
 				break;
 //Select Word Under Cursor
 			case 3:
@@ -1830,7 +1828,7 @@ void doKeyShortCut(int what)
 				break;
 //select line ^l
 			case 6:
-				buf->selectRange(&buf->lineStart,&buf->lineEnd);
+				buf->selectVisibleLine();
 				break;
 //Move Current Line Up ^m
 			case 7:
@@ -1856,6 +1854,12 @@ void doKeyShortCut(int what)
 					gtk_text_iter_forward_visible_line(&buf->cursorPos);
 					gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&buf->cursorPos);
 				gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+				break;
+			case 9:
+				buf->selectToLineEnd();
+				break;
+			case 10:
+				buf->selectToLineStart();
 				break;
 		}
 	delete buf;
