@@ -339,7 +339,6 @@ int main(int argc,char **argv)
 			if((nagScreen==false))
 				doNagScreen();
 
-			setSensitive();
 
 			gtk_window_get_size((GtkWindow*)window,&w,&h);
 			gtk_paned_set_position((GtkPaned*)mainVPane,h-120);
@@ -355,6 +354,8 @@ int main(int argc,char **argv)
 					gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
 
 			}
+
+			setSensitive();
 			gtk_main();
 		}
 }

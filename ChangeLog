@@ -1,4 +1,5 @@
 0.1.7
+When moving multiple lines up/down selections is extended to whole lines.
 Status bar now doesn't show '(null)' if no syntax highlighting or filepath.
 Added more shortcuts.
 Update status bar on tab switch.
