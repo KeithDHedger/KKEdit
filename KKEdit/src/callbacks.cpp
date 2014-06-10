@@ -1778,7 +1778,8 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
 	free(message);
 }
- 
+
+
 void doKeyShortCut(int what)
 {
 	GtkTextIter	start,end;
@@ -1792,7 +1793,6 @@ void doKeyShortCut(int what)
 		{
 //delete line ^Y
 			case 0:
-				buf->selectLine();
 				gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->lineEnd);
 				break;
 //delete from cursor to end of line ^k
@@ -1807,14 +1807,16 @@ void doKeyShortCut(int what)
 				if(!gtk_text_iter_starts_line(&buf->cursorPos))
 					buf->deleteToCursor(&buf->lineStart);
 				break;
-//delete word under cursor ^h
+//Select Word Under Cursor
 			case 3:
+				break;
+//delete word under cursor ^h
+			case 4:
 				if(buf->selectWord())
 					gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->cursorPos);
 				break;
 //duplictae line ^D
-			case 4:
-				//buf->selectLine();
+			case 5:
 				buf->getCursorIter();
 				text=buf->getSelectedText();
 				gtk_text_iter_backward_lines(&buf->cursorPos,-1);
@@ -1824,12 +1826,11 @@ void doKeyShortCut(int what)
 				gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 				break;
 //select line ^l
-			case 5:
-				//buf->selectLine();
+			case 6:
 				buf->selectRange(&buf->lineStart,&buf->lineEnd);
 				break;
 //Move Current Line Up ^m
-			case 6:
+			case 7:
 				text=buf->getSelectedText();
 				gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 					gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->lineEnd);
@@ -1841,7 +1842,7 @@ void doKeyShortCut(int what)
 				gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 				break;
 //Move Current Line Down
-			case 7:
+			case 8:
 				text=buf->getSelectedText();
 				gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 					gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->lineEnd);

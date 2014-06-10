@@ -56,7 +56,7 @@
 #define USEURI			-1
 #define USEFILE			-2
 
-#define NUMSHORTCUTS	8
+#define NUMSHORTCUTS	9
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 
