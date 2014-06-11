@@ -408,7 +408,17 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 	const char*	path;
 	const char*	lang;
 
+	pageStruct* pagecheck=getPageStructPtr(currentTabNumber);
+
+	
 	if((page==NULL) || (showStatus==false))
+		{
+			gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
+			gtk_statusbar_push((GtkStatusbar*)statusWidget,0,"");
+			return;
+		}
+
+	if(pagecheck!=page)
 		return;
 
 	path=page->filePath;
@@ -458,10 +468,10 @@ void setSensitive(void)
 			gtk_widget_set_sensitive((GtkWidget*)menucloseall,false);
 			gtk_widget_set_sensitive((GtkWidget*)menusaveall,false);
 			gtk_widget_set_sensitive((GtkWidget*)menurevert,false);
+			gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,0);
 		}
 	else
 		{
-			updateStatuBar((GtkTextBuffer*)page->buffer,NULL,NULL,page);
 			text=gtk_label_get_text((GtkLabel*)page->tabName);
 //menu
 			gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));
@@ -492,6 +502,7 @@ void setSensitive(void)
 			gtk_widget_set_sensitive((GtkWidget*)menusaveall,true);
 			gtk_widget_set_sensitive((GtkWidget*)menurevert,true);
 			gtk_widget_show_all(page->tabName);
+			updateStatuBar((GtkTextBuffer*)page->buffer,NULL,NULL,page);
 		}
 }
 
@@ -1207,9 +1218,6 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 
 			submenu=gtk_menu_new();
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),submenu);
-
-
-//find $(pwd) -maxdepth 1 -type f -iname "[^.]*[^$.o]"
 
 			asprintf(&command,"find \"%s\" -maxdepth 1 -xtype f -iname \"[^.]*[^$.o]\"|sort",page->dirName);
 			fp=popen(command,"r");

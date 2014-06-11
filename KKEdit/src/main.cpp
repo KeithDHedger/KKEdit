@@ -359,7 +359,6 @@ int main(int argc,char **argv)
 					gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
 
 			}
-
 			setSensitive();
 			gtk_main();
 		}

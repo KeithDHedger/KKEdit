@@ -1,4 +1,5 @@
 0.1.7
+Fixed status bar lag when opening many large files.
 Added 'Read Link...' to prefs to either open a link normally or to read the link first.
 Added 'Open' to tab menu to open files in current dirctory.
 When moving multiple lines up/down selection is extended to whole lines.

@@ -576,7 +576,7 @@ pageStruct* makeNewPage(void)
 	g_signal_connect(page->view, "line-mark-activated",G_CALLBACK(line_mark_activated),page);
 	add_source_mark_pixbufs(GTK_SOURCE_VIEW(page->view));
 //status bar
-	g_signal_connect_after(G_OBJECT(page->buffer),"mark_set",G_CALLBACK(updateStatuBar),(void*)page);
+	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(updateStatuBar),(void*)page);
 	return(page);
 }
 
@@ -729,6 +729,8 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
 
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
+//	while (gtk_events_pending());
+//		  gtk_main_iteration_do(false);
 
 	gtk_widget_show_all((GtkWidget*)notebook);
 
