@@ -17,7 +17,7 @@
       <font size="+3">Source code text editor</font><br>
       <br>
       <hr size="2" width="100%"><img alt="main" src="main.png"
-        width="883" height="640"><br>
+        width="980" height="600"><br>
       <hr size="2" width="100%">
       <div align="center"><b><font size="+1">Why another text editor?</font></b><br>
         <br>
@@ -242,6 +242,7 @@
 
 
 
+
                           In Popup" selected will show in the popup menu
                           regardless of w<font size="-1">hether any text
                             is or is not selected.<br>
@@ -258,6 +259,7 @@
                                   size="-1"><font size="-1"><font
                                       size="-1"><font size="-1"><font
                                           size="-1">/tmp/textfile</font></font></font></font></font></font></font></font></font>"|tail
+
 
 
 
@@ -323,10 +325,12 @@
 
 
 
+
                               of xterm and beyond</font></font> my
                           control :(<br>
                           <br>
                         </font>For very </font></font></font></font></font></font></font></font>complex
+
 
 
 
@@ -395,11 +399,12 @@
 
 
 
+
         one in /usr/share/KKEdit/tools ) you must have root privileges.</font><br>
       <hr size="2" width="100%"><br>
       <b><a name="prefsanc"></a></b><b>Preferences</b><br>
       <br>
-      <img alt="prefs" src="prefs.png" width="826" height="615"><br>
+      <img alt="prefs" src="prefs.png" width="826" height="648"><br>
       <br>
       <font size="-1">The Prefs file is created ~/.KKEdit/kkedit.rc and
         will be created/recreated when quitting KKEdit.<br>
@@ -416,11 +421,31 @@
           graphical root privileges program, if this is blank a terminal
           will be used to ask for admin passwords ( <a href="#gtksui">See
 
+
             here</a> ), the 'Terminal command' will be used to open a
           terminal, if this is blank then the default 'xterm -e' will be
           used. <br>
           You can also set the highlight colour of bookmarked lines, and
           also whether to show the bookmarkbar.<br>
+          <br>
+          You can also customize the keyboard shortcuts from here, just
+          click the button and you will get a dialog popup like so:<br>
+          <img alt="" src="keycuts.png" width="518" height="566"><br>
+          To change the default shortcut click in the relevant box and
+          press a CONTROL key and your choice of keys with or without
+          SHIFT, shortcuts MUST use CONTROL.<br>
+          Repeat the above untill you have set all the shortcuts you
+          want and click 'Apply' to keep the changes or 'Cancel' to
+          guess what?<br>
+          <br>
+          You can also choose to open a file normally or by first
+          reading the link ( if it's a symlink ), this means that
+          filepath will either be the path to the link OR the path to
+          the real file, this is handy when using the 'Open' option from
+          the tab menu as you will either select files to open from the
+          folder the link is in or the folder were the real file is, try
+          it and see it's a lot less complicated than it sounds!<br>
+          &nbsp; <br>
         </font> The 'Theme' can be set for the prefs via the drop down,
         update of the current page is 'live', click 'Apply' to set the
         theme globally or 'Cancel' to ignore changes.<br>
@@ -473,9 +498,11 @@
       <br>
       <a name="copyfilenameanc"></a><font size="-1">Right clicking on a
         tab allows copying of the document file name<font size="-1">,</font>
-        file path, spell check the document ,split/insplit the view and
-        set the source highlighting.</font><br>
-      <img alt="tabmenu" src="tabmenu.png" width="530" height="286"><br>
+        file path, spell check the document ,split/insplit the view, set
+        the source highlighting and quickly open other files in the same
+        directory as the current document ( handy for quickly opening
+        header files ).</font><br>
+      <img alt="tabmenu" src="tabmenu.png" width="384" height="355"><br>
       <br>
       <a name="copyfunctiondefine"></a><font size="-1">The document
         context menu also contains the&nbsp; 'Go To Definition' function
@@ -489,6 +516,7 @@
           <img alt="popup" src="popup.png" width="606" height="640"><br>
           <br>
         </font></font><font size="-1"><a name="spellchk"></a></font><b>Spell
+
 
 
 
@@ -616,6 +644,7 @@
 
 
 
+
                         here</a><font size="-1"> )<font size="-1">, use
                           'gtksu --', ubuntu users may have to use
                           'gtksu -- sudo' to stop gtk3 complaining,
@@ -675,7 +704,9 @@
 
 
 
+
                                                   the <font size="-1">toolbar
+
 
 
 
@@ -708,6 +739,7 @@
                                                       size="-1">
                                                       searching
                                                       backwards </font>can
+
 
 
 
@@ -778,7 +810,9 @@
 
 
 
+
                                                         <font size="-1">A</font>ll'
+
 
 
 
@@ -812,6 +846,7 @@
                                                         confirm the
                                                         action.<br>
                                                         <font size="-1">The
+
 
 
 
@@ -877,6 +912,7 @@
 
 
 
+
         can jump to a line using the toolbar entry:</font><br>
       <img alt="jumptoline" src="gotolinefromtoolbar.png" width="736"
         height="358"><br>
@@ -899,9 +935,12 @@
                     size="-1">ally be set <font size="-1">manually but
                       depends on system auto magic stuff<font size="-1">,
                         file suffix etc.</font></font></font></font></font></font></font></font><br>
-        <img alt="hilite" src="sourcehilite.png" width="797"
-          height="462"><br>
+        <img alt="hilite" src="sourcehilite.png" width="659"
+          height="338"><br>
         <br>
+        You can also turn on/off various bits and peices from the 'View'
+        menu:<br>
+        <img alt="" src="viewmenu.png" width="300" height="193"><br>
       </font>
       <hr size="2" width="100%"><a name="getanc"></a><b>Get it here!</b><b><br>
       </b> <b><a
@@ -933,6 +972,7 @@
                             size="-1"><font size="-1">(</font></font></font></font></font><font
                       size="-1"><font size="-1"><font size="-1"><font
                             size="-1"><font size="-1"><font size="-1">optional
+
 
 
 
@@ -1011,10 +1051,12 @@
 
 
 
+
                                                           but
                                                           recommended)<br>
                                                           <br>
                                                         </font></font></font></font></font></font></font></font></font></font></font></font></font>&nbsp;</font></font></font></font></font></font></font></font></font></font></font></font>webkit
+
 
 
 

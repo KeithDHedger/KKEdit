@@ -729,8 +729,6 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
 
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
-//	while (gtk_events_pending());
-//		  gtk_main_iteration_do(false);
 
 	gtk_widget_show_all((GtkWidget*)notebook);
 

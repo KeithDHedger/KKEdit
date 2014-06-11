@@ -864,7 +864,6 @@ void clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 	if ((GDK_CONTROL_MASK & mask) && (path!=NULL))
 		{
 			gtk_tree_model_get_iter((GtkTreeModel*)listStore,&iter,path);
-//			gtk_tree_model_get((GtkTreeModel*)listStore,&iter,TEXT_COLUMN,&text,-1);
 			gtk_tree_model_get((GtkTreeModel*)listStore,&iter,BUTTON_NUM,&button,-1);
 			gtk_widget_set_sensitive((GtkWidget*)tool[button],true);
 			gtk_list_store_remove((GtkListStore*)listStore,&iter);
@@ -1236,7 +1235,7 @@ void doPrefs(void)
 	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
 
 //do readlink
-	item=gtk_check_button_new_with_label("Read Link Before opening File");
+	item=gtk_check_button_new_with_label("Read Link Before Opening File");
 	gtk_widget_set_name(item,"readlink");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,readLinkFirst);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
