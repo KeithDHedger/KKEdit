@@ -12,6 +12,7 @@
 #include <gtksourceview/gtksourceprintcompositor.h>
 #include <ctype.h>
 #include <gdk/gdkkeysyms.h>
+#include <libgen.h>
 
 #include "config.h"
 #ifdef BUILDDOCVIEWER
@@ -404,7 +405,7 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 	pageStruct* page=(pageStruct*)data;
 	TextBuffer*	buf;
 	char*		message=NULL;
-	char*		path;
+	const char*	path;
 	const char*	lang;
 
 	if((page==NULL) || (showStatus==false))
@@ -1059,6 +1060,15 @@ void changeSourceStyle(GtkWidget* widget,gpointer data)
 	page->lang=langname;
 }
 
+void openFromTab(GtkMenuItem* widget,pageStruct* page)
+{
+	char*		filepath=NULL;
+
+	asprintf(&filepath,"%s/%s",page->dirName,gtk_menu_item_get_label(widget));
+	openFile(filepath,0);
+	free(filepath);
+}
+
 bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 {
 	pageStruct*					page;
@@ -1076,6 +1086,10 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 	bool						flag=true;
 	GtkSourceLanguage*			lang;
 	const char*					langname;
+	FILE*						fp=NULL;
+	char*						command;
+	char						line[2048];
+	char*						name;
 
 	if(event->button==3 && event->type==GDK_BUTTON_PRESS)
 	    {
@@ -1186,6 +1200,33 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 							gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuids);
 						}
 				}
+//add files to tab
+			//image=gtk_image_new_from_stock(GTK_STOCK_SELECT_COLOR,GTK_ICON_SIZE_MENU);
+			menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_OPEN,NULL);
+			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
+
+			submenu=gtk_menu_new();
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),submenu);
+
+
+//find $(pwd) -maxdepth 1 -type f -iname "[^.]*[^$.o]"
+
+			asprintf(&command,"find \"%s\" -maxdepth 1 -xtype f -iname \"[^.]*[^$.o]\"|sort",page->dirName);
+			fp=popen(command,"r");
+			if(fp!=NULL)
+				{
+					while(fgets(line,2048,fp))
+						{
+							line[strlen(line)-1]=0;
+							name=basename(line);
+							menuids=gtk_image_menu_item_new_with_label(strdup(name));
+							gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuids);
+							gtk_signal_connect(GTK_OBJECT(menuids),"activate",G_CALLBACK(openFromTab),(void*)page);
+						}
+					fclose(fp);
+				}
+			g_free(command);
+
 			gtk_widget_show_all(menuitem);
 
 			gtk_menu_attach_to_widget(GTK_MENU(tabMenu),widget,NULL);
@@ -1298,6 +1339,7 @@ void writeConfig(void)
 			fprintf(fd,"nagscreen	%i\n",nagScreen);
 			fprintf(fd,"noduplicates	%i\n",noDuplicates);
 			fprintf(fd,"warning	%i\n",noWarnings);
+			fprintf(fd,"readlink	%i\n",readLinkFirst);
 
 			fprintf(fd,"showbmbar	%i\n",(int)showBMBar);
 			fprintf(fd,"higlightcolour	%s\n",highlightColour);
@@ -1399,6 +1441,9 @@ void setPrefs(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"warning")==0)
 		tmpNoWarnings=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
+	if(strcmp(gtk_widget_get_name(widget),"readlink")==0)
+		tmpReadLinkFirst=gtk_toggle_button_get_active((GtkToggleButton*)data);
+
 	if(strcmp(gtk_widget_get_name(widget),"ihavedonated")==0)
 		tmpNagScreen=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
@@ -1434,6 +1479,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			highLight=tmpHighLight;
 			noDuplicates=tmpNoDuplicates;
 			noWarnings=tmpNoWarnings;
+			readLinkFirst=tmpReadLinkFirst;
 
 			if(styleName!=NULL)
 				{
@@ -1794,7 +1840,6 @@ void toggleStatusBar(GtkWidget* widget,gpointer data)
 
 void doKeyShortCut(int what)
 {
-	GtkTextIter		start,end;
 	TextBuffer*		buf;
 	char*			text;
 	pageStruct*		page=getPageStructPtr(-1);
@@ -1945,7 +1990,7 @@ void loadKeybindings(void)
 					key[0]=0;
 					func[0]=0;
 					fgets(buffer,1024,fd);
-					sscanf(buffer,"%s %s",&key,&func);
+					sscanf(buffer,"%s %s",(char*)&key,(char*)&func);
 					if(strlen(buffer)>3)
 						{
 							shortCuts[keycnt][0]=(int)atoi(key);

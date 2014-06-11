@@ -79,6 +79,9 @@ void readConfig(void)
 					if(strcasecmp(name,"nagscreen")==0)
 						nagScreen=(bool)atoi(strarg);
 
+					if(strcasecmp(name,"readlink")==0)
+						readLinkFirst=(bool)atoi(strarg);
+
 					if(strcasecmp(name,"higlightcolour")==0)
 						{
 							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
@@ -189,6 +192,7 @@ void init(void)
 	restoreBookmarks=false;
 	noDuplicates=false;
 	noWarnings=false;
+	readLinkFirst=false;
 
 	exitstatus=system("which manpageeditor &>/dev/null");
 	gotManEditor=WEXITSTATUS(exitstatus);
@@ -235,6 +239,7 @@ void init(void)
 	tmpStyleName=strdup(styleName);
 	tmpNoDuplicates=noDuplicates;
 	tmpNoWarnings=noWarnings;
+	tmpReadLinkFirst=readLinkFirst;
 
 	tmpNagScreen=nagScreen;
 	tmpHighlightColour=highlightColour;

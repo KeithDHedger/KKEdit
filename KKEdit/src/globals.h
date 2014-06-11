@@ -40,7 +40,6 @@
 #define	TOOL_INSERT_MASK 0b10111
 #define	TOOL_VIEW_OP 16
 
-
 #define VALIDCHARS "[]a-zA-Z0-9:/@ ()_-,.*#;[\"]"
 #define VALIDFILENAMECHARS "[A-Za-z0-9_-./ <>]"
 #define VALIDFUNCTIONCHARS "[A-Za-z0-9_*:/@ ()-,.#;[\"]"
@@ -49,6 +48,8 @@
 #define MAXRECENT 10
 
 #define PLACEHOLDERINFO "PLACEHOLDERS:\n%t - Currently selected text. Passed to command as $KKEDIT_SELECTION\n%f - Filepath of the current document. Passed to command as $KKEDIT_CURRENTFILE\n%d - Directory of the current document or $HOME. Passed to command as $KKEDIT_CURRENTDIR\n%i - The location of the globally installed tools. Passed to command as $KKEDIT_DATADIR\n%h - Tempory file for displaying html in doc viewer. Passed to command as $KKEDIT_HTMLFILE\n%l - Highlihting language. Passed to command as $KKEDIT_SOURCE_LANG"
+
+#define KEYCUTSINFO "To set a custom shortcut:\nClick in the appropriate box and press CONTROL ( and optionally SHIFT ) plus your custom key.\nClick 'Apply' to keep changes or 'Cancel' to discard any changes."
 
 #define MARK_TYPE_1		"one"
 #define MARK_TYPE_2		"two"
@@ -209,6 +210,8 @@ extern bool				noDuplicates;
 extern bool				tmpNoDuplicates;
 extern bool				noWarnings;
 extern bool				tmpNoWarnings;
+extern bool				readLinkFirst;
+extern bool				tmpReadLinkFirst;
 
 extern GtkWidget*		fontButton;
 extern GtkWidget*		terminalBox;
@@ -347,7 +350,7 @@ extern AspellConfig*	aspellConfig;
 extern AspellSpeller*	spellChecker;
 #endif
 
-extern int				shortCuts[100][2];
+extern unsigned int		shortCuts[100][2];
 
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);
@@ -365,13 +368,6 @@ char* deleteSlice(char* srcstring,char* delstr);
 void getRecursiveTagListFileName(char* filepath,void* ptr);
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
 void goBack(GtkWidget* widget,gpointer data);
-
-//extern GtkAdjustment * ha;
-//extern GtkAdjustment * va;
-//extern GtkAdjustment * ha2;
-//extern GtkAdjustment * va2;
-//
-void testcallback(GtkWidget* widget,gpointer data);
 
 #endif
 

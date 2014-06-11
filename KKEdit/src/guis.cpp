@@ -933,8 +933,6 @@ void setKeyCuts(GtkWidget* widget,gpointer data)
 
 gboolean setKeyInEntry(GtkEntry* widget,GdkEventKey* event,gpointer data)
 {
-	int entrynum=(int)(long)data;
-
 	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
 		gtk_entry_set_text(widget,gdk_keyval_name(event->keyval));
 
@@ -945,7 +943,6 @@ void buildKeys()
 {
 	GtkWidget*	vbox;
 	GtkWidget*	item;
-	GtkWidget*	label;
 	GtkWidget*	hbox;
 	char		keystring[32];
 	int			loop;
@@ -956,6 +953,10 @@ void buildKeys()
 			gtk_window_set_title((GtkWindow*)keysWindow,"Define Keyboard Shortcuts");
 			vbox=gtk_vbox_new(false,8);
 
+			item=gtk_label_new(KEYCUTSINFO);
+			gtk_label_set_justify((GtkLabel*)item,GTK_JUSTIFY_CENTER);
+			gtk_label_set_line_wrap((GtkLabel*)item,true);
+			gtk_box_pack_start(GTK_BOX(vbox),item,false,false,0);
 //functions
 			for(loop=0;loop<NUMSHORTCUTS;loop++)
 				{
@@ -1226,13 +1227,20 @@ void doPrefs(void)
 	if(rootCommand!=NULL)
 		gtk_entry_set_text((GtkEntry*)rootCommandBox,rootCommand);
 	gtk_widget_show_all(hbox2);
+
 //show keybindings dialog
-	hbox2=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Customize Keyboard Shortcuts: "),false,false,0);
-	item=gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
-	gtk_box_pack_start(GTK_BOX(hbox2),item,false,false,2);
+	hbox2=gtk_hbox_new(true,0);
+	item=gtk_button_new_with_label("Customize Keyboard Shortcuts");
+	gtk_box_pack_start(GTK_BOX(hbox2),item,false,false,0);
 	gtk_widget_set_name(item,"makekeys");
 	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
+
+//do readlink
+	item=gtk_check_button_new_with_label("Read Link Before opening File");
+	gtk_widget_set_name(item,"readlink");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,readLinkFirst);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+	gtk_box_pack_start(GTK_BOX(hbox2),item,false,false,0);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox2,false,false,0);
 
 //end admin

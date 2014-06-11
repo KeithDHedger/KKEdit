@@ -603,6 +603,23 @@ bool openFile(const gchar *filepath,int linenumber)
 	char*					searchtext=NULL;
 	char*					replacetext=NULL;
 
+	struct stat				sb;
+	char*					linkname;
+	ssize_t					r;
+
+	if(readLinkFirst==true)
+		{
+			lstat(filepath, &sb);
+
+			if(S_ISLNK(sb.st_mode))
+				{
+					linkname=(char*)malloc(sb.st_size + 1);
+					r=readlink(filepath,linkname,sb.st_size+1);
+					linkname[r]=0;
+					filepath=linkname;
+				}
+		}
+
 	for(int j=0; j<gtk_notebook_get_n_pages(notebook); j++)
 		{
 			page=getPageStructPtr(j);
