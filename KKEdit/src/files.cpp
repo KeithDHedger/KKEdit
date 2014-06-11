@@ -606,6 +606,9 @@ bool openFile(const gchar *filepath,int linenumber)
 	struct stat				sb;
 	char*					linkname;
 	ssize_t					r;
+	char*					filepathcopy=NULL;
+
+	filepathcopy=strdup(filepath);
 
 	if(readLinkFirst==true)
 		{
@@ -614,16 +617,17 @@ bool openFile(const gchar *filepath,int linenumber)
 			if(S_ISLNK(sb.st_mode))
 				{
 					linkname=(char*)malloc(sb.st_size + 1);
-					r=readlink(filepath,linkname,sb.st_size+1);
+					r=readlink(filepathcopy,linkname,sb.st_size+1);
 					linkname[r]=0;
-					filepath=linkname;
+					free(filepathcopy);
+					filepathcopy=linkname;
 				}
 		}
 
 	for(int j=0; j<gtk_notebook_get_n_pages(notebook); j++)
 		{
 			page=getPageStructPtr(j);
-			if((page->filePath!=NULL) && (noDuplicates==true) && (strcmp(page->filePath,filepath)==0))
+			if((page->filePath!=NULL) && (noDuplicates==true) && (strcmp(page->filePath,filepathcopy)==0))
 				{
 					gtk_notebook_set_current_page(notebook,j);
 					return(true);
@@ -632,13 +636,13 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		{
-			dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"File '%s' doesn't exist :(",filepath);
+			dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"File '%s' doesn't exist :(",filepathcopy);
 			gtk_dialog_run(GTK_DIALOG(dialog));
 			gtk_widget_destroy(dialog);
 			return(false);
 		}
 
-	if(access(filepath,R_OK)!=0)
+	if(access(filepathcopy,R_OK)!=0)
 		{
 			dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"Can't open file '%s' :(",filepath);
 			gtk_dialog_run(GTK_DIALOG(dialog));
@@ -652,14 +656,14 @@ bool openFile(const gchar *filepath,int linenumber)
 	page=makeNewPage();
 	page->tabVbox=gtk_vbox_new(true,4);
 
-	page->filePath=strdup(filepath);
+	page->filePath=strdup(filepathcopy);
 	page->fileName=strdup(filename);
-	page->dirName=g_path_get_dirname(filepath);
+	page->dirName=g_path_get_dirname(filepathcopy);
 
 	label=makeNewTab(page->fileName,page->filePath,page);
 	setLanguage(page);
 
-	g_file_get_contents(filepath,&contents,&length,&err);
+	g_file_get_contents(filepathcopy,&contents,&length,&err);
 
 	charset=detect_charset(contents);
 	if (charset==NULL)
@@ -710,6 +714,7 @@ bool openFile(const gchar *filepath,int linenumber)
 	g_free(filename);
 	g_free(recenturi);
 	g_free(str);
+	free(filepathcopy);
 
 //connect to ntebook
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
@@ -735,7 +740,6 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_buffer_move_mark((GtkTextBuffer*)page->buffer,page->backMark,&iter);
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
 
-//	g_signal_connect(G_OBJECT(window),"key-press-event",G_CALLBACK(keyShortCut),page);
 	setToobarSensitive();
 
 	return TRUE;
