@@ -24,5 +24,5 @@ autoconf
 rm -rf ./autom4te.cache
 rm ./compile ./missing ./COPYING ./AUTHORS ./NEWS
 cd ..
-tar -czvf KKEdit-${VERSION}.tar.gz KKEdit-${VERSION}
+tar -czvhf KKEdit-${VERSION}.tar.gz KKEdit-${VERSION}
 rm -r /tmp/KKEdit-${VERSION}
