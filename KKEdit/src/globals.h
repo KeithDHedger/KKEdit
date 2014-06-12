@@ -114,6 +114,7 @@ struct toolStruct
 	char*				comment;
 	bool				global;
 	bool				runAsRoot;
+	int					keyCode;
 };
 
 struct functionData
@@ -136,6 +137,7 @@ struct bookMarksNew
 };
 
 extern GtkWidget*		window;
+extern GtkAccelGroup*	accgroup;
 extern GtkNotebook*		notebook;
 
 extern GList*			newBookMarksList;
@@ -233,6 +235,7 @@ extern char*			tmpStyleName;
 
 extern GtkWidget*		toolNameWidget;
 extern GtkWidget*		commandLineWidget;
+extern GtkWidget*		keyWidget;
 extern GtkWidget*		commentWidget;
 extern GtkWidget*		inTermWidget;
 extern GtkWidget*		inPopupWidget;
@@ -275,6 +278,7 @@ extern bool				showDoc;
 extern bool				editTool;
 extern bool				clearView;
 extern bool				runAsRoot;
+extern int				keyCode;
 
 extern int				windowWidth;
 extern int				windowHeight;

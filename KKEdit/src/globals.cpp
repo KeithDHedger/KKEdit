@@ -31,6 +31,7 @@
 #include "navcallbacks.h"
 
 GtkWidget*		window=NULL;
+GtkAccelGroup*	accgroup=NULL;
 GtkNotebook*	notebook=NULL;
 GtkWidget*		menubar=NULL;
 GtkWidget*		menufile;
@@ -127,6 +128,7 @@ char*			tmpStyleName=NULL;
 
 GtkWidget*		toolNameWidget;
 GtkWidget*		commandLineWidget;
+GtkWidget*		keyWidget;
 GtkWidget*		commentWidget;
 GtkWidget*		inTermWidget;
 GtkWidget*		inPopupWidget;
@@ -167,6 +169,7 @@ bool			showDoc=false;
 bool			editTool=false;
 bool			clearView=false;
 bool			runAsRoot=false;
+int				keyCode=0;
 
 int				windowWidth;
 int				windowHeight;
@@ -777,6 +780,7 @@ void buildToolsList(void)
 	char*			commentarg=NULL;
 	char*			menuname=NULL;
 	int				rootarg=0;
+	int				keycode=0;
 
 	if(toolsList!=NULL)
 		{
@@ -804,6 +808,7 @@ void buildToolsList(void)
 									alwayspopup=0;
 									rootarg=0;
 									clearview=0;
+									keycode=0;
 
 									while(fgets(buffer,4096,fd))
 										{
@@ -827,6 +832,8 @@ void buildToolsList(void)
 												sscanf((char*)&buffer,"%*s %i",&clearview);
 											if(strcmp(strarg,"runasroot")==0)
 												sscanf((char*)&buffer,"%*s %i",&rootarg);
+											if(strcmp(strarg,"shortcutkey")==0)
+												sscanf((char*)&buffer,"%*s %i",&keycode);
 										}
 
 									if((menuname!=NULL) &&(strlen(menuname)>0))
@@ -841,6 +848,8 @@ void buildToolsList(void)
 											tool->filePath=strdup(filepath);
 											tool->clearView=(bool)clearview;
 											tool->runAsRoot=(bool)rootarg;
+											tool->keyCode=keycode;
+											
 											if(commentarg!=NULL)
 												tool->comment=strdup(commentarg);
 											else

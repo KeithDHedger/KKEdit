@@ -1639,6 +1639,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 					fprintf(fd,"alwayspopup\t%i\n",(int)alwaysPopup);
 					fprintf(fd,"clearview\t%i\n",(int)clearView);
 					fprintf(fd,"runasroot\t%i\n",(int)runAsRoot);
+					fprintf(fd,"shortcutkey\t%i\n",(int)gdk_keyval_from_name(gtk_entry_get_text((GtkEntry*)keyWidget)));
 					fclose(fd);
 				}
 			g_free(dirname);

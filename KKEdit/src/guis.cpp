@@ -14,6 +14,7 @@
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <gtksourceview/gtksourcestyleschememanager.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "config.h"
 #include "globals.h"
@@ -51,6 +52,8 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 	int				clearview=0;
 	int				flagsarg=0;
 	int				runasroot=0;
+	int				keycode=0;
+	char			keystring[32];
 
 	char*			text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
 
@@ -93,6 +96,7 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 						}
 				}
 		}
+
 	if(selectedToolPath!=NULL)
 		{
 			fd=fopen(selectedToolPath,"r");
@@ -103,12 +107,14 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 					flagsarg=0;
 					alwayspopup=0;
 					runasroot=0;
+					keycode=0;
 					gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,(bool)inpopup);
 					gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,(bool)alwayspopup);
 					gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,(bool)intermarg);
 					gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,(bool)clearview);
 					gtk_toggle_button_set_active((GtkToggleButton*)runAsRootWidget,(bool)runasroot);
 					gtk_entry_set_text((GtkEntry*)commentWidget,"");
+					gtk_entry_set_text((GtkEntry*)keyWidget,"");
 					while(fgets(buffer,4096,fd))
 						{
 							buffer[strlen(buffer)-1]=0;
@@ -117,6 +123,20 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 								gtk_entry_set_text((GtkEntry*)toolNameWidget,(char*)&buffer[5]);
 							if(strcmp(strarg,"command")==0)
 								gtk_entry_set_text((GtkEntry*)commandLineWidget,(char*)&buffer[8]);
+
+							if(strcmp(strarg,"shortcutkey")==0)
+								{
+									keystring[0]=0;
+									sscanf((char*)&buffer,"%*s %i",&keycode);
+									if(gdk_keyval_name(keycode)!=NULL)
+										{
+											sprintf(&keystring[0],"%s",gdk_keyval_name(keycode));
+											gtk_entry_set_text((GtkEntry*)keyWidget,(char*)&keystring);
+										}
+									else
+										gtk_entry_set_text((GtkEntry*)keyWidget,"");
+								}
+
 							if(strcmp(strarg,"comment")==0)
 								gtk_entry_set_text((GtkEntry*)commentWidget,(char*)&buffer[8]);
 							if(strcmp(strarg,"inpopup")==0)
@@ -349,6 +369,20 @@ void fillCombo(GtkComboBoxText* combo)
 	g_list_foreach(toolsList,addToolToDrop,NULL);
 }
 
+gboolean getToolKey(GtkEntry* widget,GdkEventKey* event,gpointer data)
+{
+	if((event->type==GDK_KEY_PRESS) && (event->keyval==GDK_KEY_Delete))
+		{
+			gtk_entry_set_text(widget,"");
+			return(true);
+		}
+
+	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
+		gtk_entry_set_text(widget,gdk_keyval_name(event->keyval));
+
+	return(true);
+}
+
 void doMakeTool(void)
 {
 	GtkWidget*	vbox;
@@ -370,7 +404,7 @@ void doMakeTool(void)
 //name
 	toolNameWidget=gtk_entry_new();
 	hbox=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Tool Name: "),false,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Tool Name:\t"),false,true,0);
 	gtk_container_add(GTK_CONTAINER(hbox),toolNameWidget);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_widget_show(toolNameWidget);
@@ -379,16 +413,25 @@ void doMakeTool(void)
 //command
 	commandLineWidget=gtk_entry_new();
 	hbox=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Command: "),false,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Command:\t"),false,true,0);
 	gtk_container_add(GTK_CONTAINER(hbox),commandLineWidget);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_widget_show(commandLineWidget);
 	gtk_entry_set_text((GtkEntry*)commandLineWidget,"");
+//key
+	keyWidget=gtk_entry_new();
+	hbox=gtk_hbox_new(false,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Shortcut Key:\t"),false,true,0);
+	gtk_container_add(GTK_CONTAINER(hbox),keyWidget);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
+	gtk_widget_show(keyWidget);
+	gtk_entry_set_text((GtkEntry*)keyWidget,"");
+	g_signal_connect(G_OBJECT(keyWidget),"key-press-event",G_CALLBACK(getToolKey),NULL);
 
 //comment
 	commentWidget=gtk_entry_new();
 	hbox=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Comment: "),false,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Comment:\t"),false,true,0);
 	gtk_container_add(GTK_CONTAINER(hbox),commentWidget);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_widget_show(commentWidget);
@@ -506,6 +549,7 @@ void buildTools(void)
 	GtkWidget*		image;
 	GList*			ptr;
 	bool			gotglobal=false;
+	int				keyflags=0;
 
 	buildToolsList();
 
@@ -535,6 +579,15 @@ void buildTools(void)
 					menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
+
+					if(((toolStruct*)ptr->data)->keyCode>0)
+						{
+							keyflags=0;
+							if(gdk_keyval_is_upper(((toolStruct*)ptr->data)->keyCode))
+								keyflags=GDK_SHIFT_MASK;
+							gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,((toolStruct*)ptr->data)->keyCode,(GdkModifierType)(GDK_CONTROL_MASK|keyflags),GTK_ACCEL_VISIBLE);
+						}
+
 					if(((toolStruct*)ptr->data)->comment!=NULL)
 						gtk_widget_set_tooltip_text((GtkWidget*)menuitem,((toolStruct*)ptr->data)->comment);
 				}
@@ -555,6 +608,15 @@ void buildTools(void)
 					menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
+
+					if(((toolStruct*)ptr->data)->keyCode>0)
+						{
+							keyflags=0;
+							if(gdk_keyval_is_upper(((toolStruct*)ptr->data)->keyCode))
+								keyflags=GDK_SHIFT_MASK;
+							gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,((toolStruct*)ptr->data)->keyCode,(GdkModifierType)(GDK_CONTROL_MASK|keyflags),GTK_ACCEL_VISIBLE);
+						}
+
 					if(((toolStruct*)ptr->data)->comment!=NULL)
 						gtk_widget_set_tooltip_text((GtkWidget*)menuitem,((toolStruct*)ptr->data)->comment);
 				}
@@ -932,6 +994,12 @@ void setKeyCuts(GtkWidget* widget,gpointer data)
 
 gboolean setKeyInEntry(GtkEntry* widget,GdkEventKey* event,gpointer data)
 {
+	if((event->type==GDK_KEY_PRESS) && (event->keyval==GDK_KEY_Delete))
+		{
+			gtk_entry_set_text(widget,"");
+			return(true);
+		}
+
 	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
 		gtk_entry_set_text(widget,gdk_keyval_name(event->keyval));
 
@@ -1323,7 +1391,6 @@ void buildMainGui(void)
 	GtkWidget*		vbox;
 	GtkWidget*		menuitem;
 	GtkWidget*		menu;
-	GtkAccelGroup*	accgroup;
 	GtkWidget*		image;
 	GtkWidget*		menurecent;
 	GtkWidget*		scrollbox;

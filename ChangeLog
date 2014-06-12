@@ -1,4 +1,6 @@
 0.1.7
+Added option to delete keyboard shortcut from external tools and main keyboard shortcuts.
+Added option to add keyboard shortcut to external tools.
 Fixed status bar lag when opening many large files.
 Added 'Read Link...' to prefs to either open a link normally or to read the link first.
 Added 'Open' to tab menu to open files in current dirctory.
