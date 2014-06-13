@@ -55,14 +55,7 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 			gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,selectedToolFromDrop->alwaysPopup);
 			gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,selectedToolFromDrop->clearView);
 			gtk_toggle_button_set_active((GtkToggleButton*)runAsRootWidget,selectedToolFromDrop->runAsRoot);
-	
 			gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,selectedToolFromDrop->inTerminal);
-//			if(selectedToolFromDrop->inTerminal==true)
-//				{
-//					gtk_widget_set_sensitive(ignoreWidget,false);
-//					gtk_widget_set_sensitive(pasteWidget,false);
-//					gtk_widget_set_sensitive(replaceWidget,false);
-//				}
 
 			gtk_entry_set_text((GtkEntry*)toolNameWidget,selectedToolFromDrop->menuName);
 			gtk_entry_set_text((GtkEntry*)commandLineWidget,selectedToolFromDrop->command);
@@ -82,16 +75,6 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 			else
 				gtk_toggle_button_set_active((GtkToggleButton*)syncWidget,true);
 
-printf("flags  %i mask %i flags&mask %i\n",flags,TOOL_INSERT_MASK,(flags&TOOL_INSERT_MASK));
-int testflag=(flags&TOOL_INSERT_MASK);
-printf("testflag=%i\n",testflag);
-printf("TOOL_IGNORE_OP=%i\n",TOOL_IGNORE_OP);
-printf("TOOL_VIEW_OP=%i\n",TOOL_VIEW_OP);
-printf("TOOL_PASTE_OP=%i\n",TOOL_PASTE_OP);
-printf("TOOL_REPLACE_OP=%i\n",TOOL_REPLACE_OP);
-
-
-
 			if((flags & TOOL_INSERT_MASK)==TOOL_IGNORE_OP)
 				gtk_toggle_button_set_active((GtkToggleButton*)ignoreWidget,true);
 			if((flags & TOOL_INSERT_MASK)==TOOL_VIEW_OP)
@@ -101,33 +84,26 @@ printf("TOOL_REPLACE_OP=%i\n",TOOL_REPLACE_OP);
 			if((flags & TOOL_INSERT_MASK)==TOOL_REPLACE_OP)
 				gtk_toggle_button_set_active((GtkToggleButton*)replaceWidget,true);
 
-
-
-	if((gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false) || (gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget)==true))
-		{
-			gtk_widget_set_sensitive(ignoreWidget,false);
-			gtk_widget_set_sensitive(pasteWidget,false);
-			gtk_widget_set_sensitive(replaceWidget,false);
-			gtk_widget_set_sensitive(outputWidget,false);
-		}
-	else
-		{
-			gtk_widget_set_sensitive(ignoreWidget,true);
-			gtk_widget_set_sensitive(pasteWidget,true);
-			gtk_widget_set_sensitive(replaceWidget,true);
-			gtk_widget_set_sensitive(outputWidget,true);
-		}
-
-
-
-
+			if((gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false) || (gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget)==true))
+				{
+					gtk_widget_set_sensitive(ignoreWidget,false);
+					gtk_widget_set_sensitive(pasteWidget,false);
+					gtk_widget_set_sensitive(replaceWidget,false);
+					gtk_widget_set_sensitive(outputWidget,false);
+				}
+			else
+				{
+					gtk_widget_set_sensitive(ignoreWidget,true);
+					gtk_widget_set_sensitive(pasteWidget,true);
+					gtk_widget_set_sensitive(replaceWidget,true);
+					gtk_widget_set_sensitive(outputWidget,true);
+				}
 
 			if(flags & TOOL_SHOW_DOC)
 				gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,true);
 			else
 				gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,false);
 		}
-		
 }
 
 void setUpToolBar(void)
