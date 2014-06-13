@@ -468,7 +468,7 @@ void doMakeTool(void)
 //name
 	toolNameWidget=gtk_entry_new();
 	hbox=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Tool Name:\t"),false,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Tool Name:\t\t"),false,true,0);
 	gtk_container_add(GTK_CONTAINER(hbox),toolNameWidget);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_widget_show(toolNameWidget);
@@ -477,7 +477,7 @@ void doMakeTool(void)
 //command
 	commandLineWidget=gtk_entry_new();
 	hbox=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Command:\t"),false,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Command:\t\t"),false,true,0);
 	gtk_container_add(GTK_CONTAINER(hbox),commandLineWidget);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_widget_show(commandLineWidget);
@@ -485,7 +485,7 @@ void doMakeTool(void)
 //key
 	keyWidget=gtk_entry_new();
 	hbox=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Shortcut Key:\t"),false,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Shortcut Key:\t\t"),false,true,0);
 	gtk_container_add(GTK_CONTAINER(hbox),keyWidget);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_widget_show(keyWidget);
@@ -495,7 +495,7 @@ void doMakeTool(void)
 //comment
 	commentWidget=gtk_entry_new();
 	hbox=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Comment:\t"),false,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Comment:\t\t"),false,true,0);
 	gtk_container_add(GTK_CONTAINER(hbox),commentWidget);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_widget_show(commentWidget);
