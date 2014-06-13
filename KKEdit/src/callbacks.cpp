@@ -1585,6 +1585,13 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 			gtk_widget_set_sensitive(replaceWidget,false);
 			gtk_widget_set_sensitive(outputWidget,false);
 		}
+	else
+		{
+			gtk_widget_set_sensitive(ignoreWidget,true);
+			gtk_widget_set_sensitive(pasteWidget,true);
+			gtk_widget_set_sensitive(replaceWidget,true);
+			gtk_widget_set_sensitive(outputWidget,true);
+		}
 
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{
