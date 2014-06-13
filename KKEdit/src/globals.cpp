@@ -142,6 +142,7 @@ GtkWidget*		showDocWidget;
 GtkWidget*		toolSelect;
 GtkWidget*		clearViewWidget;
 GtkWidget*		runAsRootWidget;
+toolStruct*		selectedToolFromDrop=NULL;
 
 //view tool output
 GtkWidget*		mainVPane=NULL;

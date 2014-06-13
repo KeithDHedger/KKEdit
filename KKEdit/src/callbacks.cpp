@@ -1552,11 +1552,75 @@ void setPrefs(GtkWidget* widget,gpointer data)
 
 void setToolOptions(GtkWidget* widget,gpointer data)
 {
+	char*	dirname;
+	char*	text;
+	char*	toolpath;
+	FILE*	fd=NULL;
+	int		flags;
+
+	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
+		{
+//			if(selectedToolFromDrop==NULL)
+//				{
+//				printf("new tool\n");
+//				}
+//			else
+//				{
+				printf("%s\n",selectedToolFromDrop->menuName);
+					asprintf(&dirname,"%s/.KKEdit/tools",getenv("HOME"));
+					text=strdup(gtk_entry_get_text((GtkEntry*)toolNameWidget));
+					text=g_strdelimit(text," ",'-');
+					asprintf(&toolpath,"%s/.KKEdit/tools/%s",getenv("HOME"),text);
+
+					fd=fopen(toolpath,"w");
+					if(fd!=NULL)
+						{
+
+							if(gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false)
+								flags=TOOL_ASYNC;
+							else
+								{
+									if(gtk_toggle_button_get_active((GtkToggleButton*)ignoreWidget)==true)
+										flags=TOOL_IGNORE_OP;
+									if(gtk_toggle_button_get_active((GtkToggleButton*)pasteWidget)==true)
+										flags=TOOL_PASTE_OP;
+									if(gtk_toggle_button_get_active((GtkToggleButton*)replaceWidget)==true)
+										flags=TOOL_REPLACE_OP;
+									if(gtk_toggle_button_get_active((GtkToggleButton*)outputWidget)==true)
+										flags=TOOL_VIEW_OP;
+								}
+							if(gtk_toggle_button_get_active((GtkToggleButton*)showDocWidget)==true)
+								flags=flags+TOOL_SHOW_DOC;				
+						
+							fprintf(fd,"name\t%s\n",gtk_entry_get_text((GtkEntry*)toolNameWidget));
+							fprintf(fd,"command\t%s\n",gtk_entry_get_text((GtkEntry*)commandLineWidget));
+							fprintf(fd,"comment\t%s\n",gtk_entry_get_text((GtkEntry*)commentWidget));
+							fprintf(fd,"flags\t%i\n",flags);
+							fprintf(fd,"interm\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget));
+							fprintf(fd,"inpopup\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)inPopupWidget));
+							fprintf(fd,"alwayspopup\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)alwaysPopupWidget));
+							fprintf(fd,"clearview\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)clearViewWidget));
+							fprintf(fd,"runasroot\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)runAsRootWidget));
+							fprintf(fd,"shortcutkey\t%i\n",(int)gdk_keyval_from_name(gtk_entry_get_text((GtkEntry*)keyWidget)));
+							fclose(fd);
+						}
+					free(dirname);
+					free(text);
+
+					gtk_widget_hide((GtkWidget*)data);
+					gtk_widget_destroy((GtkWidget*)data);
+					buildTools();
+					gtk_widget_show_all(menutools);
+				//}
+		}
+
 	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
 		{
 			gtk_widget_hide((GtkWidget*)data);
 			gtk_widget_destroy((GtkWidget*)data);
 		}
+
+
 }
 
 //void XXXsetToolOptions(GtkWidget* widget,gpointer data)

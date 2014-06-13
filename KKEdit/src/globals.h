@@ -250,6 +250,7 @@ extern GtkWidget*		showDocWidget;
 extern GtkWidget*		toolSelect;
 extern GtkWidget*		clearViewWidget;
 extern GtkWidget*		runAsRootWidget;
+extern toolStruct*		selectedToolFromDrop;
 
 //view tool output
 extern GtkWidget*		mainVPane;
