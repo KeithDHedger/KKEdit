@@ -551,24 +551,24 @@ void doMakeTool(void)
 	gtk_widget_set_name(ignoreWidget,"ignore");
 	gtk_toggle_button_set_active((GtkToggleButton*)ignoreWidget,true);
 	gtk_box_pack_start(GTK_BOX(vbox),ignoreWidget,false,true,0);
-	g_signal_connect(G_OBJECT(ignoreWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
+//	g_signal_connect(G_OBJECT(ignoreWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags - paste
 	pasteWidget=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)ignoreWidget,"Paste Output");
 	gtk_widget_set_name(pasteWidget,"paste");
 	gtk_box_pack_start(GTK_BOX(vbox),pasteWidget,false,true,0);
-	g_signal_connect(G_OBJECT(pasteWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
+//	g_signal_connect(G_OBJECT(pasteWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 //flags - replace all
 	replaceWidget=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)ignoreWidget,"Replace All Contents");
 	gtk_widget_set_name(replaceWidget,"replace");
 	gtk_box_pack_start(GTK_BOX(vbox),replaceWidget,false,true,0);
-	g_signal_connect(G_OBJECT(replaceWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
+//	g_signal_connect(G_OBJECT(replaceWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags - view
 	outputWidget=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)ignoreWidget,"View Output");
 	gtk_widget_set_name(outputWidget,"outtoview");
 	gtk_box_pack_start(GTK_BOX(vbox),outputWidget,false,true,0);
-	g_signal_connect(G_OBJECT(outputWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
+//	g_signal_connect(G_OBJECT(outputWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //buttons
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),false,false,0);
