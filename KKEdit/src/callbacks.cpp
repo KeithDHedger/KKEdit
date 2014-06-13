@@ -1552,6 +1552,11 @@ void setPrefs(GtkWidget* widget,gpointer data)
 
 void setToolOptions(GtkWidget* widget,gpointer data)
 {
+	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
+		{
+			gtk_widget_hide((GtkWidget*)data);
+			gtk_widget_destroy((GtkWidget*)data);
+		}
 }
 
 //void XXXsetToolOptions(GtkWidget* widget,gpointer data)
