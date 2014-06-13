@@ -666,7 +666,11 @@ void buildTools(void)
 						{
 							keyflags=0;
 							if(gdk_keyval_is_upper(((toolStruct*)ptr->data)->keyCode))
-								keyflags=GDK_SHIFT_MASK;
+								{
+									keyflags=GDK_SHIFT_MASK;
+									if(gdk_keyval_is_lower(((toolStruct*)ptr->data)->keyCode))
+									keyflags=0;
+								}
 							gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,((toolStruct*)ptr->data)->keyCode,(GdkModifierType)(GDK_CONTROL_MASK|keyflags),GTK_ACCEL_VISIBLE);
 						}
 
