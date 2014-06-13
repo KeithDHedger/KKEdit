@@ -36,155 +36,155 @@ void setToobarSensitive(void)
 {
 	pageStruct*	page=getPageStructPtr(currentTabNumber);
 
-	for(int j=0;j<(int)strlen(toolBarLayout);j++)
+	for(int j=0; j<(int)strlen(toolBarLayout); j++)
 		{
 			switch(toolBarLayout[j])
 				{
-					case 'N':
+				case 'N':
 //newnewButton
-						if(newButton!=NULL)
-							gtk_widget_set_sensitive((GtkWidget*)newButton,true);
-						break;
-					case 'O':
+					if(newButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)newButton,true);
+					break;
+				case 'O':
 //open+recent
-						if(openButton!=NULL)
-							gtk_widget_set_sensitive((GtkWidget*)openButton,true);
-						break;
-					case 'S':
+					if(openButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)openButton,true);
+					break;
+				case 'S':
 //save
-						if(saveButton!=NULL)
-							{
-								if(page!=NULL)
-									gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
-								else
-									gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
-							}
-						break;
-					case 'X':
+					if(saveButton!=NULL)
+						{
+							if(page!=NULL)
+								gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
+							else
+								gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
+						}
+					break;
+				case 'X':
 //cut
-						if(cutButton!=NULL)
-							{
-								if(page!=NULL)
-									gtk_widget_set_sensitive((GtkWidget*)cutButton,true);
-								else
-									gtk_widget_set_sensitive((GtkWidget*)cutButton,false);
-							}
-						break;
-					case 'C':
+					if(cutButton!=NULL)
+						{
+							if(page!=NULL)
+								gtk_widget_set_sensitive((GtkWidget*)cutButton,true);
+							else
+								gtk_widget_set_sensitive((GtkWidget*)cutButton,false);
+						}
+					break;
+				case 'C':
 //copy
-						if(copyButton!=NULL)
-							{
-								if(page!=NULL)
-									gtk_widget_set_sensitive((GtkWidget*)copyButton,true);
-								else
-									gtk_widget_set_sensitive((GtkWidget*)copyButton,false);
-							}
-						break;
-					case 'P':
+					if(copyButton!=NULL)
+						{
+							if(page!=NULL)
+								gtk_widget_set_sensitive((GtkWidget*)copyButton,true);
+							else
+								gtk_widget_set_sensitive((GtkWidget*)copyButton,false);
+						}
+					break;
+				case 'P':
 //paste
-						if(pasteButton!=NULL)
-							{
-								if(page!=NULL)
-									gtk_widget_set_sensitive((GtkWidget*)pasteButton,true);
-								else
-									gtk_widget_set_sensitive((GtkWidget*)pasteButton,false);
-							}
-						break;
-					case 'U':
+					if(pasteButton!=NULL)
+						{
+							if(page!=NULL)
+								gtk_widget_set_sensitive((GtkWidget*)pasteButton,true);
+							else
+								gtk_widget_set_sensitive((GtkWidget*)pasteButton,false);
+						}
+					break;
+				case 'U':
 //undo
-						if(undoButton!=NULL)
-							{
-								if(page!=NULL)
-									gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
-								else
-									gtk_widget_set_sensitive((GtkWidget*)undoButton,false);
-							}
-						break;
-					case 'R':
+					if(undoButton!=NULL)
+						{
+							if(page!=NULL)
+								gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
+							else
+								gtk_widget_set_sensitive((GtkWidget*)undoButton,false);
+						}
+					break;
+				case 'R':
 //redo
-						if(redoButton!=NULL)
-							{
-								if(page!=NULL)
-									gtk_widget_set_sensitive((GtkWidget*)redoButton,gtk_source_buffer_can_redo(page->buffer));
-								else
-									gtk_widget_set_sensitive((GtkWidget*)redoButton,false);
-							}
-						break;
-					case 'F':
+					if(redoButton!=NULL)
+						{
+							if(page!=NULL)
+								gtk_widget_set_sensitive((GtkWidget*)redoButton,gtk_source_buffer_can_redo(page->buffer));
+							else
+								gtk_widget_set_sensitive((GtkWidget*)redoButton,false);
+						}
+					break;
+				case 'F':
 //find
-						if(findButton!=NULL)
-							{
-								if(page!=NULL)
-									gtk_widget_set_sensitive((GtkWidget*)findButton,true);
-								else
-									gtk_widget_set_sensitive((GtkWidget*)findButton,false);
-							}
-						break;
-					case 'G':
+					if(findButton!=NULL)
+						{
+							if(page!=NULL)
+								gtk_widget_set_sensitive((GtkWidget*)findButton,true);
+							else
+								gtk_widget_set_sensitive((GtkWidget*)findButton,false);
+						}
+					break;
+				case 'G':
 //navigation
-						if(gotoDefButton!=NULL)
-							{
-								if(page!=NULL)
-									gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,true);
-								else
-									gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,false);
-							}
-						break;
+					if(gotoDefButton!=NULL)
+						{
+							if(page!=NULL)
+								gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,true);
+							else
+								gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,false);
+						}
+					break;
 
-					case 'B':
+				case 'B':
 //go back
-						if(backButton!=NULL)
-							{
-								if(page!=NULL)
-									gtk_widget_set_sensitive((GtkWidget*)backButton,true);
-								else
-									gtk_widget_set_sensitive((GtkWidget*)backButton,false);
-							}
-						break;
+					if(backButton!=NULL)
+						{
+							if(page!=NULL)
+								gtk_widget_set_sensitive((GtkWidget*)backButton,true);
+							else
+								gtk_widget_set_sensitive((GtkWidget*)backButton,false);
+						}
+					break;
 
 
-					case '9':
+				case '9':
 //find in gtkdoc
-						if(gotoLineButton!=NULL)
-							{
-								if(page!=NULL)
-									gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,true);
-								else
-									gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,false);
-							}
-						break;
-		
-					case 'A':
+					if(gotoLineButton!=NULL)
+						{
+							if(page!=NULL)
+								gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,true);
+							else
+								gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,false);
+						}
+					break;
+
+				case 'A':
 //find in gtkdoc
-						if(findApiButton!=NULL)
-							{
-								if(page!=NULL)
-									gtk_widget_set_sensitive((GtkWidget*)findApiButton,true);
-								else
-									gtk_widget_set_sensitive((GtkWidget*)findApiButton,false);
-							}
-						break;
-		
-					case 'D':
+					if(findApiButton!=NULL)
+						{
+							if(page!=NULL)
+								gtk_widget_set_sensitive((GtkWidget*)findApiButton,true);
+							else
+								gtk_widget_set_sensitive((GtkWidget*)findApiButton,false);
+						}
+					break;
+
+				case 'D':
 //find in function def
-						if(findFuncDefButton!=NULL)
-							{
-								if(page!=NULL)
-									gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,true);
-								else
-									gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,false);
-							}
-						break;
-					case 'L':
+					if(findFuncDefButton!=NULL)
+						{
+							if(page!=NULL)
+								gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,true);
+							else
+								gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,false);
+						}
+					break;
+				case 'L':
 //livesearch
-						if(liveSearchButton!=NULL)
-							{
-								if(page!=NULL)
-									gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,true);
-								else
-									gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,false);
-							}
-						break;
+					if(liveSearchButton!=NULL)
+						{
+							if(page!=NULL)
+								gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,true);
+							else
+								gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,false);
+						}
+					break;
 				}
 		}
 }
@@ -202,7 +202,7 @@ void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer)
 	GtkTextIter	enditer;
 
 	numpages=gtk_notebook_get_n_pages(notebook);
-	for(int j=0;j<numpages;j++)
+	for(int j=0; j<numpages; j++)
 		{
 			page=getPageStructPtr(j);
 			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
@@ -262,7 +262,7 @@ void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 					ptr=g_list_next(ptr);
 				}
 
-		/* just take the first and delete it */
+			/* just take the first and delete it */
 //rebuild bookmark menu
 			rebuildBookMarkMenu();
 
@@ -279,7 +279,7 @@ void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 		}
 	else
 		{
-		/* no mark found: create one */
+			/* no mark found: create one */
 			bookmarkdata=(bookMarksNew*)malloc(sizeof(bookMarksNew));
 			newBookMarksList=g_list_append(newBookMarksList,(gpointer)bookmarkdata);
 			bookmarkdata->page=page;
@@ -303,9 +303,9 @@ void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 					asprintf(&previewtext,"%s...%s",starttext,endtext);
 				}
 
-			bookmarkdata->label=previewtext;	
+			bookmarkdata->label=previewtext;
 			menuitem=gtk_menu_item_new_with_label(bookmarkdata->label);
-			gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);	
+			gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
 			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)bookmarkdata);
 			gtk_widget_show_all(menuBookMark);
 		}
@@ -361,7 +361,7 @@ void doOpenFile(GtkWidget* widget,gpointer data)
 	char*		filename;
 	GSList*		filenames;
 	GSList*		thisnext;
-	
+
 	dialog=gtk_file_chooser_dialog_new("Open File",NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,NULL);
 	gtk_file_chooser_set_select_multiple((GtkFileChooser*)dialog,true);
 	if (gtk_dialog_run(GTK_DIALOG (dialog))==GTK_RESPONSE_ACCEPT)
@@ -378,7 +378,7 @@ void doOpenFile(GtkWidget* widget,gpointer data)
 			g_slist_free(filenames);
 		}
 	gtk_widget_destroy (dialog);
-	refreshMainWindow();	
+	refreshMainWindow();
 }
 
 int show_question(char* filename)
@@ -410,7 +410,7 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 
 	pageStruct* pagecheck=getPageStructPtr(currentTabNumber);
 
-	
+
 	if((page==NULL) || (showStatus==false))
 		{
 			gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
@@ -534,15 +534,15 @@ void closeTab(GtkWidget* widget,gpointer data)
 			result=show_question(page->fileName);
 			switch(result)
 				{
-					case GTK_RESPONSE_YES:
-						if(saveFile(NULL,NULL)==false)
-							return;
-						break;
-					case GTK_RESPONSE_NO:
-						break;
-					default:
+				case GTK_RESPONSE_YES:
+					if(saveFile(NULL,NULL)==false)
 						return;
-						break;
+					break;
+				case GTK_RESPONSE_NO:
+					break;
+				default:
+					return;
+					break;
 				}
 		}
 
@@ -565,7 +565,7 @@ void closeAllTabs(GtkWidget* widget,gpointer data)
 {
 	int	numtabs=gtk_notebook_get_n_pages(notebook);
 
-	for(int loop=0;loop<numtabs;loop++)
+	for(int loop=0; loop<numtabs; loop++)
 		{
 			closingAll=true;
 			closeTab(NULL,0);
@@ -586,11 +586,11 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	char*		lineptr;
 	bool		onefunc=false;
 	int			numtypes=0;
-	char*		typenames[50]={NULL,};
+	char*		typenames[50]= {NULL,};
 	bool		flag;
 	char*		newstr=NULL;
 	GtkWidget*	whattypemenu;
-	GtkWidget*	typesubmenus[50]={NULL,};
+	GtkWidget*	typesubmenus[50]= {NULL,};
 	GtkWidget*	submenu;
 
 	if(arg1==NULL)
@@ -629,7 +629,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 							if(newstr!=NULL)
 								{
 									flag=false;
-									for(int j=0;j<numtypes;j++)
+									for(int j=0; j<numtypes; j++)
 										{
 											if (strcmp(newstr,typenames[j])==0)
 												{
@@ -710,9 +710,9 @@ void pasteFromClip(GtkWidget* widget,gpointer data)
 	mainclipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
 	clipdata=gtk_clipboard_wait_for_text(mainclipboard);
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
-		if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
-		gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)clipdata,-1);
+	gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)clipdata,-1);
 	gtk_text_buffer_end_user_action   ((GtkTextBuffer*)page->buffer);
 	setSensitive();
 }
@@ -722,11 +722,11 @@ void undo(GtkWidget* widget,gpointer data)
 	pageStruct*	page=getPageStructPtr(-1);
 
 	if(gtk_source_buffer_can_undo(page->buffer));
-		{
-			gtk_source_buffer_undo(page->buffer);
-			page->isFirst=true;
-			setSensitive();
-		}
+	{
+		gtk_source_buffer_undo(page->buffer);
+		page->isFirst=true;
+		setSensitive();
+	}
 }
 
 void unRedoAll(GtkWidget* widget,gpointer data)
@@ -756,11 +756,11 @@ void redo(GtkWidget* widget,gpointer data)
 	pageStruct*	page=getPageStructPtr(-1);
 
 	if(gtk_source_buffer_can_redo(page->buffer));
-		{
-			gtk_source_buffer_redo(page->buffer);
-			page->isFirst=true;
-			setSensitive();
-		}
+	{
+		gtk_source_buffer_redo(page->buffer);
+		page->isFirst=true;
+		setSensitive();
+	}
 }
 
 void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
@@ -769,7 +769,7 @@ void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectio
 	int		cnt=g_strv_length(array);
 	char*	filename;
 
-	for(int j=0;j<cnt;j++)
+	for(int j=0; j<cnt; j++)
 		{
 			filename=g_filename_from_uri(array[j],NULL,NULL);
 			openFile(filename,0);
@@ -788,7 +788,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
-	const char*	vars[]={"%t","%f","%d","%i","%h","%l",NULL};
+	const char*	vars[]= {"%t","%f","%d","%i","%h","%l",NULL};
 	char*		ptr;
 	long		pos;
 	int			loop=0;
@@ -798,7 +798,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	if(page==NULL || tool==NULL)
 		return;
 
-	const char*		varData[]={NULL,page->filePath,NULL,DATADIR,htmlFile,page->lang};
+	const char*		varData[]= {NULL,page->filePath,NULL,DATADIR,htmlFile,page->lang};
 
 	tempCommand=g_string_new(tool->command);
 
@@ -815,7 +815,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	setenv("KKEDIT_CURRENTDIR",docdirname,1);
 	setenv("KKEDIT_DATADIR",DATADIR,1);
 	setenv("KKEDIT_SOURCE_LANG",page->lang,1);
-	
+
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
@@ -1000,7 +1000,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 				}
 			ptr=g_list_next(ptr);
 		}
-	
+
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	menuitem=gtk_menu_item_new_with_label("Toggle Bookmark");
@@ -1103,7 +1103,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 	char*						name;
 
 	if(event->button==3 && event->type==GDK_BUTTON_PRESS)
-	    {
+		{
 			tabMenu=gtk_menu_new();
 			page=(pageStruct*)user_data;
 
@@ -1169,12 +1169,12 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 					cnt++;
 				}
 			idsort[cnt]=NULL;
-	
+
 			flag=true;
 			while(flag==true)
 				{
 					flag=false;
-					for(int j=0;j<cnt;j++)
+					for(int j=0; j<cnt; j++)
 						{
 							if((idsort[j+1]!=NULL) && (strcmp(idsort[j],idsort[j+1])>0))
 								{
@@ -1189,7 +1189,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 						}
 				}
 
-			for(int j=0;j<cnt;j++)
+			for(int j=0; j<cnt; j++)
 				{
 					lang=gtk_source_language_manager_get_language(lm,idsort[j]);
 					if(gtk_source_language_get_hidden(lang)!=true)
@@ -1203,7 +1203,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 									gtk_image_menu_item_set_image((GtkImageMenuItem *)menuids,image);
 								}
 							else
-								{	
+								{
 									menuids=gtk_menu_item_new_with_label(langname);
 								}
 
@@ -1254,7 +1254,7 @@ void messageOpen(UniqueMessageData *message)
 	gchar** uris=unique_message_data_get_uris(message);
 	argc=g_strv_length(uris);
 
-	for (int loop=1;loop<argc;loop++)
+	for (int loop=1; loop<argc; loop++)
 		openFile(uris[loop],1);
 }
 
@@ -1264,22 +1264,22 @@ UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessag
 
 	switch(command)
 		{
-			case UNIQUE_ACTIVATE:
-				gtk_window_set_screen(GTK_WINDOW(window),unique_message_data_get_screen(message));
-				gtk_window_present_with_time(GTK_WINDOW(window),time);
-				res=UNIQUE_RESPONSE_OK;
-				break;
+		case UNIQUE_ACTIVATE:
+			gtk_window_set_screen(GTK_WINDOW(window),unique_message_data_get_screen(message));
+			gtk_window_present_with_time(GTK_WINDOW(window),time);
+			res=UNIQUE_RESPONSE_OK;
+			break;
 
-			case UNIQUE_OPEN:
-				messageOpen(message);
-				gtk_window_set_screen(GTK_WINDOW(window),unique_message_data_get_screen(message));
-				gtk_window_present_with_time(GTK_WINDOW(window),time);
-   				res=UNIQUE_RESPONSE_OK;
-				break;
+		case UNIQUE_OPEN:
+			messageOpen(message);
+			gtk_window_set_screen(GTK_WINDOW(window),unique_message_data_get_screen(message));
+			gtk_window_present_with_time(GTK_WINDOW(window),time);
+			res=UNIQUE_RESPONSE_OK;
+			break;
 
-			default:
-				res=UNIQUE_RESPONSE_OK;
-				break;
+		default:
+			res=UNIQUE_RESPONSE_OK;
+			break;
 		}
 	return(res);
 }
@@ -1372,7 +1372,7 @@ bool doSaveAll(GtkWidget* widget,gpointer data)
 	int			result;
 	pageStruct*	page;
 
-	for(int loop=0;loop<numpages;loop++)
+	for(int loop=0; loop<numpages; loop++)
 		{
 			page=getPageStructPtr(loop);
 			if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)))
@@ -1382,16 +1382,16 @@ bool doSaveAll(GtkWidget* widget,gpointer data)
 							result=show_question(g_path_get_basename(page->fileName));
 							switch(result)
 								{
-									case GTK_RESPONSE_YES:
-										gtk_notebook_set_current_page(notebook,loop);
-										saveFile(NULL,NULL);
-										
-										break;
-									case GTK_RESPONSE_NO:
-										break;
-									default:
-										return(false);;
-										break;
+								case GTK_RESPONSE_YES:
+									gtk_notebook_set_current_page(notebook,loop);
+									saveFile(NULL,NULL);
+
+									break;
+								case GTK_RESPONSE_NO:
+									break;
+								default:
+									return(false);;
+									break;
 								}
 						}
 					else
@@ -1506,7 +1506,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 					g_free(highlightColour);
 					highlightColour=strdup(gtk_entry_get_text((GtkEntry*)bmHighlightBox));
 				}
-			
+
 			if(terminalCommand!=NULL)
 				{
 					g_free(terminalCommand);
@@ -1558,60 +1558,73 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 	FILE*	fd=NULL;
 	int		flags;
 
+	asprintf(&dirname,"%s/.KKEdit/tools",getenv("HOME"));
+	text=strdup(gtk_entry_get_text((GtkEntry*)toolNameWidget));
+	text=g_strdelimit(text," ",'-');
+	asprintf(&toolpath,"%s/.KKEdit/tools/%s",getenv("HOME"),text);
+
+	if(gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false)
+		{
+			gtk_widget_set_sensitive(ignoreWidget,false);
+			gtk_widget_set_sensitive(pasteWidget,false);
+			gtk_widget_set_sensitive(replaceWidget,false);
+			gtk_widget_set_sensitive(outputWidget,false);
+		}
+	else
+		{
+			gtk_widget_set_sensitive(ignoreWidget,true);
+			gtk_widget_set_sensitive(pasteWidget,true);
+			gtk_widget_set_sensitive(replaceWidget,true);
+			gtk_widget_set_sensitive(outputWidget,true);
+		}
+
+	if(gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget)==true)
+		{
+			gtk_widget_set_sensitive(ignoreWidget,false);
+			gtk_widget_set_sensitive(pasteWidget,false);
+			gtk_widget_set_sensitive(replaceWidget,false);
+			gtk_widget_set_sensitive(outputWidget,false);
+		}
+
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{
-//			if(selectedToolFromDrop==NULL)
-//				{
-//				printf("new tool\n");
-//				}
-//			else
-//				{
-				printf("%s\n",selectedToolFromDrop->menuName);
-					asprintf(&dirname,"%s/.KKEdit/tools",getenv("HOME"));
-					text=strdup(gtk_entry_get_text((GtkEntry*)toolNameWidget));
-					text=g_strdelimit(text," ",'-');
-					asprintf(&toolpath,"%s/.KKEdit/tools/%s",getenv("HOME"),text);
+			fd=fopen(toolpath,"w");
+			if(fd!=NULL)
+				{
 
-					fd=fopen(toolpath,"w");
-					if(fd!=NULL)
+					if(gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false)
+						flags=TOOL_ASYNC;
+					else
 						{
-
-							if(gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false)
-								flags=TOOL_ASYNC;
-							else
-								{
-									if(gtk_toggle_button_get_active((GtkToggleButton*)ignoreWidget)==true)
-										flags=TOOL_IGNORE_OP;
-									if(gtk_toggle_button_get_active((GtkToggleButton*)pasteWidget)==true)
-										flags=TOOL_PASTE_OP;
-									if(gtk_toggle_button_get_active((GtkToggleButton*)replaceWidget)==true)
-										flags=TOOL_REPLACE_OP;
-									if(gtk_toggle_button_get_active((GtkToggleButton*)outputWidget)==true)
-										flags=TOOL_VIEW_OP;
-								}
-							if(gtk_toggle_button_get_active((GtkToggleButton*)showDocWidget)==true)
-								flags=flags+TOOL_SHOW_DOC;				
-						
-							fprintf(fd,"name\t%s\n",gtk_entry_get_text((GtkEntry*)toolNameWidget));
-							fprintf(fd,"command\t%s\n",gtk_entry_get_text((GtkEntry*)commandLineWidget));
-							fprintf(fd,"comment\t%s\n",gtk_entry_get_text((GtkEntry*)commentWidget));
-							fprintf(fd,"flags\t%i\n",flags);
-							fprintf(fd,"interm\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget));
-							fprintf(fd,"inpopup\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)inPopupWidget));
-							fprintf(fd,"alwayspopup\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)alwaysPopupWidget));
-							fprintf(fd,"clearview\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)clearViewWidget));
-							fprintf(fd,"runasroot\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)runAsRootWidget));
-							fprintf(fd,"shortcutkey\t%i\n",(int)gdk_keyval_from_name(gtk_entry_get_text((GtkEntry*)keyWidget)));
-							fclose(fd);
+							if(gtk_toggle_button_get_active((GtkToggleButton*)ignoreWidget)==true)
+								flags=TOOL_IGNORE_OP;
+							if(gtk_toggle_button_get_active((GtkToggleButton*)pasteWidget)==true)
+								flags=TOOL_PASTE_OP;
+							if(gtk_toggle_button_get_active((GtkToggleButton*)replaceWidget)==true)
+								flags=TOOL_REPLACE_OP;
+							if(gtk_toggle_button_get_active((GtkToggleButton*)outputWidget)==true)
+								flags=TOOL_VIEW_OP;
 						}
-					free(dirname);
-					free(text);
+					if(gtk_toggle_button_get_active((GtkToggleButton*)showDocWidget)==true)
+						flags=flags+TOOL_SHOW_DOC;
 
-					gtk_widget_hide((GtkWidget*)data);
-					gtk_widget_destroy((GtkWidget*)data);
-					buildTools();
-					gtk_widget_show_all(menutools);
-				//}
+					fprintf(fd,"name\t%s\n",gtk_entry_get_text((GtkEntry*)toolNameWidget));
+					fprintf(fd,"command\t%s\n",gtk_entry_get_text((GtkEntry*)commandLineWidget));
+					fprintf(fd,"comment\t%s\n",gtk_entry_get_text((GtkEntry*)commentWidget));
+					fprintf(fd,"flags\t%i\n",flags);
+					fprintf(fd,"interm\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget));
+					fprintf(fd,"inpopup\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)inPopupWidget));
+					fprintf(fd,"alwayspopup\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)alwaysPopupWidget));
+					fprintf(fd,"clearview\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)clearViewWidget));
+					fprintf(fd,"runasroot\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)runAsRootWidget));
+					fprintf(fd,"shortcutkey\t%i\n",(int)gdk_keyval_from_name(gtk_entry_get_text((GtkEntry*)keyWidget)));
+					fclose(fd);
+				}
+
+			gtk_widget_hide((GtkWidget*)data);
+			gtk_widget_destroy((GtkWidget*)data);
+			buildTools();
+			gtk_widget_show_all(menutools);
 		}
 
 	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
@@ -1620,7 +1633,22 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 			gtk_widget_destroy((GtkWidget*)data);
 		}
 
+	if(strcmp(gtk_widget_get_name(widget),"delete")==0)
+		{
+			if((gtk_entry_get_text((GtkEntry*)toolNameWidget)!=NULL) && (yesNo((char*)"Are you sure you want to delete",(char*)gtk_entry_get_text((GtkEntry*)toolNameWidget))==GTK_RESPONSE_YES))
+				{
+					asprintf(&dirname,"rm \"%s\"",toolpath);
+					system(dirname);
+					gtk_widget_hide((GtkWidget*)data);
+					gtk_widget_destroy((GtkWidget*)data);
+					buildTools();
+					gtk_widget_show_all(menutools);
+				}
+		}
 
+	free(toolpath);
+	free(text);
+	free(dirname);
 }
 
 //void XXXsetToolOptions(GtkWidget* widget,gpointer data)
@@ -1677,13 +1705,13 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 //			if(pasteOut==true)
 //				flags=TOOL_PASTE_OP;
 //			if(replaceOut==true)
-//				flags=TOOL_REPLACE_OP;				
+//				flags=TOOL_REPLACE_OP;
 //			if(viewOut==true)
-//				flags=TOOL_VIEW_OP;				
+//				flags=TOOL_VIEW_OP;
 //		}
 //
 //	if(showDoc==true)
-//		flags=flags+TOOL_SHOW_DOC;				
+//		flags=flags+TOOL_SHOW_DOC;
 //
 //	if(inTerm==true)
 //		{
@@ -1739,7 +1767,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 
 void doAbout(GtkWidget* widget,gpointer data)
 {
-	const char*	authors[]={"K.D.Hedger <"MYEMAIL">\n",MYWEBSITE,"\nMore by the same author\n","Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
+	const char*	authors[]= {"K.D.Hedger <"MYEMAIL">\n",MYWEBSITE,"\nMore by the same author\n","Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
 	const char	copyright[] ="Copyright \xc2\xa9 2013 K.D.Hedger";
 	const char*	aboutboxstring="KKEdit Code Text Editor";
 	char*		licence;
@@ -1760,13 +1788,13 @@ void doCombineBuffers(void)
 	GtkTextIter	iter;
 	GtkTextIter	fromstart;
 	GtkTextIter	fromend;
-	
+
 	printBuffer=gtk_source_buffer_new(NULL);
 	printView=(GtkSourceView*)gtk_source_view_new_with_buffer(printBuffer);
 
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)printBuffer,&iter);
 
-	for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
+	for(int j=0; j<gtk_notebook_get_n_pages(notebook); j++)
 		{
 			page=getPageStructPtr(j);
 			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&fromstart);
@@ -1790,12 +1818,12 @@ void beginPrint(GtkPrintOperation *operation,GtkPrintContext *context,gpointer u
 	GtkSourcePrintCompositor*	compositor;
 	gint						n_pages;
 
-    compositor=GTK_SOURCE_PRINT_COMPOSITOR (user_data);
+	compositor=GTK_SOURCE_PRINT_COMPOSITOR (user_data);
 
-    while(!gtk_source_print_compositor_paginate(compositor,context));
+	while(!gtk_source_print_compositor_paginate(compositor,context));
 
-    n_pages=gtk_source_print_compositor_get_n_pages(compositor);
-    gtk_print_operation_set_n_pages(operation,n_pages);
+	n_pages=gtk_source_print_compositor_get_n_pages(compositor);
+	gtk_print_operation_set_n_pages(operation,n_pages);
 }
 
 void printFile(GtkWidget* widget,gpointer data)
@@ -1834,12 +1862,12 @@ void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 
 	uri=gtk_recent_chooser_get_current_uri(chooser);
 	if (uri!=NULL)
-	{
-		filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
-		openFile(filename,0);
-		g_free (uri);
-		g_free(filename);
-	}
+		{
+			filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
+			openFile(filename,0);
+			g_free (uri);
+			g_free(filename);
+		}
 }
 
 void newEditor(GtkWidget* widget,gpointer data)
@@ -1848,21 +1876,21 @@ void newEditor(GtkWidget* widget,gpointer data)
 
 	switch((long)data)
 		{
-			case 1:
-				if(strcmp(rootCommand,"")!=0)
-					asprintf(&command,"%s kkedit -m &>/dev/null &",rootCommand);
-				else
-					asprintf(&command,"%s sudo kkedit -m &>/dev/null &",terminalCommand);
-				system(command);
-				free(command);
-				break;
-			case 2:
-				system("kkedit -m &>/dev/null &");
-				break;
-			case 3:
-				if(gotManEditor==0)
-					system("manpageeditor &>/dev/null &");
-				break;
+		case 1:
+			if(strcmp(rootCommand,"")!=0)
+				asprintf(&command,"%s kkedit -m &>/dev/null &",rootCommand);
+			else
+				asprintf(&command,"%s sudo kkedit -m &>/dev/null &",terminalCommand);
+			system(command);
+			free(command);
+			break;
+		case 2:
+			system("kkedit -m &>/dev/null &");
+			break;
+		case 3:
+			if(gotManEditor==0)
+				system("manpageeditor &>/dev/null &");
+			break;
 		}
 }
 
@@ -1887,7 +1915,7 @@ void toggleToolOutput(GtkWidget* widget,gpointer data)
 		{
 			gtk_widget_hide(toolOutVBox);
 			gtk_menu_item_set_label((GtkMenuItem*)widget,"Show Tool Output");
-	}
+		}
 }
 
 void toggleBookMarkBar(GtkWidget* widget,gpointer data)
@@ -1932,123 +1960,123 @@ void doKeyShortCut(int what)
 	switch(what)
 		{
 //delete line ^Y
-			case 0:
-				gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
-				break;
+		case 0:
+			gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
+			break;
 //delete from cursor to end of line ^k
-			case 1:
-				buf->getToVisibleLineEnd();
-				buf->deleteFromCursor(&buf->visibleLineEnd);
-				break;
+		case 1:
+			buf->getToVisibleLineEnd();
+			buf->deleteFromCursor(&buf->visibleLineEnd);
+			break;
 //delete from cursor to beginning of line ^?
-			case 2:
-				buf->getToLineStart();
-				buf->deleteToCursor(&buf->lineStart);
-				break;
+		case 2:
+			buf->getToLineStart();
+			buf->deleteToCursor(&buf->lineStart);
+			break;
 //Select Word Under Cursor
-			case 3:
-				if(buf->selectWord())
-					buf->selectRange(&buf->lineStart,&buf->cursorPos);
-				break;
+		case 3:
+			if(buf->selectWord())
+				buf->selectRange(&buf->lineStart,&buf->cursorPos);
+			break;
 //delete word under cursor ^h
-			case 4:
-				if(buf->selectWord())
-					gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->cursorPos);
-				break;
+		case 4:
+			if(buf->selectWord())
+				gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->cursorPos);
+			break;
 //duplictae line ^D
-			case 5:
-				buf->getCursorIter();
-				text=buf->getSelectedText();
-				gtk_text_iter_backward_lines(&buf->cursorPos,-1);
-				gtk_text_buffer_begin_user_action(buf->textBuffer);
-					gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
-					free(text);
-				gtk_text_buffer_end_user_action(buf->textBuffer);
-				break;
+		case 5:
+			buf->getCursorIter();
+			text=buf->getSelectedText();
+			gtk_text_iter_backward_lines(&buf->cursorPos,-1);
+			gtk_text_buffer_begin_user_action(buf->textBuffer);
+			gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
+			free(text);
+			gtk_text_buffer_end_user_action(buf->textBuffer);
+			break;
 //select line ^l
-			case 6:
-				buf->selectVisibleLine();
-				break;
+		case 6:
+			buf->selectVisibleLine();
+			break;
 //Move Current Line Up ^m
-			case 7:
-				text=buf->getSelectedText();
-				gtk_text_buffer_begin_user_action(buf->textBuffer);
-					gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
-					buf->getCursorIter();
-					gtk_text_iter_backward_visible_line(&buf->cursorPos);
-					gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
-					gtk_text_iter_backward_visible_line(&buf->cursorPos);
-					gtk_text_buffer_place_cursor(buf->textBuffer,&buf->cursorPos);
-				gtk_text_buffer_end_user_action(buf->textBuffer);
-				break;
+		case 7:
+			text=buf->getSelectedText();
+			gtk_text_buffer_begin_user_action(buf->textBuffer);
+			gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
+			buf->getCursorIter();
+			gtk_text_iter_backward_visible_line(&buf->cursorPos);
+			gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
+			gtk_text_iter_backward_visible_line(&buf->cursorPos);
+			gtk_text_buffer_place_cursor(buf->textBuffer,&buf->cursorPos);
+			gtk_text_buffer_end_user_action(buf->textBuffer);
+			break;
 //Move Current Line Down
-			case 8:
-				text=buf->getSelectedText();
-				gtk_text_buffer_begin_user_action(buf->textBuffer);
+		case 8:
+			text=buf->getSelectedText();
+			gtk_text_buffer_begin_user_action(buf->textBuffer);
+			gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
+			buf->getCursorIter();
+			gtk_text_iter_forward_visible_line(&buf->cursorPos);
+			gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
+			buf->getCursorIter();
+			gtk_text_iter_forward_visible_line(&buf->cursorPos);
+			gtk_text_buffer_place_cursor(buf->textBuffer,&buf->cursorPos);
+			gtk_text_buffer_end_user_action(buf->textBuffer);
+			break;
+//Select From Cursor To End Of Line
+		case 9:
+			buf->selectToLineEnd();
+			break;
+//Select From Beginning Of Line To Cursor
+		case 10:
+			buf->selectToLineStart();
+			break;
+//Move Selection Up
+		case 11:
+			if(gtk_text_buffer_get_selection_bounds(buf->textBuffer,&buf->lineStart,&buf->lineEnd))
+				{
+					gtk_text_buffer_begin_user_action(buf->textBuffer);
+					gtk_text_iter_set_line_offset(&buf->lineStart,0);
+					if(!gtk_text_iter_starts_line(&buf->lineEnd))
+						gtk_text_iter_forward_visible_line(&buf->lineEnd);
+					buf->selectRange(&buf->lineStart,&buf->lineEnd);
+					text=gtk_text_buffer_get_text(buf->textBuffer,&buf->lineStart,&buf->lineEnd,true);
+					gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
+					buf->getCursorIter();
+					gtk_text_iter_backward_visible_line(&buf->cursorPos);
+					mark=gtk_text_buffer_create_mark(buf->textBuffer,"moveup",&buf->cursorPos,true);
+					gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
+					gtk_text_buffer_get_iter_at_mark(buf->textBuffer,&buf->cursorPos,mark);
+					buf->lineEnd=buf->cursorPos;
+					gtk_text_buffer_place_cursor(buf->textBuffer,&buf->cursorPos);
+					gtk_text_iter_forward_chars(&buf->lineEnd,strlen(text));
+					buf->selectRange(&buf->cursorPos,&buf->lineEnd);
+					gtk_text_buffer_delete_mark(buf->textBuffer,mark);
+					gtk_text_buffer_end_user_action(buf->textBuffer);
+				}
+			break;
+//Move Selection Down
+		case 12:
+			if(gtk_text_buffer_get_selection_bounds(buf->textBuffer,&buf->lineStart,&buf->lineEnd))
+				{
+					gtk_text_buffer_begin_user_action(buf->textBuffer);
+					gtk_text_iter_set_line_offset(&buf->lineStart,0);
+					if(!gtk_text_iter_starts_line(&buf->lineEnd))
+						gtk_text_iter_forward_visible_line(&buf->lineEnd);
+					buf->selectRange(&buf->lineStart,&buf->lineEnd);
+					text=gtk_text_buffer_get_text(buf->textBuffer,&buf->lineStart,&buf->lineEnd,true);
 					gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
 					buf->getCursorIter();
 					gtk_text_iter_forward_visible_line(&buf->cursorPos);
+					mark=gtk_text_buffer_create_mark(buf->textBuffer,"movedown",&buf->cursorPos,false);
 					gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
-					buf->getCursorIter();
-					gtk_text_iter_forward_visible_line(&buf->cursorPos);
-					gtk_text_buffer_place_cursor(buf->textBuffer,&buf->cursorPos);
-				gtk_text_buffer_end_user_action(buf->textBuffer);
-				break;
-//Select From Cursor To End Of Line
-			case 9:
-				buf->selectToLineEnd();
-				break;
-//Select From Beginning Of Line To Cursor
-			case 10:
-				buf->selectToLineStart();
-				break;
-//Move Selection Up
-			case 11:
-				if(gtk_text_buffer_get_selection_bounds(buf->textBuffer,&buf->lineStart,&buf->lineEnd))
-					{
-						gtk_text_buffer_begin_user_action(buf->textBuffer);
-							gtk_text_iter_set_line_offset(&buf->lineStart,0);
-							if(!gtk_text_iter_starts_line(&buf->lineEnd))
-								gtk_text_iter_forward_visible_line(&buf->lineEnd);
-							buf->selectRange(&buf->lineStart,&buf->lineEnd);
-							text=gtk_text_buffer_get_text(buf->textBuffer,&buf->lineStart,&buf->lineEnd,true);
-							gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
-							buf->getCursorIter();
-							gtk_text_iter_backward_visible_line(&buf->cursorPos);
-							mark=gtk_text_buffer_create_mark(buf->textBuffer,"moveup",&buf->cursorPos,true);
-							gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
-							gtk_text_buffer_get_iter_at_mark(buf->textBuffer,&buf->cursorPos,mark);
-							buf->lineEnd=buf->cursorPos;
-							gtk_text_buffer_place_cursor(buf->textBuffer,&buf->cursorPos);
-							gtk_text_iter_forward_chars(&buf->lineEnd,strlen(text));
-							buf->selectRange(&buf->cursorPos,&buf->lineEnd);
-							gtk_text_buffer_delete_mark(buf->textBuffer,mark);
-						gtk_text_buffer_end_user_action(buf->textBuffer);
-					}
-				break;
-//Move Selection Down
-			case 12:
-				if(gtk_text_buffer_get_selection_bounds(buf->textBuffer,&buf->lineStart,&buf->lineEnd))
-					{
-						gtk_text_buffer_begin_user_action(buf->textBuffer);
-							gtk_text_iter_set_line_offset(&buf->lineStart,0);
-							if(!gtk_text_iter_starts_line(&buf->lineEnd))
-								gtk_text_iter_forward_visible_line(&buf->lineEnd);
-							buf->selectRange(&buf->lineStart,&buf->lineEnd);
-							text=gtk_text_buffer_get_text(buf->textBuffer,&buf->lineStart,&buf->lineEnd,true);
-							gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
-							buf->getCursorIter();
-							gtk_text_iter_forward_visible_line(&buf->cursorPos);
-							mark=gtk_text_buffer_create_mark(buf->textBuffer,"movedown",&buf->cursorPos,false);
-							gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
-							gtk_text_buffer_get_iter_at_mark(buf->textBuffer,&buf->lineEnd,mark);
-							buf->cursorPos=buf->lineEnd;
-							gtk_text_iter_backward_chars(&buf->cursorPos,strlen(text));
-							buf->selectRange(&buf->cursorPos,&buf->lineEnd);
-							gtk_text_buffer_delete_mark(buf->textBuffer,mark);
-						gtk_text_buffer_end_user_action(buf->textBuffer);
-					}
-				break;
+					gtk_text_buffer_get_iter_at_mark(buf->textBuffer,&buf->lineEnd,mark);
+					buf->cursorPos=buf->lineEnd;
+					gtk_text_iter_backward_chars(&buf->cursorPos,strlen(text));
+					buf->selectRange(&buf->cursorPos,&buf->lineEnd);
+					gtk_text_buffer_delete_mark(buf->textBuffer,mark);
+					gtk_text_buffer_end_user_action(buf->textBuffer);
+				}
+			break;
 		}
 	delete buf;
 }
@@ -2091,7 +2119,7 @@ gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 
 	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
 		{
-			for(loop=0;loop<NUMSHORTCUTS;loop++)
+			for(loop=0; loop<NUMSHORTCUTS; loop++)
 				{
 					if(event->keyval==shortCuts[loop][0])
 						{
@@ -2106,6 +2134,7 @@ gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 
 	return FALSE;
 }
+
 
 
 
