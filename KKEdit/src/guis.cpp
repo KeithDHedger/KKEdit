@@ -469,7 +469,7 @@ void doMakeTool(void)
 	toolNameWidget=gtk_entry_new();
 	hbox=gtk_hbox_new(false,0);
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Tool Name:\t"),false,true,0);
-	gtk_container_add(GTK_CONTAINER(hbox),toolNameWidget);
+	gtk_box_pack_start(GTK_BOX(hbox),toolNameWidget,true,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_widget_show(toolNameWidget);
 	gtk_entry_set_text((GtkEntry*)toolNameWidget,"New Tool");
@@ -477,28 +477,28 @@ void doMakeTool(void)
 //command
 	commandLineWidget=gtk_entry_new();
 	hbox=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Command:\t"),false,true,0);
-	gtk_container_add(GTK_CONTAINER(hbox),commandLineWidget);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Command: \t"),false,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),commandLineWidget,true,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_widget_show(commandLineWidget);
 	gtk_entry_set_text((GtkEntry*)commandLineWidget,"");
 //key
 	keyWidget=gtk_entry_new();
-	hbox=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Shortcut:\t"),false,true,0);
-	gtk_container_add(GTK_CONTAINER(hbox),keyWidget);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_widget_show(keyWidget);
+	hbox=gtk_hbox_new(false,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Shortcut:   \t"),false,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),keyWidget,true,true,0);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_entry_set_text((GtkEntry*)keyWidget,"");
 	g_signal_connect(G_OBJECT(keyWidget),"key-press-event",G_CALLBACK(getToolKey),NULL);
 
 //comment
 	commentWidget=gtk_entry_new();
-	hbox=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Comment:\t"),false,true,0);
-	gtk_container_add(GTK_CONTAINER(hbox),commentWidget);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_widget_show(commentWidget);
+	hbox=gtk_hbox_new(false,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new("Comment:  \t"),false,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),commentWidget,true,true,0);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_entry_set_text((GtkEntry*)commentWidget,"");
 
 //info
