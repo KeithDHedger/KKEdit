@@ -158,20 +158,6 @@ GList*			toolsList=NULL;
 
 GtkWidget*		restoreBMs;
 
-//bool			inTerm=false;
-//bool			inPopup=false;
-//bool			alwaysPopup=false;
-//bool			runSync=true;
-//bool			ignoreOut=true;
-//bool			pasteOut=false;
-//bool			replaceOut=false;
-//bool			viewOut=false;
-//bool			showDoc=false;
-//bool			editTool=false;
-//bool			clearView=false;
-//bool			runAsRoot=false;
-//int				keyCode=0;
-
 int				windowWidth;
 int				windowHeight;
 int				windowX=-1;

@@ -266,21 +266,6 @@ extern GList*			toolsList;
 
 extern GtkWidget*		restoreBMs;
 
-
-//extern bool				inTerm;
-//extern bool				inPopup;
-//extern bool				alwaysPopup;
-//extern bool				runSync;
-//extern bool				ignoreOut;
-//extern bool				pasteOut;
-//extern bool				replaceOut;
-//extern bool				viewOut;
-//extern bool				showDoc;
-//extern bool				editTool;
-//extern bool				clearView;
-//extern bool				runAsRoot;
-//extern int				keyCode;
-
 extern int				windowWidth;
 extern int				windowHeight;
 extern int				windowX;
