@@ -1,4 +1,5 @@
 0.1.7
+Redone code for external tools.
 Fixed rare segfault in external tools dialog.
 Added option to delete keyboard shortcut from external tools and main keyboard shortcuts.
 Added option to add keyboard shortcut to external tools.
