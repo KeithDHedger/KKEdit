@@ -49,7 +49,7 @@
 
 #define PLACEHOLDERINFO "PLACEHOLDERS:\n%t - Currently selected text. Passed to command as $KKEDIT_SELECTION\n%f - Filepath of the current document. Passed to command as $KKEDIT_CURRENTFILE\n%d - Directory of the current document or $HOME. Passed to command as $KKEDIT_CURRENTDIR\n%i - The location of the globally installed tools. Passed to command as $KKEDIT_DATADIR\n%h - Tempory file for displaying html in doc viewer. Passed to command as $KKEDIT_HTMLFILE\n%l - Highlihting language. Passed to command as $KKEDIT_SOURCE_LANG"
 
-#define KEYCUTSINFO "To set a custom shortcut:\nClick in the appropriate box and press CONTROL ( and optionally SHIFT ) plus your custom key.\nClick 'Apply' to keep changes or 'Cancel' to discard any changes."
+#define KEYCUTSINFO "To set a custom shortcut:\nClick in the appropriate box and press CONTROL ( and optionally SHIFT ) plus your custom key.\nJust press 'Delete' to remove the shortcut\nClick 'Apply' to keep changes or 'Cancel' to discard any changes."
 
 #define MARK_TYPE_1		"one"
 #define MARK_TYPE_2		"two"
@@ -266,19 +266,19 @@ extern GList*			toolsList;
 extern GtkWidget*		restoreBMs;
 
 
-extern bool				inTerm;
-extern bool				inPopup;
-extern bool				alwaysPopup;
-extern bool				runSync;
-extern bool				ignoreOut;
-extern bool				pasteOut;
-extern bool				replaceOut;
-extern bool				viewOut;
-extern bool				showDoc;
-extern bool				editTool;
-extern bool				clearView;
-extern bool				runAsRoot;
-extern int				keyCode;
+//extern bool				inTerm;
+//extern bool				inPopup;
+//extern bool				alwaysPopup;
+//extern bool				runSync;
+//extern bool				ignoreOut;
+//extern bool				pasteOut;
+//extern bool				replaceOut;
+//extern bool				viewOut;
+//extern bool				showDoc;
+//extern bool				editTool;
+//extern bool				clearView;
+//extern bool				runAsRoot;
+//extern int				keyCode;
 
 extern int				windowWidth;
 extern int				windowHeight;

@@ -35,169 +35,235 @@ GtkListStore*	listStore=NULL;
 GtkWidget*		entries[NUMSHORTCUTS];
 const char* 	shortcuttext[NUMSHORTCUTS]={"Delete Current Line","Delete To End Of Line","Delete To Beginning Of Line","Select Word Under Cursor","Delete Word Under Cursor","Duplicate Current Line","Select Current Line","Move Current Line Up","Move Current Line Down","Select From Cursor To End Of Line","Select From Beginning Of Line To Cursor","Move Selection Up","Move Selection Down"};
 
+toolStruct*		selectedToolFromDrop;
+
+void findTool(toolStruct* data,char* toolname)
+{
+	if(strcmp(toolname,data->menuName)==0)
+		selectedToolFromDrop=data;
+}
+
 void selectToolOptions(GtkWidget* widget,gpointer data)
 {
-	char*			datafolder[2];
-	char*			nameoftool=NULL;
-	GDir*			folder;
-	const gchar*	entry=NULL;
-	FILE*			fd=NULL;
-	char*			filepath;
-	char			buffer[4096];
-	char			strarg[1024];
+	char*	text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
+	int		flags=0;
 
-	int				intermarg=0;
-	int				inpopup=0;
-	int				alwayspopup=0;
-	int				clearview=0;
-	int				flagsarg=0;
-	int				runasroot=0;
-	int				keycode=0;
-	char			keystring[32];
+	selectedToolFromDrop=NULL;
 
-	char*			text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
-
-	asprintf(&datafolder[0],"%s/tools/",DATADIR);
-	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));
-
-	for(int loop=0;loop<2;loop++)
+	g_list_foreach(toolsList,(GFunc)findTool,text);
+	if(selectedToolFromDrop!=NULL)
 		{
-			folder=g_dir_open(datafolder[loop],0,NULL);
-
-			if(folder!=NULL)
+			gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,selectedToolFromDrop->inPopUp);
+			gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,selectedToolFromDrop->alwaysPopup);
+			gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,selectedToolFromDrop->clearView);
+			gtk_toggle_button_set_active((GtkToggleButton*)runAsRootWidget,selectedToolFromDrop->runAsRoot);
+	
+			gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,selectedToolFromDrop->inTerminal);
+			if(selectedToolFromDrop->inTerminal==true)
 				{
-					entry=g_dir_read_name(folder);
-					while(entry!=NULL)
-						{
-							asprintf(&filepath,"%s%s",datafolder[loop],entry);
-							fd=fopen(filepath,"r");
-							if(fd!=NULL)
-								{
-									while(fgets(buffer,4096,fd))
-										{
-											buffer[strlen(buffer)-1]=0;
-											sscanf((char*)&buffer,"%s",(char*)&strarg);
-											if(strcmp(strarg,"name")==0)
-												{
-													nameoftool=strdup((char*)&buffer[5]);
-													if((nameoftool!=NULL) &&(strlen(nameoftool)>0) && (strcmp(nameoftool,text)==0))
-														{
-															if(selectedToolPath!=NULL)
-																g_free(selectedToolPath);
-															selectedToolPath=strdup(filepath);
-															gtk_entry_set_text((GtkEntry*)toolNameWidget,nameoftool);
-														}
-												}
-										}
-									fclose(fd);
-								}
-							g_free(filepath);
-							entry=g_dir_read_name(folder);
-						}
+					gtk_widget_set_sensitive(ignoreWidget,false);
+					gtk_widget_set_sensitive(pasteWidget,false);
+					gtk_widget_set_sensitive(replaceWidget,false);
 				}
+
+			gtk_entry_set_text((GtkEntry*)toolNameWidget,selectedToolFromDrop->menuName);
+			gtk_entry_set_text((GtkEntry*)commandLineWidget,selectedToolFromDrop->command);
+			if(selectedToolFromDrop->comment!=NULL)
+				gtk_entry_set_text((GtkEntry*)commentWidget,selectedToolFromDrop->comment);
+			else
+				gtk_entry_set_text((GtkEntry*)commentWidget,"");
+
+			if(selectedToolFromDrop->keyCode!=0)
+				gtk_entry_set_text((GtkEntry*)keyWidget,gdk_keyval_name(selectedToolFromDrop->keyCode));
+			else
+				gtk_entry_set_text((GtkEntry*)keyWidget,"");
+
+			flags=selectedToolFromDrop->flags;
+			if(flags & TOOL_ASYNC)
+				gtk_toggle_button_set_active((GtkToggleButton*)syncWidget,false);
+			else
+				gtk_toggle_button_set_active((GtkToggleButton*)syncWidget,true);
+
+			if((flags & TOOL_INSERT_MASK)==TOOL_IGNORE_OP)
+				gtk_toggle_button_set_active((GtkToggleButton*)ignoreWidget,true);
+			if((flags & TOOL_INSERT_MASK)==TOOL_VIEW_OP)
+				gtk_toggle_button_set_active((GtkToggleButton*)outputWidget,true);
+			if((flags & TOOL_INSERT_MASK)==TOOL_PASTE_OP)
+				gtk_toggle_button_set_active((GtkToggleButton*)pasteWidget,true);
+			if((flags & TOOL_INSERT_MASK)==TOOL_REPLACE_OP)
+				gtk_toggle_button_set_active((GtkToggleButton*)replaceWidget,true);
+
+			if(flags & TOOL_SHOW_DOC)
+				gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,true);
+			else
+				gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,false);
 		}
-
-	if(selectedToolPath!=NULL)
-		{
-			fd=fopen(selectedToolPath,"r");
-			if(fd!=NULL)
-				{
-					intermarg=0;
-					inpopup=0;
-					flagsarg=0;
-					alwayspopup=0;
-					runasroot=0;
-					keycode=0;
-					gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,(bool)inpopup);
-					gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,(bool)alwayspopup);
-					gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,(bool)intermarg);
-					gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,(bool)clearview);
-					gtk_toggle_button_set_active((GtkToggleButton*)runAsRootWidget,(bool)runasroot);
-					gtk_entry_set_text((GtkEntry*)commentWidget,"");
-					gtk_entry_set_text((GtkEntry*)keyWidget,"");
-					while(fgets(buffer,4096,fd))
-						{
-							buffer[strlen(buffer)-1]=0;
-							sscanf((char*)&buffer,"%s",(char*)&strarg);
-							if(strcmp(strarg,"name")==0)
-								gtk_entry_set_text((GtkEntry*)toolNameWidget,(char*)&buffer[5]);
-							if(strcmp(strarg,"command")==0)
-								gtk_entry_set_text((GtkEntry*)commandLineWidget,(char*)&buffer[8]);
-
-							if(strcmp(strarg,"shortcutkey")==0)
-								{
-									keystring[0]=0;
-									sscanf((char*)&buffer,"%*s %i",&keycode);
-									if(gdk_keyval_name(keycode)!=NULL)
-										{
-											sprintf(&keystring[0],"%s",gdk_keyval_name(keycode));
-											gtk_entry_set_text((GtkEntry*)keyWidget,(char*)&keystring);
-										}
-									else
-										gtk_entry_set_text((GtkEntry*)keyWidget,"");
-								}
-
-							if(strcmp(strarg,"comment")==0)
-								gtk_entry_set_text((GtkEntry*)commentWidget,(char*)&buffer[8]);
-							if(strcmp(strarg,"inpopup")==0)
-								{
-									sscanf((char*)&buffer,"%*s %i",&inpopup);
-									gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,(bool)inpopup);
-								}
-							if(strcmp(strarg,"alwayspopup")==0)
-								{
-									sscanf((char*)&buffer,"%*s %i",&alwayspopup);
-									gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,(bool)alwayspopup);
-								}
-							if(strcmp(strarg,"clearview")==0)
-								{
-									sscanf((char*)&buffer,"%*s %i",&clearview);
-									gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,(bool)clearview);
-								}
-							if(strcmp(strarg,"runasroot")==0)
-								{
-									sscanf((char*)&buffer,"%*s %i",&runasroot);
-									gtk_toggle_button_set_active((GtkToggleButton*)runAsRootWidget,(bool)runasroot);
-								}
-							if(strcmp(strarg,"interm")==0)
-								{
-									sscanf((char*)&buffer,"%*s %i",&intermarg);
-									gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,(bool)intermarg);
-									if((bool)intermarg==true)
-										{
-											gtk_widget_set_sensitive(ignoreWidget,false);
-											gtk_widget_set_sensitive(pasteWidget,false);
-											gtk_widget_set_sensitive(replaceWidget,false);
-										}
-								}
-							if(strcmp(strarg,"flags")==0)
-								{
-									sscanf((char*)&buffer,"%*s %i",&flagsarg);
-									if(flagsarg & TOOL_ASYNC)
-										gtk_toggle_button_set_active((GtkToggleButton*)syncWidget,false);
-									else
-										gtk_toggle_button_set_active((GtkToggleButton*)syncWidget,true);
-
-									if((flagsarg & TOOL_INSERT_MASK)==TOOL_IGNORE_OP)
-										gtk_toggle_button_set_active((GtkToggleButton*)ignoreWidget,true);
-									if((flagsarg & TOOL_INSERT_MASK)==TOOL_VIEW_OP)
-										gtk_toggle_button_set_active((GtkToggleButton*)outputWidget,true);
-									if((flagsarg & TOOL_INSERT_MASK)==TOOL_PASTE_OP)
-										gtk_toggle_button_set_active((GtkToggleButton*)pasteWidget,true);
-									if((flagsarg & TOOL_INSERT_MASK)==TOOL_REPLACE_OP)
-										gtk_toggle_button_set_active((GtkToggleButton*)replaceWidget,true);
-
-									if(flagsarg & TOOL_SHOW_DOC)
-										gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,true);
-									else
-										gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,false);
-								}
-							}
-						fclose(fd);
-					}
-		}
-	g_free(text);
+		
 }
+
+//void selectToolOptionsXX(GtkWidget* widget,gpointer data)
+//{
+//	char*			datafolder[2];
+//	char*			nameoftool=NULL;
+//	GDir*			folder;
+//	const gchar*	entry=NULL;
+//	FILE*			fd=NULL;
+//	char*			filepath;
+//	char			buffer[4096];
+//	char			strarg[1024];
+//
+//	int				intermarg=0;
+//	int				inpopup=0;
+//	int				alwayspopup=0;
+//	int				clearview=0;
+//	int				flagsarg=0;
+//	int				runasroot=0;
+//	int				keycode=0;
+//	char			keystring[32];
+//
+//	char*			text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
+//
+//	asprintf(&datafolder[0],"%s/tools/",DATADIR);
+//	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));
+//
+//	for(int loop=0;loop<2;loop++)
+//		{
+//			folder=g_dir_open(datafolder[loop],0,NULL);
+//
+//			if(folder!=NULL)
+//				{
+//					entry=g_dir_read_name(folder);
+//					while(entry!=NULL)
+//						{
+//							asprintf(&filepath,"%s%s",datafolder[loop],entry);
+//							fd=fopen(filepath,"r");
+//							if(fd!=NULL)
+//								{
+//									while(fgets(buffer,4096,fd))
+//										{
+//											buffer[strlen(buffer)-1]=0;
+//											sscanf((char*)&buffer,"%s",(char*)&strarg);
+//											if(strcmp(strarg,"name")==0)
+//												{
+//													nameoftool=strdup((char*)&buffer[5]);
+//													if((nameoftool!=NULL) &&(strlen(nameoftool)>0) && (strcmp(nameoftool,text)==0))
+//														{
+//															if(selectedToolPath!=NULL)
+//																g_free(selectedToolPath);
+//															selectedToolPath=strdup(filepath);
+//															gtk_entry_set_text((GtkEntry*)toolNameWidget,nameoftool);
+//														}
+//												}
+//										}
+//									fclose(fd);
+//								}
+//							g_free(filepath);
+//							entry=g_dir_read_name(folder);
+//						}
+//				}
+//		}
+//
+//	if(selectedToolPath!=NULL)
+//		{
+//			fd=fopen(selectedToolPath,"r");
+//			if(fd!=NULL)
+//				{
+//					intermarg=0;
+//					inpopup=0;
+//					flagsarg=0;
+//					alwayspopup=0;
+//					runasroot=0;
+//					keycode=0;
+//					gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,(bool)inpopup);
+//					gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,(bool)alwayspopup);
+//					gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,(bool)intermarg);
+//					gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,(bool)clearview);
+//					gtk_toggle_button_set_active((GtkToggleButton*)runAsRootWidget,(bool)runasroot);
+//					gtk_entry_set_text((GtkEntry*)commentWidget,"");
+//					gtk_entry_set_text((GtkEntry*)keyWidget,"");
+//					while(fgets(buffer,4096,fd))
+//						{
+//							buffer[strlen(buffer)-1]=0;
+//							sscanf((char*)&buffer,"%s",(char*)&strarg);
+//							if(strcmp(strarg,"name")==0)
+//								gtk_entry_set_text((GtkEntry*)toolNameWidget,(char*)&buffer[5]);
+//							if(strcmp(strarg,"command")==0)
+//								gtk_entry_set_text((GtkEntry*)commandLineWidget,(char*)&buffer[8]);
+//
+//							if(strcmp(strarg,"shortcutkey")==0)
+//								{
+//									keystring[0]=0;
+//									sscanf((char*)&buffer,"%*s %i",&keycode);
+//									if(gdk_keyval_name(keycode)!=NULL)
+//										{
+//											sprintf(&keystring[0],"%s",gdk_keyval_name(keycode));
+//											gtk_entry_set_text((GtkEntry*)keyWidget,(char*)&keystring);
+//										}
+//									else
+//										gtk_entry_set_text((GtkEntry*)keyWidget,"");
+//								}
+//
+//							if(strcmp(strarg,"comment")==0)
+//								gtk_entry_set_text((GtkEntry*)commentWidget,(char*)&buffer[8]);
+//							if(strcmp(strarg,"inpopup")==0)
+//								{
+//									sscanf((char*)&buffer,"%*s %i",&inpopup);
+//									gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,(bool)inpopup);
+//								}
+//							if(strcmp(strarg,"alwayspopup")==0)
+//								{
+//									sscanf((char*)&buffer,"%*s %i",&alwayspopup);
+//									gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,(bool)alwayspopup);
+//								}
+//							if(strcmp(strarg,"clearview")==0)
+//								{
+//									sscanf((char*)&buffer,"%*s %i",&clearview);
+//									gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,(bool)clearview);
+//								}
+//							if(strcmp(strarg,"runasroot")==0)
+//								{
+//									sscanf((char*)&buffer,"%*s %i",&runasroot);
+//									gtk_toggle_button_set_active((GtkToggleButton*)runAsRootWidget,(bool)runasroot);
+//								}
+//							if(strcmp(strarg,"interm")==0)
+//								{
+//									sscanf((char*)&buffer,"%*s %i",&intermarg);
+//									gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,(bool)intermarg);
+//									if((bool)intermarg==true)
+//										{
+//											gtk_widget_set_sensitive(ignoreWidget,false);
+//											gtk_widget_set_sensitive(pasteWidget,false);
+//											gtk_widget_set_sensitive(replaceWidget,false);
+//										}
+//								}
+//							if(strcmp(strarg,"flags")==0)
+//								{
+//									sscanf((char*)&buffer,"%*s %i",&flagsarg);
+//									if(flagsarg & TOOL_ASYNC)
+//										gtk_toggle_button_set_active((GtkToggleButton*)syncWidget,false);
+//									else
+//										gtk_toggle_button_set_active((GtkToggleButton*)syncWidget,true);
+//
+//									if((flagsarg & TOOL_INSERT_MASK)==TOOL_IGNORE_OP)
+//										gtk_toggle_button_set_active((GtkToggleButton*)ignoreWidget,true);
+//									if((flagsarg & TOOL_INSERT_MASK)==TOOL_VIEW_OP)
+//										gtk_toggle_button_set_active((GtkToggleButton*)outputWidget,true);
+//									if((flagsarg & TOOL_INSERT_MASK)==TOOL_PASTE_OP)
+//										gtk_toggle_button_set_active((GtkToggleButton*)pasteWidget,true);
+//									if((flagsarg & TOOL_INSERT_MASK)==TOOL_REPLACE_OP)
+//										gtk_toggle_button_set_active((GtkToggleButton*)replaceWidget,true);
+//
+//									if(flagsarg & TOOL_SHOW_DOC)
+//										gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,true);
+//									else
+//										gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,false);
+//								}
+//							}
+//						fclose(fd);
+//					}
+//		}
+//	g_free(text);
+//}
 
 void setUpToolBar(void)
 {
@@ -444,19 +510,16 @@ void doMakeTool(void)
 //in terminal
 	inTermWidget=gtk_check_button_new_with_label("Run Tool In Terminal");
 	gtk_widget_set_name(inTermWidget,"interm");
-	gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,inTerm);
 	gtk_box_pack_start(GTK_BOX(vbox),inTermWidget,false,true,0);
 	g_signal_connect(G_OBJECT(inTermWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 //show in popup menu
 	inPopupWidget=gtk_check_button_new_with_label("Show Tool In Pop-Up Menu");
 	gtk_widget_set_name(inPopupWidget,"inpopup");
-	gtk_toggle_button_set_active((GtkToggleButton*)inPopupWidget,inPopup);
 	gtk_box_pack_start(GTK_BOX(vbox),inPopupWidget,false,true,0);
 	g_signal_connect(G_OBJECT(inPopupWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 //always show in popup
 	alwaysPopupWidget=gtk_check_button_new_with_label("Always Show Tool In Pop-Up Menu");
 	gtk_widget_set_name(alwaysPopupWidget,"alwayspopup");
-	gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,alwaysPopup);
 	gtk_box_pack_start(GTK_BOX(vbox),alwaysPopupWidget,false,true,0);
 	g_signal_connect(G_OBJECT(alwaysPopupWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
@@ -464,56 +527,48 @@ void doMakeTool(void)
 //snch/async
 	syncWidget=gtk_check_button_new_with_label("Run Tool Synchronously");
 	gtk_widget_set_name(syncWidget,"sync");
-	gtk_toggle_button_set_active((GtkToggleButton*)syncWidget,runSync);
 	gtk_box_pack_start(GTK_BOX(vbox),syncWidget,false,true,0);
 	g_signal_connect(G_OBJECT(syncWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags - show html doc
 	showDocWidget=gtk_check_button_new_with_label("Show HTML Doc");
 	gtk_widget_set_name(showDocWidget,"showdoc");
-	gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,showDoc);
 	gtk_box_pack_start(GTK_BOX(vbox),showDocWidget,false,true,0);
 	g_signal_connect(G_OBJECT(showDocWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags - clear view first
 	clearViewWidget=gtk_check_button_new_with_label("Clear Tool Output First");
 	gtk_widget_set_name(clearViewWidget,"clearview");
-	gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,clearView);
 	gtk_box_pack_start(GTK_BOX(vbox),clearViewWidget,false,true,0);
 	g_signal_connect(G_OBJECT(clearViewWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags - run as root
 	runAsRootWidget=gtk_check_button_new_with_label("Run Tool As Root");
 	gtk_widget_set_name(runAsRootWidget,"runasroot");
-	gtk_toggle_button_set_active((GtkToggleButton*)runAsRootWidget,clearView);
 	gtk_box_pack_start(GTK_BOX(vbox),runAsRootWidget,false,true,0);
 	g_signal_connect(G_OBJECT(runAsRootWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags - ignore
 	ignoreWidget=gtk_radio_button_new_with_label(NULL,"Ignore Output");
 	gtk_widget_set_name(ignoreWidget,"ignore");
-	gtk_toggle_button_set_active((GtkToggleButton*)ignoreWidget,ignoreOut);
+	gtk_toggle_button_set_active((GtkToggleButton*)ignoreWidget,true);
 	gtk_box_pack_start(GTK_BOX(vbox),ignoreWidget,false,true,0);
 	g_signal_connect(G_OBJECT(ignoreWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags - paste
 	pasteWidget=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)ignoreWidget,"Paste Output");
 	gtk_widget_set_name(pasteWidget,"paste");
-	gtk_toggle_button_set_active((GtkToggleButton*)pasteWidget,pasteOut);
 	gtk_box_pack_start(GTK_BOX(vbox),pasteWidget,false,true,0);
 	g_signal_connect(G_OBJECT(pasteWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
-
 //flags - replace all
 	replaceWidget=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)ignoreWidget,"Replace All Contents");
 	gtk_widget_set_name(replaceWidget,"replace");
-	gtk_toggle_button_set_active((GtkToggleButton*)replaceWidget,replaceOut);
 	gtk_box_pack_start(GTK_BOX(vbox),replaceWidget,false,true,0);
 	g_signal_connect(G_OBJECT(replaceWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags - view
 	outputWidget=gtk_radio_button_new_with_label_from_widget((GtkRadioButton*)ignoreWidget,"View Output");
 	gtk_widget_set_name(outputWidget,"outtoview");
-	gtk_toggle_button_set_active((GtkToggleButton*)outputWidget,viewOut);
 	gtk_box_pack_start(GTK_BOX(vbox),outputWidget,false,true,0);
 	g_signal_connect(G_OBJECT(outputWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 

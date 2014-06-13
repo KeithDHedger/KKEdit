@@ -157,19 +157,19 @@ GList*			toolsList=NULL;
 
 GtkWidget*		restoreBMs;
 
-bool			inTerm=false;
-bool			inPopup=false;
-bool			alwaysPopup=false;
-bool			runSync=true;
-bool			ignoreOut=true;
-bool			pasteOut=false;
-bool			replaceOut=false;
-bool			viewOut=false;
-bool			showDoc=false;
-bool			editTool=false;
-bool			clearView=false;
-bool			runAsRoot=false;
-int				keyCode=0;
+//bool			inTerm=false;
+//bool			inPopup=false;
+//bool			alwaysPopup=false;
+//bool			runSync=true;
+//bool			ignoreOut=true;
+//bool			pasteOut=false;
+//bool			replaceOut=false;
+//bool			viewOut=false;
+//bool			showDoc=false;
+//bool			editTool=false;
+//bool			clearView=false;
+//bool			runAsRoot=false;
+//int				keyCode=0;
 
 int				windowWidth;
 int				windowHeight;
@@ -809,6 +809,9 @@ void buildToolsList(void)
 									rootarg=0;
 									clearview=0;
 									keycode=0;
+									menuname=NULL;
+									commandarg=NULL;
+									commentarg=NULL;
 
 									while(fgets(buffer,4096,fd))
 										{
@@ -836,7 +839,7 @@ void buildToolsList(void)
 												sscanf((char*)&buffer,"%*s %i",&keycode);
 										}
 
-									if((menuname!=NULL) &&(strlen(menuname)>0))
+									if((menuname!=NULL) && (strlen(menuname)>0) && ( commandarg!=NULL))
 										{
 											tool=(toolStruct*)malloc(sizeof(toolStruct));
 											tool->menuName=strdup(menuname);
@@ -860,13 +863,12 @@ void buildToolsList(void)
 												tool->global=false;
 
 											toolsList=g_list_prepend(toolsList,(gpointer)tool);
+											free(menuname);
+											free(commandarg);
+											if(commentarg!=NULL)
+												free(commentarg);
 										}
-									g_free(menuname);
-									g_free(commandarg);
-									g_free(commentarg);
-									menuname=NULL;
-									commandarg=NULL;
-									commentarg=NULL;
+
 									fclose(fd);
 								}
 							entry=g_dir_read_name(folder);
