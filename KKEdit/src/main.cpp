@@ -21,6 +21,7 @@
 #include "callbacks.h"
 #include "guis.h"
 #include "config.h"
+//#include "backclass.h"
 
 bool singleOverRide=false;
 
@@ -260,7 +261,7 @@ void init(void)
 	else
 		spellChecker=to_aspell_speller(possible_err);
 #endif
-
+	history=new HistoryClass;
 }
 
 void doNagScreen(void)

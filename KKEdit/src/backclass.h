@@ -6,12 +6,11 @@
 *     backclass.h
 * 
 ******************************************************/
+
 #include "textbuffer.h"
-#include "config.h"
 
 #ifndef _BACKCLASS_
 #define _BACKCLASS_
-
 
 class HistoryClass
 {
@@ -20,6 +19,7 @@ class HistoryClass
 		~HistoryClass();
 
 		void getThisPage(void);
+		
 	private:
 		pageStruct*		page;
 		int				lineNum;

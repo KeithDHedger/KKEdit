@@ -7,9 +7,7 @@
 * 
 ******************************************************/
 
-#include "config.h"
 #include "globals.h"
-#include "backclass.h"
 
 HistoryClass::HistoryClass()
 {
@@ -34,5 +32,7 @@ void HistoryClass::getThisPage(void)
 	else
 		this->page=(pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata");
 
+	this->buf->getLineData();
+	this->lineNum=this->buf->lineNum;
 }
 

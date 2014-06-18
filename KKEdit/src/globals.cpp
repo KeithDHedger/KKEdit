@@ -16,7 +16,6 @@
 #include <gtksourceview/gtksourcestyleschememanager.h>
 #include <gdk/gdkkeysyms.h>
 
-#include "config.h"
 #ifdef BUILDDOCVIEWER
 #include <webkit/webkit.h>
 #endif
@@ -25,10 +24,12 @@
 #include <aspell.h>
 #endif
 
+#include "config.h"
 #include "globals.h"
 #include "searchcallbacks.h"
 #include "callbacks.h"
 #include "navcallbacks.h"
+//#include "backclass.h"
 
 GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;
@@ -232,6 +233,8 @@ char*			goodWord=NULL;
 AspellConfig*	aspellConfig;
 AspellSpeller*	spellChecker=0;
 #endif
+
+HistoryClass*	history;
 
 unsigned int	shortCuts[100][2]={
 	{121,0},

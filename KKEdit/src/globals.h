@@ -14,6 +14,7 @@
 #include <gtksourceview/gtksourcestyleschememanager.h>
 
 #include "config.h"
+
 #ifdef BUILDDOCVIEWER
 #include <webkit/webkit.h>
 #endif
@@ -24,6 +25,7 @@
 
 #ifndef _GLOBALS_
 #define _GLOBALS_
+
 
 #define REPLACE			100
 #define FINDNEXT		200
@@ -128,6 +130,10 @@ struct bookMarksNew
 	char*				markName;
 	int					line;
 };
+
+#include "backclass.h"
+
+extern HistoryClass*	history;
 
 extern GtkWidget*		window;
 extern GtkAccelGroup*	accgroup;
@@ -332,6 +338,9 @@ extern char*			goodWord;
 extern AspellConfig*	aspellConfig;
 extern AspellSpeller*	spellChecker;
 #endif
+
+////classes
+//extern HistoryClass*	history;
 
 extern unsigned int		shortCuts[100][2];
 
