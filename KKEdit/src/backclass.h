@@ -18,8 +18,10 @@ class HistoryClass
 		HistoryClass();
 		~HistoryClass();
 
-		void getThisPage(void);
-		
+		void		getThisPoint(void);
+		pageStruct*	getPage(void);
+		TextBuffer*	getTextBuffer(void);
+
 	private:
 		pageStruct*		page;
 		int				lineNum;

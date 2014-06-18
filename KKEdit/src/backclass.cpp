@@ -19,7 +19,7 @@ HistoryClass::~HistoryClass()
 	delete this->buf;
 }
 
-void HistoryClass::getThisPage(void)
+void HistoryClass::getThisPoint(void)
 {
 	int			thispage;
 	GtkWidget*	pageBox;
@@ -36,3 +36,12 @@ void HistoryClass::getThisPage(void)
 	this->lineNum=this->buf->lineNum;
 }
 
+pageStruct* HistoryClass::getPage(void)
+{
+	return(page);
+}
+
+TextBuffer* HistoryClass::getTextBuffer(void)
+{
+	return(buf);
+}

@@ -897,18 +897,20 @@ void rebuildBookMarkMenu(void)
 
 void goBack(GtkWidget* widget,gpointer data)
 {
-	pageStruct*		page=getPageStructPtr(-1);
-	GtkTextIter		iter;
-	GtkTextIter		currentiter;
-	GtkTextMark*	cursor;
-
-	cursor=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
-	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&currentiter,cursor);
-
-	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-	scrollToIterInPane(page,&iter);
-
-	gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)page->buffer,"back-mark",&currentiter);
+//	pageStruct*		page=getPageStructPtr(-1);
+//	GtkTextIter		iter;
+//	GtkTextIter		currentiter;
+//	GtkTextMark*	cursor;
+//
+//	cursor=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+//	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&currentiter,cursor);
+//
+//	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
+//	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+//	scrollToIterInPane(page,&iter);
+//
+//	gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)page->buffer,"back-mark",&currentiter);
+	history->getThisPoint();
+	gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)(pageStruct*)(history->getPage())->buffer,"back-mark",&((TextBuffer*)history->getTextBuffer())->cursorPos);
 }
 
