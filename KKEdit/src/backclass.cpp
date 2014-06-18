@@ -11,12 +11,12 @@
 
 HistoryClass::HistoryClass()
 {
-	this->buf=new TextBuffer;
+	buf=new TextBuffer;
 }
 
 HistoryClass::~HistoryClass()
 {
-	delete this->buf;
+	delete buf;
 }
 
 void HistoryClass::getThisPoint(void)
@@ -28,12 +28,12 @@ void HistoryClass::getThisPoint(void)
 
 	pageBox=gtk_notebook_get_nth_page(notebook,thispage);
 	if(pageBox==NULL)
-		this->page=NULL;
+		page=NULL;
 	else
-		this->page=(pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata");
+		page=(pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata");
 
-	this->buf->getLineData();
-	this->lineNum=this->buf->lineNum;
+//	this->buf->getLineData();
+//	this->lineNum=this->buf->lineNum;
 }
 
 pageStruct* HistoryClass::getPage(void)

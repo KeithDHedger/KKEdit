@@ -911,6 +911,12 @@ void goBack(GtkWidget* widget,gpointer data)
 //
 //	gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)page->buffer,"back-mark",&currentiter);
 	history->getThisPoint();
-	gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)(pageStruct*)(history->getPage())->buffer,"back-mark",&((TextBuffer*)history->getTextBuffer())->cursorPos);
+	pageStruct*		page=history->getPage();
+	TextBuffer*		buf=history->getTextBuffer();
+	printf("XXXX\n");
+	buf->textBuffer=(GtkTextBuffer*)page->buffer;
+	buf->getLineData();
+	printf("ZZZZZZZ\n");
+	gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)page->buffer,"back-mark",&buf->cursorPos);
 }
 
