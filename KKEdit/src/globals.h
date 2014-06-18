@@ -61,13 +61,6 @@
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 
-struct lineMarkStruc
-{
-	GtkTextMark*		mark;
-	GtkTextIter			iter;
-	int					line;
-};
-
 struct pageStruct
 {
 	GtkWidget*			pane;
@@ -86,7 +79,7 @@ struct pageStruct
 	GtkTextIter			match_end;
 	bool				isFirst;
 	char*				fileName;
-	GFile*				gFile;
+	GFile*				gFile; 
 	GFileMonitor*		monitor;
 	bool				itsMe;
 	GList*				markList;
