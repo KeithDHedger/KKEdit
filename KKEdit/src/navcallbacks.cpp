@@ -128,6 +128,8 @@ void gotoLine(GtkWidget* widget,gpointer data)
 
 	if(page!=NULL)
 		{
+			history->savePosition();
+
 			gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,line-1,0);
 			gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
 			scrollToIterInPane(page,&iter);

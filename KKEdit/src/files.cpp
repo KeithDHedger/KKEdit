@@ -560,6 +560,8 @@ pageStruct* makeNewPage(void)
 	page->tabVbox=NULL;
 	page->showingChanged=false;
 	page->backMark=gtk_text_mark_new("back-mark",true);
+	page->highlightTag=gtk_text_buffer_create_tag((GtkTextBuffer*)page->buffer,"highlighttag","background","gray",NULL);
+
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&iter);
 	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),page->backMark,&iter);
 

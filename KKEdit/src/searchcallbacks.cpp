@@ -541,7 +541,9 @@ void basicFind(int dowhat)
 	GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
 	bool					replaceAllFlag;
 	bool					found=false;
-
+	GtkTextIter				start_find,end_find;
+	GtkTextIter				start_match,end_match;
+	int						offset;
 
 	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
 		return;
@@ -571,6 +573,20 @@ void basicFind(int dowhat)
 
 	if(!gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
 		gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+
+	start_match=page->match_start;
+	end_match=page->match_end;
+
+	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer, &start_find);
+	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer, &end_find);
+	gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find, &end_find);  
+
+	while(gtk_source_iter_forward_search(&start_find,searchtext,flags,&start_match,&end_match,NULL))
+		{
+			gtk_text_buffer_apply_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_match,&end_match);
+			offset=gtk_text_iter_get_offset(&end_match);
+			gtk_text_buffer_get_iter_at_offset((GtkTextBuffer*)page->buffer,&start_find,offset);
+		}
 
 	if(dowhat==FINDNEXT)
 		{

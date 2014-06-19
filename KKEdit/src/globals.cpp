@@ -29,7 +29,6 @@
 #include "searchcallbacks.h"
 #include "callbacks.h"
 #include "navcallbacks.h"
-//#include "backclass.h"
 
 GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;
@@ -378,13 +377,6 @@ void setLanguage(pageStruct* page)
 	if(mimetype!=NULL)
 		g_free(mimetype);
 }
-
-
-//				if(strcmp(rootCommand,"")!=0)
-//					asprintf(&command,"%s kkedit -m &>/dev/null &",rootCommand);
-//				else
-//					asprintf(&command,"%s sudo kkedit -m &>/dev/null &",terminalCommand);
-
 
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot)
 {

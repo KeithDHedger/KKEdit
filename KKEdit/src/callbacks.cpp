@@ -410,7 +410,6 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 
 	pageStruct* pagecheck=getPageStructPtr(currentTabNumber);
 
-
 	if((page==NULL) || (showStatus==false))
 		{
 			gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
@@ -445,6 +444,7 @@ void setSensitive(void)
 	const gchar*	text;
 	char*			newlabel;
 	int				offset=0;
+	GtkTextIter	start_find,end_find;
 
 	setToobarSensitive();
 
@@ -503,6 +503,9 @@ void setSensitive(void)
 			gtk_widget_set_sensitive((GtkWidget*)menurevert,true);
 			gtk_widget_show_all(page->tabName);
 			updateStatuBar((GtkTextBuffer*)page->buffer,NULL,NULL,page);
+			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start_find);
+			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end_find);
+			gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);  
 		}
 }
 
