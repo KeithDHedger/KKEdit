@@ -21,12 +21,16 @@ class HistoryClass
 		void		getThisPoint(void);
 		pageStruct*	getPage(void);
 		TextBuffer*	getTextBuffer(void);
-
+		void		savePosition(void);
+		void		setPage(pageStruct* page);
+		int			getTabNum(void);
+		int			getTabNumForPage(void);
 	private:
-		pageStruct*		page;
+		pageStruct*		savedPage;
 		int				lineNum;
-		GtkTextMark*	backMark;
+		GtkTextMark*	savedMark;
 		TextBuffer*		buf;
+		int				tabNum;
 };
 
 #endif

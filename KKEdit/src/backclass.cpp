@@ -21,27 +21,72 @@ HistoryClass::~HistoryClass()
 
 void HistoryClass::getThisPoint(void)
 {
-	int			thispage;
 	GtkWidget*	pageBox;
 
-	thispage=gtk_notebook_get_current_page(notebook);
+	tabNum=gtk_notebook_get_current_page(notebook);
 
-	pageBox=gtk_notebook_get_nth_page(notebook,thispage);
+	pageBox=gtk_notebook_get_nth_page(notebook,tabNum);
 	if(pageBox==NULL)
-		page=NULL;
+		savedPage=NULL;
 	else
-		page=(pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata");
-
-//	this->buf->getLineData();
-//	this->lineNum=this->buf->lineNum;
+		savedPage=(pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata");
 }
 
 pageStruct* HistoryClass::getPage(void)
 {
-	return(page);
+	return(savedPage);
+}
+
+void HistoryClass::setPage(pageStruct* page)
+{
+	savedPage=page;
 }
 
 TextBuffer* HistoryClass::getTextBuffer(void)
 {
 	return(buf);
 }
+
+void HistoryClass::savePosition(void)
+{
+	getThisPoint();
+
+	buf->textBuffer=(GtkTextBuffer*)savedPage->buffer;
+	buf->getLineData();
+	gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)savedPage->buffer,"back-mark",&buf->cursorPos);
+}
+
+int HistoryClass::getTabNum(void)
+{
+	return(tabNum);
+}
+
+int HistoryClass::getTabNumForPage(void)
+{
+	pageStruct*	page;
+	int			numpages=gtk_notebook_get_n_pages(notebook);
+
+	for(int loop=0;loop<numpages;loop++)
+		{
+			page=getPageStructPtr(loop);
+			if (page==savedPage)
+				return(loop);
+		}
+	return(0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
