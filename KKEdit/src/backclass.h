@@ -23,14 +23,12 @@ class HistoryClass
 		TextBuffer*	getTextBuffer(void);
 		void		savePosition(void);
 		void		setPage(pageStruct* page);
-		int			getTabNum(void);
 		int			getTabNumForPage(void);
 	private:
 		pageStruct*		savedPage;
 		int				lineNum;
 		GtkTextMark*	savedMark;
 		TextBuffer*		buf;
-		int				tabNum;
 };
 
 #endif

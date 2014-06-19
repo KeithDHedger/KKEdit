@@ -22,8 +22,7 @@ HistoryClass::~HistoryClass()
 void HistoryClass::getThisPoint(void)
 {
 	GtkWidget*	pageBox;
-
-	tabNum=gtk_notebook_get_current_page(notebook);
+	int			tabNum=gtk_notebook_get_current_page(notebook);
 
 	pageBox=gtk_notebook_get_nth_page(notebook,tabNum);
 	if(pageBox==NULL)
@@ -54,11 +53,6 @@ void HistoryClass::savePosition(void)
 	buf->textBuffer=(GtkTextBuffer*)savedPage->buffer;
 	buf->getLineData();
 	gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)savedPage->buffer,"back-mark",&buf->cursorPos);
-}
-
-int HistoryClass::getTabNum(void)
-{
-	return(tabNum);
 }
 
 int HistoryClass::getTabNumForPage(void)

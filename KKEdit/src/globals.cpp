@@ -903,15 +903,25 @@ void goBack(GtkWidget* widget,gpointer data)
 	pageStruct*		page=history->getPage();
 	TextBuffer*		buf=history->getTextBuffer();
 
-	hist->savePosition();
+	if(gtk_notebook_get_current_page(notebook)==history->getTabNumForPage())
+		{
+			buf->getLineData();
+			gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
+			gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+			scrollToIterInPane(page,&iter);
+			gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)page->buffer,"back-mark",&buf->cursorPos);
+		}
+	else
+		{
+			hist->savePosition();
 
-	gtk_notebook_set_current_page(notebook,history->getTabNumForPage());
-	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-	scrollToIterInPane(page,&iter);
+			gtk_notebook_set_current_page(notebook,history->getTabNumForPage());
+			gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
+			gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+			scrollToIterInPane(page,&iter);
 
-	delete history;
-	history=hist;
-
+			delete history;
+			history=hist;
+	}
 }
 
