@@ -26,8 +26,6 @@ class HistoryClass
 		int			getTabNumForPage(void);
 	private:
 		pageStruct*		savedPage;
-		int				lineNum;
-		GtkTextMark*	savedMark;
 		TextBuffer*		buf;
 };
 

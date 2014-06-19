@@ -44,8 +44,6 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
-			history->savePosition();
-			//gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)page->buffer,"back-mark",&start);
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 			if(selection==NULL)
 				return;
@@ -53,10 +51,12 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 	else
 		return;
 
+
 	fdata=getFunctionByName(selection,true);
 
 	if(fdata!=NULL)
 		{
+			history->savePosition();
 			goToDefine(fdata);
 			destroyData(fdata);
 		}
