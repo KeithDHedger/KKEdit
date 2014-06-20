@@ -155,6 +155,10 @@ void readConfig(void)
 //status bar
 					if(strcasecmp(name,"showstatusbar")==0)
 						showStatus=(bool)atoi(strarg);
+//highlight all
+					if(strcasecmp(name,"highlightall")==0)
+						hightlightAll=(bool)atoi(strarg);
+
 				}
 			fclose(fd);
 		}
@@ -193,6 +197,7 @@ void init(void)
 	noDuplicates=false;
 	noWarnings=false;
 	readLinkFirst=false;
+	hightlightAll=true;
 
 	exitstatus=system("which manpageeditor &>/dev/null");
 	gotManEditor=WEXITSTATUS(exitstatus);

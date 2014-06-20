@@ -1,4 +1,6 @@
 0.1.8
+Added 'Highlight All' to regex find.
+Made 'Highlight All' persistent.
 Added highlight all to search.
 'Back' now goes back from selecting in the 'Functions' menu.
 'Back' now switches tabs as well.

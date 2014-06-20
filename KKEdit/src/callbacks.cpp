@@ -1314,6 +1314,7 @@ void writeExitData(void)
 			fprintf(fd,"showbmbar	%i\n",(int)showBMBar);
 			fprintf(fd,"showtoolbar	%i\n",(int)showToolBar);
 			fprintf(fd,"showstatusbar	%i\n",(int)showStatus);
+			fprintf(fd,"highlightall	%i\n",(int)hightlightAll);
 			fclose(fd);
 		}
 	g_free(filename);

@@ -375,6 +375,7 @@ void regexFind(int dowhat)
 	int						charstartpos;
 	int						charendpos;
 	bool					found=false;
+	GtkTextIter				hastart,haend;
 
 	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
 		return;
@@ -414,6 +415,27 @@ void regexFind(int dowhat)
 				gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 				gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
 				text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+
+				gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&hastart);
+				gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&haend);
+				gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&hastart,&haend);  
+
+				if(hightlightAll==true)
+					{
+						g_regex_match_full(regex,text,-1,0,matchflags,&match_info,NULL);
+						while (g_match_info_matches(match_info))
+							{
+
+								g_match_info_fetch_pos(match_info,0,&startpos,&endpos);
+								charstartpos=g_utf8_pointer_to_offset(text,&text[startpos]);
+								charendpos=g_utf8_pointer_to_offset(text,&text[endpos]);
+								gtk_text_iter_set_offset(&hastart,charstartpos);
+								haend=hastart;
+								gtk_text_iter_set_offset(&haend,charendpos);
+								gtk_text_buffer_apply_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&hastart,&haend);
+								g_match_info_next (match_info,NULL);
+							}
+					}
 
 				if(g_regex_match_full(regex,text,-1,gtk_text_iter_get_offset(&page->match_end),matchflags,&match_info,NULL))
 					{
@@ -581,11 +603,14 @@ void basicFind(int dowhat)
 	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer, &end_find);
 	gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find, &end_find);  
 
-	while(gtk_source_iter_forward_search(&start_find,searchtext,flags,&start_match,&end_match,NULL))
+	if(hightlightAll==true)
 		{
-			gtk_text_buffer_apply_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_match,&end_match);
-			offset=gtk_text_iter_get_offset(&end_match);
-			gtk_text_buffer_get_iter_at_offset((GtkTextBuffer*)page->buffer,&start_find,offset);
+			while(gtk_source_iter_forward_search(&start_find,searchtext,flags,&start_match,&end_match,NULL))
+				{
+					gtk_text_buffer_apply_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_match,&end_match);
+					offset=gtk_text_iter_get_offset(&end_match);
+					gtk_text_buffer_get_iter_at_offset((GtkTextBuffer*)page->buffer,&start_find,offset);
+				}
 		}
 
 	if(dowhat==FINDNEXT)
@@ -825,6 +850,9 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 				useRegex=gtk_toggle_button_get_active((GtkToggleButton*)widget);
 				button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,FINDPREV);
 				gtk_widget_set_sensitive(button,!useRegex);
+				break;
+			case 6:
+				hightlightAll=gtk_toggle_button_get_active((GtkToggleButton*)widget);
 				break;
 		}
 }

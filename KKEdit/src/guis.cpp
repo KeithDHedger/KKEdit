@@ -1752,6 +1752,12 @@ void buildFindReplace(void)
 	gtk_widget_show(item);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)4);
 
+	item=gtk_check_button_new_with_label("Highlight All");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,hightlightAll);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
+	gtk_widget_show(item);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)6);
+
 	item=gtk_check_button_new_with_label("Replace All");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,replaceAll);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);

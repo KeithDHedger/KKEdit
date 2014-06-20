@@ -167,6 +167,7 @@ bool			insensitiveSearch;
 bool			useRegex;
 bool			replaceAll;
 bool			findInAllFiles;
+bool			hightlightAll;
 
 int				currentTabNumber;
 int 			untitledNumber=1;

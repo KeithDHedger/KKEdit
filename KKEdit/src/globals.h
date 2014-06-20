@@ -275,6 +275,7 @@ extern bool				insensitiveSearch;
 extern bool				useRegex;
 extern bool				replaceAll;
 extern bool				findInAllFiles;
+extern bool				hightlightAll;
 
 extern int				currentTabNumber;
 extern int 				untitledNumber;
