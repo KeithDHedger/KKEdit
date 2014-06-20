@@ -182,7 +182,7 @@ void init(void)
 	singleUse=true;
 	fontAndSize=strdup("mono 10");
 	terminalCommand=strdup("xterm -e");
-	rootCommand=strdup(GTKSUPATH " -- ");
+	rootCommand=strdup(GTKSUPATH);
 	windowWidth=800;
 	windowHeight=400;
 	windowX=-1;
