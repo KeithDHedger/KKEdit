@@ -1,6 +1,6 @@
 #
 #
-AC_INIT([KKEdit],[0.1.7],[PROJ],[KKEdit])
+AC_INIT([KKEdit],[0.1.8],[PROJ],[KKEdit])
 
 AC_CONFIG_HEADER([config.h])
 AC_PROG_CXX
@@ -85,6 +85,14 @@ if test $MANPAGEEDITOR = false; then
 	AC_MSG_NOTICE([You can download it from here:])
 	AC_MSG_NOTICE([http://gtk-apps.org/content/show.php?content=160219])
 fi
+
+AC_ARG_WITH(gsu-path,AS_HELP_STRING([ --with-gsu-path],[Path to graphical su app]),
+    [with_gsu_path=$withval],
+    [with_gsu_path="/usr/bin/gtksu"])
+
+AC_SUBST(with_gsu_path)
+AC_MSG_RESULT([Setting path to graphical su app to $with_gsu_path])
+
 
 AC_OUTPUT(Makefile KKEdit/app/Makefile)
 

@@ -8,4 +8,3 @@ Type=Application
 Categories=System;
 MimeType=text/plain
 Icon=KKEditRoot.png
-Exec=gtksu -- kkedit -m %f
