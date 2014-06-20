@@ -1044,7 +1044,7 @@ void doSplitView(GtkWidget *widget,gpointer user_data)
 
 			page->view2 = (GtkSourceView*)gtk_source_view_new_with_buffer (page->buffer);
 			g_signal_connect(G_OBJECT(page->view2),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
-			setFilePrefs((GtkSourceView*)page->view2);
+			setFilePrefs(page);
 //	g_signal_connect(G_OBJECT(page->view2),"paste-clipboard",G_CALLBACK(testcallback),NULL);
 
 
@@ -1430,7 +1430,7 @@ void doShutdown(GtkWidget* widget,gpointer data)
 
 void setPrefs(GtkWidget* widget,gpointer data)
 {
-	pageStruct* tpage=getPageStructPtr(-1);
+	pageStruct*			tpage=getPageStructPtr(-1);
 
 	if(strcmp(gtk_widget_get_name(widget),"indent")==0)
 		tmpIndent=gtk_toggle_button_get_active((GtkToggleButton*)data);

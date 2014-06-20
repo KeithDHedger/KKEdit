@@ -64,40 +64,46 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	return(evbox);
 }
 
-void setFilePrefs(GtkSourceView* sourceview)
+void setFilePrefs(pageStruct* page)
 {
 	PangoFontDescription*	font_desc;
 	GdkColor				color;
+	GtkTextAttributes*		attr;
 
-	gtk_source_view_set_auto_indent(sourceview,indent);
-	gtk_source_view_set_show_line_numbers(sourceview,lineNumbers);
-	gtk_source_view_set_highlight_current_line(sourceview,highLight);
-	gtk_source_view_set_show_line_marks(sourceview,showBMBar);
+	gtk_source_view_set_auto_indent(page->view,indent);
+	gtk_source_view_set_show_line_numbers(page->view,lineNumbers);
+	gtk_source_view_set_highlight_current_line(page->view,highLight);
+	gtk_source_view_set_show_line_marks(page->view,showBMBar);
 	gdk_color_parse(highlightColour,&color);
-	gtk_source_view_set_mark_category_background(sourceview,MARK_TYPE_1,&color);
+	gtk_source_view_set_mark_category_background(page->view,MARK_TYPE_1,&color);
 
 	if(lineWrap==true)
-		gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_WORD_CHAR);
+		gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_WORD_CHAR);
 	else
-		gtk_text_view_set_wrap_mode((GtkTextView *)sourceview,GTK_WRAP_NONE);
+		gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_NONE);
 
-	gtk_source_view_set_tab_width(sourceview,tabWidth);
+	gtk_source_view_set_tab_width(page->view,tabWidth);
 
 	font_desc=pango_font_description_from_string(fontAndSize);
-	gtk_widget_modify_font((GtkWidget*)sourceview,font_desc);
+	gtk_widget_modify_font((GtkWidget*)page->view,font_desc);
 	pango_font_description_free(font_desc);
+
+	attr=gtk_text_view_get_default_attributes((GtkTextView*)page->view);
+	g_object_set((gpointer)page->highlightTag,"background",gdk_color_to_string((const GdkColor*)&attr->appearance.fg_color),"foreground",gdk_color_to_string((const GdkColor*)&attr->appearance.bg_color),NULL);
+	gtk_text_attributes_unref(attr);
 }
 
 void resetAllFilePrefs(void)
 {
-	pageStruct*	page;
+	pageStruct*			page;
+
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
 	for(int loop=0; loop<gtk_notebook_get_n_pages(notebook); loop++)
 		{
 			page=getPageStructPtr(loop);
 			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
-			setFilePrefs(page->view);
+			setFilePrefs(page);
 		}
 }
 
@@ -522,8 +528,9 @@ void add_source_mark_pixbufs (GtkSourceView *view)
 
 pageStruct* makeNewPage(void)
 {
-	pageStruct*		page;
-	GtkTextIter		iter;
+	pageStruct*			page;
+	GtkTextIter			iter;
+	GtkTextAttributes*	attr;
 
 	page=(pageStruct*)malloc(sizeof(pageStruct));
 	page->buffer=NULL;
@@ -542,7 +549,9 @@ pageStruct* makeNewPage(void)
 	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
 	page->view2=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
-	setFilePrefs(page->view);
+	attr=gtk_text_view_get_default_attributes((GtkTextView*)page->view);
+	page->highlightTag=gtk_text_buffer_create_tag((GtkTextBuffer*)page->buffer,"highlighttag","background",gdk_color_to_string((const GdkColor*)&attr->appearance.fg_color),"foreground",gdk_color_to_string((const GdkColor*)&attr->appearance.bg_color),NULL);
+	gtk_text_attributes_unref(attr);
 
 	gtk_paned_add1(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow);
 	gtk_container_add (GTK_CONTAINER(page->pageWindow),(GtkWidget*)page->view);
@@ -560,7 +569,7 @@ pageStruct* makeNewPage(void)
 	page->tabVbox=NULL;
 	page->showingChanged=false;
 	page->backMark=gtk_text_mark_new("back-mark",true);
-	page->highlightTag=gtk_text_buffer_create_tag((GtkTextBuffer*)page->buffer,"highlighttag","background","gray",NULL);
+
 
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&iter);
 	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),page->backMark,&iter);
@@ -579,6 +588,7 @@ pageStruct* makeNewPage(void)
 	add_source_mark_pixbufs(GTK_SOURCE_VIEW(page->view));
 //status bar
 	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(updateStatuBar),(void*)page);
+
 	return(page);
 }
 
@@ -744,6 +754,7 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	setToobarSensitive();
 
+	setFilePrefs(page);
 	return TRUE;
 }
 
@@ -778,5 +789,5 @@ void newFile(GtkWidget* widget,gpointer data)
 	setToobarSensitive();
 	currentPage++;
 	gtk_widget_show_all((GtkWidget*)notebook);
-
+	setFilePrefs(page);
 }
