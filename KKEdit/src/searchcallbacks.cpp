@@ -205,6 +205,20 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 		g_free(selection);
 }
 
+void doDoxy(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=getPageStructPtr(-1);
+	char*		command;
+
+	if(page==NULL)
+		return;
+
+	chdir(page->dirName);
+	system("doxygen Doxyfile");
+	asprintf(&thePage,"file:///tmp/html/index.html");
+	showDocView(USEURI,"file:///tmp/html/index.html");
+}
+
 void searchQT5Docs(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
