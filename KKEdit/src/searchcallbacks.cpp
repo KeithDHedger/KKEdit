@@ -67,6 +67,9 @@ void showDocView(int howtodisplay,char* text)
 	gtk_widget_show_all(docView);
 	gtk_window_present((GtkWindow*)docView);
 
+	showDocviewer=true;
+	gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,"Hide Docviewer");
+
 #else
 	command=NULL;
 	if(howtodisplay==USEURI)
@@ -209,11 +212,18 @@ void doDoxy(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	char*		command;
+	struct stat	sb;
 
 	if(page==NULL)
 		return;
 
 	chdir(page->dirName);
+	stat("Doxyfile",&sb);
+	if(!S_ISREG(sb.st_mode))
+		{
+			system("cp " DATADIR "/docs/Doxyfile .");
+		}
+		
 	system("doxygen Doxyfile");
 	asprintf(&thePage,"file:///tmp/html/index.html");
 	showDocView(USEURI,"file:///tmp/html/index.html");

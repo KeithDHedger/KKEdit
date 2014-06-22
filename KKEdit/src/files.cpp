@@ -624,7 +624,7 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	if(readLinkFirst==true)
 		{
-			lstat(filepath, &sb);
+			lstat(filepath,&sb);
 
 			if(S_ISLNK(sb.st_mode))
 				{

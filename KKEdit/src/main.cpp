@@ -199,8 +199,11 @@ void init(void)
 	readLinkFirst=false;
 	hightlightAll=true;
 
+//runtime deps
 	exitstatus=system("which manpageeditor &>/dev/null");
 	gotManEditor=WEXITSTATUS(exitstatus);
+	exitstatus=system("doxygen -v &>/dev/null");
+	gotDoxygen=WEXITSTATUS(exitstatus);
 
 	if(getuid()!=0)
 		styleName=strdup("classic");

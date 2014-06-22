@@ -1830,6 +1830,24 @@ void toggleStatusBar(GtkWidget* widget,gpointer data)
 	refreshMainWindow();
 }
 
+#ifdef BUILDDOCVIEWER
+void toggleDocviewer(GtkWidget* widget,gpointer data)
+{
+	showDocviewer=!showDocviewer;
+	if(showDocviewer)
+		{
+			gtk_menu_item_set_label((GtkMenuItem*)widget,"Hide Docviewer");
+			gtk_widget_show_all(docView);
+			gtk_window_present((GtkWindow*)docView);
+		}
+	else
+		{
+			gtk_menu_item_set_label((GtkMenuItem*)widget,"Show Docviewer");
+			gtk_widget_hide(docView);
+		}
+}
+#endif
+
 void doKeyShortCut(int what)
 {
 	TextBuffer*		buf;

@@ -58,5 +58,6 @@ gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data);
 void loadKeybindings(void);
 void toggleStatusBar(GtkWidget* widget,gpointer data);
 void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data);
+void toggleDocviewer(GtkWidget* widget,gpointer data);
 
 #endif

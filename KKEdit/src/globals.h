@@ -323,6 +323,7 @@ extern char*			htmlURI;
 
 //runtime deps
 extern int				gotManEditor;
+extern int				gotDoxygen;
 
 extern GtkSourceStyleSchemeManager*	schemeManager;
 extern GtkSourceStyleScheme*		styleScheme;
@@ -330,6 +331,8 @@ extern GtkSourceStyleScheme*		styleScheme;
 #ifdef BUILDDOCVIEWER
 extern GtkWidget*		docView;
 extern WebKitWebView*	webView;
+extern bool				showDocviewer;
+extern GtkWidget*		showDocViewWidget;
 #endif
 
 extern GtkWidget*		spellCheckWord;

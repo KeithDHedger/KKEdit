@@ -1379,6 +1379,16 @@ void buildMainGui(void)
 			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newEditor),(void*)3);
 		}
 
+//doxy
+	if(gotDoxygen==0)
+		{
+			menuitem=gtk_image_menu_item_new_with_label("Create Documentation");
+			image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
+			gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doDoxy),NULL);
+		}
+
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
@@ -1569,6 +1579,13 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuStatusBar);
 	gtk_signal_connect(GTK_OBJECT(menuStatusBar),"activate",G_CALLBACK(toggleStatusBar),NULL);
 
+#ifdef BUILDDOCVIEWER
+//toggle docviewer
+	showDocViewWidget=gtk_menu_item_new_with_label("Show Docviewer");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),showDocViewWidget);
+	gtk_signal_connect(GTK_OBJECT(showDocViewWidget),"activate",G_CALLBACK(toggleDocviewer),NULL);
+#endif
+
 //navigation menu
 	menunav=gtk_menu_item_new_with_label("Navigation");
 	menu=gtk_menu_new();
@@ -1613,13 +1630,6 @@ void buildMainGui(void)
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(searchQT5Docs),NULL);
-
-//doxy
-	menuitem=gtk_image_menu_item_new_with_label("Create Doxy");
-	image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doDoxy),NULL);
 
 //go back
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_GO_BACK,NULL);
@@ -1886,6 +1896,7 @@ void buildGtkDocViewer(void)
 	GtkWidget*	scrolledWindow;
 	GtkWidget*	entry;
 	GtkWidget*	findbutton;
+	WebKitWebSettings*	settings;
 
 	docView=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(docView),800,600);
@@ -1895,6 +1906,8 @@ void buildGtkDocViewer(void)
 	hbox=gtk_hbox_new(true,0);
 
 	webView=WEBKIT_WEB_VIEW(webkit_web_view_new());
+	settings=webkit_web_view_get_settings(webView);
+	g_object_set((gpointer)settings,"enable-file-access-from-file-uris",true,NULL);
 
 	scrolledWindow=gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);

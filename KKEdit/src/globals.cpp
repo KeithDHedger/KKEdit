@@ -215,6 +215,7 @@ char*			htmlURI=NULL;
 
 //runtime deps
 int				gotManEditor;
+int				gotDoxygen;
 
 GtkSourceStyleSchemeManager*	schemeManager;
 GtkSourceStyleScheme*			styleScheme;
@@ -222,6 +223,8 @@ GtkSourceStyleScheme*			styleScheme;
 #ifdef BUILDDOCVIEWER
 GtkWidget*		docView;
 WebKitWebView*	webView;
+bool			showDocviewer;
+GtkWidget*		showDocViewWidget;
 #endif
 
 //spellcheck
