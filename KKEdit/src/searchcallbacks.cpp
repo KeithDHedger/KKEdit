@@ -224,7 +224,7 @@ void doDoxy(GtkWidget* widget,gpointer data)
 			system("cp " DATADIR "/docs/Doxyfile .");
 		}
 		
-	system("doxygen Doxyfile");
+	system("doxygen Doxyfile >/dev/null");
 	asprintf(&thePage,"file:///tmp/html/index.html");
 	showDocView(USEURI,"file:///tmp/html/index.html");
 }
