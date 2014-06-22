@@ -88,11 +88,10 @@ fi
 
 AC_ARG_WITH(gsu-path,AS_HELP_STRING([ --with-gsu-path],[Path to graphical su app]),
     [with_gsu_path=$withval],
-    [with_gsu_path="/usr/bin/gtksu -- "])
+    [with_gsu_path="gtksu -- "])
 
 AC_SUBST(with_gsu_path)
-AC_MSG_RESULT([Setting path to graphical su app to $with_gsu_path])
-
+AC_MSG_RESULT([Setting path to graphical su app to \"$with_gsu_path\"])
 
 AC_OUTPUT(Makefile KKEdit/app/Makefile)
 

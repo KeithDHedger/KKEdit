@@ -211,7 +211,6 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 void doDoxy(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
-	char*		command;
 	struct stat	sb;
 
 	if(page==NULL)
@@ -220,13 +219,11 @@ void doDoxy(GtkWidget* widget,gpointer data)
 	chdir(page->dirName);
 	stat("Doxyfile",&sb);
 	if(!S_ISREG(sb.st_mode))
-		{
-			system("cp " DATADIR "/docs/Doxyfile .");
-		}
-		
+		system("cp " DATADIR "/docs/Doxyfile .");
+
+	asprintf(&thePage,"file://%s/html/index.html",page->dirName);
 	system("doxygen Doxyfile >/dev/null");
-	asprintf(&thePage,"file:///tmp/html/index.html");
-	showDocView(USEURI,"file:///tmp/html/index.html");
+	showDocView(USEURI,thePage);
 }
 
 void searchQT5Docs(GtkWidget* widget,gpointer data)

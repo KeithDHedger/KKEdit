@@ -1,12 +1,13 @@
 0.1.8
 Back now goes back after jumping to bookmark.
+Default doxygen config file copied to current folder when making documents if there is no file called 'Doxyfile'.
 Added Show/Hide docviewer to 'View' menu.
 Added runtime check for doxygen.
 Added default doxygen config file to "/usr/share/KKEdit/docs"
 Added doxygen document builder to 'File' menu.
 Stopped loads of pointless javasript warnings on stdout when using the docviewer for certain pages.
 Root desktop file now uses the graphical su path defined by configure ( defaults to /usr/bin/gtksu ).
-Can now set default path to graphical su at compile time with "--with-gsu-path" option.
+Can now set default path to graphical su at compile time with "--with-gsu-path" option ( can be overidden via prefs ).
 Added 'Highlight All' to regex find.
 Made 'Highlight All' persistent.
 Added 'Highlight All' to search.
