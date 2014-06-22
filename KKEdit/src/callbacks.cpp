@@ -1819,6 +1819,7 @@ void toggleToolBar(GtkWidget* widget,gpointer data)
 		gtk_menu_item_set_label((GtkMenuItem*)widget,"Show Tool Bar");
 	refreshMainWindow();
 }
+
 //toggleStatusBar
 void toggleStatusBar(GtkWidget* widget,gpointer data)
 {
