@@ -23,7 +23,10 @@ void goToDefine(functionData* fdata)
 	GtkTextIter	iter;
 
 	if(fdata->intab==-1)
+		{
+		printf("%s %i\n",fdata->file,fdata->line-1);
 		openFile(fdata->file,fdata->line-1);
+		}
 	else
 		{
 			page=getPageStructPtr(fdata->intab);

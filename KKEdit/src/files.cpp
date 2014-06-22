@@ -744,6 +744,10 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	gtk_widget_show_all((GtkWidget*)notebook);
 
+	setToobarSensitive();
+
+	setFilePrefs(page);
+
 	/* move cursor to the linenumber */
 	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,linenum,0);
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
@@ -752,9 +756,6 @@ bool openFile(const gchar *filepath,int linenumber)
 	gtk_text_buffer_move_mark((GtkTextBuffer*)page->buffer,page->backMark,&iter);
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
 
-	setToobarSensitive();
-
-	setFilePrefs(page);
 	return TRUE;
 }
 

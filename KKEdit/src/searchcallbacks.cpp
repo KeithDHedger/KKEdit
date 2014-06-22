@@ -227,7 +227,7 @@ void doDoxy(GtkWidget* widget,gpointer data)
 	system("doxygen Doxyfile >/dev/null");
 	showDocView(USEURI,thePage);
 }
-
+//showDocViewWidget
 void searchQT5Docs(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);

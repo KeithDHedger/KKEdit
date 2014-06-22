@@ -492,14 +492,13 @@ functionData* getFunctionByName(char* name,bool recurse,bool fuzzy)
 									if(strlen(function)==matchlen)
 										gotmatch=strncasecmp(name,function,matchlen);
 									else
-										gotmatch=1
+										gotmatch=1;
 								}
 							else
-								gotmatch=strncasecmp(name,function,strlen(name));
+								gotmatch=strncasecmp(function,name,strlen(name));
 
 							if(gotmatch==0)
 								{
-								printf("%s -> %s\n",name,function);
 									fdata=(functionData*)malloc(sizeof(functionData));
 									sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
 									fdata->name=strdup(function);
@@ -520,6 +519,7 @@ functionData* getFunctionByName(char* name,bool recurse,bool fuzzy)
 						}
 				}
 		}
+
 	if(recurse==true)
 		{
 //not in any open files
@@ -538,9 +538,15 @@ functionData* getFunctionByName(char* name,bool recurse,bool fuzzy)
 								{
 									sscanf (lineptr,"%s",function);
 									if(fuzzy==false)
-										gotmatch=strncasecmp(name,function,strlen(function));
+										{
+											matchlen=strlen(name);
+											if(strlen(function)==matchlen)
+												gotmatch=strncasecmp(name,function,matchlen);
+											else
+												gotmatch=1;
+										}
 									else
-										gotmatch=strncasecmp(name,function,strlen(name));
+										gotmatch=strncasecmp(function,name,strlen(name));
 
 									if(gotmatch==0)
 										{
