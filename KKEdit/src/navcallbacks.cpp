@@ -200,6 +200,7 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 	pageStruct*		checkpage;
 	GtkTextIter		iter;
 
+	history->savePosition();
 	page=(pageStruct*)((bookMarksNew*)data)->page;
 	mark=(GtkTextMark*)((bookMarksNew*)data)->mark;
 	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);

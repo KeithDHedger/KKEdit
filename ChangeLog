@@ -1,4 +1,5 @@
 0.1.8
+Back now goes back after jumping to bookmark.
 Added Show/Hide docviewer to 'View' menu.
 Added runtime check for doxygen.
 Added default doxygen config file to "/usr/share/KKEdit/docs"
