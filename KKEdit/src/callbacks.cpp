@@ -920,6 +920,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	GtkWidget*		menuitem;
 	GtkWidget*		image;
 	GList*			ptr;
+	functionData*	fdata;
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
@@ -929,7 +930,10 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 			if(selection!=NULL)
 				{
-					functionData* fdata=getFunctionByName(selection,false);
+					fdata=getFunctionByName(selection,true,false);
+					if(fdata==NULL)
+						fdata=getFunctionByName(selection,true,true);
+
 					if(fdata!=NULL)
 						{
 							sprintf((char*)&defineText,"%s",fdata->define);
@@ -1834,8 +1838,8 @@ void toggleStatusBar(GtkWidget* widget,gpointer data)
 #ifdef BUILDDOCVIEWER
 void toggleDocviewer(GtkWidget* widget,gpointer data)
 {
-	showDocviewer=!showDocviewer;
-	if(showDocviewer)
+	showHideDocviewer=!showHideDocviewer;
+	if(showHideDocviewer)
 		{
 			gtk_menu_item_set_label((GtkMenuItem*)widget,"Hide Docviewer");
 			gtk_widget_show_all(docView);

@@ -67,7 +67,7 @@ void showDocView(int howtodisplay,char* text)
 	gtk_widget_show_all(docView);
 	gtk_window_present((GtkWindow*)docView);
 
-	showDocviewer=true;
+	showHideDocviewer=true;
 	gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,"Hide Docviewer");
 
 #else
@@ -221,6 +221,8 @@ void doDoxy(GtkWidget* widget,gpointer data)
 	if(!S_ISREG(sb.st_mode))
 		system("cp " DATADIR "/docs/Doxyfile .");
 
+	if(thePage!=NULL)
+		free(thePage);
 	asprintf(&thePage,"file://%s/html/index.html",page->dirName);
 	system("doxygen Doxyfile >/dev/null");
 	showDocView(USEURI,thePage);
@@ -295,10 +297,15 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 
 void defSearchFromBar(GtkWidget* widget,gpointer data)
 {
+	functionData* fdata;
+
 	functionSearchText=strdup(gtk_entry_get_text((GtkEntry*)widget));
 	if(functionSearchText!=NULL)
 		{
-			functionData* fdata=getFunctionByName(functionSearchText,true);
+			fdata=getFunctionByName(functionSearchText,true,false);
+			if(fdata==NULL)
+				fdata=getFunctionByName(functionSearchText,true,true);
+
 			if(fdata!=NULL)
 				{
 					goToDefine(fdata);

@@ -223,7 +223,7 @@ GtkSourceStyleScheme*			styleScheme;
 #ifdef BUILDDOCVIEWER
 GtkWidget*		docView;
 WebKitWebView*	webView;
-bool			showDocviewer;
+bool			showHideDocviewer;
 GtkWidget*		showDocViewWidget;
 #endif
 
@@ -455,7 +455,7 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot)
 	free(asroot);
 }
 
-functionData* getFunctionByName(char* name,bool recurse)
+functionData* getFunctionByName(char* name,bool recurse,bool fuzzy)
 {
 	pageStruct*	page;
 	int			numpages=gtk_notebook_get_n_pages(notebook);
@@ -467,6 +467,8 @@ functionData* getFunctionByName(char* name,bool recurse)
 	char		funcname[256];
 	char		filepath[1024];
 	int			linenumber;
+	int			gotmatch;
+	int			matchlen;
 
 	functionData* fdata;
 	page=getPageStructPtr(-1);
@@ -484,8 +486,20 @@ functionData* getFunctionByName(char* name,bool recurse)
 					while (lineptr!=NULL)
 						{
 							sscanf (lineptr,"%s",function);
-							if((strncasecmp(name,function,strlen(name))==0))
+							if(fuzzy==false)
 								{
+									matchlen=strlen(name);
+									if(strlen(function)==matchlen)
+										gotmatch=strncasecmp(name,function,matchlen);
+									else
+										gotmatch=1
+								}
+							else
+								gotmatch=strncasecmp(name,function,strlen(name));
+
+							if(gotmatch==0)
+								{
+								printf("%s -> %s\n",name,function);
 									fdata=(functionData*)malloc(sizeof(functionData));
 									sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
 									fdata->name=strdup(function);
@@ -523,10 +537,14 @@ functionData* getFunctionByName(char* name,bool recurse)
 							while (lineptr!=NULL)
 								{
 									sscanf (lineptr,"%s",function);
-									if((strncasecmp(name,function,strlen(name))==0))
+									if(fuzzy==false)
+										gotmatch=strncasecmp(name,function,strlen(function));
+									else
+										gotmatch=strncasecmp(name,function,strlen(name));
+
+									if(gotmatch==0)
 										{
 											sscanf (lineptr, "%s\t%s\t%i",funcname,filepath,&linenumber);
-
 											fdata=(functionData*)malloc(sizeof(functionData));
 											fdata->name=strdup(funcname);
 											fdata->file=strdup(filepath);

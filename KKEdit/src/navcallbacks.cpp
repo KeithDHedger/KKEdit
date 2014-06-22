@@ -52,7 +52,9 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 		return;
 
 
-	fdata=getFunctionByName(selection,true);
+	fdata=getFunctionByName(selection,true,false);
+	if(fdata==NULL)
+		fdata=getFunctionByName(selection,true,true);
 
 	if(fdata!=NULL)
 		{
@@ -179,11 +181,16 @@ void jumpToLine(GtkWidget* widget,gpointer data)
 
 void functionSearch(GtkWidget* widget,gpointer data)
 {
+	functionData* fdata;
+
 	if(showFunctionEntry()==GTK_RESPONSE_YES)
 		{
 			if(functionSearchText!=NULL)
 				{
-					functionData* fdata=getFunctionByName(functionSearchText,true);
+					fdata=getFunctionByName(functionSearchText,true,false);
+					if(fdata==NULL)
+						fdata=getFunctionByName(functionSearchText,true,true);
+
 					if(fdata!=NULL)
 						{
 							goToDefine(fdata);
