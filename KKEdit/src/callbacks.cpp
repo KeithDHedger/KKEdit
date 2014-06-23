@@ -371,7 +371,7 @@ void doOpenFile(GtkWidget* widget,gpointer data)
 			while(thisnext!=NULL)
 				{
 					filename=(char*)thisnext->data;
-					openFile(filename,0);
+					openFile(filename,0,true);
 					g_free (filename);
 					thisnext=thisnext->next;
 				}
@@ -775,7 +775,7 @@ void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectio
 	for(int j=0; j<cnt; j++)
 		{
 			filename=g_filename_from_uri(array[j],NULL,NULL);
-			openFile(filename,0);
+			openFile(filename,0,true);
 		}
 
 	g_strfreev(array);
@@ -1083,7 +1083,7 @@ void openFromTab(GtkMenuItem* widget,pageStruct* page)
 	char*		filepath=NULL;
 
 	asprintf(&filepath,"%s/%s",page->dirName,gtk_menu_item_get_label(widget));
-	openFile(filepath,0);
+	openFile(filepath,0,true);
 	free(filepath);
 }
 
@@ -1262,7 +1262,7 @@ void messageOpen(UniqueMessageData *message)
 	argc=g_strv_length(uris);
 
 	for (int loop=1; loop<argc; loop++)
-		openFile(uris[loop],1);
+		openFile(uris[loop],1,true);
 }
 
 UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessageData *message,guint time,gpointer user_data)
@@ -1742,7 +1742,7 @@ void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 
 	if(data!=NULL)
 		{
-			openFile((char*)data,0);
+			openFile((char*)data,0,true);
 			return;
 		}
 
@@ -1750,7 +1750,7 @@ void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 	if (uri!=NULL)
 		{
 			filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
-			openFile(filename,0);
+			openFile(filename,0,true);
 			g_free (uri);
 			g_free(filename);
 		}
@@ -1836,18 +1836,19 @@ void toggleStatusBar(GtkWidget* widget,gpointer data)
 }
 
 #ifdef BUILDDOCVIEWER
+
 void toggleDocviewer(GtkWidget* widget,gpointer data)
 {
 	showHideDocviewer=!showHideDocviewer;
 	if(showHideDocviewer)
 		{
-			gtk_menu_item_set_label((GtkMenuItem*)widget,"Hide Docviewer");
+			gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,"Hide Docviewer");
 			gtk_widget_show_all(docView);
 			gtk_window_present((GtkWindow*)docView);
 		}
 	else
 		{
-			gtk_menu_item_set_label((GtkMenuItem*)widget,"Show Docviewer");
+			gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,"Show Docviewer");
 			gtk_widget_hide(docView);
 		}
 }

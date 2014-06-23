@@ -29,6 +29,7 @@
 #include "searchcallbacks.h"
 #include "callbacks.h"
 #include "navcallbacks.h"
+#include "sliceclass.h"
 
 GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;
@@ -238,6 +239,7 @@ AspellSpeller*	spellChecker=0;
 #endif
 
 HistoryClass*	history;
+StringSlice*	globalSlice;
 
 unsigned int	shortCuts[100][2]={
 	{121,0},
@@ -457,18 +459,18 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot)
 
 functionData* getFunctionByName(char* name,bool recurse,bool fuzzy)
 {
-	pageStruct*	page;
-	int			numpages=gtk_notebook_get_n_pages(notebook);
-	char*		lineptr;
-	char*		functions=NULL;
-	char*		dirname;
-	gchar*		stdout=NULL;
-	char		function[1024];
-	char		funcname[256];
-	char		filepath[1024];
-	int			linenumber;
-	int			gotmatch;
-	int			matchlen;
+	pageStruct*		page;
+	int				numpages=gtk_notebook_get_n_pages(notebook);
+	char*			lineptr;
+	char*			functions=NULL;
+	char*			dirname;
+	gchar*			stdout=NULL;
+	char			function[1024];
+	char			funcname[256];
+	char			filepath[1024];
+	int				linenumber;
+	int				gotmatch;
+	unsigned int	matchlen;
 
 	functionData* fdata;
 	page=getPageStructPtr(-1);

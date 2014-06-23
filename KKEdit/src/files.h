@@ -8,7 +8,7 @@
 #ifndef _FILES_
 #define _FILES_
 
-bool openFile(const gchar *filepath,int linenumber);
+bool openFile(const gchar *filepath,int linenumber,bool warn);
 bool saveFile(GtkWidget* widget,gpointer data);
 void newFile(GtkWidget* widget,gpointer data);
 void resetAllFilePrefs(void);

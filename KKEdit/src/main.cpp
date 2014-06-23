@@ -21,6 +21,7 @@
 #include "callbacks.h"
 #include "guis.h"
 #include "config.h"
+#include "sliceclass.h"
 
 bool singleOverRide=false;
 
@@ -173,6 +174,7 @@ void init(void)
 #ifdef _ASPELL_
 	AspellCanHaveError*	possible_err;
 #endif
+
 	indent=true;
 	lineNumbers=true;
 	lineWrap=true;
@@ -269,6 +271,7 @@ void init(void)
 		spellChecker=to_aspell_speller(possible_err);
 #endif
 	history=new HistoryClass;
+	globalSlice=new StringSlice;
 }
 
 void doNagScreen(void)
@@ -337,7 +340,7 @@ int main(int argc,char **argv)
 			for(int j=1; j<argc; j++)
 				{
 					if(strncasecmp(argv[j],"-m",2)!=0)
-						openFile(argv[j],0);
+						openFile(argv[j],0,true);
 				}
 			refreshMainWindow();
 
@@ -369,6 +372,8 @@ int main(int argc,char **argv)
 			}
 			setSensitive();
 			gtk_main();
+			delete history;
+			delete globalSlice;
 		}
 }
 

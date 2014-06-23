@@ -59,5 +59,6 @@ void loadKeybindings(void);
 void toggleStatusBar(GtkWidget* widget,gpointer data);
 void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data);
 void toggleDocviewer(GtkWidget* widget,gpointer data);
+void closeDocViewer(GtkWidget *widget,GdkEvent *event,gpointer data);
 
 #endif

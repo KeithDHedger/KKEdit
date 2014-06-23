@@ -14,6 +14,7 @@
 #include <gtksourceview/gtksourcestyleschememanager.h>
 
 #include "config.h"
+#include "sliceclass.h"
 
 #ifdef BUILDDOCVIEWER
 #include <webkit/webkit.h>
@@ -343,10 +344,7 @@ extern char*			goodWord;
 extern AspellConfig*	aspellConfig;
 extern AspellSpeller*	spellChecker;
 #endif
-
-////classes
-//extern HistoryClass*	history;
-
+extern StringSlice*		globalSlice;
 extern unsigned int		shortCuts[100][2];
 
 pageStruct* getPageStructPtr(int pagenum);

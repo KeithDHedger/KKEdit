@@ -1909,6 +1909,8 @@ void buildGtkDocViewer(void)
 
 	settings=webkit_web_view_get_settings(webView);
 	g_object_set((gpointer)settings,"enable-file-access-from-file-uris",true,NULL);
+	g_object_set((gpointer)settings,"enable-page-cache",true,NULL);
+	g_object_set((gpointer)settings,"enable-plugins",false,NULL);
 
 	scrolledWindow=gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
@@ -1940,8 +1942,7 @@ void buildGtkDocViewer(void)
 	gtk_container_add(GTK_CONTAINER(docView),vbox);
 	gtk_widget_grab_focus(GTK_WIDGET(webView));
 
-	gtk_signal_connect_object(GTK_OBJECT(docView),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(docView));
-	gtk_signal_connect(GTK_OBJECT(docView),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
+	gtk_signal_connect_object(GTK_OBJECT(docView),"delete-event",GTK_SIGNAL_FUNC(toggleDocviewer),GTK_OBJECT(docView));
 }
 #endif
 

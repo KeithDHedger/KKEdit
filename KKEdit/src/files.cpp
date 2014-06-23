@@ -431,7 +431,7 @@ void restoreSession(GtkWidget* widget,gpointer data)
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
 					sscanf(buffer,"%i %"VALIDFILENAMECHARS"s",(int*)&currentline,(char*)&strarg);
-					openFile(strarg,currentline);
+					openFile(strarg,currentline,true);
 					fgets(buffer,2048,fd);
 					sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 					page=getPageStructPtr(currentPage-1);
@@ -593,7 +593,7 @@ pageStruct* makeNewPage(void)
 	return(page);
 }
 
-bool openFile(const gchar *filepath,int linenumber)
+bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
 	GtkTextIter				iter;
 	GtkWidget*				label;
@@ -649,17 +649,23 @@ bool openFile(const gchar *filepath,int linenumber)
 
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		{
-			dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"File '%s' doesn't exist :(",filepathcopy);
-			gtk_dialog_run(GTK_DIALOG(dialog));
-			gtk_widget_destroy(dialog);
+			if(warn==true)
+				{
+					dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"File '%s' doesn't exist :(",filepathcopy);
+					gtk_dialog_run(GTK_DIALOG(dialog));
+					gtk_widget_destroy(dialog);
+				}
 			return(false);
 		}
 
 	if(access(filepathcopy,R_OK)!=0)
 		{
-			dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"Can't open file '%s' :(",filepath);
-			gtk_dialog_run(GTK_DIALOG(dialog));
-			gtk_widget_destroy(dialog);
+			if(warn==true)
+				{
+					dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"Can't open file '%s' :(",filepath);
+					gtk_dialog_run(GTK_DIALOG(dialog));
+					gtk_widget_destroy(dialog);
+				}
 			return(false);
 		}
 

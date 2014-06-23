@@ -23,13 +23,11 @@ int marknum=0;
 void goToDefine(functionData* fdata)
 {
 	pageStruct*	page;
-	GtkTextIter	iter;
-	GtkTextMark*	mark;
-	TextBuffer*		buf;
+	TextBuffer*	buf;
 
 	if(fdata->intab==-1)
 		{
-			openFile(fdata->file,fdata->line-1);
+			openFile(fdata->file,fdata->line-1,true);
 		}
 	else
 		{
@@ -123,7 +121,7 @@ void findFile(GtkWidget* widget,gpointer data)
 					lineptr=strchr(lineptr,'\n');
 					if (lineptr!=NULL)
 						lineptr++;
-					openFile(buffer,0);
+					openFile(buffer,0,true);
 				}
 			g_free(stdout);
 			g_free(stderr);
@@ -137,7 +135,6 @@ void findFile(GtkWidget* widget,gpointer data)
 void gotoLine(GtkWidget* widget,gpointer data)
 {
 	int			line=(long)data;
-	GtkTextIter	iter;
 	pageStruct*	page=getPageStructPtr(-1);
 	TextBuffer*	buf;
 
@@ -220,7 +217,6 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 	GtkTextMark*	mark;
 	pageStruct*		page;
 	pageStruct*		checkpage;
-	GtkTextIter		iter;
 	TextBuffer*		buf;
 
 	history->savePosition();
@@ -242,20 +238,13 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 
 #ifdef BUILDDOCVIEWER
 
-/*
-file:///media/LinuxData/Development/Projects/KKEdit/KKEdit/src/html/callbacks_8cpp_source.html#l00035
-<div class="title">disc.cpp</div>  </div>
-*/
-
 gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest* request,WebKitWebNavigationAction* navigationAction,WebKitWebPolicyDecision* policy_decision, gpointer user_data)
 {
 
 	int				mod=-1;
 	const char*		uri;
-	StringSlice*	slice=new StringSlice;
 	const char*		linenum=NULL;
 	int				line;
-	char*			data=NULL;
 	const char*		filepath=NULL;
 	const char*		filename;
 	pageStruct*		page;
@@ -264,57 +253,75 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 	char*			loadfile;
 
 	mod=webkit_web_navigation_action_get_modifier_state(navigationAction);
-	uri=webkit_network_request_get_uri(request);
 	if(mod&GDK_SHIFT_MASK)
 		{
-//			printf("uri=%s\n",uri);
-		
-			linenum=slice->sliceBetween((char*)uri,"#l",NULL);
+			uri=webkit_network_request_get_uri(request);
+			linenum=globalSlice->sliceBetween((char*)uri,(char*)"#l",NULL);
+//clicked line number
 			if(linenum!=NULL)
 				{
 					line=atoi(linenum);
-//					printf("line=%i\n",line);
-					filepath=slice->sliceBetween((char*)uri,"file://","#l");
-//					printf("%s\n",filepath);
-					//g_file_get_contents(filepath,&data,NULL,NULL);
-					//if(data!=NULL)
-					//	printf("data=%s\n",data);
-					//filepath=slice->replaceAllSlice((char*)filepath,"_8",".");
-					//filepath=slice->replaceAllSlice((char*)filepath,"_source","");
+					filepath=globalSlice->sliceBetween((char*)uri,(char*)"file://",(char*)"#l");
 					filename=(char*)basename((char*)filepath);
-					filename=slice->replaceAllSlice((char*)filename,"_source","");
-					filename=slice->replaceAllSlice((char*)filename,".html","");
-					filename=slice->replaceAllSlice((char*)filename,"_8",".");
-//					printf("new name %s\n",filename);
-//in open tab
+					filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_source",(char*)"",false);
+					filename=globalSlice->replaceAllSlice((char*)filename,(char*)".html",(char*)"",false);
+					filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_8",(char*)".",false);
+//check in open tabs
+					buf=new TextBuffer;
 					for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
 						{
 							page=getPageStructPtr(j);
 							if(strcmp(page->fileName,filename)==0)
 								{
-									buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 									gtk_notebook_set_current_page(notebook,j);
+									buf->textBuffer=(GtkTextBuffer*)page->buffer;
 									buf->scroll2Line((GtkTextView*)page->view,line-1);
 									delete buf;
+									return(false);
 								}
 						}
 //try to open file
 					pwd=get_current_dir_name();
 					if(pwd!=NULL)
 						{
-//							printf("%s/%s\n",pwd,filename);
 							asprintf(&loadfile,"%s/%s",pwd,filename);
-							openFile(loadfile,line);
+							openFile(loadfile,line,false);
+							free(loadfile);
+							free(pwd);
+							return(false);
+						}
+				}
+			else
+				{
+//just file name
+//check if tab open
+					filepath=globalSlice->replaceSlice((char*)uri,(char*)"file://",(char*)"");
+					filename=(char*)basename((char*)filepath);
+					filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_source",(char*)"",false);
+					filename=globalSlice->replaceAllSlice((char*)filename,(char*)".html",(char*)"",false);
+					filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_8",(char*)".",false);
+				
+					for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
+						{
+							page=getPageStructPtr(j);
+							if((page!=NULL) && (strcmp(page->fileName,filename)==0))
+								{
+									gtk_notebook_set_current_page(notebook,j);
+									return(false);
+								}
+						}
+//try to open file
+					pwd=get_current_dir_name();
+					if(pwd!=NULL)
+						{
+							asprintf(&loadfile,"%s/%s",pwd,filename);
+							openFile(loadfile,-1,false);
 							free(loadfile);
 							free(pwd);
 						}
 				}
-//	printf("\nXX%sXX\n",uri)sliceBetween	;
-//	printf("%i %i\n",mod,mod&GDK_SHIFT_MASK);
-			
-
 		}
-	delete slice;
+
 	return(false);
 }
 #endif
