@@ -202,9 +202,9 @@ void init(void)
 	hightlightAll=true;
 
 //runtime deps
-	exitstatus=system("which manpageeditor &>/dev/null");
+	exitstatus=system("which manpageeditor 2>&1 >/dev/null");
 	gotManEditor=WEXITSTATUS(exitstatus);
-	exitstatus=system("doxygen -v &>/dev/null");
+	exitstatus=system("which doxygen 2>&1 >/dev/null");
 	gotDoxygen=WEXITSTATUS(exitstatus);
 
 	if(getuid()!=0)

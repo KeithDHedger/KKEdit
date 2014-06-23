@@ -1416,7 +1416,7 @@ void doShutdown(GtkWidget* widget,gpointer data)
 {
 	char*	command;
 
-	asprintf(&command,"rm %s &>/dev/null",htmlFile);
+	asprintf(&command,"rm %s 2>&1 >/dev/null",htmlFile);
 	if(doSaveAll(widget,(void*)true)==true)
 		{
 			if(onExitSaveSession)
@@ -1764,18 +1764,18 @@ void newEditor(GtkWidget* widget,gpointer data)
 		{
 		case 1:
 			if(strcmp(rootCommand,"")!=0)
-				asprintf(&command,"%s kkedit -m &>/dev/null &",rootCommand);
+				asprintf(&command,"%s kkedit -m 2>&1 >/dev/null &",rootCommand);
 			else
-				asprintf(&command,"%s sudo kkedit -m &>/dev/null &",terminalCommand);
+				asprintf(&command,"%s sudo kkedit -m 2>&1 >/dev/null &",terminalCommand);
 			system(command);
 			free(command);
 			break;
 		case 2:
-			system("kkedit -m &>/dev/null &");
+			system("kkedit -m 2>&1 >/dev/null &");
 			break;
 		case 3:
 			if(gotManEditor==0)
-				system("manpageeditor &>/dev/null &");
+				system("manpageeditor 2>&1 >/dev/null &");
 			break;
 		}
 }
