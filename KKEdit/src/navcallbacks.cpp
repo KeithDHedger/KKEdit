@@ -13,6 +13,7 @@
 #include "globals.h"
 #include "files.h"
 #include "guis.h"
+#include "callbacks.h"
 
 int	theLineNum=0;
 int marknum=0;
@@ -21,19 +22,25 @@ void goToDefine(functionData* fdata)
 {
 	pageStruct*	page;
 	GtkTextIter	iter;
+	GtkTextMark*	mark;
+	TextBuffer*		buf;
 
 	if(fdata->intab==-1)
 		{
-		printf("%s %i\n",fdata->file,fdata->line-1);
-		openFile(fdata->file,fdata->line-1);
+			openFile(fdata->file,fdata->line-1);
 		}
 	else
 		{
 			page=getPageStructPtr(fdata->intab);
 			gtk_notebook_set_current_page(notebook,fdata->intab);
-			gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,fdata->line-1,0);
-			gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
-			scrollToIterInPane(page,&iter);
+			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+
+			if(page->inTop==true)
+				buf->scroll2Line((GtkTextView*)page->view,fdata->line-1);
+			else
+				buf->scroll2Line((GtkTextView*)page->view2,fdata->line-1);
+
+			delete buf;
 		}
 }
 
@@ -130,14 +137,17 @@ void gotoLine(GtkWidget* widget,gpointer data)
 	int			line=(long)data;
 	GtkTextIter	iter;
 	pageStruct*	page=getPageStructPtr(-1);
+	TextBuffer*	buf;
 
 	if(page!=NULL)
 		{
 			history->savePosition();
-
-			gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,line-1,0);
-			gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
-			scrollToIterInPane(page,&iter);
+			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+			if(page->inTop==true)
+				buf->scroll2Line((GtkTextView*)page->view,line-1);
+			else
+				buf->scroll2Line((GtkTextView*)page->view2,line-1);
+			delete buf;
 		}
 }
 
@@ -209,14 +219,13 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 	pageStruct*		page;
 	pageStruct*		checkpage;
 	GtkTextIter		iter;
+	TextBuffer*		buf;
 
 	history->savePosition();
 	page=(pageStruct*)((bookMarksNew*)data)->page;
 	mark=(GtkTextMark*)((bookMarksNew*)data)->mark;
-	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
-	scrollToIterInPane(page,&iter);
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-
+	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+	buf->scroll2Mark((GtkTextView*)page->view,mark);
 	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
 		{
 			checkpage=getPageStructPtr(loop);
@@ -226,5 +235,30 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 					return;
 				}
 		}
+	delete buf;
 }
 
+#ifdef BUILDDOCVIEWER
+
+/*
+file:///media/LinuxData/Development/Projects/KKEdit/KKEdit/src/html/callbacks_8cpp_source.html#l00035
+*/
+
+gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest* request,WebKitWebNavigationAction* navigationAction,WebKitWebPolicyDecision* policy_decision, gpointer user_data)
+{
+
+	int	mod=-1;
+	const char* uri;
+	char*
+	mod=webkit_web_navigation_action_get_modifier_state(navigationAction);
+	uri=webkit_network_request_get_uri(request);
+	if(mod&GDK_SHIFT_MASK)
+		{
+//	printf("\nXX%sXX\n",uri);
+//	printf("%i %i\n",mod,mod&GDK_SHIFT_MASK);
+			
+
+		}
+	return(false);
+}
+#endif

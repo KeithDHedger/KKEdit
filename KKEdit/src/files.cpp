@@ -24,6 +24,7 @@
 #include "callbacks.h"
 #include "navcallbacks.h"
 #include "encoding.h"
+#include "textbuffer.h"
 
 #include <gtksourceview/gtksourcestyleschememanager.h>
 
@@ -420,6 +421,7 @@ void restoreSession(GtkWidget* widget,gpointer data)
 	pageStruct*	page;
 	GtkTextIter	markiter;
 	int			currentline;
+	TextBuffer*	buf=new TextBuffer;
 
 	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
 	fd=fopen(filename,"r");
@@ -445,14 +447,13 @@ void restoreSession(GtkWidget* widget,gpointer data)
 							fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 						}
-
-					gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,currentline);
-					gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
-					scrollToIterInPane(page,&markiter);
+					buf->textBuffer=(GtkTextBuffer*)page->buffer;
+					buf->scroll2Line((GtkTextView*)page->view,currentline);					
 				}
 			fclose(fd);
 			g_free(filename);
 		}
+	delete buf;
 }
 
 int showFileChanged(char* filename)

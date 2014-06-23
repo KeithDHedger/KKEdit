@@ -1499,7 +1499,6 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),undoAllMenu);
 	gtk_signal_connect(GTK_OBJECT(undoAllMenu),"activate",G_CALLBACK(unRedoAll),(void*)0);
 
-
 //redoall
 	image=gtk_image_new_from_stock(GTK_STOCK_REDO,GTK_ICON_SIZE_MENU);
 	redoAllMenu=gtk_image_menu_item_new_with_label("Redo All");
@@ -1906,6 +1905,8 @@ void buildGtkDocViewer(void)
 	hbox=gtk_hbox_new(true,0);
 
 	webView=WEBKIT_WEB_VIEW(webkit_web_view_new());
+	g_signal_connect(G_OBJECT(webView),"navigation-policy-decision-requested",G_CALLBACK(docLinkTrap),NULL);	
+
 	settings=webkit_web_view_get_settings(webView);
 	g_object_set((gpointer)settings,"enable-file-access-from-file-uris",true,NULL);
 
