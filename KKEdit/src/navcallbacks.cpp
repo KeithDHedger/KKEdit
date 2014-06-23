@@ -9,11 +9,13 @@
 #include <gtk/gtk.h>
 #include <gtksourceview/gtksourceiter.h>
 #include <unique/unique.h>
+#include <libgen.h>
 
 #include "globals.h"
 #include "files.h"
 #include "guis.h"
 #include "callbacks.h"
+#include "sliceclass.h"
 
 int	theLineNum=0;
 int marknum=0;
@@ -242,23 +244,77 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 
 /*
 file:///media/LinuxData/Development/Projects/KKEdit/KKEdit/src/html/callbacks_8cpp_source.html#l00035
+<div class="title">disc.cpp</div>  </div>
 */
 
 gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest* request,WebKitWebNavigationAction* navigationAction,WebKitWebPolicyDecision* policy_decision, gpointer user_data)
 {
 
-	int	mod=-1;
-	const char* uri;
-	char*
+	int				mod=-1;
+	const char*		uri;
+	StringSlice*	slice=new StringSlice;
+	const char*		linenum=NULL;
+	int				line;
+	char*			data=NULL;
+	const char*		filepath=NULL;
+	const char*		filename;
+	pageStruct*		page;
+	TextBuffer*		buf;
+	char*			pwd;
+	char*			loadfile;
+
 	mod=webkit_web_navigation_action_get_modifier_state(navigationAction);
 	uri=webkit_network_request_get_uri(request);
 	if(mod&GDK_SHIFT_MASK)
 		{
-//	printf("\nXX%sXX\n",uri);
+//			printf("uri=%s\n",uri);
+		
+			linenum=slice->sliceBetween((char*)uri,"#l",NULL);
+			if(linenum!=NULL)
+				{
+					line=atoi(linenum);
+//					printf("line=%i\n",line);
+					filepath=slice->sliceBetween((char*)uri,"file://","#l");
+//					printf("%s\n",filepath);
+					//g_file_get_contents(filepath,&data,NULL,NULL);
+					//if(data!=NULL)
+					//	printf("data=%s\n",data);
+					//filepath=slice->replaceAllSlice((char*)filepath,"_8",".");
+					//filepath=slice->replaceAllSlice((char*)filepath,"_source","");
+					filename=(char*)basename((char*)filepath);
+					filename=slice->replaceAllSlice((char*)filename,"_source","");
+					filename=slice->replaceAllSlice((char*)filename,".html","");
+					filename=slice->replaceAllSlice((char*)filename,"_8",".");
+//					printf("new name %s\n",filename);
+//in open tab
+					for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
+						{
+							page=getPageStructPtr(j);
+							if(strcmp(page->fileName,filename)==0)
+								{
+									buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+									gtk_notebook_set_current_page(notebook,j);
+									buf->scroll2Line((GtkTextView*)page->view,line-1);
+									delete buf;
+								}
+						}
+//try to open file
+					pwd=get_current_dir_name();
+					if(pwd!=NULL)
+						{
+//							printf("%s/%s\n",pwd,filename);
+							asprintf(&loadfile,"%s/%s",pwd,filename);
+							openFile(loadfile,line);
+							free(loadfile);
+							free(pwd);
+						}
+				}
+//	printf("\nXX%sXX\n",uri)sliceBetween	;
 //	printf("%i %i\n",mod,mod&GDK_SHIFT_MASK);
 			
 
 		}
+	delete slice;
 	return(false);
 }
 #endif

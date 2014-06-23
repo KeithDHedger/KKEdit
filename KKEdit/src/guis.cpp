@@ -1382,7 +1382,7 @@ void buildMainGui(void)
 //doxy
 	if(gotDoxygen==0)
 		{
-			menuitem=gtk_image_menu_item_new_with_label("Create Documentation");
+			menuitem=gtk_image_menu_item_new_with_label("Documentation");
 			image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
 			gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
