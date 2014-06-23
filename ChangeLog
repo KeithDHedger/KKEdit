@@ -1,4 +1,5 @@
 0.1.8
+Yet another work around for ubuntu based distros ( what is it with dash anyway? ).
 Prelim suport for linking doxygen links to source code in the editor ( must use the internal doc viewer, won't work with external browser ).
 Fixed goto define opening a file but not scrolling to the proper line.
 Goto define now searches for an exact match first and then the nearest match.
