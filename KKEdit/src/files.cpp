@@ -6,27 +6,27 @@
  *
 */
 
-#include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
+//#include <stdlib.h>
+//#include <string.h>
+//#include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <gtk/gtk.h>
+//#include <gtk/gtk.h>
 #include <glib.h>
 
-#include <gtksourceview/gtksourceview.h>
-#include <gtksourceview/gtksourcebuffer.h>
+//#include <gtksourceview/gtksourceview.h>
+//#include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
 
-#include "globals.h"
+//#include "globals.h"
 #include "callbacks.h"
 #include "navcallbacks.h"
 #include "encoding.h"
-#include "textbuffer.h"
+//#include "textbuffer.h"
 
-#include <gtksourceview/gtksourcestyleschememanager.h>
+//#include <gtksourceview/gtksourcestyleschememanager.h>
 
 GtkWidget*	vbox;
 char*		saveFileName=NULL;

@@ -4,24 +4,24 @@
  *
 */
 
-#include <stdlib.h>
-#include <gtk/gtk.h>
-#include <string.h>
-#include <sys/stat.h>
+//#include <stdlib.h>
+//#include <gtk/gtk.h>
+//#include <string.h>
+//#include <sys/stat.h>
 
-#include <gtksourceview/gtksourceview.h>
-#include <gtksourceview/gtksourcebuffer.h>
-#include <gtksourceview/gtksourcelanguage.h>
-#include <gtksourceview/gtksourcelanguagemanager.h>
-#include <unique/unique.h>
+//#include <gtksourceview/gtksourceview.h>
+//#include <gtksourceview/gtksourcebuffer.h>
+//#include <gtksourceview/gtksourcelanguage.h>
+//#include <gtksourceview/gtksourcelanguagemanager.h>
+//#include <unique/unique.h>
 #include <time.h>
 
-#include "globals.h"
-#include "files.h"
+//#include "globals.h"
+//#include "files.h"
 #include "callbacks.h"
 #include "guis.h"
-#include "config.h"
-#include "sliceclass.h"
+//#include "config.h"
+//#include "sliceclass.h"
 
 bool singleOverRide=false;
 

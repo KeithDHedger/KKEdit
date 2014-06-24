@@ -6,30 +6,30 @@
  *
 */
 
-#include <stdlib.h>
-#include <gtk/gtk.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <gtksourceview/gtksourcebuffer.h>
+//#include <stdlib.h>
+//#include <gtk/gtk.h>
+//#include <string.h>
+//#include <sys/stat.h>
+//#include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
-#include <gtksourceview/gtksourcestyleschememanager.h>
+//#include <gtksourceview/gtksourcestyleschememanager.h>
 #include <gdk/gdkkeysyms.h>
 
-#ifdef _BUILDDOCVIEWER_
-#include <webkit/webkit.h>
-#endif
+//#ifdef _BUILDDOCVIEWER_
+//#include <webkit/webkit.h>
+//#endif
 
-#ifdef _ASPELL_
-#include <aspell.h>
-#endif
+//#ifdef _ASPELL_
+//#include <aspell.h>
+//#endif
 
-#include "config.h"
-#include "globals.h"
+//#include "config.h"
+//#include "globals.h"
 #include "searchcallbacks.h"
 #include "callbacks.h"
 #include "navcallbacks.h"
-#include "sliceclass.h"
+//#include "sliceclass.h"
 
 GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;
