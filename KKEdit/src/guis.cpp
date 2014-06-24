@@ -24,7 +24,7 @@
 #include "searchcallbacks.h"
 #include "spellcheck.h"
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 #include <webkit/webkit.h>
 #endif
 
@@ -1578,7 +1578,7 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuStatusBar);
 	gtk_signal_connect(GTK_OBJECT(menuStatusBar),"activate",G_CALLBACK(toggleStatusBar),NULL);
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 //toggle docviewer
 	showDocViewWidget=gtk_menu_item_new_with_label("Show Docviewer");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),showDocViewWidget);
@@ -1886,7 +1886,7 @@ int showFunctionEntry(void)
 	return(result);
 }
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 void buildGtkDocViewer(void)
 {
 	GtkWidget*	vbox;

@@ -22,7 +22,7 @@ void buildTools(void);
 void buildFindReplace(void);
 void buildWordCheck(int documentCheck);
 int showFunctionEntry(void);
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 void buildGtkDocViewer(void);
 #endif
 void setUpToolBar(void);

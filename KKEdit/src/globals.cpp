@@ -16,7 +16,7 @@
 #include <gtksourceview/gtksourcestyleschememanager.h>
 #include <gdk/gdkkeysyms.h>
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 #include <webkit/webkit.h>
 #endif
 
@@ -41,7 +41,7 @@ GtkWidget*		menufunc;
 GtkWidget*		menunav;
 GtkWidget*		menutools;
 GtkWidget*		menuhelp;
-GtkWidget*		menumanpage;
+
 GtkWidget*		menuItemOpen=NULL;
 GtkWidget*		menuView=NULL;
 GtkWidget*		menuToolOut=NULL;
@@ -57,7 +57,6 @@ GtkWidget*		bmHighlightBox;
 int				bmMarkNumber=0;
 
 char*			toolBarLayout=NULL;
-char*			tmpToolBarLayout=NULL;
 GtkToolbar*		toolBar;
 GtkWidget*		toolBarBox;
 
@@ -176,8 +175,6 @@ int 			untitledNumber=1;
 GtkToolItem*	newButton=NULL;
 GtkToolItem*	openButton=NULL;
 GtkToolItem*	saveButton=NULL;
-GtkToolItem*	saveasButton=NULL;
-GtkToolItem*	closeButton=NULL;
 GtkToolItem*	redoButton=NULL;
 GtkToolItem*	undoButton=NULL;
 GtkToolItem*	cutButton=NULL;
@@ -221,7 +218,7 @@ int				gotDoxygen;
 GtkSourceStyleSchemeManager*	schemeManager;
 GtkSourceStyleScheme*			styleScheme;
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 GtkWidget*		docView;
 WebKitWebView*	webView;
 bool			showHideDocviewer;
@@ -472,6 +469,11 @@ functionData* getFunctionByName(char* name,bool recurse,bool fuzzy)
 	int				gotmatch;
 	unsigned int	matchlen;
 
+	char*			possmatch=NULL;
+	int				bestlen=-1;
+	int				thislen;
+	int				loophold=-1;
+
 	functionData* fdata;
 	page=getPageStructPtr(-1);
 	if(page==NULL)
@@ -488,19 +490,19 @@ functionData* getFunctionByName(char* name,bool recurse,bool fuzzy)
 					while (lineptr!=NULL)
 						{
 							sscanf (lineptr,"%s",function);
-							if(fuzzy==false)
+							if(strlen(name)>strlen(function))
 								{
-									matchlen=strlen(name);
-									if(strlen(function)==matchlen)
-										gotmatch=strncasecmp(name,function,matchlen);
-									else
-										gotmatch=1;
+									gotmatch=strncasecmp(function,name,strlen(function));
+									thislen=strlen(function);
 								}
 							else
-								gotmatch=strncasecmp(function,name,strlen(name));
-
-							if(gotmatch==0)
 								{
+									gotmatch=strncasecmp(name,function,strlen(name));
+									thislen=strlen(name);
+								}
+							if((gotmatch==0) && (strlen(name)==strlen(function)))
+								{
+printf("XXXXXXXX\n");
 									fdata=(functionData*)malloc(sizeof(functionData));
 									sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
 									fdata->name=strdup(function);
@@ -514,14 +516,63 @@ functionData* getFunctionByName(char* name,bool recurse,bool fuzzy)
 									fdata->intab=loop;
 									return(fdata);
 								}
+							if((gotmatch==0) && (bestlen<thislen))
+								{
+									possmatch=strdup(lineptr);
+									bestlen=thislen;
+									loophold=loop;
+								}
+//							if(fuzzy==false)
+//								{
+//									matchlen=strlen(name);
+//									if(strlen(function)==matchlen)
+//										gotmatch=strncasecmp(name,function,matchlen);
+//									else
+//										gotmatch=1;
+//								}
+//							else
+//								gotmatch=strncasecmp(function,name,strlen(name));
+
+//							if(gotmatch==0)
+//								{
+//									fdata=(functionData*)malloc(sizeof(functionData));
+//									sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
+//									fdata->name=strdup(function);
+//									sscanf (lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
+//									fdata->type=strdup(function);
+//									sscanf (lineptr,"%*s %*s %i",&fdata->line);
+//									sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
+//									fdata->file=strdup(function);
+//									sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
+//									fdata->define=strdup(function);
+//									fdata->intab=loop;
+//									return(fdata);
+//								}
 
 							lineptr=strchr(lineptr,'\n');
 							if (lineptr!=NULL)
 								lineptr++;
 						}
+
+					if(possmatch!=NULL)
+						{
+printf("ZZZZZZZZ\n");
+							fdata=(functionData*)malloc(sizeof(functionData));
+							sscanf (possmatch,"%"VALIDFUNCTIONCHARS"s",function);
+							fdata->name=strdup(function);
+							sscanf (possmatch,"%*s %"VALIDFUNCTIONCHARS"s",function);
+							fdata->type=strdup(function);
+							sscanf (possmatch,"%*s %*s %i",&fdata->line);
+							sscanf (possmatch,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
+							fdata->file=strdup(function);
+							sscanf (possmatch,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
+							fdata->define=strdup(function);
+							fdata->intab=loophold;
+							return(fdata);
+						}
 				}
 		}
-
+return(NULL);
 	if(recurse==true)
 		{
 //not in any open files

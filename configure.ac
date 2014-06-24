@@ -46,7 +46,7 @@ if test "$enable_docviewer" = "yes"; then
 	PKG_CHECK_MODULES(WEBKIT, $WEBKIT_MODULES)
 	AC_SUBST(WEBKIT_CFLAGS)
 	AC_SUBST(WEBKIT_LIBS)
-	AC_DEFINE([BUILDDOCVIEWER], [], [Build gtk-doc viewer])
+	AC_DEFINE([_BUILDDOCVIEWER_], [], [Build gtk-doc viewer])
 fi
 
 AC_ARG_WITH(qt5-docdir,AS_HELP_STRING([ --with-qt5-docdir],[Installtion DIR for Qt5 documentation]),

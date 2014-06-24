@@ -11,7 +11,7 @@
 #include <unique/unique.h>
 
 #include "config.h"
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 #include <webkit/webkit.h>
 #endif
 
@@ -26,7 +26,7 @@ int currentFindPage=-1;
 int firstPage=-1;
 int pagesChecked=0;
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 
 void webKitGoBack(GtkWidget* widget,gpointer data)
 {
@@ -49,7 +49,7 @@ void showDocView(int howtodisplay,char* text)
 {
 	char*		command;
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 
 	if(howtodisplay==USEURI)
 		{
@@ -115,7 +115,7 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 	char*		link;
 	int			cnt=0;
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 	gtk_window_set_title((GtkWindow*)docView,"Gtk Docs");
 #endif
 	for(int loop=0;loop<2048;loop++)
@@ -242,7 +242,7 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 	char*		func=NULL;
 	int			cnt=0;
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 	gtk_window_set_title((GtkWindow*)docView,"Qt5 Docs");
 #endif
 	if(data!=NULL)

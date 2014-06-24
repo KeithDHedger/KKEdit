@@ -346,7 +346,7 @@ int main(int argc,char **argv)
 
 			buildFindReplace();
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 			buildGtkDocViewer();
 #endif
 			unique_app_watch_window(app,(GtkWindow*)window);

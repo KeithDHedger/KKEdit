@@ -236,7 +236,7 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 	delete buf;
 }
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 
 gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest* request,WebKitWebNavigationAction* navigationAction,WebKitWebPolicyDecision* policy_decision, gpointer user_data)
 {

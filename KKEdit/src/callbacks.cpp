@@ -15,7 +15,7 @@
 #include <libgen.h>
 
 #include "config.h"
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 #include <webkit/webkit.h>
 #endif
 
@@ -849,7 +849,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 				}
 		}
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 	gtk_window_set_title((GtkWindow*)docView,tool->menuName);
 #endif
 
@@ -893,7 +893,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 void openHelp(GtkWidget* widget,gpointer data)
 {
 	asprintf(&thePage,"file://%s/help/help.html",DATADIR);
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 	gtk_window_set_title((GtkWindow*)docView,"KKEdit Help");
 	showDocView(USEURI,(char*)"KKEdit");
 
@@ -931,9 +931,9 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 			if(selection!=NULL)
 				{
 					fdata=getFunctionByName(selection,true,false);
-					if(fdata==NULL)
-						fdata=getFunctionByName(selection,true,true);
-
+//					if(fdata==NULL)
+//						fdata=getFunctionByName(selection,true,true);
+//
 					if(fdata!=NULL)
 						{
 							sprintf((char*)&defineText,"%s",fdata->define);
@@ -1835,7 +1835,7 @@ void toggleStatusBar(GtkWidget* widget,gpointer data)
 	refreshMainWindow();
 }
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 
 void toggleDocviewer(GtkWidget* widget,gpointer data)
 {

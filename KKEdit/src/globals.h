@@ -16,7 +16,7 @@
 #include "config.h"
 #include "sliceclass.h"
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 #include <webkit/webkit.h>
 #endif
 
@@ -151,7 +151,6 @@ extern GtkWidget*		bmHighlightBox;
 extern int				bmMarkNumber;
 
 extern char*			toolBarLayout;
-extern char*			tmpToolBarLayout;
 extern GtkToolbar*		toolBar;
 extern GtkWidget*		toolBarBox;
 
@@ -169,7 +168,7 @@ extern GtkWidget*		menuclose;
 extern GtkWidget*		menucloseall;
 extern GtkWidget*		menusaveall;
 extern GtkWidget*		menurevert;
-extern GtkWidget*		menumanpage;
+
 extern GtkWidget*		menuItemOpen;
 extern GtkWidget*		menuToolOut;
 extern GtkWidget*		menuStatusBar;
@@ -284,8 +283,6 @@ extern int 				untitledNumber;
 extern GtkToolItem*		newButton;
 extern GtkToolItem*		openButton;
 extern GtkToolItem*		saveButton;
-extern GtkToolItem*		saveasButton;
-extern GtkToolItem*		closeButton;
 extern GtkToolItem*		redoButton;
 extern GtkToolItem*		undoButton;
 extern GtkToolItem*		cutButton;
@@ -329,7 +326,7 @@ extern int				gotDoxygen;
 extern GtkSourceStyleSchemeManager*	schemeManager;
 extern GtkSourceStyleScheme*		styleScheme;
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 extern GtkWidget*		docView;
 extern WebKitWebView*	webView;
 extern bool				showHideDocviewer;

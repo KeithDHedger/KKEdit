@@ -15,7 +15,7 @@
 #ifndef _FUNCCALLBACKS_
 #define _FUNCCALLBACKS_
 
-#ifdef BUILDDOCVIEWER
+#ifdef _BUILDDOCVIEWER_
 void webKitGoBack(GtkWidget* widget,gpointer data);
 void webKitGoForward(GtkWidget* widget,gpointer data);
 void webKitGoHome(GtkWidget* widget,gpointer data);
