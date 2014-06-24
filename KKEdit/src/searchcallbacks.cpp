@@ -302,10 +302,7 @@ void defSearchFromBar(GtkWidget* widget,gpointer data)
 	functionSearchText=strdup(gtk_entry_get_text((GtkEntry*)widget));
 	if(functionSearchText!=NULL)
 		{
-			fdata=getFunctionByName(functionSearchText,true,false);
-			if(fdata==NULL)
-				fdata=getFunctionByName(functionSearchText,true,true);
-
+			fdata=getFunctionByName(functionSearchText,true);
 			if(fdata!=NULL)
 				{
 					goToDefine(fdata);

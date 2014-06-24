@@ -348,7 +348,7 @@ pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot);
-functionData* getFunctionByName(char* name,bool recurse,bool fuzzy);
+functionData* getFunctionByName(char* name,bool recurse);
 void destroyData(functionData* fdata);
 void getRecursiveTagList(char* filepath,void* ptr);
 char* slice(char* srcstring,int startchar,int endchar);

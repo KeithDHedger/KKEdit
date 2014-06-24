@@ -61,11 +61,7 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 	else
 		return;
 
-
-	fdata=getFunctionByName(selection,true,false);
-	if(fdata==NULL)
-		fdata=getFunctionByName(selection,true,true);
-
+	fdata=getFunctionByName(selection,true);
 	if(fdata!=NULL)
 		{
 			history->savePosition();
@@ -199,10 +195,7 @@ void functionSearch(GtkWidget* widget,gpointer data)
 		{
 			if(functionSearchText!=NULL)
 				{
-					fdata=getFunctionByName(functionSearchText,true,false);
-					if(fdata==NULL)
-						fdata=getFunctionByName(functionSearchText,true,true);
-
+					fdata=getFunctionByName(functionSearchText,true);
 					if(fdata!=NULL)
 						{
 							goToDefine(fdata);

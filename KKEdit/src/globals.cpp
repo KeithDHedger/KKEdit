@@ -454,7 +454,7 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot)
 	free(asroot);
 }
 
-functionData* getFunctionByName(char* name,bool recurse,bool fuzzy)
+functionData* getFunctionByName(char* name,bool recurse)
 {
 	pageStruct*		page;
 	int				numpages=gtk_notebook_get_n_pages(notebook);
@@ -473,12 +473,14 @@ functionData* getFunctionByName(char* name,bool recurse,bool fuzzy)
 	int				bestlen=-1;
 	int				thislen;
 	int				loophold=-1;
+	bool			getfromfile;
 
 	functionData* fdata;
 	page=getPageStructPtr(-1);
 	if(page==NULL)
 		return(NULL);
 
+	getfromfile=false;
 	for(int loop=0;loop<numpages;loop++)
 		{
 			page=getPageStructPtr(loop);
@@ -526,22 +528,6 @@ functionData* getFunctionByName(char* name,bool recurse,bool fuzzy)
 							if (lineptr!=NULL)
 								lineptr++;
 						}
-
-//					if(possmatch!=NULL)
-//						{
-//							fdata=(functionData*)malloc(sizeof(functionData));
-//							sscanf (possmatch,"%"VALIDFUNCTIONCHARS"s",function);
-//							fdata->name=strdup(function);
-//							sscanf (possmatch,"%*s %"VALIDFUNCTIONCHARS"s",function);
-//							fdata->type=strdup(function);
-//							sscanf (possmatch,"%*s %*s %i",&fdata->line);
-//							sscanf (possmatch,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
-//							fdata->file=strdup(function);
-//							sscanf (possmatch,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
-//							fdata->define=strdup(function);
-//							fdata->intab=loophold;
-//							return(fdata);
-//						}
 				}
 		}
 
@@ -563,29 +549,26 @@ functionData* getFunctionByName(char* name,bool recurse,bool fuzzy)
 							while (lineptr!=NULL)
 								{
 									sscanf (lineptr,"%s",function);
-							if(strlen(name)>strlen(function))
-								{
-									gotmatch=strncasecmp(function,name,strlen(function));
-									thislen=strlen(function);
-								}
-							else
-								{
-									gotmatch=strncasecmp(name,function,strlen(name));
-									thislen=strlen(name);
+									if(strlen(name)>strlen(function))
+										{
+											gotmatch=strncasecmp(function,name,strlen(function));
+											thislen=strlen(function);
+										}
+									else
+										{
+											gotmatch=strncasecmp(name,function,strlen(name));
+											thislen=strlen(name);
 								}
 							if((gotmatch==0) && (strlen(name)==strlen(function)))
 								{
+									sscanf (lineptr, "%s\t%s\t%i",funcname,filepath,&linenumber);
 									fdata=(functionData*)malloc(sizeof(functionData));
-									sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
-									fdata->name=strdup(function);
-									sscanf (lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
-									fdata->type=strdup(function);
-									sscanf (lineptr,"%*s %*s %i",&fdata->line);
-									sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
-									fdata->file=strdup(function);
-									sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
-									fdata->define=strdup(function);
-									fdata->intab=loop;
+									fdata->name=strdup(funcname);
+									fdata->file=strdup(filepath);
+									fdata->line=linenumber+1;
+									fdata->type=NULL;
+									fdata->define=NULL;
+									fdata->intab=-1;
 									return(fdata);
 								}
 							if((gotmatch==0) && (bestlen<thislen))
@@ -593,35 +576,12 @@ functionData* getFunctionByName(char* name,bool recurse,bool fuzzy)
 									possmatch=strdup(lineptr);
 									bestlen=thislen;
 									loophold=loop;
+									getfromfile=true;
 								}
-									
-//									if(fuzzy==false)
-//										{
-//											matchlen=strlen(name);
-//											if(strlen(function)==matchlen)
-//												gotmatch=strncasecmp(name,function,matchlen);
-//											else
-//												gotmatch=1;
-//										}
-//									else
-//										gotmatch=strncasecmp(function,name,strlen(name));
-//
-//									if(gotmatch==0)
-//										{
-//											sscanf (lineptr, "%st%st%i",funcname,filepath,&linenumber);
-//											fdata=(functionData*)malloc(sizeof(functionData));
-//											fdata->name=strdup(funcname);
-//											fdata->file=strdup(filepath);
-//											fdata->line=linenumber+1;
-//											fdata->type=NULL;
-//											fdata->define=NULL;
-//											fdata->intab=-1;
-//											return(fdata);
-//										}
 
-									lineptr=strchr(lineptr,'\n');
-									if (lineptr!=NULL)
-										lineptr++;
+							lineptr=strchr(lineptr,'\n');
+							if (lineptr!=NULL)
+								lineptr++;
 								}
 							if(stdout!=NULL)
 								g_free(stdout);
@@ -633,18 +593,33 @@ functionData* getFunctionByName(char* name,bool recurse,bool fuzzy)
 
 	if(possmatch!=NULL)
 		{
-			fdata=(functionData*)malloc(sizeof(functionData));
-			sscanf (possmatch,"%"VALIDFUNCTIONCHARS"s",function);
-			fdata->name=strdup(function);
-			sscanf (possmatch,"%*s %"VALIDFUNCTIONCHARS"s",function);
-			fdata->type=strdup(function);
-			sscanf (possmatch,"%*s %*s %i",&fdata->line);
-			sscanf (possmatch,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
-			fdata->file=strdup(function);
-			sscanf (possmatch,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
-			fdata->define=strdup(function);
-			fdata->intab=loophold;
-			return(fdata);
+			if(getfromfile==false)
+				{
+					fdata=(functionData*)malloc(sizeof(functionData));
+					sscanf (possmatch,"%"VALIDFUNCTIONCHARS"s",function);
+					fdata->name=strdup(function);
+					sscanf (possmatch,"%*s %"VALIDFUNCTIONCHARS"s",function);
+					fdata->type=strdup(function);
+					sscanf (possmatch,"%*s %*s %i",&fdata->line);
+					sscanf (possmatch,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
+					fdata->file=strdup(function);
+					sscanf (possmatch,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
+					fdata->define=strdup(function);
+					fdata->intab=loophold;
+					return(fdata);
+				}
+			else
+				{
+					sscanf (possmatch, "%s\t%s\t%i",funcname,filepath,&linenumber);
+					fdata=(functionData*)malloc(sizeof(functionData));
+					fdata->name=strdup(funcname);
+					fdata->file=strdup(filepath);
+					fdata->line=linenumber+1;
+					fdata->type=NULL;
+					fdata->define=NULL;
+					fdata->intab=-1;
+					return(fdata);
+				}
 		}
 
 //	if(recurse==true)

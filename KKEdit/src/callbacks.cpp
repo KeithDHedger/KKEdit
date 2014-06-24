@@ -930,13 +930,10 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 			if(selection!=NULL)
 				{
-					fdata=getFunctionByName(selection,true,false);
-//					if(fdata==NULL)
-//						fdata=getFunctionByName(selection,true,true);
-//
+					fdata=getFunctionByName(selection,false);
 					if(fdata!=NULL)
 						{
-							sprintf((char*)&defineText,"%s",fdata->define);
+						sprintf((char*)&defineText,"%s",fdata->define);
 							menuitem=gtk_menu_item_new_with_label(defineText);
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)defineText);
