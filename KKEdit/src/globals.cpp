@@ -238,7 +238,8 @@ AspellSpeller*	spellChecker=0;
 HistoryClass*	history;
 StringSlice*	globalSlice;
 
-unsigned int	shortCuts[100][2]={
+unsigned int	shortCuts[100][2]=
+{
 	{121,0},
 	{63,1},
 	{107,2},
@@ -329,9 +330,9 @@ void setLanguage(pageStruct* page)
 	lm=gtk_source_language_manager_get_default();
 
 	gfile=g_file_new_for_path(page->filePath);
-    gfileinfo=g_file_query_info(gfile,"standard::*",(GFileQueryInfoFlags)0,NULL,NULL);
+	gfileinfo=g_file_query_info(gfile,"standard::*",(GFileQueryInfoFlags)0,NULL,NULL);
 
-    content_type=g_file_info_get_content_type(gfileinfo);
+	content_type=g_file_info_get_content_type(gfileinfo);
 	mimetype=g_content_type_get_mime_type(content_type);
 
 	if(mimetype==NULL)
@@ -371,8 +372,8 @@ void setLanguage(pageStruct* page)
 
 	if(lang!=NULL)
 		page->lang=gtk_source_language_get_name(lang);
-		else
-			page->lang=NULL;
+	else
+		page->lang=NULL;
 
 	g_object_unref(gfile);
 	g_object_unref(gfileinfo);
@@ -429,16 +430,16 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot)
 								{
 									gtk_text_buffer_insert_at_cursor(toolOutputBuffer,line,strlen(line));
 									while (gtk_events_pending())
-	 									gtk_main_iteration();
-	 								gtk_text_buffer_get_end_iter(toolOutputBuffer,&iter);
-	 								gtk_text_view_scroll_to_iter((GtkTextView*)toolOutputView,&iter,0,true,0,0);
+										gtk_main_iteration();
+									gtk_text_buffer_get_end_iter(toolOutputBuffer,&iter);
+									gtk_text_view_scroll_to_iter((GtkTextView*)toolOutputView,&iter,0,true,0,0);
 								}
 						}
 					else
 						{
 							str=g_string_new(NULL);
 							while(fgets(line,1024,fp))
-								 g_string_append(str,line);
+								g_string_append(str,line);
 							if(ptr!=NULL)
 								*((char**)ptr)=str->str;
 							g_string_free(str,false);
@@ -467,8 +468,6 @@ functionData* getFunctionByName(char* name,bool recurse)
 	char			filepath[1024];
 	int				linenumber;
 	int				gotmatch;
-	unsigned int	matchlen;
-
 	char*			possmatch=NULL;
 	int				bestlen=-1;
 	int				thislen;
@@ -481,7 +480,7 @@ functionData* getFunctionByName(char* name,bool recurse)
 		return(NULL);
 
 	getfromfile=false;
-	for(int loop=0;loop<numpages;loop++)
+	for(int loop=0; loop<numpages; loop++)
 		{
 			page=getPageStructPtr(loop);
 			if(page->filePath!=NULL)
@@ -531,13 +530,12 @@ functionData* getFunctionByName(char* name,bool recurse)
 				}
 		}
 
-
 	if(recurse==true)
 		{
 //not in any open files
 //check ./ from all files
 //dont do this from popup for speed reasons
-			for(int loop=0;loop<numpages;loop++)
+			for(int loop=0; loop<numpages; loop++)
 				{
 					page=getPageStructPtr(loop);
 					if(page->filePath!=NULL)
@@ -558,30 +556,30 @@ functionData* getFunctionByName(char* name,bool recurse)
 										{
 											gotmatch=strncasecmp(name,function,strlen(name));
 											thislen=strlen(name);
-								}
-							if((gotmatch==0) && (strlen(name)==strlen(function)))
-								{
-									sscanf (lineptr, "%s\t%s\t%i",funcname,filepath,&linenumber);
-									fdata=(functionData*)malloc(sizeof(functionData));
-									fdata->name=strdup(funcname);
-									fdata->file=strdup(filepath);
-									fdata->line=linenumber+1;
-									fdata->type=NULL;
-									fdata->define=NULL;
-									fdata->intab=-1;
-									return(fdata);
-								}
-							if((gotmatch==0) && (bestlen<thislen))
-								{
-									possmatch=strdup(lineptr);
-									bestlen=thislen;
-									loophold=loop;
-									getfromfile=true;
-								}
+										}
+									if((gotmatch==0) && (strlen(name)==strlen(function)))
+										{
+											sscanf (lineptr, "%s\t%s\t%i",funcname,filepath,&linenumber);
+											fdata=(functionData*)malloc(sizeof(functionData));
+											fdata->name=strdup(funcname);
+											fdata->file=strdup(filepath);
+											fdata->line=linenumber+1;
+											fdata->type=NULL;
+											fdata->define=NULL;
+											fdata->intab=-1;
+											return(fdata);
+										}
+									if((gotmatch==0) && (bestlen<thislen))
+										{
+											possmatch=strdup(lineptr);
+											bestlen=thislen;
+											loophold=loop;
+											getfromfile=true;
+										}
 
-							lineptr=strchr(lineptr,'\n');
-							if (lineptr!=NULL)
-								lineptr++;
+									lineptr=strchr(lineptr,'\n');
+									if (lineptr!=NULL)
+										lineptr++;
 								}
 							if(stdout!=NULL)
 								g_free(stdout);
@@ -621,59 +619,6 @@ functionData* getFunctionByName(char* name,bool recurse)
 					return(fdata);
 				}
 		}
-
-//	if(recurse==true)
-//		{
-////not in any open files
-////check ./ from all files
-////dont do this from popup for speed reasons
-//			for(int loop=0;loop<numpages;loop++)
-//				{
-//					page=getPageStructPtr(loop);
-//					if(page->filePath!=NULL)
-//						{
-//							dirname=strdup(g_path_get_dirname(page->filePath));
-//							getRecursiveTagListFileName(dirname,&stdout);
-//
-//							lineptr=stdout;
-//							while (lineptr!=NULL)
-//								{
-//									sscanf (lineptr,"%s",function);
-//									if(fuzzy==false)
-//										{
-//											matchlen=strlen(name);
-//											if(strlen(function)==matchlen)
-//												gotmatch=strncasecmp(name,function,matchlen);
-//											else
-//												gotmatch=1;
-//										}
-//									else
-//										gotmatch=strncasecmp(function,name,strlen(name));
-//
-//									if(gotmatch==0)
-//										{
-//											sscanf (lineptr, "%st%st%i",funcname,filepath,&linenumber);
-//											fdata=(functionData*)malloc(sizeof(functionData));
-//											fdata->name=strdup(funcname);
-//											fdata->file=strdup(filepath);
-//											fdata->line=linenumber+1;
-//											fdata->type=NULL;
-//											fdata->define=NULL;
-//											fdata->intab=-1;
-//											return(fdata);
-//										}
-//
-//									lineptr=strchr(lineptr,'n');
-//									if (lineptr!=NULL)
-//										lineptr++;
-//								}
-//							if(stdout!=NULL)
-//								g_free(stdout);
-//							if(dirname!=NULL)
-//								g_free(dirname);
-//						}
-//				}
-//		}
 
 	return(NULL);
 }
@@ -742,21 +687,21 @@ void getRecursiveTagList(char* filepath,void* ptr)
 
 	switch (listFunction)
 		{
-			case 0:
-				asprintf(&sort,"sort -k 2rb,2rb -k 1b,1b");
-				break;
-			case 1:
-				asprintf(&sort,"sort -k 2rb,2rb -k 3n,3n");
-				break;
-			case 2:
-				asprintf(&sort,"sort -k 3n");
-				break;
-			case 4:
-				asprintf(&sort,"sort -k 2rb,2rb -k 1b,1b");
-				break;
-			default:
-				asprintf(&sort,"sort");
-				break;
+		case 0:
+			asprintf(&sort,"sort -k 2rb,2rb -k 1b,1b");
+			break;
+		case 1:
+			asprintf(&sort,"sort -k 2rb,2rb -k 3n,3n");
+			break;
+		case 2:
+			asprintf(&sort,"sort -k 3n");
+			break;
+		case 4:
+			asprintf(&sort,"sort -k 2rb,2rb -k 1b,1b");
+			break;
+		default:
+			asprintf(&sort,"sort");
+			break;
 		}
 
 	asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - -x|%s|sed 's@ \\+@ @g'",filepath,depth,sort);
@@ -882,7 +827,7 @@ void buildToolsList(void)
 	toolStruct*		tool;
 	char*			datafolder[2];
 	char			strarg[1024];
-	
+
 	int				intermarg=0;
 	int				flagsarg=0;
 	int				inpopup=0;
@@ -902,7 +847,7 @@ void buildToolsList(void)
 
 	asprintf(&datafolder[0],"%s/tools/",DATADIR);
 	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));
-	for(int loop=0;loop<2;loop++)
+	for(int loop=0; loop<2; loop++)
 		{
 			folder=g_dir_open(datafolder[loop],0,NULL);
 			if(folder!=NULL)
@@ -955,7 +900,7 @@ void buildToolsList(void)
 										{
 											tool=(toolStruct*)malloc(sizeof(toolStruct));
 											tool->menuName=strdup(menuname);
-											tool->command=strdup(commandarg);											
+											tool->command=strdup(commandarg);
 											tool->flags=flagsarg;
 											tool->inTerminal=(bool)intermarg;
 											tool->inPopUp=(bool)inpopup;
@@ -964,7 +909,7 @@ void buildToolsList(void)
 											tool->clearView=(bool)clearview;
 											tool->runAsRoot=(bool)rootarg;
 											tool->keyCode=keycode;
-											
+
 											if(commentarg!=NULL)
 												tool->comment=strdup(commentarg);
 											else
@@ -1044,6 +989,7 @@ void goBack(GtkWidget* widget,gpointer data)
 
 			delete history;
 			history=hist;
-	}
+		}
 }
+
 
