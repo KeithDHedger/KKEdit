@@ -311,14 +311,6 @@ void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 		}
 }
 
-void showHideWidget(GtkWidget* widget,bool show)
-{
-	if(show==false)
-		gtk_widget_hide(widget);
-	else
-		gtk_widget_show(widget);
-}
-
 void refreshMainWindow(void)
 {
 	gtk_widget_show_all(window);

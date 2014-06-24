@@ -261,7 +261,6 @@ extern GtkWidget*		toolOutVBox;
 extern bool				showStatus;
 extern GtkWidget*		statusWidget;
 
-extern char*			selectedToolPath;
 extern GList*			toolsList;
 
 extern GtkWidget*		restoreBMs;
@@ -354,7 +353,6 @@ void getRecursiveTagList(char* filepath,void* ptr);
 char* slice(char* srcstring,int startchar,int endchar);
 char* sliceBetween(char* srcstring,char* startstr,char* endstr);
 char* sliceLen(char* srcstring,int tmpstartchar,int len);
-char* sliceStrLen(char* srcstring,char* startstr,int len);
 void buildToolsList(void);
 char* deleteSlice(char* srcstring,char* delstr);
 void getRecursiveTagListFileName(char* filepath,void* ptr);

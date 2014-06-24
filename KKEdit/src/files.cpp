@@ -344,28 +344,6 @@ void reloadFile(GtkWidget* widget,gpointer data)
 		}
 }
 
-gpointer findMark(GtkSourceBuffer* buffer)
-{
-	GList*			ptr;
-	GtkTextMark*	retmark=NULL;
-	gpointer		retval=NULL;
-
-	ptr=newBookMarksList;
-
-	while(ptr!=NULL)
-		{
-			retmark=gtk_text_buffer_get_mark((GtkTextBuffer*)buffer,((bookMarksNew*)ptr->data)->markName);
-			if(retmark!=NULL)
-				{
-					printf("markname =%s\n",((bookMarksNew*)ptr->data)->markName);
-					retval=ptr->data;
-					break;
-				}
-			ptr=g_list_next(ptr);
-		}
-	return(retval);
-}
-
 void saveSession(GtkWidget* widget,gpointer data)
 {
 	pageStruct*		page;

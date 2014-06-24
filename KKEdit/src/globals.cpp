@@ -153,7 +153,6 @@ GtkWidget*		toolOutVBox=NULL;
 bool			showStatus;
 GtkWidget*		statusWidget=NULL;
 
-char*			selectedToolPath=NULL;
 GList*			toolsList=NULL;
 
 GtkWidget*		restoreBMs;
@@ -788,19 +787,19 @@ char* sliceLen(char* srcstring,int tmpstartchar,int len)
 	return(dest);
 }
 
-char* sliceStrLen(char* srcstring,char* startstr,int len)
-{
-	char*	ptr;
-	int		startchar;
-
-	ptr=strstr(srcstring,startstr);
-	if(ptr==NULL)
-		return(NULL);
-	startchar=(int)(long)ptr+strlen(startstr)-(long)srcstring;
-	printf("%i\n",startchar);
-	return(sliceLen(srcstring,startchar,len));
-}
-
+//char* sliceStrLen(char* srcstring,char* startstr,int len)
+//{
+//	char*	ptr;
+//	int		startchar;
+//
+//	ptr=strstr(srcstring,startstr);
+//	if(ptr==NULL)
+//		return(NULL);
+//	startchar=(int)(long)ptr+strlen(startstr)-(long)srcstring;
+//	printf("%in",startchar);
+//	return(sliceLen(srcstring,startchar,len));
+//}
+//
 void destroyTool(gpointer data)
 {
 	if(((toolStruct*)data)->menuName!=NULL)

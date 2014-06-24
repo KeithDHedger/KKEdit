@@ -39,7 +39,6 @@ void writeExitData(void);
 bool doSaveAll(GtkWidget* widget,gpointer data);
 void closeAllTabs(GtkWidget* widget,gpointer data);
 void recentFileMenu(GtkRecentChooser* chooser,gpointer* data);
-void showHideWidget(GtkWidget* widget,bool show);
 void refreshMainWindow(void);
 gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data);
 void newEditor(GtkWidget* widget,gpointer data);
