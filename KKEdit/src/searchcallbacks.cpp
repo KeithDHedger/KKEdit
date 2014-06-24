@@ -6,17 +6,8 @@
  *
 */
 
-//#include <gtk/gtk.h>
 #include <gtksourceview/gtksourceiter.h>
-//#include <unique/unique.h>
 
-//#include "config.h"
-//#ifdef _BUILDDOCVIEWER_
-//#include <webkit/webkit.h>
-//#endif
-
-//#include "globals.h"
-//#include "files.h"
 #include "guis.h"
 #include "navcallbacks.h"
 #include "callbacks.h"

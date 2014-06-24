@@ -6,16 +6,11 @@
  *
 */
 
-//#include <gtk/gtk.h>
 #include <gtksourceview/gtksourceiter.h>
-//#include <unique/unique.h>
 #include <libgen.h>
 
-//#include "globals.h"
-//#include "files.h"
 #include "guis.h"
 #include "callbacks.h"
-//#include "sliceclass.h"
 
 int	theLineNum=0;
 int marknum=0;

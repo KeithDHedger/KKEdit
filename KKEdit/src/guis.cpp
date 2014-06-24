@@ -4,29 +4,14 @@
  *
 */
 
-//#include <stdlib.h>
-//#include <gtk/gtk.h>
-//#include <string.h>
-//#include <sys/stat.h>
-
-//#include <gtksourceview/gtksourceview.h>
-//#include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
-//#include <gtksourceview/gtksourcestyleschememanager.h>
 #include <gdk/gdkkeysyms.h>
 
-//#include "config.h"
-//#include "globals.h"
-//#include "files.h"
 #include "callbacks.h"
 #include "navcallbacks.h"
 #include "searchcallbacks.h"
 #include "spellcheck.h"
-
-//#ifdef _BUILDDOCVIEWER_
-//#include <webkit/webkit.h>
-//#endif
 
 GtkWidget*		recent;
 GtkToolItem*	tool[18]={NULL,};
