@@ -17,18 +17,18 @@
 *
 ******************************************************/
 
-#include <stdlib.h>
-#include <gtk/gtk.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <gtksourceview/gtksourcebuffer.h>
-#include <gtksourceview/gtksourceview.h>
+//#include <stdlib.h>
+//#include <gtk/gtk.h>
+//#include <string.h>
+//#include <sys/stat.h>
+//#include <gtksourceview/gtksourcebuffer.h>
+//#include <gtksourceview/gtksourceview.h>
 
-#ifdef _ASPELL_
-#include <aspell.h>
-#endif
+//#ifdef _ASPELL_
+//#include <aspell.h>
+//#endif
 
-#include "config.h"
+//#include "config.h"
 #include "globals.h"
 #include "guis.h"
 
