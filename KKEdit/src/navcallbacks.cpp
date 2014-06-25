@@ -236,18 +236,12 @@ char* unEscapeFileNAme(char* name)
 	buffer=(char*)calloc(strlen(name),1);
 	charpos=0;
 	namepos=0;
-printf("%i\n",strlen(buffer));
-printf("%i\n",strlen(name));
 
 	while(namepos<strlen(name))
 		{
 			if(name[namepos]!='_')
 				{
 					buffer[charpos]=name[namepos];
-					printf("%i\n",strlen(buffer));
-					printf("buf so far = %s namepos=%i charpos=%i\n",buffer,namepos,charpos);
-					//charpos++;
-					//namepos++;
 				}
 			else
 				{
@@ -335,7 +329,7 @@ printf("%i\n",strlen(name));
 			namepos++;
 			charpos++;
 		}
-	buffer[charpos]=0;
+
 	return(buffer);
 }
 
@@ -358,27 +352,44 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 		{
 			uri=webkit_network_request_get_uri(request);
 			convertedname=unEscapeFileNAme((char*)uri);
-			if(convertedname!=NULL)
-				{
-					printf("uri = %s\n to -> %s\n",uri,convertedname);
-					free(convertedname);
-				}
-			linenum=globalSlice->sliceBetween((char*)uri,(char*)"#l",NULL);
+//			if(convertedname!=NULL)
+//				{
+//					printf("uri = %s\n to -> %s\n",uri,convertedname);
+//					free(convertedname);
+//				}
+//			linenum=globalSlice->sliceBetween((char*)uri,(char*)"#l",NULL);
+			linenum=globalSlice->sliceBetween(convertedname,(char*)"#l",NULL);
+			if(linenum!=NULL)
+				filepath=globalSlice->sliceBetween(convertedname,(char*)"file://",(char*)"#l");
+			else
+				filepath=globalSlice->sliceBetween(convertedname,(char*)"file://",NULL);
+			
+					filepath=globalSlice->replaceSlice((char*)filepath,(char*)"/html/",(char*)"/");
+					filepath=globalSlice->replaceSlice((char*)filepath,(char*)"Source.html",(char*)"");
+					filename=(char*)basename((char*)filepath);
+printf("linenum %s\nfilename =%s\nfilepath=%s\nuri=%s\n",linenum,filename,filepath,uri);
+			
 //clicked line number
 			if(linenum!=NULL)
 				{
 					line=atoi(linenum);
-					filepath=globalSlice->sliceBetween((char*)uri,(char*)"file://",(char*)"#l");
-					filename=(char*)basename((char*)filepath);
-					filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_source",(char*)"",false);
-					filename=globalSlice->replaceAllSlice((char*)filename,(char*)".html",(char*)"",false);
-					filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_8",(char*)".",false);
+//					filepath=globalSlice->sliceBetween(convertedname,(char*)"file://",(char*)"#l");
+//					filepath=globalSlice->replaceSlice((char*)filepath,(char*)"/html/",(char*)"/");
+//					filepath=globalSlice->replaceSlice((char*)filepath,(char*)"Source.html",(char*)"");
+//printf("filename =%s\nfilepath=%s\n",filename,filepath);
+					//filepath=(const char*)globalSlice->replaceSlice((char*)filepath,(char*)"/html/",(char*)"/");
+//					filename=(char*)basename((char*)filepath);
+//					filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_source",(char*)"",false);
+//					filename=globalSlice->replaceAllSlice((char*)filename,(char*)".html",(char*)"",false);
+					//filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_8",(char*)".",false);
 //check in open tabs
+
+printf("filename =%s\nfilepath=%s\n",filename,filepath);
 					buf=new TextBuffer;
 					for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
 						{
 							page=getPageStructPtr(j);
-							if(strcmp(page->fileName,filename)==0)
+							if(strcmp(page->filePath,filepath)==0)
 								{
 									gtk_notebook_set_current_page(notebook,j);
 									buf->textBuffer=(GtkTextBuffer*)page->buffer;
@@ -388,13 +399,14 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 								}
 						}
 //try to open file
-					pwd=get_current_dir_name();
+					//pwd=get_current_dir_name();
 					if(pwd!=NULL)
 						{
-							asprintf(&loadfile,"%s/%s",pwd,filename);
-							openFile(loadfile,line,false);
-							free(loadfile);
-							free(pwd);
+							//asprintf(&loadfile,"%s/%s",pwd,filename);
+							//openFile(loadfile,line,false);
+							openFile(filepath,line,false);
+						//	free(loadfile);
+						//	free(pwd);
 							return(false);
 						}
 				}
@@ -402,11 +414,12 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 				{
 //just file name
 //check if tab open
-					filepath=globalSlice->replaceSlice((char*)uri,(char*)"file://",(char*)"");
-					filename=(char*)basename((char*)filepath);
-					filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_source",(char*)"",false);
-					filename=globalSlice->replaceAllSlice((char*)filename,(char*)".html",(char*)"",false);
-					filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_8",(char*)".",false);
+//					filepath=globalSlice->replaceSlice((char*)uri,(char*)"file://",(char*)"");
+//					filename=(char*)basename((char*)filepath);
+//					filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_source",(char*)"",false);
+//					filename=globalSlice->replaceAllSlice((char*)filename,(char*)".html",(char*)"",false);
+//					filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_8",(char*)".",false);
+printf("no line num filename =%s\nfilepath=%s\n",filename,filepath);
 				
 					for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
 						{
