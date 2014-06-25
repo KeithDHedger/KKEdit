@@ -8,6 +8,7 @@
 
 #include <gtksourceview/gtksourceiter.h>
 #include <libgen.h>
+#include <ctype.h>
 
 #include "guis.h"
 #include "callbacks.h"
@@ -226,9 +227,120 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 
 #ifdef _BUILDDOCVIEWER_
 
+char* unEscapeFileNAme(char* name)
+{
+	char*	buffer;
+	int		charpos;
+	int		namepos;
+
+	buffer=(char*)calloc(strlen(name),1);
+	charpos=0;
+	namepos=0;
+printf("%i\n",strlen(buffer));
+printf("%i\n",strlen(name));
+
+	while(namepos<strlen(name))
+		{
+			if(name[namepos]!='_')
+				{
+					buffer[charpos]=name[namepos];
+					printf("%i\n",strlen(buffer));
+					printf("buf so far = %s namepos=%i charpos=%i\n",buffer,namepos,charpos);
+					//charpos++;
+					//namepos++;
+				}
+			else
+				{
+					namepos++;
+					switch(name[namepos])
+						{
+							case '_':
+								buffer[charpos]='_';
+								break;
+							case '1':
+								buffer[charpos]=':';
+								break;
+							case '2':
+								buffer[charpos]='/';
+								break;
+							case '3':
+								buffer[charpos]='<';
+								break;
+							case '4':
+								buffer[charpos]='>';
+								break;
+							case '5':
+								buffer[charpos]='*';
+								break;
+							case '6':
+								buffer[charpos]='&';
+								break;
+							case '7':
+								buffer[charpos]='|';
+								break;
+							case '8':
+								buffer[charpos]='.';
+								break;
+							case '9':
+								buffer[charpos]='!';
+								break;
+							case '0':
+								namepos++;
+								switch(name[namepos])
+									{
+										case '0':
+											buffer[charpos]=',';
+											break;
+										case '1':
+											buffer[charpos]=' ';
+											break;
+										case '2':
+											buffer[charpos]='{';
+											break;
+										case '3':
+											buffer[charpos]='}';
+											break;
+										case '4':
+											buffer[charpos]='?';
+											break;
+										case '5':
+											break;
+											buffer[charpos]='^';
+										case '6':
+											buffer[charpos]='%';
+											break;
+										case '7':
+											buffer[charpos]='(';
+											break;
+										case '8':
+											buffer[charpos]=')';
+											break;
+										case '9':
+											buffer[charpos]='+';
+											break;
+										case 'A':
+											buffer[charpos]='=';
+										case 'B':
+											buffer[charpos]='$';
+											break;
+										case 'C':
+											buffer[charpos]='\\';
+											break;
+									}
+							default:
+								buffer[charpos]=toupper(name[namepos]);
+								break;
+						}
+				}
+			namepos++;
+			charpos++;
+		}
+	buffer[charpos]=0;
+	return(buffer);
+}
+
 gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest* request,WebKitWebNavigationAction* navigationAction,WebKitWebPolicyDecision* policy_decision, gpointer user_data)
 {
-
 	int				mod=-1;
 	const char*		uri;
 	const char*		linenum=NULL;
@@ -239,11 +351,18 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 	TextBuffer*		buf;
 	char*			pwd;
 	char*			loadfile;
+	char*			convertedname=NULL;
 
 	mod=webkit_web_navigation_action_get_modifier_state(navigationAction);
 	if(mod&GDK_SHIFT_MASK)
 		{
 			uri=webkit_network_request_get_uri(request);
+			convertedname=unEscapeFileNAme((char*)uri);
+			if(convertedname!=NULL)
+				{
+					printf("uri = %s\n to -> %s\n",uri,convertedname);
+					free(convertedname);
+				}
 			linenum=globalSlice->sliceBetween((char*)uri,(char*)"#l",NULL);
 //clicked line number
 			if(linenum!=NULL)
