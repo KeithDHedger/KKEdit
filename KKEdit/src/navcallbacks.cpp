@@ -94,7 +94,7 @@ void findFile(GtkWidget* widget,gpointer data)
 
 	sscanf(selection,"#include %s",(char*)&strarg);
 	strarg[strlen(strarg)-1]=0;
-	
+
 	if(strarg[0]=='<')
 		searchdir=strdup("/usr/include");
 	else
@@ -144,8 +144,8 @@ void gotoLine(GtkWidget* widget,gpointer data)
 
 void jumpToLineFromBar(GtkWidget* widget,gpointer data)
 {
-		theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
-		gotoLine(NULL,(gpointer)(long)theLineNum);
+	theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
+	gotoLine(NULL,(gpointer)(long)theLineNum);
 }
 
 int showLineEntry(void)
@@ -161,7 +161,7 @@ int showLineEntry(void)
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OK,GTK_RESPONSE_YES,NULL);
 	gtk_window_set_title(GTK_WINDOW(dialog),"Go To Line");
 
-	content_area=gtk_dialog_get_content_area(GTK_DIALOG(dialog));	
+	content_area=gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 	entrybox=gtk_entry_new();
 	sprintf((char*)&line,"%i",theLineNum);
 	gtk_entry_set_text((GtkEntry*)entrybox,line);
@@ -171,7 +171,7 @@ int showLineEntry(void)
 	gtk_widget_show_all(content_area);
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 	theLineNum=atoi(gtk_entry_get_text((GtkEntry*)entrybox));
-	
+
 	gtk_widget_destroy(dialog);
 
 	return(result);
@@ -213,7 +213,7 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 	mark=(GtkTextMark*)((bookMarksNew*)data)->mark;
 	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 	buf->scroll2Mark((GtkTextView*)page->view,mark);
-	for(int loop=0;loop<gtk_notebook_get_n_pages(notebook);loop++)
+	for(int loop=0; loop<gtk_notebook_get_n_pages(notebook); loop++)
 		{
 			checkpage=getPageStructPtr(loop);
 			if(checkpage==page)
@@ -248,82 +248,82 @@ char* unEscapeFileNAme(char* name)
 					namepos++;
 					switch(name[namepos])
 						{
-							case '_':
-								buffer[charpos]='_';
-								break;
-							case '1':
-								buffer[charpos]=':';
-								break;
-							case '2':
-								buffer[charpos]='/';
-								break;
-							case '3':
-								buffer[charpos]='<';
-								break;
-							case '4':
-								buffer[charpos]='>';
-								break;
-							case '5':
-								buffer[charpos]='*';
-								break;
-							case '6':
-								buffer[charpos]='&';
-								break;
-							case '7':
-								buffer[charpos]='|';
-								break;
-							case '8':
-								buffer[charpos]='.';
-								break;
-							case '9':
-								buffer[charpos]='!';
-								break;
-							case '0':
-								namepos++;
-								switch(name[namepos])
-									{
-										case '0':
-											buffer[charpos]=',';
-											break;
-										case '1':
-											buffer[charpos]=' ';
-											break;
-										case '2':
-											buffer[charpos]='{';
-											break;
-										case '3':
-											buffer[charpos]='}';
-											break;
-										case '4':
-											buffer[charpos]='?';
-											break;
-										case '5':
-											break;
-											buffer[charpos]='^';
-										case '6':
-											buffer[charpos]='%';
-											break;
-										case '7':
-											buffer[charpos]='(';
-											break;
-										case '8':
-											buffer[charpos]=')';
-											break;
-										case '9':
-											buffer[charpos]='+';
-											break;
-										case 'A':
-											buffer[charpos]='=';
-										case 'B':
-											buffer[charpos]='$';
-											break;
-										case 'C':
-											buffer[charpos]='\\';
-											break;
-									}
-							default:
-								buffer[charpos]=toupper(name[namepos]);
-								break;
+						case '_':
+							buffer[charpos]='_';
+							break;
+						case '1':
+							buffer[charpos]=':';
+							break;
+						case '2':
+							buffer[charpos]='/';
+							break;
+						case '3':
+							buffer[charpos]='<';
+							break;
+						case '4':
+							buffer[charpos]='>';
+							break;
+						case '5':
+							buffer[charpos]='*';
+							break;
+						case '6':
+							buffer[charpos]='&';
+							break;
+						case '7':
+							buffer[charpos]='|';
+							break;
+						case '8':
+							buffer[charpos]='.';
+							break;
+						case '9':
+							buffer[charpos]='!';
+							break;
+						case '0':
+							namepos++;
+							switch(name[namepos])
+								{
+								case '0':
+									buffer[charpos]=',';
+									break;
+								case '1':
+									buffer[charpos]=' ';
+									break;
+								case '2':
+									buffer[charpos]='{';
+									break;
+								case '3':
+									buffer[charpos]='}';
+									break;
+								case '4':
+									buffer[charpos]='?';
+									break;
+								case '5':
+									break;
+									buffer[charpos]='^';
+								case '6':
+									buffer[charpos]='%';
+									break;
+								case '7':
+									buffer[charpos]='(';
+									break;
+								case '8':
+									buffer[charpos]=')';
+									break;
+								case '9':
+									buffer[charpos]='+';
+									break;
+								case 'A':
+									buffer[charpos]='=';
+								case 'B':
+									buffer[charpos]='$';
+									break;
+								case 'C':
+									buffer[charpos]='\\';
+									break;
+								}
+						default:
+							buffer[charpos]=toupper(name[namepos]);
+							break;
 						}
 				}
 			namepos++;
@@ -340,11 +340,8 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 	const char*		linenum=NULL;
 	int				line;
 	const char*		filepath=NULL;
-	const char*		filename;
 	pageStruct*		page;
 	TextBuffer*		buf;
-	char*			pwd;
-	char*			loadfile;
 	char*			convertedname=NULL;
 
 	mod=webkit_web_navigation_action_get_modifier_state(navigationAction);
@@ -352,96 +349,46 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 		{
 			uri=webkit_network_request_get_uri(request);
 			convertedname=unEscapeFileNAme((char*)uri);
-//			if(convertedname!=NULL)
-//				{
-//					printf("uri = %s\n to -> %s\n",uri,convertedname);
-//					free(convertedname);
-//				}
-//			linenum=globalSlice->sliceBetween((char*)uri,(char*)"#l",NULL);
 			linenum=globalSlice->sliceBetween(convertedname,(char*)"#l",NULL);
-			if(linenum!=NULL)
-				filepath=globalSlice->sliceBetween(convertedname,(char*)"file://",(char*)"#l");
-			else
-				filepath=globalSlice->sliceBetween(convertedname,(char*)"file://",NULL);
-			
-					filepath=globalSlice->replaceSlice((char*)filepath,(char*)"/html/",(char*)"/");
-					filepath=globalSlice->replaceSlice((char*)filepath,(char*)"Source.html",(char*)"");
-					filename=(char*)basename((char*)filepath);
-printf("linenum %s\nfilename =%s\nfilepath=%s\nuri=%s\n",linenum,filename,filepath,uri);
-			
-//clicked line number
+
 			if(linenum!=NULL)
 				{
+//clicked line number
 					line=atoi(linenum);
-//					filepath=globalSlice->sliceBetween(convertedname,(char*)"file://",(char*)"#l");
-//					filepath=globalSlice->replaceSlice((char*)filepath,(char*)"/html/",(char*)"/");
-//					filepath=globalSlice->replaceSlice((char*)filepath,(char*)"Source.html",(char*)"");
-//printf("filename =%s\nfilepath=%s\n",filename,filepath);
-					//filepath=(const char*)globalSlice->replaceSlice((char*)filepath,(char*)"/html/",(char*)"/");
-//					filename=(char*)basename((char*)filepath);
-//					filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_source",(char*)"",false);
-//					filename=globalSlice->replaceAllSlice((char*)filename,(char*)".html",(char*)"",false);
-					//filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_8",(char*)".",false);
-//check in open tabs
+					filepath=globalSlice->sliceBetween(convertedname,(char*)"file://",(char*)"#l");
+				}
+			else
+				{
+					line=1;
+					filepath=globalSlice->sliceBetween(convertedname,(char*)"file://",NULL);
+				}
 
-printf("filename =%s\nfilepath=%s\n",filename,filepath);
-					buf=new TextBuffer;
-					for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
+			free(convertedname);
+
+			filepath=globalSlice->replaceSlice((char*)filepath,(char*)"/html/",(char*)"/");
+			filepath=globalSlice->replaceSlice((char*)filepath,(char*)"Source.html",(char*)"");
+			filepath=globalSlice->replaceSlice((char*)filepath,(char*)".html",(char*)"");
+
+//check in open tabs
+			buf=new TextBuffer;
+			for(int j=0; j<gtk_notebook_get_n_pages(notebook); j++)
+				{
+					page=getPageStructPtr(j);
+					if(strcmp(page->filePath,filepath)==0)
 						{
-							page=getPageStructPtr(j);
-							if(strcmp(page->filePath,filepath)==0)
-								{
-									gtk_notebook_set_current_page(notebook,j);
-									buf->textBuffer=(GtkTextBuffer*)page->buffer;
-									buf->scroll2Line((GtkTextView*)page->view,line-1);
-									delete buf;
-									return(false);
-								}
-						}
-//try to open file
-					//pwd=get_current_dir_name();
-					if(pwd!=NULL)
-						{
-							//asprintf(&loadfile,"%s/%s",pwd,filename);
-							//openFile(loadfile,line,false);
-							openFile(filepath,line,false);
-						//	free(loadfile);
-						//	free(pwd);
+							gtk_notebook_set_current_page(notebook,j);
+							buf->textBuffer=(GtkTextBuffer*)page->buffer;
+							buf->scroll2Line((GtkTextView*)page->view,line-1);
+							delete buf;
 							return(false);
 						}
 				}
-			else
-				{
-//just file name
-//check if tab open
-//					filepath=globalSlice->replaceSlice((char*)uri,(char*)"file://",(char*)"");
-//					filename=(char*)basename((char*)filepath);
-//					filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_source",(char*)"",false);
-//					filename=globalSlice->replaceAllSlice((char*)filename,(char*)".html",(char*)"",false);
-//					filename=globalSlice->replaceAllSlice((char*)filename,(char*)"_8",(char*)".",false);
-printf("no line num filename =%s\nfilepath=%s\n",filename,filepath);
-				
-					for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
-						{
-							page=getPageStructPtr(j);
-							if((page!=NULL) && (strcmp(page->fileName,filename)==0))
-								{
-									gtk_notebook_set_current_page(notebook,j);
-									return(false);
-								}
-						}
 //try to open file
-					pwd=get_current_dir_name();
-					if(pwd!=NULL)
-						{
-							asprintf(&loadfile,"%s/%s",pwd,filename);
-							openFile(loadfile,-1,false);
-							free(loadfile);
-							free(pwd);
-						}
-				}
+			openFile(filepath,line,false);
+			return(false);
 		}
 
 	return(false);
 }
 #endif
+

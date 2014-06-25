@@ -1,3 +1,7 @@
+0.1.9
+Add 'Show Documents' to 'View' menu to show the doxygen docs ( faster ) without rebuilding/updating ( unless the don't exist ).
+Better file integration with doxygen.
+
 0.1.8
 Numerous small bug fixes and code cleanup. 
 Yet another work around for ubuntu based distros ( what is it with dash anyway? ).

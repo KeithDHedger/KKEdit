@@ -31,6 +31,6 @@ void qt5DocSearchFromBar(GtkWidget* widget,gpointer data);
 void seachGtkDocs(GtkWidget* widget,gpointer data);
 void showDocView(int howtodisplay,char* text);
 void pasteFRClip(GtkWidget* widget,gpointer data);
-void doDoxy(GtkWidget* widget,gpointer data);
+void doDoxy(GtkWidget* widget,long data);
 
 #endif

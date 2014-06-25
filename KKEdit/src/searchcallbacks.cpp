@@ -199,10 +199,16 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 		g_free(selection);
 }
 
-void doDoxy(GtkWidget* widget,gpointer data)
+void doDoxy(GtkWidget* widget,long data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	struct stat	sb;
+	bool		dorebuild;
+
+	if(data==1)
+		dorebuild=true;
+	else
+		dorebuild=false;
 
 	if(page==NULL)
 		return;
@@ -210,14 +216,19 @@ void doDoxy(GtkWidget* widget,gpointer data)
 	chdir(page->dirName);
 	stat("Doxyfile",&sb);
 	if(!S_ISREG(sb.st_mode))
-		system("cp " DATADIR "/docs/Doxyfile .");
+		{
+			system("cp " DATADIR "/docs/Doxyfile .");
+			dorebuild=true;
+		}
 
 	if(thePage!=NULL)
 		free(thePage);
 	asprintf(&thePage,"file://%s/html/index.html",page->dirName);
-	system("doxygen Doxyfile >/dev/null");
+	if(dorebuild==true)
+		system("doxygen Doxyfile >/dev/null");
 	showDocView(USEURI,thePage);
 }
+
 //showDocViewWidget
 void searchQT5Docs(GtkWidget* widget,gpointer data)
 {
