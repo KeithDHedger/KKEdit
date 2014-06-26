@@ -342,7 +342,6 @@ void setLanguage(pageStruct* page)
 		{
 			getMimeType((char*)page->filePath,&mimetype);
 			lang=gtk_source_language_manager_guess_language(lm,page->filePath,mimetype);
-			//g_print("Language: [%s]\n", gtk_source_language_get_name(lang));
 			if (lang!=NULL)
 				gtk_source_buffer_set_language(page->buffer,lang);
 		}

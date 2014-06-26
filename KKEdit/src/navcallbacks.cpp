@@ -351,7 +351,7 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 			convertedname=unEscapeFileNAme((char*)uri);
 			linenum=globalSlice->sliceBetween(convertedname,(char*)"#l",NULL);
 
-			if(linenum!=NULL)
+			if(globalSlice->getResult()==0)
 				{
 //clicked line number
 					line=atoi(linenum);
@@ -359,6 +359,7 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 				}
 			else
 				{
+					globalSlice->setReturnDupString(false);
 					line=1;
 					filepath=globalSlice->sliceBetween(convertedname,(char*)"file://",NULL);
 				}
@@ -368,6 +369,7 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 			filepath=globalSlice->replaceSlice((char*)filepath,(char*)"/html/",(char*)"/");
 			filepath=globalSlice->replaceSlice((char*)filepath,(char*)"Source.html",(char*)"");
 			filepath=globalSlice->replaceSlice((char*)filepath,(char*)".html",(char*)"");
+			globalSlice->setReturnDupString(true);
 
 //check in open tabs
 			buf=new TextBuffer;
