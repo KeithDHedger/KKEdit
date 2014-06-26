@@ -928,6 +928,14 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
 						}
 
+					if(gotDoxygen==0)
+						{
+							menuitem=gtk_image_menu_item_new_with_label("Find In Documentation");
+							image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
+							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doxyDocs),NULL);
+						}
 					menuitem=gtk_image_menu_item_new_with_label("Search In Qt5 Docs");
 					image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
 					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
@@ -939,6 +947,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(seachGtkDocs),NULL);
+
 #ifdef _ASPELL_
 //spell check
 					if((spellChecker!=NULL) && (aspellConfig!=NULL))

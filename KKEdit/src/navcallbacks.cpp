@@ -12,6 +12,7 @@
 
 #include "guis.h"
 #include "callbacks.h"
+#include "searchcallbacks.h"
 
 int	theLineNum=0;
 int marknum=0;
@@ -333,6 +334,41 @@ char* unEscapeFileNAme(char* name)
 	return(buffer);
 }
 
+struct docFileData
+{
+	char*	fileName;
+	char*	filePath;
+	int		lineNum;
+};
+
+//<title>KKEdit: globals.cpp File Reference</title>
+
+docFileData* getDoxyFileData(char* uri)
+{
+	FILE*	file;
+	char	line[1024];
+	char*	command;
+	int		linenumber;
+	char*	filepath;
+
+	filepath=g_filename_from_uri(uri,NULL,NULL);
+
+	docFileData* doc=(docFileData*)malloc(sizeof(docFileData));
+	asprintf(&command,"head \"%s\"|grep -i \"<title>\"",filepath);
+	file=popen(command,"r");
+	globalSlice->setReturnDupString(true);
+	printf("%s\n",filepath);
+	while(fgets(line,1024,file))
+		{
+			doc->filePath=globalSlice->sliceBetween(line,(char*)": ",(char*)" File Reference<");
+			doc->fileName=strdup(basename(doc->filePath));
+		}
+	pclose(file);
+	globalSlice->setReturnDupString(false);
+	free(filepath);
+	return(doc);
+}
+
 gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest* request,WebKitWebNavigationAction* navigationAction,WebKitWebPolicyDecision* policy_decision, gpointer user_data)
 {
 	int				mod=-1;
@@ -343,11 +379,14 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 	pageStruct*		page;
 	TextBuffer*		buf;
 	char*			convertedname=NULL;
+	docFileData*	doxydata;
 
 	mod=webkit_web_navigation_action_get_modifier_state(navigationAction);
 	if(mod&GDK_SHIFT_MASK)
 		{
 			uri=webkit_network_request_get_uri(request);
+			doxydata=getDoxyFileData((char*)uri);
+			printf("path=%s\nname=%s\n",doxydata->filePath,doxydata->fileName);
 			convertedname=unEscapeFileNAme((char*)uri);
 			linenum=globalSlice->sliceBetween(convertedname,(char*)"#l",NULL);
 
@@ -386,10 +425,43 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 						}
 				}
 //try to open file
-			openFile(filepath,line,false);
-			return(false);
-		}
+			if(openFile(filepath,line,false)==false)
+				{
+#if 0
+					FILE*		headfile;
+	char		line[1024];
+	char*		command;
+	int linenumber;
+					if(thePage!=NULL)
+						free(thePage);
+					globalSlice->setReturnDupString(false);
+					filepath=globalSlice->sliceBetween((char*)uri,(char*)"file://",(char*)"#");
+printf("XXX\n%s\nXXXX\n",filepath);
+//<p>Definition at line <a class="el" href="callbacks_8cpp_source.html#l00180">180</a> of file <a class="el" href="callbacks_8cpp_source.html">callbacks.cpp</a>.</p>
 
+					asprintf(&command,"cat \"%s\"|grep \"Definition at line\"",filepath);
+					headfile=popen(command,"r");
+					while(fgets(line,1024,headfile))
+						{
+							printf("%s\n",line);
+							filepath=globalSlice->sliceBetween(line,(char*)"href=\"",(char*)"\"");
+							linenum=(char*)globalSlice->sliceBetween((char*)filepath,(char*)"#l",NULL);
+							linenumber=atoi(linenum);
+							filepath=globalSlice->sliceBetween(line,(char*)"href=\"",(char*)"#");
+							printf("href='%s' @ line %i\n",filepath,linenumber);
+							printf("%s\n",uri);
+							printf("%s\n",(char*)dirname((char*)uri));
+						}
+					pclose(headfile);
+					asprintf(&command,"%s/%s#l%i",dirname((char*)uri),filepath,linenumber);
+					printf("XXXXXXXXXxx\n\n%s\n\nXXXXXXXXXXX\n",command);
+					//asprintf(&thePage,"%s",uri);
+					//showDocView(USEURI,thePage);
+#endif
+				}
+			//return(false);
+
+		}
 	return(false);
 }
 #endif

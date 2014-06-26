@@ -1621,12 +1621,14 @@ void buildMainGui(void)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(searchQT5Docs),NULL);
 
 //goto doxy docs
-	menuitem=gtk_image_menu_item_new_with_label("Find In Documentation");
-	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doxyDocs),NULL);
-
+	if(gotDoxygen==0)
+		{
+			menuitem=gtk_image_menu_item_new_with_label("Find In Documentation");
+			image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
+			gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doxyDocs),NULL);
+		}
 //go back
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_GO_BACK,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
