@@ -258,6 +258,7 @@ void init(void)
 #endif
 	history=new HistoryClass;
 	globalSlice=new StringSlice;
+	globalSlice->setReturnDupString(true);
 }
 
 void doNagScreen(void)

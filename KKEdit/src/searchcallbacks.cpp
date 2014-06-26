@@ -132,18 +132,18 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 					ptr=strstr(line,"name=\"");
 					if(ptr!=NULL)
 						{
-							funcname=sliceBetween(line,(char*)"name=\"",(char*)"\" link=");
+							funcname=globalSlice->sliceBetween(line,(char*)"name=\"",(char*)"\" link=");
 							if(funcname!=NULL)
 								{
 									if(strstr(funcname,selection)!=NULL)
 										{
 											if(cnt<2048)
 												{
-													tempstr=sliceBetween(line,(char*)"",(char*)":");
+													tempstr=globalSlice->sliceBetween(line,(char*)"",(char*)":");
 													if(tempstr!=NULL)
 														{
 															foldername=g_path_get_dirname(tempstr);
-															link=sliceBetween(line,(char*)"link=\"",(char*)"\"");
+															link=globalSlice->sliceBetween(line,(char*)"link=\"",(char*)"\"");
 															if((foldername!=NULL) && (link!=NULL))
 																{
 																	searchdata[cnt][0]=strdup(funcname);

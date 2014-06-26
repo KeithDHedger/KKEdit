@@ -231,7 +231,7 @@ char* unEscapeFileNAme(char* name)
 {
 	char*	buffer;
 	int		charpos;
-	int		namepos;
+	unsigned int		namepos;
 
 	buffer=(char*)calloc(strlen(name),1);
 	charpos=0;

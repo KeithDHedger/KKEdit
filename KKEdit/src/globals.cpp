@@ -328,7 +328,7 @@ void setLanguage(pageStruct* page)
 			fgets(line,1024,fp);
 			hold=strdup(line);
 			if(strchr(line,';')!=NULL)
-				asprintf(&mimetype,"%s",sliceBetween(line,(char*)"",(char*)";"));
+				asprintf(&mimetype,"%s",globalSlice->sliceBetween(line,NULL,(char*)";"));
 			else
 				mimetype=strndup(line,strlen(line)-1);
 
@@ -703,86 +703,6 @@ void getRecursiveTagList(char* filepath,void* ptr)
 	g_free(sort);
 }
 
-//string slicing
-
-char* slice(char* srcstring,int tmpstartchar,int tmpendchar)
-{
-	char*	dest;
-	int		strsize;
-	int		startchar=tmpstartchar;
-	int		endchar=tmpendchar;
-
-	if(tmpstartchar<0)
-		startchar=0;
-
-	if((tmpendchar<0) || (tmpendchar>(int)strlen(srcstring)))
-		endchar=strlen(srcstring)-1;
-
-	strsize=endchar-startchar+1;
-
-	dest=(char*)malloc(strsize+1);
-	strncpy(dest,(char*)&srcstring[startchar],strsize);
-	dest[strsize]=0;
-
-	return(dest);
-}
-
-char* sliceBetween(char* srcstring,char* startstr,char* endstr)
-{
-	int		startchar;
-	int		endchar;
-	char*	ptr;
-	char*	dest=NULL;
-
-	ptr=strstr(srcstring,startstr);
-	if(ptr==NULL)
-		return(NULL);
-	startchar=(int)(long)ptr+strlen(startstr)-(long)srcstring;
-
-	ptr=strstr((char*)&srcstring[startchar],endstr);
-	if(ptr==NULL)
-		return(NULL);
-	endchar=(int)(long)ptr-(long)srcstring-1;
-
-	dest=slice(srcstring,startchar,endchar);
-	return(dest);
-}
-
-char* sliceLen(char* srcstring,int tmpstartchar,int len)
-{
-	char*	dest;
-	int		strsize;
-	int		startchar=tmpstartchar;
-	int		endchar=len;
-
-	if(tmpstartchar<0)
-		startchar=0;
-
-	if((len<0) || (len+startchar>(int)strlen(srcstring)))
-		endchar=strlen(srcstring)-startchar;
-
-	strsize=endchar;
-
-	dest=(char*)malloc(strsize+1);
-	strncpy(dest,(char*)&srcstring[startchar],endchar);
-	dest[endchar]=0;
-
-	return(dest);
-}
-
-//char* sliceStrLen(char* srcstring,char* startstr,int len)
-//{
-//	char*	ptr;
-//	int		startchar;
-//
-//	ptr=strstr(srcstring,startstr);
-//	if(ptr==NULL)
-//		return(NULL);
-//	startchar=(int)(long)ptr+strlen(startstr)-(long)srcstring;
-//	printf("%in",startchar);
-//	return(sliceLen(srcstring,startchar,len));
-//}
-//
 void destroyTool(gpointer data)
 {
 	if(((toolStruct*)data)->menuName!=NULL)

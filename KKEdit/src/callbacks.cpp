@@ -285,10 +285,12 @@ void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 
 			if(strlen(previewtext)>BOOKMAXMARKMENULEN)
 				{
-					starttext=sliceLen(previewtext,-1,BOOKMAXMARKMENULEN/2);
-					endtext=sliceLen(previewtext,strlen(previewtext)-BOOKMAXMARKMENULEN/2,-1);
-					g_free(previewtext);
+					starttext=globalSlice->sliceLen(previewtext,0,BOOKMAXMARKMENULEN/2);
+					endtext=globalSlice->sliceLen(previewtext,strlen(previewtext)-BOOKMAXMARKMENULEN/2,-1);
+					free(previewtext);
 					asprintf(&previewtext,"%s...%s",starttext,endtext);
+					free(starttext);
+					free(endtext);
 				}
 
 			bookmarkdata->label=previewtext;
@@ -608,7 +610,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 					if(listFunction==4)
 						{
 							newstr=NULL;
-							newstr=sliceBetween(lineptr,(char*)" ",(char*)" ");
+							newstr=globalSlice->sliceBetween(lineptr,(char*)" ",(char*)" ");
 							if(newstr!=NULL)
 								{
 									flag=false;
