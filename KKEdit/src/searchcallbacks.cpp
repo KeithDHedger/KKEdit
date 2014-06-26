@@ -239,7 +239,7 @@ void doxyDocs(GtkWidget* widget,gpointer data)
 	char*		findcommand;
 	char*		headcommand;
 	char		line[1024];
-	char		titleline[4096];
+	char		titleline[1024];
 	FILE*		findfile;
 	FILE*		headfile;
 
@@ -255,15 +255,15 @@ void doxyDocs(GtkWidget* widget,gpointer data)
 					line[strlen(line)-1]=0;
 					asprintf(&headcommand,"head \"%s\"|grep title",line);
 					headfile=popen(headcommand,"r");
-					while(fgets(titleline,4096,headfile))
+					while(fgets(titleline,1024,headfile))
 						{
 							if(strstr(titleline,selection)!=NULL)
 								{
 									if(thePage!=NULL)
 										free(thePage);
 									asprintf(&thePage,"file://%s",line);
-									while(fgets(titleline,4096,headfile));
-									while(fgets(titleline,4096,findfile));
+									while(fgets(titleline,1024,headfile));
+									while(fgets(titleline,1024,findfile));
 									pclose(headfile);
 									pclose(findfile);
 									free(headcommand);
