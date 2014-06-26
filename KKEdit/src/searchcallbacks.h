@@ -32,5 +32,6 @@ void seachGtkDocs(GtkWidget* widget,gpointer data);
 void showDocView(int howtodisplay,char* text);
 void pasteFRClip(GtkWidget* widget,gpointer data);
 void doDoxy(GtkWidget* widget,long data);
+void doxyDocs(GtkWidget* widget,gpointer data);
 
 #endif

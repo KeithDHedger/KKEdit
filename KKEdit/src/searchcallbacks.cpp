@@ -229,6 +229,57 @@ void doDoxy(GtkWidget* widget,long data)
 	showDocView(USEURI,thePage);
 }
 
+//find in doxy docs
+void doxyDocs(GtkWidget* widget,gpointer data)
+{
+	pageStruct*	page=getPageStructPtr(-1);
+	GtkTextIter	start;
+	GtkTextIter	end;
+	char*		selection=NULL;
+	char*		findcommand;
+	char*		headcommand;
+	char		line[1024];
+	char		titleline[4096];
+	FILE*		findfile;
+	FILE*		headfile;
+
+	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+		selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+
+	if(selection!=NULL)
+		{
+			asprintf(&findcommand,"find %s/html -name \"*.html\"",page->dirName);
+			findfile=popen(findcommand,"r");
+			while(fgets(line,1024,findfile))
+				{
+					line[strlen(line)-1]=0;
+					asprintf(&headcommand,"head \"%s\"|grep title",line);
+					headfile=popen(headcommand,"r");
+					while(fgets(titleline,4096,headfile))
+						{
+							if(strstr(titleline,selection)!=NULL)
+								{
+									if(thePage!=NULL)
+										free(thePage);
+									asprintf(&thePage,"file://%s",line);
+									while(fgets(titleline,4096,headfile));
+									while(fgets(titleline,4096,findfile));
+									pclose(headfile);
+									pclose(findfile);
+									free(headcommand);
+									free(findcommand);
+									showDocView(USEURI,thePage);
+									return;
+								}
+						}
+					pclose(headfile);
+				}
+			pclose(findfile);
+			free(headcommand);
+			free(findcommand);
+		}
+}
+
 //showDocViewWidget
 void searchQT5Docs(GtkWidget* widget,gpointer data)
 {
@@ -563,7 +614,7 @@ void regexFind(int dowhat)
 								regex=g_regex_new(searchtext,(GRegexCompileFlags)(G_REGEX_CASELESS|G_REGEX_EXTENDED),(GRegexMatchFlags)0,NULL);
 								text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end,false);
 								reptext=g_regex_replace(regex,text,-1,0,replacetext,(GRegexMatchFlags)0,NULL);
-								if(strcmp(reptext,text)!=0)
+								if((reptext!=NULL) && (strcmp(reptext,text)!=0))
 									{
 										gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 										gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,reptext,-1);
