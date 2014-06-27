@@ -339,6 +339,7 @@ struct docFileData
 	char*	fileName;
 	char*	filePath;
 	int		lineNum;
+	char*	hashTag;
 };
 
 //<title>KKEdit: globals.cpp File Reference</title>
@@ -350,22 +351,73 @@ docFileData* getDoxyFileData(char* uri)
 	char*	command;
 	int		linenumber;
 	char*	filepath;
+	char*	linetag=NULL;
+	char*	tpath=NULL;
+	char*	pathuri=NULL;
 
-	filepath=g_filename_from_uri(uri,NULL,NULL);
-
+	globalSlice->setReturnDupString(true);
 	docFileData* doc=(docFileData*)malloc(sizeof(docFileData));
+
+	doc->fileName="XXX";
+	doc->filePath="XXX";
+	doc->lineNum=1;
+	doc->hashTag="XXX";
+
+	linetag=globalSlice->sliceInclude(uri,(char*)"#",NULL);
+	if(globalSlice->getResult()==0)
+		{
+			tpath=globalSlice->deleteSlice(uri,linetag);
+		}
+	else
+		{
+			tpath=strdup(uri);
+			linetag=NULL;
+		}
+//	if(strstr(uri,"#")!=NULL)
+//		{
+//			command=globalSlice->sliceBetween(uri,(char*)"#l",NULL);
+//			doc->lineNum=atoi(command);
+//			filepath=globalSlice->deleteSlice(uri,command);
+//			free(command);
+//		}
+	
+//	printf("%sn",linetag);
+//	printf("%sn",tpath);
+	filepath=g_filename_from_uri(tpath,NULL,NULL);
+//	printf("%sn",uri);
+	printf("%s\n",filepath);
+//				doc->filePath=globalSlice->sliceBetween(line,(char*)": ",(char*)" File Reference<");
+
 	asprintf(&command,"head \"%s\"|grep -i \"<title>\"",filepath);
 	file=popen(command,"r");
-	globalSlice->setReturnDupString(true);
-	printf("%s\n",filepath);
 	while(fgets(line,1024,file))
 		{
-			doc->filePath=globalSlice->sliceBetween(line,(char*)": ",(char*)" File Reference<");
+			if(strstr(line,(char*)" File Reference<")!=NULL)
+				pathuri=globalSlice->sliceBetween(line,(char*)": ",(char*)" File Reference<");
+			if(strstr(line,(char*)" Source File<")!=NULL)
+				pathuri=globalSlice->sliceBetween(line,(char*)": ",(char*)" Source File<");
+			
+			doc->filePath=globalSlice->decodeHtml(pathuri);
+
+			if(pathuri!=NULL)
+				free(pathuri);
 			doc->fileName=strdup(basename(doc->filePath));
 		}
 	pclose(file);
 	globalSlice->setReturnDupString(false);
 	free(filepath);
+	free(tpath);
+
+	if(linetag!=NULL)
+		{
+			tpath=globalSlice->sliceBetween(linetag,(char*)"#l",NULL);
+			if(globalSlice->getResult()==0)
+				doc->lineNum=atoi(tpath);
+			else
+				doc->hashTag=strdup(globalSlice->sliceBetween(linetag,(char*)"#",NULL));
+					//line=atoi(tpath);
+		//printf("%s\n",linetag);
+		}
 	return(doc);
 }
 
@@ -386,7 +438,8 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 		{
 			uri=webkit_network_request_get_uri(request);
 			doxydata=getDoxyFileData((char*)uri);
-			printf("path=%s\nname=%s\n",doxydata->filePath,doxydata->fileName);
+			printf("path=%s\nname=%s\nline=%i\nhahtag=%s\n",doxydata->filePath,doxydata->fileName,doxydata->lineNum,doxydata->hashTag);
+			return(false);
 			convertedname=unEscapeFileNAme((char*)uri);
 			linenum=globalSlice->sliceBetween(convertedname,(char*)"#l",NULL);
 
