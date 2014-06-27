@@ -340,9 +340,104 @@ struct docFileData
 	char*	filePath;
 	int		lineNum;
 	char*	hashTag;
+	char*	sourceFile;
 };
 
-docFileData* getDoxyFileData(char* uri)
+//<li class="navelem"><a class="el" href="dir_1dd5afa8c1d8ad957086a4fdfbcc964b.html">bonesCommand</a></li><li class="navelem"><a class="el" href="dir_31954dcac7dfb52c8729d5c38013c665.html"><>PROJ<></a></li><li class="navelem"><a class="el" href="dir_de49531bcd3ac9966fabd3576b784d0a.html">src</a></li><li class="navelem"><a class="el" href="bonesCommand_2_3_4PROJ_3_4_2src_2main_8cpp.html">main.cpp</a></li>  </ul>
+
+
+/*
+<li class="navelem"><a class="el" href="dir_1dd5afa8c1d8ad957086a4fdfbcc964b.html">bonesCommand</a></li><li class="navelem"><a class="el" href="dir_31954dcac7dfb52c8729d5c38013c665.html"><>PROJ<></a></li><li class="navelem"><a class="el" href="dir_de49531bcd3ac9966fabd3576b784d0a.html">src</a></li>  </ul>
+
+<div class="title">main.cpp File Reference</div>  </div>
+
+*/
+
+char* getPathFromXML(char* xml)
+{
+	StringSlice*	slice=new StringSlice;
+	bool			done=false;
+	char*			data;
+	int				bufferlen=1024;
+	char*			buffer=(char*)calloc(bufferlen,1);
+	char*			xmldata=xml;
+	char*			portion;
+
+printf("%s\n",xml);
+
+	while(done==false)
+		{
+			data=slice->sliceBetween(xmldata,(char*)"<a ",(char*)"</a>");
+			if(slice->getResult()==0)
+				{
+			printf("%s\n",data);
+					portion=slice->sliceBetween(data,(char*)"\">",NULL);
+					if(strlen(buffer)+strlen(portion)+1<bufferlen)
+						{
+							bufferlen=bufferlen+strlen(portion)+1024;
+							buffer=(char*)realloc(buffer,bufferlen);
+						}
+					strcat(buffer,"/");
+					strcat(buffer,portion);
+					//printf("%s\n",buffer);
+					xmldata=strstr(xmldata,"</a>");
+					xmldata=(char*)(long)xmldata+4;
+				}
+			else
+				done=true;
+		}
+
+	delete slice;
+	return(buffer);
+}
+
+docFileData* doRegetDocData(docFileData* olddoc)
+{
+	StringSlice*	slice=new StringSlice;
+
+	slice->setReturnDupString(false);
+	docFileData* doc=(docFileData*)malloc(sizeof(docFileData));
+//	printf("redone data\npath=%s\nname=%s\nline=%i\nhashtag=%s\n",doc->filePath,doc->fileName,doc->lineNum,doc->hashTag);
+
+	doc->fileName=strdup(olddoc->fileName);
+	doc->filePath=strdup(olddoc->filePath);
+	doc->lineNum=olddoc->lineNum;
+	doc->hashTag=strdup(olddoc->hashTag);
+
+	FILE*	file;
+	char	line[1024];
+	char*	command;
+
+	asprintf(&command,"cat %s|grep -i \"<p>Definition at line\"",slice->deleteSlice(olddoc->sourceFile,"file://"));
+	file=popen(command,"r");
+	while(fgets(line,1024,file))
+		{
+			doc->lineNum=atoi(slice->sliceBetween(line,(char*)"#l",(char*)"\">"));
+//			doc->
+//			printf("line =%s\n",line);
+//			printf("doc->lineNum =%i\n",doc->lineNum);
+		}
+	pclose(file);
+
+	asprintf(&command,"cat %s|grep -i \"<li class=\"",slice->deleteSlice(olddoc->sourceFile,"file://"));
+	file=popen(command,"r");
+	while(fgets(line,1024,file))
+		{
+			getPathFromXML(line);
+		}
+	pclose(file);
+
+
+	printf("redone data\npath=%s\nname=%s\nline=%i\nhashtag=%s\nsrc=%s\n\n",doc->filePath,doc->fileName,doc->lineNum,doc->hashTag,olddoc->sourceFile);
+	delete slice;
+	return(doc);
+//	free(doc);
+}
+
+//gives
+//<p>Definition at line <a class="el" href="bonesGnome_2_3_4PROJ_3_4_2src_2main_8cpp_source.html#l00011">11</a> of file <a class="el" //href="bonesGnome_2_3_4PROJ_3_4_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+
+docFileData* getDoxyFileDataX(char* uri)
 {
 	FILE*	file;
 	char	line[1024];
@@ -356,8 +451,11 @@ docFileData* getDoxyFileData(char* uri)
 	char*	filepath=NULL;
 	char*	document=NULL;
 	char*	linestring=NULL;
+	bool	regetdocdata=false;
 
-	globalSlice->setReturnDupString(true);
+	StringSlice*	slice=new StringSlice;
+
+	slice->setReturnDupString(true);
 	docFileData* doc=(docFileData*)malloc(sizeof(docFileData));
 
 	doc->fileName="XXX";
@@ -365,9 +463,9 @@ docFileData* getDoxyFileData(char* uri)
 	doc->lineNum=1;
 	doc->hashTag="XXX";
 
-	linetag=globalSlice->sliceInclude(uri,(char*)"#",NULL);
-	if(globalSlice->getResult()==0)
-		unhashedline=globalSlice->deleteSlice(uri,linetag);
+	linetag=slice->sliceInclude(uri,(char*)"#",NULL);
+	if(slice->getResult()==0)
+		unhashedline=slice->deleteSlice(uri,linetag);
 	else
 		{
 			unhashedline=strdup(uri);
@@ -381,40 +479,98 @@ docFileData* getDoxyFileData(char* uri)
 		{
 			document=NULL;
 			if(strstr(line,(char*)" File Reference<")!=NULL)
-				document=globalSlice->sliceBetween(line,(char*)": ",(char*)" File Reference<");
+				document=slice->sliceBetween(line,(char*)": ",(char*)" File Reference<");
 			if(strstr(line,(char*)" Source File<")!=NULL)
-				document=globalSlice->sliceBetween(line,(char*)": ",(char*)" Source File<");
+				document=slice->sliceBetween(line,(char*)": ",(char*)" Source File<");
 
-			globalSlice->setReturnDupString(false);
+			slice->setReturnDupString(false);
 			if(document!=NULL)
 				{
-					asprintf(&doc->filePath,"%s/%s",dirname(dirname(filepath)),globalSlice->decodeHtml(document));
+					asprintf(&doc->filePath,"%s/%s",dirname(dirname(filepath)),slice->decodeHtml(document));
 					doc->fileName=strdup(basename(doc->filePath));
 				}
 			else
 				{
-//gives
-//<p>Definition at line <a class="el" href="bonesGnome_2_3_4PROJ_3_4_2src_2main_8cpp_source.html#l00011">11</a> of file <a class="el" href="bonesGnome_2_3_4PROJ_3_4_2src_2main_8cpp_source.html">main.cpp</a>.</p>
-					asprintf(&doc->filePath,"%s",unhashedline);
-					doc->fileName=strdup(globalSlice->sliceBetween(line,(char*)": ",(char*)"</title>"));
+					asprintf(&doc->sourceFile,"%s",unhashedline);
+					asprintf(&doc->filePath,"%s",dirname(dirname(filepath)));
+					//asprintf(&doc->filePath,"%s/%s",dirname(dirname(filepath)),slice->decodeHtml(document));
+//					asprintf(&doc->filePath,"%s",unhashedline);
+//					doc->fileName=strdup(slice->sliceBetween(line,(char*)": ",(char*)"</title>"));
+					doc->fileName=strdup(slice->sliceBetween(line,(char*)": ",(char*)"</title>"));
+					regetdocdata=true;
 				}
 			break;
 		}
 
 	pclose(file);
-	globalSlice->setReturnDupString(false);
 
 	if(linetag!=NULL)
 		{
-			linestring=globalSlice->sliceBetween(linetag,(char*)"#l",NULL);
-			if(globalSlice->getResult()==0)
+			linestring=slice->sliceBetween(linetag,(char*)"#l",NULL);
+			if(slice->getResult()==0)
 				doc->lineNum=atoi(linestring);
 			else
-				doc->hashTag=strdup(globalSlice->sliceBetween(linetag,(char*)"#",NULL));
+				doc->hashTag=strdup(slice->sliceBetween(linetag,(char*)"#",NULL));
+			free(linetag);
 		}
 
-	globalSlice->setReturnDupString(true);
+	if(document!=NULL)
+		free(document);
+	free(unhashedline);
+	free(filepath);
+	free(command);
+	delete slice;
+	if(regetdocdata==true)
+		doc=doRegetDocData(doc);
+
 	return(doc);
+}
+
+docFileData* getDoxyFileData(char* uri)
+{
+	FILE*	file;
+	char	line[4096];
+	char*	command;
+	int		linenumber;
+	char*	linetag=NULL;
+
+	char*	unhashedline=NULL;
+	char*	filepath=NULL;
+//	char*	document=NULL;
+//	char*	linestring=NULL;
+//	bool	regetdocdata=false;
+
+	StringSlice*	slice=new StringSlice;
+
+	slice->setReturnDupString(true);
+	docFileData* doxydata=(docFileData*)malloc(sizeof(docFileData));
+
+	linetag=slice->sliceInclude(uri,(char*)"#",NULL);
+	if(slice->getResult()==0)
+		unhashedline=slice->deleteSlice(uri,linetag);
+	else
+		{
+			unhashedline=strdup(uri);
+			linetag=NULL;
+		}
+
+//grep -i "li class=\"navelem\"\|<div class=\"title\">"
+
+	filepath=g_filename_from_uri(unhashedline,NULL,NULL);
+	asprintf(&command,"cat %s|grep -i \"li class=\\\"navelem\\\"\\|<div class=\\\"title\\\">\"",filepath);
+	printf("%s\n",command);
+	file=popen(command,"r");
+	while(fgets(line,4096,file))
+		doxydata->sourceFile=getPathFromXML(line);
+	pclose(file);
+
+	doxydata->fileName="XXX";
+	doxydata->filePath="XXX";
+	doxydata->lineNum=1;
+	doxydata->hashTag="XXX";
+
+	
+	return(doxydata);
 }
 
 gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest* request,WebKitWebNavigationAction* navigationAction,WebKitWebPolicyDecision* policy_decision, gpointer user_data)
@@ -433,8 +589,10 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 	if(mod&GDK_SHIFT_MASK)
 		{
 			uri=webkit_network_request_get_uri(request);
+			//printf("%s\n",uri);
 			doxydata=getDoxyFileData((char*)uri);
-			printf("path=%s\nname=%s\nline=%i\nhahtag=%s\n",doxydata->filePath,doxydata->fileName,doxydata->lineNum,doxydata->hashTag);
+			printf("source=%s\npath=%s\nname=%s\nline=%i\nhahtag=%s\n",doxydata->sourceFile,doxydata->filePath,doxydata->fileName,doxydata->lineNum,doxydata->hashTag);
+			return(false);
 			return(false);
 			convertedname=unEscapeFileNAme((char*)uri);
 			linenum=globalSlice->sliceBetween(convertedname,(char*)"#l",NULL);
