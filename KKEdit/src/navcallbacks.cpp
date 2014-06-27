@@ -342,18 +342,20 @@ struct docFileData
 	char*	hashTag;
 };
 
-//<title>KKEdit: globals.cpp File Reference</title>
-
 docFileData* getDoxyFileData(char* uri)
 {
 	FILE*	file;
 	char	line[1024];
 	char*	command;
 	int		linenumber;
-	char*	filepath;
 	char*	linetag=NULL;
-	char*	tpath=NULL;
-	char*	pathuri=NULL;
+//	char*	tpath=NULL;
+//	char*	pathuri=NULL;
+
+	char*	unhashedline=NULL;
+	char*	filepath=NULL;
+	char*	document=NULL;
+	char*	linestring=NULL;
 
 	globalSlice->setReturnDupString(true);
 	docFileData* doc=(docFileData*)malloc(sizeof(docFileData));
@@ -365,59 +367,53 @@ docFileData* getDoxyFileData(char* uri)
 
 	linetag=globalSlice->sliceInclude(uri,(char*)"#",NULL);
 	if(globalSlice->getResult()==0)
-		{
-			tpath=globalSlice->deleteSlice(uri,linetag);
-		}
+		unhashedline=globalSlice->deleteSlice(uri,linetag);
 	else
 		{
-			tpath=strdup(uri);
+			unhashedline=strdup(uri);
 			linetag=NULL;
 		}
-//	if(strstr(uri,"#")!=NULL)
-//		{
-//			command=globalSlice->sliceBetween(uri,(char*)"#l",NULL);
-//			doc->lineNum=atoi(command);
-//			filepath=globalSlice->deleteSlice(uri,command);
-//			free(command);
-//		}
-	
-//	printf("%sn",linetag);
-//	printf("%sn",tpath);
-	filepath=g_filename_from_uri(tpath,NULL,NULL);
-//	printf("%sn",uri);
-	printf("%s\n",filepath);
-//				doc->filePath=globalSlice->sliceBetween(line,(char*)": ",(char*)" File Reference<");
 
+	filepath=g_filename_from_uri(unhashedline,NULL,NULL);
 	asprintf(&command,"head \"%s\"|grep -i \"<title>\"",filepath);
 	file=popen(command,"r");
 	while(fgets(line,1024,file))
 		{
+			document=NULL;
 			if(strstr(line,(char*)" File Reference<")!=NULL)
-				pathuri=globalSlice->sliceBetween(line,(char*)": ",(char*)" File Reference<");
+				document=globalSlice->sliceBetween(line,(char*)": ",(char*)" File Reference<");
 			if(strstr(line,(char*)" Source File<")!=NULL)
-				pathuri=globalSlice->sliceBetween(line,(char*)": ",(char*)" Source File<");
-			
-			doc->filePath=globalSlice->decodeHtml(pathuri);
+				document=globalSlice->sliceBetween(line,(char*)": ",(char*)" Source File<");
 
-			if(pathuri!=NULL)
-				free(pathuri);
-			doc->fileName=strdup(basename(doc->filePath));
+			globalSlice->setReturnDupString(false);
+			if(document!=NULL)
+				{
+					asprintf(&doc->filePath,"%s/%s",dirname(dirname(filepath)),globalSlice->decodeHtml(document));
+					doc->fileName=strdup(basename(doc->filePath));
+				}
+			else
+				{
+//gives
+//<p>Definition at line <a class="el" href="bonesGnome_2_3_4PROJ_3_4_2src_2main_8cpp_source.html#l00011">11</a> of file <a class="el" href="bonesGnome_2_3_4PROJ_3_4_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+					asprintf(&doc->filePath,"%s",unhashedline);
+					doc->fileName=strdup(globalSlice->sliceBetween(line,(char*)": ",(char*)"</title>"));
+				}
+			break;
 		}
+
 	pclose(file);
 	globalSlice->setReturnDupString(false);
-	free(filepath);
-	free(tpath);
 
 	if(linetag!=NULL)
 		{
-			tpath=globalSlice->sliceBetween(linetag,(char*)"#l",NULL);
+			linestring=globalSlice->sliceBetween(linetag,(char*)"#l",NULL);
 			if(globalSlice->getResult()==0)
-				doc->lineNum=atoi(tpath);
+				doc->lineNum=atoi(linestring);
 			else
 				doc->hashTag=strdup(globalSlice->sliceBetween(linetag,(char*)"#",NULL));
-					//line=atoi(tpath);
-		//printf("%s\n",linetag);
 		}
+
+	globalSlice->setReturnDupString(true);
 	return(doc);
 }
 
