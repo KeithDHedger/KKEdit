@@ -394,6 +394,36 @@ void readFile(char *name)
 
 */
 
+//<p>Definition at line <a class="el" href="bonesCommand_2_3_4PROJ_3_4_2src_2main_8cpp_source.html#l00023">23</a> of file <a class="el" href="bonesCommand_2_3_4PROJ_3_4_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+
+int getLineFromXML(char* xml)
+{
+	StringSlice*	slice=new StringSlice;
+	bool			done=false;
+	char*			data;
+	int				bufferlen=1024;
+	char*			buffer=(char*)calloc(bufferlen,1);
+	char*			xmldata=xml;
+	char*			portion;
+	int				retline=1;
+
+	data=slice->sliceBetween(xmldata,(char*)"Definition at line",(char*)"\">");
+//			printf("%s\n",data);
+	if(slice->getResult()==0)
+		{
+			retline=atoi(slice->sliceBetween(data,(char*)"#l",NULL));
+//			printf("ZZZZZ%i\n",retline);
+//			if(strlen(buffer)+strlen(data)+1<bufferlen)
+//				{
+//					bufferlen=bufferlen+strlen(data)+1024;
+//					buffer=(char*)realloc(buffer,bufferlen);
+//				}
+			//strcat(buffer,"/");
+			//strcat(buffer,data);
+		}
+	return(retline);
+}
+
 char* getPathFromXML(char* xml)
 {
 	StringSlice*	slice=new StringSlice;
@@ -413,7 +443,7 @@ char* getPathFromXML(char* xml)
 			if(slice->getResult()==0)
 				{
 					portion=slice->sliceBetween(data,(char*)"html\">",(char*)"</a>");
-			printf("XXXX%s\n",portion);
+		//	printf("XXXX%s\n",portion);
 					if(strlen(buffer)+strlen(portion)+1<bufferlen)
 						{
 							bufferlen=bufferlen+strlen(portion)+1024;
@@ -429,7 +459,7 @@ char* getPathFromXML(char* xml)
 				done=true;
 		}
 
-printf("inter %s\n",buffer);
+//printf("inter %s\n",buffer);
 
 	xmldata=xml;
 	done=false;
@@ -478,12 +508,14 @@ printf("inter %s\n",buffer);
 //						done=true;
 //				}
 	
-printf("outer %s\n",buffer);
+//printf("outer %s\n",buffer);
+
 	delete slice;
 	return(buffer);
 }
 
-docFileData* doRegetDocData(docFileData* olddoc)
+#if 0
+docFileData* doRegetDocDataXX(docFileData* olddoc)
 {
 	StringSlice*	slice=new StringSlice;
 
@@ -525,12 +557,14 @@ docFileData* doRegetDocData(docFileData* olddoc)
 	return(doc);
 //	free(doc);
 }
-
+#endif
 //gives
 //<p>Definition at line <a class="el" href="bonesGnome_2_3_4PROJ_3_4_2src_2main_8cpp_source.html#l00011">11</a> of file <a class="el" //href="bonesGnome_2_3_4PROJ_3_4_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
+#if 0
 docFileData* getDoxyFileDataX(char* uri)
 {
+#if 0
 	FILE*	file;
 	char	line[1024];
 	char*	command;
@@ -616,7 +650,9 @@ docFileData* getDoxyFileDataX(char* uri)
 		doc=doRegetDocData(doc);
 
 	return(doc);
+#endif
 }
+#endif
 
 docFileData* getDoxyFileData(char* uri)
 {
@@ -625,6 +661,7 @@ docFileData* getDoxyFileData(char* uri)
 	char*	command;
 	int		linenumber;
 	char*	linetag=NULL;
+	bool	gotline=false;
 
 	char*	unhashedline=NULL;
 	char*	filepath=NULL;
@@ -636,19 +673,52 @@ docFileData* getDoxyFileData(char* uri)
 
 	slice->setReturnDupString(true);
 	docFileData* doxydata=(docFileData*)malloc(sizeof(docFileData));
-
-	linetag=slice->sliceInclude(uri,(char*)"#",NULL);
+doxydata->lineNum=1;
+	linetag=slice->sliceBetween(uri,(char*)"#",NULL);
 	if(slice->getResult()==0)
-		unhashedline=slice->deleteSlice(uri,linetag);
+		{
+		printf("XXX\n");
+printf("%s\n",linetag);
+if(linetag[0]='l')
+	{
+	doxydata->lineNum=atoi(&linetag[1]);
+	gotline=true;
+	printf("doxydata->lineNum=%i\n",doxydata->lineNum);
+	}
+		printf("XXX\n");
+			unhashedline=slice->sliceBetween(uri,NULL,(char*)"#");
+	
+		}
 	else
 		{
+		printf("zzzz\n");
 			unhashedline=strdup(uri);
-			linetag=NULL;
+			linetag=strdup("");
 		}
+
+filepath=g_filename_from_uri(unhashedline,NULL,NULL);
+//	linetag=slice->sliceBetween(uri,(char*)"#",NULL);
+//	if(slice->getResult()==0)
+//		{
+//			unhashedline=slice->deleteSlice(uri,linetag);
+//			//printf("QQQ%sn",linetag);
+//		}
+//	else
+//		{
+//			unhashedline=strdup(uri);
+//			linetag=NULL;
+//		}
 
 //grep -i "li class=\"navelem\"\|<div class=\"title\">"
 
 	filepath=g_filename_from_uri(unhashedline,NULL,NULL);
+
+printf("%s\n",linetag);
+printf("%s\n",unhashedline);
+printf("%s\n",uri);
+
+printf("End\n");
+//printf("%s\n",filepath);
 //	asprintf(&command,"cat %s|grep -i \"li class=\\\"navelem\\\"\\|<div class=\\\"title\\\">\"",filepath);
 //	printf("%s\n",command);
 
@@ -657,11 +727,13 @@ docFileData* getDoxyFileData(char* uri)
 
 readFile(filepath);
 		doxydata->sourceFile=getPathFromXML(filebuffer);
+//		if(gotline==false)
+			doxydata->lineNum=getLineFromXML(filebuffer);
 //	pclose(file);
 
 	doxydata->fileName="XXX";
 	doxydata->filePath="XXX";
-	doxydata->lineNum=1;
+	//doxydata->lineNum=1;
 	doxydata->hashTag="XXX";
 
 	
