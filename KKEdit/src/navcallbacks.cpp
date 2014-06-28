@@ -343,6 +343,47 @@ struct docFileData
 	char*	sourceFile;
 };
 
+char*	filebuffer=NULL;
+
+void readFile(char *name)
+{
+	FILE *file;
+	//char *buffer;
+	unsigned long fileLen;
+
+	if(filebuffer!=NULL)
+		free(filebuffer);
+	//Open file
+	file = fopen(name, "rb");
+	if (!file)
+	{
+		fprintf(stderr, "Unable to open file %s", name);
+		return;
+	}
+	
+	//Get file length
+	fseek(file, 0, SEEK_END);
+	fileLen=ftell(file);
+	fseek(file, 0, SEEK_SET);
+
+	//Allocate memory
+	filebuffer=(char *)malloc(fileLen+1);
+	if (!filebuffer)
+	{
+		fprintf(stderr, "Memory error!");
+                                fclose(file);
+		return;
+	}
+
+	//Read file contents into buffer
+	fread(filebuffer, fileLen, 1, file);
+	fclose(file);
+
+	//Do what ever with buffer
+
+//	free(buffer);
+}
+
 //<li class="navelem"><a class="el" href="dir_1dd5afa8c1d8ad957086a4fdfbcc964b.html">bonesCommand</a></li><li class="navelem"><a class="el" href="dir_31954dcac7dfb52c8729d5c38013c665.html"><>PROJ<></a></li><li class="navelem"><a class="el" href="dir_de49531bcd3ac9966fabd3576b784d0a.html">src</a></li><li class="navelem"><a class="el" href="bonesCommand_2_3_4PROJ_3_4_2src_2main_8cpp.html">main.cpp</a></li>  </ul>
 
 
@@ -363,15 +404,16 @@ char* getPathFromXML(char* xml)
 	char*			xmldata=xml;
 	char*			portion;
 
-printf("%s\n",xml);
+//printf("%s\n",xml);
+//return(NULL);
 
 	while(done==false)
 		{
-			data=slice->sliceBetween(xmldata,(char*)"<a ",(char*)"</a>");
+			data=slice->sliceInclude(xmldata,(char*)"<li class=\"navelem\"",(char*)"</a>");
 			if(slice->getResult()==0)
 				{
-			printf("%s\n",data);
-					portion=slice->sliceBetween(data,(char*)"\">",NULL);
+					portion=slice->sliceBetween(data,(char*)"html\">",(char*)"</a>");
+			printf("XXXX%s\n",portion);
 					if(strlen(buffer)+strlen(portion)+1<bufferlen)
 						{
 							bufferlen=bufferlen+strlen(portion)+1024;
@@ -379,14 +421,64 @@ printf("%s\n",xml);
 						}
 					strcat(buffer,"/");
 					strcat(buffer,portion);
-					//printf("%s\n",buffer);
-					xmldata=strstr(xmldata,"</a>");
-					xmldata=(char*)(long)xmldata+4;
+//					printf("%s\n",buffer);
+					xmldata=strstr(xmldata,portion);
+					xmldata=(char*)(long)xmldata+strlen(portion);
 				}
 			else
 				done=true;
 		}
 
+printf("inter %s\n",buffer);
+
+	xmldata=xml;
+	done=false;
+//	while(done==false)
+//		{
+					data=slice->sliceBetween(xmldata,(char*)"\"title\">",(char*)" File Reference");
+					if(slice->getResult()==0)
+						{
+						
+	//		printf("%s\n",data);
+							//portion=slice->sliceBetween(data,(char*)"\">",NULL);
+							if(strlen(buffer)+strlen(data)+1<bufferlen)
+								{
+									bufferlen=bufferlen+strlen(data)+1024;
+									buffer=(char*)realloc(buffer,bufferlen);
+								}
+							strcat(buffer,"/");
+							strcat(buffer,data);
+//					printf("%s\n",buffer);
+							//xmldata=strstr(xmldata,"</a>");
+							//xmldata=(char*)(long)xmldata+4;
+						}
+					else
+						{
+					data=slice->sliceBetween(xmldata,(char*)"\"title\">",(char*)"</div>");
+					if(slice->getResult()==0)
+						{
+						
+	//		printf("%s\n",data);
+							//portion=slice->sliceBetween(data,(char*)"\">",NULL);
+							if(strlen(buffer)+strlen(data)+1<bufferlen)
+								{
+									bufferlen=bufferlen+strlen(data)+1024;
+									buffer=(char*)realloc(buffer,bufferlen);
+								}
+							strcat(buffer,"/");
+							strcat(buffer,data);
+//					printf("%s\n",buffer);
+							//xmldata=strstr(xmldata,"</a>");
+							//xmldata=(char*)(long)xmldata+4;
+						}
+						
+						}
+//<div class="title">main.cpp</div>  </div>
+//					else
+//						done=true;
+//				}
+	
+printf("outer %s\n",buffer);
 	delete slice;
 	return(buffer);
 }
@@ -557,12 +649,15 @@ docFileData* getDoxyFileData(char* uri)
 //grep -i "li class=\"navelem\"\|<div class=\"title\">"
 
 	filepath=g_filename_from_uri(unhashedline,NULL,NULL);
-	asprintf(&command,"cat %s|grep -i \"li class=\\\"navelem\\\"\\|<div class=\\\"title\\\">\"",filepath);
-	printf("%s\n",command);
-	file=popen(command,"r");
-	while(fgets(line,4096,file))
-		doxydata->sourceFile=getPathFromXML(line);
-	pclose(file);
+//	asprintf(&command,"cat %s|grep -i \"li class=\\\"navelem\\\"\\|<div class=\\\"title\\\">\"",filepath);
+//	printf("%s\n",command);
+
+//	file=popen(command,"r");
+//	while(fgets(line,4096,file))
+
+readFile(filepath);
+		doxydata->sourceFile=getPathFromXML(filebuffer);
+//	pclose(file);
 
 	doxydata->fileName="XXX";
 	doxydata->filePath="XXX";
