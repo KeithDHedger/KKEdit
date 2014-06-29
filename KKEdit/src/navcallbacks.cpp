@@ -395,6 +395,10 @@ int getLineFromXML(char* xml)
 	return(retline);
 }
 
+bool	mustBeAClass=false;
+int		classLineNumber=1;
+char*	classFileName=NULL;
+
 char* getPathFromXML(char* xml)
 {
 	StringSlice*	slice=new StringSlice;
@@ -406,6 +410,7 @@ char* getPathFromXML(char* xml)
 	char*			portion;
 
 	buffer[0]=0;
+	mustBeAClass=false;
 
 	xmldata=strstr(xml,(char*)"<li class=\"navelem\"");
 	while(done==false)
@@ -441,20 +446,16 @@ char* getPathFromXML(char* xml)
 					char*	tlinenum;
 					char*	tfile;
 					tlinenum=slice->sliceBetween(xmldata,(char*)"#l",(char*)"\">");
-					asprintf(&tfile,"/%s",slice->sliceBetween(xmldata,(char*)".html\">",(char*)"</a>"));
-					//tfile=strdup();
-					
+					asprintf(&tfile,"/%s",slice->sliceBetween(xmldata,(char*)".html\">",(char*)"</a>"));					
 					delete slice;
 					return(tfile);
 				}
 		}
 
 	xmldata=xml;
-printf("XXXXXXXXX\n");
 	data=slice->sliceBetween(xmldata,(char*)"\"title\">",(char*)" File Reference");
 	if(slice->getResult()==0)
 		{
-				printf("%s\n",data);
 			if(strlen(buffer)+strlen(data)+1<bufferlen)
 				{
 					bufferlen=bufferlen+strlen(data)+1024;
@@ -468,7 +469,6 @@ printf("XXXXXXXXX\n");
 			data=slice->sliceBetween(xmldata,(char*)"\"title\">",(char*)"</div>");
 			if(slice->getResult()==0)
 				{
-				printf("%s\n",data);
 					if(strlen(buffer)+strlen(data)+1<bufferlen)
 						{
 							bufferlen=bufferlen+strlen(data)+1024;
@@ -479,18 +479,23 @@ printf("XXXXXXXXX\n");
 				}
 			else
 				{
-								printf("aaaaaaaaaaa\n");
 					data=slice->sliceBetween(xmldata,(char*)"<title>",(char*)"</title>");
-							printf("zzzzzzzzzzz%s\n",data);
 				if(slice->getResult()==0)
 						{
-							if(strlen(buffer)+strlen(data)+1<bufferlen)
-								{
-									bufferlen=bufferlen+strlen(data)+1024;
-									buffer=(char*)realloc(buffer,bufferlen);
-								}
-							strcat(buffer,"/");
-							strcat(buffer,data);
+						if(strstr(data,"::")!=NULL)
+							{
+								xmldata=strstr(xml,(char*)"<p>Definition at line ");
+								if(xmldata!=NULL)
+									{
+										mustBeAClass=false;
+										//char*	tlinenum;
+										//char*	tfile;
+										classLineNumber=atoi(slice->sliceBetween(xmldata,(char*)"#l",(char*)"\">"));
+										asprintf(&classFileName,"/%s",slice->sliceBetween(xmldata,(char*)".html\">",(char*)"</a>"));
+										delete slice;
+										return(classFileName);
+									}
+							}
 						}
 				}
 		}
@@ -538,9 +543,20 @@ docFileData* getDoxyFileData(char* uri)
 		{
 			doxydata->filePath=slice->sliceBetween(filepath,NULL,(char*)"/html/");
 			doxydata->fileName=getPathFromXML(filebuffer);
-			asprintf(&doxydata->sourceFile,"%s%s",doxydata->filePath,doxydata->fileName);
-			if(gotline==false)
-				doxydata->lineNum=getLineFromXML(filebuffer);
+			if(mustBeAClass==false)
+				{
+					asprintf(&doxydata->sourceFile,"%s%s",doxydata->filePath,doxydata->fileName);
+					if(gotline==false)
+						{
+							doxydata->lineNum=getLineFromXML(filebuffer);
+						}
+				}
+			else
+				{
+					doxydata->lineNum=classLineNumber;
+					asprintf(&doxydata->sourceFile,"%s%s",doxydata->filePath,classFileName);
+					
+				}
 		}
 	else
 		{
