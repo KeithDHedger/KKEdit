@@ -673,14 +673,17 @@ docFileData* getDoxyFileData(char* uri)
 
 	slice->setReturnDupString(true);
 	docFileData* doxydata=(docFileData*)malloc(sizeof(docFileData));
+
+gotline=false;
 doxydata->lineNum=1;
 	linetag=slice->sliceBetween(uri,(char*)"#",NULL);
 	if(slice->getResult()==0)
 		{
 		printf("XXX\n");
-printf("%s\n",linetag);
-if(linetag[0]='l')
+printf("QQQQQQQQQQQQQQQQQQQQQQ%s\n",linetag);
+if(linetag[0]=='l')
 	{
+	printf("(((((((((((((((\n");
 	doxydata->lineNum=atoi(&linetag[1]);
 	gotline=true;
 	printf("doxydata->lineNum=%i\n",doxydata->lineNum);
@@ -727,8 +730,11 @@ printf("End\n");
 
 readFile(filepath);
 		doxydata->sourceFile=getPathFromXML(filebuffer);
-//		if(gotline==false)
+		if(gotline==false)
+			{
+			printf("AAAAAAAAAAAAA\n");
 			doxydata->lineNum=getLineFromXML(filebuffer);
+			}
 //	pclose(file);
 
 	doxydata->fileName="XXX";

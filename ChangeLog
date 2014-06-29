@@ -1,4 +1,5 @@
 0.1.9
+Added missing keyboard accelerators for opening menus from keyboard (ALT-F for file menu etc ).
 Fixed regex crash when using badly formed replace string.
 Improved string slicing code.
 Add 'Show Documents' to 'View' menu to show the doxygen docs ( faster ) without rebuilding/updating ( unless they don't exist ).

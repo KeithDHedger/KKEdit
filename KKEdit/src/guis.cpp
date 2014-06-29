@@ -1317,7 +1317,8 @@ void buildMainGui(void)
 
 //menus
 //file menu
-	menufile=gtk_menu_item_new_with_label("File");
+	menufile=gtk_menu_item_new_with_label("_File");
+	gtk_menu_item_set_use_underline((GtkMenuItem*)menufile,true);
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufile),menu);
 //new
@@ -1462,7 +1463,8 @@ void buildMainGui(void)
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'Q',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 
 //edit menu
-	menuedit=gtk_menu_item_new_with_label("Edit");
+	menuedit=gtk_menu_item_new_with_label("_Edit");
+	gtk_menu_item_set_use_underline((GtkMenuItem*)menuedit,true);
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuedit),menu);
 //undo
@@ -1530,7 +1532,8 @@ void buildMainGui(void)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doPrefs),NULL);
 
 //view menu
-	menuView=gtk_menu_item_new_with_label("View");
+	menuView=gtk_menu_item_new_with_label("_View");
+	gtk_menu_item_set_use_underline((GtkMenuItem*)menuView,true);
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuView),menu);
 
@@ -1576,7 +1579,8 @@ void buildMainGui(void)
 #endif
 
 //navigation menu
-	menunav=gtk_menu_item_new_with_label("Navigation");
+	menunav=gtk_menu_item_new_with_label("_Navigation");
+	gtk_menu_item_set_use_underline((GtkMenuItem*)menunav,true);
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),menu);
 //goto define
@@ -1635,18 +1639,22 @@ void buildMainGui(void)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goBack),NULL);
 
 //function menu
-	menufunc=gtk_menu_item_new_with_label("Functions");
+	menufunc=gtk_menu_item_new_with_label("_Functions");
+	gtk_menu_item_set_use_underline((GtkMenuItem*)menufunc,true);
 
 //newbookmarks
-	menuBookMark=gtk_menu_item_new_with_label("Bookmarks");
+	menuBookMark=gtk_menu_item_new_with_label("_Bookmarks");
+	gtk_menu_item_set_use_underline((GtkMenuItem*)menuBookMark,true);
 	rebuildBookMarkMenu();
 
 //external tools
-	menutools=gtk_menu_item_new_with_label("Tools");
+	menutools=gtk_menu_item_new_with_label("_Tools");
+	gtk_menu_item_set_use_underline((GtkMenuItem*)menutools,true);
 	buildTools();
 
 //help
-	menuhelp=gtk_menu_item_new_with_label("Help");
+	menuhelp=gtk_menu_item_new_with_label("_Help");
+	gtk_menu_item_set_use_underline((GtkMenuItem*)menuhelp,true);
 	menu=gtk_menu_new();
 //about
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuhelp),menu);
