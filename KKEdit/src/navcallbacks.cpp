@@ -430,9 +430,31 @@ char* getPathFromXML(char* xml)
 
 	xmldata=xml;
 	done=false;
+// Class Reference
+//<p>Definition at line <a class="el" href="sliceclass_8h_source.html#l00026">26</a> of file <a class="el" href="sliceclass_8h_source.html">sliceclass.h</a>.</p>
+	data=slice->sliceBetween(xmldata,(char*)"\"title\">",(char*)" Class Reference");
+	if(slice->getResult()==0)
+		{
+			xmldata=strstr(xml,(char*)"<p>Definition at line ");
+			if(xmldata!=NULL)
+				{
+					char*	tlinenum;
+					char*	tfile;
+					tlinenum=slice->sliceBetween(xmldata,(char*)"#l",(char*)"\">");
+					asprintf(&tfile,"/%s",slice->sliceBetween(xmldata,(char*)".html\">",(char*)"</a>"));
+					//tfile=strdup();
+					
+					delete slice;
+					return(tfile);
+				}
+		}
+
+	xmldata=xml;
+printf("XXXXXXXXX\n");
 	data=slice->sliceBetween(xmldata,(char*)"\"title\">",(char*)" File Reference");
 	if(slice->getResult()==0)
 		{
+				printf("%s\n",data);
 			if(strlen(buffer)+strlen(data)+1<bufferlen)
 				{
 					bufferlen=bufferlen+strlen(data)+1024;
@@ -446,6 +468,7 @@ char* getPathFromXML(char* xml)
 			data=slice->sliceBetween(xmldata,(char*)"\"title\">",(char*)"</div>");
 			if(slice->getResult()==0)
 				{
+				printf("%s\n",data);
 					if(strlen(buffer)+strlen(data)+1<bufferlen)
 						{
 							bufferlen=bufferlen+strlen(data)+1024;
@@ -453,6 +476,22 @@ char* getPathFromXML(char* xml)
 						}
 					strcat(buffer,"/");
 					strcat(buffer,data);
+				}
+			else
+				{
+								printf("aaaaaaaaaaa\n");
+					data=slice->sliceBetween(xmldata,(char*)"<title>",(char*)"</title>");
+							printf("zzzzzzzzzzz%s\n",data);
+				if(slice->getResult()==0)
+						{
+							if(strlen(buffer)+strlen(data)+1<bufferlen)
+								{
+									bufferlen=bufferlen+strlen(data)+1024;
+									buffer=(char*)realloc(buffer,bufferlen);
+								}
+							strcat(buffer,"/");
+							strcat(buffer,data);
+						}
 				}
 		}
 	delete slice;
@@ -529,7 +568,7 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 			doxydata=getDoxyFileData((char*)uri);
 			if(doxydata==NULL)
 				return(false);
-//			printf("source=%s\npath=%s\nname=%s\nline=%i\nhahtag=%s\n",doxydata->sourceFile,doxydata->filePath,doxydata->fileName,doxydata->lineNum,doxydata->hashTag);
+			printf("source=%s\npath=%s\nname=%s\nline=%i\nhahtag=%s\n",doxydata->sourceFile,doxydata->filePath,doxydata->fileName,doxydata->lineNum,doxydata->hashTag);
 
 //check in open tabs
 			buf=new TextBuffer;
