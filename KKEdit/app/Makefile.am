@@ -33,6 +33,7 @@ install-exec-hook:
 	echo "Exec=${with_gsu_path} kkedit -m %f" >> $(DESTDIR)${prefix}/share/applications/KKEditRoot.desktop
 	install -D ../resources/pixmaps/KKEdit.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEdit.png
 	install -D ../resources/pixmaps/KKEditRoot.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditRoot.png
+#	mv $(DESTDIR)${prefix}/bin/barberpole $(pkgdatadir)
 	gtk-update-icon-cache --ignore-theme-index --force ${prefix}/share/icons/hicolor||true
 
 uninstall-hook:

@@ -283,8 +283,8 @@ int main(int argc,char **argv)
 	int					w,h;
 
 	gtk_init(&argc,&argv);
-
 	back=unique_backend_create();
+
 	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace(back));
 	app=unique_app_new(dbusname,NULL);
 	message=unique_message_data_new();

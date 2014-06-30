@@ -36,6 +36,11 @@ PKG_CHECK_MODULES(UNIQ, $UNIQ_MODULES)
 AC_SUBST(UNIQ_CFLAGS)
 AC_SUBST(UNIQ_LIBS)
 
+GTHREAD_MODULES="gthread-2.0 >= 2.30.0"
+PKG_CHECK_MODULES(GTHREAD, $GTHREAD_MODULES)
+AC_SUBST(GTHREAD_CFLAGS)
+AC_SUBST(GTHREAD_LIBS)
+
 AC_MSG_CHECKING(whether to build gtk-doc viewer)
 AC_ARG_ENABLE(docviewer,AS_HELP_STRING([--enable-docviewer],[Build the Gtk-Doc viewer]),
     [enable_docviewer=$enableval],
@@ -93,6 +98,6 @@ AC_ARG_WITH(gsu-path,AS_HELP_STRING([ --with-gsu-path],[Path to graphical su app
 AC_SUBST(with_gsu_path)
 AC_MSG_RESULT([Setting path to graphical su app to \"$with_gsu_path\"])
 
-AC_OUTPUT(Makefile KKEdit/app/Makefile)
+AC_OUTPUT(Makefile KKEdit/app/Makefile KKEdit/pole/Makefile)
 
 

@@ -896,16 +896,16 @@ void goBack(GtkWidget* widget,gpointer data)
 		}
 }
 
-gboolean idlescroll(gpointer data)
+gboolean idleScroll(gpointer data)
 {
-gtk_main_iteration_do(false);
-if(progressBar!=NULL)
-	{
-		gtk_progress_bar_pulse((GtkProgressBar*)progressBar);
-		return(true);
-	}
-else
-	return(false);
+	gtk_main_iteration_do(false);
+	if(progressBar!=NULL)
+		{
+			gtk_progress_bar_pulse((GtkProgressBar*)progressBar);
+			return(true);
+		}
+	else
+		return(false);
 }
 
 void showBarberPole(const char* title)
@@ -928,7 +928,7 @@ void showBarberPole(const char* title)
 	gtk_container_add(GTK_CONTAINER(progressWindow),vbox);
 
 	gtk_widget_show_all(progressWindow);
-	g_timeout_add(100,idlescroll,NULL);
+	g_timeout_add(100,idleScroll,NULL);
 }
 
 void killBarberPole(void)
@@ -936,3 +936,4 @@ void killBarberPole(void)
 	gtk_widget_destroy(progressWindow);
 	progressBar=NULL;
 }
+
