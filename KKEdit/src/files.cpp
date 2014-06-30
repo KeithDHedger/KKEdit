@@ -600,7 +600,7 @@ bool openFile(const gchar *filepath,int linenumber,bool warn)
 	if((readLinkFirst==true) && (S_ISLNK(sb.st_mode)))
 		{
 			free(filepathcopy);
-			filepathcopy=linkname;
+			filepathcopy=strdup(linkname);
 		}
 
 
@@ -609,30 +609,13 @@ bool openFile(const gchar *filepath,int linenumber,bool warn)
 			page=getPageStructPtr(j);
 			if(noDuplicates==true)
 				{
-					if((page->realFilePath!=NULL) && (strcmp(page->realFilePath,filepathcopy)==0))
+					if((page->realFilePath!=NULL) && ((strcmp(page->realFilePath,filepathcopy)==0) ||(strcmp(page->filePath,filepathcopy)==0)))
 						{
-							printf("real=%s\npath=%s\n",page->realFilePath,filepath);
 							gtk_notebook_set_current_page(notebook,j);
 							return(true);
 						}
 				}
-//			if((page->realFilePath!=NULL) && (noDuplicates==true) && ((strcmp(page->realFilePath,filepathcopy)==0) || (strcmp(page->filePath,filepath)==0)))
-//				{
-//					gtk_notebook_set_current_page(notebook,j);
-//					return(true);
-//				}
 		}
-
-
-//	for(int j=0; j<gtk_notebook_get_n_pages(notebook); j++)
-//		{
-//			page=getPageStructPtr(j);
-//			if((page->realFilePath!=NULL) && (noDuplicates==true) && ((strcmp(page->realFilePath,filepathcopy)==0) || (strcmp(page->filePath,filepath)==0)))
-//				{
-//					gtk_notebook_set_current_page(notebook,j);
-//					return(true);
-//				}
-//		}
 
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		{
@@ -726,6 +709,7 @@ bool openFile(const gchar *filepath,int linenumber,bool warn)
 	g_free(recenturi);
 	g_free(str);
 	free(filepathcopy);
+	free(linkname);
 
 //connect to ntebook
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));

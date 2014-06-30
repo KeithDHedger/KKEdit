@@ -593,7 +593,7 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 						{
 							gtk_notebook_set_current_page(notebook,j);
 							buf->textBuffer=(GtkTextBuffer*)page->buffer;
-							buf->scroll2Line((GtkTextView*)page->view,doxydata->lineNum-1);
+							buf->scroll2LineM((GtkTextView*)page->view,doxydata->lineNum-1);
 							delete buf;
 							free(doxydata);
 							return(false);
