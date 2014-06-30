@@ -73,6 +73,7 @@ struct pageStruct
 	GtkSourceView*		view;
 	GtkSourceView*		view2;
 	char*				filePath;
+	char*				realFilePath;
 	char*				dirName;
 	GtkMenuItem*		navSubMenu;
 	bool				rebuildMenu;

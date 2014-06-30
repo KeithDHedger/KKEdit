@@ -589,24 +589,24 @@ bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	filepathcopy=strdup(filepath);
 
-	if(readLinkFirst==true)
+	lstat(filepath,&sb);
+	if(S_ISLNK(sb.st_mode))
 		{
-			lstat(filepath,&sb);
+			linkname=(char*)malloc(sb.st_size + 1);
+			r=readlink(filepathcopy,linkname,sb.st_size+1);
+			linkname[r]=0;
+		}
 
-			if(S_ISLNK(sb.st_mode))
-				{
-					linkname=(char*)malloc(sb.st_size + 1);
-					r=readlink(filepathcopy,linkname,sb.st_size+1);
-					linkname[r]=0;
-					free(filepathcopy);
-					filepathcopy=linkname;
-				}
+	if((readLinkFirst==true) && (S_ISLNK(sb.st_mode)))
+		{
+			free(filepathcopy);
+			filepathcopy=linkname;
 		}
 
 	for(int j=0; j<gtk_notebook_get_n_pages(notebook); j++)
 		{
 			page=getPageStructPtr(j);
-			if((page->filePath!=NULL) && (noDuplicates==true) && (strcmp(page->filePath,filepathcopy)==0))
+			if((page->realFilePath!=NULL) && (noDuplicates==true) && ((strcmp(page->realFilePath,filepathcopy)==0) || (strcmp(page->filePath,filepathcopy)==0)))
 				{
 					gtk_notebook_set_current_page(notebook,j);
 					return(true);
@@ -644,6 +644,10 @@ bool openFile(const gchar *filepath,int linenumber,bool warn)
 	page->filePath=strdup(filepathcopy);
 	page->fileName=strdup(filename);
 	page->dirName=g_path_get_dirname(filepathcopy);
+	if(S_ISLNK(sb.st_mode))
+		page->realFilePath=linkname;
+	else
+		page->realFilePath=(char*)filepath;
 
 	label=makeNewTab(page->fileName,page->filePath,page);
 	setLanguage(page);

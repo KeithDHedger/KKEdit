@@ -488,8 +488,6 @@ char* getPathFromXML(char* xml)
 								if(xmldata!=NULL)
 									{
 										mustBeAClass=false;
-										//char*	tlinenum;
-										//char*	tfile;
 										classLineNumber=atoi(slice->sliceBetween(xmldata,(char*)"#l",(char*)"\">"));
 										asprintf(&classFileName,"/%s",slice->sliceBetween(xmldata,(char*)".html\">",(char*)"</a>"));
 										delete slice;
@@ -584,14 +582,14 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 			doxydata=getDoxyFileData((char*)uri);
 			if(doxydata==NULL)
 				return(false);
-			printf("source=%s\npath=%s\nname=%s\nline=%i\nhahtag=%s\n",doxydata->sourceFile,doxydata->filePath,doxydata->fileName,doxydata->lineNum,doxydata->hashTag);
+//			printf("source=%snpath=%snname=%snline=%inhahtag=%sn",doxydata->sourceFile,doxydata->filePath,doxydata->fileName,doxydata->lineNum,doxydata->hashTag);
 
 //check in open tabs
 			buf=new TextBuffer;
 			for(int j=0; j<gtk_notebook_get_n_pages(notebook); j++)
 				{
 					page=getPageStructPtr(j);
-					if(strcmp(page->filePath,doxydata->sourceFile)==0)
+					if((strcmp(page->realFilePath,doxydata->sourceFile)==0) || (strcmp(page->filePath,doxydata->sourceFile)==0))
 						{
 							gtk_notebook_set_current_page(notebook,j);
 							buf->textBuffer=(GtkTextBuffer*)page->buffer;
