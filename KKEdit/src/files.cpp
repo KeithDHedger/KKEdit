@@ -583,7 +583,7 @@ bool openFile(const gchar *filepath,int linenumber,bool warn)
 	char*					replacetext=NULL;
 
 	struct stat				sb;
-	char*					linkname;
+	char*					linkname=NULL;
 	ssize_t					r;
 	char*					filepathcopy=NULL;
 
@@ -603,15 +603,36 @@ bool openFile(const gchar *filepath,int linenumber,bool warn)
 			filepathcopy=linkname;
 		}
 
+
 	for(int j=0; j<gtk_notebook_get_n_pages(notebook); j++)
 		{
 			page=getPageStructPtr(j);
-			if((page->realFilePath!=NULL) && (noDuplicates==true) && ((strcmp(page->realFilePath,filepathcopy)==0) || (strcmp(page->filePath,filepathcopy)==0)))
+			if(noDuplicates==true)
 				{
-					gtk_notebook_set_current_page(notebook,j);
-					return(true);
+					if((page->realFilePath!=NULL) && (strcmp(page->realFilePath,filepathcopy)==0))
+						{
+							printf("real=%s\npath=%s\n",page->realFilePath,filepath);
+							gtk_notebook_set_current_page(notebook,j);
+							return(true);
+						}
 				}
+//			if((page->realFilePath!=NULL) && (noDuplicates==true) && ((strcmp(page->realFilePath,filepathcopy)==0) || (strcmp(page->filePath,filepath)==0)))
+//				{
+//					gtk_notebook_set_current_page(notebook,j);
+//					return(true);
+//				}
 		}
+
+
+//	for(int j=0; j<gtk_notebook_get_n_pages(notebook); j++)
+//		{
+//			page=getPageStructPtr(j);
+//			if((page->realFilePath!=NULL) && (noDuplicates==true) && ((strcmp(page->realFilePath,filepathcopy)==0) || (strcmp(page->filePath,filepath)==0)))
+//				{
+//					gtk_notebook_set_current_page(notebook,j);
+//					return(true);
+//				}
+//		}
 
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		{
@@ -644,10 +665,11 @@ bool openFile(const gchar *filepath,int linenumber,bool warn)
 	page->filePath=strdup(filepathcopy);
 	page->fileName=strdup(filename);
 	page->dirName=g_path_get_dirname(filepathcopy);
+
 	if(S_ISLNK(sb.st_mode))
-		page->realFilePath=linkname;
+		page->realFilePath=strdup(linkname);
 	else
-		page->realFilePath=(char*)filepath;
+		page->realFilePath=(char*)strdup(filepath);
 
 	label=makeNewTab(page->fileName,page->filePath,page);
 	setLanguage(page);
