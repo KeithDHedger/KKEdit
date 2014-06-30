@@ -1,4 +1,5 @@
 0.1.9
+Fixed opening file from docs not respecting no duplicates when opening link.
 Better file integration with doxygen.
 Added missing keyboard accelerators for opening menus from keyboard (ALT-F for file menu etc ).
 Fixed regex crash when using badly formed replace string.
