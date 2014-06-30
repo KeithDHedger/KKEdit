@@ -343,6 +343,8 @@ extern AspellSpeller*	spellChecker;
 #endif
 extern StringSlice*		globalSlice;
 extern unsigned int		shortCuts[100][2];
+extern GtkWidget*		progressWindow;
+extern GtkWidget*		progressBar;
 
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);
@@ -356,6 +358,8 @@ char* deleteSlice(char* srcstring,char* delstr);
 void getRecursiveTagListFileName(char* filepath,void* ptr);
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
 void goBack(GtkWidget* widget,gpointer data);
+void showBarberPole(const char* title);
+void killBarberPole(void);
 
 #endif
 

@@ -204,6 +204,8 @@ void doDoxy(GtkWidget* widget,long data)
 	pageStruct*	page=getPageStructPtr(-1);
 	struct stat	sb;
 	bool		dorebuild;
+	FILE*		fp;
+	char		line[1024];
 
 	if(data==1)
 		dorebuild=true;
@@ -213,6 +215,7 @@ void doDoxy(GtkWidget* widget,long data)
 	if(page==NULL)
 		return;
 
+	showBarberPole("Building Documentaion ...");
 	chdir(page->dirName);
 	stat("Doxyfile",&sb);
 	if(!S_ISREG(sb.st_mode))
@@ -225,8 +228,14 @@ void doDoxy(GtkWidget* widget,long data)
 		free(thePage);
 	asprintf(&thePage,"file://%s/html/index.html",page->dirName);
 	if(dorebuild==true)
-		system("doxygen Doxyfile >/dev/null");
+		{
+			fp=popen("doxygen Doxyfile","r");
+			while(fgets(line,1024,fp))
+				gtk_main_iteration_do(false);
+			pclose(fp);
+		}
 	showDocView(USEURI,thePage);
+	killBarberPole();
 }
 
 //find in doxy docs
@@ -248,10 +257,13 @@ void doxyDocs(GtkWidget* widget,gpointer data)
 
 	if(selection!=NULL)
 		{
+			showBarberPole("Searching ...");
+
 			asprintf(&findcommand,"find %s/html -name \"*.html\"",page->dirName);
 			findfile=popen(findcommand,"r");
 			while(fgets(line,1024,findfile))
 				{
+					gtk_main_iteration_do(false);
 					line[strlen(line)-1]=0;
 					asprintf(&headcommand,"head \"%s\"|grep title",line);
 					headfile=popen(headcommand,"r");
@@ -269,6 +281,7 @@ void doxyDocs(GtkWidget* widget,gpointer data)
 									free(headcommand);
 									free(findcommand);
 									showDocView(USEURI,thePage);
+									killBarberPole();
 									return;
 								}
 						}
@@ -277,6 +290,7 @@ void doxyDocs(GtkWidget* widget,gpointer data)
 			pclose(findfile);
 			free(headcommand);
 			free(findcommand);
+			killBarberPole();
 		}
 }
 

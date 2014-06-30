@@ -436,16 +436,13 @@ char* getPathFromXML(char* xml)
 	xmldata=xml;
 	done=false;
 // Class Reference
-//<p>Definition at line <a class="el" href="sliceclass_8h_source.html#l00026">26</a> of file <a class="el" href="sliceclass_8h_source.html">sliceclass.h</a>.</p>
 	data=slice->sliceBetween(xmldata,(char*)"\"title\">",(char*)" Class Reference");
 	if(slice->getResult()==0)
 		{
 			xmldata=strstr(xml,(char*)"<p>Definition at line ");
 			if(xmldata!=NULL)
 				{
-					char*	tlinenum;
 					char*	tfile;
-					tlinenum=slice->sliceBetween(xmldata,(char*)"#l",(char*)"\">");
 					asprintf(&tfile,"/%s",slice->sliceBetween(xmldata,(char*)".html\">",(char*)"</a>"));					
 					delete slice;
 					return(tfile);

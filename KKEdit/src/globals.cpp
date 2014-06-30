@@ -250,6 +250,9 @@ unsigned int	shortCuts[100][2]=
 //39 11 ^' Move Selection Up
 //64 12 ^@ Move Selection Down
 
+GtkWidget*		progressWindow;
+GtkWidget*		progressBar;
+
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 {
 	if(page->inTop==true)
@@ -893,4 +896,43 @@ void goBack(GtkWidget* widget,gpointer data)
 		}
 }
 
+gboolean idlescroll(gpointer data)
+{
+gtk_main_iteration_do(false);
+if(progressBar!=NULL)
+	{
+		gtk_progress_bar_pulse((GtkProgressBar*)progressBar);
+		return(true);
+	}
+else
+	return(false);
+}
 
+void showBarberPole(const char* title)
+{
+	GtkWidget*		vbox;
+
+	progressWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_widget_set_size_request(progressWindow,400,40);
+	gtk_window_set_deletable((GtkWindow*)progressWindow,false);
+	gtk_window_set_resizable((GtkWindow*)progressWindow,false);
+	gtk_window_set_type_hint((GtkWindow*)progressWindow,GDK_WINDOW_TYPE_HINT_DIALOG);
+	gtk_window_set_title((GtkWindow*)progressWindow,title);
+	vbox=gtk_vbox_new(FALSE,0);
+	progressBar=gtk_progress_bar_new();
+	gtk_progress_bar_pulse((GtkProgressBar*)progressBar);
+
+	gtk_progress_bar_set_orientation((GtkProgressBar*)progressBar,GTK_PROGRESS_LEFT_TO_RIGHT);
+
+	gtk_box_pack_start(GTK_BOX(vbox),progressBar,false,false,8);
+	gtk_container_add(GTK_CONTAINER(progressWindow),vbox);
+
+	gtk_widget_show_all(progressWindow);
+	g_timeout_add(100,idlescroll,NULL);
+}
+
+void killBarberPole(void)
+{
+	gtk_widget_destroy(progressWindow);
+	progressBar=NULL;
+}
