@@ -40,7 +40,8 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 			gtk_toggle_button_set_active((GtkToggleButton*)alwaysPopupWidget,selectedToolFromDrop->alwaysPopup);
 			gtk_toggle_button_set_active((GtkToggleButton*)clearViewWidget,selectedToolFromDrop->clearView);
 			gtk_toggle_button_set_active((GtkToggleButton*)runAsRootWidget,selectedToolFromDrop->runAsRoot);
-			gtk_toggle_button_set_active((GtkToggleButton*)inTermWidget,selectedToolFromDrop->inTerminal);
+			gtk_toggle_button_set_active((GtkToggleButton*)runAsRootWidget,selectedToolFromDrop->runAsRoot);
+			gtk_toggle_button_set_active((GtkToggleButton*)useBarWidget,selectedToolFromDrop->useBar);
 
 			gtk_entry_set_text((GtkEntry*)toolNameWidget,selectedToolFromDrop->menuName);
 			gtk_entry_set_text((GtkEntry*)commandLineWidget,selectedToolFromDrop->command);
@@ -373,6 +374,12 @@ void doMakeTool(void)
 	gtk_widget_set_name(runAsRootWidget,"runasroot");
 	gtk_box_pack_start(GTK_BOX(vbox),runAsRootWidget,false,true,0);
 	g_signal_connect(G_OBJECT(runAsRootWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
+
+//flags - use progressbar
+	useBarWidget=gtk_check_button_new_with_label("Use Progress Bar");
+	gtk_widget_set_name(useBarWidget,"usebar");
+	gtk_box_pack_start(GTK_BOX(vbox),useBarWidget,false,true,0);
+	g_signal_connect(G_OBJECT(useBarWidget),"toggled",G_CALLBACK(setToolOptions),NULL);
 
 //flags - ignore
 	ignoreWidget=gtk_radio_button_new_with_label(NULL,"Ignore Output");

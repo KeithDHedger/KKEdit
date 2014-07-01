@@ -781,6 +781,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	bool			continueflag;
 	char*			barcontrol;
 	StringSlice*	slice=new StringSlice;
+	char*			barcommand=NULL;
 
 	if(page==NULL || tool==NULL)
 		return;
@@ -803,10 +804,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	setenv("KKEDIT_DATADIR",DATADIR,1);
 	setenv("KKEDIT_SOURCE_LANG",page->lang,1);
 
-	//slice->setReturnDupString(true);
-	//barcontrol=slice->randomName(6);
 	asprintf(&barcontrol,"%s/BarControl-%s",tmpFolderName,slice->randomName(6));
-	setenv("KKEDIT_BAR_CONTROL",barcontrol,1);
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
@@ -847,6 +845,13 @@ void externalTool(GtkWidget* widget,gpointer data)
 			gtk_text_buffer_set_text(toolOutputBuffer,"",0);
 		}
 
+	if(tool->useBar==true)
+		{
+			setenv("KKEDIT_BAR_CONTROL",barcontrol,1);
+			asprintf(&barcommand,DATADIR "/barberpole \"%s\" \"%s\" &",tool->menuName,barcontrol);
+			system(barcommand);
+		}
+
 	runCommand(tempCommand->str,&text,tool->inTerminal,tool->flags,tool->runAsRoot);
 	g_free(selection);
 
@@ -875,9 +880,17 @@ void externalTool(GtkWidget* widget,gpointer data)
 	unsetenv("KKEDIT_SELECTION");
 	unsetenv("KKEDIT_HTMLFILE");
 	unsetenv("KKEDIT_BAR_CONTROL");
+
 	free(text);
 	free(docdirname);
 	free(tooldirname);
+	if(barcommand!=NULL)
+		{
+			free(barcommand);
+			asprintf(&barcommand,"echo quit>%s",barcontrol);
+			system(barcommand);
+			free(barcommand);
+		}
 	free(barcontrol);
 	delete slice;
 }
@@ -1616,6 +1629,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 					fprintf(fd,"alwayspopup\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)alwaysPopupWidget));
 					fprintf(fd,"clearview\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)clearViewWidget));
 					fprintf(fd,"runasroot\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)runAsRootWidget));
+					fprintf(fd,"usebar\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)useBarWidget));
 					fprintf(fd,"shortcutkey\t%i\n",(int)gdk_keyval_from_name(gtk_entry_get_text((GtkEntry*)keyWidget)));
 					fclose(fd);
 				}

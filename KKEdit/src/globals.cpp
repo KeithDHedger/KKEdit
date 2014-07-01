@@ -125,6 +125,8 @@ GtkWidget*		showDocWidget;
 GtkWidget*		toolSelect;
 GtkWidget*		clearViewWidget;
 GtkWidget*		runAsRootWidget;
+GtkWidget*		useBarWidget;
+
 toolStruct*		selectedToolFromDrop=NULL;
 
 //view tool output
@@ -743,6 +745,7 @@ void buildToolsList(void)
 	char*			menuname=NULL;
 	int				rootarg=0;
 	int				keycode=0;
+	int				usebar=0;
 
 	if(toolsList!=NULL)
 		{
@@ -774,6 +777,7 @@ void buildToolsList(void)
 									menuname=NULL;
 									commandarg=NULL;
 									commentarg=NULL;
+									usebar=0;
 
 									while(fgets(buffer,4096,fd))
 										{
@@ -797,6 +801,8 @@ void buildToolsList(void)
 												sscanf((char*)&buffer,"%*s %i",&clearview);
 											if(strcmp(strarg,"runasroot")==0)
 												sscanf((char*)&buffer,"%*s %i",&rootarg);
+											if(strcmp(strarg,"usebar")==0)
+												sscanf((char*)&buffer,"%*s %i",&usebar);
 											if(strcmp(strarg,"shortcutkey")==0)
 												sscanf((char*)&buffer,"%*s %i",&keycode);
 										}
@@ -814,6 +820,7 @@ void buildToolsList(void)
 											tool->clearView=(bool)clearview;
 											tool->runAsRoot=(bool)rootarg;
 											tool->keyCode=keycode;
+											tool->useBar=(bool)usebar;
 
 											if(commentarg!=NULL)
 												tool->comment=strdup(commentarg);

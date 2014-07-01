@@ -113,6 +113,7 @@ struct toolStruct
 	bool				global;
 	bool				runAsRoot;
 	int					keyCode;
+	bool				useBar;
 };
 
 struct functionData
@@ -251,6 +252,8 @@ extern GtkWidget*		showDocWidget;
 extern GtkWidget*		toolSelect;
 extern GtkWidget*		clearViewWidget;
 extern GtkWidget*		runAsRootWidget;
+extern GtkWidget*		useBarWidget;
+
 extern toolStruct*		selectedToolFromDrop;
 
 //view tool output
