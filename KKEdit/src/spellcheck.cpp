@@ -141,13 +141,15 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 	FILE*					out;
 	FILE*					doc;
 	char					line[2048];
-	char*					tempfile=tempnam(NULL,"KKEd");
+	char*					tempfile;
 	int						diff;
 	unsigned int			goodwordlen;
 	char*					word_begin;
 	char*					filename=(char*)data;
 	char*					badword;
+	StringSlice*			slice=new StringSlice;
 
+	asprintf(&tempfile,"%s/KKEditAspell-%s",tmpFolderName,slice->randomName(6));
 	/* Open the file */
 	doc=fopen(filename,"r");
 	if (doc<=0)
@@ -229,7 +231,8 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 
 	remove(tempfile);
 	g_free(buffer);
-	g_free(tempfile);
+	free(tempfile);
+	delete slice;
 
 	if(page->filePath!=NULL)
 		{

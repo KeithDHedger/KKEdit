@@ -1,5 +1,5 @@
 0.1.9
-
+Removed the use of tempfile, now uses a tempory folder and internally generated random names.
 Added progress bar for long documentaion ops.
 Fixed opening file from docs not respecting no duplicates when opening link.
 Better file integration with doxygen.

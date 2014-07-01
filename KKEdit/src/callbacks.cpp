@@ -765,20 +765,22 @@ void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectio
 
 void externalTool(GtkWidget* widget,gpointer data)
 {
-	toolStruct*	tool=(toolStruct*)data;
-	pageStruct*	page=getPageStructPtr(-1);
-	char*		docdirname=NULL;
-	char*		tooldirname=NULL;
-	char*		text=NULL;
-	GtkTextIter	start;
-	GtkTextIter	end;
-	char*		selection=NULL;
-	const char*	vars[]= {"%t","%f","%d","%i","%h","%l",NULL};
-	char*		ptr;
-	long		pos;
-	int			loop=0;
-	GString*	tempCommand;
-	bool		continueflag;
+	toolStruct*		tool=(toolStruct*)data;
+	pageStruct*		page=getPageStructPtr(-1);
+	char*			docdirname=NULL;
+	char*			tooldirname=NULL;
+	char*			text=NULL;
+	GtkTextIter		start;
+	GtkTextIter		end;
+	char*			selection=NULL;
+	const char*		vars[]= {"%t","%f","%d","%i","%h","%l",NULL};
+	char*			ptr;
+	long			pos;
+	int				loop=0;
+	GString*		tempCommand;
+	bool			continueflag;
+	char*			barcontrol;
+	StringSlice*	slice=new StringSlice;
 
 	if(page==NULL || tool==NULL)
 		return;
@@ -800,6 +802,11 @@ void externalTool(GtkWidget* widget,gpointer data)
 	setenv("KKEDIT_CURRENTDIR",docdirname,1);
 	setenv("KKEDIT_DATADIR",DATADIR,1);
 	setenv("KKEDIT_SOURCE_LANG",page->lang,1);
+
+	//slice->setReturnDupString(true);
+	//barcontrol=slice->randomName(6);
+	asprintf(&barcontrol,"%s/BarControl-%s",tmpFolderName,slice->randomName(6));
+	setenv("KKEDIT_BAR_CONTROL",barcontrol,1);
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
@@ -867,9 +874,12 @@ void externalTool(GtkWidget* widget,gpointer data)
 	unsetenv("KKEDIT_DATADIR");
 	unsetenv("KKEDIT_SELECTION");
 	unsetenv("KKEDIT_HTMLFILE");
-	g_free(text);
-	g_free(docdirname);
-	g_free(tooldirname);
+	unsetenv("KKEDIT_BAR_CONTROL");
+	free(text);
+	free(docdirname);
+	free(tooldirname);
+	free(barcontrol);
+	delete slice;
 }
 
 void openHelp(GtkWidget* widget,gpointer data)
