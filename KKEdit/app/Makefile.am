@@ -24,6 +24,9 @@ docfiles_DATA = ../resources/docs/*
 stylefilesdir = $(pkgdatadir)/styles
 stylefiles_DATA =../resources/styles/*
 
+examplefilesdir = $(pkgdatadir)/Example\ External\ Tools
+examplefiles_DATA = '../resources/Example External Tools/'*
+
 bin_PROGRAMS = kkedit
 
 install-exec-hook:
