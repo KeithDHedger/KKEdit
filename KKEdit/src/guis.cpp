@@ -1646,7 +1646,7 @@ void buildMainGui(void)
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goBack),NULL);
 
 //function menu
-	menufunc=gtk_menu_item_new_with_label("_Functions");
+	menufunc=gtk_menu_item_new_with_label("Fun_ctions");
 	gtk_menu_item_set_use_underline((GtkMenuItem*)menufunc,true);
 
 //newbookmarks
