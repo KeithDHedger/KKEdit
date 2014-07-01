@@ -163,7 +163,7 @@
         menu and edit tools dialog.<br>
         External tools can be created by hand or via the 'Tools-&gt;New'
         menu like so:</font><br>
-      <img alt="exttool" src="newtool.png" width="640" height="671"><br>
+      <img alt="exttool" src="newtool.png" width="640" height="700"><br>
       <br>
       <font size="-1">The place holders are:<br>
         %t - Currently selected text, the same as the $KKEDIT_SELECTION
@@ -254,6 +254,7 @@
 
 
 
+
                           In Popup" selected will show in the popup menu
                           regardless of w<font size="-1">hether any text
                             is or is not selected.<br>
@@ -270,6 +271,7 @@
                                   size="-1"><font size="-1"><font
                                       size="-1"><font size="-1"><font
                                           size="-1">/tmp/textfile</font></font></font></font></font></font></font></font></font>"|tail
+
 
 
 
@@ -349,10 +351,12 @@
 
 
 
+
                               of xterm and beyond</font></font> my
                           control :(<br>
                           <br>
                         </font>For very </font></font></font></font></font></font></font></font>complex
+
 
 
 
@@ -435,7 +439,28 @@
 
 
 
-        one in /usr/share/KKEdit/tools ) you must have root privileges.</font><br>
+
+        one in /usr/share/KKEdit/tools ) you must have root privileges.<br>
+        <br>
+        You can also display a progress bar from your tool by selecting
+        the 'Use Prgress Bar' checkbox, a bar will be created for you
+        and you can control it by writing simple commands to a file, the
+        file path is contained in the environment variable
+        '$KKEDIT_BAR_CONTROL", you can write either a simple number
+        between 0 and 100 to set the gauge , 'pulse' to pulse the bar
+        and 'quit' to kill the bar, you do not need to specifically
+        write the 'quit' command as it will be sent automatically when
+        your tool runs, there is an example of how to control the bar in
+        the example tools in
+        PREFIX/share/KKEdit//usr/share/KKEdit/Example External Tools.</font><br>
+      <img alt="" src="countbar.png" width="589" height="548"><br>
+      <br>
+      <img alt="" src="pulsebar.png" width="669" height="550"><br>
+      <font size="-1"><br>
+        The title of the progress bar window is automatically set to the
+        name of your tool.<br>
+        <br>
+      </font>
       <hr size="2" width="100%"><br>
       <b><a name="prefsanc"></a></b><b>Preferences</b><br>
       <br>
@@ -455,6 +480,7 @@
           The 'Run as Root Command' allows you to set your favorite
           graphical root privileges program, if this is blank a terminal
           will be used to ask for admin passwords ( <a href="#gtksui">See
+
 
 
 
@@ -557,6 +583,7 @@
           <img alt="popup" src="popup.png" width="606" height="640"><br>
           <br>
         </font></font><font size="-1"><a name="spellchk"></a></font><b>Spell
+
 
 
 
@@ -698,6 +725,7 @@
 
 
 
+
                         here</a><font size="-1"> )<font size="-1">, use
                           'gtksu --', ubuntu users may have to use
                           'gtksu -- sudo' to stop gtk3 complaining,
@@ -730,6 +758,7 @@
                                               uses regex expressions<font
                                                 size="-1">, the quick
                                                 search <font size="-1">on
+
 
 
 
@@ -800,10 +829,12 @@
 
 
 
+
                                                     does not,<font
                                                       size="-1">
                                                       searching
                                                       backwards </font>can
+
 
 
 
@@ -888,7 +919,9 @@
 
 
 
+
                                                         <font size="-1">A</font>ll'
+
 
 
 
@@ -963,6 +996,7 @@
 
 
 
+
                                                           'Wrap<font
                                                           size="-1">'
                                                           option to
@@ -974,6 +1008,7 @@
                                                     </font><br>
                                                   </font></font></font></font></font></font></font></font></font></font></font></font></font><br>
                         </font></font></font></font></font></font></font></font></font>You
+
 
 
 
@@ -1177,6 +1212,7 @@
 
 
 
+
                                 but recommended)<br>
                                 Glib-Networking </font></font></font></font></font></font></font></font></font></font></font></font></font><font
         size="-1"><font size="-1"><font size="-1"><font size="-1"><font
@@ -1233,10 +1269,12 @@
 
 
 
+
                                                           but
                                                           recommended)<br>
                                                           <br>
                                                         </font></font></font></font></font></font></font></font></font></font></font></font></font>&nbsp;</font></font></font></font></font></font></font></font></font></font></font></font>webkit
+
 
 
 
