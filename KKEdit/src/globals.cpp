@@ -192,6 +192,7 @@ char*			functionSearchText=NULL;
 char*			thePage=NULL;
 char*			htmlFile=NULL;
 char*			htmlURI=NULL;
+char*			tmpFolderName=NULL;
 
 //runtime deps
 int				gotManEditor;

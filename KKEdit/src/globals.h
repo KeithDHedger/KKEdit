@@ -318,6 +318,7 @@ extern char*			functionSearchText;
 extern char*			thePage;
 extern char*			htmlFile;
 extern char*			htmlURI;
+extern char*			tmpFolderName;
 
 //runtime deps
 extern int				gotManEditor;

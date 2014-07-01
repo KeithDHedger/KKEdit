@@ -1404,7 +1404,6 @@ void doShutdown(GtkWidget* widget,gpointer data)
 {
 	char*	command;
 
-	asprintf(&command,"rm %s 2>&1 >/dev/null",htmlFile);
 	if(doSaveAll(widget,(void*)true)==true)
 		{
 			if(onExitSaveSession)
@@ -1412,8 +1411,10 @@ void doShutdown(GtkWidget* widget,gpointer data)
 			writeExitData();
 			gtk_main_quit();
 		}
+
+	asprintf(&command,"rm -r %s",tmpFolderName);
 	system(command);
-	g_free(command);
+	free(command);
 
 #ifdef _ASPELL_
 	delete_aspell_config(aspellConfig);

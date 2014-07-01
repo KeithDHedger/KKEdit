@@ -152,14 +152,31 @@ void readConfig(void)
 	g_free(filename);
 }
 
+//void gen_random(char *s, const int len) {
+//srand(time(0));
+//    static const char alphanum[] =
+//        "0123456789"
+//        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+//        "abcdefghijklmnopqrstuvwxyz";
+//
+//    for (int i = 0; i < len; ++i) {
+//        s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
+//    }
+//
+//    s[len] = 0;
+//}
 void init(void)
 {
 	char*	filename;
 	int		exitstatus;
+	char	tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
 
 #ifdef _ASPELL_
 	AspellCanHaveError*	possible_err;
 #endif
+	globalSlice=new StringSlice;
+
+	tmpFolderName=strdup(mkdtemp(tmpfoldertemplate));
 
 	indent=true;
 	lineNumbers=true;
@@ -239,11 +256,10 @@ void init(void)
 
 	tmpNagScreen=nagScreen;
 	tmpHighlightColour=highlightColour;
-
-	filename=tempnam(NULL,"KKEdit");
-	asprintf(&htmlFile,"%s.html",filename);
-	asprintf(&htmlURI,"file://%s.html",filename);
-	g_free(filename);
+	
+	asprintf(&htmlFile,"%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
+	asprintf(&htmlURI,"file://%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
+	free(filename);
 
 #ifdef _ASPELL_
 	spellChecker=NULL;
@@ -257,7 +273,6 @@ void init(void)
 		spellChecker=to_aspell_speller(possible_err);
 #endif
 	history=new HistoryClass;
-	globalSlice=new StringSlice;
 	globalSlice->setReturnDupString(true);
 }
 
@@ -359,6 +374,7 @@ int main(int argc,char **argv)
 			}
 			setSensitive();
 			gtk_main();
+			
 			delete history;
 			delete globalSlice;
 		}
