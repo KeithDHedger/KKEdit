@@ -22,10 +22,10 @@ docfilesdir = $(pkgdatadir)/docs
 docfiles_DATA = ../resources/docs/*
 
 stylefilesdir = $(pkgdatadir)/styles
-stylefiles_DATA =../resources/styles/*
+stylefiles_DATA = "../resources/styles/brown wood.xml"
 
-examplefilesdir = $(pkgdatadir)/Example\ External\ Tools
-examplefiles_DATA = '../resources/Example External Tools/'*
+toolsdir = "$(pkgdatadir)/ExampleExtrnalTools"
+tools_DATA = ../resources/ExampleExtrnalTools/*
 
 bin_PROGRAMS = kkedit
 
