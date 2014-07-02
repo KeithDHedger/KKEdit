@@ -104,12 +104,11 @@ void showBarberPole(const char* title,char* filepath)
 	gtk_box_pack_start(GTK_BOX(vbox),progressBar,false,false,8);
 	gtk_container_add(GTK_CONTAINER(progressWindow),vbox);
 
+	gtk_window_set_keep_above((GtkWindow*)progressWindow,true);
+
 	gtk_widget_show_all(progressWindow);
 	g_timeout_add(100,idleScroll,(void*)filepath);
 }
-
-
-
 
 int main(int argc,char **argv)
 {

@@ -880,10 +880,16 @@ void goBack(GtkWidget* widget,gpointer data)
 
 	GtkTextIter		iter;
 	pageStruct*		page=history->getPage();
-	TextBuffer*		buf=history->getTextBuffer();
+	TextBuffer*		buf;
+
+	if(page==NULL)
+		return;
+
+	buf=history->getTextBuffer();
 
 	if(gtk_notebook_get_current_page(notebook)==history->getTabNumForPage())
 		{
+			buf->textBuffer=(GtkTextBuffer*)page->buffer;
 			buf->getLineData();
 			gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
 			gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);

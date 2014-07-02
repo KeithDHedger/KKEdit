@@ -1,6 +1,8 @@
 0.1.9
+Fixed 'Back' segfault.
+Made progressbar always stay on top.
 Minor fix for default Doxyfile.
-Example tools are now installed at $(DESTDIR)$(pkgdatadir)/Example External Tools, as the packaged versions were not installing them.
+Example tools are now installed at "$(DESTDIR)$(pkgdatadir)/Example External Tools", as the packaged versions were not installing them.
 Added option to display a progress bar when running external tool, can be controled from the tool.
 Removed the use of tempfile, now uses a tempory folder and internally generated random names.
 Added progress bar for long documentaion ops.

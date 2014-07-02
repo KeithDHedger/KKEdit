@@ -12,6 +12,7 @@
 HistoryClass::HistoryClass()
 {
 	buf=new TextBuffer;
+	this->savedPage=NULL;
 }
 
 HistoryClass::~HistoryClass()
