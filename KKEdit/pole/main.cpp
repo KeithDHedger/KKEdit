@@ -91,9 +91,7 @@ void showBarberPole(const char* title,char* filepath)
 
 	progressWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_widget_set_size_request(progressWindow,400,40);
-	gtk_window_set_deletable((GtkWindow*)progressWindow,false);
-	gtk_window_set_resizable((GtkWindow*)progressWindow,false);
-	gtk_window_set_type_hint((GtkWindow*)progressWindow,GDK_WINDOW_TYPE_HINT_DIALOG);
+	gtk_window_set_type_hint((GtkWindow*)progressWindow,GDK_WINDOW_TYPE_HINT_NORMAL);
 	gtk_window_set_title((GtkWindow*)progressWindow,title);
 	vbox=gtk_vbox_new(FALSE,0);
 	progressBar=gtk_progress_bar_new();
@@ -105,6 +103,10 @@ void showBarberPole(const char* title,char* filepath)
 	gtk_container_add(GTK_CONTAINER(progressWindow),vbox);
 
 	gtk_window_set_keep_above((GtkWindow*)progressWindow,true);
+	gtk_window_set_deletable((GtkWindow*)progressWindow,false);
+	gtk_window_set_resizable((GtkWindow*)progressWindow,false);
+	gtk_window_set_skip_taskbar_hint((GtkWindow*)progressWindow,true);
+	gtk_window_set_skip_pager_hint((GtkWindow*)progressWindow,true);
 
 	gtk_widget_show_all(progressWindow);
 	g_timeout_add(100,idleScroll,(void*)filepath);
