@@ -256,6 +256,9 @@ unsigned int	shortCuts[100][2]=
 GtkWidget*		progressWindow;
 GtkWidget*		progressBar;
 
+GList*			pluginList=NULL;
+char*			pluginFolder=NULL;
+
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 {
 	if(page->inTop==true)
@@ -435,9 +438,10 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot)
 				}
 		}
 
+//thePage=strdup("file:///media/LinuxData/ManPages/index.html");
 	if(flags & TOOL_SHOW_DOC)
 		showDocView(USEFILE,(char*)"");
-
+//showDocView(USEURI,(char*)"/media/LinuxData/ManPages/index.html");
 	free(command);
 	free(asroot);
 }

@@ -1423,6 +1423,11 @@ bool doSaveAll(GtkWidget* widget,gpointer data)
 	return(true);
 }
 
+void releasePlugs(gpointer data,gpointer user_data)
+{
+	g_module_close((GModule*)data);
+}
+
 void doShutdown(GtkWidget* widget,gpointer data)
 {
 	char*	command;
@@ -1443,6 +1448,8 @@ void doShutdown(GtkWidget* widget,gpointer data)
 	delete_aspell_config(aspellConfig);
 	delete_aspell_speller(spellChecker);
 #endif
+
+	g_list_foreach(pluginList,releasePlugs,NULL);
 }
 
 void setPrefs(GtkWidget* widget,gpointer data)

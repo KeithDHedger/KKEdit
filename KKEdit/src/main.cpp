@@ -5,6 +5,7 @@
 */
 
 #include <time.h>
+#include <gmodule.h>
 
 #include "callbacks.h"
 #include "guis.h"
@@ -145,7 +146,6 @@ void readConfig(void)
 //highlight all
 					if(strcasecmp(name,"highlightall")==0)
 						hightlightAll=(bool)atoi(strarg);
-
 				}
 			fclose(fd);
 		}
@@ -259,6 +259,30 @@ void init(void)
 	else
 		spellChecker=to_aspell_speller(possible_err);
 #endif
+//do plugins
+	if(!g_module_supported())
+		{
+			perror ("module not supported");
+		}
+	else
+		{
+			GModule*	module=NULL;
+			char*		modulepath=NULL;
+
+			asprintf(&pluginFolder,PLUGPATH);
+			modulepath=g_module_build_path(pluginFolder,"kkedit-test-plug");
+			perror(modulepath);
+			module=g_module_open(modulepath,G_MODULE_BIND_LAZY);
+			if(module!= NULL)
+				{
+					pluginList=g_list_prepend(pluginList,module);
+				}
+			else
+				{
+					g_error ("module path not found: %s",modulepath);
+				}
+
+		}
 	history=new HistoryClass;
 	globalSlice->setReturnDupString(true);
 }

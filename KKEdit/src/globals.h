@@ -350,6 +350,11 @@ extern unsigned int		shortCuts[100][2];
 extern GtkWidget*		progressWindow;
 extern GtkWidget*		progressBar;
 
+//plugins
+#define PLUGPATH "/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/plugs"
+extern GList*			pluginList;
+extern char*			pluginFolder;
+
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);

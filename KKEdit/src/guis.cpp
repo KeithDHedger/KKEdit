@@ -1278,6 +1278,18 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 		}
 }
 
+int (*module_func) (gpointer menulist);
+gint module_results = 0;
+
+void plugMenus(gpointer data,gpointer user_data)
+{
+	
+	if(g_module_symbol((GModule*)data,"addMenus",(gpointer*)&module_func))
+		{
+			module_results = module_func((void*)"function_parameter");
+		}
+}
+
 void buildMainGui(void)
 {
 	GtkWidget*		vbox;
@@ -1682,6 +1694,8 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menutools);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
 
+	g_list_foreach(pluginList,plugMenus,NULL);
+
 //tooloutputwindow
 	mainVPane=gtk_vpaned_new();
 	gtk_container_set_border_width(GTK_CONTAINER(mainVPane),0);
@@ -1925,6 +1939,7 @@ void buildGtkDocViewer(void)
 	g_object_set((gpointer)settings,"enable-file-access-from-file-uris",true,NULL);
 	g_object_set((gpointer)settings,"enable-page-cache",true,NULL);
 	g_object_set((gpointer)settings,"enable-plugins",false,NULL);
+	g_object_set((gpointer)settings,"enable-caret-browsing",true,NULL);
 
 	scrolledWindow=gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);

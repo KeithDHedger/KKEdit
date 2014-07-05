@@ -1,3 +1,7 @@
+0.2.0
+Started plugins code.
+Add caret browsing to docviewer.
+
 0.1.9
 Fixed 'Back' segfault.
 Made progressbar always stay on top.
