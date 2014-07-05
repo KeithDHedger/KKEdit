@@ -1,0 +1,9 @@
+#!/bin/sh
+
+[ -f libplug_01.so ] && rm libplug_01.so
+[ -f plug_01.o ] && rm plug_01.o
+
+# gcc "-g" opcioja a debuggolashoz szukseges szimbolumtablat kapcsolja be
+
+gcc -fPIC -Wall -g -c libplug_01.c `pkg-config --cflags --libs gtk+-2.0 gmodule-2.0` -o libplug_01.o
+gcc -shared -Wl,-soname,libplug_01.so -o libplug_01.so libplug_01.o -lc
