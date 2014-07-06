@@ -1,9 +1,5 @@
 /*
-  plugins/libplug_01.c
-  plugin example with GLib: plugin
-  Compile:
-  gcc -fPIC -Wall -c libplug_01.c `pkg-config --cflags --libs gtk+-2.0 gmodule-2.0` -o libplug_01.o
-  gcc -shared -Wl,-soname,libplug_01.so -o libplug_01.so libplug_01.o -lc
+  plugs/kkedit-example-plug.cpp
 */
 
 #include <stdio.h>
@@ -51,6 +47,7 @@ extern "C" int addMenus (gpointer menulist)
 	printf("done adding  plug menus\n");
 	return(0);
 }
+
 
 
 
