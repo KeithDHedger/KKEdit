@@ -331,8 +331,7 @@ int main(int argc,char **argv)
 	app=unique_app_new(dbusname,NULL);
 	message=unique_message_data_new();
 
-	init();
-
+	readConfig();
 	if((argc>1) && (strcmp(argv[1],"-m")==0))
 		singleOverRide=true;
 
@@ -361,6 +360,7 @@ int main(int argc,char **argv)
 		}
 	else
 		{
+	init();
 			buildMainGui();
 
 			if(onExitSaveSession==true)

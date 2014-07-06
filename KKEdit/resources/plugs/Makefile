@@ -1,4 +1,4 @@
-PLUGNAME=kkedit-test-plug
+PLUGNAME=kkedit-example-plug
 
 all:
 	gcc -fPIC -Wall -g -c ${PLUGNAME}.cpp `pkg-config --cflags --libs gtk+-2.0 gmodule-2.0 glib-2.0` -o ${PLUGNAME}.o
