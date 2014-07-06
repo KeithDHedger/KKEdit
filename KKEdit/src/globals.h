@@ -65,6 +65,8 @@
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 
+#ifndef _PAGESTRUCT_
+#define _PAGESTRUCT_
 struct pageStruct
 {
 	GtkWidget*			pane;
@@ -99,6 +101,7 @@ struct pageStruct
 //	GtkWidget*			toolOutputBuffer;
 //	GtkWidget*			toolOutputView;
 };
+#endif
 
 struct toolStruct
 {
@@ -372,7 +375,6 @@ void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
 void goBack(GtkWidget* widget,gpointer data);
 void showBarberPole(const char* title);
 void killBarberPole(void);
-
 #endif
 
 

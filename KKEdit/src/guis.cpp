@@ -19,8 +19,16 @@ GtkIconView*	iconView=NULL;
 GtkListStore*	listStore=NULL;
 GtkWidget*		entries[NUMSHORTCUTS];
 const char* 	shortcuttext[NUMSHORTCUTS]={"Delete Current Line","Delete To End Of Line","Delete To Beginning Of Line","Select Word Under Cursor","Delete Word Under Cursor","Duplicate Current Line","Select Current Line","Move Current Line Up","Move Current Line Down","Select From Cursor To End Of Line","Select From Beginning Of Line To Cursor","Move Selection Up","Move Selection Down"};
-int				(*module_func) (gpointer menulist);
-gint			module_results=0;
+
+int				(*module_func_menus) (gpointer menulist);
+
+void plugMenus(gpointer data,gpointer mlist)
+{
+	gint	module_results=0;
+
+	if(g_module_symbol((GModule*)data,"addMenus",(gpointer*)&module_func_menus))
+		module_results=module_func_menus((void*)mlist);
+}
 
 void findTool(toolStruct* data,char* toolname)
 {
@@ -1284,12 +1292,6 @@ void doPlugPrefs(void)
 {
 }
 
-void plugMenus(gpointer data,gpointer mlist)
-{
-	if(g_module_symbol((GModule*)data,"addMenus",(gpointer*)&module_func))
-		module_results=module_func((void*)mlist);
-}
-
 void buildMainGui(void)
 {
 	GtkWidget*		vbox;
@@ -1956,6 +1958,8 @@ void buildGtkDocViewer(void)
 	g_object_set((gpointer)settings,"enable-page-cache",true,NULL);
 	g_object_set((gpointer)settings,"enable-plugins",false,NULL);
 	g_object_set((gpointer)settings,"enable-caret-browsing",true,NULL);
+	g_object_set((gpointer)settings,"enable-private-browsing",true,NULL);
+	g_object_set((gpointer)settings,"enable-java-applet",false,NULL);
 
 	scrolledWindow=gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);

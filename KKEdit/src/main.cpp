@@ -293,13 +293,15 @@ void init(void)
 				}
 			free(command);
 		}
-		
+
+//set up plugin data		
 	globalPlugData=(plugData*)malloc(sizeof(plugData));
 	globalPlugData->dataDir=DATADIR;
 	globalPlugData->plugFolder=pluginFolder;
 	globalPlugData->showDoc=(void*)&showDocView;
 	globalPlugData->htmlFile=htmlFile;
 	globalPlugData->thePage=&thePage;
+	globalPlugData->getPageStruct=(void*)&getPageStructPtr;
 
 	history=new HistoryClass;
 	globalSlice->setReturnDupString(true);

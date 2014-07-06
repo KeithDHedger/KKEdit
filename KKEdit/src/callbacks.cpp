@@ -19,6 +19,23 @@
 GtkWidget*			tabMenu;
 char				defineText[1024];
 GtkPrintSettings*	settings=NULL;
+int					(*module_func_sensitive) (gpointer menulist);
+
+void plugSensitive(gpointer data,gpointer mlist)
+{
+	gint	module_results=0;
+
+	if(g_module_symbol((GModule*)data,"setSensitive",(gpointer*)&module_func_sensitive))
+		module_results=module_func_sensitive((void*)mlist);
+}
+
+void plugCloseFile(gpointer data,gpointer mlist)
+{
+	gint	module_results=0;
+
+	if(g_module_symbol((GModule*)data,"closeFile",(gpointer*)&module_func_sensitive))
+		module_results=module_func_sensitive((void*)mlist);
+}
 
 void setToobarSensitive(void)
 {
@@ -489,6 +506,9 @@ void setSensitive(void)
 			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end_find);
 			gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);  
 		}
+//do plugin sensitive
+	globalPlugData->page=page;
+	g_list_foreach(pluginList,plugSensitive,(gpointer)globalPlugData);
 }
 
 bool closingAll=false;
@@ -530,6 +550,9 @@ void closeTab(GtkWidget* widget,gpointer data)
 					break;
 				}
 		}
+
+	globalPlugData->page=page;
+	g_list_foreach(pluginList,plugCloseFile,(gpointer)globalPlugData);
 
 	if(page->filePath!=NULL)
 		g_free(page->filePath);

@@ -31,12 +31,12 @@ void openPlugHelp(GtkWidget* widget,gpointer data)
 	showDocView(USEURI,(char*)"KKEdit Plugin Help");
 }
 
-extern "C" int addMenus (gpointer menulist)
+extern "C" int addMenus(gpointer data)
 {
 	printf("adding  plug menus\n");
 	GtkWidget*		menuitem;
 	GtkWidget*		menu;
-	plugData*		plugdata=(plugData*)menulist;
+	plugData*		plugdata=(plugData*)data;
 
 	menu=gtk_menu_item_get_submenu((GtkMenuItem*)plugdata->mlist.menuHelp);
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_HELP,NULL);
@@ -48,8 +48,35 @@ extern "C" int addMenus (gpointer menulist)
 	return(0);
 }
 
+extern "C" int setSensitive(gpointer data)
+{
+	printf("set sensitive\n");
+	return(0);
+}
 
+extern "C" int openFile(gpointer data)
+{
+	printf("open file \n");
+	return(0);
+}
 
+extern "C" int saveFile(gpointer data)
+{
+	printf("save file\n");
+	return(0);
+}
+
+extern "C" int newFile(gpointer data)
+{
+	printf("new file\n");
+	return(0);
+}
+
+extern "C" int closeFile(gpointer data)
+{
+	printf("close file\n");
+	return(0);
+}
 
 
 
