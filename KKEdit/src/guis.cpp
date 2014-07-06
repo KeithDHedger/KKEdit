@@ -1280,7 +1280,7 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 		}
 }
 
-void buildPlugPrefs(void)
+void doPlugPrefs(void)
 {
 }
 
@@ -1549,6 +1549,12 @@ void buildMainGui(void)
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doPrefs),NULL);
+
+//plugs
+	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES,NULL);
+	gtk_menu_item_set_label((GtkMenuItem*)menuitem,"Plugin Prefs");
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doPlugPrefs),NULL);
 
 //view menu
 	menuView=gtk_menu_item_new_with_label("_View");
