@@ -1280,6 +1280,10 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 		}
 }
 
+void buildPlugPrefs(void)
+{
+}
+
 void plugMenus(gpointer data,gpointer mlist)
 {
 	if(g_module_symbol((GModule*)data,"addMenus",(gpointer*)&module_func))

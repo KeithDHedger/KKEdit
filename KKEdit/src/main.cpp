@@ -276,11 +276,13 @@ void init(void)
 		{
 			asprintf(&pluginFolder,PLUGPATH);
 			asprintf(&command,"find %s -iname \"*.so\" -print0",pluginFolder);
+			printf(command);
 			pf=popen(command,"r");
 			if(pf!=NULL)
 				{
 					while(fgets(buffer,4096,pf))
 						{
+							printf(buffer);
 							module=g_module_open(buffer,G_MODULE_BIND_LAZY);
 							if(module!= NULL)
 								pluginList=g_list_prepend(pluginList,module);

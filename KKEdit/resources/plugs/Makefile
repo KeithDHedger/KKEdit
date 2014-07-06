@@ -7,3 +7,5 @@ all:
 clean:
 	rm lib${PLUGNAME}.so||true
 	rm ${PLUGNAME}.o||true
+
+install:
