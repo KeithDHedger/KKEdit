@@ -1,4 +1,7 @@
 0.2.0
+Started help for plugins.
+Plugins can now call showDocView.
+Added kkedit-plugins.h.
 Added test plugin.
 Started plugins code.
 Add caret browsing to docviewer.

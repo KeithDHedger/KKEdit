@@ -19,6 +19,8 @@ GtkIconView*	iconView=NULL;
 GtkListStore*	listStore=NULL;
 GtkWidget*		entries[NUMSHORTCUTS];
 const char* 	shortcuttext[NUMSHORTCUTS]={"Delete Current Line","Delete To End Of Line","Delete To Beginning Of Line","Select Word Under Cursor","Delete Word Under Cursor","Duplicate Current Line","Select Current Line","Move Current Line Up","Move Current Line Down","Select From Cursor To End Of Line","Select From Beginning Of Line To Cursor","Move Selection Up","Move Selection Down"};
+int				(*module_func) (gpointer menulist);
+gint			module_results=0;
 
 void findTool(toolStruct* data,char* toolname)
 {
@@ -1278,16 +1280,10 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 		}
 }
 
-int (*module_func) (gpointer menulist);
-gint module_results = 0;
-
-void plugMenus(gpointer data,gpointer user_data)
+void plugMenus(gpointer data,gpointer mlist)
 {
-	
 	if(g_module_symbol((GModule*)data,"addMenus",(gpointer*)&module_func))
-		{
-			module_results = module_func((void*)"function_parameter");
-		}
+		module_results=module_func((void*)mlist);
 }
 
 void buildMainGui(void)
@@ -1694,7 +1690,17 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menutools);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
 
-	g_list_foreach(pluginList,plugMenus,NULL);
+	globalPlugData->mlist.menuBar=menubar;
+	globalPlugData->mlist.menuFile=menufile;
+	globalPlugData->mlist.menuEdit=menuedit;
+	globalPlugData->mlist.menuFunc=menufunc;
+	globalPlugData->mlist.menuNav=menunav;
+	globalPlugData->mlist.menuTools=menutools;
+	globalPlugData->mlist.menuHelp=menuhelp;
+	globalPlugData->mlist.menuBookMark=menuBookMark;
+	globalPlugData->mlist.menuView=menuView;
+
+	g_list_foreach(pluginList,plugMenus,(gpointer)globalPlugData);
 
 //tooloutputwindow
 	mainVPane=gtk_vpaned_new();

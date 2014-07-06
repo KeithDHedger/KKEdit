@@ -9,6 +9,7 @@
 
 #include "callbacks.h"
 #include "guis.h"
+#include "searchcallbacks.h"
 
 bool singleOverRide=false;
 
@@ -154,9 +155,14 @@ void readConfig(void)
 
 void init(void)
 {
-	char*	filename;
-	int		exitstatus;
-	char	tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
+	char*		filename;
+	int			exitstatus;
+	char		tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
+	FILE*		pf;
+	char		buffer[4096];
+	GModule*	module=NULL;
+	char*		modulepath=NULL;
+	char*		command;
 
 #ifdef _ASPELL_
 	AspellCanHaveError*	possible_err;
@@ -259,30 +265,40 @@ void init(void)
 	else
 		spellChecker=to_aspell_speller(possible_err);
 #endif
+
 //do plugins
 	if(!g_module_supported())
 		{
-			perror ("module not supported");
+			perror ("modules not supported");
+			pluginFolder=NULL;
 		}
 	else
 		{
-			GModule*	module=NULL;
-			char*		modulepath=NULL;
-
 			asprintf(&pluginFolder,PLUGPATH);
-			modulepath=g_module_build_path(pluginFolder,"kkedit-test-plug");
-			perror(modulepath);
-			module=g_module_open(modulepath,G_MODULE_BIND_LAZY);
-			if(module!= NULL)
+			asprintf(&command,"find %s -iname \"*.so\" -print0",pluginFolder);
+			pf=popen(command,"r");
+			if(pf!=NULL)
 				{
-					pluginList=g_list_prepend(pluginList,module);
+					while(fgets(buffer,4096,pf))
+						{
+							module=g_module_open(buffer,G_MODULE_BIND_LAZY);
+							if(module!= NULL)
+								pluginList=g_list_prepend(pluginList,module);
+							else
+								printf("module path not found: %s",modulepath);
+						}
+					pclose(pf);
 				}
-			else
-				{
-					g_error ("module path not found: %s",modulepath);
-				}
-
+			free(command);
 		}
+		
+	globalPlugData=(plugData*)malloc(sizeof(plugData));
+	globalPlugData->dataDir=DATADIR;
+	globalPlugData->plugFolder=pluginFolder;
+	globalPlugData->showDoc=(void*)&showDocView;
+	globalPlugData->htmlFile=htmlFile;
+	globalPlugData->thePage=&thePage;
+
 	history=new HistoryClass;
 	globalSlice->setReturnDupString(true);
 }

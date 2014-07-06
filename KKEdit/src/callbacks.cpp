@@ -1440,16 +1440,16 @@ void doShutdown(GtkWidget* widget,gpointer data)
 			gtk_main_quit();
 		}
 
-	asprintf(&command,"rm -r %s",tmpFolderName);
-	system(command);
-	free(command);
-
 #ifdef _ASPELL_
 	delete_aspell_config(aspellConfig);
 	delete_aspell_speller(spellChecker);
 #endif
 
 	g_list_foreach(pluginList,releasePlugs,NULL);
+
+	asprintf(&command,"rm -rf %s",tmpFolderName);
+	system(command);
+	free(command);
 }
 
 void setPrefs(GtkWidget* widget,gpointer data)

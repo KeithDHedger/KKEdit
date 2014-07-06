@@ -15,6 +15,7 @@
 
 #include "config.h"
 #include "sliceclass.h"
+#include "kkedit-plugins.h"
 
 #ifdef _BUILDDOCVIEWER_
 #include <webkit/webkit.h>
@@ -354,6 +355,7 @@ extern GtkWidget*		progressBar;
 #define PLUGPATH "/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/plugs"
 extern GList*			pluginList;
 extern char*			pluginFolder;
+extern plugData*		globalPlugData;
 
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);

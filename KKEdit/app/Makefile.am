@@ -24,6 +24,8 @@ docfiles_DATA = ../resources/docs/*
 stylefilesdir = $(pkgdatadir)/styles
 stylefiles_DATA = ../resources/styles/*
 
+include_HEADERS = ../src/kkedit-plugins.h
+
 bin_PROGRAMS = kkedit
 
 install-exec-hook:
