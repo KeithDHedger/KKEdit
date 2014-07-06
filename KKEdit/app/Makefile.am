@@ -26,6 +26,9 @@ stylefiles_DATA = ../resources/styles/*
 
 include_HEADERS = ../src/kkedit-plugins.h
 
+plugfilesdir = $(pkgdatadir)/plugs
+plugfiles_DATA = ../resources/plugs/*
+
 bin_PROGRAMS = kkedit
 
 install-exec-hook:

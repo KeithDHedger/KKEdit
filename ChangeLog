@@ -1,4 +1,5 @@
 0.2.0
+Prelim testing on xubuntu OK.
 Fixed bug when using single instance re-running init when opeing new file.
 Started help for plugins.
 Plugins can now call showDocView.
