@@ -10,8 +10,6 @@
 
 #include "kkedit-plugins.h"
 
-extern void showDocView(int howtodisplay,char* text,const char* title);
-
 extern "C" const gchar* g_module_check_init(GModule *module)
 {
 	perror("doin ininit");
@@ -94,6 +92,14 @@ extern "C" int newTab(gpointer data)
 		printf("dirName = %s\n",plugdata->page->dirName);
 		
 	printf("finished new tab\n");
+	return(0);
+}
+
+extern "C" int switchTab(gpointer data)
+{
+	plugData*		plugdata=(plugData*)data;
+	printf("switching tab\n");
+	printf("new tab is %i\n",plugdata->currentTab);
 	return(0);
 }
 

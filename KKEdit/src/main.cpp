@@ -275,14 +275,13 @@ void init(void)
 	else
 		{
 			asprintf(&pluginFolder,PLUGPATH);
-			asprintf(&command,"find %s -iname \"*.so\" -print0",pluginFolder);
-			printf(command);
+			asprintf(&command,"find %s -iname \"*.so\"",pluginFolder);
 			pf=popen(command,"r");
 			if(pf!=NULL)
 				{
 					while(fgets(buffer,4096,pf))
 						{
-							printf(buffer);
+							buffer[strlen(buffer)-1]=0;
 							module=g_module_open(buffer,G_MODULE_BIND_LAZY);
 							if(module!= NULL)
 								pluginList=g_list_prepend(pluginList,module);
@@ -298,10 +297,10 @@ void init(void)
 	globalPlugData=(plugData*)malloc(sizeof(plugData));
 	globalPlugData->dataDir=DATADIR;
 	globalPlugData->plugFolder=pluginFolder;
-	globalPlugData->showDoc=(void*)&showDocView;
 	globalPlugData->htmlFile=htmlFile;
 	globalPlugData->thePage=&thePage;
-	globalPlugData->getPageStruct=(void*)&getPageStructPtr;
+	globalPlugData->notebook=NULL;
+	globalPlugData->currentTab=-1;
 
 	history=new HistoryClass;
 	globalSlice->setReturnDupString(true);

@@ -69,19 +69,22 @@ struct plugData
 	const char*		dataDir;
 //plugin folder defaults to dataDir/plugs
 	char*			plugFolder;
-//function pointer to showDocView
-	void*           showDoc;
 //unused
 	char*			htmlFile;
 //location of variable that holds the uri to be disp[layed by showDoc
 	char**			thePage;
-//get the page struct for the current page gives acces to text buffer text view etc
-	void*			getPageStruct;
 //current page MAYBE NULL!!
 	pageStruct*		page;
+//the main notebook
+	GtkNotebook*	notebook;
+//cuurent tab
+	int				currentTab;
 };
 
 #define USEFILE			-2
 #define USEURI			-1
+
+extern void showDocView(int howtodisplay,char* text,const char* title);
+extern pageStruct* getPageStructPtr(int pagenum);
 
 #endif

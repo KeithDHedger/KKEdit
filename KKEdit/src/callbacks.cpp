@@ -33,6 +33,12 @@ void plugCloseFile(gpointer data,gpointer mlist)
 		module_func_sensitive((void*)mlist);
 }
 
+void plugSwitchTab(gpointer data,gpointer mlist)
+{
+	if(g_module_symbol((GModule*)data,"switchTab",(gpointer*)&module_func_sensitive))
+		module_func_sensitive((void*)mlist);
+}
+
 void setToobarSensitive(void)
 {
 	pageStruct*	page=getPageStructPtr(currentTabNumber);
@@ -688,6 +694,10 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 
 	gtk_widget_set_sensitive((GtkWidget*)menufunc,onefunc);
 	setSensitive();
+
+	globalPlugData->page=page;
+	globalPlugData->currentTab=currentTabNumber;
+	g_list_foreach(pluginList,plugSwitchTab,(gpointer)globalPlugData);
 }
 
 void copyToClip(GtkWidget* widget,gpointer data)

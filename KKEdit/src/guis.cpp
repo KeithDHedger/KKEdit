@@ -1316,6 +1316,7 @@ void buildMainGui(void)
 	gtk_notebook_set_scrollable(notebook,true);
 	gtk_signal_connect(GTK_OBJECT(notebook),"switch-page",G_CALLBACK(switchPage),NULL);
 	gtk_signal_connect(GTK_OBJECT(notebook),"page-reordered",G_CALLBACK(switchPage),NULL);
+	globalPlugData->notebook=notebook;
 
 	vbox=gtk_vbox_new(false,0);
 	menubar=gtk_menu_bar_new();
