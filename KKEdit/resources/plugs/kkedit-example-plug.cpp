@@ -10,7 +10,7 @@
 
 #include "kkedit-plugins.h"
 
-void showDocView(int howtodisplay,char* text,char* title);
+extern void showDocView(int howtodisplay,char* text,const char* title);
 
 extern "C" const gchar* g_module_check_init(GModule *module)
 {
