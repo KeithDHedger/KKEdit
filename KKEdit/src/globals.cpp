@@ -373,7 +373,7 @@ void setLanguage(pageStruct* page)
 		g_free(mimetype);
 }
 
-void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot)
+void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title)
 {
 	char*		command;
 	FILE*		fp=NULL;
@@ -440,7 +440,7 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot)
 		}
 
 	if(flags & TOOL_SHOW_DOC)
-		showDocView(USEFILE,(char*)"");
+		showDocView(USEFILE,(char*)"",title);
 
 	free(command);
 	free(asroot);

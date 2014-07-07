@@ -24,10 +24,8 @@ int				(*module_func_menus) (gpointer menulist);
 
 void plugMenus(gpointer data,gpointer mlist)
 {
-	gint	module_results=0;
-
 	if(g_module_symbol((GModule*)data,"addMenus",(gpointer*)&module_func_menus))
-		module_results=module_func_menus((void*)mlist);
+		module_func_menus((void*)mlist);
 }
 
 void findTool(toolStruct* data,char* toolname)

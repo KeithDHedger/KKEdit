@@ -36,11 +36,13 @@ void webKitGoHome(GtkWidget* widget,gpointer data)
 }
 #endif
 
-void showDocView(int howtodisplay,char* text)
+void showDocView(int howtodisplay,char* text,const char* title)
 {
 	char*		command;
 
 #ifdef _BUILDDOCVIEWER_
+
+	gtk_window_set_title((GtkWindow*)docView,title);
 
 	if(howtodisplay==USEURI)
 		{
@@ -106,9 +108,6 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 	char*		link;
 	int			cnt=0;
 
-#ifdef _BUILDDOCVIEWER_
-	gtk_window_set_title((GtkWindow*)docView,"Gtk Docs");
-#endif
 	for(int loop=0;loop<2048;loop++)
 		{
 			searchdata[loop][0]=NULL;
@@ -185,7 +184,7 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 					asprintf(&thePage,"file://%s",searchdata[0][1]);
 				}
 
-			showDocView(USEURI,selection);
+			showDocView(USEURI,selection,"Gtk Docs");
 		}
 
 	for(int loop=0;loop<cnt;loop++)
@@ -234,7 +233,7 @@ void doDoxy(GtkWidget* widget,long data)
 				gtk_main_iteration_do(false);
 			pclose(fp);
 		}
-	showDocView(USEURI,thePage);
+	showDocView(USEURI,thePage,"Doxygen Documentation");
 	killBarberPole();
 }
 
@@ -280,7 +279,7 @@ void doxyDocs(GtkWidget* widget,gpointer data)
 									pclose(findfile);
 									free(headcommand);
 									free(findcommand);
-									showDocView(USEURI,thePage);
+									showDocView(USEURI,thePage,"Doxygen Documentation");
 									killBarberPole();
 									return;
 								}
@@ -309,9 +308,6 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 	char*		func=NULL;
 	int			cnt=0;
 
-#ifdef _BUILDDOCVIEWER_
-	gtk_window_set_title((GtkWindow*)docView,"Qt5 Docs");
-#endif
 	if(data!=NULL)
 		selection=strdup((char*)data);
 	else
@@ -355,7 +351,7 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 			else
 				thePage=strdup(htmlURI);
 
-			showDocView(USEURI,(char*)str->str);
+			showDocView(USEURI,(char*)str->str,"Qt5 Docs");
 
 			g_string_free(str,true);
 			free(selection);
@@ -1007,7 +1003,6 @@ void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
 		}
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 }
-
 
 
 

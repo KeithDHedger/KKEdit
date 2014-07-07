@@ -1,4 +1,6 @@
 0.2.0
+Fixed Makefile dependency.
+Fixed built in doc viewer not showing correct title.
 Started plugin prefs.
 Prelim testing on xubuntu OK.
 Fixed bug when using single instance re-running init when opeing new file.

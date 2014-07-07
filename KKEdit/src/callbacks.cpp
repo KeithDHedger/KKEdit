@@ -23,18 +23,14 @@ int					(*module_func_sensitive) (gpointer menulist);
 
 void plugSensitive(gpointer data,gpointer mlist)
 {
-	gint	module_results=0;
-
 	if(g_module_symbol((GModule*)data,"setSensitive",(gpointer*)&module_func_sensitive))
-		module_results=module_func_sensitive((void*)mlist);
+		module_func_sensitive((void*)mlist);
 }
 
 void plugCloseFile(gpointer data,gpointer mlist)
 {
-	gint	module_results=0;
-
 	if(g_module_symbol((GModule*)data,"closeFile",(gpointer*)&module_func_sensitive))
-		module_results=module_func_sensitive((void*)mlist);
+		module_func_sensitive((void*)mlist);
 }
 
 void setToobarSensitive(void)
@@ -859,10 +855,6 @@ void externalTool(GtkWidget* widget,gpointer data)
 				}
 		}
 
-#ifdef _BUILDDOCVIEWER_
-	gtk_window_set_title((GtkWindow*)docView,tool->menuName);
-#endif
-
 	if(tool->clearView==true)
 		{
 			gtk_text_buffer_set_text(toolOutputBuffer,"",0);
@@ -875,7 +867,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 			system(barcommand);
 		}
 
-	runCommand(tempCommand->str,&text,tool->inTerminal,tool->flags,tool->runAsRoot);
+	runCommand(tempCommand->str,&text,tool->inTerminal,tool->flags,tool->runAsRoot,tool->menuName);
 	g_free(selection);
 
 	if(text!=NULL)
@@ -922,9 +914,7 @@ void openHelp(GtkWidget* widget,gpointer data)
 {
 	asprintf(&thePage,"file://%s/help/help.html",DATADIR);
 #ifdef _BUILDDOCVIEWER_
-	gtk_window_set_title((GtkWindow*)docView,"KKEdit Help");
-	showDocView(USEURI,(char*)"KKEdit");
-
+	showDocView(USEURI,(char*)"KKEdit","KKEdit Help");
 #else
 	asprintf(&thePage,"xdg-open %s/help/help.html",DATADIR);
 	runCommand(thePage,NULL,false,8);
@@ -1473,6 +1463,7 @@ void doShutdown(GtkWidget* widget,gpointer data)
 	asprintf(&command,"rm -rf %s",tmpFolderName);
 	system(command);
 	free(command);
+	system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
 }
 
 void setPrefs(GtkWidget* widget,gpointer data)

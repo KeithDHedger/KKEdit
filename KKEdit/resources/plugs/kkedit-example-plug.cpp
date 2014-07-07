@@ -10,7 +10,7 @@
 
 #include "kkedit-plugins.h"
 
-void showDocView(int howtodisplay,char* text);
+void showDocView(int howtodisplay,char* text,char* title);
 
 extern "C" const gchar* g_module_check_init(GModule *module)
 {
@@ -28,7 +28,7 @@ void openPlugHelp(GtkWidget* widget,gpointer data)
 {
 	plugData*	pdata=(plugData*)data;
 	asprintf(pdata->thePage,"file://%s/plughelp.html",(char*)pdata->plugFolder);
-	showDocView(USEURI,(char*)"KKEdit Plugin Help");
+	showDocView(USEURI,(char*)"KKEdit Plugin Help",(char*)"KKEdit Plugin Help");
 }
 
 extern "C" int addMenus(gpointer data)
@@ -78,5 +78,22 @@ extern "C" int closeFile(gpointer data)
 	return(0);
 }
 
+extern "C" int newTab(gpointer data)
+{
+	plugData*		plugdata=(plugData*)data;
 
+	printf("doing new tab\n");
+
+	if(plugdata->page->filePath!=NULL)
+		printf("filePath = %s\n",plugdata->page->filePath);
+
+	if(plugdata->page->fileName!=NULL)
+		printf("fileName = %s\n",plugdata->page->fileName);
+
+	if(plugdata->page->dirName!=NULL)
+		printf("dirName = %s\n",plugdata->page->dirName);
+		
+	printf("finished new tab\n");
+	return(0);
+}
 

@@ -24,26 +24,26 @@ int			(*module_func_files) (gpointer globaldata);
 
 void plugOpenFile(gpointer data,gpointer globaldata)
 {
-	gint	module_results=0;
-
 	if(g_module_symbol((GModule*)data,"openFile",(gpointer*)&module_func_files))
-		module_results=module_func_files((void*)globaldata);
+		module_func_files((void*)globaldata);
 }
 
 void plugSaveFile(gpointer data,gpointer globaldata)
 {
-	gint	module_results=0;
-
 	if(g_module_symbol((GModule*)data,"saveFile",(gpointer*)&module_func_files))
-		module_results=module_func_files((void*)globaldata);
+		module_func_files((void*)globaldata);
 }
 
 void plugNewFile(gpointer data,gpointer globaldata)
 {
-	gint	module_results=0;
-
 	if(g_module_symbol((GModule*)data,"newFile",(gpointer*)&module_func_files))
-		module_results=module_func_files((void*)globaldata);
+		module_func_files((void*)globaldata);
+}
+
+void plugNewTab(gpointer data,gpointer globaldata)
+{
+	if(g_module_symbol((GModule*)data,"newTab",(gpointer*)&module_func_files))
+		module_func_files((void*)globaldata);
 }
 
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
@@ -74,6 +74,9 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	g_object_unref(G_OBJECT(style));
 
 	gtk_widget_show_all(evbox);
+
+	globalPlugData->page=page;
+	g_list_foreach(pluginList,plugNewTab,(gpointer)globalPlugData);
 
 	return(evbox);
 }
