@@ -1296,7 +1296,7 @@ void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
 	gboolean fixed;
 
 	/* get toggled iter */
-	gtk_tree_model_get_iter (model, &iter, path);
+	gtk_tree_model_get_iter (model,&iter, path);
 	gtk_tree_model_get (model, &iter, COLUMN_ENABLE, &fixed, -1);
 
 	/* do something with the value */
@@ -1321,6 +1321,65 @@ void getPlugName(gpointer data,gpointer store)
 	gtk_list_store_set((GtkListStore*)store,&iter,COLUMN_ENABLE,plugdata->enabled,COLUMN_PLUGIN,plugdata->name,-1);
 }
 
+GtkWidget*		plugwindow;
+GtkWidget*		treeview;
+
+gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data)
+{
+	int	enabled;
+	char*	name=NULL;
+
+	gtk_tree_model_get(model,iter,COLUMN_ENABLE,&enabled,COLUMN_PLUGIN,&name,-1);
+	printf("plug %s enabled=%i\n",name,(int)enabled);
+	return(false);
+}
+
+void setPlugsEnabled(void)
+{
+	GtkTreeModel*	model;
+	GtkTreeIter		iter;
+	int	enabled;
+	char*	name=NULL;
+
+	model=gtk_tree_view_get_model((GtkTreeView*)treeview);
+
+//	if(gtk_tree_model_get_iter_first(model,&iter))
+//		{
+//		do
+//		{
+//			gtk_tree_model_get(model,&iter,COLUMN_PLUGIN,&name,-1);
+//			gtk_tree_model_get(model,&iter,COLUMN_ENABLE,&enabled,-1);
+//			printf("plug %s enabled=%in",name,(int)enabled);
+//
+//		}while(gtk_tree_model_iter_next(model,&iter));
+//		}
+
+//	gtk_tree_model_get                  (GtkTreeModel *tree_model,
+ //                                                        GtkTreeIter *iter,
+  //
+    gtk_tree_model_foreach(model,doSetPlugData,NULL);
+}
+
+void setPlugPrefs(GtkWidget* widget,gpointer data)
+{
+	switch(long(data))
+		{
+			case 1:
+				break;
+			case 2:
+				break;
+//apply
+			case 3:
+				setPlugsEnabled();
+				break;
+//cancel
+			case 4:
+				gtk_widget_hide(plugwindow);
+				gtk_widget_destroy(plugwindow);
+				break;
+		}
+}
+
 void doPlugPrefs(void)
 {
 
@@ -1331,11 +1390,9 @@ void doPlugPrefs(void)
 	GtkWidget*		menurecent;
 	GtkWidget*		scrollbox;
 	GtkWidget*		mainwindowbox;
-	GtkWidget*		plugwindow;
 	GtkListStore*	store;
 	GtkTreeIter		iter;
 	GtkTreeModel*	model=NULL;
-	GtkWidget*		treeview;
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 	GtkWidget*		button;
@@ -1344,21 +1401,13 @@ void doPlugPrefs(void)
 	plugwindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
 	vbox=gtk_vbox_new(false,4);
-//	scrollbox=gtk_scrolled_window_new(NULL,NULL);
-//	gtk_box_pack_start(GTK_BOX(scrollbox),(GtkWidget*)toolBar,true,true,0);
 	store=gtk_list_store_new (NUM_COLUMNS,G_TYPE_BOOLEAN,G_TYPE_STRING);
 
 	g_list_foreach(plugPrefsList,getPlugName,store);
 
-
-//	gtk_list_store_append(store,&iter);
-//	gtk_list_store_set(store,&iter,COLUMN_ENABLE,true,COLUMN_PLUGIN,"test1",-1);
-//	gtk_list_store_append(store,&iter);
-//	gtk_list_store_set(store,&iter,COLUMN_ENABLE,false,COLUMN_PLUGIN,"test2",-1);
-
 	model=GTK_TREE_MODEL(store);
 	treeview=gtk_tree_view_new_with_model(model);
-	g_object_unref (model);
+	//g_object_unref (model);
 	gtk_container_add (GTK_CONTAINER (vbox),treeview);
 
 //enable
@@ -1380,15 +1429,19 @@ void doPlugPrefs(void)
 //plugin prefs
 	button=gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
 	gtk_box_pack_start((GtkBox*)hbox,button,false,false,4);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setPlugPrefs),(void*)1);
 //plugin about
 	button=gtk_button_new_from_stock(GTK_STOCK_ABOUT);
 	gtk_box_pack_start((GtkBox*)hbox,button,false,false,4);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setPlugPrefs),(void*)2);
 //close
 	button=gtk_button_new_from_stock(GTK_STOCK_APPLY);
 	gtk_box_pack_start((GtkBox*)hbox,button,false,false,4);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setPlugPrefs),(void*)3);
 //apply
 	button=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
 	gtk_box_pack_start((GtkBox*)hbox,button,false,false,4);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setPlugPrefs),(void*)4);
 
 	gtk_container_add (GTK_CONTAINER(vbox),hbox);
 	gtk_container_add (GTK_CONTAINER(plugwindow),vbox);

@@ -189,9 +189,9 @@ void readConfig(void)
 
 void isBlackListed(gpointer data,gpointer user_data)
 {
-	char*	name;
+	char*			name;
 	StringSlice*	slice=new StringSlice;
-	pluginData*	plugdata=(pluginData*)data;
+	pluginData*		plugdata=(pluginData*)data;
 
 	name=slice->sliceBetween((char*)user_data,"lib",".so");
 
