@@ -1309,6 +1309,25 @@ void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
 	gtk_tree_path_free (path);
 }
 
+int	isloaded=-1;
+void isLoaded(gpointer data,gpointer user_data)
+{
+	const char*			name;
+	StringSlice*	slice=new StringSlice;
+
+	pluginData*		plugdata=(pluginData*)data;
+
+	name=g_module_name((GModule*)data);
+	name=slice->sliceBetween((char*)name,"lib",".so");
+
+	//printf("name %s plugdata->name%s\n",name,(char*)user_data);
+	if(strcmp((char*)name,(char*)user_data)==0)
+		isloaded=1;
+
+	delete slice;
+
+}
+
 void getPlugName(gpointer data,gpointer store)
 {
 	GtkTreeIter		iter;
@@ -1316,9 +1335,14 @@ void getPlugName(gpointer data,gpointer store)
 	pluginData*		plugdata;
 
 	plugdata=(pluginData*)data;
-	
-	gtk_list_store_append((GtkListStore*)store,&iter);
-	gtk_list_store_set((GtkListStore*)store,&iter,COLUMN_ENABLE,plugdata->enabled,COLUMN_PLUGIN,plugdata->name,-1);
+	isloaded=-1;
+	g_list_foreach(pluginList,isLoaded,plugdata->name);
+
+	if(isloaded==1)
+		{
+			gtk_list_store_append((GtkListStore*)store,&iter);
+			gtk_list_store_set((GtkListStore*)store,&iter,COLUMN_ENABLE,plugdata->enabled,COLUMN_PLUGIN,plugdata->name,-1);
+		}
 }
 
 GtkWidget*		plugwindow;
