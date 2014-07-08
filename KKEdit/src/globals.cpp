@@ -256,7 +256,9 @@ unsigned int	shortCuts[100][2]=
 GtkWidget*		progressWindow;
 GtkWidget*		progressBar;
 
+//plugins
 GList*			pluginList=NULL;
+GList*			plugPrefsList=NULL;
 char*			pluginFolder=NULL;
 plugData*		globalPlugData=NULL;
 

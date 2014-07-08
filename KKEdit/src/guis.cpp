@@ -1309,6 +1309,18 @@ void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
 	gtk_tree_path_free (path);
 }
 
+void getPlugName(gpointer data,gpointer store)
+{
+	GtkTreeIter		iter;
+	char*			name;
+	pluginData*		plugdata;
+
+	plugdata=(pluginData*)data;
+	
+	gtk_list_store_append((GtkListStore*)store,&iter);
+	gtk_list_store_set((GtkListStore*)store,&iter,COLUMN_ENABLE,plugdata->enabled,COLUMN_PLUGIN,plugdata->name,-1);
+}
+
 void doPlugPrefs(void)
 {
 
@@ -1331,15 +1343,18 @@ void doPlugPrefs(void)
 
 	plugwindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
-	vbox=gtk_vbox_new(false,0);
+	vbox=gtk_vbox_new(false,4);
 //	scrollbox=gtk_scrolled_window_new(NULL,NULL);
 //	gtk_box_pack_start(GTK_BOX(scrollbox),(GtkWidget*)toolBar,true,true,0);
 	store=gtk_list_store_new (NUM_COLUMNS,G_TYPE_BOOLEAN,G_TYPE_STRING);
 
-	gtk_list_store_append(store,&iter);
-	gtk_list_store_set(store,&iter,COLUMN_ENABLE,true,COLUMN_PLUGIN,"test1",-1);
-	gtk_list_store_append(store,&iter);
-	gtk_list_store_set(store,&iter,COLUMN_ENABLE,false,COLUMN_PLUGIN,"test2",-1);
+	g_list_foreach(plugPrefsList,getPlugName,store);
+
+
+//	gtk_list_store_append(store,&iter);
+//	gtk_list_store_set(store,&iter,COLUMN_ENABLE,true,COLUMN_PLUGIN,"test1",-1);
+//	gtk_list_store_append(store,&iter);
+//	gtk_list_store_set(store,&iter,COLUMN_ENABLE,false,COLUMN_PLUGIN,"test2",-1);
 
 	model=GTK_TREE_MODEL(store);
 	treeview=gtk_tree_view_new_with_model(model);
@@ -1361,22 +1376,21 @@ void doPlugPrefs(void)
 	gtk_tree_view_column_set_sort_column_id(column,COLUMN_PLUGIN);
 	gtk_tree_view_append_column((GtkTreeView*)treeview,column);
 
-
-	hbox=gtk_hbox_new(true,4);
-	gtk_container_add (GTK_CONTAINER(vbox),hbox);
+	hbox=gtk_hbox_new(false,4);
 //plugin prefs
 	button=gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
-	gtk_box_pack_start((GtkBox*)hbox,button,true,true,4);
+	gtk_box_pack_start((GtkBox*)hbox,button,false,false,4);
 //plugin about
 	button=gtk_button_new_from_stock(GTK_STOCK_ABOUT);
-	gtk_box_pack_start((GtkBox*)hbox,button,true,true,4);
+	gtk_box_pack_start((GtkBox*)hbox,button,false,false,4);
 //close
 	button=gtk_button_new_from_stock(GTK_STOCK_APPLY);
-	gtk_box_pack_start((GtkBox*)hbox,button,true,true,4);
+	gtk_box_pack_start((GtkBox*)hbox,button,false,false,4);
 //apply
 	button=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
-	gtk_box_pack_start((GtkBox*)hbox,button,true,true,4);
+	gtk_box_pack_start((GtkBox*)hbox,button,false,false,4);
 
+	gtk_container_add (GTK_CONTAINER(vbox),hbox);
 	gtk_container_add (GTK_CONTAINER(plugwindow),vbox);
 	gtk_widget_show_all(plugwindow);
 }
