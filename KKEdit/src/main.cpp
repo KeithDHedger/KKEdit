@@ -361,6 +361,19 @@ void init(void)
 //	globalPlugData->currentTab=-1;
 
 	globalPlugins=new PluginClass;
+	
+	for(int j=0;j<globalPlugins->plugCount;j++)
+		{
+			struct pluginData
+{
+	char*		name;
+	bool		enabled;
+	GModule*	module;
+	bool		loaded;
+};
+			pluginData* pd=(pluginData*)g_list_nth_data(globalPlugins->plugins,j);
+			printf("name=%s\n",pd->name);
+		}
 	history=new HistoryClass;
 	globalSlice->setReturnDupString(true);
 }
