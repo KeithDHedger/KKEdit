@@ -1330,19 +1330,19 @@ void isLoaded(gpointer data,gpointer user_data)
 
 void getPlugName(gpointer data,gpointer store)
 {
-	GtkTreeIter		iter;
-	char*			name;
-	pluginData*		plugdata;
-
-	plugdata=(pluginData*)data;
-	isloaded=-1;
-	g_list_foreach(pluginList,isLoaded,plugdata->name);
-
-	if(isloaded==1)
-		{
-			gtk_list_store_append((GtkListStore*)store,&iter);
-			gtk_list_store_set((GtkListStore*)store,&iter,COLUMN_ENABLE,plugdata->enabled,COLUMN_PLUGIN,plugdata->name,-1);
-		}
+//	GtkTreeIter		iter;
+//	char*			name;
+//	pluginData*		plugdata;
+//
+//	plugdata=(pluginData*)data;
+//	isloaded=-1;
+//	g_list_foreach(pluginList,isLoaded,plugdata->name);
+//
+//	if(isloaded==1)
+//		{
+//			gtk_list_store_append((GtkListStore*)store,&iter);
+//			gtk_list_store_set((GtkListStore*)store,&iter,COLUMN_ENABLE,plugdata->enabled,COLUMN_PLUGIN,plugdata->name,-1);
+//		}
 }
 
 GtkWidget*		plugwindow;
@@ -1427,7 +1427,7 @@ void doPlugPrefs(void)
 	vbox=gtk_vbox_new(false,4);
 	store=gtk_list_store_new (NUM_COLUMNS,G_TYPE_BOOLEAN,G_TYPE_STRING);
 
-	g_list_foreach(plugPrefsList,getPlugName,store);
+//	g_list_foreach(plugPrefsList,getPlugName,store);
 
 	model=GTK_TREE_MODEL(store);
 	treeview=gtk_tree_view_new_with_model(model);
@@ -1498,7 +1498,8 @@ void buildMainGui(void)
 	gtk_notebook_set_scrollable(notebook,true);
 	gtk_signal_connect(GTK_OBJECT(notebook),"switch-page",G_CALLBACK(switchPage),NULL);
 	gtk_signal_connect(GTK_OBJECT(notebook),"page-reordered",G_CALLBACK(switchPage),NULL);
-	globalPlugData->notebook=notebook;
+
+//	globalPlugData->notebook=notebook;
 
 	vbox=gtk_vbox_new(false,0);
 	menubar=gtk_menu_bar_new();
@@ -1883,17 +1884,17 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menutools);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
 
-	globalPlugData->mlist.menuBar=menubar;
-	globalPlugData->mlist.menuFile=menufile;
-	globalPlugData->mlist.menuEdit=menuedit;
-	globalPlugData->mlist.menuFunc=menufunc;
-	globalPlugData->mlist.menuNav=menunav;
-	globalPlugData->mlist.menuTools=menutools;
-	globalPlugData->mlist.menuHelp=menuhelp;
-	globalPlugData->mlist.menuBookMark=menuBookMark;
-	globalPlugData->mlist.menuView=menuView;
+//	globalPlugData->mlist.menuBar=menubar;
+//	globalPlugData->mlist.menuFile=menufile;
+//	globalPlugData->mlist.menuEdit=menuedit;
+//	globalPlugData->mlist.menuFunc=menufunc;
+//	globalPlugData->mlist.menuNav=menunav;
+//	globalPlugData->mlist.menuTools=menutools;
+//	globalPlugData->mlist.menuHelp=menuhelp;
+//	globalPlugData->mlist.menuBookMark=menuBookMark;
+//	globalPlugData->mlist.menuView=menuView;
 
-	g_list_foreach(pluginList,plugMenus,(gpointer)globalPlugData);
+//	g_list_foreach(pluginList,plugMenus,(gpointer)globalPlugData);
 
 //tooloutputwindow
 	mainVPane=gtk_vpaned_new();

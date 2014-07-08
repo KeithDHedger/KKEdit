@@ -354,18 +354,21 @@ extern unsigned int		shortCuts[100][2];
 extern GtkWidget*		progressWindow;
 extern GtkWidget*		progressBar;
 
+#include "pluginclass.h"
+
 //plugins
-struct pluginData
-{
-	char*	name;
-	bool	enabled;
-};
-//#define PLUGPATH DATADIR "/plugs"
+//struct pluginData
+//{
+//	char*	name;
+//	bool	enabled;
+//};
+////#define PLUGPATH DATADIR "/plugs"
 #define PLUGPATH "/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/plugs"
-extern GList*			pluginList;
-extern GList*			plugPrefsList;
-extern char*			pluginFolder;
-extern plugData*		globalPlugData;
+//extern GList*			pluginList;
+//extern GList*			plugPrefsList;
+//extern char*			pluginFolder;
+//extern plugData*		globalPlugData;
+extern PluginClass*		globalPlugins;
 
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);

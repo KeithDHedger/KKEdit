@@ -12,40 +12,40 @@
 #include "searchcallbacks.h"
 
 bool	singleOverRide=false;
-int		blacklisted;
-
-void getPlugList(void)
-{
-	FILE*	fd=NULL;
-	char*	filename;
-	char	buffer[1024];
-	char	name[256];
-	int		enabled;
-	pluginData*	data;
-
-	asprintf(&filename,"%s/.KKEdit/pluglist",getenv("HOME"));
-	fd=fopen(filename,"r");
-	if(fd!=NULL)
-		{
-			while(feof(fd)==0)
-				{
-					buffer[0]=0;
-					name[0]=0;
-					enabled=1;
-					fgets(buffer,1024,fd);
-					sscanf(buffer,"%s %i",(char*)&name,(char*)&enabled);
-
-					if(strlen(name)>0)
-						{
-							data=(pluginData*)malloc(sizeof(pluginData));
-							data->name=strdup(name);
-							data->enabled=enabled;
-							plugPrefsList=g_list_prepend(plugPrefsList,data);
-						}
-				}
-			fclose(fd);
-		}
-}
+//int		blacklisted;
+//
+//void getPlugList(void)
+//{
+//	FILE*	fd=NULL;
+//	char*	filename;
+//	char	buffer[1024];
+//	char	name[256];
+//	int		enabled;
+//	pluginData*	data;
+//
+//	asprintf(&filename,"%s/.KKEdit/pluglist",getenv("HOME"));
+//	fd=fopen(filename,"r");
+//	if(fd!=NULL)
+//		{
+//			while(feof(fd)==0)
+//				{
+//					buffer[0]=0;
+//					name[0]=0;
+//					enabled=1;
+//					fgets(buffer,1024,fd);
+//					sscanf(buffer,"%s %i",(char*)&name,(char*)&enabled);
+//
+//					if(strlen(name)>0)
+//						{
+//							data=(pluginData*)malloc(sizeof(pluginData));
+//							data->name=strdup(name);
+//							data->enabled=enabled;
+//							plugPrefsList=g_list_prepend(plugPrefsList,data);
+//						}
+//				}
+//			fclose(fd);
+//		}
+//}
 
 void readConfig(void)
 {
@@ -187,24 +187,24 @@ void readConfig(void)
 	g_free(filename);
 }
 
-void isBlackListed(gpointer data,gpointer user_data)
-{
-	char*			name;
-	StringSlice*	slice=new StringSlice;
-	pluginData*		plugdata=(pluginData*)data;
-
-	name=slice->sliceBetween((char*)user_data,"lib",".so");
-
-	if(strcmp(name,plugdata->name)==0)
-		{
-			if(plugdata->enabled==true)
-				blacklisted=1;
-			else
-				blacklisted=0;
-		}
-	delete slice;
-}
-
+//void isBlackListed(gpointer data,gpointer user_data)
+//{
+//	char*			name;
+//	StringSlice*	slice=new StringSlice;
+//	pluginData*		plugdata=(pluginData*)data;
+//
+//	name=slice->sliceBetween((char*)user_data,"lib",".so");
+//
+//	if(strcmp(name,plugdata->name)==0)
+//		{
+//			if(plugdata->enabled==true)
+//				blacklisted=1;
+//			else
+//				blacklisted=0;
+//		}
+//	delete slice;
+//}
+//
 void init(void)
 {
 	char*		filename;
@@ -282,7 +282,7 @@ void init(void)
 
 	readConfig();
 	loadKeybindings();
-	getPlugList();
+	//getPlugList();
 
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
@@ -320,46 +320,47 @@ void init(void)
 #endif
 
 //do plugins
-	if(!g_module_supported())
-		{
-			perror ("modules not supported");
-			pluginFolder=NULL;
-		}
-	else
-		{
-			asprintf(&pluginFolder,PLUGPATH);
-			asprintf(&command,"find %s -iname \"*.so\"",pluginFolder);
-			pf=popen(command,"r");
-			if(pf!=NULL)
-				{
-					while(fgets(buffer,4096,pf))
-						{
-							buffer[strlen(buffer)-1]=0;
-							blacklisted=-1;
-							g_list_foreach(plugPrefsList,isBlackListed,buffer);
-							if(blacklisted==1)
-								{
-									module=g_module_open(buffer,G_MODULE_BIND_LAZY);
-									if(module!= NULL)
-										pluginList=g_list_prepend(pluginList,module);
-									else
-										printf("module path not found: %s",modulepath);
-								}
-						}
-					pclose(pf);
-				}
-			free(command);
-		}
-
+//	if(!g_module_supported())
+//		{
+//			perror ("modules not supported");
+//			pluginFolder=NULL;
+//		}
+//	else
+//		{
+//			asprintf(&pluginFolder,PLUGPATH);
+//			asprintf(&command,"find %s -iname "*.so"",pluginFolder);
+//			pf=popen(command,"r");
+//			if(pf!=NULL)
+//				{
+//					while(fgets(buffer,4096,pf))
+//						{
+//							buffer[strlen(buffer)-1]=0;
+//							blacklisted=-1;
+//							g_list_foreach(plugPrefsList,isBlackListed,buffer);
+//							if(blacklisted==1)
+//								{
+//									module=g_module_open(buffer,G_MODULE_BIND_LAZY);
+//									if(module!= NULL)
+//										pluginList=g_list_prepend(pluginList,module);
+//									else
+//										printf("module path not found: %s",modulepath);
+//								}
+//						}
+//					pclose(pf);
+//				}
+//			free(command);
+//		}
+//
 //set up plugin data		
-	globalPlugData=(plugData*)malloc(sizeof(plugData));
-	globalPlugData->dataDir=DATADIR;
-	globalPlugData->plugFolder=pluginFolder;
-	globalPlugData->htmlFile=htmlFile;
-	globalPlugData->thePage=&thePage;
-	globalPlugData->notebook=NULL;
-	globalPlugData->currentTab=-1;
+//	globalPlugData=(plugData*)malloc(sizeof(plugData));
+//	globalPlugData->dataDir=DATADIR;
+////	globalPlugData->plugFolder=pluginFolder;
+//	globalPlugData->htmlFile=htmlFile;
+//	globalPlugData->thePage=&thePage;
+//	globalPlugData->notebook=NULL;
+//	globalPlugData->currentTab=-1;
 
+	globalPlugins=new PluginClass;
 	history=new HistoryClass;
 	globalSlice->setReturnDupString(true);
 }

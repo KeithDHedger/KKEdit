@@ -509,8 +509,8 @@ void setSensitive(void)
 			gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);  
 		}
 //do plugin sensitive
-	globalPlugData->page=page;
-	g_list_foreach(pluginList,plugSensitive,(gpointer)globalPlugData);
+//	globalPlugData->page=page;
+//	g_list_foreach(pluginList,plugSensitive,(gpointer)globalPlugData);
 }
 
 bool closingAll=false;
@@ -553,8 +553,8 @@ void closeTab(GtkWidget* widget,gpointer data)
 				}
 		}
 
-	globalPlugData->page=page;
-	g_list_foreach(pluginList,plugCloseFile,(gpointer)globalPlugData);
+//	globalPlugData->page=page;
+//	g_list_foreach(pluginList,plugCloseFile,(gpointer)globalPlugData);
 
 	if(page->filePath!=NULL)
 		g_free(page->filePath);
@@ -695,9 +695,9 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	gtk_widget_set_sensitive((GtkWidget*)menufunc,onefunc);
 	setSensitive();
 
-	globalPlugData->page=page;
-	globalPlugData->currentTab=currentTabNumber;
-	g_list_foreach(pluginList,plugSwitchTab,(gpointer)globalPlugData);
+//	globalPlugData->page=page;
+//	globalPlugData->currentTab=currentTabNumber;
+//	g_list_foreach(pluginList,plugSwitchTab,(gpointer)globalPlugData);
 }
 
 void copyToClip(GtkWidget* widget,gpointer data)
@@ -1468,7 +1468,7 @@ void doShutdown(GtkWidget* widget,gpointer data)
 	delete_aspell_speller(spellChecker);
 #endif
 
-	g_list_foreach(pluginList,releasePlugs,NULL);
+//	g_list_foreach(pluginList,releasePlugs,NULL);
 
 	asprintf(&command,"rm -rf %s",tmpFolderName);
 	system(command);

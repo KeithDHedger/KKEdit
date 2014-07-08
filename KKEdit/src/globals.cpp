@@ -13,6 +13,7 @@
 #include "searchcallbacks.h"
 #include "callbacks.h"
 #include "navcallbacks.h"
+#include "pluginclass.h"
 
 GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;
@@ -257,10 +258,11 @@ GtkWidget*		progressWindow;
 GtkWidget*		progressBar;
 
 //plugins
-GList*			pluginList=NULL;
-GList*			plugPrefsList=NULL;
-char*			pluginFolder=NULL;
-plugData*		globalPlugData=NULL;
+//GList*			pluginList=NULL;
+//GList*			plugPrefsList=NULL;
+//char*			pluginFolder=NULL;
+//plugData*		globalPlugData=NULL;
+PluginClass*	globalPlugins=NULL;
 
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 {

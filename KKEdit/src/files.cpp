@@ -75,8 +75,8 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 
 	gtk_widget_show_all(evbox);
 
-	globalPlugData->page=page;
-	g_list_foreach(pluginList,plugNewTab,(gpointer)globalPlugData);
+//	globalPlugData->page=page;
+//	g_list_foreach(pluginList,plugNewTab,(gpointer)globalPlugData);
 
 	return(evbox);
 }
@@ -284,8 +284,8 @@ bool saveFile(GtkWidget* widget,gpointer data)
 	switchPage(notebook,page->tabVbox,currentTabNumber,NULL);
 	setSensitive();
 
-	globalPlugData->page=page;
-	g_list_foreach(pluginList,plugSaveFile,(gpointer)globalPlugData);
+//	globalPlugData->page=page;
+//	g_list_foreach(pluginList,plugSaveFile,(gpointer)globalPlugData);
 
 	return(true);
 }
@@ -771,8 +771,8 @@ bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_text_buffer_move_mark((GtkTextBuffer*)page->buffer,page->backMark,&iter);
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
 
-	globalPlugData->page=page;
-	g_list_foreach(pluginList,plugOpenFile,(gpointer)globalPlugData);
+//	globalPlugData->page=page;
+//	g_list_foreach(pluginList,plugOpenFile,(gpointer)globalPlugData);
 
 	return TRUE;
 }
@@ -810,7 +810,7 @@ void newFile(GtkWidget* widget,gpointer data)
 	gtk_widget_show_all((GtkWidget*)notebook);
 	setFilePrefs(page);
 
-	globalPlugData->page=page;
-	g_list_foreach(pluginList,plugNewFile,(gpointer)globalPlugData);
+//	globalPlugData->page=page;
+//	g_list_foreach(pluginList,plugNewFile,(gpointer)globalPlugData);
 
 }
