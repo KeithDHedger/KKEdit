@@ -1855,7 +1855,8 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->mlist.menuBookMark=menuBookMark;
 	globalPlugins->globalPlugData->mlist.menuView=menuView;
 
-	g_list_foreach(globalPlugins->plugins,plugMenus,globalPlugins->globalPlugData);
+	//g_list_foreach(globalPlugins->plugins,plugMenus,globalPlugins->globalPlugData);
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addMenus");
 
 //tooloutputwindow
 	mainVPane=gtk_vpaned_new();

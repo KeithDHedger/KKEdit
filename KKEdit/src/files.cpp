@@ -20,31 +20,6 @@ GtkWidget*	vbox;
 char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
 bool		dropTextFile=false;
-int			(*module_func_files) (gpointer globaldata);
-
-void plugOpenFile(gpointer data,gpointer globaldata)
-{
-	if(g_module_symbol((GModule*)data,"openFile",(gpointer*)&module_func_files))
-		module_func_files((void*)globaldata);
-}
-
-void plugSaveFile(gpointer data,gpointer globaldata)
-{
-	if(g_module_symbol((GModule*)data,"saveFile",(gpointer*)&module_func_files))
-		module_func_files((void*)globaldata);
-}
-
-void plugNewFile(gpointer data,gpointer globaldata)
-{
-	if(g_module_symbol((GModule*)data,"newFile",(gpointer*)&module_func_files))
-		module_func_files((void*)globaldata);
-}
-
-void plugNewTab(gpointer data,gpointer globaldata)
-{
-	if(g_module_symbol((GModule*)data,"newTab",(gpointer*)&module_func_files))
-		module_func_files((void*)globaldata);
-}
 
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
@@ -75,8 +50,8 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 
 	gtk_widget_show_all(evbox);
 
-//	globalPlugData->page=page;
-//	g_list_foreach(pluginList,plugNewTab,(gpointer)globalPlugData);
+	globalPlugins->globalPlugData->page=page;
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"newTab");
 
 	return(evbox);
 }
@@ -284,8 +259,8 @@ bool saveFile(GtkWidget* widget,gpointer data)
 	switchPage(notebook,page->tabVbox,currentTabNumber,NULL);
 	setSensitive();
 
-//	globalPlugData->page=page;
-//	g_list_foreach(pluginList,plugSaveFile,(gpointer)globalPlugData);
+	globalPlugins->globalPlugData->page=page;
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"saveFile");
 
 	return(true);
 }
@@ -771,8 +746,8 @@ bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_text_buffer_move_mark((GtkTextBuffer*)page->buffer,page->backMark,&iter);
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
 
-//	globalPlugData->page=page;
-//	g_list_foreach(pluginList,plugOpenFile,(gpointer)globalPlugData);
+	globalPlugins->globalPlugData->page=page;
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"openFile");
 
 	return TRUE;
 }
@@ -810,7 +785,6 @@ void newFile(GtkWidget* widget,gpointer data)
 	gtk_widget_show_all((GtkWidget*)notebook);
 	setFilePrefs(page);
 
-//	globalPlugData->page=page;
-//	g_list_foreach(pluginList,plugNewFile,(gpointer)globalPlugData);
-
+	globalPlugins->globalPlugData->page=page;
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"newFile");
 }

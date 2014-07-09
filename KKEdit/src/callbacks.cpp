@@ -41,8 +41,11 @@ void plugCloseFile(gpointer data,gpointer mlist)
 
 void plugSwitchTab(gpointer data,gpointer mlist)
 {
-	if(g_module_symbol((GModule*)data,"switchTab",(gpointer*)&module_func_sensitive))
-		module_func_sensitive((void*)mlist);
+	if(((pluginData*)data)->module!=NULL)
+		{
+			if(g_module_symbol((GModule*)((pluginData*)data)->module,"switchTab",(gpointer*)&module_func_sensitive))
+				module_func_sensitive((void*)mlist);
+		}
 }
 
 void releasePlugs(gpointer data,gpointer user_data)
@@ -707,9 +710,10 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	gtk_widget_set_sensitive((GtkWidget*)menufunc,onefunc);
 	setSensitive();
 
-//	globalPlugData->page=page;
-//	globalPlugData->currentTab=currentTabNumber;
-//	g_list_foreach(pluginList,plugSwitchTab,(gpointer)globalPlugData);
+//plug switch tab
+	globalPlugins->globalPlugData->page=page;
+	globalPlugins->globalPlugData->currentTab=currentTabNumber;
+	g_list_foreach(globalPlugins->plugins,plugSwitchTab,(gpointer)globalPlugins->globalPlugData);
 }
 
 void copyToClip(GtkWidget* widget,gpointer data)

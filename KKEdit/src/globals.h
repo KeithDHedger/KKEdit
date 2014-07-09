@@ -370,6 +370,8 @@ extern GtkWidget*		progressBar;
 //extern plugData*		globalPlugData;
 extern PluginClass*		globalPlugins;
 
+void plugRunFunction(gpointer data,gpointer funcname);
+
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
