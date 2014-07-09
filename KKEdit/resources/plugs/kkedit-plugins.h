@@ -1,1 +1,0 @@
-/media/LinuxData/Development/Projects/KKEdit/KKEdit/src/kkedit-plugins.h
