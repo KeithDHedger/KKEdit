@@ -32,8 +32,11 @@ void plugSensitive(gpointer data,gpointer mlist)
 
 void plugCloseFile(gpointer data,gpointer mlist)
 {
-	if(g_module_symbol((GModule*)data,"closeFile",(gpointer*)&module_func_sensitive))
-		module_func_sensitive((void*)mlist);
+	if(((pluginData*)data)->module!=NULL)
+		{
+			if(g_module_symbol((GModule*)((pluginData*)data)->module,"closeFile",(gpointer*)&module_func_sensitive))
+				module_func_sensitive((void*)mlist);
+		}
 }
 
 void plugSwitchTab(gpointer data,gpointer mlist)
@@ -562,8 +565,8 @@ void closeTab(GtkWidget* widget,gpointer data)
 				}
 		}
 
-//	globalPlugData->page=page;
-//	g_list_foreach(pluginList,plugCloseFile,(gpointer)globalPlugData);
+	globalPlugins->globalPlugData->page=page;
+	g_list_foreach(globalPlugins->plugins,plugCloseFile,(gpointer)globalPlugins->globalPlugData);
 
 	if(page->filePath!=NULL)
 		g_free(page->filePath);
