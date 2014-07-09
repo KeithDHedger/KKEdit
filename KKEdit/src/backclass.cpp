@@ -7,7 +7,7 @@
 * 
 ******************************************************/
 
-#include "globals.h"
+#include "kkedit-includes.h"
 
 HistoryClass::HistoryClass()
 {

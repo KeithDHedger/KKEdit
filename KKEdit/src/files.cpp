@@ -6,15 +6,7 @@
  *
 */
 
-#include <sys/types.h>
-#include <unistd.h>
-#include <glib.h>
-#include <gtksourceview/gtksourcelanguage.h>
-#include <gtksourceview/gtksourcelanguagemanager.h>
-
-#include "callbacks.h"
-#include "navcallbacks.h"
-#include "encoding.h"
+#include "kkedit-includes.h"
 
 GtkWidget*	vbox;
 char*		saveFileName=NULL;

@@ -17,8 +17,7 @@
 *
 ******************************************************/
 
-#include "globals.h"
-#include "guis.h"
+#include "kkedit-includes.h"
 
 #ifdef _ASPELL_
 

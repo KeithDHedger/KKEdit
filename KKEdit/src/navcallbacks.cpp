@@ -6,13 +6,7 @@
  *
 */
 
-#include <gtksourceview/gtksourceiter.h>
-#include <libgen.h>
-#include <ctype.h>
-
-#include "guis.h"
-#include "callbacks.h"
-#include "searchcallbacks.h"
+#include "kkedit-includes.h"
 
 int	theLineNum=0;
 int marknum=0;

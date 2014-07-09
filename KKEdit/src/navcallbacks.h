@@ -6,10 +6,7 @@
  *
 */
 
-#include <unique/unique.h>
-
-#include "globals.h"
-#include "files.h"
+#include "kkedit-includes.h"
 
 #ifndef _NAVCALLBACKS_
 #define _NAVCALLBACKS_

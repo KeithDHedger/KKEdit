@@ -6,13 +6,7 @@
  *
 */
 
-#include <gtksourceview/gtksourcelanguage.h>
-#include <gtksourceview/gtksourcelanguagemanager.h>
-#include <gdk/gdkkeysyms.h>
-
-#include "searchcallbacks.h"
-#include "callbacks.h"
-#include "navcallbacks.h"
+#include "kkedit-includes.h"
 
 GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;

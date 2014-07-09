@@ -7,7 +7,7 @@
 * 
 ******************************************************/
 
-#include "textbuffer.h"
+#include "kkedit-includes.h"
 
 #ifndef _BACKCLASS_
 #define _BACKCLASS_

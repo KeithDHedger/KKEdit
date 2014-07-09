@@ -5,22 +5,8 @@
  * globals.h
  *
 */
-#include <stdlib.h>
-#include <gtk/gtk.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <gtksourceview/gtksourcestyleschememanager.h>
 
-#include "config.h"
-#include "sliceclass.h"
-#include "kkedit-plugins.h"
-#ifdef _BUILDDOCVIEWER_
-#include <webkit/webkit.h>
-#endif
-
-#ifdef _ASPELL_
-#include <aspell.h>
-#endif
+#include "kkedit-includes.h"
 
 #ifndef _GLOBALS_
 #define _GLOBALS_
@@ -136,7 +122,7 @@ struct bookMarksNew
 	int					line;
 };
 
-#include "backclass.h"
+//#include "backclass.h"
 
 extern HistoryClass*	history;
 

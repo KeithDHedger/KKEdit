@@ -11,13 +11,7 @@
 *	http://savannah.nongnu.org/download/leafpad/leafpad-0.8.17.tar.gz
 ******************************************************/
 
-#include <stdlib.h>
-#include <gtk/gtk.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <glib.h>
-
-#include "encoding.h"
+#include "kkedit-includes.h"
 
 const char *country_table[][MAX_COUNTRY_NUM] =
 {

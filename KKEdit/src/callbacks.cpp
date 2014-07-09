@@ -6,15 +6,7 @@
  *
 */
 
-#include <gtksourceview/gtksourceprintcompositor.h>
-#include <ctype.h>
-#include <gdk/gdkkeysyms.h>
-#include <libgen.h>
-
-#include "guis.h"
-#include "navcallbacks.h"
-#include "searchcallbacks.h"
-#include "spellcheck.h"
+#include "kkedit-includes.h"
 
 GtkWidget*			tabMenu;
 char				defineText[1024];

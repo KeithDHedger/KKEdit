@@ -4,14 +4,7 @@
  *
 */
 
-#include <gtksourceview/gtksourcelanguage.h>
-#include <gtksourceview/gtksourcelanguagemanager.h>
-#include <gdk/gdkkeysyms.h>
-
-#include "callbacks.h"
-#include "navcallbacks.h"
-#include "searchcallbacks.h"
-#include "spellcheck.h"
+#include "kkedit-includes.h"
 
 #define COLUMN_ENABLE 0
 #define COLUMN_PLUGIN 1

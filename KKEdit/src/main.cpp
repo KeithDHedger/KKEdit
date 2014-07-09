@@ -4,11 +4,7 @@
  *
 */
 
-#include <time.h>
-
-#include "callbacks.h"
-#include "guis.h"
-#include "searchcallbacks.h"
+#include "kkedit-includes.h"
 
 bool	singleOverRide=false;
 

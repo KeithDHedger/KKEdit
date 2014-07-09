@@ -6,12 +6,7 @@
  *
 */
 
-#include <gtksourceview/gtksourceiter.h>
-
-#include "guis.h"
-#include "navcallbacks.h"
-#include "callbacks.h"
-#include "searchcallbacks.h"
+#include "kkedit-includes.h"
 
 int currentFindPage=-1;
 int firstPage=-1;

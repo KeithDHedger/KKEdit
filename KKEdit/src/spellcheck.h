@@ -6,7 +6,8 @@
 *     spellcheck.h
 * 
 ******************************************************/
-#include <gtk/gtk.h>
+
+#include "kkedit-includes.h"
 
 #ifndef _SPELLCHECK_
 #define _SPELLCHECK_
