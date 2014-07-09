@@ -12,40 +12,6 @@
 #include "searchcallbacks.h"
 
 bool	singleOverRide=false;
-//int		blacklisted;
-//
-//void getPlugList(void)
-//{
-//	FILE*	fd=NULL;
-//	char*	filename;
-//	char	buffer[1024];
-//	char	name[256];
-//	int		enabled;
-//	pluginData*	data;
-//
-//	asprintf(&filename,"%s/.KKEdit/pluglist",getenv("HOME"));
-//	fd=fopen(filename,"r");
-//	if(fd!=NULL)
-//		{
-//			while(feof(fd)==0)
-//				{
-//					buffer[0]=0;
-//					name[0]=0;
-//					enabled=1;
-//					fgets(buffer,1024,fd);
-//					sscanf(buffer,"%s %i",(char*)&name,(char*)&enabled);
-//
-//					if(strlen(name)>0)
-//						{
-//							data=(pluginData*)malloc(sizeof(pluginData));
-//							data->name=strdup(name);
-//							data->enabled=enabled;
-//							plugPrefsList=g_list_prepend(plugPrefsList,data);
-//						}
-//				}
-//			fclose(fd);
-//		}
-//}
 
 void readConfig(void)
 {
@@ -187,34 +153,11 @@ void readConfig(void)
 	g_free(filename);
 }
 
-//void isBlackListed(gpointer data,gpointer user_data)
-//{
-//	char*			name;
-//	StringSlice*	slice=new StringSlice;
-//	pluginData*		plugdata=(pluginData*)data;
-//
-//	name=slice->sliceBetween((char*)user_data,"lib",".so");
-//
-//	if(strcmp(name,plugdata->name)==0)
-//		{
-//			if(plugdata->enabled==true)
-//				blacklisted=1;
-//			else
-//				blacklisted=0;
-//		}
-//	delete slice;
-//}
-//
 void init(void)
 {
 	char*		filename;
 	int			exitstatus;
 	char		tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
-	FILE*		pf;
-	char		buffer[4096];
-	GModule*	module=NULL;
-	char*		modulepath=NULL;
-	char*		command;
 
 #ifdef _ASPELL_
 	AspellCanHaveError*	possible_err;
@@ -330,19 +273,21 @@ void init(void)
 	globalPlugins->globalPlugData->notebook=NULL;
 	globalPlugins->globalPlugData->currentTab=-1;
 	
-	for(int j=0;j<globalPlugins->plugCount;j++)
-		{
-			struct pluginData
-{
-	char*		name;
-	bool		enabled;
-	GModule*	module;
-	bool		loaded;
-};
-			pluginData* pd=(pluginData*)g_list_nth_data(globalPlugins->plugins,j);
-			printf("num %i name=%s\n",j,pd->name);
-			printf("num %i enabled=%i\n",j,(int)pd->enabled);
-		}
+//	for(int j=0;j<globalPlugins->plugCount;j++)
+//		{
+//			struct pluginData
+//{
+//	char*		name;
+//	bool		enabled;
+//	GModule*	module;
+//	bool		loaded;
+//	char*       path;
+//};
+//			pluginData* pd=(pluginData*)g_list_nth_data(globalPlugins->plugins,j);
+//			printf("num %i name=%sn",j,pd->name);
+//			printf("num %i enabled=%in",j,(int)pd->enabled);
+//			printf("num %i path=%sn",j,pd->path);
+//		}
 	history=new HistoryClass;
 	globalSlice->setReturnDupString(true);
 }
