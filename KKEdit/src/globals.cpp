@@ -13,7 +13,6 @@
 #include "searchcallbacks.h"
 #include "callbacks.h"
 #include "navcallbacks.h"
-#include "pluginclass.h"
 
 GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;

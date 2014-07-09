@@ -5,7 +5,6 @@
 */
 
 #include <time.h>
-#include <gmodule.h>
 
 #include "callbacks.h"
 #include "guis.h"

@@ -9,14 +9,11 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <gtksourceview/gtksourcebuffer.h>
-#include <gtksourceview/gtksourceview.h>
 #include <gtksourceview/gtksourcestyleschememanager.h>
 
 #include "config.h"
 #include "sliceclass.h"
 #include "kkedit-plugins.h"
-
 #ifdef _BUILDDOCVIEWER_
 #include <webkit/webkit.h>
 #endif
