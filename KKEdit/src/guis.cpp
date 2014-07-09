@@ -13,6 +13,10 @@
 #include "searchcallbacks.h"
 #include "spellcheck.h"
 
+#define COLUMN_ENABLE 0
+#define COLUMN_PLUGIN 1
+#define NUM_COLUMNS 2
+
 GtkWidget*		recent;
 GtkToolItem*	tool[18]={NULL,};
 GtkIconView*	iconView=NULL;
@@ -21,10 +25,16 @@ GtkWidget*		entries[NUMSHORTCUTS];
 const char* 	shortcuttext[NUMSHORTCUTS]={"Delete Current Line","Delete To End Of Line","Delete To Beginning Of Line","Select Word Under Cursor","Delete Word Under Cursor","Duplicate Current Line","Select Current Line","Move Current Line Up","Move Current Line Down","Select From Cursor To End Of Line","Select From Beginning Of Line To Cursor","Move Selection Up","Move Selection Down"};
 
 int				(*module_func_menus) (gpointer menulist);
+GtkWidget*		plugwindow;
+GtkWidget*		treeview;
 
 void plugMenus(gpointer data,gpointer mlist)
 {
-	if(g_module_symbol((GModule*)data,"addMenus",(gpointer*)&module_func_menus))
+	pluginData*	pd;
+
+	pd=(pluginData*)data;
+
+	if((pd->module!=NULL) && (g_module_symbol((GModule*)pd->module,"addMenus",(gpointer*)&module_func_menus)))
 		module_func_menus((void*)mlist);
 }
 
@@ -1286,8 +1296,6 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 		}
 }
 
-enum {COLUMN_ENABLE,COLUMN_PLUGIN,NUM_COLUMNS};
-
 void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
 {
 	GtkTreeModel *model = (GtkTreeModel *)data;
@@ -1309,78 +1317,37 @@ void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
 	gtk_tree_path_free (path);
 }
 
-int	isloaded=-1;
-void isLoaded(gpointer data,gpointer user_data)
-{
-	const char*			name;
-	StringSlice*	slice=new StringSlice;
-
-	pluginData*		plugdata=(pluginData*)data;
-
-	name=g_module_name((GModule*)data);
-	name=slice->sliceBetween((char*)name,"lib",".so");
-
-	//printf("name %s plugdata->name%s\n",name,(char*)user_data);
-	if(strcmp((char*)name,(char*)user_data)==0)
-		isloaded=1;
-
-	delete slice;
-
-}
-
 void getPlugName(gpointer data,gpointer store)
 {
-//	GtkTreeIter		iter;
-//	char*			name;
-//	pluginData*		plugdata;
-//
-//	plugdata=(pluginData*)data;
-//	isloaded=-1;
-//	g_list_foreach(pluginList,isLoaded,plugdata->name);
-//
-//	if(isloaded==1)
-//		{
-//			gtk_list_store_append((GtkListStore*)store,&iter);
-//			gtk_list_store_set((GtkListStore*)store,&iter,COLUMN_ENABLE,plugdata->enabled,COLUMN_PLUGIN,plugdata->name,-1);
-//		}
-}
+	GtkTreeIter		iter;
+	pluginData*		plugdata;
 
-GtkWidget*		plugwindow;
-GtkWidget*		treeview;
+	plugdata=(pluginData*)data;
+	gtk_list_store_append((GtkListStore*)store,&iter);
+	gtk_list_store_set((GtkListStore*)store,&iter,COLUMN_ENABLE,plugdata->enabled,COLUMN_PLUGIN,plugdata->name,-1);
+}
 
 gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data)
 {
 	int	enabled;
 	char*	name=NULL;
+	pluginData*	pd;
 
 	gtk_tree_model_get(model,iter,COLUMN_ENABLE,&enabled,COLUMN_PLUGIN,&name,-1);
-	printf("plug %s enabled=%i\n",name,(int)enabled);
+	if(!enabled)
+		globalPlugins->appendToBlackList(name);
+
+	pd=globalPlugins->getPluginByName(name);
+	pd->enabled=enabled;
 	return(false);
 }
 
 void setPlugsEnabled(void)
 {
 	GtkTreeModel*	model;
-	GtkTreeIter		iter;
-	int	enabled;
-	char*	name=NULL;
 
+	globalPlugins->deleteBlackList();
 	model=gtk_tree_view_get_model((GtkTreeView*)treeview);
-
-//	if(gtk_tree_model_get_iter_first(model,&iter))
-//		{
-//		do
-//		{
-//			gtk_tree_model_get(model,&iter,COLUMN_PLUGIN,&name,-1);
-//			gtk_tree_model_get(model,&iter,COLUMN_ENABLE,&enabled,-1);
-//			printf("plug %s enabled=%in",name,(int)enabled);
-//
-//		}while(gtk_tree_model_iter_next(model,&iter));
-//		}
-
-//	gtk_tree_model_get                  (GtkTreeModel *tree_model,
- //                                                        GtkTreeIter *iter,
-  //
     gtk_tree_model_foreach(model,doSetPlugData,NULL);
 }
 
@@ -1395,6 +1362,8 @@ void setPlugPrefs(GtkWidget* widget,gpointer data)
 //apply
 			case 3:
 				setPlugsEnabled();
+				gtk_widget_hide(plugwindow);
+				gtk_widget_destroy(plugwindow);
 				break;
 //cancel
 			case 4:
@@ -1406,16 +1375,8 @@ void setPlugPrefs(GtkWidget* widget,gpointer data)
 
 void doPlugPrefs(void)
 {
-
 	GtkWidget*		vbox;
-	GtkWidget*		menuitem;
-	GtkWidget*		menu;
-	GtkWidget*		image;
-	GtkWidget*		menurecent;
-	GtkWidget*		scrollbox;
-	GtkWidget*		mainwindowbox;
 	GtkListStore*	store;
-	GtkTreeIter		iter;
 	GtkTreeModel*	model=NULL;
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
@@ -1427,11 +1388,11 @@ void doPlugPrefs(void)
 	vbox=gtk_vbox_new(false,4);
 	store=gtk_list_store_new (NUM_COLUMNS,G_TYPE_BOOLEAN,G_TYPE_STRING);
 
-//	g_list_foreach(plugPrefsList,getPlugName,store);
+	g_list_foreach(globalPlugins->plugins,getPlugName,store);
 
 	model=GTK_TREE_MODEL(store);
 	treeview=gtk_tree_view_new_with_model(model);
-	//g_object_unref (model);
+	g_object_unref (model);
 	gtk_container_add (GTK_CONTAINER (vbox),treeview);
 
 //enable
@@ -1884,17 +1845,17 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menutools);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
 
-//	globalPlugData->mlist.menuBar=menubar;
-//	globalPlugData->mlist.menuFile=menufile;
-//	globalPlugData->mlist.menuEdit=menuedit;
-//	globalPlugData->mlist.menuFunc=menufunc;
-//	globalPlugData->mlist.menuNav=menunav;
-//	globalPlugData->mlist.menuTools=menutools;
-//	globalPlugData->mlist.menuHelp=menuhelp;
-//	globalPlugData->mlist.menuBookMark=menuBookMark;
-//	globalPlugData->mlist.menuView=menuView;
+	globalPlugins->globalPlugData->mlist.menuBar=menubar;
+	globalPlugins->globalPlugData->mlist.menuFile=menufile;
+	globalPlugins->globalPlugData->mlist.menuEdit=menuedit;
+	globalPlugins->globalPlugData->mlist.menuFunc=menufunc;
+	globalPlugins->globalPlugData->mlist.menuNav=menunav;
+	globalPlugins->globalPlugData->mlist.menuTools=menutools;
+	globalPlugins->globalPlugData->mlist.menuHelp=menuhelp;
+	globalPlugins->globalPlugData->mlist.menuBookMark=menuBookMark;
+	globalPlugins->globalPlugData->mlist.menuView=menuView;
 
-//	g_list_foreach(pluginList,plugMenus,(gpointer)globalPlugData);
+	g_list_foreach(globalPlugins->plugins,plugMenus,globalPlugins->globalPlugData);
 
 //tooloutputwindow
 	mainVPane=gtk_vpaned_new();

@@ -23,8 +23,11 @@ int					(*module_func_sensitive) (gpointer menulist);
 
 void plugSensitive(gpointer data,gpointer mlist)
 {
-	if(g_module_symbol((GModule*)data,"setSensitive",(gpointer*)&module_func_sensitive))
-		module_func_sensitive((void*)mlist);
+	if(((pluginData*)data)->module!=NULL)
+		{
+			if(g_module_symbol((GModule*)((pluginData*)data)->module,"setSensitive",(gpointer*)&module_func_sensitive))
+				module_func_sensitive((void*)mlist);
+		}
 }
 
 void plugCloseFile(gpointer data,gpointer mlist)
@@ -37,6 +40,12 @@ void plugSwitchTab(gpointer data,gpointer mlist)
 {
 	if(g_module_symbol((GModule*)data,"switchTab",(gpointer*)&module_func_sensitive))
 		module_func_sensitive((void*)mlist);
+}
+
+void releasePlugs(gpointer data,gpointer user_data)
+{
+	if(((pluginData*)data)->module!=NULL)
+		g_module_close((GModule*)((pluginData*)data)->module);
 }
 
 void setToobarSensitive(void)
@@ -509,8 +518,8 @@ void setSensitive(void)
 			gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);  
 		}
 //do plugin sensitive
-//	globalPlugData->page=page;
-//	g_list_foreach(pluginList,plugSensitive,(gpointer)globalPlugData);
+	globalPlugins->globalPlugData->page=page;
+	g_list_foreach(globalPlugins->plugins,plugSensitive,(gpointer)globalPlugins->globalPlugData);
 }
 
 bool closingAll=false;
@@ -1446,11 +1455,6 @@ bool doSaveAll(GtkWidget* widget,gpointer data)
 	return(true);
 }
 
-void releasePlugs(gpointer data,gpointer user_data)
-{
-	g_module_close((GModule*)data);
-}
-
 void doShutdown(GtkWidget* widget,gpointer data)
 {
 	char*	command;
@@ -1468,7 +1472,7 @@ void doShutdown(GtkWidget* widget,gpointer data)
 	delete_aspell_speller(spellChecker);
 #endif
 
-//	g_list_foreach(pluginList,releasePlugs,NULL);
+	g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
 
 	asprintf(&command,"rm -rf %s",tmpFolderName);
 	system(command);

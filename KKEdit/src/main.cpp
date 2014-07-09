@@ -320,47 +320,15 @@ void init(void)
 #endif
 
 //do plugins
-//	if(!g_module_supported())
-//		{
-//			perror ("modules not supported");
-//			pluginFolder=NULL;
-//		}
-//	else
-//		{
-//			asprintf(&pluginFolder,PLUGPATH);
-//			asprintf(&command,"find %s -iname "*.so"",pluginFolder);
-//			pf=popen(command,"r");
-//			if(pf!=NULL)
-//				{
-//					while(fgets(buffer,4096,pf))
-//						{
-//							buffer[strlen(buffer)-1]=0;
-//							blacklisted=-1;
-//							g_list_foreach(plugPrefsList,isBlackListed,buffer);
-//							if(blacklisted==1)
-//								{
-//									module=g_module_open(buffer,G_MODULE_BIND_LAZY);
-//									if(module!= NULL)
-//										pluginList=g_list_prepend(pluginList,module);
-//									else
-//										printf("module path not found: %s",modulepath);
-//								}
-//						}
-//					pclose(pf);
-//				}
-//			free(command);
-//		}
-//
-//set up plugin data		
-//	globalPlugData=(plugData*)malloc(sizeof(plugData));
-//	globalPlugData->dataDir=DATADIR;
-////	globalPlugData->plugFolder=pluginFolder;
-//	globalPlugData->htmlFile=htmlFile;
-//	globalPlugData->thePage=&thePage;
-//	globalPlugData->notebook=NULL;
-//	globalPlugData->currentTab=-1;
-
 	globalPlugins=new PluginClass;
+//set up plugin data		
+	globalPlugins->globalPlugData=(plugData*)malloc(sizeof(plugData));
+	globalPlugins->globalPlugData->dataDir=DATADIR;
+	globalPlugins->globalPlugData->plugFolder=PLUGPATH;
+	globalPlugins->globalPlugData->htmlFile=htmlFile;
+	globalPlugins->globalPlugData->thePage=&thePage;
+	globalPlugins->globalPlugData->notebook=NULL;
+	globalPlugins->globalPlugData->currentTab=-1;
 	
 	for(int j=0;j<globalPlugins->plugCount;j++)
 		{
@@ -372,7 +340,8 @@ void init(void)
 	bool		loaded;
 };
 			pluginData* pd=(pluginData*)g_list_nth_data(globalPlugins->plugins,j);
-			printf("name=%s\n",pd->name);
+			printf("num %i name=%s\n",j,pd->name);
+			printf("num %i enabled=%i\n",j,(int)pd->enabled);
 		}
 	history=new HistoryClass;
 	globalSlice->setReturnDupString(true);
