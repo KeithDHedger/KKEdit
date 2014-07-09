@@ -19,34 +19,6 @@
 GtkWidget*			tabMenu;
 char				defineText[1024];
 GtkPrintSettings*	settings=NULL;
-int					(*module_func_sensitive) (gpointer menulist);
-
-void plugSensitive(gpointer data,gpointer mlist)
-{
-	if(((pluginData*)data)->module!=NULL)
-		{
-			if(g_module_symbol((GModule*)((pluginData*)data)->module,"setSensitive",(gpointer*)&module_func_sensitive))
-				module_func_sensitive((void*)mlist);
-		}
-}
-
-void plugCloseFile(gpointer data,gpointer mlist)
-{
-	if(((pluginData*)data)->module!=NULL)
-		{
-			if(g_module_symbol((GModule*)((pluginData*)data)->module,"closeFile",(gpointer*)&module_func_sensitive))
-				module_func_sensitive((void*)mlist);
-		}
-}
-
-void plugSwitchTab(gpointer data,gpointer mlist)
-{
-	if(((pluginData*)data)->module!=NULL)
-		{
-			if(g_module_symbol((GModule*)((pluginData*)data)->module,"switchTab",(gpointer*)&module_func_sensitive))
-				module_func_sensitive((void*)mlist);
-		}
-}
 
 void releasePlugs(gpointer data,gpointer user_data)
 {
@@ -525,7 +497,7 @@ void setSensitive(void)
 		}
 //do plugin sensitive
 	globalPlugins->globalPlugData->page=page;
-	g_list_foreach(globalPlugins->plugins,plugSensitive,(gpointer)globalPlugins->globalPlugData);
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"setSensitive");
 }
 
 bool closingAll=false;
@@ -569,7 +541,7 @@ void closeTab(GtkWidget* widget,gpointer data)
 		}
 
 	globalPlugins->globalPlugData->page=page;
-	g_list_foreach(globalPlugins->plugins,plugCloseFile,(gpointer)globalPlugins->globalPlugData);
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"closeFile");
 
 	if(page->filePath!=NULL)
 		g_free(page->filePath);
@@ -713,7 +685,8 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 //plug switch tab
 	globalPlugins->globalPlugData->page=page;
 	globalPlugins->globalPlugData->currentTab=currentTabNumber;
-	g_list_foreach(globalPlugins->plugins,plugSwitchTab,(gpointer)globalPlugins->globalPlugData);
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"switchTab");
+
 }
 
 void copyToClip(GtkWidget* widget,gpointer data)

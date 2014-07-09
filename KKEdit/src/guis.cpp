@@ -24,19 +24,8 @@ GtkListStore*	listStore=NULL;
 GtkWidget*		entries[NUMSHORTCUTS];
 const char* 	shortcuttext[NUMSHORTCUTS]={"Delete Current Line","Delete To End Of Line","Delete To Beginning Of Line","Select Word Under Cursor","Delete Word Under Cursor","Duplicate Current Line","Select Current Line","Move Current Line Up","Move Current Line Down","Select From Cursor To End Of Line","Select From Beginning Of Line To Cursor","Move Selection Up","Move Selection Down"};
 
-int				(*module_func_menus) (gpointer menulist);
 GtkWidget*		plugwindow;
 GtkWidget*		treeview;
-
-void plugMenus(gpointer data,gpointer mlist)
-{
-	pluginData*	pd;
-
-	pd=(pluginData*)data;
-
-	if((pd->module!=NULL) && (g_module_symbol((GModule*)pd->module,"addMenus",(gpointer*)&module_func_menus)))
-		module_func_menus((void*)mlist);
-}
 
 void findTool(toolStruct* data,char* toolname)
 {
@@ -1855,7 +1844,6 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->mlist.menuBookMark=menuBookMark;
 	globalPlugins->globalPlugData->mlist.menuView=menuView;
 
-	//g_list_foreach(globalPlugins->plugins,plugMenus,globalPlugins->globalPlugData);
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addMenus");
 
 //tooloutputwindow
