@@ -1,4 +1,5 @@
 0.2.0
+Installed example p;ugin to DATADIR/plugins.
 Plugins can now be enabled and disabled from the plug prefs.
 Moved plug code to PluginClass;
 Fixed not finding more than one plugin.

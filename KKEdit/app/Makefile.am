@@ -26,7 +26,7 @@ stylefiles_DATA = ../resources/styles/*
 
 include_HEADERS = ../src/kkedit-plugins.h
 
-plugfilesdir = $(pkgdatadir)/plugins
+plugfilesdir = $(pkgdatadir)/plugins/example-plugin
 plugfiles_DATA = ../resources/example-plugin/*.so ../resources/example-plugin/*.html ../resources/example-plugin/Makefile ../resources/example-plugin/kkedit-example-plug.cpp
 
 bin_PROGRAMS = kkedit
