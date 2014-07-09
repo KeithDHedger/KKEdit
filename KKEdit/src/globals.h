@@ -346,7 +346,7 @@ extern GtkWidget*		progressBar;
 //	bool	enabled;
 //};
 ////#define PLUGPATH DATADIR "/plugs"
-#define PLUGPATH "/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/plugs"
+//#define PLUGPATH "/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/plugs"
 //extern GList*			pluginList;
 //extern GList*			plugPrefsList;
 //extern char*			pluginFolder;

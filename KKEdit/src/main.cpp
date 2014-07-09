@@ -262,7 +262,8 @@ void init(void)
 //set up plugin data		
 	globalPlugins->globalPlugData=(plugData*)malloc(sizeof(plugData));
 	globalPlugins->globalPlugData->dataDir=DATADIR;
-	globalPlugins->globalPlugData->plugFolder=PLUGPATH;
+	globalPlugins->globalPlugData->gPlugFolder=globalPlugins->plugFolderPaths[0];
+	globalPlugins->globalPlugData->lPlugFolder=globalPlugins->plugFolderPaths[1];
 	globalPlugins->globalPlugData->htmlFile=htmlFile;
 	globalPlugins->globalPlugData->thePage=&thePage;
 	globalPlugins->globalPlugData->notebook=NULL;
