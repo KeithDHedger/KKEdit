@@ -1335,11 +1335,30 @@ void setPlugsEnabled(void)
 
 void setPlugPrefs(GtkWidget* widget,gpointer data)
 {
+	GtkTreeModel*		model;
+	GtkTreeSelection*	selection=NULL;
+	GtkTreeIter			iter;
+	char*				plugname;
+
 	switch(long(data))
 		{
 			case 1:
+				selection=gtk_tree_view_get_selection((GtkTreeView*)treeview);
+				if((selection!=NULL) && (gtk_tree_selection_get_selected(selection,&model,&iter)))
+					{
+						gtk_tree_model_get(model,&iter,COLUMN_PLUGIN,&plugname,-1);
+						globalPlugins->runPlugFunction(globalPlugins->getPluginByName(plugname),"plugPrefs");
+						free(plugname);
+					}
 				break;
 			case 2:
+				selection=gtk_tree_view_get_selection((GtkTreeView*)treeview);
+				if((selection!=NULL) && (gtk_tree_selection_get_selected(selection,&model,&iter)))
+					{
+						gtk_tree_model_get(model,&iter,COLUMN_PLUGIN,&plugname,-1);
+						globalPlugins->runPlugFunction(globalPlugins->getPluginByName(plugname),"doAbout");
+						free(plugname);
+					}
 				break;
 //apply
 			case 3:
@@ -1374,7 +1393,7 @@ void doPlugPrefs(void)
 
 	model=GTK_TREE_MODEL(store);
 	treeview=gtk_tree_view_new_with_model(model);
-	g_object_unref (model);
+//	g_object_unref (model);
 	gtk_container_add (GTK_CONTAINER (vbox),treeview);
 
 //enable
