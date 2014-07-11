@@ -1311,16 +1311,58 @@ void getPlugName(gpointer data,gpointer store)
 
 gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data)
 {
-	int	enabled;
-	char*	name=NULL;
+	int			enabled;
+	char*		name=NULL;
 	pluginData*	pd;
+	char*		filepath;
 
 	gtk_tree_model_get(model,iter,COLUMN_ENABLE,&enabled,COLUMN_PLUGIN,&name,-1);
 	if(!enabled)
+	{
 		globalPlugins->appendToBlackList(name);
+	}
 
 	pd=globalPlugins->getPluginByName(name);
-	pd->enabled=enabled;
+
+	if((pd->loaded==true) && (!enabled))
+			{
+				if(globalPlugins->enablePlugin(name,true)==0)
+					{
+						pd->loaded=!g_module_close(pd->module);
+						pd->enabled=pd->loaded;
+						pd->module=NULL;
+						return(false);
+					}
+			}
+
+	if((pd->loaded==false) && (enabled))
+		{
+			filepath=globalPlugins->getPluginPathByName(name);
+			printf("%s\n",filepath);
+			if(filepath==NULL)
+				{
+					printf("Can't open: %s\n",name);
+					return(false);
+				}
+
+			pd->module=g_module_open(filepath,G_MODULE_BIND_LAZY);
+			free(filepath);
+				
+			if(pd->module!= NULL)
+				{
+					pd->loaded=true;
+					pd->enabled=true;
+					printf("%s\n",name);
+					globalPlugins->enablePlugin(name,false);
+				}
+			else
+				{
+					pd->loaded=false;
+					pd->enabled=false;
+					printf("Can't open: %s\n",filepath);
+				}
+		}
+
 	return(false);
 }
 

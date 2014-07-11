@@ -1,3 +1,5 @@
+0.2.1
+
 0.2.0
 Installed example plugin to DATADIR/plugins.
 Plugins can now be enabled and disabled from the plug prefs.
