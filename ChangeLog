@@ -1,4 +1,7 @@
 0.2.1
+Added about box to example plugin.
+Added plugin icon.
+Plugins can now be enabled/disabled without restart.
 
 0.2.0
 Installed example plugin to DATADIR/plugins.
