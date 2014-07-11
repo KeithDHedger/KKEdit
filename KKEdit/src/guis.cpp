@@ -1315,6 +1315,7 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 	char*		name=NULL;
 	pluginData*	pd;
 	char*		filepath;
+	GList*		element;
 
 	gtk_tree_model_get(model,iter,COLUMN_ENABLE,&enabled,COLUMN_PLUGIN,&name,-1);
 	if(!enabled)
@@ -1331,6 +1332,12 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 						pd->loaded=!g_module_close(pd->module);
 						pd->enabled=pd->loaded;
 						pd->module=NULL;
+						pd->loaded=false;
+						pd->enabled=false;
+						//element=g_list_find(globalPlugins->plugins,pd);
+						//free(pd->path);
+						//free(pd->name);
+						//g_list_delete_link(globalPlugins->plugins,element);
 						return(false);
 					}
 			}

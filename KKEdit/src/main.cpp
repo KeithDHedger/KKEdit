@@ -269,21 +269,21 @@ void init(void)
 	globalPlugins->globalPlugData->notebook=NULL;
 	globalPlugins->globalPlugData->currentTab=-1;
 	
-//	for(int j=0;j<globalPlugins->plugCount;j++)
-//		{
-//			struct pluginData
-//{
-//	char*		name;
-//	bool		enabled;
-//	GModule*	module;
-//	bool		loaded;
-//	char*       path;
-//};
-//			pluginData* pd=(pluginData*)g_list_nth_data(globalPlugins->plugins,j);
-//			printf("num %i name=%sn",j,pd->name);
-//			printf("num %i enabled=%in",j,(int)pd->enabled);
-//			printf("num %i path=%sn",j,pd->path);
-//		}
+	for(int j=0;j<globalPlugins->plugCount;j++)
+		{
+			struct pluginData
+{
+	char*		name;
+	bool		enabled;
+	GModule*	module;
+	bool		loaded;
+	char*       path;
+};
+			pluginData* pd=(pluginData*)g_list_nth_data(globalPlugins->plugins,j);
+			printf("num %i name=%s\n",j,pd->name);
+			printf("num %i enabled=%i\n",j,(int)pd->enabled);
+			printf("num %i path=%s\n",j,pd->path);
+		}
 	history=new HistoryClass;
 	globalSlice->setReturnDupString(true);
 }
