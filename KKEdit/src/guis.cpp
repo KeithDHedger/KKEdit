@@ -1399,6 +1399,8 @@ void setPlugPrefs(GtkWidget* widget,gpointer data)
 						globalPlugins->runPlugFunction(globalPlugins->getPluginByName(plugname),"plugPrefs");
 						free(plugname);
 					}
+				gtk_widget_hide(plugwindow);
+				gtk_widget_destroy(plugwindow);
 				break;
 			case 2:
 				selection=gtk_tree_view_get_selection((GtkTreeView*)treeview);
