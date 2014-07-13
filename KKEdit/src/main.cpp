@@ -268,6 +268,7 @@ void init(void)
 	globalPlugins->globalPlugData->thePage=&thePage;
 	globalPlugins->globalPlugData->notebook=NULL;
 	globalPlugins->globalPlugData->currentTab=-1;
+	globalPlugins->globalPlugData->tmpFolder=tmpFolderName;
 	
 //	for(int j=0;j<globalPlugins->plugCount;j++)
 //		{
