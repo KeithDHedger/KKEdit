@@ -1,4 +1,5 @@
 0.2.1
+Path to KKEdit's temp folder now passed to plugins.
 Added about box to example plugin.
 Added plugin icon.
 Plugins can now be enabled/disabled without restart.

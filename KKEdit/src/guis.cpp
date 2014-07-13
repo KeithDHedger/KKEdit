@@ -1512,8 +1512,6 @@ void buildMainGui(void)
 	gtk_signal_connect(GTK_OBJECT(notebook),"switch-page",G_CALLBACK(switchPage),NULL);
 	gtk_signal_connect(GTK_OBJECT(notebook),"page-reordered",G_CALLBACK(switchPage),NULL);
 
-//	globalPlugData->notebook=notebook;
-
 	vbox=gtk_vbox_new(false,0);
 	menubar=gtk_menu_bar_new();
 	toolBarBox=gtk_hbox_new(true,0);
@@ -1886,6 +1884,12 @@ void buildMainGui(void)
 //help
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_HELP,NULL);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(openHelp),NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//get plugins
+	menuitem=gtk_image_menu_item_new_with_label("Get Plugins");
+	image=gtk_image_new_from_file(DATADIR"/pixmaps/KKEditPlugMenu.png");
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(getPlugins),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufile);

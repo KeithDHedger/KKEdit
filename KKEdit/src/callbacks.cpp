@@ -2061,7 +2061,10 @@ gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 	return FALSE;
 }
 
-
+void getPlugins(GtkWidget* widget,gpointer data)
+{
+	system("xdg-open \"https://sites.google.com/site/kkeditlinuxtexteditor/home\"");
+}
 
 
 
