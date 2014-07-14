@@ -15,4 +15,4 @@ barberpole_CXXFLAGS = -O3 -export-dynamic
 
 poledir = $(pkgdatadir)
 pole_PROGRAMS = barberpole
-
+#g++ main.cpp -o barber `pkg-config  --cflags --libs gtk+-2.0`
