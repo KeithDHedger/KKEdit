@@ -258,6 +258,7 @@ extern GList*			toolsList;
 
 extern GtkWidget*		restoreBMs;
 
+//main window
 extern int				windowWidth;
 extern int				windowHeight;
 extern int				windowX;
@@ -268,6 +269,7 @@ extern bool				useRegex;
 extern bool				replaceAll;
 extern bool				findInAllFiles;
 extern bool				hightlightAll;
+extern GtkWidget*		mainWindowHBox;
 
 extern int				currentTabNumber;
 extern int 				untitledNumber;

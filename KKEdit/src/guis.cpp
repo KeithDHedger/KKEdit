@@ -1511,8 +1511,13 @@ void buildMainGui(void)
 	toolBarBox=gtk_hbox_new(true,0);
 	toolBar=(GtkToolbar*)gtk_toolbar_new();
 
-	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)menubar,false,true,0);
-	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)toolBarBox,false,true,0);
+//	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)menubar,false,true,0);
+	gtk_box_pack_start(GTK_BOX(mainwindowbox),(GtkWidget*)menubar,false,true,0);
+	
+	
+//	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)toolBarBox,false,true,0);
+	gtk_box_pack_start(GTK_BOX(mainwindowbox),(GtkWidget*)toolBarBox,false,true,0);
+
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)notebook,true,true,0);
 
 //dnd
@@ -1905,15 +1910,27 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->mlist.menuBookMark=menuBookMark;
 	globalPlugins->globalPlugData->mlist.menuView=menuView;
 
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addMenus");
+	//g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addMenus");
 
 //tooloutputwindow
 	mainVPane=gtk_vpaned_new();
 	gtk_container_set_border_width(GTK_CONTAINER(mainVPane),0);
-	gtk_paned_add1(GTK_PANED (mainVPane),vbox);
+	gtk_paned_add1(GTK_PANED(mainVPane),vbox);
 
-	gtk_container_add(GTK_CONTAINER(mainwindowbox),(GtkWidget*)mainVPane);
-	
+	mainWindowHBox=gtk_hbox_new(false,0);
+
+//	gtk_container_add(GTK_CONTAINER(mainWindowHBox),(GtkWidget*)mainVPane);
+//	gtk_container_add(GTK_CONTAINER(mainWindowHBox),(GtkWidget*)mainVPane);
+//	gtk_box_pack_end(GTK_BOX(mainWindowHBox),mainVPane,true,true,0);
+	gtk_box_pack_end(GTK_BOX(mainWindowHBox),mainVPane,true,true,0);
+
+//	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)menubar,false,true,0);
+
+
+	gtk_container_add(GTK_CONTAINER(mainwindowbox),(GtkWidget*)mainWindowHBox);
+	//gtk_container_add(GTK_CONTAINER(mainWindowHBox),(GtkWidget*)mainwindowbox);
+
+	//gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)mainWindowHBox);
 	gtk_container_add(GTK_CONTAINER(window),(GtkWidget*)mainwindowbox);
 
 	toolOutVBox=gtk_vbox_new(false,0);
@@ -1932,6 +1949,10 @@ void buildMainGui(void)
 	gtk_box_pack_end(GTK_BOX(mainwindowbox),statusWidget,false,true,0);
 
 	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
+
+	globalPlugins->globalPlugData->mainHbox=mainWindowHBox;
+	globalPlugins->globalPlugData->mainWindow=window;
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addMenus");
 }
 
 void buildFindReplace(void)

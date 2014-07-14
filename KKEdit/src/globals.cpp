@@ -136,6 +136,7 @@ GList*			toolsList=NULL;
 
 GtkWidget*		restoreBMs;
 
+//main window
 int				windowWidth;
 int				windowHeight;
 int				windowX=-1;
@@ -146,6 +147,7 @@ bool			useRegex;
 bool			replaceAll;
 bool			findInAllFiles;
 bool			hightlightAll;
+GtkWidget*		mainWindowHBox=NULL;
 
 int				currentTabNumber;
 int 			untitledNumber=1;
@@ -250,11 +252,6 @@ unsigned int	shortCuts[100][2]=
 GtkWidget*		progressWindow;
 GtkWidget*		progressBar;
 
-//plugins
-//GList*			pluginList=NULL;
-//GList*			plugPrefsList=NULL;
-//char*			pluginFolder=NULL;
-//plugData*		globalPlugData=NULL;
 PluginClass*	globalPlugins=NULL;
 
 void plugRunFunction(gpointer data,gpointer funcname)
