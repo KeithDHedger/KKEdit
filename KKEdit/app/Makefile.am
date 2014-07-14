@@ -31,6 +31,9 @@ plugfiles_DATA = ../resources/example-plugin/*.so ../resources/example-plugin/*.
 
 bin_PROGRAMS = kkedit
 
+all-local:
+	cd ../pole && g++ main.cpp -o barberpole `pkg-config  --cflags --libs gtk+-2.0`
+
 install-exec-hook:
 	install -D ../resources/pixmaps/KKEditPlug.png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlug.png
 	install -D ../resources/pixmaps/KKEditPlugMenu.png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlugMenu.png
@@ -42,6 +45,7 @@ install-exec-hook:
 	install -D ../resources/pixmaps/KKEditRoot.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditRoot.png
 	mkdir -vp "$(DESTDIR)$(pkgdatadir)/Example External Tools"
 	cp -r "../resources/Example External Tools" "$(DESTDIR)$(pkgdatadir)"
+	cp ../pole/barberpole "$(DESTDIR)$(pkgdatadir)"
 	gtk-update-icon-cache --ignore-theme-index --force ${prefix}/share/icons/hicolor||true
 
 

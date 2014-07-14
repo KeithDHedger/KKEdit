@@ -36,7 +36,7 @@ PKG_CHECK_MODULES(UNIQ, $UNIQ_MODULES)
 AC_SUBST(UNIQ_CFLAGS)
 AC_SUBST(UNIQ_LIBS)
 
-GLIBMODULES_MODULES="gmodule-2.0 >= 2.38.0"
+GLIBMODULES_MODULES="gmodule-2.0 >= 2.32.4"
 PKG_CHECK_MODULES(GLIBMODULES, $GLIBMODULES_MODULES)
 AC_SUBST(GLIBMODULES_CFLAGS)
 AC_SUBST(GLIBMODULES_LIBS)
@@ -98,6 +98,6 @@ AC_ARG_WITH(gsu-path,AS_HELP_STRING([ --with-gsu-path],[Path to graphical su app
 AC_SUBST(with_gsu_path)
 AC_MSG_RESULT([Setting path to graphical su app to \"$with_gsu_path\"])
 
-AC_OUTPUT(Makefile KKEdit/app/Makefile KKEdit/pole/Makefile)
+AC_OUTPUT(Makefile KKEdit/app/Makefile)
 
 
