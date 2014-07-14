@@ -44,6 +44,8 @@
 #define USEURI			-1
 #define USEFILE			-2
 
+#define	POLEPATH		PREFIX "/bin/KKEditProgressBar"
+
 #define NUMSHORTCUTS	13
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};

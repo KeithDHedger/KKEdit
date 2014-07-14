@@ -259,7 +259,7 @@ PluginClass*	globalPlugins=NULL;
 
 void plugRunFunction(gpointer data,gpointer funcname)
 {
-	globalPlugins->runPlugFunction((pluginData*)data,(const char*)funcname);
+	globalPlugins->runPlugFunction((moduleData*)data,(const char*)funcname);
 }
 
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)

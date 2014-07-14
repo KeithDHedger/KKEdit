@@ -1302,9 +1302,9 @@ void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
 void getPlugName(gpointer data,gpointer store)
 {
 	GtkTreeIter		iter;
-	pluginData*		plugdata;
+	moduleData*		plugdata;
 
-	plugdata=(pluginData*)data;
+	plugdata=(moduleData*)data;
 	gtk_list_store_append((GtkListStore*)store,&iter);
 	gtk_list_store_set((GtkListStore*)store,&iter,COLUMN_ENABLE,plugdata->enabled,COLUMN_PLUGIN,plugdata->name,-1);
 }
@@ -1313,7 +1313,7 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 {
 	int			enabled;
 	char*		name=NULL;
-	pluginData*	pd;
+	moduleData*	pd;
 	char*		filepath;
 	GList*		element;
 
@@ -1334,10 +1334,6 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 						pd->module=NULL;
 						pd->loaded=false;
 						pd->enabled=false;
-						//element=g_list_find(globalPlugins->plugins,pd);
-						//free(pd->path);
-						//free(pd->name);
-						//g_list_delete_link(globalPlugins->plugins,element);
 						return(false);
 					}
 			}
@@ -1399,8 +1395,6 @@ void setPlugPrefs(GtkWidget* widget,gpointer data)
 						globalPlugins->runPlugFunction(globalPlugins->getPluginByName(plugname),"plugPrefs");
 						free(plugname);
 					}
-				gtk_widget_hide(plugwindow);
-				gtk_widget_destroy(plugwindow);
 				break;
 			case 2:
 				selection=gtk_tree_view_get_selection((GtkTreeView*)treeview);

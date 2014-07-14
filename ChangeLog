@@ -1,5 +1,5 @@
 0.2.1
-
+Changed the build for the barber pole  as a fix for ubuntu 12.04.
 Down graded the required version of gmodule as a fix for ubuntu 12.04.
 Path to KKEdit's temp folder now passed to plugins.
 Added about box to example plugin.

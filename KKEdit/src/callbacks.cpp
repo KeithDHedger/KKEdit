@@ -14,8 +14,8 @@ GtkPrintSettings*	settings=NULL;
 
 void releasePlugs(gpointer data,gpointer user_data)
 {
-	if(((pluginData*)data)->module!=NULL)
-		g_module_close((GModule*)((pluginData*)data)->module);
+	if(((moduleData*)data)->module!=NULL)
+		g_module_close((GModule*)((moduleData*)data)->module);
 }
 
 void setToobarSensitive(void)
@@ -854,7 +854,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	if(tool->useBar==true)
 		{
 			setenv("KKEDIT_BAR_CONTROL",barcontrol,1);
-			asprintf(&barcommand,DATADIR "/barberpole \"%s\" \"%s\" &",tool->menuName,barcontrol);
+			asprintf(&barcommand,POLEPATH " \"%s\" \"%s\" &",tool->menuName,barcontrol);
 			system(barcommand);
 		}
 
