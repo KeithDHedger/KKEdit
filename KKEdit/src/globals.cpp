@@ -147,7 +147,14 @@ bool			useRegex;
 bool			replaceAll;
 bool			findInAllFiles;
 bool			hightlightAll;
+
+GtkWidget*		mainWindowVBox=NULL;
+GtkWidget*		mainTopUserVBox=NULL;
 GtkWidget*		mainWindowHBox=NULL;
+GtkWidget*		mainLeftUserVBox=NULL;
+GtkWidget*		mainNotebookVBox=NULL;
+GtkWidget*		mainRightUserVBox=NULL;
+GtkWidget*		mainBottomUserVBox=NULL;
 
 int				currentTabNumber;
 int 			untitledNumber=1;

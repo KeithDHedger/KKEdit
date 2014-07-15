@@ -269,7 +269,14 @@ extern bool				useRegex;
 extern bool				replaceAll;
 extern bool				findInAllFiles;
 extern bool				hightlightAll;
+
+extern GtkWidget*		mainWindowVBox;
+extern GtkWidget*		mainTopUserVBox;
 extern GtkWidget*		mainWindowHBox;
+extern GtkWidget*		mainLeftUserVBox;
+extern GtkWidget*		mainNotebookVBox;
+extern GtkWidget*		mainRightUserVBox;
+extern GtkWidget*		mainBottomUserVBox;
 
 extern int				currentTabNumber;
 extern int 				untitledNumber;
