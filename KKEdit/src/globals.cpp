@@ -427,7 +427,7 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,c
 							while(fgets(line,1024,fp))
 								{
 									gtk_text_buffer_insert_at_cursor(toolOutputBuffer,line,strlen(line));
-									while (gtk_events_pending())
+									while(gtk_events_pending())
 										gtk_main_iteration();
 									gtk_text_buffer_get_end_iter(toolOutputBuffer,&iter);
 									gtk_text_view_scroll_to_iter((GtkTextView*)toolOutputView,&iter,0,true,0,0);

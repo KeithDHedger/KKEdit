@@ -1810,6 +1810,30 @@ void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButto
 	toggleBookmark(NULL,iter);
 }
 
+void showToolOutput(bool immediate)
+{
+	showToolOutWin=true;
+	gtk_widget_show(toolOutVBox);
+	gtk_menu_item_set_label((GtkMenuItem*)menuToolOut,"Hide Tool Output");
+	if(immediate==true)
+		{
+			while(gtk_events_pending())
+				gtk_main_iteration();
+		}
+}
+
+void hideToolOutput(bool immediate)
+{
+	showToolOutWin=false;;
+	gtk_widget_show(toolOutVBox);
+	gtk_menu_item_set_label((GtkMenuItem*)menuToolOut,"Show Tool Output");
+	if(immediate==true)
+		{
+			while(gtk_events_pending())
+				gtk_main_iteration();
+		}
+}
+
 void toggleToolOutput(GtkWidget* widget,gpointer data)
 {
 	showToolOutWin=!showToolOutWin;

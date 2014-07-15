@@ -1,4 +1,7 @@
 0.2.1
+Plugins can now send output to the tool output window.
+Added textbuffer of tool output pane for plugin use.
+Added Hide/Show tooloutput for plugin use.
 Tool output pane height now saved at exit.
 Added menu 'Get Plugins' to 'Help' menu to get more plugins from my website.
 Changed some plugin interface names so its less confusing.

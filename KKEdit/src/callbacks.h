@@ -56,5 +56,7 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 void toggleDocviewer(GtkWidget* widget,gpointer data);
 void closeDocViewer(GtkWidget *widget,GdkEvent *event,gpointer data);
 void getPlugins(GtkWidget* widget,gpointer data);
+void showToolOutput(bool immediate);
+void hideToolOutput(bool immediate);
 
 #endif

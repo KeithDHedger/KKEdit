@@ -1403,10 +1403,8 @@ void setPlugPrefs(GtkWidget* widget,gpointer data)
 //apply
 			case 3:
 				setPlugsEnabled();
-				gtk_widget_hide(plugwindow);
-				gtk_widget_destroy(plugwindow);
 				break;
-//cancel
+//close
 			case 4:
 				gtk_widget_hide(plugwindow);
 				gtk_widget_destroy(plugwindow);
@@ -1460,12 +1458,12 @@ void doPlugPrefs(void)
 	button=gtk_button_new_from_stock(GTK_STOCK_ABOUT);
 	gtk_box_pack_start((GtkBox*)hbox,button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setPlugPrefs),(void*)2);
-//close
+//apply
 	button=gtk_button_new_from_stock(GTK_STOCK_APPLY);
 	gtk_box_pack_start((GtkBox*)hbox,button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setPlugPrefs),(void*)3);
-//apply
-	button=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+//close
+	button=gtk_button_new_from_stock(GTK_STOCK_CLOSE);
 	gtk_box_pack_start((GtkBox*)hbox,button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setPlugPrefs),(void*)4);
 
@@ -1947,6 +1945,8 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->rightUserBox=mainRightUserVBox;
 	globalPlugins->globalPlugData->bottomUserBox=mainBottomUserVBox;
 	globalPlugins->globalPlugData->mainWindow=window;
+	globalPlugins->globalPlugData->toolOutBuffer=toolOutputBuffer;
+	globalPlugins->globalPlugData->toolOutWindow=toolOutputView;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
 }
 
