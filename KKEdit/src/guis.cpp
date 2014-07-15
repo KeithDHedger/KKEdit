@@ -1759,6 +1759,7 @@ void buildMainGui(void)
 		menuitem=gtk_menu_item_new_with_label("Show Bookmarks Bar");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookMarkBar),NULL);
+
 //toggle toolbar bar
 	if(showToolBar)
 		menuitem=gtk_menu_item_new_with_label("Hide Tool Bar");
@@ -1766,6 +1767,7 @@ void buildMainGui(void)
 		menuitem=gtk_menu_item_new_with_label("Show Tool Bar");
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleToolBar),NULL);
+
 //tooloutput
 	if(showToolOutWin)
 		menuToolOut=gtk_menu_item_new_with_label("Hide Tool Output");
@@ -1897,14 +1899,12 @@ void buildMainGui(void)
 	gtk_paned_add1(GTK_PANED(mainVPane),mainNotebookVBox);
 
 	toolOutVBox=gtk_vbox_new(false,0);
-
 	gtk_paned_add2(GTK_PANED(mainVPane),toolOutVBox);
 	scrollbox=gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy((GtkScrolledWindow*)scrollbox,GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	toolOutputBuffer=gtk_text_buffer_new(NULL);
 	toolOutputView=gtk_text_view_new_with_buffer(toolOutputBuffer);
 	gtk_container_add(GTK_CONTAINER(scrollbox),(GtkWidget*)toolOutputView);
-
 	gtk_container_add(GTK_CONTAINER(toolOutVBox),(GtkWidget*)scrollbox);
 
 //add main vbox to window
@@ -1915,7 +1915,6 @@ void buildMainGui(void)
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,toolBarBox,false,false,0);
 //add top user
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainTopUserVBox,false,false,0);
-
 //add left user
 	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainLeftUserVBox,false,false,0);
 //add notebook
@@ -1925,10 +1924,8 @@ void buildMainGui(void)
 	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainRightUserVBox,false,false,0);
 //add main hbox
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainWindowHBox,true,true,0);
-
 //add botom user
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainBottomUserVBox,false,false,0);
-
 //add status bar
 	statusWidget=gtk_statusbar_new();
 	gtk_box_pack_end((GtkBox*)mainWindowVBox,statusWidget,false,true,0);
@@ -1963,7 +1960,6 @@ void buildFindReplace(void)
 	GtkWidget*	vbox;
 	GtkWidget*	hbox;
 	GtkWidget*	item;
-
 
 	findReplaceDialog=gtk_dialog_new_with_buttons("Find/Replace",(GtkWindow*)window, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_GO_FORWARD,FINDNEXT,GTK_STOCK_GO_BACK,FINDPREV,"Replace",REPLACE,NULL);
 	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,GTK_RESPONSE_OK);

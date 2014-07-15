@@ -1334,6 +1334,7 @@ void writeExitData(void)
 			fprintf(fd,"showtoolbar	%i\n",(int)showToolBar);
 			fprintf(fd,"showstatusbar	%i\n",(int)showStatus);
 			fprintf(fd,"highlightall	%i\n",(int)hightlightAll);
+			fprintf(fd,"toolouthite	%i\n",gtk_paned_get_position((GtkPaned*)mainVPane));
 			fclose(fd);
 		}
 	g_free(filename);

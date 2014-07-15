@@ -142,6 +142,9 @@ void readConfig(void)
 //highlight all
 					if(strcasecmp(name,"highlightall")==0)
 						hightlightAll=(bool)atoi(strarg);
+//set toolout hite
+					if(strcasecmp(name,"toolouthite")==0)
+						tooOutHeight=(int)atoi(strarg);
 				}
 			fclose(fd);
 		}
@@ -346,7 +349,7 @@ int main(int argc,char **argv)
 		}
 	else
 		{
-	init();
+			init();
 			buildMainGui();
 
 			if(onExitSaveSession==true)
@@ -372,7 +375,7 @@ int main(int argc,char **argv)
 
 
 			gtk_window_get_size((GtkWindow*)window,&w,&h);
-			gtk_paned_set_position((GtkPaned*)mainVPane,h-120);
+			gtk_paned_set_position((GtkPaned*)mainVPane,tooOutHeight);
 			gtk_widget_hide(toolOutVBox);
 			if(getuid()!=0)
 				{
