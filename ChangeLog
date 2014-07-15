@@ -1,5 +1,5 @@
 0.2.1
-Tool output height now saved at exit.
+Tool output pane height now saved at exit.
 Added menu 'Get Plugins' to 'Help' menu to get more plugins from my website.
 Changed some plugin interface names so its less confusing.
 Added top,left.right and bottom user vboxs to main window for use in plugins.
