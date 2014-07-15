@@ -269,7 +269,6 @@ void init(void)
 	globalPlugins->globalPlugData->lPlugFolder=globalPlugins->plugFolderPaths[1];
 	globalPlugins->globalPlugData->htmlFile=htmlFile;
 	globalPlugins->globalPlugData->thePage=&thePage;
-	globalPlugins->globalPlugData->notebook=NULL;
 	globalPlugins->globalPlugData->currentTab=-1;
 	globalPlugins->globalPlugData->tmpFolder=tmpFolderName;
 	

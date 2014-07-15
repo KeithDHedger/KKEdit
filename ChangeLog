@@ -1,4 +1,6 @@
 0.2.1
+Plugin prefs dialog now stays open until manually closed.
+Added top and bottom label to the demo plugin.
 Plugins can now send output to the tool output window.
 Added textbuffer of tool output pane for plugin use.
 Added Hide/Show tooloutput for plugin use.
