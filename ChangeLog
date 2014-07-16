@@ -1,4 +1,5 @@
 0.2.1
+Fixed a few small compile bugs when not using the built in docviewer.
 Hidden all symbols from plugins except what they need to access.
 Updated plugin help and commented example plugin source file.
 Plugin prefs dialog now stays open until manually closed.

@@ -907,7 +907,7 @@ void openHelp(GtkWidget* widget,gpointer data)
 	showDocView(USEURI,(char*)"KKEdit","KKEdit Help");
 #else
 	asprintf(&thePage,"xdg-open %s/help/help.html",DATADIR);
-	runCommand(thePage,NULL,false,8);
+	runCommand(thePage,NULL,false,8,0,"KKEdit Help");
 	g_free(thePage);
 	thePage=NULL;
 #endif

@@ -224,6 +224,8 @@ void init(void)
 	readConfig();
 	loadKeybindings();
 	//getPlugList();
+	
+	
 
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
@@ -246,7 +248,6 @@ void init(void)
 	
 	asprintf(&htmlFile,"%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
 	asprintf(&htmlURI,"file://%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
-	free(filename);
 
 #ifdef _ASPELL_
 	spellChecker=NULL;

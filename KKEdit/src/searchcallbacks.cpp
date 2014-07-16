@@ -31,9 +31,8 @@ void webKitGoHome(GtkWidget* widget,gpointer data)
 }
 #endif
 
-__attribute__((visibility("default"))) void showDocView(int howtodisplay,char* text,const char* title)
+__attribute__((visibility("protected"))) void showDocView(int howtodisplay,char* text,const char* title)
 {
-	char*		command;
 
 #ifdef _BUILDDOCVIEWER_
 
@@ -59,6 +58,7 @@ __attribute__((visibility("default"))) void showDocView(int howtodisplay,char* t
 	gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,"Hide Docviewer");
 
 #else
+	char*		command;
 	command=NULL;
 	if(howtodisplay==USEURI)
 		{
