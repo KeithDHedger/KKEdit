@@ -275,7 +275,7 @@ void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 		gtk_text_view_scroll_to_iter((GtkTextView*)page->view2,iter,0,true,0,0.5);
 }
 
-pageStruct* getPageStructPtr(int pagenum)
+__attribute__((visibility("default"))) pageStruct* getPageStructPtr(int pagenum)
 {
 	int			thispage;
 	GtkWidget*	pageBox;

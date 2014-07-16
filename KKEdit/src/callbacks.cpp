@@ -1821,7 +1821,7 @@ __attribute__((visibility("default"))) void showToolOutput(bool immediate)
 		}
 }
 
-void hideToolOutput(bool immediate)
+__attribute__((visibility("default"))) void hideToolOutput(bool immediate)
 {
 	showToolOutWin=false;;
 	gtk_widget_show(toolOutVBox);
