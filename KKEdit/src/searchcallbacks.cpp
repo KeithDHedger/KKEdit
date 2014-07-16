@@ -31,7 +31,7 @@ void webKitGoHome(GtkWidget* widget,gpointer data)
 }
 #endif
 
-void showDocView(int howtodisplay,char* text,const char* title)
+__attribute__((visibility("default"))) void showDocView(int howtodisplay,char* text,const char* title)
 {
 	char*		command;
 

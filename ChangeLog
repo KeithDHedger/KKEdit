@@ -1,4 +1,6 @@
 0.2.1
+Hidden all symbols from plugins except what they need to access.
+Updated plugin help and commented example plugin source file.
 Plugin prefs dialog now stays open until manually closed.
 Added top and bottom label to the demo plugin.
 Plugins can now send output to the tool output window.

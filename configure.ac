@@ -77,6 +77,7 @@ if test $CTAGS = false; then
 	AC_MSG_ERROR([No ctags program found!])
 fi
 
+
 AC_CHECK_PROG(GTKSU, gtksu ,true,false)
 if test $GTKSU = false; then
 	AC_MSG_NOTICE([No GtkSu program found!])

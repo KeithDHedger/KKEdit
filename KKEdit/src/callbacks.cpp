@@ -11,6 +11,7 @@
 GtkWidget*			tabMenu;
 char				defineText[1024];
 GtkPrintSettings*	settings=NULL;
+bool				closingAll=false;
 
 void releasePlugs(gpointer data,gpointer user_data)
 {
@@ -491,8 +492,6 @@ void setSensitive(void)
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"setSensitive");
 }
-
-bool closingAll=false;
 
 void closeTab(GtkWidget* widget,gpointer data)
 {
@@ -1810,7 +1809,7 @@ void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButto
 	toggleBookmark(NULL,iter);
 }
 
-void showToolOutput(bool immediate)
+__attribute__((visibility("default"))) void showToolOutput(bool immediate)
 {
 	showToolOutWin=true;
 	gtk_widget_show(toolOutVBox);
