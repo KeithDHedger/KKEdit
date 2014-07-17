@@ -10,7 +10,7 @@ Added Hide/Show tooloutput for plugin use.
 Tool output pane height now saved at exit.
 Added menu 'Get Plugins' to 'Help' menu to get more plugins from my website.
 Changed some plugin interface names so its less confusing.
-Added top,left.right and bottom user vboxs to main window for use in plugins.
+Added top,left,right and bottom user vboxs to main window for use in plugins.
 Changed the build for the barber pole  as a fix for ubuntu 12.04.
 Down graded the required version of gmodule as a fix for ubuntu 12.04.
 Path to KKEdit's temp folder now passed to plugins.
