@@ -907,7 +907,7 @@ void openHelp(GtkWidget* widget,gpointer data)
 	showDocView(USEURI,(char*)"KKEdit","KKEdit Help");
 #else
 	asprintf(&thePage,"xdg-open %s/help/help.html",DATADIR);
-	runCommand(thePage,NULL,false,8,0,"KKEdit Help");
+	runCommand(thePage,NULL,false,8,0,(char*)"KKEdit Help");
 	g_free(thePage);
 	thePage=NULL;
 #endif
@@ -2087,7 +2087,7 @@ gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 
 void getPlugins(GtkWidget* widget,gpointer data)
 {
-	system("xdg-open \"https://sites.google.com/site/kkeditlinuxtexteditor/home\"");
+	system("xdg-open \"https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins#getplugs\"");
 }
 
 
