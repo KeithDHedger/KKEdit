@@ -11,7 +11,6 @@
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
-
 #define REPLACE			100
 #define FINDNEXT		200
 #define FINDPREV		300

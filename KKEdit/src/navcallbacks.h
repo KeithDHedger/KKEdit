@@ -6,8 +6,6 @@
  *
 */
 
-#include "kkedit-includes.h"
-
 #ifndef _NAVCALLBACKS_
 #define _NAVCALLBACKS_
 

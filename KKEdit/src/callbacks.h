@@ -6,8 +6,6 @@
  *
 */
 
-#include "kkedit-includes.h"
-
 #ifndef _CALLBACKS_
 #define _CALLBACKS_
 

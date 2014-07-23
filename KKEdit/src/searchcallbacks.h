@@ -6,8 +6,6 @@
  *
 */
 
-#include "kkedit-includes.h"
-
 #ifndef _FUNCCALLBACKS_
 #define _FUNCCALLBACKS_
 

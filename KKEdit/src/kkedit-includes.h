@@ -36,24 +36,25 @@
 #include "config.h"
 #include "sliceclass.h"
 #include "kkedit-plugins.h"
+
 #include "textbuffer.h"
 #include "backclass.h"
-//#include "pluginclass.h"
 
 #ifdef _ASPELL_
 #include <aspell.h>
 #endif
 
+#include "globals.h"
+#include "navcallbacks.h"
+
 #ifdef _BUILDDOCVIEWER_
 #include <webkit/webkit.h>
 #endif
 
-#include "globals.h"
-
+#include "plugins.h"
 #include "callbacks.h"
 #include "guis.h"
 #include "searchcallbacks.h"
-#include "navcallbacks.h"
 #include "spellcheck.h"
 #include "files.h"
 #include "encoding.h"

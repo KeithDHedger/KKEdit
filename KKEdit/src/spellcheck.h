@@ -7,8 +7,6 @@
 * 
 ******************************************************/
 
-#include "kkedit-includes.h"
-
 #ifndef _SPELLCHECK_
 #define _SPELLCHECK_
 #ifdef _ASPELL_
