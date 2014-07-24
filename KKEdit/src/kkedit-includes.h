@@ -44,12 +44,12 @@
 #include <aspell.h>
 #endif
 
-#include "globals.h"
-#include "navcallbacks.h"
-
 #ifdef _BUILDDOCVIEWER_
 #include <webkit/webkit.h>
 #endif
+
+#include "globals.h"
+#include "navcallbacks.h"
 
 #include "plugins.h"
 #include "callbacks.h"
