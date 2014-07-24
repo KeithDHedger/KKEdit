@@ -1,4 +1,6 @@
 0.2.2
+~/.KKEdit/plugins now searched first for plugins, ( ie local plugs take precedence over global plugs ).
+Plugins now checked for duplicate names on load, only first instance loaded.
 Plugins now loaded alphabetically.
 If two or more plugins use a left/right pane pane wont be closed until all plugins close it.
 Added expander handles to left and right user boxes.
