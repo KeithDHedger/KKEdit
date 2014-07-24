@@ -1286,7 +1286,11 @@ void buildMainGui(void)
 	mainNotebookVBox=gtk_vbox_new(false,0);
 	mainRightUserVBox=gtk_vbox_new(false,0);
 	mainBottomUserVBox=gtk_vbox_new(false,0);
+
 	mainWindowHBox=gtk_hbox_new(false,0);
+	mainWindowHPane=gtk_hpaned_new();
+	secondWindowHPane=gtk_hpaned_new();
+
 
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size((GtkWindow*)window,windowWidth,windowHeight);
@@ -1713,15 +1717,46 @@ void buildMainGui(void)
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,toolBarBox,false,false,0);
 //add top user
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainTopUserVBox,false,false,0);
+
+
 //add left user
-	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainLeftUserVBox,false,false,0);
+//	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainLeftUserVBox,false,false,0);
+	gtk_paned_pack1((GtkPaned*)mainWindowHPane,mainLeftUserVBox,false,true);
+	gtk_paned_pack2((GtkPaned*)mainWindowHPane,secondWindowHPane,true,false);
+
 //add notebook
 	gtk_box_pack_start((GtkBox*)mainNotebookVBox,(GtkWidget*)notebook,true,true,0);
 	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainVPane,true,true,0);
+
+	gtk_paned_pack1((GtkPaned*)secondWindowHPane,mainWindowHBox,true,false);
+                                                         
 //addright user
-	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainRightUserVBox,false,false,0);
+//	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainRightUserVBox,false,false,0);
+	gtk_paned_pack2((GtkPaned*)secondWindowHPane,mainRightUserVBox,false,true);
+
+
+
+#if 0
+//add left user
+//	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainLeftUserVBox,false,false,0);
+	gtk_paned_add1((GtkPaned*)mainWindowHPane,mainLeftUserVBox);
+	gtk_paned_add2((GtkPaned*)mainWindowHPane,secondWindowHPane);
+
+//add notebook
+	gtk_box_pack_start((GtkBox*)mainNotebookVBox,(GtkWidget*)notebook,true,true,0);
+	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainVPane,true,true,0);
+
+	gtk_paned_add1((GtkPaned*)secondWindowHPane,mainWindowHBox);
+                                                         
+//addright user
+//	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainRightUserVBox,false,false,0);
+	gtk_paned_add2((GtkPaned*)secondWindowHPane,mainRightUserVBox);
+#endif
+
 //add main hbox
-	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainWindowHBox,true,true,0);
+//	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainWindowHBox,true,true,0);
+	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainWindowHPane,true,true,0);
+
 //add botom user
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainBottomUserVBox,false,false,0);
 //add status bar
@@ -1745,8 +1780,13 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->rightUserBox=mainRightUserVBox;
 	globalPlugins->globalPlugData->bottomUserBox=mainBottomUserVBox;
 	globalPlugins->globalPlugData->mainWindow=window;
+	globalPlugins->globalPlugData->mainWindowHPane=mainWindowHPane;
+
+	globalPlugins->globalPlugData->leftBoxVisibilLock=0;
+
 	globalPlugins->globalPlugData->toolOutBuffer=toolOutputBuffer;
 	globalPlugins->globalPlugData->toolOutWindow=toolOutputView;
+
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
 }
 

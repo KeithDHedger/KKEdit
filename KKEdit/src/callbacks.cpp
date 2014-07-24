@@ -302,7 +302,14 @@ void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 
 void refreshMainWindow(void)
 {
-	gtk_widget_show_all(window);
+	gtk_widget_show(window);
+	gtk_widget_show(mainWindowVBox);
+	gtk_widget_show(mainVPane);
+	gtk_widget_show(mainWindowHPane);
+	gtk_widget_show(secondWindowHPane);
+	gtk_widget_show_all(menubar);
+	gtk_widget_show_all(toolBarBox);
+	gtk_widget_show_all(mainWindowHBox);
 
 	if(showToolOutWin)
 		gtk_widget_show(toolOutVBox);

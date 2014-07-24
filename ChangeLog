@@ -1,4 +1,5 @@
 0.2.2
+Added expander handles to left and right user boxes.
 Code Clean
 About and/or Preferences in plugin prefs dialog now dimmed if not available in the plugin.
 

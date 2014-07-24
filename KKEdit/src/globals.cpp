@@ -157,6 +157,9 @@ GtkWidget*		mainNotebookVBox=NULL;
 GtkWidget*		mainRightUserVBox=NULL;
 GtkWidget*		mainBottomUserVBox=NULL;
 
+GtkWidget*		mainWindowHPane=NULL;
+GtkWidget*		secondWindowHPane=NULL;
+
 int				currentTabNumber;
 int 			untitledNumber=1;
 

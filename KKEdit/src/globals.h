@@ -278,6 +278,10 @@ extern GtkWidget*		mainNotebookVBox;
 extern GtkWidget*		mainRightUserVBox;
 extern GtkWidget*		mainBottomUserVBox;
 
+
+extern GtkWidget*		mainWindowHPane;
+extern GtkWidget*		secondWindowHPane;
+
 extern int				currentTabNumber;
 extern int 				untitledNumber;
 
