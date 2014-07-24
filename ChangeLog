@@ -1,4 +1,6 @@
 0.2.2
+Plugins now loaded alphabetically.
+If two or more plugins use a left/right pane pane wont be closed until all plugins close it.
 Added expander handles to left and right user boxes.
 Code Clean
 About and/or Preferences in plugin prefs dialog now dimmed if not available in the plugin.
