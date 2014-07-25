@@ -1278,7 +1278,6 @@ void buildMainGui(void)
 	GtkWidget*		menu;
 	GtkWidget*		image;
 	GtkWidget*		menurecent;
-	GtkWidget*		scrollbox;
 
 	mainWindowVBox=gtk_vbox_new(false,0);
 	mainTopUserVBox=gtk_vbox_new(false,0);
@@ -1702,12 +1701,12 @@ void buildMainGui(void)
 
 	toolOutVBox=gtk_vbox_new(false,0);
 	gtk_paned_add2(GTK_PANED(mainVPane),toolOutVBox);
-	scrollbox=gtk_scrolled_window_new(NULL,NULL);
-	gtk_scrolled_window_set_policy((GtkScrolledWindow*)scrollbox,GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+	mainWindowScrollbox=gtk_scrolled_window_new(NULL,NULL);
+	gtk_scrolled_window_set_policy((GtkScrolledWindow*)mainWindowScrollbox,GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	toolOutputBuffer=gtk_text_buffer_new(NULL);
 	toolOutputView=gtk_text_view_new_with_buffer(toolOutputBuffer);
-	gtk_container_add(GTK_CONTAINER(scrollbox),(GtkWidget*)toolOutputView);
-	gtk_container_add(GTK_CONTAINER(toolOutVBox),(GtkWidget*)scrollbox);
+	gtk_container_add(GTK_CONTAINER(mainWindowScrollbox),(GtkWidget*)toolOutputView);
+	gtk_container_add(GTK_CONTAINER(toolOutVBox),(GtkWidget*)mainWindowScrollbox);
 
 //add main vbox to window
 	gtk_container_add((GtkContainer*)window,mainWindowVBox);

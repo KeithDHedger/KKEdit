@@ -223,9 +223,6 @@ void init(void)
 
 	readConfig();
 	loadKeybindings();
-	//getPlugList();
-	
-	
 
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 

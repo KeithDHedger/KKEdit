@@ -270,6 +270,8 @@ extern bool				findInAllFiles;
 extern bool				hightlightAll;
 extern int				tooOutHeight;
 
+extern GtkWidget*		mainWindowScrollbox;
+
 extern GtkWidget*		mainWindowVBox;
 extern GtkWidget*		mainTopUserVBox;
 extern GtkWidget*		mainWindowHBox;

@@ -1,4 +1,5 @@
 0.2.2
+
 ~/.KKEdit/plugins now searched first for plugins, ( ie local plugs take precedence over global plugs ).
 Plugins now checked for duplicate names on load, only first instance loaded.
 Plugins now loaded alphabetically.

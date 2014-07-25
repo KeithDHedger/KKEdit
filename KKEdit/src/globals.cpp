@@ -149,6 +149,8 @@ bool			findInAllFiles;
 bool			hightlightAll;
 int				tooOutHeight=200;
 
+GtkWidget*		mainWindowScrollbox=NULL;
+
 GtkWidget*		mainWindowVBox=NULL;
 GtkWidget*		mainTopUserVBox=NULL;
 GtkWidget*		mainWindowHBox=NULL;
