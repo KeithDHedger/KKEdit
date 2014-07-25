@@ -1247,7 +1247,8 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 			submenu=gtk_menu_new();
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),submenu);
 
-			asprintf(&command,"find \"%s\" -maxdepth 1 -xtype f -iname \"[^.]*[^$.o]\"|sort",page->dirName);
+		//	asprintf(&command,"find \"%s\" -maxdepth 1 -xtype f -iname \"[^.]*[^$.o]\"|sort",page->dirName);
+			asprintf(&command,"ls -1 \"%s\"|sort",page->dirName);
 			fp=popen(command,"r");
 			if(fp!=NULL)
 				{
