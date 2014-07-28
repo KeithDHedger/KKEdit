@@ -7,6 +7,7 @@
 #include "kkedit-includes.h"
 
 bool	singleOverRide=false;
+bool	loadPlugins=true;
 
 void readConfig(void)
 {
@@ -259,7 +260,7 @@ void init(void)
 #endif
 
 //do plugins
-	globalPlugins=new PluginClass;
+	globalPlugins=new PluginClass(loadPlugins);
 //set up plugin data		
 	globalPlugins->globalPlugData=(plugData*)malloc(sizeof(plugData));
 	globalPlugins->globalPlugData->dataDir=DATADIR;
@@ -321,6 +322,12 @@ int main(int argc,char **argv)
 	if((argc>1) && (strcmp(argv[1],"-m")==0))
 		singleOverRide=true;
 
+	if((argc>1) && (strcmp(argv[1],"-s")==0))
+		{
+			singleOverRide=true;
+			loadPlugins=false;
+		}
+
 	if((unique_app_is_running(app)==true) && (singleUse==true) && (singleOverRide==false))
 		{
 			if(argc==1)
@@ -354,7 +361,7 @@ int main(int argc,char **argv)
 
 			for(int j=1; j<argc; j++)
 				{
-					if(strncasecmp(argv[j],"-m",2)!=0)
+					if((strncasecmp(argv[j],"-m",2)!=0) && (strncasecmp(argv[j],"-s",2)!=0))
 						openFile(argv[j],0,true);
 				}
 			refreshMainWindow();
