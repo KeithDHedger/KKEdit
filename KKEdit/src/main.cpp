@@ -46,7 +46,7 @@ void readConfig(void)
 					if(strcasecmp(name,"stylename")==0)
 						{
 							if(styleName!=NULL)
-								g_free(styleName);
+								debugFree(styleName,"readConfig styleName");
 							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
 							styleName=strdup(strarg);
 						}
@@ -92,7 +92,7 @@ void readConfig(void)
 							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
 							if(strlen(strarg)>0)
 								{
-									free(terminalCommand);
+									debugFree(terminalCommand,"readConfig terminalCommand");
 									terminalCommand=strdup(strarg);
 								}
 						}
@@ -102,7 +102,7 @@ void readConfig(void)
 							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
 							if(strlen(strarg)>0)
 								{
-									free(rootCommand);
+									debugFree(rootCommand,"readConfig rootCommand");
 									rootCommand=strdup(strarg);
 								}
 						}
@@ -110,7 +110,7 @@ void readConfig(void)
 			fclose(fd);
 		}
 
-	g_free(filename);
+	debugFree(filename,"readConfig filename");
 	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
 	fd=fopen(filename,"r");
 	if(fd!=NULL)
@@ -148,7 +148,7 @@ void readConfig(void)
 				}
 			fclose(fd);
 		}
-	g_free(filename);
+	debugFree(filename,"readConfig filename");
 }
 
 void init(void)
@@ -208,15 +208,15 @@ void init(void)
 
 	asprintf(&filename,"%s/.KKEdit/tools",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
-	g_free(filename);
+	debugFree(filename,"init filename");
 
 	schemeManager=gtk_source_style_scheme_manager_get_default();
 	asprintf(&filename,"%s/.gnome2/gedit/styles",getenv("HOME"));
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
-	g_free(filename);
+	debugFree(filename,"init filename");
 	asprintf(&filename,"%s/styles",DATADIR);
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
-	g_free(filename);
+	debugFree(filename,"init filename");
 
 //toolbar layout
 	toolBarLayout=strdup("NOSsXCPsURsFGsE9ADL");
@@ -263,8 +263,8 @@ void init(void)
 //set up plugin data		
 	globalPlugins->globalPlugData=(plugData*)malloc(sizeof(plugData));
 	globalPlugins->globalPlugData->dataDir=DATADIR;
-	globalPlugins->globalPlugData->gPlugFolder=globalPlugins->plugFolderPaths[0];
-	globalPlugins->globalPlugData->lPlugFolder=globalPlugins->plugFolderPaths[1];
+	globalPlugins->globalPlugData->gPlugFolder=globalPlugins->plugFolderPaths[GLOBALPLUGS];
+	globalPlugins->globalPlugData->lPlugFolder=globalPlugins->plugFolderPaths[LOCALPLUGS];
 	globalPlugins->globalPlugData->htmlFile=htmlFile;
 	globalPlugins->globalPlugData->thePage=&thePage;
 	globalPlugins->globalPlugData->currentTab=-1;

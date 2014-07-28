@@ -1,5 +1,5 @@
 0.2.2
-
+Fixed regex for 'Open' from tab popup not showing some files.
 ~/.KKEdit/plugins now searched first for plugins, ( ie local plugs take precedence over global plugs ).
 Plugins now checked for duplicate names on load, only first instance loaded.
 Plugins now loaded alphabetically.

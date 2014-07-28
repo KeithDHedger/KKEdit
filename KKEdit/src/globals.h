@@ -11,6 +11,8 @@
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
+#undef _DEBUG_FREE_
+
 #define REPLACE			100
 #define FINDNEXT		200
 #define FINDPREV		300
@@ -356,18 +358,6 @@ extern GtkWidget*		progressBar;
 
 #include "pluginclass.h"
 
-//plugins
-//struct pluginData
-//{
-//	char*	name;
-//	bool	enabled;
-//};
-////#define PLUGPATH DATADIR "/plugs"
-//#define PLUGPATH "/media/LinuxData/Development/Projects/KKEdit/KKEdit/resources/plugs"
-//extern GList*			pluginList;
-//extern GList*			plugPrefsList;
-//extern char*			pluginFolder;
-//extern plugData*		globalPlugData;
 extern PluginClass*		globalPlugins;
 
 void plugRunFunction(gpointer data,gpointer funcname);
@@ -386,6 +376,8 @@ void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
 void goBack(GtkWidget* widget,gpointer data);
 void showBarberPole(const char* title);
 void killBarberPole(void);
+void debugFree(gpointer ptr,const char* message);
+
 #endif
 
 

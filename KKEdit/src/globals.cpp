@@ -310,8 +310,8 @@ void getMimeType(char* filepath,void* ptr)
 		{
 			stdout[strlen(stdout)-1]=0;
 			*((char**)ptr)=strdup(stdout);
-			g_free(stdout);
-			g_free(stderr);
+			debugFree(stdout,"getMimeType stdout");
+			debugFree(stderr,"getMimeType stderr");
 		}
 }
 
@@ -354,7 +354,7 @@ void setLanguage(pageStruct* page)
 			else
 				mimetype=strndup(line,strlen(line)-1);
 
-			free(hold);
+			debugFree(hold,"setLanguage hold");
 			pclose(fp);
 		}
 
@@ -382,10 +382,10 @@ void setLanguage(pageStruct* page)
 	g_object_unref(gfileinfo);
 
 	if(mimetype!=NULL)
-		g_free(mimetype);
+		debugFree(mimetype,"setLanguage mimetype");
 }
 
-void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title)
+__attribute__((visibility("default"))) void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title)
 {
 	char*		command;
 	FILE*		fp=NULL;
@@ -454,8 +454,8 @@ void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,c
 	if(flags & TOOL_SHOW_DOC)
 		showDocView(USEFILE,(char*)"",title);
 
-	free(command);
-	free(asroot);
+	debugFree(command,"runCommand command");
+	debugFree(asroot,"runCommand asroot");
 }
 
 functionData* getFunctionByName(char* name,bool recurse)
@@ -585,9 +585,9 @@ functionData* getFunctionByName(char* name,bool recurse)
 										lineptr++;
 								}
 							if(stdout!=NULL)
-								g_free(stdout);
+								debugFree(stdout,"getFunctionByName stdout");
 							if(dirname!=NULL)
-								g_free(dirname);
+								debugFree(dirname,"getFunctionByName dirname");
 						}
 				}
 		}
@@ -631,14 +631,14 @@ void destroyData(functionData* fdata)
 	if(fdata!=NULL)
 		{
 			if(fdata->name!=NULL)
-				g_free(fdata->name);
+				debugFree(fdata->name,"destroyData name");
 			if(fdata->type!=NULL)
-				g_free(fdata->type);
+				debugFree(fdata->type,"destroyData type");
 			if(fdata->file!=NULL)
-				g_free(fdata->file);
+				debugFree(fdata->file,"destroyData file");
 			if(fdata->define!=NULL)
-				g_free(fdata->define);
-			g_free(fdata);
+				debugFree(fdata->define,"destroyData define");
+			debugFree(fdata,"destroyData fdata");
 		}
 }
 
@@ -673,7 +673,7 @@ void getRecursiveTagListFileName(char* filepath,void* ptr)
 	*((char**)ptr)=str->str;
 	g_string_free(str,false);
 
-	g_free(command);
+	debugFree(command,"getRecursiveTagListFileName command");
 }
 
 void getRecursiveTagList(char* filepath,void* ptr)
@@ -714,25 +714,25 @@ void getRecursiveTagList(char* filepath,void* ptr)
 		{
 			newstr=deleteSlice(line,filepath);
 			g_string_append_printf(str,"%s",newstr);
-			g_free(newstr);
+			debugFree(newstr,"getRecursiveTagList newstr");
 		}
 	pclose(fp);
 
 	*((char**)ptr)=str->str;
 	g_string_free(str,false);
-	g_free(command);
-	g_free(sort);
+	debugFree(command,"getRecursiveTagList command");
+	debugFree(sort,"getRecursiveTagList sort");
 }
 
 void destroyTool(gpointer data)
 {
 	if(((toolStruct*)data)->menuName!=NULL)
-		g_free(((toolStruct*)data)->menuName);
+		debugFree(((toolStruct*)data)->menuName,"destroyTool menuName");
 	if(((toolStruct*)data)->filePath!=NULL)
-		g_free(((toolStruct*)data)->filePath);
+		debugFree(((toolStruct*)data)->filePath,"destroyTool filePath");
 	if(((toolStruct*)data)->command!=NULL)
-		g_free(((toolStruct*)data)->command);
-	g_free(data);
+		debugFree(((toolStruct*)data)->command,"destroyTool command");
+	debugFree(data,"destroyTool data");
 }
 
 gint sortTools(gconstpointer a,gconstpointer b)
@@ -848,10 +848,10 @@ void buildToolsList(void)
 												tool->global=false;
 
 											toolsList=g_list_prepend(toolsList,(gpointer)tool);
-											free(menuname);
-											free(commandarg);
+											debugFree(menuname,"buildToolsList menuname");
+											debugFree(commandarg,"buildToolsList commandarg");
 											if(commentarg!=NULL)
-												free(commentarg);
+												debugFree(commentarg,"buildToolsList commentarg");
 										}
 
 									fclose(fd);
@@ -860,8 +860,8 @@ void buildToolsList(void)
 						}
 				}
 		}
-	g_free(datafolder[0]);
-	g_free(datafolder[1]);
+	debugFree(datafolder[0],"buildToolsList datafolder[0]");
+	debugFree(datafolder[1],"buildToolsList datafolder[1]");
 
 	toolsList=g_list_sort(toolsList,sortTools);
 }
@@ -967,3 +967,10 @@ void killBarberPole(void)
 	progressBar=NULL;
 }
 
+__attribute__((visibility("default"))) void debugFree(gpointer ptr,const char* message)
+{
+#ifdef _DEBUG_FREE_
+	fprintf(stderr,"free :%s\n",message);
+#endif
+	free(ptr);
+}

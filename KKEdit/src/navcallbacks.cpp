@@ -110,13 +110,13 @@ void findFile(GtkWidget* widget,gpointer data)
 						lineptr++;
 					openFile(buffer,0,true);
 				}
-			g_free(stdout);
-			g_free(stderr);
+			debugFree(stdout,"findFile stdout");
+			debugFree(stderr,"findFile stderr");
 		}
 
-	g_free(searchdir);
-	g_free(filename);
-	g_free(command);
+	debugFree(searchdir,"findFile searchdir");
+	debugFree(filename,"findFile filename");
+	debugFree(command,"findFile command");
 }
 
 void gotoLine(GtkWidget* widget,gpointer data)
@@ -345,7 +345,7 @@ bool readFile(char *name)
 	unsigned long	fileLen;
 
 	if(filebuffer!=NULL)
-		free(filebuffer);
+		debugFree(filebuffer,"readFile filebuffer");
 	//Open file
 	file=fopen(name,"rb");
 	if (!file)
@@ -549,12 +549,12 @@ docFileData* getDoxyFileData(char* uri)
 		}
 	else
 		{
-			free(doxydata);
+			debugFree(doxydata,"getDoxyFileData doxydata");
 			doxydata=NULL;
 		}
-	free(unhashedline);
-	free(linetag);
-	free(filepath);
+	debugFree(unhashedline,"getDoxyFileData unhashedline");
+	debugFree(linetag,"getDoxyFileData linetag");
+	debugFree(filepath,"getDoxyFileData filepath");
 	return(doxydata);
 }
 
@@ -587,13 +587,13 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 							//buf->scroll2LineM((GtkTextView*)page->view,doxydata->lineNum-1);
 							buf->scroll2LineM(page,doxydata->lineNum-1);
 							delete buf;
-							free(doxydata);
+							debugFree(doxydata,"docLinkTrap doxydata");
 							return(false);
 						}
 				}
 //try to open file f not in tabs
 			openFile(doxydata->sourceFile,doxydata->lineNum,false);
-			free(doxydata);
+			debugFree(doxydata,"docLinkTrap doxydata");
 		}
 	return(false);
 }

@@ -42,7 +42,7 @@ __attribute__((visibility("protected"))) void showDocView(int howtodisplay,char*
 		{
 			if(strcasecmp(thePage,"file://(null)")==0)
 				{
-					free(thePage);
+					debugFree(thePage,"showDocView thePage");
 					asprintf(&thePage,"https://www.google.co.uk/search?q=%s",text);
 				}
 			webkit_web_view_load_uri(webView,thePage);
@@ -74,12 +74,12 @@ __attribute__((visibility("protected"))) void showDocView(int howtodisplay,char*
 	if(command!=NULL)
 		{
 			system(command);
-			free(command);
+			debugFree(command,"showDocView command");
 		}
 #endif
 
 	if(thePage!=NULL)
-		free(thePage);
+		debugFree(thePage,"showDocView thePage");
 	thePage=NULL;
 		
 	return;
@@ -142,15 +142,15 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 																{
 																	searchdata[cnt][0]=strdup(funcname);
 																	asprintf(&searchdata[cnt][1],"%s/%s",foldername,link);
-																	g_free(foldername);
-																	g_free(link);
+																	debugFree(foldername,"seachGtkDocs foldername");
+																	debugFree(link,"seachGtkDocs link");
 																	cnt++;
 																}
-															g_free(tempstr);
+															debugFree(tempstr,"seachGtkDocs tempstr");
 														}
 												}
 										}
-									g_free(funcname);
+									debugFree(funcname,"seachGtkDocs funcname");
 								}
 						}
 				}
@@ -185,12 +185,12 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 	for(int loop=0;loop<cnt;loop++)
 		{
 			if(searchdata[loop][0]!=NULL)
-				g_free(searchdata[loop][0]);
+				debugFree(searchdata[loop][0],"seachGtkDocs searchdata[loop][0]");
 			if(searchdata[loop][1]!=NULL)
-				g_free(searchdata[loop][1]);
+				debugFree(searchdata[loop][1],"seachGtkDocs searchdata[loop][1]");
 		}
 	if((selection!=NULL) && (data==NULL))
-		g_free(selection);
+		debugFree(selection,"seachGtkDocs selection");
 }
 
 void doDoxy(GtkWidget* widget,long data)
@@ -219,7 +219,7 @@ void doDoxy(GtkWidget* widget,long data)
 		}
 
 	if(thePage!=NULL)
-		free(thePage);
+		debugFree(thePage,"doDoxy thePage");
 	asprintf(&thePage,"file://%s/html/index.html",page->dirName);
 	if(dorebuild==true)
 		{
@@ -266,14 +266,14 @@ void doxyDocs(GtkWidget* widget,gpointer data)
 							if(strstr(titleline,selection)!=NULL)
 								{
 									if(thePage!=NULL)
-										free(thePage);
+										debugFree(thePage,"doxyDocs thePage");
 									asprintf(&thePage,"file://%s",line);
 									while(fgets(titleline,1024,headfile));
 									while(fgets(titleline,1024,findfile));
 									pclose(headfile);
 									pclose(findfile);
-									free(headcommand);
-									free(findcommand);
+									debugFree(headcommand,"doxyDocs headcommand");
+									debugFree(findcommand,"doxyDocs findcommand");
 									showDocView(USEURI,thePage,"Doxygen Documentation");
 									killBarberPole();
 									return;
@@ -282,8 +282,8 @@ void doxyDocs(GtkWidget* widget,gpointer data)
 					pclose(headfile);
 				}
 			pclose(findfile);
-			free(headcommand);
-			free(findcommand);
+			debugFree(headcommand,"doxyDocs headcommand");
+			debugFree(findcommand,"doxyDocs findcommand");
 			killBarberPole();
 		}
 }
@@ -339,7 +339,7 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 					fprintf(fd,"</html>\n");
 					fclose(fd);
 					fclose(fp);
-					free(command);
+					debugFree(command,"searchQT5Docs command");
 				}
 			if(cnt==0)
 				asprintf(&thePage,"file://(null)");
@@ -349,7 +349,7 @@ void searchQT5Docs(GtkWidget* widget,gpointer data)
 			showDocView(USEURI,(char*)str->str,"Qt5 Docs");
 
 			g_string_free(str,true);
-			free(selection);
+			debugFree(selection,"searchQT5Docs selection");
 		}
 }
 
@@ -366,7 +366,7 @@ void defSearchFromBar(GtkWidget* widget,gpointer data)
 					goToDefine(fdata);
 					destroyData(fdata);
 				}
-			g_free(functionSearchText);
+			debugFree(functionSearchText,"defSearchFromBar functionSearchText");
 		}
 }
 
@@ -583,12 +583,12 @@ void regexFind(int dowhat)
 											}
 										if(text!=NULL)
 											{
-												g_free(text);
+												debugFree(text,"regexFind text");
 												text=NULL;
 											}
 										if(reptext!=NULL)
 											{
-												g_free(reptext);
+												debugFree(reptext,"regexFind reptext");
 												reptext=NULL;
 											}
 									}
@@ -632,9 +632,9 @@ void regexFind(int dowhat)
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 	g_regex_unref(regex);
 	if(text!=NULL)
-		g_free(text);
+		debugFree(text,"regexFind text");
 	if(reptext!=NULL)
-	g_free(reptext);
+	debugFree(reptext,"regexFind reptext");
 }
 
 void basicFind(int dowhat)
@@ -718,8 +718,8 @@ void basicFind(int dowhat)
 									page->iter=page->match_end;
 								}
 							gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
-							g_free(searchtext);
-							g_free(replacetext);
+							debugFree(searchtext,"basicFind searchtext");
+							debugFree(replacetext,"basicFind replacetext");
 							return;
 						}
 					if((wrapSearch==true) || (findInAllFiles==true))
@@ -749,8 +749,8 @@ void basicFind(int dowhat)
 										page->iter=page->match_start;
 									}
 								gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
-								g_free(searchtext);
-								g_free(replacetext);
+								debugFree(searchtext,"basicFind searchtext");
+								debugFree(replacetext,"basicFind replacetext");
 								return;
 							}
 					if((wrapSearch==true) || (findInAllFiles==true))
@@ -822,7 +822,7 @@ void basicFind(int dowhat)
 											}
 									}
 								if(selectedtext!=NULL)
-									g_free(selectedtext);
+									debugFree(selectedtext,"basicFind selectedtext");
 							}
 					}
 				while(replaceAllFlag==true);
@@ -830,8 +830,8 @@ void basicFind(int dowhat)
 			}
 
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
-	g_free(searchtext);
-	g_free(replacetext);
+	debugFree(searchtext,"basicFind searchtext");
+	debugFree(replacetext,"basicFind replacetext");
 }
 
 void pasteFRClip(GtkWidget* widget,gpointer data)
