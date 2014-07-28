@@ -424,7 +424,6 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
 	debugFree(message,"updateStatuBar message");
 	delete buf;
-	fprintf(stderr,"dead buffer\n");
 }
 
 void setSensitive(void)
