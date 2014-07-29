@@ -61,9 +61,17 @@ GtkWidget*		findDefWidget;
 GtkWidget*		liveSearchWidget;
 
 int				currentPage=0;
+//nag
 bool			nagScreen;
 bool			tmpNagScreen;
+unsigned int	nagTime;
+unsigned int	lastNagTime=0;
+bool			timeToNag=true;
+unsigned int	lastUpdate=0;
+unsigned int	lastPlugUpdate=0;
+unsigned int	updateWait=2592000;
 
+//prefs
 GtkWidget*		prefswin;
 bool			indent;
 bool			lineNumbers;

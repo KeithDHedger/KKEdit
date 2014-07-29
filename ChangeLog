@@ -1,4 +1,7 @@
 0.2.2
+Fixed bookmarks not being removed from closed tab.
+Nag screen now only every month.
+Added check for update every month.
 Added '-s' switch ( safe ) to disable loading of ALL plugins for this session implies '-m'.
 Fixed regex for 'Open' from tab popup not showing some files.
 ~/.KKEdit/plugins now searched first for plugins, ( ie local plugs take precedence over global plugs ).

@@ -125,8 +125,6 @@ struct bookMarksNew
 	int					line;
 };
 
-//#include "backclass.h"
-
 extern HistoryClass*	history;
 
 extern GtkWidget*		window;
@@ -183,9 +181,17 @@ extern GtkWidget*		findDefWidget;
 extern GtkWidget*		liveSearchWidget;
 
 extern int				currentPage;
+//nag
 extern bool				nagScreen;
 extern bool				tmpNagScreen;
+extern unsigned int		nagTime;
+extern unsigned int		lastNagTime;
+extern bool				timeToNag;
+extern unsigned int		lastUpdate;
+extern unsigned int		lastPlugUpdate;
+extern unsigned int		updateWait;
 
+//prefs
 extern GtkWidget*		prefswin;
 extern bool				indent;
 extern bool				lineNumbers;

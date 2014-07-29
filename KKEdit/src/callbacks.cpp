@@ -293,6 +293,7 @@ void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 				}
 
 			bookmarkdata->label=previewtext;
+			bookmarkdata->line=line;
 			menuitem=gtk_menu_item_new_with_label(bookmarkdata->label);
 			gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
 			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)bookmarkdata);
@@ -505,6 +506,9 @@ void closeTab(GtkWidget* widget,gpointer data)
 	long		thispage;
 	int			result;
 	pageStruct*	page;
+	GList*		ptr;
+	bool		changed=false;
+	GtkWidget*	menuitem;
 
 	if(closingAll==true)
 		thispage=0;
@@ -538,8 +542,38 @@ void closeTab(GtkWidget* widget,gpointer data)
 				}
 		}
 
+
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"closeFile");
+
+	rebuildBookMarkMenu();
+	while(changed==false)
+		{
+			changed=true;	
+			ptr=newBookMarksList;
+			while(ptr!=NULL)
+				{
+					if(((bookMarksNew*)ptr->data)->page==page)
+						{
+							free(((bookMarksNew*)ptr->data)->markName);
+							free(((bookMarksNew*)ptr->data)->label);
+							free(ptr->data);
+							changed=false;
+							newBookMarksList=g_list_remove_link(newBookMarksList,ptr);
+						}
+					ptr=g_list_next(ptr);
+				}
+		}
+					
+	ptr=newBookMarksList;
+	while(ptr!=NULL)
+		{
+			menuitem=gtk_menu_item_new_with_label(((bookMarksNew*)ptr->data)->label);
+			gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)ptr->data);
+			ptr=g_list_next(ptr);
+		}
+	gtk_widget_show_all(menuBookMark);
 
 	if(page->filePath!=NULL)
 		debugFree(page->filePath,"closeTab filePath");
@@ -1340,6 +1374,9 @@ void writeExitData(void)
 			fprintf(fd,"showstatusbar	%i\n",(int)showStatus);
 			fprintf(fd,"highlightall	%i\n",(int)hightlightAll);
 			fprintf(fd,"toolouthite	%i\n",gtk_paned_get_position((GtkPaned*)mainVPane));
+			fprintf(fd,"nagtime	%i\n",lastNagTime);
+			fprintf(fd,"lastupdate	%i\n",lastUpdate);
+			fprintf(fd,"lastplugupdate	%i\n",lastPlugUpdate);
 			fclose(fd);
 		}
 	debugFree(filename,"writeExitData filename");

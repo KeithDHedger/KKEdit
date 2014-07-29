@@ -5,6 +5,7 @@
 */
 
 #include "kkedit-includes.h"
+#include <time.h>
 
 bool	singleOverRide=false;
 bool	loadPlugins=true;
@@ -146,6 +147,13 @@ void readConfig(void)
 //set toolout hite
 					if(strcasecmp(name,"toolouthite")==0)
 						tooOutHeight=(int)atoi(strarg);
+//last nag time/update
+					if(strcasecmp(name,"nagtime")==0)
+						lastNagTime=atol(strarg);
+					if(strcasecmp(name,"lastupdate")==0)
+						lastUpdate=atol(strarg);
+					if(strcasecmp(name,"lastplugupdate")==0)
+						lastPlugUpdate=atol(strarg);
 				}
 			fclose(fd);
 		}
@@ -157,6 +165,10 @@ void init(void)
 	char*		filename;
 	int			exitstatus;
 	char		tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
+
+//nag times
+	lastNagTime=-1;
+	nagTime=(long)time(NULL);
 
 #ifdef _ASPELL_
 	AspellCanHaveError*	possible_err;
@@ -286,6 +298,15 @@ void init(void)
 //			printf("num %i enabled=%in",j,(int)pd->enabled);
 //			printf("num %i path=%sn",j,pd->path);
 //		}
+//time to nag?
+
+	timeToNag=false;
+	if((lastNagTime==0) || (nagTime-lastNagTime>updateWait))
+		{
+			timeToNag=true;
+			lastNagTime=nagTime;
+		}
+
 	history=new HistoryClass;
 	globalSlice->setReturnDupString(true);
 }
@@ -299,6 +320,106 @@ void doNagScreen(void)
 
 	gtk_dialog_run(GTK_DIALOG (dialog));
 	gtk_widget_destroy(dialog);
+}
+
+void doNagStuff(void)
+{
+	char*			command=NULL;
+	char*			control=NULL;
+	int				gotcurl=-1;
+	int				gotwget=-1;
+	int				exitstatus;
+	FILE*			fp;
+	char			t1[1024];
+	char			vers[1024];
+	char			plugt[1024];
+	unsigned int	thisupdate=0;
+	char*			kkeditupdatemessage=strdup("");
+	char*			plugupdatemessage=strdup("");
+	
+	asprintf(&command,"KKEditProgressBar \"Checking for updates ...\" %s/updatecontrol &",tmpFolderName);
+	system(command);
+	while(gtk_events_pending())
+		gtk_main_iteration();
+
+	debugFree(command,"command pulse from donagstuff");
+
+	asprintf(&control,"echo \"pulse\" > \"%s/updatecontrol\"",tmpFolderName);
+	system(control);
+	debugFree(control,"control from donagstuff");
+
+	exitstatus=system("which curl 2>&1 >/dev/null");
+	gotcurl=WEXITSTATUS(exitstatus);
+
+	if(gotcurl==0)
+		asprintf(&command,"curl https://dl.dropboxusercontent.com/s/xcvp8af3qp7ffxg/NAGTIME -s -o -");
+	else
+		{
+			exitstatus=system("which wget 2>&1 >/dev/null");
+			gotwget=WEXITSTATUS(exitstatus);
+			if(gotwget==0)
+				asprintf(&command,"wget https://dl.dropboxusercontent.com/s/xcvp8af3qp7ffxg/NAGTIME -O - -q");
+		}
+
+	if(command!=NULL)
+		{
+			t1[0]=0;
+			vers[0]=0;
+			plugt[0]=0;
+			fp=popen(command,"r");
+			if(fp!=NULL)
+				{
+					fgets(t1,1024,fp);
+					fgets(vers,1024,fp);
+					fgets(plugt,1024,fp);
+					pclose(fp);
+				}
+			t1[strlen(t1)-1]=0;
+			vers[strlen(vers)-1]=0;
+			plugt[strlen(plugt)-1]=0;
+
+			asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
+			system(control);
+			debugFree(control,"control from do nag stuff");
+			if(strlen(t1)>1)
+				{
+					thisupdate=atol(t1);
+					if((thisupdate>lastUpdate) || (strcmp(VERSION,vers)!=0))
+						{
+							GtkWidget* dialog;
+
+							if(strcmp(VERSION,vers)!=0)
+								{
+									free(kkeditupdatemessage);
+									asprintf(&kkeditupdatemessage,"KKEdit update available to <b>%s</b> from <b>%s</b>\nFrom here:\n<b>%s</b>\n",vers,VERSION,MYWEBSITE);
+								}
+						
+							if(lastPlugUpdate<atol(plugt))
+								{
+									free(plugupdatemessage);
+									asprintf(&plugupdatemessage,"\nPlugin updates are available from here:\n<b>https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins</b>"); 
+									lastPlugUpdate=thisupdate;
+								}
+
+							dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"Updates Available");
+							gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s%s",kkeditupdatemessage,plugupdatemessage);
+
+							gtk_dialog_run(GTK_DIALOG (dialog));
+							gtk_widget_destroy(dialog);
+							free(kkeditupdatemessage);
+							free(plugupdatemessage);
+							lastUpdate=thisupdate;
+						}
+				}
+			debugFree(command,"command from donagstuff");
+		}
+
+	if((nagScreen==false))
+		doNagScreen();
+
+	asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
+	system(control);
+	debugFree(control,"control from do nag stuff");	
 }
 
 int main(int argc,char **argv)
@@ -374,10 +495,6 @@ int main(int argc,char **argv)
 			unique_app_watch_window(app,(GtkWindow*)window);
 			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
 
-			if((nagScreen==false))
-				doNagScreen();
-
-
 			gtk_window_get_size((GtkWindow*)window,&w,&h);
 			gtk_paned_set_position((GtkPaned*)mainVPane,tooOutHeight);
 			gtk_widget_hide(toolOutVBox);
@@ -393,6 +510,10 @@ int main(int argc,char **argv)
 
 			}
 			setSensitive();
+
+			if(timeToNag==true)
+				doNagStuff();
+
 			gtk_main();
 			
 			delete history;

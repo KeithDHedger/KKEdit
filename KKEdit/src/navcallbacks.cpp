@@ -202,12 +202,14 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 	pageStruct*		page;
 	pageStruct*		checkpage;
 	TextBuffer*		buf;
-
 	history->savePosition();
+
 	page=(pageStruct*)((bookMarksNew*)data)->page;
 	mark=(GtkTextMark*)((bookMarksNew*)data)->mark;
 	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+
 	buf->scroll2Mark((GtkTextView*)page->view,mark);
+
 	for(int loop=0; loop<gtk_notebook_get_n_pages(notebook); loop++)
 		{
 			checkpage=getPageStructPtr(loop);
