@@ -803,6 +803,7 @@ void writeExitData(void)
 			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
 			fprintf(fd,"replaceall	%i\n",(int)replaceAll);
 			fprintf(fd,"allfiles	%i\n",(int)findInAllFiles);
+			fprintf(fd,"nagscreen	%s\n",nagScreen);
 			fclose(fd);
 		}
 	g_free(filename);

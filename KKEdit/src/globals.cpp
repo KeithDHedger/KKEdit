@@ -58,6 +58,7 @@ GtkWidget*		findDefWidget;
 GtkWidget*		liveSearchWidget;
 
 int				currentPage=0;
+char*			nagScreen=strdup("XXXXXXXXXX");
 
 GtkWidget*		prefswin;
 bool			indent;
@@ -674,4 +675,67 @@ void buildToolsList(void)
 		}
 	g_free(datafolder[0]);
 	g_free(datafolder[1]);
+}
+
+
+int makeCheckDigit(char* data)
+{
+	char	dataarray[10];
+	int		sum=0;
+	bool	alt=true;
+	int		curdigit;
+
+	for(int j=0;j<strlen(data);j++)
+		dataarray[j]=data[j];
+
+	for(int i=strlen(data)-1;i>=0;i--)
+		{
+			curdigit=(dataarray[i] - 48);
+			if (alt)
+				{
+					curdigit*=2;
+					if(curdigit>9)
+						curdigit-=9;
+				}
+			sum+=curdigit;
+			alt=!alt;
+		}
+
+	if((sum%10)==0)
+		return(0);
+	else
+		return(10-(sum%10));}
+
+
+
+
+int makeCheckDigitXXX(char* checkdata)
+{
+	char	dataarray[10]={0,};
+	int		sum=0;
+	bool	alt=true;
+	int		curdigit;
+
+	for(int j=0;j<strlen(checkdata);j++)
+{
+		dataarray[j]=checkdata[j];
+printf("AA%c\n",dataarray[j]);
+}
+	for(int i=9;i>=0;i--)
+		{
+			curdigit=(dataarray[i]-48);
+			if (alt)
+				{
+					curdigit*=2;
+					if(curdigit>9)
+						curdigit-=9;
+				}
+			sum+=curdigit;
+			alt=!alt;
+		}
+
+	if((sum%10)==0)
+		return(0);
+	else
+		return(10-(sum%10));
 }

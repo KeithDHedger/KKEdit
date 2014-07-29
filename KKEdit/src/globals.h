@@ -133,6 +133,7 @@ extern GtkWidget*		findDefWidget;
 extern GtkWidget*		liveSearchWidget;
 
 extern int				currentPage;
+extern char*			nagScreen;
 
 extern GtkWidget*		prefswin;
 extern bool				indent;
@@ -260,6 +261,7 @@ void buildToolsList(void);
 char* deleteSlice(char* srcstring,char* delstr);
 void getRecursiveTagListFileName(char* filepath,void* ptr);
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
+int makeCheckDigit(char* data);
 
 #endif
 

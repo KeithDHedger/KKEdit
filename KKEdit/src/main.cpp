@@ -14,6 +14,7 @@
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <unique/unique.h>
+#include <time.h>
 
 #include "globals.h"
 #include "files.h"
@@ -116,6 +117,11 @@ void readConfig(void)
 							replaceAll=(bool)atoi(strarg);
 					if(strcasecmp(name,"allfiles")==0)
 							findInAllFiles=(bool)atoi(strarg);
+					if(strcasecmp(name,"nagscreen")==0)
+						{
+							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
+							nagScreen=strdup(strarg);
+						}
 				}
 			fclose(fd);
 		}
@@ -200,6 +206,17 @@ void init(void)
 
 }
 
+void doNagScreen(void)
+{
+	GtkWidget* dialog;
+
+	dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"Please donate");
+	gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"If you have a PayPal account you can donate any amount you like by logging into yor account and click the 'Send Money' tab, enter my email address\n<b>%s</b>\nand then send it.\n\nThank you for helping to support Free software.",MYEMAIL);
+
+	gtk_dialog_run(GTK_DIALOG (dialog));
+	gtk_widget_destroy(dialog);
+}
+
 int main(int argc,char **argv)
 {
 	UniqueApp*			app;
@@ -208,8 +225,14 @@ int main(int argc,char **argv)
 	UniqueResponse 		response;
 	UniqueBackend*		back;
 	char*				dbusname;
+	tm*					timedata;
+	time_t				now;
+	char				makenum[10]={0,};
 
 	gtk_init(&argc,&argv);
+
+	time(&now);
+	timedata=localtime(&now);
 
 	back=unique_backend_create();
 	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace(back));
@@ -217,6 +240,32 @@ int main(int argc,char **argv)
 	message=unique_message_data_new();
 
 	init();
+	
+
+	for(int j=0;j<9;j++)
+		makenum[j]=nagScreen[j];
+
+printf("%i\n",makeCheckDigit(&makenum[0]));
+	if((nagScreen[9]-48)!=makeCheckDigit(&makenum[0]))
+		{
+		printf("XXXX\n");
+			if(nagScreen[0]=='X')
+				{
+					nagScreen=strdup("aaaaaaaaaa");
+					doNagScreen();
+				}
+			else
+				{
+					if((timedata->tm_mon==7)||(timedata->tm_mon==0))
+						nagScreen=strdup("aaaaaaaaaa");
+
+					if((nagScreen[0]=='a') && ((timedata->tm_mon==6)||(timedata->tm_mon==11)))
+						{
+							nagScreen=strdup("bbbbbbbbbb");;
+							doNagScreen();
+						}
+				}
+		}
 
 	if((argc>1) && (strcmp(argv[1],"-m")==0))
 		singleOverRide=true;
