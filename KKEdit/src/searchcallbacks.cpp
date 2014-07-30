@@ -384,6 +384,24 @@ void docSearchFromBar(GtkWidget* widget,gpointer data)
 		seachGtkDocs(NULL,(void*)text);
 }
 
+#ifdef _BUILDDOCVIEWER_
+void docSearchInPageFoward(GtkWidget* widget,gpointer data)
+{
+	const char* text=gtk_entry_get_text((GtkEntry*)data);
+
+	if(text!=NULL && strlen(text)>0)
+		webkit_web_view_search_text(webView,text,false,true,true);
+}
+
+void docSearchInPageBack(GtkWidget* widget,gpointer data)
+{
+	const char* text=gtk_entry_get_text((GtkEntry*)data);
+
+	if(text!=NULL && strlen(text)>0)
+		webkit_web_view_search_text(webView,text,false,false,true);
+}
+#endif
+
 void qt5DocSearchFromBar(GtkWidget* widget,gpointer data)
 {
 	const char* text=gtk_entry_get_text((GtkEntry*)data);

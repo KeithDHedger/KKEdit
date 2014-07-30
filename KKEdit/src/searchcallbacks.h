@@ -13,6 +13,8 @@
 void webKitGoBack(GtkWidget* widget,gpointer data);
 void webKitGoForward(GtkWidget* widget,gpointer data);
 void webKitGoHome(GtkWidget* widget,gpointer data);
+void docSearchInPageFoward(GtkWidget* widget,gpointer data);
+void docSearchInPageBack(GtkWidget* widget,gpointer data);
 #endif
 
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data);

@@ -1966,6 +1966,7 @@ void buildGtkDocViewer(void)
 	GtkWidget*	scrolledWindow;
 	GtkWidget*	entry;
 	GtkWidget*	findbutton;
+	GtkWidget*	findnextinpage;
 	WebKitWebSettings*	settings;
 
 	docView=gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -1973,7 +1974,7 @@ void buildGtkDocViewer(void)
 	gtk_window_set_title((GtkWindow*)docView,"Doc Viewer");
 
 	vbox=gtk_vbox_new(false,0);
-	hbox=gtk_hbox_new(true,0);
+	hbox=gtk_hbox_new(false,4);
 
 	webView=WEBKIT_WEB_VIEW(webkit_web_view_new());
 	g_signal_connect(G_OBJECT(webView),"navigation-policy-decision-requested",G_CALLBACK(docLinkTrap),NULL);	
@@ -1993,22 +1994,41 @@ void buildGtkDocViewer(void)
 	gtk_container_add(GTK_CONTAINER(vbox),scrolledWindow);
 
 	button=gtk_button_new_from_stock(GTK_STOCK_GO_BACK);
-	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
+	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoBack),(void*)webView);	
- 
+
+//spacer
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,false,0);
+
 	button=gtk_button_new_from_stock(GTK_STOCK_HOME);
-	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
+	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoHome),(void*)webView);	
  
+//spacer
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,false,0);
+
 	entry=gtk_entry_new();
-	gtk_box_pack_start(GTK_BOX(hbox),entry,false,true,0);
-	g_signal_connect_after(G_OBJECT(entry),"activate",G_CALLBACK(docSearchFromBar),(void*)entry);
 	findbutton=gtk_button_new_from_stock(GTK_STOCK_FIND);
 	gtk_box_pack_start(GTK_BOX(hbox),findbutton,false,false,0);
 	g_signal_connect(G_OBJECT(findbutton),"clicked",G_CALLBACK(docSearchFromBar),(void*)entry);	
 
+	gtk_box_pack_start(GTK_BOX(hbox),entry,false,true,0);
+	g_signal_connect_after(G_OBJECT(entry),"activate",G_CALLBACK(docSearchFromBar),(void*)entry);
+
+	findnextinpage=gtk_button_new_from_stock(GTK_STOCK_GO_DOWN);
+//	g_object_set(findnextinpage,"label","Find Next In Page",NULL);
+	gtk_box_pack_start(GTK_BOX(hbox),findnextinpage,false,false,0);
+	g_signal_connect(G_OBJECT(findnextinpage),"clicked",G_CALLBACK(docSearchInPageFoward),(void*)entry);
+
+	findbutton=gtk_button_new_from_stock(GTK_STOCK_GO_UP);
+	gtk_box_pack_start(GTK_BOX(hbox),findbutton,false,false,0);
+	g_signal_connect(G_OBJECT(findbutton),"clicked",G_CALLBACK(docSearchInPageBack),(void*)entry);
+
+//spacer
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,false,0);
+
 	button=gtk_button_new_from_stock(GTK_STOCK_GO_FORWARD);
-	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
+	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoForward),(void*)webView);	
 
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,false,4);

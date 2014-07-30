@@ -1,4 +1,6 @@
 0.2.2
+Added search in page of builtin doc viewer (Up/Down).
+Fixed bug when trying to jump to non-existant function declaration.
 Fixed minor sensitive bug when closing tab.
 If documentation doesn't exist when selecting 'Show Documentaion' from the 'View' menu it is now built.
 Fixed bookmarks not being removed from closed tab.
