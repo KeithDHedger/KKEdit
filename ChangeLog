@@ -1,4 +1,5 @@
 0.2.2
+Fixed minor sensitive bug when closing tab.
 If documentation doesn't exist when selecting 'Show Documentaion' from the 'View' menu it is now built.
 Fixed bookmarks not being removed from closed tab.
 Nag screen now only every month.
