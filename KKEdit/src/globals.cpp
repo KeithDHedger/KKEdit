@@ -69,7 +69,7 @@ unsigned int	lastNagTime=0;
 bool			timeToNag=true;
 unsigned int	lastUpdate=0;
 unsigned int	lastPlugUpdate=0;
-unsigned int	updateWait=2592000;
+unsigned int	updateWait=2678400;
 
 //prefs
 GtkWidget*		prefswin;

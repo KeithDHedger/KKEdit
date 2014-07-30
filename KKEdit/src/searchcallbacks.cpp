@@ -211,6 +211,11 @@ void doDoxy(GtkWidget* widget,long data)
 
 	showBarberPole("Building Documentaion ...");
 	chdir(page->dirName);
+
+	stat("./html/index.html",&sb);
+	if(!S_ISREG(sb.st_mode))
+		dorebuild=true;
+
 	stat("Doxyfile",&sb);
 	if(!S_ISREG(sb.st_mode))
 		{
@@ -220,6 +225,7 @@ void doDoxy(GtkWidget* widget,long data)
 
 	if(thePage!=NULL)
 		debugFree(thePage,"doDoxy thePage");
+
 	asprintf(&thePage,"file://%s/html/index.html",page->dirName);
 	if(dorebuild==true)
 		{
@@ -239,8 +245,8 @@ void doxyDocs(GtkWidget* widget,gpointer data)
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
-	char*		findcommand;
-	char*		headcommand;
+	char*		findcommand=NULL;
+	char*		headcommand=NULL;
 	char		line[1024];
 	char		titleline[1024];
 	FILE*		findfile;
@@ -272,8 +278,7 @@ void doxyDocs(GtkWidget* widget,gpointer data)
 									while(fgets(titleline,1024,findfile));
 									pclose(headfile);
 									pclose(findfile);
-									debugFree(headcommand,"doxyDocs headcommand");
-									debugFree(findcommand,"doxyDocs findcommand");
+									debugFree(headcommand,"doxyDocs headcommand 1");
 									showDocView(USEURI,thePage,"Doxygen Documentation");
 									killBarberPole();
 									return;
@@ -282,8 +287,9 @@ void doxyDocs(GtkWidget* widget,gpointer data)
 					pclose(headfile);
 				}
 			pclose(findfile);
-			debugFree(headcommand,"doxyDocs headcommand");
-			debugFree(findcommand,"doxyDocs findcommand");
+			if(headcommand!=NULL)
+				debugFree(headcommand,"doxyDocs headcommand 2");
+			debugFree(findcommand,"doxyDocs findcommand 2");
 			killBarberPole();
 		}
 }

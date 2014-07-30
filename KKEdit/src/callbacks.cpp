@@ -429,7 +429,7 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 
 void setSensitive(void)
 {
-	pageStruct*		page=getPageStructPtr(currentTabNumber);
+	pageStruct*		page=getPageStructPtr(-1);
 	const gchar*	text;
 	char*			newlabel;
 	int				offset=0;
