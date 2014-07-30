@@ -2016,7 +2016,6 @@ void buildGtkDocViewer(void)
 	g_signal_connect_after(G_OBJECT(entry),"activate",G_CALLBACK(docSearchFromBar),(void*)entry);
 
 	findnextinpage=gtk_button_new_from_stock(GTK_STOCK_GO_DOWN);
-//	g_object_set(findnextinpage,"label","Find Next In Page",NULL);
 	gtk_box_pack_start(GTK_BOX(hbox),findnextinpage,false,false,0);
 	g_signal_connect(G_OBJECT(findnextinpage),"clicked",G_CALLBACK(docSearchInPageFoward),(void*)entry);
 
