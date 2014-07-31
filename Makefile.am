@@ -1,5 +1,5 @@
 
-SUBDIRS = KKEdit/resources/example-plugin KKEdit/app
+SUBDIRS = KKEdit/app
 
 remake:
 	$(shell ./remakesourcelist)
