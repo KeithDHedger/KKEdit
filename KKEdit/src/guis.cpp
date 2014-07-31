@@ -1763,6 +1763,7 @@ void buildMainGui(void)
 
 	globalPlugins->globalPlugData->toolOutBuffer=toolOutputBuffer;
 	globalPlugins->globalPlugData->toolOutWindow=toolOutputView;
+	globalPlugins->globalPlugData->tabPopUpMenu=NULL;
 
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
 }
@@ -1956,6 +1957,13 @@ int showFunctionEntry(void)
 
 	return(result);
 }
+void testweb(GObject* gobject,GParamSpec* pspec,gpointer data)
+{
+//WebKitWebWindowFeatures *features = webkit_web_view_get_window_features (webView);
+	g_object_set((gpointer)gobject,"menubar-visible",true,NULL);
+	g_object_set((gpointer)gobject,"statusbar-visible",true,NULL);
+
+}
 
 #ifdef _BUILDDOCVIEWER_
 void buildGtkDocViewer(void)
@@ -1978,15 +1986,6 @@ void buildGtkDocViewer(void)
 
 	webView=WEBKIT_WEB_VIEW(webkit_web_view_new());
 	g_signal_connect(G_OBJECT(webView),"navigation-policy-decision-requested",G_CALLBACK(docLinkTrap),NULL);	
-
-//
-///* Get the current WebKitWebWindowFeatures */
-//WebKitWebWindowFeatures *features = webkit_web_view_get_window_features (my_webview);
-//
-///* Connect to the property changes */
-//g_signal_connect (G_OBJECT(features), "notify::menubar-visible", G_CALLBACK(make_menu_bar_visible), NULL);
-//g_signal_connect (G_OBJECT(features), "notify::statusbar-visible", G_CALLBACK(make_status_bar_visible), NULL);
-//
 
 	settings=webkit_web_view_get_settings(webView);
 	g_object_set((gpointer)settings,"enable-file-access-from-file-uris",true,NULL);

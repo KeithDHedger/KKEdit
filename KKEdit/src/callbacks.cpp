@@ -1298,6 +1298,11 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 
 			gtk_widget_show_all(menuitem);
 
+//do plugs
+			globalPlugins->globalPlugData->tabPopUpMenu=tabMenu;
+			globalPlugins->globalPlugData->page=page;
+			g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToTab");
+
 			gtk_menu_attach_to_widget(GTK_MENU(tabMenu),widget,NULL);
 			gtk_menu_popup(GTK_MENU(tabMenu),NULL,NULL,NULL,NULL,event->button,event->time);
 			gtk_widget_show_all((GtkWidget*)tabMenu);

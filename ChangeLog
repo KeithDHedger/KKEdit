@@ -1,4 +1,6 @@
 0.2.2
+Added tab popup menu to data passed to plugins to add to the tab pop up.
+Added call to "addToTab" functions in plugins.
 Removed example-plugin from package as it's available from the website now.
 Added search in page of builtin doc viewer (Up/Down).
 Fixed bug when trying to jump to non-existant function declaration.
