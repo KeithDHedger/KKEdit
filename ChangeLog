@@ -1,5 +1,6 @@
 0.2.2
-Added context popup menu to data passed to plugins to add to the tab pop up.
+Added context popup menu to data passed to plugins to add to the context pop up.
+Added call to "addToContext" functions in plugins.
 Added tab popup menu to data passed to plugins to add to the tab pop up.
 Added call to "addToTab" functions in plugins.
 Removed example-plugin from package as it's available from the website now.
