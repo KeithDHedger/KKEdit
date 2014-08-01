@@ -1069,6 +1069,10 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);
 
+	globalPlugins->globalPlugData->contextPopUpMenu=(GtkWidget*)menu;
+
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToContext");
+
 	gtk_widget_show_all((GtkWidget*)menu);
 }
 

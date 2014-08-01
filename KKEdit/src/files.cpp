@@ -174,7 +174,7 @@ bool getSaveFile(void)
 	return(retval);
 }
 
-bool saveFile(GtkWidget* widget,gpointer data)
+__attribute__((visibility("default"))) bool saveFile(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start,end;
@@ -558,7 +558,7 @@ pageStruct* makeNewPage(void)
 	return(page);
 }
 
-bool openFile(const gchar *filepath,int linenumber,bool warn)
+__attribute__((visibility("default"))) bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
 	GtkTextIter				iter;
 	GtkWidget*				label;
@@ -744,7 +744,7 @@ bool openFile(const gchar *filepath,int linenumber,bool warn)
 	return TRUE;
 }
 
-void newFile(GtkWidget* widget,gpointer data)
+__attribute__((visibility("default"))) void newFile(GtkWidget* widget,gpointer data)
 {
 	GtkTextIter	iter;
 	GtkWidget*	label;

@@ -1764,6 +1764,7 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->toolOutBuffer=toolOutputBuffer;
 	globalPlugins->globalPlugData->toolOutWindow=toolOutputView;
 	globalPlugins->globalPlugData->tabPopUpMenu=NULL;
+	globalPlugins->globalPlugData->contextPopUpMenu=NULL;
 
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
 }
