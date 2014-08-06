@@ -108,6 +108,17 @@ void readConfig(void)
 									rootCommand=strdup(strarg);
 								}
 						}
+
+					if(strcasecmp(name,"defaultbrowser")==0)
+						{
+							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
+							if(strlen(strarg)>0)
+								{
+									debugFree(browserCommand,"readConfig browserCommand");
+									browserCommand=strdup(strarg);
+								}
+						}
+
 				}
 			fclose(fd);
 		}

@@ -947,7 +947,7 @@ void openHelp(GtkWidget* widget,gpointer data)
 #ifdef _BUILDDOCVIEWER_
 	showDocView(USEURI,(char*)"KKEdit","KKEdit Help");
 #else
-	asprintf(&thePage,"xdg-open %s/help/help.html",DATADIR);
+	asprintf(&thePage,"%s %s/help/help.html",browserCommand,DATADIR);
 	runCommand(thePage,NULL,false,8,0,(char*)"KKEdit Help");
 	debugFree(thePage,"openHelp thePage");
 	thePage=NULL;
@@ -1432,6 +1432,7 @@ void writeConfig(void)
 			fprintf(fd,"font	%s\n",fontAndSize);
 			fprintf(fd,"terminalcommand	%s\n",terminalCommand);
 			fprintf(fd,"rootcommand	%s\n",rootCommand);
+			fprintf(fd,"defaultbrowser	%s\n",browserCommand);
 
 			fprintf(fd,"toolbarlayout	%s\n",toolBarLayout);
 			fprintf(fd,"funcsort	%i\n",listFunction);
@@ -1602,6 +1603,12 @@ void setPrefs(GtkWidget* widget,gpointer data)
 				{
 					debugFree(fontAndSize,"setPrefs fontAndSize");
 					fontAndSize=strdup(gtk_font_button_get_font_name((GtkFontButton*)fontButton));
+				}
+
+			if(browserCommand!=NULL)
+				{
+					debugFree(browserCommand,"setPrefs browserCommand");
+					browserCommand=strdup(gtk_entry_get_text((GtkEntry*)defaultBrowserBox));
 				}
 
 			if(toolBarLayout!=NULL)
@@ -2139,7 +2146,11 @@ gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 
 void getPlugins(GtkWidget* widget,gpointer data)
 {
-	system("xdg-open \"https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins#getplugs\"");
+	char*	command;
+
+	asprintf(&command,"%s \"%s\"",browserCommand,PLUGINSLINK);
+	system(command);
+	free(command);
 }
 
 

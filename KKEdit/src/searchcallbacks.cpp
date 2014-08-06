@@ -63,13 +63,13 @@ __attribute__((visibility("protected"))) void showDocView(int howtodisplay,char*
 	if(howtodisplay==USEURI)
 		{
 			if(strcasecmp(thePage,"file://(null)")!=0)
-				asprintf(&command,"xdg-open %s &",thePage);
+				asprintf(&command,"%s %s &",browserCommand,thePage);
 			else
-				asprintf(&command,"xdg-open https://www.google.co.uk/search?q=%s",text);
+				asprintf(&command,"%s https://www.google.co.uk/search?q=%s",browserCommand,text);
 		}
 
 	if(howtodisplay==USEFILE)
-		asprintf(&command,"xdg-open %s",htmlURI);
+		asprintf(&command,"%s %s",browserCommand,htmlURI);
 
 	if(command!=NULL)
 		{

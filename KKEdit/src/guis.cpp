@@ -955,6 +955,7 @@ void doPrefs(void)
 	GtkWidget*	vbox;
 	GtkWidget*	hbox;
 	GtkWidget*	hbox2;
+	GtkWidget*	hbox3;
 	GtkWidget*	item;
 	GtkWidget*	label;
 
@@ -1194,6 +1195,19 @@ void doPrefs(void)
 	gtk_toggle_button_set_active((GtkToggleButton*)item,readLinkFirst);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 	gtk_box_pack_start(GTK_BOX(hbox2),item,false,false,0);
+
+//set default browser
+	hbox3=gtk_hbox_new(false,0);
+	defaultBrowserBox=gtk_entry_new();
+	gtk_widget_set_name(defaultBrowserBox,"defaultbrowser");
+	gtk_box_pack_start(GTK_BOX(hbox3),gtk_label_new("Default Browser: "),false,false,0);
+	gtk_container_add(GTK_CONTAINER(hbox3),defaultBrowserBox);
+	gtk_box_pack_start(GTK_BOX(hbox2),hbox3,true,true,0);
+
+	if(browserCommand!=NULL)
+		gtk_entry_set_text((GtkEntry*)defaultBrowserBox,browserCommand);
+	gtk_widget_show_all(hbox3);
+
 	gtk_box_pack_start(GTK_BOX(vbox),hbox2,false,false,0);
 
 //end admin

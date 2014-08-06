@@ -1,4 +1,5 @@
 0.2.2
+Removed use of xdg-open ( broken in LFS ) can now set the default browser in prefs if internal docviewer is disabled ( deafults to firefox ).
 Added context popup menu to data passed to plugins to add to the context pop up.
 Added call to "addToContext" functions in plugins.
 Added tab popup menu to data passed to plugins to add to the tab pop up.

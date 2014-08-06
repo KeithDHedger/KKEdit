@@ -96,6 +96,8 @@ bool			tmpReadLinkFirst;
 GtkWidget*		fontButton;
 GtkWidget*		terminalBox;
 GtkWidget*		rootCommandBox;
+GtkWidget*		defaultBrowserBox;
+char*			browserCommand=strdup("firefox");
 
 //key short cuts
 GtkWidget*		keysWindow=NULL;

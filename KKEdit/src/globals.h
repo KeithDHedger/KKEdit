@@ -19,6 +19,7 @@
 
 #define MYEMAIL "kdhedger68713@gmail.com"
 #define MYWEBSITE "https://sites.google.com/site/kkeditlinuxtexteditor/home"
+#define PLUGINSLINK "https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins#getplugs"
 
 #define TOOL_ASYNC 8
 #define TOOL_IGNORE_OP 0
@@ -216,6 +217,8 @@ extern bool				tmpReadLinkFirst;
 extern GtkWidget*		fontButton;
 extern GtkWidget*		terminalBox;
 extern GtkWidget*		rootCommandBox;
+extern GtkWidget*		defaultBrowserBox;
+extern char*			browserCommand;
 
 //key short cuts
 extern GtkWidget*		keysWindow;
