@@ -2148,7 +2148,7 @@ void getPlugins(GtkWidget* widget,gpointer data)
 {
 	char*	command;
 
-	asprintf(&command,"%s \"%s\"",browserCommand,PLUGINSLINK);
+	asprintf(&command,"%s \"%s\" &",browserCommand,PLUGINSLINK);
 	system(command);
 	free(command);
 }

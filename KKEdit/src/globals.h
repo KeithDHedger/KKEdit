@@ -20,6 +20,7 @@
 #define MYEMAIL "kdhedger68713@gmail.com"
 #define MYWEBSITE "https://sites.google.com/site/kkeditlinuxtexteditor/home"
 #define PLUGINSLINK "https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins#getplugs"
+#define NAGTIMELINK " https://dl.dropboxusercontent.com/s/j1yb70qmhwpsijh/NAGTIME"
 
 #define TOOL_ASYNC 8
 #define TOOL_IGNORE_OP 0

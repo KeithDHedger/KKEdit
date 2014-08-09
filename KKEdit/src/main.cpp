@@ -363,13 +363,13 @@ void doNagStuff(void)
 	gotcurl=WEXITSTATUS(exitstatus);
 
 	if(gotcurl==0)
-		asprintf(&command,"curl https://dl.dropboxusercontent.com/s/xcvp8af3qp7ffxg/NAGTIME -s -o -");
+		asprintf(&command,"curl %s -s -o -",NAGTIMELINK);
 	else
 		{
 			exitstatus=system("which wget 2>&1 >/dev/null");
 			gotwget=WEXITSTATUS(exitstatus);
 			if(gotwget==0)
-				asprintf(&command,"wget https://dl.dropboxusercontent.com/s/xcvp8af3qp7ffxg/NAGTIME -O - -q");
+				asprintf(&command,"wget %s -O - -q",NAGTIMELINK);
 		}
 
 	if(command!=NULL)
