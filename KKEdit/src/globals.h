@@ -85,9 +85,7 @@ struct pageStruct
 	bool				showingChanged;
 	GtkTextMark*		backMark;
 	GtkTextTag*			highlightTag;
-//	GtkWidget*			toolOutVBox;
-//	GtkWidget*			toolOutputBuffer;
-//	GtkWidget*			toolOutputView;
+	GList*				userDataList;
 };
 #endif
 

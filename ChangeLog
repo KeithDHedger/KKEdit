@@ -1,3 +1,9 @@
+0.2.3
+Changed plugin routine names ( saveFile etc ) to prevent potential clashes.
+Fixed key presses not being propagated to plugins.
+Added user datalist to page structure for use by plugins.
+Fixed plugins in subfolders not being properly sorted on load.
+
 0.2.2
 Made 'Get Plugins' open browser as async.
 Removed use of xdg-open ( broken in LFS ) can now set the default browser in prefs if internal docviewer is disabled ( deafults to firefox ).

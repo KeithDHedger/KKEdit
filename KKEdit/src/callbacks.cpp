@@ -2138,10 +2138,14 @@ gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 				}
 
 			if(gotKey==true)
-				doKeyShortCut(loop);
+				{
+					doKeyShortCut(loop);
+					return(false);
+				}
 		}
 
-	return FALSE;
+	gtk_window_propagate_key_event((GtkWindow*)window, event);
+	return(true);
 }
 
 void getPlugins(GtkWidget* widget,gpointer data)

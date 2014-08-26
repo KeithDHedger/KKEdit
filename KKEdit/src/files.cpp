@@ -500,6 +500,7 @@ pageStruct* makeNewPage(void)
 
 	page=(pageStruct*)malloc(sizeof(pageStruct));
 	page->buffer=NULL;
+	page->userDataList=NULL;
 
 	page->pane=gtk_vpaned_new();
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
@@ -567,7 +568,7 @@ __attribute__((visibility("default"))) bool openFile(const gchar *filepath,int l
 	char*					str=NULL;
 	char*					recenturi;
 	int						linenum=linenumber-1;
-	gchar*					contents;
+	gchar*					contents=NULL;
 	gsize					length;
 	GError*					err=NULL;
 	const gchar*			charset;
@@ -657,6 +658,17 @@ __attribute__((visibility("default"))) bool openFile(const gchar *filepath,int l
 	setLanguage(page);
 
 	g_file_get_contents(filepathcopy,&contents,&length,&err);
+
+	if(contents==NULL)
+		{
+			if(warn==true)
+				{
+					dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"Can't open file '%s' :(",filepath);
+					gtk_dialog_run(GTK_DIALOG(dialog));
+					gtk_widget_destroy(dialog);
+				}
+			return(false);
+		}
 
 	charset=detect_charset(contents);
 	if (charset==NULL)
