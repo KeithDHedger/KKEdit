@@ -1,4 +1,5 @@
 0.2.3
+Fixed segfault when shutting window with close button rather than using quit.
 Changed plugin routine names ( saveFile etc ) to prevent potential clashes.
 Fixed key presses not being propagated to plugins.
 Added user datalist to page structure for use by plugins.

@@ -1489,7 +1489,6 @@ void doShutdown(GtkWidget* widget,gpointer data)
 			if(onExitSaveSession)
 				saveSession(NULL,NULL);
 			writeExitData();
-			gtk_main_quit();
 		}
 
 #ifdef _ASPELL_
@@ -1503,6 +1502,7 @@ void doShutdown(GtkWidget* widget,gpointer data)
 	system(command);
 	debugFree(command,"doShutdown command");
 	system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
+	gtk_main_quit();
 }
 
 void setPrefs(GtkWidget* widget,gpointer data)
