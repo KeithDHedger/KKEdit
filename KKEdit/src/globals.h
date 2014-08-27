@@ -53,6 +53,13 @@
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 
+struct args
+{
+	const char*	name;
+	int			type;
+	void*		data;
+};
+
 #ifndef _PAGESTRUCT_
 #define _PAGESTRUCT_
 struct pageStruct
@@ -86,6 +93,10 @@ struct pageStruct
 	GtkTextMark*		backMark;
 	GtkTextTag*			highlightTag;
 	GList*				userDataList;
+	gpointer			reserved1;
+	gpointer			reserved2;
+	gpointer			reserved3;
+	gpointer			reserved4;
 };
 #endif
 

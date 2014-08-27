@@ -12,6 +12,36 @@ bool	loadPlugins=true;
 
 void readConfig(void)
 {
+	char*	filename;
+	args mydata[]={
+					//bools =11
+					{"indentcode",3,&indent},
+					{"showlinenumbers",3,&lineNumbers},
+					{"wrapline",3,&lineWrap},
+					{"highlightcurrentline",3,&highLight},
+					{"singleuse",3,&singleUse},
+					{"noduplicates",3,&noDuplicates},
+					{"warning",3,&noWarnings},
+					{"savesessiononexit",3,&onExitSaveSession},
+					{"restorebookmarks",3,&restoreBookmarks},
+					{"nagscreen",3,&nagScreen},
+					{"readlink",3,&readLinkFirst},
+					//strings =1
+					{"stylename",2,&styleName},
+					{"stylename",2,&styleName},
+					{"stylename",2,&styleName},
+					{"stylename",2,&styleName},
+					{"stylename",2,&styleName},
+					{"stylename",2,&styleName},
+					{"stylename",2,&styleName},
+				  };
+
+	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
+	parseargs(filename,12,&mydata[0]);
+}
+
+void readConfigXX(void)
+{
 	FILE*	fd=NULL;
 	char*	filename;
 	char	buffer[1024];
@@ -30,43 +60,43 @@ void readConfig(void)
 					fgets(buffer,1024,fd);
 					sscanf(buffer,"%s %s",(char*)&name,(char*)&strarg);
 
-					if(strcasecmp(name,"indentcode")==0)
-						indent=(bool)atoi(strarg);
-					if(strcasecmp(name,"showlinenumbers")==0)
-						lineNumbers=(bool)atoi(strarg);
-					if(strcasecmp(name,"wrapline")==0)
-						lineWrap=(bool)atoi(strarg);
-					if(strcasecmp(name,"highlightcurrentline")==0)
-						highLight=(bool)atoi(strarg);
-					if(strcasecmp(name,"singleuse")==0)
-						singleUse=(bool)atoi(strarg);
-					if(strcasecmp(name,"noduplicates")==0)
-						noDuplicates=(bool)atoi(strarg);
-					if(strcasecmp(name,"warning")==0)
-						noWarnings=(bool)atoi(strarg);
+//					if(strcasecmp(name,"indentcode")==0)
+//						indent=(bool)atoi(strarg);
+//					if(strcasecmp(name,"showlinenumbers")==0)
+//						lineNumbers=(bool)atoi(strarg);
+//					if(strcasecmp(name,"wrapline")==0)
+//						lineWrap=(bool)atoi(strarg);
+//					if(strcasecmp(name,"highlightcurrentline")==0)
+//						highLight=(bool)atoi(strarg);
+//					if(strcasecmp(name,"singleuse")==0)
+//						singleUse=(bool)atoi(strarg);
+//					if(strcasecmp(name,"noduplicates")==0)
+//						noDuplicates=(bool)atoi(strarg);
+//					if(strcasecmp(name,"warning")==0)
+//						noWarnings=(bool)atoi(strarg);
 
-					if(strcasecmp(name,"stylename")==0)
-						{
-							if(styleName!=NULL)
-								debugFree(styleName,"readConfig styleName");
-							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
-							styleName=strdup(strarg);
-						}
+//					if(strcasecmp(name,"stylename")==0)
+//						{
+//							if(styleName!=NULL)
+//								debugFree(styleName,"readConfig styleName");
+//							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
+//							styleName=strdup(strarg);
+//						}
 
-					if(strcasecmp(name,"savesessiononexit")==0)
-						onExitSaveSession=(bool)atoi(strarg);
-					if(strcasecmp(name,"restorebookmarks")==0)
-						restoreBookmarks=(bool)atoi(strarg);
+//					if(strcasecmp(name,"savesessiononexit")==0)
+//						onExitSaveSession=(bool)atoi(strarg);
+//					if(strcasecmp(name,"restorebookmarks")==0)
+//						restoreBookmarks=(bool)atoi(strarg);
 
 					if(strcasecmp(name,"tabwidth")==0)
 						tabWidth=atoi(strarg);
 					if(strcasecmp(name,"depth")==0)
 						depth=atoi(strarg);
-					if(strcasecmp(name,"nagscreen")==0)
-						nagScreen=(bool)atoi(strarg);
-
-					if(strcasecmp(name,"readlink")==0)
-						readLinkFirst=(bool)atoi(strarg);
+//					if(strcasecmp(name,"nagscreen")==0)
+//						nagScreen=(bool)atoi(strarg);
+//
+//					if(strcasecmp(name,"readlink")==0)
+//						readLinkFirst=(bool)atoi(strarg);
 
 					if(strcasecmp(name,"higlightcolour")==0)
 						{

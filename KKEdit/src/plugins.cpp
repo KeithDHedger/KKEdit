@@ -73,6 +73,11 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 						pd->enabled=false;
 						return(false);
 					}
+				else
+					{
+						pd->enabled=false;
+						return(false);
+					}
 			}
 
 	if((pd->loaded==false) && (enabled))

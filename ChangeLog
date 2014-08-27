@@ -1,4 +1,6 @@
 0.2.3
+Added reserved data to page structure.
+Fixed bug when plugin must not be unloaded.
 Fixed segfault when shutting window with close button rather than using quit.
 Changed plugin routine names ( saveFile etc ) to prevent potential clashes.
 Fixed key presses not being propagated to plugins.
@@ -7,7 +9,7 @@ Fixed plugins in subfolders not being properly sorted on load.
 
 0.2.2
 Made 'Get Plugins' open browser as async.
-Removed use of xdg-open ( broken in LFS ) can now set the default browser in prefs if internal docviewer is disabled ( deafults to firefox ).
+Removed use of xdg-open ( broken in LFS ) can now set the default browser in prefs if internal docviewer is disabled ( defaults to firefox ).
 Added context popup menu to data passed to plugins to add to the context pop up.
 Added call to "addToContext" functions in plugins.
 Added tab popup menu to data passed to plugins to add to the tab pop up.

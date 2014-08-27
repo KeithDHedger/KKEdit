@@ -13,6 +13,47 @@ char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
 bool		dropTextFile=false;
 
+void parseargs(char* filepath,int datacnt,args* dataptr)
+{
+	FILE*	fd=NULL;
+	char	buffer[2048];
+	char	argname[256];
+	char	strarg[1024];
+
+	fd=fopen(filepath,"r");
+	if(fd!=NULL)
+		{
+			while(feof(fd)==0)
+				{
+					buffer[0]=0;
+					strarg[0]=0;
+					argname[0]=0;
+					fgets(buffer,2048,fd);
+					sscanf(buffer,"%s %s",(char*)&argname,(char*)&strarg);
+					for(int j=0;j<datacnt;j++)
+						{
+							if(strcmp(argname,dataptr[j].name)==0)
+								{
+									switch(dataptr[j].type)
+										{
+											case 1:
+												*(int*)dataptr[j].data=atoi(strarg);
+												break;
+											case 2:
+												sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
+												asprintf((char**)dataptr[j].data,"%s",strarg);
+												break;
+											case 3:
+												*(bool*)dataptr[j].data=(bool)atoi(strarg);
+												break;
+										}
+								}
+						}
+				}
+			fclose(fd);
+		}
+}
+
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
 	GtkWidget*	evbox=gtk_event_box_new();
