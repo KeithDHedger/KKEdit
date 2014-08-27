@@ -13,12 +13,13 @@ char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
 bool		dropTextFile=false;
 
-void parseargs(char* filepath,int datacnt,args* dataptr)
+void parseargs(char* filepath,args* dataptr)
 {
 	FILE*	fd=NULL;
 	char	buffer[2048];
 	char	argname[256];
 	char	strarg[1024];
+	int		cnt;
 
 	fd=fopen(filepath,"r");
 	if(fd!=NULL)
@@ -30,24 +31,28 @@ void parseargs(char* filepath,int datacnt,args* dataptr)
 					argname[0]=0;
 					fgets(buffer,2048,fd);
 					sscanf(buffer,"%s %s",(char*)&argname,(char*)&strarg);
-					for(int j=0;j<datacnt;j++)
+					cnt=0;
+					while(dataptr[cnt].name!=NULL)
 						{
-							if(strcmp(argname,dataptr[j].name)==0)
+							if(strcmp(argname,dataptr[cnt].name)==0)
 								{
-									switch(dataptr[j].type)
+									switch(dataptr[cnt].type)
 										{
 											case 1:
-												*(int*)dataptr[j].data=atoi(strarg);
+												*(int*)dataptr[cnt].data=atoi(strarg);
 												break;
 											case 2:
 												sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
-												asprintf((char**)dataptr[j].data,"%s",strarg);
+												if(*(char**)(dataptr[cnt].data)!=NULL)
+													free(*(char**)(dataptr[cnt].data));
+												asprintf((char**)dataptr[cnt].data,"%s",strarg);
 												break;
 											case 3:
-												*(bool*)dataptr[j].data=(bool)atoi(strarg);
+												*(bool*)dataptr[cnt].data=(bool)atoi(strarg);
 												break;
 										}
 								}
+							cnt++;
 						}
 				}
 			fclose(fd);

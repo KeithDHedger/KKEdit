@@ -14,7 +14,7 @@ void readConfig(void)
 {
 	char*	filename;
 	args mydata[]={
-					//bools =11
+					//bools
 					{"indentcode",3,&indent},
 					{"showlinenumbers",3,&lineNumbers},
 					{"wrapline",3,&lineWrap},
@@ -26,18 +26,23 @@ void readConfig(void)
 					{"restorebookmarks",3,&restoreBookmarks},
 					{"nagscreen",3,&nagScreen},
 					{"readlink",3,&readLinkFirst},
-					//strings =1
+					//strings
 					{"stylename",2,&styleName},
-					{"stylename",2,&styleName},
-					{"stylename",2,&styleName},
-					{"stylename",2,&styleName},
-					{"stylename",2,&styleName},
-					{"stylename",2,&styleName},
-					{"stylename",2,&styleName},
+					{"higlightcolour",2,&highlightColour},
+					{"toolbarlayout",2,&toolBarLayout},
+					{"font",2,&fontAndSize},
+					{"terminalcommand",2,&terminalCommand},
+					{"rootcommand",2,&rootCommand},
+					{"defaultbrowser",2,&browserCommand},
+					//ints
+					{"tabwidth",1,&tabWidth},
+					{"depth",1,&depth},
+					{"funcsort",1,&listFunction},
+					{NULL,0,NULL}
 				  };
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
-	parseargs(filename,12,&mydata[0]);
+	parseargs(filename,&mydata[0]);
 }
 
 void readConfigXX(void)
@@ -98,56 +103,56 @@ void readConfigXX(void)
 //					if(strcasecmp(name,"readlink")==0)
 //						readLinkFirst=(bool)atoi(strarg);
 
-					if(strcasecmp(name,"higlightcolour")==0)
-						{
-							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
-							highlightColour=strdup(strarg);
-						}
+//					if(strcasecmp(name,"higlightcolour")==0)
+//						{
+//							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
+//							highlightColour=strdup(strarg);
+//						}
 
 					if(strcasecmp(name,"funcsort")==0)
 						listFunction=(int)atoi(strarg);
 
-					if(strcasecmp(name,"toolbarlayout")==0)
-						{
-							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
-							toolBarLayout=strdup(strarg);
-						}
-
-					if(strcasecmp(name,"font")==0)
-						{
-							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
-							fontAndSize=strdup(strarg);
-						}
-
-					if(strcasecmp(name,"terminalcommand")==0)
-						{
-							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
-							if(strlen(strarg)>0)
-								{
-									debugFree(terminalCommand,"readConfig terminalCommand");
-									terminalCommand=strdup(strarg);
-								}
-						}
-					
-					if(strcasecmp(name,"rootcommand")==0)
-						{
-							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
-							if(strlen(strarg)>0)
-								{
-									debugFree(rootCommand,"readConfig rootCommand");
-									rootCommand=strdup(strarg);
-								}
-						}
-
-					if(strcasecmp(name,"defaultbrowser")==0)
-						{
-							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
-							if(strlen(strarg)>0)
-								{
-									debugFree(browserCommand,"readConfig browserCommand");
-									browserCommand=strdup(strarg);
-								}
-						}
+//					if(strcasecmp(name,"toolbarlayout")==0)
+//						{
+//							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
+//							toolBarLayout=strdup(strarg);
+//						}
+//
+//					if(strcasecmp(name,"font")==0)
+//						{
+//							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
+//							fontAndSize=strdup(strarg);
+//						}
+//
+//					if(strcasecmp(name,"terminalcommand")==0)
+//						{
+//							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
+//							if(strlen(strarg)>0)
+//								{
+//									debugFree(terminalCommand,"readConfig terminalCommand");
+//									terminalCommand=strdup(strarg);
+//								}
+//						}
+//					
+//					if(strcasecmp(name,"rootcommand")==0)
+//						{
+//							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
+//							if(strlen(strarg)>0)
+//								{
+//									debugFree(rootCommand,"readConfig rootCommand");
+//									rootCommand=strdup(strarg);
+//								}
+//						}
+//
+//					if(strcasecmp(name,"defaultbrowser")==0)
+//						{
+//							sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
+//							if(strlen(strarg)>0)
+//								{
+//									debugFree(browserCommand,"readConfig browserCommand");
+//									browserCommand=strdup(strarg);
+//								}
+//						}
 
 				}
 			fclose(fd);
