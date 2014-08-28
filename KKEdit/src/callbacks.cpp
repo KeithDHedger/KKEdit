@@ -494,7 +494,7 @@ void setSensitive(void)
 			updateStatuBar((GtkTextBuffer*)page->buffer,NULL,NULL,page);
 			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start_find);
 			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end_find);
-			gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);  
+			gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);
 		}
 //do plugin sensitive
 	globalPlugins->globalPlugData->page=page;
@@ -549,7 +549,7 @@ void closeTab(GtkWidget* widget,gpointer data)
 	rebuildBookMarkMenu();
 	while(changed==false)
 		{
-			changed=true;	
+			changed=true;
 			ptr=newBookMarksList;
 			while(ptr!=NULL)
 				{
@@ -564,7 +564,7 @@ void closeTab(GtkWidget* widget,gpointer data)
 					ptr=g_list_next(ptr);
 				}
 		}
-					
+
 	ptr=newBookMarksList;
 	while(ptr!=NULL)
 		{
@@ -982,7 +982,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 					fdata=getFunctionByName(selection,false);
 					if(fdata!=NULL)
 						{
-						sprintf((char*)&defineText,"%s",fdata->define);
+							sprintf((char*)&defineText,"%s",fdata->define);
 							menuitem=gtk_menu_item_new_with_label(defineText);
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)defineText);
@@ -1357,87 +1357,36 @@ UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessag
 void writeExitData(void)
 {
 	GtkAllocation	alloc;
-	FILE*			fd=NULL;
 	char*			filename;
 	int				winx;
 	int				winy;
-	char*			windowdata=NULL;
 
 	gtk_widget_get_allocation(window,&alloc);
 	gtk_window_get_position((GtkWindow*)window,&winx,&winy);
-	asprintf(&windowdata,"%i %i %i %in",alloc.width,alloc.height,winx,winy);
+	asprintf(&windowAllocData,"%i %i %i %in",alloc.width,alloc.height,winx,winy);
+
+	toolOutHeight=gtk_paned_get_position((GtkPaned*)mainVPane);
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	debugFree(filename,"writeExitData filename");
 	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
 
-	args mydata[]={
-					//bools
-					{"insenssearch",TYPEBOOL,&insensitiveSearch},
-					{"useregex",TYPEBOOL,&useRegex},
-					{"wrapsearch",TYPEBOOL,&wrapSearch},
-					{"replaceall",TYPEBOOL,&replaceAll},
-					{"allfiles",TYPEBOOL,&findInAllFiles},
-					{"showbmbar",TYPEBOOL,&showBMBar},
-					{"showtoolbar",TYPEBOOL,&showToolBar},
-					{"showstatusbar",TYPEBOOL,&showStatus},
-					{"highlightall",TYPEBOOL,&hightlightAll},
-					//strings
-					{"windowsize",TYPESTRING,&windowdata},
-					//ints
-					{"toolouthite",TYPEINT,&toolOutHeight},
-					{"nagtime",TYPEINT,&lastNagTime},
-					{"lastupdate",TYPEINT,&lastUpdate},
-					{"lastplugupdate",TYPEINT,&lastPlugUpdate},
-					{NULL,0,NULL}
-				  };
-
-	saveVarsToFile(filename,mydata);
+	saveVarsToFile(filename,kkedit_window_rc);
 	debugFree(filename,"writeExitData filename");
+	debugFree(windowAllocData,"writeExitData windowAllocData");
 }
 
 void writeConfig(void)
 {
-	//GtkAllocation	alloc;
-	FILE*			fd=NULL;
 	char*			filename;
-	int				winx;
-	int				winy;
-	args mydata[]={
-					//bools
-					{"indentcode",3,&indent},
-					{"showlinenumbers",3,&lineNumbers},
-					{"wrapline",3,&lineWrap},
-					{"highlightcurrentline",3,&highLight},
-					{"singleuse",3,&singleUse},
-					{"noduplicates",3,&noDuplicates},
-					{"warning",3,&noWarnings},
-					{"savesessiononexit",3,&onExitSaveSession},
-					{"restorebookmarks",3,&restoreBookmarks},
-					{"nagscreen",3,&nagScreen},
-					{"readlink",3,&readLinkFirst},
-					//strings
-					{"stylename",2,&styleName},
-					{"higlightcolour",2,&highlightColour},
-					{"toolbarlayout",2,&toolBarLayout},
-					{"font",2,&fontAndSize},
-					{"terminalcommand",2,&terminalCommand},
-					{"rootcommand",2,&rootCommand},
-					{"defaultbrowser",2,&browserCommand},
-					//ints
-					{"tabwidth",1,&tabWidth},
-					{"depth",1,&depth},
-					{"funcsort",1,&listFunction},
-					{NULL,0,NULL}
-				  };
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	debugFree(filename,"writeConfig filename");
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
-	saveVarsToFile(filename,mydata);
+	saveVarsToFile(filename,kkedit_rc);
 	debugFree(filename,"writeConfig filename");
 }
 
@@ -1637,11 +1586,10 @@ void setPrefs(GtkWidget* widget,gpointer data)
 
 void setToolOptions(GtkWidget* widget,gpointer data)
 {
-	char*	dirname;
-	char*	text;
-	char*	toolpath;
-	FILE*	fd=NULL;
-	int		flags;
+	char*		dirname;
+	char*		text;
+	char*		toolpath;
+	int			flags;
 
 	asprintf(&dirname,"%s/.KKEdit/tools",getenv("HOME"));
 	text=strdup(gtk_entry_get_text((GtkEntry*)toolNameWidget));
@@ -1665,39 +1613,36 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{
-			fd=fopen(toolpath,"w");
-			if(fd!=NULL)
+			if(gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false)
+				flags=TOOL_ASYNC;
+			else
 				{
-
-					if(gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false)
-						flags=TOOL_ASYNC;
-					else
-						{
-							if(gtk_toggle_button_get_active((GtkToggleButton*)ignoreWidget)==true)
-								flags=TOOL_IGNORE_OP;
-							if(gtk_toggle_button_get_active((GtkToggleButton*)pasteWidget)==true)
-								flags=TOOL_PASTE_OP;
-							if(gtk_toggle_button_get_active((GtkToggleButton*)replaceWidget)==true)
-								flags=TOOL_REPLACE_OP;
-							if(gtk_toggle_button_get_active((GtkToggleButton*)outputWidget)==true)
-								flags=TOOL_VIEW_OP;
-						}
-					if(gtk_toggle_button_get_active((GtkToggleButton*)showDocWidget)==true)
-						flags=flags+TOOL_SHOW_DOC;
-
-					fprintf(fd,"name\t%s\n",gtk_entry_get_text((GtkEntry*)toolNameWidget));
-					fprintf(fd,"command\t%s\n",gtk_entry_get_text((GtkEntry*)commandLineWidget));
-					fprintf(fd,"comment\t%s\n",gtk_entry_get_text((GtkEntry*)commentWidget));
-					fprintf(fd,"flags\t%i\n",flags);
-					fprintf(fd,"interm\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget));
-					fprintf(fd,"inpopup\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)inPopupWidget));
-					fprintf(fd,"alwayspopup\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)alwaysPopupWidget));
-					fprintf(fd,"clearview\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)clearViewWidget));
-					fprintf(fd,"runasroot\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)runAsRootWidget));
-					fprintf(fd,"usebar\t%i\n",(int)gtk_toggle_button_get_active((GtkToggleButton*)useBarWidget));
-					fprintf(fd,"shortcutkey\t%i\n",(int)gdk_keyval_from_name(gtk_entry_get_text((GtkEntry*)keyWidget)));
-					fclose(fd);
+					if(gtk_toggle_button_get_active((GtkToggleButton*)ignoreWidget)==true)
+						flags=TOOL_IGNORE_OP;
+					if(gtk_toggle_button_get_active((GtkToggleButton*)pasteWidget)==true)
+						flags=TOOL_PASTE_OP;
+					if(gtk_toggle_button_get_active((GtkToggleButton*)replaceWidget)==true)
+						flags=TOOL_REPLACE_OP;
+					if(gtk_toggle_button_get_active((GtkToggleButton*)outputWidget)==true)
+						flags=TOOL_VIEW_OP;
 				}
+			if(gtk_toggle_button_get_active((GtkToggleButton*)showDocWidget)==true)
+				flags=flags+TOOL_SHOW_DOC;
+
+
+			intermarg=(int)gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget);
+			flagsarg=flags;
+			inpopup=(int)gtk_toggle_button_get_active((GtkToggleButton*)inPopupWidget);
+			alwayspopup=(int)gtk_toggle_button_get_active((GtkToggleButton*)alwaysPopupWidget);
+			clearview=(int)gtk_toggle_button_get_active((GtkToggleButton*)clearViewWidget);
+			commandarg=(char*)gtk_entry_get_text((GtkEntry*)commandLineWidget);
+			commentarg=(char*)gtk_entry_get_text((GtkEntry*)commentWidget);
+			menuname=(char*)gtk_entry_get_text((GtkEntry*)toolNameWidget);
+			rootarg=(int)gtk_toggle_button_get_active((GtkToggleButton*)runAsRootWidget);
+			keycode=(int)gdk_keyval_from_name(gtk_entry_get_text((GtkEntry*)keyWidget));
+			usebar=(int)gtk_toggle_button_get_active((GtkToggleButton*)useBarWidget);
+
+			saveVarsToFile(toolpath,tool_vars);
 
 			gtk_widget_hide((GtkWidget*)data);
 			gtk_widget_destroy((GtkWidget*)data);
@@ -2157,6 +2102,7 @@ void getPlugins(GtkWidget* widget,gpointer data)
 	system(command);
 	free(command);
 }
+
 
 
 

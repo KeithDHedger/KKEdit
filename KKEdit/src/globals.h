@@ -382,6 +382,24 @@ extern GtkWidget*		progressBar;
 
 extern PluginClass*		globalPlugins;
 
+//save and load var lists
+extern int				intermarg;
+extern int				flagsarg;
+extern int				inpopup;
+extern int				alwayspopup;
+extern int				clearview;
+extern char*			commandarg;
+extern char*			commentarg;
+extern char*			menuname;
+extern int				rootarg;
+extern int				keycode;
+extern int				usebar;
+
+extern char*			windowAllocData;
+extern args				kkedit_window_rc[];
+extern args				kkedit_rc[];
+extern args				tool_vars[];
+
 void plugRunFunction(gpointer data,gpointer funcname);
 
 pageStruct* getPageStructPtr(int pagenum);

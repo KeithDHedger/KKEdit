@@ -277,6 +277,89 @@ GtkWidget*		progressBar;
 
 PluginClass*	globalPlugins=NULL;
 
+//save and load var lists
+char*			windowAllocData=NULL;
+args kkedit_window_rc[]=
+	{
+		//bools
+		{"insenssearch",TYPEBOOL,&insensitiveSearch},
+		{"useregex",TYPEBOOL,&useRegex},
+		{"wrapsearch",TYPEBOOL,&wrapSearch},
+		{"replaceall",TYPEBOOL,&replaceAll},
+		{"allfiles",TYPEBOOL,&findInAllFiles},
+		{"showbmbar",TYPEBOOL,&showBMBar},
+		{"showtoolbar",TYPEBOOL,&showToolBar},
+		{"showstatusbar",TYPEBOOL,&showStatus},
+		{"highlightall",TYPEBOOL,&hightlightAll},
+		//strings
+		{"windowsize",TYPESTRING,&windowAllocData},
+		//ints
+		{"toolouthite",TYPEINT,&toolOutHeight},
+		{"nagtime",TYPEINT,&lastNagTime},
+		{"lastupdate",TYPEINT,&lastUpdate},
+		{"lastplugupdate",TYPEINT,&lastPlugUpdate},
+		{NULL,0,NULL}
+	};
+
+args kkedit_rc[]=
+	{
+		//bools
+		{"indentcode",TYPEBOOL,&indent},
+		{"showlinenumbers",TYPEBOOL,&lineNumbers},
+		{"wrapline",TYPEBOOL,&lineWrap},
+		{"highlightcurrentline",TYPEBOOL,&highLight},
+		{"singleuse",TYPEBOOL,&singleUse},
+		{"noduplicates",TYPEBOOL,&noDuplicates},
+		{"warning",TYPEBOOL,&noWarnings},
+		{"savesessiononexit",TYPEBOOL,&onExitSaveSession},
+		{"restorebookmarks",TYPEBOOL,&restoreBookmarks},
+		{"nagscreen",TYPEBOOL,&nagScreen},
+		{"readlink",TYPEBOOL,&readLinkFirst},
+		//strings
+		{"stylename",TYPESTRING,&styleName},
+		{"higlightcolour",TYPESTRING,&highlightColour},
+		{"toolbarlayout",TYPESTRING,&toolBarLayout},
+		{"font",TYPESTRING,&fontAndSize},
+		{"terminalcommand",TYPESTRING,&terminalCommand},
+		{"rootcommand",TYPESTRING,&rootCommand},
+		{"defaultbrowser",TYPESTRING,&browserCommand},
+		//ints
+		{"tabwidth",TYPEINT,&tabWidth},
+		{"depth",TYPEINT,&depth},
+		{"funcsort",TYPEINT,&listFunction},
+		{NULL,0,NULL}
+	};
+
+int		intermarg=0;
+int		flagsarg=0;
+int		inpopup=0;
+int		alwayspopup=0;
+int		clearview=0;
+char*	commandarg=NULL;
+char*	commentarg=NULL;
+char*	menuname=NULL;
+int		rootarg=0;
+int		keycode=0;
+int		usebar=0;
+
+args tool_vars[]=
+	{
+		//strings
+		{"name",TYPESTRING,&menuname},
+		{"command",TYPESTRING,&commandarg},
+		{"comment",TYPESTRING,&commentarg},
+		//ints
+		{"interm",TYPEINT,&intermarg},
+		{"flags",TYPEINT,&flagsarg},
+		{"inpopup",TYPEINT,&inpopup},
+		{"alwayspopup",TYPEINT,&alwayspopup},
+		{"clearview",TYPEINT,&clearview},
+		{"runasroot",TYPEINT,&rootarg},
+		{"usebar",TYPEINT,&usebar},
+		{"shortcutkey",TYPEINT,&keycode},
+		{NULL,0,NULL}
+	};
+
 void plugRunFunction(gpointer data,gpointer funcname)
 {
 	globalPlugins->runPlugFunction((moduleData*)data,(const char*)funcname);
@@ -754,43 +837,9 @@ void buildToolsList(void)
 {
 	GDir*			folder;
 	const gchar*	entry=NULL;
-	FILE*			fd=NULL;
 	char*			filepath;
-	char			buffer[4096];
 	toolStruct*		tool;
 	char*			datafolder[2];
-	char			strarg[1024];
-
-	int				intermarg=0;
-	int				flagsarg=0;
-	int				inpopup=0;
-	int				alwayspopup=0;
-	int				clearview=0;
-	char*			commandarg=NULL;
-	char*			commentarg=NULL;
-	char*			menuname=NULL;
-	int				rootarg=0;
-	int				keycode=0;
-	int				usebar=0;
-
-	args			mydata[]=
-	{
-		//bools
-		//strings
-		{"name",2,&menuname},
-		{"command",2,&commandarg},
-		{"comment",2,&commentarg},
-		//ints
-		{"interm",1,&intermarg},
-		{"flags",1,&flagsarg},
-		{"inpopup",1,&inpopup},
-		{"alwayspopup",1,&alwayspopup},
-		{"clearview",1,&clearview},
-		{"runasroot",1,&rootarg},
-		{"usebar",1,&usebar},
-		{"shortcutkey",1,&keycode},
-		{NULL,0,NULL}
-	};
 
 	if(toolsList!=NULL)
 		{
@@ -821,7 +870,7 @@ void buildToolsList(void)
 							usebar=0;
 
 							asprintf(&filepath,"%s%s",datafolder[loop],entry);
-							loadVarsFromFile(filepath,mydata);
+							loadVarsFromFile(filepath,tool_vars);
 
 							if((menuname!=NULL) && (strlen(menuname)>0) && ( commandarg!=NULL))
 								{

@@ -13,66 +13,15 @@ bool	loadPlugins=true;
 void readConfig(void)
 {
 	char*	filename;
-	char*	windowdata=NULL;
-
-	args mydata[]={
-					//bools
-					{"indentcode",3,&indent},
-					{"showlinenumbers",3,&lineNumbers},
-					{"wrapline",3,&lineWrap},
-					{"highlightcurrentline",3,&highLight},
-					{"singleuse",3,&singleUse},
-					{"noduplicates",3,&noDuplicates},
-					{"warning",3,&noWarnings},
-					{"savesessiononexit",3,&onExitSaveSession},
-					{"restorebookmarks",3,&restoreBookmarks},
-					{"nagscreen",3,&nagScreen},
-					{"readlink",3,&readLinkFirst},
-					//strings
-					{"stylename",2,&styleName},
-					{"higlightcolour",2,&highlightColour},
-					{"toolbarlayout",2,&toolBarLayout},
-					{"font",2,&fontAndSize},
-					{"terminalcommand",2,&terminalCommand},
-					{"rootcommand",2,&rootCommand},
-					{"defaultbrowser",2,&browserCommand},
-					//ints
-					{"tabwidth",1,&tabWidth},
-					{"depth",1,&depth},
-					{"funcsort",1,&listFunction},
-					{NULL,0,NULL}
-				  };
-
-	args mydata2[]={
-					//bools
-					{"insenssearch",3,&insensitiveSearch},
-					{"useregex",3,&useRegex},
-					{"wrapsearch",3,&wrapSearch},
-					{"replaceall",3,&replaceAll},
-					{"allfiles",3,&findInAllFiles},
-					{"showbmbar",3,&showBMBar},
-					{"showtoolbar",3,&showToolBar},
-					{"showstatusbar",3,&showStatus},
-					{"highlightall",3,&hightlightAll},
-					//strings
-					{"windowsize",2,&windowdata},
-					//ints
-					{"toolouthite",1,&toolOutHeight},
-					{"nagtime",1,&lastNagTime},
-					{"lastupdate",1,&lastUpdate},
-					{"lastplugupdate",1,&lastPlugUpdate},
-					{NULL,0,NULL}
-				  };
-	
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
-	loadVarsFromFile(filename,mydata);
+	loadVarsFromFile(filename,kkedit_rc);
 	debugFree(filename,"readConfig filename");
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
-	loadVarsFromFile(filename,mydata2);
-	if(windowdata!=NULL)
-		sscanf(windowdata,"%i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
+	loadVarsFromFile(filename,kkedit_window_rc);
+	if(windowAllocData!=NULL)
+		sscanf(windowAllocData,"%i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
 	debugFree(filename,"readConfig filename");
 }
 
@@ -414,6 +363,7 @@ int main(int argc,char **argv)
 			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
 
 			gtk_window_get_size((GtkWindow*)window,&w,&h);
+			printf("%i\n",toolOutHeight);
 			gtk_paned_set_position((GtkPaned*)mainVPane,toolOutHeight);
 			gtk_widget_hide(toolOutVBox);
 			if(getuid()!=0)
