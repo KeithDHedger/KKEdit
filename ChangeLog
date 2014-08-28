@@ -1,4 +1,5 @@
 0.2.3
+Fixed key propagation to tools!
 Added reserved data to page structure.
 Fixed bug when plugin must not be unloaded.
 Fixed segfault when shutting window with close button rather than using quit.

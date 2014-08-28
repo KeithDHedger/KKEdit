@@ -773,6 +773,25 @@ void buildToolsList(void)
 	int				keycode=0;
 	int				usebar=0;
 
+	args			mydata[]=
+	{
+		//bools
+		//strings
+		{"name",2,&menuname},
+		{"command",2,&commandarg},
+		{"comment",2,&commentarg},
+		//ints
+		{"interm",1,&intermarg},
+		{"flags",1,&flagsarg},
+		{"inpopup",1,&inpopup},
+		{"alwayspopup",1,&alwayspopup},
+		{"clearview",1,&clearview},
+		{"runasroot",1,&rootarg},
+		{"usebar",1,&usebar},
+		{"shortcutkey",1,&keycode},
+		{NULL,0,NULL}
+	};
+
 	if(toolsList!=NULL)
 		{
 			g_list_free_full(toolsList,destroyTool);
@@ -789,83 +808,54 @@ void buildToolsList(void)
 					entry=g_dir_read_name(folder);
 					while(entry!=NULL)
 						{
+							intermarg=0;
+							flagsarg=0;
+							inpopup=0;
+							alwayspopup=0;
+							rootarg=0;
+							clearview=0;
+							keycode=0;
+							menuname=NULL;
+							commandarg=NULL;
+							commentarg=NULL;
+							usebar=0;
+
 							asprintf(&filepath,"%s%s",datafolder[loop],entry);
-							fd=fopen(filepath,"r");
-							if(fd!=NULL)
+							loadVarsFromFile(filepath,mydata);
+
+							if((menuname!=NULL) && (strlen(menuname)>0) && ( commandarg!=NULL))
 								{
-									intermarg=0;
-									flagsarg=0;
-									inpopup=0;
-									alwayspopup=0;
-									rootarg=0;
-									clearview=0;
-									keycode=0;
-									menuname=NULL;
-									commandarg=NULL;
-									commentarg=NULL;
-									usebar=0;
+									tool=(toolStruct*)malloc(sizeof(toolStruct));
+									tool->menuName=strdup(menuname);
+									tool->command=strdup(commandarg);
+									tool->flags=flagsarg;
+									tool->inTerminal=(bool)intermarg;
+									tool->inPopUp=(bool)inpopup;
+									tool->alwaysPopup=(bool)alwayspopup;
+									tool->filePath=strdup(filepath);
+									tool->clearView=(bool)clearview;
+									tool->runAsRoot=(bool)rootarg;
+									tool->keyCode=keycode;
+									tool->useBar=(bool)usebar;
 
-									while(fgets(buffer,4096,fd))
-										{
-											buffer[strlen(buffer)-1]=0;
-											sscanf((char*)&buffer,"%s",(char*)&strarg);
-											if(strcmp(strarg,"name")==0)
-												asprintf(&menuname,"%.*s",(int)strlen(buffer)-5,(char*)&buffer[5]);
-											if(strcmp(strarg,"command")==0)
-												asprintf(&commandarg,"%.*s",(int)strlen(buffer)-8,(char*)&buffer[8]);
-											if(strcmp(strarg,"comment")==0)
-												asprintf(&commentarg,"%.*s",(int)strlen(buffer)-8,(char*)&buffer[8]);
-											if(strcmp(strarg,"interm")==0)
-												sscanf((char*)&buffer,"%*s %i",&intermarg);
-											if(strcmp(strarg,"flags")==0)
-												sscanf((char*)&buffer,"%*s %i",&flagsarg);
-											if(strcmp(strarg,"inpopup")==0)
-												sscanf((char*)&buffer,"%*s %i",&inpopup);
-											if(strcmp(strarg,"alwayspopup")==0)
-												sscanf((char*)&buffer,"%*s %i",&alwayspopup);
-											if(strcmp(strarg,"clearview")==0)
-												sscanf((char*)&buffer,"%*s %i",&clearview);
-											if(strcmp(strarg,"runasroot")==0)
-												sscanf((char*)&buffer,"%*s %i",&rootarg);
-											if(strcmp(strarg,"usebar")==0)
-												sscanf((char*)&buffer,"%*s %i",&usebar);
-											if(strcmp(strarg,"shortcutkey")==0)
-												sscanf((char*)&buffer,"%*s %i",&keycode);
-										}
+									if(commentarg!=NULL)
+										tool->comment=strdup(commentarg);
+									else
+										tool->comment=NULL;
+									if(loop==0)
+										tool->global=true;
+									else
+										tool->global=false;
 
-									if((menuname!=NULL) && (strlen(menuname)>0) && ( commandarg!=NULL))
-										{
-											tool=(toolStruct*)malloc(sizeof(toolStruct));
-											tool->menuName=strdup(menuname);
-											tool->command=strdup(commandarg);
-											tool->flags=flagsarg;
-											tool->inTerminal=(bool)intermarg;
-											tool->inPopUp=(bool)inpopup;
-											tool->alwaysPopup=(bool)alwayspopup;
-											tool->filePath=strdup(filepath);
-											tool->clearView=(bool)clearview;
-											tool->runAsRoot=(bool)rootarg;
-											tool->keyCode=keycode;
-											tool->useBar=(bool)usebar;
-
-											if(commentarg!=NULL)
-												tool->comment=strdup(commentarg);
-											else
-												tool->comment=NULL;
-											if(loop==0)
-												tool->global=true;
-											else
-												tool->global=false;
-
-											toolsList=g_list_prepend(toolsList,(gpointer)tool);
-											debugFree(menuname,"buildToolsList menuname");
-											debugFree(commandarg,"buildToolsList commandarg");
-											if(commentarg!=NULL)
-												debugFree(commentarg,"buildToolsList commentarg");
-										}
-
-									fclose(fd);
+									toolsList=g_list_prepend(toolsList,(gpointer)tool);
+									debugFree(menuname,"buildToolsList menuname");
+									debugFree(commandarg,"buildToolsList commandarg");
+									if(commentarg!=NULL)
+										debugFree(commentarg,"buildToolsList commentarg");
 								}
+
+							debugFree(filepath,"buildToolsList filepath");
+
 							entry=g_dir_read_name(folder);
 						}
 				}
@@ -984,3 +974,5 @@ __attribute__((visibility("default"))) void debugFree(gpointer ptr,const char* m
 #endif
 	free(ptr);
 }
+
+

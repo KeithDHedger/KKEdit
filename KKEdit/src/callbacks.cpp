@@ -2126,6 +2126,7 @@ gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 	int		loop;
 	bool	gotKey=false;
 
+
 	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
 		{
 			for(loop=0; loop<NUMSHORTCUTS; loop++)
@@ -2140,12 +2141,13 @@ gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 			if(gotKey==true)
 				{
 					doKeyShortCut(loop);
-					return(false);
+					return(true);
 				}
+
+			return(gtk_window_propagate_key_event((GtkWindow*)window, event));
 		}
 
-	gtk_window_propagate_key_event((GtkWindow*)window, event);
-	return(true);
+	return(false);
 }
 
 void getPlugins(GtkWidget* widget,gpointer data)

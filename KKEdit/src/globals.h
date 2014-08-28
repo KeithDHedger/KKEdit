@@ -63,6 +63,8 @@ struct args
 	void*		data;
 };
 
+enum {TYPEINT=1,TYPESTRING,TYPEBOOL};
+
 struct pageStruct
 {
 	GtkWidget*			pane;

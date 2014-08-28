@@ -13,7 +13,38 @@ char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
 bool		dropTextFile=false;
 
-__attribute__((visibility("default"))) void parseargs(char* filepath,args* dataptr)
+__attribute__((visibility("default"))) void saveVarsToFile(char* filepath,args* dataptr)
+{
+	FILE*	fd=NULL;
+	int		cnt=0;
+
+	fd=fopen(filepath,"w");
+	if(fd!=NULL)
+		{
+			while(dataptr[cnt].name!=NULL)
+				{
+					switch(dataptr[cnt].type)
+						{
+							case TYPEINT:
+//				printf("%s\n%s\n%i\n%i\n",filepath,dataptr[cnt].name,dataptr[cnt].type,*(int*)(dataptr[cnt].data));
+								fprintf(fd,"%s	%i\n",dataptr[cnt].name,*(int*)dataptr[cnt].data);
+								break;
+							case TYPESTRING:
+//				printf("%s\n%s\n%i\n%s\n",filepath,dataptr[cnt].name,dataptr[cnt].type,*(char**)(dataptr[cnt].data));
+								fprintf(fd,"%s	%s\n",dataptr[cnt].name,*(char**)(dataptr[cnt].data));
+								break;
+							case TYPEBOOL:
+//				printf("%s\n%s\n%i\n%i\n",filepath,dataptr[cnt].name,dataptr[cnt].type,(int)*(bool*)(dataptr[cnt].data));
+								fprintf(fd,"%s	%i\n",dataptr[cnt].name,(int)*(bool*)dataptr[cnt].data);
+								break;
+						}
+					cnt++;
+				}
+			fclose(fd);
+		}
+}
+
+__attribute__((visibility("default"))) void loadVarsFromFile(char* filepath,args* dataptr)
 {
 	FILE*	fd=NULL;
 	char	buffer[2048];
