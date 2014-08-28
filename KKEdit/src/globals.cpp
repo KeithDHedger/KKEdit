@@ -157,7 +157,7 @@ bool			useRegex;
 bool			replaceAll;
 bool			findInAllFiles;
 bool			hightlightAll;
-int				tooOutHeight=200;
+int				toolOutHeight=200;
 
 GtkWidget*		mainWindowScrollbox=NULL;
 

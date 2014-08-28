@@ -1,4 +1,5 @@
 0.2.3
+Added loadVarsFromFile and saveVarsToFile to kkedits export so plugins can use the routines to save/load data.
 Fixed key propagation to tools!
 Added reserved data to page structure.
 Fixed bug when plugin must not be unloaded.

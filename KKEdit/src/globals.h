@@ -292,7 +292,7 @@ extern bool				useRegex;
 extern bool				replaceAll;
 extern bool				findInAllFiles;
 extern bool				hightlightAll;
-extern int				tooOutHeight;
+extern int				toolOutHeight;
 
 extern GtkWidget*		mainWindowScrollbox;
 

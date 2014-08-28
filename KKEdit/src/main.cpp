@@ -57,7 +57,7 @@ void readConfig(void)
 					//strings
 					{"windowsize",2,&windowdata},
 					//ints
-					{"toolouthite",1,&tooOutHeight},
+					{"toolouthite",1,&toolOutHeight},
 					{"nagtime",1,&lastNagTime},
 					{"lastupdate",1,&lastUpdate},
 					{"lastplugupdate",1,&lastPlugUpdate},
@@ -414,7 +414,7 @@ int main(int argc,char **argv)
 			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
 
 			gtk_window_get_size((GtkWindow*)window,&w,&h);
-			gtk_paned_set_position((GtkPaned*)mainVPane,tooOutHeight);
+			gtk_paned_set_position((GtkPaned*)mainVPane,toolOutHeight);
 			gtk_widget_hide(toolOutVBox);
 			if(getuid()!=0)
 				{

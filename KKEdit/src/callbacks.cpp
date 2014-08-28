@@ -1361,84 +1361,83 @@ void writeExitData(void)
 	char*			filename;
 	int				winx;
 	int				winy;
+	char*			windowdata=NULL;
 
 	gtk_widget_get_allocation(window,&alloc);
 	gtk_window_get_position((GtkWindow*)window,&winx,&winy);
+	asprintf(&windowdata,"%i %i %i %in",alloc.width,alloc.height,winx,winy);
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	debugFree(filename,"writeExitData filename");
 	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
-	fd=fopen(filename,"w");
-	if(fd!=NULL)
-		{
-			fprintf(fd,"windowsize	%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
-			fprintf(fd,"insenssearch	%i\n",(int)insensitiveSearch);
-			fprintf(fd,"useregex	%i\n",(int)useRegex);
-			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
-			fprintf(fd,"replaceall	%i\n",(int)replaceAll);
-			fprintf(fd,"allfiles	%i\n",(int)findInAllFiles);
-			fprintf(fd,"showbmbar	%i\n",(int)showBMBar);
-			fprintf(fd,"showtoolbar	%i\n",(int)showToolBar);
-			fprintf(fd,"showstatusbar	%i\n",(int)showStatus);
-			fprintf(fd,"highlightall	%i\n",(int)hightlightAll);
-			fprintf(fd,"toolouthite	%i\n",gtk_paned_get_position((GtkPaned*)mainVPane));
-			fprintf(fd,"nagtime	%i\n",lastNagTime);
-			fprintf(fd,"lastupdate	%i\n",lastUpdate);
-			fprintf(fd,"lastplugupdate	%i\n",lastPlugUpdate);
-			fclose(fd);
-		}
+
+	args mydata[]={
+					//bools
+					{"insenssearch",TYPEBOOL,&insensitiveSearch},
+					{"useregex",TYPEBOOL,&useRegex},
+					{"wrapsearch",TYPEBOOL,&wrapSearch},
+					{"replaceall",TYPEBOOL,&replaceAll},
+					{"allfiles",TYPEBOOL,&findInAllFiles},
+					{"showbmbar",TYPEBOOL,&showBMBar},
+					{"showtoolbar",TYPEBOOL,&showToolBar},
+					{"showstatusbar",TYPEBOOL,&showStatus},
+					{"highlightall",TYPEBOOL,&hightlightAll},
+					//strings
+					{"windowsize",TYPESTRING,&windowdata},
+					//ints
+					{"toolouthite",TYPEINT,&toolOutHeight},
+					{"nagtime",TYPEINT,&lastNagTime},
+					{"lastupdate",TYPEINT,&lastUpdate},
+					{"lastplugupdate",TYPEINT,&lastPlugUpdate},
+					{NULL,0,NULL}
+				  };
+
+	saveVarsToFile(filename,mydata);
 	debugFree(filename,"writeExitData filename");
 }
 
 void writeConfig(void)
 {
-	GtkAllocation	alloc;
+	//GtkAllocation	alloc;
 	FILE*			fd=NULL;
 	char*			filename;
 	int				winx;
 	int				winy;
-
-	gtk_widget_get_allocation(window,&alloc);
-	gtk_window_get_position((GtkWindow*)window,&winx,&winy);
+	args mydata[]={
+					//bools
+					{"indentcode",3,&indent},
+					{"showlinenumbers",3,&lineNumbers},
+					{"wrapline",3,&lineWrap},
+					{"highlightcurrentline",3,&highLight},
+					{"singleuse",3,&singleUse},
+					{"noduplicates",3,&noDuplicates},
+					{"warning",3,&noWarnings},
+					{"savesessiononexit",3,&onExitSaveSession},
+					{"restorebookmarks",3,&restoreBookmarks},
+					{"nagscreen",3,&nagScreen},
+					{"readlink",3,&readLinkFirst},
+					//strings
+					{"stylename",2,&styleName},
+					{"higlightcolour",2,&highlightColour},
+					{"toolbarlayout",2,&toolBarLayout},
+					{"font",2,&fontAndSize},
+					{"terminalcommand",2,&terminalCommand},
+					{"rootcommand",2,&rootCommand},
+					{"defaultbrowser",2,&browserCommand},
+					//ints
+					{"tabwidth",1,&tabWidth},
+					{"depth",1,&depth},
+					{"funcsort",1,&listFunction},
+					{NULL,0,NULL}
+				  };
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	debugFree(filename,"writeConfig filename");
+
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
-	fd=fopen(filename,"w");
-	if(fd!=NULL)
-		{
-			fprintf(fd,"indentcode	%i\n",(int)indent);
-			fprintf(fd,"showlinenumbers	%i\n",(int)lineNumbers);
-			fprintf(fd,"wrapline	%i\n",(int)lineWrap);
-			fprintf(fd,"highlightcurrentline	%i\n",(int)highLight);
-			fprintf(fd,"stylename	%s\n",styleName);
-			fprintf(fd,"singleuse	%i\n",(int)singleUse);
-			fprintf(fd,"insenssearch	%i\n",(int)insensitiveSearch);
-			fprintf(fd,"wrapsearch	%i\n",(int)wrapSearch);
-			fprintf(fd,"savesessiononexit	%i\n",(int)onExitSaveSession);
-			fprintf(fd,"restorebookmarks	%i\n",(int)restoreBookmarks);
-			fprintf(fd,"nagscreen	%i\n",nagScreen);
-			fprintf(fd,"noduplicates	%i\n",noDuplicates);
-			fprintf(fd,"warning	%i\n",noWarnings);
-			fprintf(fd,"readlink	%i\n",readLinkFirst);
-
-			fprintf(fd,"showbmbar	%i\n",(int)showBMBar);
-			fprintf(fd,"higlightcolour	%s\n",highlightColour);
-
-			fprintf(fd,"tabwidth	%i\n",tabWidth);
-			fprintf(fd,"depth	%i\n",depth);
-			fprintf(fd,"font	%s\n",fontAndSize);
-			fprintf(fd,"terminalcommand	%s\n",terminalCommand);
-			fprintf(fd,"rootcommand	%s\n",rootCommand);
-			fprintf(fd,"defaultbrowser	%s\n",browserCommand);
-
-			fprintf(fd,"toolbarlayout	%s\n",toolBarLayout);
-			fprintf(fd,"funcsort	%i\n",listFunction);
-
-			fclose(fd);
-		}
+	saveVarsToFile(filename,mydata);
 	debugFree(filename,"writeConfig filename");
 }
 
