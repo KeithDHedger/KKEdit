@@ -13,7 +13,7 @@ char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
 bool		dropTextFile=false;
 
-void parseargs(char* filepath,args* dataptr)
+__attribute__((visibility("default"))) void parseargs(char* filepath,args* dataptr)
 {
 	FILE*	fd=NULL;
 	char	buffer[2048];

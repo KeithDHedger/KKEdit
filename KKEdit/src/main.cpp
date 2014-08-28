@@ -13,6 +13,8 @@ bool	loadPlugins=true;
 void readConfig(void)
 {
 	char*	filename;
+	char*	windowdata=NULL;
+
 	args mydata[]={
 					//bools
 					{"indentcode",3,&indent},
@@ -41,8 +43,37 @@ void readConfig(void)
 					{NULL,0,NULL}
 				  };
 
+	args mydata2[]={
+					//bools
+					{"insenssearch",3,&insensitiveSearch},
+					{"useregex",3,&useRegex},
+					{"wrapsearch",3,&wrapSearch},
+					{"replaceall",3,&replaceAll},
+					{"allfiles",3,&findInAllFiles},
+					{"showbmbar",3,&showBMBar},
+					{"showtoolbar",3,&showToolBar},
+					{"showstatusbar",3,&showStatus},
+					{"highlightall",3,&hightlightAll},
+					//strings
+					{"windowsize",2,&windowdata},
+					//ints
+					{"toolouthite",1,&tooOutHeight},
+					{"nagtime",1,&lastNagTime},
+					{"lastupdate",1,&lastUpdate},
+					{"lastplugupdate",1,&lastPlugUpdate},
+					{NULL,0,NULL}
+				  };
+	
+
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	parseargs(filename,&mydata[0]);
+	debugFree(filename,"readConfig filename");
+
+	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
+	parseargs(filename,&mydata2[0]);
+	if(windowdata!=NULL)
+		sscanf(windowdata,"%i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
+	debugFree(filename,"readConfig filename");
 }
 
 void readConfigXX(void)
@@ -93,10 +124,10 @@ void readConfigXX(void)
 //					if(strcasecmp(name,"restorebookmarks")==0)
 //						restoreBookmarks=(bool)atoi(strarg);
 
-					if(strcasecmp(name,"tabwidth")==0)
-						tabWidth=atoi(strarg);
-					if(strcasecmp(name,"depth")==0)
-						depth=atoi(strarg);
+//					if(strcasecmp(name,"tabwidth")==0)
+//						tabWidth=atoi(strarg);
+//					if(strcasecmp(name,"depth")==0)
+//						depth=atoi(strarg);
 //					if(strcasecmp(name,"nagscreen")==0)
 //						nagScreen=(bool)atoi(strarg);
 //
@@ -109,8 +140,8 @@ void readConfigXX(void)
 //							highlightColour=strdup(strarg);
 //						}
 
-					if(strcasecmp(name,"funcsort")==0)
-						listFunction=(int)atoi(strarg);
+//					if(strcasecmp(name,"funcsort")==0)
+//						listFunction=(int)atoi(strarg);
 
 //					if(strcasecmp(name,"toolbarlayout")==0)
 //						{
@@ -170,36 +201,37 @@ void readConfigXX(void)
 
 					if(strcasecmp(name,"windowsize")==0)
 						sscanf(buffer,"%*s %i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
-					if(strcasecmp(name,"insenssearch")==0)
-						insensitiveSearch=(bool)atoi(strarg);
-					if(strcasecmp(name,"useregex")==0)
-						useRegex=(bool)atoi(strarg);
-					if(strcasecmp(name,"wrapsearch")==0)
-						wrapSearch=(bool)atoi(strarg);
-					if(strcasecmp(name,"replaceall")==0)
-						replaceAll=(bool)atoi(strarg);
-					if(strcasecmp(name,"allfiles")==0)
-						findInAllFiles=(bool)atoi(strarg);
-					if(strcasecmp(name,"showbmbar")==0)
-						showBMBar=(bool)atoi(strarg);
-					if(strcasecmp(name,"showtoolbar")==0)
-						showToolBar=(bool)atoi(strarg);
-//status bar
-					if(strcasecmp(name,"showstatusbar")==0)
-						showStatus=(bool)atoi(strarg);
-//highlight all
-					if(strcasecmp(name,"highlightall")==0)
-						hightlightAll=(bool)atoi(strarg);
+
+//					if(strcasecmp(name,"insenssearch")==0)
+//						insensitiveSearch=(bool)atoi(strarg);
+//					if(strcasecmp(name,"useregex")==0)
+//						useRegex=(bool)atoi(strarg);
+//					if(strcasecmp(name,"wrapsearch")==0)
+//						wrapSearch=(bool)atoi(strarg);
+//					if(strcasecmp(name,"replaceall")==0)
+//						replaceAll=(bool)atoi(strarg);
+//					if(strcasecmp(name,"allfiles")==0)
+//						findInAllFiles=(bool)atoi(strarg);
+//					if(strcasecmp(name,"showbmbar")==0)
+//						showBMBar=(bool)atoi(strarg);
+//					if(strcasecmp(name,"showtoolbar")==0)
+//						showToolBar=(bool)atoi(strarg);
+////status bar
+//					if(strcasecmp(name,"showstatusbar")==0)
+//						showStatus=(bool)atoi(strarg);
+////highlight all
+//					if(strcasecmp(name,"highlightall")==0)
+//						hightlightAll=(bool)atoi(strarg);
 //set toolout hite
-					if(strcasecmp(name,"toolouthite")==0)
-						tooOutHeight=(int)atoi(strarg);
-//last nag time/update
-					if(strcasecmp(name,"nagtime")==0)
-						lastNagTime=atol(strarg);
-					if(strcasecmp(name,"lastupdate")==0)
-						lastUpdate=atol(strarg);
-					if(strcasecmp(name,"lastplugupdate")==0)
-						lastPlugUpdate=atol(strarg);
+//					if(strcasecmp(name,"toolouthite")==0)
+//						tooOutHeight=(int)atoi(strarg);
+////last nag time/update
+//					if(strcasecmp(name,"nagtime")==0)
+//						lastNagTime=atol(strarg);
+//					if(strcasecmp(name,"lastupdate")==0)
+//						lastUpdate=atol(strarg);
+//					if(strcasecmp(name,"lastplugupdate")==0)
+//						lastPlugUpdate=atol(strarg);
 				}
 			fclose(fd);
 		}

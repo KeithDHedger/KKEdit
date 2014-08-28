@@ -53,6 +53,9 @@
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 
+#ifndef _PAGESTRUCT_
+#define _PAGESTRUCT_
+
 struct args
 {
 	const char*	name;
@@ -60,8 +63,6 @@ struct args
 	void*		data;
 };
 
-#ifndef _PAGESTRUCT_
-#define _PAGESTRUCT_
 struct pageStruct
 {
 	GtkWidget*			pane;
