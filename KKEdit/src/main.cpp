@@ -8,7 +8,7 @@
 #include <time.h>
 
 bool	singleOverRide=false;
-bool	loadPlugins=true;
+bool	loadPluginsFlag=true;
 
 void readConfig(void)
 {
@@ -137,7 +137,7 @@ void init(void)
 #endif
 
 //do plugins
-	globalPlugins=new PluginClass(loadPlugins);
+	globalPlugins=new PluginClass(loadPluginsFlag);
 //set up plugin data		
 	globalPlugins->globalPlugData=(plugData*)malloc(sizeof(plugData));
 	globalPlugins->globalPlugData->dataDir=DATADIR;
@@ -313,7 +313,7 @@ int main(int argc,char **argv)
 	if((argc>1) && (strcmp(argv[1],"-s")==0))
 		{
 			singleOverRide=true;
-			loadPlugins=false;
+			loadPluginsFlag=false;
 		}
 
 	if((unique_app_is_running(app)==true) && (singleUse==true) && (singleOverRide==false))
@@ -363,7 +363,6 @@ int main(int argc,char **argv)
 			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
 
 			gtk_window_get_size((GtkWindow*)window,&w,&h);
-			printf("%i\n",toolOutHeight);
 			gtk_paned_set_position((GtkPaned*)mainVPane,toolOutHeight);
 			gtk_widget_hide(toolOutVBox);
 			if(getuid()!=0)

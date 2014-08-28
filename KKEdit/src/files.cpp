@@ -69,16 +69,16 @@ __attribute__((visibility("default"))) void loadVarsFromFile(char* filepath,args
 								{
 									switch(dataptr[cnt].type)
 										{
-											case 1:
+											case TYPEINT:
 												*(int*)dataptr[cnt].data=atoi(strarg);
 												break;
-											case 2:
+											case TYPESTRING:
 												sscanf(buffer,"%*s %"VALIDCHARS"s",(char*)&strarg);
 												if(*(char**)(dataptr[cnt].data)!=NULL)
 													free(*(char**)(dataptr[cnt].data));
 												asprintf((char**)dataptr[cnt].data,"%s",strarg);
 												break;
-											case 3:
+											case TYPEBOOL:
 												*(bool*)dataptr[cnt].data=(bool)atoi(strarg);
 												break;
 										}

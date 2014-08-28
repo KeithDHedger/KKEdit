@@ -1304,7 +1304,6 @@ void buildMainGui(void)
 	mainWindowHPane=gtk_hpaned_new();
 	secondWindowHPane=gtk_hpaned_new();
 
-
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size((GtkWindow*)window,windowWidth,windowHeight);
 	if(windowX!=-1 && windowY!=-1)
@@ -1321,7 +1320,6 @@ void buildMainGui(void)
 	gtk_signal_connect(GTK_OBJECT(notebook),"switch-page",G_CALLBACK(switchPage),NULL);
 	gtk_signal_connect(GTK_OBJECT(notebook),"page-reordered",G_CALLBACK(switchPage),NULL);
 
-//	vbox=gtk_vbox_new(false,0);
 	menubar=gtk_menu_bar_new();
 	toolBarBox=gtk_hbox_new(true,0);
 	toolBar=(GtkToolbar*)gtk_toolbar_new();
@@ -1731,7 +1729,6 @@ void buildMainGui(void)
 //add top user
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainTopUserVBox,false,false,0);
 
-
 //add left user
 	gtk_paned_pack1((GtkPaned*)mainWindowHPane,mainLeftUserVBox,false,true);
 	gtk_paned_pack2((GtkPaned*)mainWindowHPane,secondWindowHPane,true,false);
@@ -1745,11 +1742,24 @@ void buildMainGui(void)
 //addright user
 	gtk_paned_pack2((GtkPaned*)secondWindowHPane,mainRightUserVBox,false,true);
 
+
+
+GtkWidget *         vpane=gtk_vpaned_new                      ();
+GtkWidget * bb=gtk_statusbar_new();
+//gtk_paned_pack1                      ((GtkPaned *)vpane,mainWindowHPane,false,true);
+gtk_paned_add2                      ((GtkPaned *)vpane,mainBottomUserVBox);
+gtk_paned_add1                      ((GtkPaned *)vpane,mainWindowHPane);
+//add this to vpane and below
 //add main hbox
-	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainWindowHPane,true,true,0);
+////	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainWindowHPane,true,true,0);
 
 //add botom user
-	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainBottomUserVBox,false,false,0);
+////	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainBottomUserVBox,false,false,0);
+gtk_widget_show_all(vpane);
+gtk_box_pack_start((GtkBox*)mainWindowVBox,vpane,true,true,0);
+//gtk_container_add((GtkContainer*)mainWindowVBox,vpane);
+
+
 //add status bar
 	statusWidget=gtk_statusbar_new();
 	gtk_box_pack_end((GtkBox*)mainWindowVBox,statusWidget,false,true,0);
@@ -1971,13 +1981,6 @@ int showFunctionEntry(void)
 	gtk_widget_destroy(dialog);
 
 	return(result);
-}
-void testweb(GObject* gobject,GParamSpec* pspec,gpointer data)
-{
-//WebKitWebWindowFeatures *features = webkit_web_view_get_window_features (webView);
-	g_object_set((gpointer)gobject,"menubar-visible",true,NULL);
-	g_object_set((gpointer)gobject,"statusbar-visible",true,NULL);
-
 }
 
 #ifdef _BUILDDOCVIEWER_

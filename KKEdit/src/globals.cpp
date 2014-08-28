@@ -279,7 +279,7 @@ PluginClass*	globalPlugins=NULL;
 
 //save and load var lists
 char*			windowAllocData=NULL;
-args kkedit_window_rc[]=
+args			kkedit_window_rc[]=
 	{
 		//bools
 		{"insenssearch",TYPEBOOL,&insensitiveSearch},
@@ -301,7 +301,7 @@ args kkedit_window_rc[]=
 		{NULL,0,NULL}
 	};
 
-args kkedit_rc[]=
+args			kkedit_rc[]=
 	{
 		//bools
 		{"indentcode",TYPEBOOL,&indent},
@@ -330,19 +330,19 @@ args kkedit_rc[]=
 		{NULL,0,NULL}
 	};
 
-int		intermarg=0;
-int		flagsarg=0;
-int		inpopup=0;
-int		alwayspopup=0;
-int		clearview=0;
-char*	commandarg=NULL;
-char*	commentarg=NULL;
-char*	menuname=NULL;
-int		rootarg=0;
-int		keycode=0;
-int		usebar=0;
+int				intermarg=0;
+int				flagsarg=0;
+int				inpopup=0;
+int				alwayspopup=0;
+int				clearview=0;
+char*			commandarg=NULL;
+char*			commentarg=NULL;
+char*			menuname=NULL;
+int				rootarg=0;
+int				keycode=0;
+int				usebar=0;
 
-args tool_vars[]=
+args			tool_vars[]=
 	{
 		//strings
 		{"name",TYPESTRING,&menuname},
