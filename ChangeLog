@@ -1,5 +1,6 @@
 0.2.3
-Standardised save/load routines for configs.
+Improved string scanning fo valid chars.
+Standardized save/load routines for configs.
 If two or more plugins use a top/bottom pane pane wont be closed until all plugins close it.
 Added top/bottom draggable panes for plugins.
 Added loadVarsFromFile and saveVarsToFile to kkedits export so plugins can use the routines to save/load data.

@@ -614,7 +614,8 @@ functionData* getFunctionByName(char* name,bool recurse)
 									sscanf (lineptr,"%*s %*s %i",&fdata->line);
 									sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
 									fdata->file=strdup(function);
-									sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
+									//sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
+									sscanf (lineptr,"%*s %*s %*i %*s %[^\n]s",function);
 									fdata->define=strdup(function);
 									fdata->intab=loop;
 									return(fdata);
@@ -704,7 +705,8 @@ functionData* getFunctionByName(char* name,bool recurse)
 					sscanf (possmatch,"%*s %*s %i",&fdata->line);
 					sscanf (possmatch,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
 					fdata->file=strdup(function);
-					sscanf (possmatch,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
+					//sscanf (possmatch,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
+					sscanf (possmatch,"%*s %*s %*i %*s %[^\n]s",function);
 					fdata->define=strdup(function);
 					fdata->intab=loophold;
 					return(fdata);

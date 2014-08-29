@@ -30,7 +30,7 @@
 #define	TOOL_INSERT_MASK 0b10111
 #define	TOOL_VIEW_OP 16
 
-#define VALIDCHARS "[]a-zA-Z0-9:/@ ()_-,.*#;[\"]"
+//#define VALIDCHARS "[]a-zA-Z0-9:/@ ()_-,.%*#;[\"]"
 #define VALIDFILENAMECHARS "[A-Za-z0-9_-./ <>]"
 #define VALIDFUNCTIONCHARS "[A-Za-z0-9_*:/@ ()-,.#;[\"]"
 
