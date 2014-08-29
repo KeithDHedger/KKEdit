@@ -48,9 +48,9 @@ __attribute__((visibility("default"))) void loadVarsFromFile(char* filepath,args
 {
 	FILE*	fd=NULL;
 	char	buffer[2048];
-	char	argname[256];
-	char	strarg[1024];
 	int		cnt;
+	char*	argname=NULL;
+	char*	strarg=NULL;
 
 	fd=fopen(filepath,"r");
 	if(fd!=NULL)
@@ -58,14 +58,12 @@ __attribute__((visibility("default"))) void loadVarsFromFile(char* filepath,args
 			while(feof(fd)==0)
 				{
 					buffer[0]=0;
-					strarg[0]=0;
-					argname[0]=0;
 					fgets(buffer,2048,fd);
-					sscanf(buffer,"%s %s",(char*)&argname,(char*)&strarg);
+					sscanf(buffer,"%as %as",&argname,&strarg);
 					cnt=0;
 					while(dataptr[cnt].name!=NULL)
 						{
-							if(strcmp(argname,dataptr[cnt].name)==0)
+							if((strarg!=NULL) && (argname!=NULL) && (strcmp(argname,dataptr[cnt].name)==0))
 								{
 									switch(dataptr[cnt].type)
 										{
@@ -84,6 +82,12 @@ __attribute__((visibility("default"))) void loadVarsFromFile(char* filepath,args
 								}
 							cnt++;
 						}
+					if(argname!=NULL)
+						free(argname);
+					if(strarg!=NULL)
+						free(strarg);
+					argname=NULL;
+					strarg=NULL;
 				}
 			fclose(fd);
 		}
