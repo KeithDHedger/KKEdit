@@ -1366,6 +1366,8 @@ void writeExitData(void)
 	asprintf(&windowAllocData,"%i %i %i %in",alloc.width,alloc.height,winx,winy);
 
 	toolOutHeight=gtk_paned_get_position((GtkPaned*)mainVPane);
+	bottomVPaneHite=gtk_paned_get_position((GtkPaned*)mainWindowVPane);
+	topVPaneHite=gtk_paned_get_position((GtkPaned*)secondWindowVPane);
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);

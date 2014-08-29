@@ -158,6 +158,8 @@ bool			replaceAll;
 bool			findInAllFiles;
 bool			hightlightAll;
 int				toolOutHeight=200;
+int				bottomVPaneHite=200;
+int				topVPaneHite=200;
 
 GtkWidget*		mainWindowScrollbox=NULL;
 
@@ -168,6 +170,9 @@ GtkWidget*		mainLeftUserVBox=NULL;
 GtkWidget*		mainNotebookVBox=NULL;
 GtkWidget*		mainRightUserVBox=NULL;
 GtkWidget*		mainBottomUserVBox=NULL;
+
+GtkWidget*		mainWindowVPane=NULL;
+GtkWidget*		secondWindowVPane=NULL;
 
 GtkWidget*		mainWindowHPane=NULL;
 GtkWidget*		secondWindowHPane=NULL;
@@ -295,6 +300,8 @@ args			kkedit_window_rc[]=
 		{"windowsize",TYPESTRING,&windowAllocData},
 		//ints
 		{"toolouthite",TYPEINT,&toolOutHeight},
+		{"bottomvpanehite",TYPEINT,&bottomVPaneHite},
+		{"topvpanehite",TYPEINT,&topVPaneHite},
 		{"nagtime",TYPEINT,&lastNagTime},
 		{"lastupdate",TYPEINT,&lastUpdate},
 		{"lastplugupdate",TYPEINT,&lastPlugUpdate},

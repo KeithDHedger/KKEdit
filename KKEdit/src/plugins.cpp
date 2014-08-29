@@ -236,6 +236,7 @@ void doPlugPrefs(void)
 	gtk_widget_show_all(plugwindow);
 }
 
+//left/right
 __attribute__((visibility("default"))) void showSide(bool left)
 {
 	if(left==true)
@@ -273,6 +274,42 @@ __attribute__((visibility("default"))) void hideSide(bool left)
 	
 }
 
+//top/bottom
+__attribute__((visibility("default"))) void showTop(bool top)
+{
+	if(top==true)
+		{
+			gtk_widget_show(globalPlugins->globalPlugData->topUserBox);
+			globalPlugins->globalPlugData->topShow++;
+		}
+	else
+		{
+			gtk_widget_show(globalPlugins->globalPlugData->bottomUserBox);
+			globalPlugins->globalPlugData->bottomShow++;
+		}
+}
+
+__attribute__((visibility("default"))) void hideTop(bool top)
+{
+	if(top==true)
+		{
+			globalPlugins->globalPlugData->topShow--;
+			if(globalPlugins->globalPlugData->topShow<=0)
+				{
+					gtk_widget_hide(globalPlugins->globalPlugData->topUserBox);
+					globalPlugins->globalPlugData->topShow=0;
+				}
+		}
+	else
+		{
+			globalPlugins->globalPlugData->bottomShow--;
+			if(globalPlugins->globalPlugData->bottomShow<=0)
+				{
+					gtk_widget_hide(globalPlugins->globalPlugData->bottomUserBox);
+					globalPlugins->globalPlugData->bottomShow=0;
+				}
+		}
+}
 
 
 

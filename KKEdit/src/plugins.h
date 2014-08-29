@@ -13,5 +13,7 @@
 void doPlugPrefs(void);
 void showSide(bool left);
 void hideSide(bool left);
+void showTop(bool left);
+void hideTop(bool left);
 
 #endif

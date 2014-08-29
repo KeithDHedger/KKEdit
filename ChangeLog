@@ -1,10 +1,12 @@
 0.2.3
+Standardised save/load routines for configs.
+If two or more plugins use a top/bottom pane pane wont be closed until all plugins close it.
+Added top/bottom draggable panes for plugins.
 Added loadVarsFromFile and saveVarsToFile to kkedits export so plugins can use the routines to save/load data.
 Fixed key propagation to tools!
 Added reserved data to page structure.
 Fixed bug when plugin must not be unloaded.
 Fixed segfault when shutting window with close button rather than using quit.
-Changed plugin routine names ( saveFile etc ) to prevent potential clashes.
 Fixed key presses not being propagated to plugins.
 Added user datalist to page structure for use by plugins.
 Fixed plugins in subfolders not being properly sorted on load.

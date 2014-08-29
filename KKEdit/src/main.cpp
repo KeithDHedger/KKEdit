@@ -364,6 +364,10 @@ int main(int argc,char **argv)
 
 			gtk_window_get_size((GtkWindow*)window,&w,&h);
 			gtk_paned_set_position((GtkPaned*)mainVPane,toolOutHeight);
+
+			gtk_paned_set_position((GtkPaned*)secondWindowVPane,topVPaneHite);
+			gtk_paned_set_position((GtkPaned*)mainWindowVPane,bottomVPaneHite);
+
 			gtk_widget_hide(toolOutVBox);
 			if(getuid()!=0)
 				{

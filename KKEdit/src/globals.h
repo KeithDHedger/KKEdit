@@ -293,6 +293,8 @@ extern bool				replaceAll;
 extern bool				findInAllFiles;
 extern bool				hightlightAll;
 extern int				toolOutHeight;
+extern int				bottomVPaneHite;
+extern int				topVPaneHite;
 
 extern GtkWidget*		mainWindowScrollbox;
 
@@ -304,6 +306,8 @@ extern GtkWidget*		mainNotebookVBox;
 extern GtkWidget*		mainRightUserVBox;
 extern GtkWidget*		mainBottomUserVBox;
 
+extern GtkWidget*		mainWindowVPane;
+extern GtkWidget*		secondWindowVPane;
 
 extern GtkWidget*		mainWindowHPane;
 extern GtkWidget*		secondWindowHPane;

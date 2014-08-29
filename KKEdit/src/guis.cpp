@@ -1726,8 +1726,6 @@ void buildMainGui(void)
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,menubar,false,false,0);
 //add toolbar
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,toolBarBox,false,false,0);
-//add top user
-	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainTopUserVBox,false,false,0);
 
 //add left user
 	gtk_paned_pack1((GtkPaned*)mainWindowHPane,mainLeftUserVBox,false,true);
@@ -1736,33 +1734,36 @@ void buildMainGui(void)
 //add notebook
 	gtk_box_pack_start((GtkBox*)mainNotebookVBox,(GtkWidget*)notebook,true,true,0);
 	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainVPane,true,true,0);
-
 	gtk_paned_pack1((GtkPaned*)secondWindowHPane,mainWindowHBox,true,false);
                                                          
 //addright user
 	gtk_paned_pack2((GtkPaned*)secondWindowHPane,mainRightUserVBox,false,true);
 
+//vpanes top and bottom
+	mainWindowVPane=gtk_vpaned_new();
+	secondWindowVPane=gtk_vpaned_new();
 
+	gtk_paned_pack1((GtkPaned *)mainWindowVPane,mainWindowHPane,false,false);
+	gtk_paned_pack2((GtkPaned *)mainWindowVPane,mainBottomUserVBox,false,false);
 
-GtkWidget *         vpane=gtk_vpaned_new                      ();
-GtkWidget * bb=gtk_statusbar_new();
-//gtk_paned_pack1                      ((GtkPaned *)vpane,mainWindowHPane,false,true);
-gtk_paned_add2                      ((GtkPaned *)vpane,mainBottomUserVBox);
-gtk_paned_add1                      ((GtkPaned *)vpane,mainWindowHPane);
+	gtk_paned_pack1((GtkPaned *)secondWindowVPane,mainTopUserVBox,false,false);
+	gtk_paned_pack2((GtkPaned *)secondWindowVPane,mainWindowVPane,false,false);
+
 //add this to vpane and below
-//add main hbox
-////	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainWindowHPane,true,true,0);
-
 //add botom user
-////	gtk_box_pack_start((GtkBox*)mainWindowVBox,mainBottomUserVBox,false,false,0);
-gtk_widget_show_all(vpane);
-gtk_box_pack_start((GtkBox*)mainWindowVBox,vpane,true,true,0);
-//gtk_container_add((GtkContainer*)mainWindowVBox,vpane);
-
+	gtk_widget_show_all(secondWindowVPane);
+	gtk_box_pack_start((GtkBox*)mainWindowVBox,secondWindowVPane,true,true,0);
 
 //add status bar
 	statusWidget=gtk_statusbar_new();
 	gtk_box_pack_end((GtkBox*)mainWindowVBox,statusWidget,false,true,0);
+
+//hide top/bottom user boxes
+	gtk_widget_hide(mainTopUserVBox);
+	gtk_widget_hide(mainBottomUserVBox);
+//hide left/right user boxes
+	gtk_widget_hide(mainLeftUserVBox);
+	gtk_widget_hide(mainRightUserVBox);
 
 	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 
@@ -1784,6 +1785,9 @@ gtk_box_pack_start((GtkBox*)mainWindowVBox,vpane,true,true,0);
 	globalPlugins->globalPlugData->mainWindowHPane=mainWindowHPane;
 
 	globalPlugins->globalPlugData->leftShow=0;
+	globalPlugins->globalPlugData->rightShow=0;
+	globalPlugins->globalPlugData->topShow=0;
+	globalPlugins->globalPlugData->bottomShow=0;
 
 	globalPlugins->globalPlugData->toolOutBuffer=toolOutputBuffer;
 	globalPlugins->globalPlugData->toolOutWindow=toolOutputView;
