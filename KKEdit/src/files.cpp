@@ -476,24 +476,35 @@ void restoreSession(GtkWidget* widget,gpointer data)
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
 					sscanf(buffer,"%i %[^\n]s",(int*)&currentline,(char*)&strarg);
-					openFile(strarg,currentline,true);
-					fgets(buffer,2048,fd);
-					sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
-					page=getPageStructPtr(currentPage-1);
-					gtk_notebook_set_current_page(notebook,currentPage-1);
-					while(intarg!=-1)
+					if(openFile(strarg,currentline,true)==false)
 						{
-							if((bool)data==true)
+							intarg=999;
+							while(intarg!=-1)
 								{
-									gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
-									gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
-									toggleBookmark(NULL,&markiter);
+									fgets(buffer,2048,fd);
+									sscanf(buffer,"%i",(int*)&intarg);
 								}
+						}
+					else
+						{
 							fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
+							page=getPageStructPtr(currentPage-1);
+							gtk_notebook_set_current_page(notebook,currentPage-1);
+							while(intarg!=-1)
+								{
+									if((bool)data==true)
+										{
+											gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
+											gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
+											toggleBookmark(NULL,&markiter);
+										}
+									fgets(buffer,2048,fd);
+									sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
+								}
+							buf->textBuffer=(GtkTextBuffer*)page->buffer;
+							buf->scroll2Line((GtkTextView*)page->view,currentline);					
 						}
-					buf->textBuffer=(GtkTextBuffer*)page->buffer;
-					buf->scroll2Line((GtkTextView*)page->view,currentline);					
 				}
 			fclose(fd);
 			debugFree(filename,"restoreSession filename");

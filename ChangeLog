@@ -1,4 +1,7 @@
 0.2.3
+Improved search for definition now try's: exact match in open files->exact match in all files in current folder->best match in all files in current folder.
+Fixed bug in restore session when trying to restor file with a space in the name.
+Fixed crash when trying to restore session with bookmarks with missing file.
 Improved string scanning fo valid chars.
 Standardized save/load routines for configs.
 If two or more plugins use a top/bottom pane pane wont be closed until all plugins close it.

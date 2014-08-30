@@ -285,57 +285,57 @@ PluginClass*	globalPlugins=NULL;
 //save and load var lists
 char*			windowAllocData=NULL;
 args			kkedit_window_rc[]=
-	{
-		//bools
-		{"insenssearch",TYPEBOOL,&insensitiveSearch},
-		{"useregex",TYPEBOOL,&useRegex},
-		{"wrapsearch",TYPEBOOL,&wrapSearch},
-		{"replaceall",TYPEBOOL,&replaceAll},
-		{"allfiles",TYPEBOOL,&findInAllFiles},
-		{"showbmbar",TYPEBOOL,&showBMBar},
-		{"showtoolbar",TYPEBOOL,&showToolBar},
-		{"showstatusbar",TYPEBOOL,&showStatus},
-		{"highlightall",TYPEBOOL,&hightlightAll},
-		//strings
-		{"windowsize",TYPESTRING,&windowAllocData},
-		//ints
-		{"toolouthite",TYPEINT,&toolOutHeight},
-		{"bottomvpanehite",TYPEINT,&bottomVPaneHite},
-		{"topvpanehite",TYPEINT,&topVPaneHite},
-		{"nagtime",TYPEINT,&lastNagTime},
-		{"lastupdate",TYPEINT,&lastUpdate},
-		{"lastplugupdate",TYPEINT,&lastPlugUpdate},
-		{NULL,0,NULL}
-	};
+{
+	//bools
+	{"insenssearch",TYPEBOOL,&insensitiveSearch},
+	{"useregex",TYPEBOOL,&useRegex},
+	{"wrapsearch",TYPEBOOL,&wrapSearch},
+	{"replaceall",TYPEBOOL,&replaceAll},
+	{"allfiles",TYPEBOOL,&findInAllFiles},
+	{"showbmbar",TYPEBOOL,&showBMBar},
+	{"showtoolbar",TYPEBOOL,&showToolBar},
+	{"showstatusbar",TYPEBOOL,&showStatus},
+	{"highlightall",TYPEBOOL,&hightlightAll},
+	//strings
+	{"windowsize",TYPESTRING,&windowAllocData},
+	//ints
+	{"toolouthite",TYPEINT,&toolOutHeight},
+	{"bottomvpanehite",TYPEINT,&bottomVPaneHite},
+	{"topvpanehite",TYPEINT,&topVPaneHite},
+	{"nagtime",TYPEINT,&lastNagTime},
+	{"lastupdate",TYPEINT,&lastUpdate},
+	{"lastplugupdate",TYPEINT,&lastPlugUpdate},
+	{NULL,0,NULL}
+};
 
 args			kkedit_rc[]=
-	{
-		//bools
-		{"indentcode",TYPEBOOL,&indent},
-		{"showlinenumbers",TYPEBOOL,&lineNumbers},
-		{"wrapline",TYPEBOOL,&lineWrap},
-		{"highlightcurrentline",TYPEBOOL,&highLight},
-		{"singleuse",TYPEBOOL,&singleUse},
-		{"noduplicates",TYPEBOOL,&noDuplicates},
-		{"warning",TYPEBOOL,&noWarnings},
-		{"savesessiononexit",TYPEBOOL,&onExitSaveSession},
-		{"restorebookmarks",TYPEBOOL,&restoreBookmarks},
-		{"nagscreen",TYPEBOOL,&nagScreen},
-		{"readlink",TYPEBOOL,&readLinkFirst},
-		//strings
-		{"stylename",TYPESTRING,&styleName},
-		{"higlightcolour",TYPESTRING,&highlightColour},
-		{"toolbarlayout",TYPESTRING,&toolBarLayout},
-		{"font",TYPESTRING,&fontAndSize},
-		{"terminalcommand",TYPESTRING,&terminalCommand},
-		{"rootcommand",TYPESTRING,&rootCommand},
-		{"defaultbrowser",TYPESTRING,&browserCommand},
-		//ints
-		{"tabwidth",TYPEINT,&tabWidth},
-		{"depth",TYPEINT,&depth},
-		{"funcsort",TYPEINT,&listFunction},
-		{NULL,0,NULL}
-	};
+{
+	//bools
+	{"indentcode",TYPEBOOL,&indent},
+	{"showlinenumbers",TYPEBOOL,&lineNumbers},
+	{"wrapline",TYPEBOOL,&lineWrap},
+	{"highlightcurrentline",TYPEBOOL,&highLight},
+	{"singleuse",TYPEBOOL,&singleUse},
+	{"noduplicates",TYPEBOOL,&noDuplicates},
+	{"warning",TYPEBOOL,&noWarnings},
+	{"savesessiononexit",TYPEBOOL,&onExitSaveSession},
+	{"restorebookmarks",TYPEBOOL,&restoreBookmarks},
+	{"nagscreen",TYPEBOOL,&nagScreen},
+	{"readlink",TYPEBOOL,&readLinkFirst},
+	//strings
+	{"stylename",TYPESTRING,&styleName},
+	{"higlightcolour",TYPESTRING,&highlightColour},
+	{"toolbarlayout",TYPESTRING,&toolBarLayout},
+	{"font",TYPESTRING,&fontAndSize},
+	{"terminalcommand",TYPESTRING,&terminalCommand},
+	{"rootcommand",TYPESTRING,&rootCommand},
+	{"defaultbrowser",TYPESTRING,&browserCommand},
+	//ints
+	{"tabwidth",TYPEINT,&tabWidth},
+	{"depth",TYPEINT,&depth},
+	{"funcsort",TYPEINT,&listFunction},
+	{NULL,0,NULL}
+};
 
 int				intermarg=0;
 int				flagsarg=0;
@@ -350,22 +350,22 @@ int				keycode=0;
 int				usebar=0;
 
 args			tool_vars[]=
-	{
-		//strings
-		{"name",TYPESTRING,&menuname},
-		{"command",TYPESTRING,&commandarg},
-		{"comment",TYPESTRING,&commentarg},
-		//ints
-		{"interm",TYPEINT,&intermarg},
-		{"flags",TYPEINT,&flagsarg},
-		{"inpopup",TYPEINT,&inpopup},
-		{"alwayspopup",TYPEINT,&alwayspopup},
-		{"clearview",TYPEINT,&clearview},
-		{"runasroot",TYPEINT,&rootarg},
-		{"usebar",TYPEINT,&usebar},
-		{"shortcutkey",TYPEINT,&keycode},
-		{NULL,0,NULL}
-	};
+{
+	//strings
+	{"name",TYPESTRING,&menuname},
+	{"command",TYPESTRING,&commandarg},
+	{"comment",TYPESTRING,&commentarg},
+	//ints
+	{"interm",TYPEINT,&intermarg},
+	{"flags",TYPEINT,&flagsarg},
+	{"inpopup",TYPEINT,&inpopup},
+	{"alwayspopup",TYPEINT,&alwayspopup},
+	{"clearview",TYPEINT,&clearview},
+	{"runasroot",TYPEINT,&rootarg},
+	{"usebar",TYPEINT,&usebar},
+	{"shortcutkey",TYPEINT,&keycode},
+	{NULL,0,NULL}
+};
 
 void plugRunFunction(gpointer data,gpointer funcname)
 {
@@ -594,14 +594,9 @@ functionData* getFunctionByName(char* name,bool recurse)
 					while (lineptr!=NULL)
 						{
 							sscanf (lineptr,"%s",function);
-							if(strlen(name)>strlen(function))
+							if(strlen(name)==strlen(function))
 								{
 									gotmatch=strncasecmp(function,name,strlen(function));
-									thislen=strlen(function);
-								}
-							else
-								{
-									gotmatch=strncasecmp(name,function,strlen(name));
 									thislen=strlen(name);
 								}
 							if((gotmatch==0) && (strlen(name)==strlen(function)))
@@ -614,17 +609,10 @@ functionData* getFunctionByName(char* name,bool recurse)
 									sscanf (lineptr,"%*s %*s %i",&fdata->line);
 									sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
 									fdata->file=strdup(function);
-									//sscanf (lineptr,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
 									sscanf (lineptr,"%*s %*s %*i %*s %[^\n]s",function);
 									fdata->define=strdup(function);
 									fdata->intab=loop;
 									return(fdata);
-								}
-							if((gotmatch==0) && (bestlen<thislen))
-								{
-									possmatch=strdup(lineptr);
-									bestlen=thislen;
-									loophold=loop;
 								}
 
 							lineptr=strchr(lineptr,'\n');
@@ -651,16 +639,25 @@ functionData* getFunctionByName(char* name,bool recurse)
 							while (lineptr!=NULL)
 								{
 									sscanf (lineptr,"%s",function);
-									if(strlen(name)>strlen(function))
+									if(strlen(name)==strlen(function))
 										{
 											gotmatch=strncasecmp(function,name,strlen(function));
-											thislen=strlen(function);
+											thislen=strlen(name);
 										}
 									else
 										{
-											gotmatch=strncasecmp(name,function,strlen(name));
-											thislen=strlen(name);
+											if(strlen(name)>strlen(function))
+												{
+													gotmatch=strncasecmp(function,name,strlen(function));
+													thislen=strlen(function);
+												}
+											else
+												{
+													gotmatch=strncasecmp(name,function,strlen(name));
+													thislen=strlen(name);
+												}
 										}
+
 									if((gotmatch==0) && (strlen(name)==strlen(function)))
 										{
 											sscanf (lineptr, "%s\t%s\t%i",funcname,filepath,&linenumber);
@@ -705,7 +702,6 @@ functionData* getFunctionByName(char* name,bool recurse)
 					sscanf (possmatch,"%*s %*s %i",&fdata->line);
 					sscanf (possmatch,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
 					fdata->file=strdup(function);
-					//sscanf (possmatch,"%*s %*s %*i %*s %"VALIDCHARS"s",function);
 					sscanf (possmatch,"%*s %*s %*i %*s %[^\n]s",function);
 					fdata->define=strdup(function);
 					fdata->intab=loophold;
@@ -1032,5 +1028,6 @@ __attribute__((visibility("default"))) void debugFree(gpointer ptr,const char* m
 #endif
 	free(ptr);
 }
+
 
 
