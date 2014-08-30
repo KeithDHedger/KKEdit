@@ -79,10 +79,10 @@ void findFile(GtkWidget* widget,gpointer data)
 	slice= new StringSlice;
 
 	selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->lineEnd,false);
-	if(strncmp(selection,(char*)"#include",8)!=0)
+	if(selection[0]!='#')
 		return;
 	slice->setReturnDupString(false);
-	filename=slice->sliceBetween(selection,(char*)"#include ",NULL);
+	filename=slice->sliceBetween(selection,(char*)"include ",NULL);
 
 	if(slice->getResult()==0)
 		{
@@ -105,6 +105,7 @@ void findFile(GtkWidget* widget,gpointer data)
 								}
 							pclose(fp);
 						}
+					free(command);
 				}
 			free(filepath);
 		}

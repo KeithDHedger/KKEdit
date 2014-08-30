@@ -10,6 +10,114 @@
 bool	singleOverRide=false;
 bool	loadPluginsFlag=true;
 
+//GtkWidget* find_childX(GtkWidget* parent, const gchar* name)
+//    {
+//    printf("XXXn");
+//   //         if (g_strcasecmp(gtk_widget_get_name((GtkWidget*)parent), (gchar*)name) == 0) { 
+//  //                  return parent;
+//    //        }
+//
+//            if (GTK_IS_BIN(parent)) {
+//                    GtkWidget *child = gtk_bin_get_child(GTK_BIN(parent));
+//                    return find_child(child, name);
+//            }
+//
+//
+//            if (GTK_IS_MENU(parent)) {
+//            printf("ZZZZZZZZZn");
+//                    GList *children = gtk_container_get_children(GTK_CONTAINER(parent));
+//                    while ((children = g_list_next(children)) != NULL) {
+//                            GtkWidget* widget = find_child((GtkWidget*)children->data, name);
+//                            if (widget != NULL) {
+//                                    return widget;
+//                            }
+//                    }
+//                   }
+//            
+//
+//
+//            if (GTK_IS_CONTAINER(parent)) {
+//                    GList *children = gtk_container_get_children(GTK_CONTAINER(parent));
+//                    while ((children = g_list_next(children)) != NULL) {
+//                            GtkWidget* widget = find_child((GtkWidget*)children->data, name);
+//                            if (widget != NULL) {
+//                                    return widget;
+//                            }
+//                    }
+//            }
+//
+//            return NULL;
+//    }
+
+//int cnt=0;
+GtkWidget* find_child(GtkWidget* parent, const gchar* name)
+    {
+    const gchar* mname=NULL;
+    //cnt++;
+    if (GTK_IS_MENU_ITEM(parent))
+    {
+    	mname=gtk_menu_item_get_label             ((GtkMenuItem *)parent);
+    	if(mname!=NULL && strlen(mname)>0)
+	    	printf("%s\n",mname);
+	   }
+//   //         if (g_strcasecmp(gtk_widget_get_name((GtkWidget*)parent), (gchar*)name) == 0) { 
+//  //                  return parent;
+//    //        }
+//
+//            if (GTK_IS_BIN(parent)) {
+//                    GtkWidget *child = gtk_bin_get_child(GTK_BIN(parent));
+//                    return find_child(child, name);
+//            }
+//
+//
+//            if (GTK_IS_MENU(parent)) {
+//            printf("ZZZZZZZZZn");
+//                    GList *children = gtk_container_get_children(GTK_CONTAINER(parent));
+//                    while ((children = g_list_next(children)) != NULL) {
+//                            GtkWidget* widget = find_child((GtkWidget*)children->data, name);
+//                            if (widget != NULL) {
+//                                    return widget;
+//                            }
+//                    }
+//                   }
+//            
+//
+//
+            if (GTK_IS_CONTAINER(parent)) {
+                    GList *children = gtk_container_get_children(GTK_CONTAINER(parent));
+                    while ((children = g_list_next(children)) != NULL)
+                    	{
+                            GtkWidget* widget = find_child((GtkWidget*)children->data, name);
+                            
+                            if (widget != NULL)
+                             {
+                             	   // printf("%s\n",gtk_menu_item_get_label((GtkMenuItem *)widget));
+                             		//gtk_container_foreach               ((GtkContainer *)widget,find_child,NULL);
+                                    return widget;
+                            }
+                    }
+            }
+
+            return NULL;
+    }
+
+
+
+void sayname(GtkWidget *widget,gpointer data)
+{
+	if(gtk_menu_get_title((GtkMenu *)widget)!=NULL)
+		printf("%s\n",gtk_menu_get_title((GtkMenu *)widget));
+
+gtk_container_foreach((GtkContainer *)widget,sayname,NULL);
+}
+
+void walktree(GtkWidget* parent)
+{
+	if(gtk_menu_get_title((GtkMenu *)parent)!=NULL)
+		printf("%s\n",gtk_menu_get_title((GtkMenu *)parent));
+	gtk_container_foreach((GtkContainer *)parent,sayname,NULL);
+}
+
 void readConfig(void)
 {
 	char*	filename;
@@ -384,7 +492,8 @@ int main(int argc,char **argv)
 
 			if(timeToNag==true)
 				doNagStuff();
-
+//walktree(menuItemOpen);
+find_child(gtk_menu_item_get_submenu((GtkMenuItem*)globalPlugins->globalPlugData->mlist.menuFile),"Save Session");
 			gtk_main();
 			
 			delete history;

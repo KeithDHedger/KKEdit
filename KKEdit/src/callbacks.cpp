@@ -647,7 +647,6 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	while (lineptr!=NULL)
 		{
 			tmpstr[0]=0;
-			//sscanf (lineptr,"%*s %*s %i %"VALIDCHARS"s",&linenum,tmpstr);
 			sscanf (lineptr,"%*s %*s %i %[^\n]s",&linenum,tmpstr);
 
 			if(strlen(tmpstr)>0)
