@@ -475,7 +475,7 @@ void restoreSession(GtkWidget* widget,gpointer data)
 			closeAllTabs(NULL,NULL);
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
-					sscanf(buffer,"%i %"VALIDFILENAMECHARS"s",(int*)&currentline,(char*)&strarg);
+					sscanf(buffer,"%i %[^\n]s",(int*)&currentline,(char*)&strarg);
 					openFile(strarg,currentline,true);
 					fgets(buffer,2048,fd);
 					sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
