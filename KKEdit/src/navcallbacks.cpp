@@ -64,59 +64,52 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 
 void findFile(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getPageStructPtr(-1);
-	GtkTextIter	start;
-	GtkTextIter	end;
-	char*		selection=NULL;
-	char		strarg[2048];
-	char*		filename;
-	char*		command;
-	gchar*		stdout=NULL;
-	gchar*		stderr=NULL;
-	gint		retval=0;
-	char*		lineptr;
-	char		buffer[2048];
-	char*		searchdir;
+	char*			command;
+	char			buffer[2048];
+	TextBuffer*		buf;
+	char*			selection=NULL;
+	char*			filename=NULL;
+	char*			searchdir=NULL;
+	char*			filepath=NULL;
+	FILE*			fp;
+	StringSlice*	slice;
+	pageStruct*		page=getPageStructPtr(-1);
 
-	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
-		{
-			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
-			if(selection==NULL)
-				return;
-		}
-	else
+	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+	slice= new StringSlice;
+
+	selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->lineEnd,false);
+	if(strncmp(selection,(char*)"#include",8)!=0)
 		return;
+	slice->setReturnDupString(false);
+	filename=slice->sliceBetween(selection,(char*)"#include ",NULL);
 
-	sscanf(selection,"#include %s",(char*)&strarg);
-	strarg[strlen(strarg)-1]=0;
-
-	if(strarg[0]=='<')
-		searchdir=strdup("/usr/include");
-	else
-		searchdir=strdup(g_path_get_dirname(page->filePath));
-
-	filename=g_path_get_basename(&strarg[1]);
-	asprintf(&command,"find \"%s\" -name \"%s\"",searchdir,filename);
-	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
-	if (retval==0)
+	if(slice->getResult()==0)
 		{
-			stdout[strlen(stdout)-1]=0;
-			lineptr=stdout;
-			while (lineptr!=NULL)
-				{
-					sscanf (lineptr,"%s",(char*)&buffer);
-					lineptr=strchr(lineptr,'\n');
-					if (lineptr!=NULL)
-						lineptr++;
-					openFile(buffer,0,true);
-				}
-			debugFree(stdout,"findFile stdout");
-			debugFree(stderr,"findFile stderr");
-		}
+			if(filename[0]=='<')
+				searchdir=strdup("/usr/include");
+			else
+				searchdir=strdup(page->dirName);
 
-	debugFree(searchdir,"findFile searchdir");
-	debugFree(filename,"findFile filename");
-	debugFree(command,"findFile command");
+			asprintf(&filepath,"%s/%s",searchdir,slice->sliceLen(filename,1,strlen(filename)-3));
+			if(openFile(filepath,0,false)==false)
+				{
+					asprintf(&command,"find \"%s\" -name \"%s\"",searchdir,basename(filepath));
+					fp=popen(command, "r");
+					if(fp!=NULL)
+						{
+							while(fgets(buffer,1024,fp))
+								{
+									buffer[strlen(buffer)-1]=0;
+									openFile(buffer,0,false);
+								}
+							pclose(fp);
+						}
+				}
+			free(filepath);
+		}
+	delete buf;
+	delete slice;
 }
 
 void gotoLine(GtkWidget* widget,gpointer data)

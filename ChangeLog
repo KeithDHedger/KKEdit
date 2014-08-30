@@ -1,4 +1,6 @@
 0.2.3
+Improved open include now tries exact match -> best match.
+Open include file now only needs the cursor on the line with a #include no need to select the whole line, #include must be at the start of the line.
 Improved search for definition now try's: exact match in open files->exact match in all files in current folder->best match in all files in current folder.
 Fixed bug in restore session when trying to restor file with a space in the name.
 Fixed crash when trying to restore session with bookmarks with missing file.
