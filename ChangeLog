@@ -1,13 +1,14 @@
 0.2.3
+Added message dialog when disabling a plugin that can't be unloaded without a restart.
 Added KKEdit version string to data passed to plugins.
 Added main notebook widget to data passed to plugins.
 Exposed main menu callbacks to plugins so they can be overridden.
 Improved open include now tries exact match -> best match.
 Open include file now only needs the cursor on the line with a #include no need to select the whole line, # **MUST** be the first character on the line.
 Improved search for definition now try's: exact match in open files->exact match in all files in current folder->best match in all files in current folder.
-Fixed bug in restore session when trying to restor file with a space in the name.
+Fixed bug in restore session when trying to restore file with a space in the name.
 Fixed crash when trying to restore session with bookmarks with missing file.
-Improved string scanning fo valid chars.
+Improved string scanning for valid chars.
 Standardized save/load routines for configs.
 If two or more plugins use a top/bottom pane pane wont be closed until all plugins close it.
 Added top/bottom draggable panes for plugins.
@@ -22,21 +23,21 @@ Fixed plugins in subfolders not being properly sorted on load.
 
 0.2.2
 Made 'Get Plugins' open browser as async.
-Removed use of xdg-open ( broken in LFS ) can now set the default browser in prefs if internal docviewer is disabled ( defaults to firefox ).
-Added context popup menu to data passed to plugins to add to the context pop up.
+Removed use of xdg-open ( broken in LFS ) can now set the default browser in prefs if internal docviewer is disabled ( defaults to Firefox ).
+Added context pop up menu to data passed to plugins to add to the context pop up.
 Added call to "addToContext" functions in plugins.
-Added tab popup menu to data passed to plugins to add to the tab pop up.
+Added tab pop up menu to data passed to plugins to add to the tab pop up.
 Added call to "addToTab" functions in plugins.
 Removed example-plugin from package as it's available from the website now.
 Added search in page of builtin doc viewer (Up/Down).
-Fixed bug when trying to jump to non-existant function declaration.
+Fixed bug when trying to jump to non-existent function declaration.
 Fixed minor sensitive bug when closing tab.
-If documentation doesn't exist when selecting 'Show Documentaion' from the 'View' menu it is now built.
+If documentation doesn't exist when selecting 'Show Documentation' from the 'View' menu it is now built.
 Fixed bookmarks not being removed from closed tab.
 Nag screen now only every month.
 Added check for update every month.
 Added '-s' switch ( safe ) to disable loading of ALL plugins for this session implies '-m'.
-Fixed regex for 'Open' from tab popup not showing some files.
+Fixed regex for 'Open' from tab pop up not showing some files.
 ~/.KKEdit/plugins now searched first for plugins, ( ie local plugs take precedence over global plugs ).
 Plugins now checked for duplicate names on load, only first instance loaded.
 Plugins now loaded alphabetically.
@@ -60,8 +61,8 @@ Tool output pane height now saved at exit.
 Added menu 'Get Plugins' to 'Help' menu to get more plugins from my website.
 Changed some plugin interface names so its less confusing.
 Added top,left,right and bottom user vboxs to main window for use in plugins.
-Changed the build for the barber pole  as a fix for ubuntu 12.04.
-Down graded the required version of gmodule as a fix for ubuntu 12.04.
+Changed the build for the barber pole  as a fix for Ubuntu 12.04.
+Down graded the required version of gmodule as a fix for Ubuntu 12.04.
 Path to KKEdit's temp folder now passed to plugins.
 Added about box to example plugin.
 Added plugin icon.
@@ -76,10 +77,10 @@ Fixed Makefile dependency.
 Fixed built in doc viewer not showing correct title.
 Started plugin prefs.
 Prelim testing on xubuntu OK.
-Fixed bug when using single instance re-running init when opeing new file.
+Fixed bug when using single instance re-running init when opening new file.
 Started help for plugins.
 Plugins can now call showDocView.
-Added kkedit-plugins.h.
+Added KKEdit-plugins.h.
 Added test plugin.
 Started plugins code.
 Add caret browsing to docviewer.
@@ -89,9 +90,9 @@ Fixed 'Back' segfault.
 Made progressbar always stay on top.
 Minor fix for default Doxyfile.
 Example tools are now installed at "$(DESTDIR)$(pkgdatadir)/Example External Tools", as the packaged versions were not installing them.
-Added option to display a progress bar when running external tool, can be controled from the tool.
+Added option to display a progress bar when running external tool, can be controlled from the tool.
 Removed the use of tempfile, now uses a tempory folder and internally generated random names.
-Added progress bar for long documentaion ops.
+Added progress bar for long documentation ops.
 Fixed opening file from docs not respecting no duplicates when opening link.
 Better file integration with doxygen.
 Added missing keyboard accelerators for opening menus from keyboard (ALT-F for file menu etc ).
@@ -102,8 +103,8 @@ Better file integration with doxygen.
 
 0.1.8
 Numerous small bug fixes and code cleanup. 
-Yet another work around for ubuntu based distros ( what is it with dash anyway? ).
-Prelim suport for linking doxygen links to source code in the editor ( must use the internal doc viewer, won't work with external browser ).
+Yet another work around for Ubuntu based distros ( what is it with dash anyway? ).
+Prelim support for linking doxygen links to source code in the editor ( must use the internal doc viewer, won't work with external browser ).
 Fixed goto define opening a file but not scrolling to the proper line.
 Goto define now searches for an exact match first and then the nearest match.
 Back now goes back after jumping to bookmark.
@@ -112,9 +113,9 @@ Added Show/Hide docviewer to 'View' menu.
 Added runtime check for doxygen.
 Added default doxygen config file to "/usr/share/KKEdit/docs"
 Added doxygen document builder to 'File' menu.
-Stopped loads of pointless javasript warnings on stdout when using the docviewer for certain pages.
-Root desktop file now uses the graphical su path defined by configure ( defaults to /usr/bin/gtksu ).
-Can now set default path to graphical su at compile time with "--with-gsu-path" option ( can be overidden via prefs ).
+Stopped loads of pointless JavaScript warnings on stdout when using the docviewer for certain pages.
+Root desktop file now uses the graphical su path defined by configure ( defaults to /usr/bin/GtkSu ).
+Can now set default path to graphical su at compile time with "--with-gsu-path" option ( can be overridden via prefs ).
 Added 'Highlight All' to regex find.
 Made 'Highlight All' persistent.
 Added 'Highlight All' to search.
@@ -128,7 +129,7 @@ Added option to delete keyboard shortcut from external tools and main keyboard s
 Added option to add keyboard shortcut to external tools.
 Fixed status bar lag when opening many large files.
 Added 'Read Link...' to prefs to either open a link normally or to read the link first.
-Added 'Open' to tab menu to quickly open files in current dirctory.
+Added 'Open' to tab menu to quickly open files in current directory.
 When moving multiple lines up/down selection is extended to whole lines.
 Status bar now doesn't show '(null)' if no syntax highlighting or filepath.
 Added more shortcuts.
@@ -140,7 +141,7 @@ Added keyboard shortcuts.
 
 0.1.6
 Updated example tools that need root to use new features.
-Now if no GUI for getting root priviliges specified ALL root actions are run in terminal.
+Now if no GUI for getting root privileges specified ALL root actions are run in terminal.
 Added 'Run Tool As Root' to tool options.
 Fixed bug when user terminal command empty.
 External Manpage editor program installed now checked at runtime instead of compile time.
@@ -157,10 +158,10 @@ Set window icon properly.
 
 0.1.5
 Added 'Back' button to toolbar and 'Navigation' menu.
-Added 'Copy Folder Path' to tab popup menu.
+Added 'Copy Folder Path' to tab pop up menu.
 Globally installed tools are not usually editable and so don't show in the 'Edit External Tools' dialog.
 Globally installed tools are now shown at the top of the 'Tools' menu.
-Minor 'Paste' bugfix.
+Minor 'Paste' bug fix.
 Added 'Clear tool output first' option to external tools prefs. 
 Changed example tool 'Comment Selection' to take advantage of the $KKEDIT_SOURCE_LANG env var.
 Pass highlighting language to external tools, "%l" placeholder and $KKEDIT_SOURCE_LANG env var.
@@ -176,7 +177,7 @@ Added switch to ./configure to set directory of installed Qt5 docs ( default "/u
 Set the title of the docviewer correctly.
 Cleaned the docviewer code.
 Added a "Find API In Qt5 Docs" entry box to toolbar.
-Fixed minor bug when selecting "Search In Gtk Docs" from 'Navigation' menu when no selection.
+Fixed minor bug when selecting "Search In GTK Docs" from 'Navigation' menu when no selection.
 Added "Search In Qt5 Docs" to 'Navigation' menu.
 Added "Search In Qt5 Docs" to context menu.
 Removed QT Search from external tools.
@@ -212,7 +213,7 @@ Added configurable toolbar.
 Fixed bug when loading session where file has weird characters in the name.
 
 0.1.1
-Fixed tool not appearing in popup if both popup options selected.
+Fixed tool not appearing in pop up if both pop up options selected.
 Fixed not creating new tool if ~/.KKEdit/tools folder doesn't exist.
 Comments now appear as tooltips in the 'Tools' menu and the context menu.
 Added optional comments to external tools.
@@ -258,7 +259,7 @@ Added "Theme" to prefs.
 
 0.0.30
 fixed bug in determining mime type of file.
-Fixed debian install instructions in INSTALL file.
+Fixed Debian install instructions in INSTALL file.
 
 0.0.29
 Fixed infinite loop bug when no find text in find/replace dialog.
@@ -270,7 +271,7 @@ Fixed minor bug in configure.ac script.
 Replaced simple font name and size entry box in prefs with font select button.
 Fixed Minor bug when using 'Go To Definition' from menu opens a new file jumping to wrong line number.
 Minor updates to user submitted scripts.
-If glib networking is installed if selecting "Open Man page" or "Search in GTK-Docs" can't find anything appropriate a google search is performed.
+If glib networking is installed if selecting "Open Man page" or "Search in GTK-Docs" can't find anything appropriate a Google search is performed.
 
 0.0.27
 Fixed over enthusiastic utf8 conversion!
