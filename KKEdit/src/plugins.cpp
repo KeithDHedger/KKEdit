@@ -55,6 +55,7 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 	char*		name=NULL;
 	moduleData*	pd;
 	char*		filepath;
+	GtkWidget*	dialog;
 
 	gtk_tree_model_get(model,iter,COLUMN_ENABLE,&enabled,COLUMN_PLUGIN,&name,-1);
 	if(!enabled)
@@ -75,6 +76,9 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 					}
 				else
 					{
+						dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"Plugin '%s' cannot be unloaded yet.\nRestart KKEdit to unload.",name);
+						gtk_dialog_run(GTK_DIALOG(dialog));
+						gtk_widget_destroy(dialog);
 						pd->enabled=false;
 						return(false);
 					}
@@ -193,7 +197,6 @@ __attribute__((visibility("default"))) void doPlugPrefs(void)
 
 	model=GTK_TREE_MODEL(store);
 	treeview=gtk_tree_view_new_with_model(model);
-//	g_object_unref (model);
 	gtk_container_add (GTK_CONTAINER (vbox),treeview);
 
 //enable
