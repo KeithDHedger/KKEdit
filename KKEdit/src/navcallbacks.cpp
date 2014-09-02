@@ -35,7 +35,7 @@ void goToDefine(functionData* fdata)
 		}
 }
 
-void goToDefinition(GtkWidget* widget,gpointer data)
+__attribute__((visibility("default"))) void goToDefinition(GtkWidget* widget,gpointer data)
 {
 	pageStruct*		page=getPageStructPtr(-1);
 	GtkTextIter		start;
@@ -62,7 +62,7 @@ void goToDefinition(GtkWidget* widget,gpointer data)
 	return;
 }
 
-void findFile(GtkWidget* widget,gpointer data)
+__attribute__((visibility("default"))) void findFile(GtkWidget* widget,gpointer data)
 {
 	char*			command;
 	char			buffer[2048];
@@ -166,13 +166,13 @@ int showLineEntry(void)
 	return(result);
 }
 
-void jumpToLine(GtkWidget* widget,gpointer data)
+__attribute__((visibility("default"))) void jumpToLine(GtkWidget* widget,gpointer data)
 {
 	if(showLineEntry()==GTK_RESPONSE_YES)
 		gotoLine(NULL,(gpointer)(long)theLineNum);
 }
 
-void functionSearch(GtkWidget* widget,gpointer data)
+__attribute__((visibility("default"))) void functionSearch(GtkWidget* widget,gpointer data)
 {
 	functionData* fdata;
 

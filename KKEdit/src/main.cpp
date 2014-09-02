@@ -10,114 +10,6 @@
 bool	singleOverRide=false;
 bool	loadPluginsFlag=true;
 
-//GtkWidget* find_childX(GtkWidget* parent, const gchar* name)
-//    {
-//    printf("XXXn");
-//   //         if (g_strcasecmp(gtk_widget_get_name((GtkWidget*)parent), (gchar*)name) == 0) { 
-//  //                  return parent;
-//    //        }
-//
-//            if (GTK_IS_BIN(parent)) {
-//                    GtkWidget *child = gtk_bin_get_child(GTK_BIN(parent));
-//                    return find_child(child, name);
-//            }
-//
-//
-//            if (GTK_IS_MENU(parent)) {
-//            printf("ZZZZZZZZZn");
-//                    GList *children = gtk_container_get_children(GTK_CONTAINER(parent));
-//                    while ((children = g_list_next(children)) != NULL) {
-//                            GtkWidget* widget = find_child((GtkWidget*)children->data, name);
-//                            if (widget != NULL) {
-//                                    return widget;
-//                            }
-//                    }
-//                   }
-//            
-//
-//
-//            if (GTK_IS_CONTAINER(parent)) {
-//                    GList *children = gtk_container_get_children(GTK_CONTAINER(parent));
-//                    while ((children = g_list_next(children)) != NULL) {
-//                            GtkWidget* widget = find_child((GtkWidget*)children->data, name);
-//                            if (widget != NULL) {
-//                                    return widget;
-//                            }
-//                    }
-//            }
-//
-//            return NULL;
-//    }
-
-//int cnt=0;
-GtkWidget* find_child(GtkWidget* parent, const gchar* name)
-    {
-    const gchar* mname=NULL;
-    //cnt++;
-    if (GTK_IS_MENU_ITEM(parent))
-    {
-    	mname=gtk_menu_item_get_label             ((GtkMenuItem *)parent);
-    	if(mname!=NULL && strlen(mname)>0)
-	    	printf("%s\n",mname);
-	   }
-//   //         if (g_strcasecmp(gtk_widget_get_name((GtkWidget*)parent), (gchar*)name) == 0) { 
-//  //                  return parent;
-//    //        }
-//
-//            if (GTK_IS_BIN(parent)) {
-//                    GtkWidget *child = gtk_bin_get_child(GTK_BIN(parent));
-//                    return find_child(child, name);
-//            }
-//
-//
-//            if (GTK_IS_MENU(parent)) {
-//            printf("ZZZZZZZZZn");
-//                    GList *children = gtk_container_get_children(GTK_CONTAINER(parent));
-//                    while ((children = g_list_next(children)) != NULL) {
-//                            GtkWidget* widget = find_child((GtkWidget*)children->data, name);
-//                            if (widget != NULL) {
-//                                    return widget;
-//                            }
-//                    }
-//                   }
-//            
-//
-//
-            if (GTK_IS_CONTAINER(parent)) {
-                    GList *children = gtk_container_get_children(GTK_CONTAINER(parent));
-                    while ((children = g_list_next(children)) != NULL)
-                    	{
-                            GtkWidget* widget = find_child((GtkWidget*)children->data, name);
-                            
-                            if (widget != NULL)
-                             {
-                             	   // printf("%s\n",gtk_menu_item_get_label((GtkMenuItem *)widget));
-                             		//gtk_container_foreach               ((GtkContainer *)widget,find_child,NULL);
-                                    return widget;
-                            }
-                    }
-            }
-
-            return NULL;
-    }
-
-
-
-void sayname(GtkWidget *widget,gpointer data)
-{
-	if(gtk_menu_get_title((GtkMenu *)widget)!=NULL)
-		printf("%s\n",gtk_menu_get_title((GtkMenu *)widget));
-
-gtk_container_foreach((GtkContainer *)widget,sayname,NULL);
-}
-
-void walktree(GtkWidget* parent)
-{
-	if(gtk_menu_get_title((GtkMenu *)parent)!=NULL)
-		printf("%s\n",gtk_menu_get_title((GtkMenu *)parent));
-	gtk_container_foreach((GtkContainer *)parent,sayname,NULL);
-}
-
 void readConfig(void)
 {
 	char*	filename;
@@ -228,7 +120,7 @@ void init(void)
 
 	tmpNagScreen=nagScreen;
 	tmpHighlightColour=highlightColour;
-	
+
 	asprintf(&htmlFile,"%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
 	asprintf(&htmlURI,"file://%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
 
@@ -246,7 +138,7 @@ void init(void)
 
 //do plugins
 	globalPlugins=new PluginClass(loadPluginsFlag);
-//set up plugin data		
+//set up plugin data
 	globalPlugins->globalPlugData=(plugData*)malloc(sizeof(plugData));
 	globalPlugins->globalPlugData->dataDir=DATADIR;
 	globalPlugins->globalPlugData->gPlugFolder=globalPlugins->plugFolderPaths[GLOBALPLUGS];
@@ -255,24 +147,25 @@ void init(void)
 	globalPlugins->globalPlugData->thePage=&thePage;
 	globalPlugins->globalPlugData->currentTab=-1;
 	globalPlugins->globalPlugData->tmpFolder=tmpFolderName;
+	globalPlugins->globalPlugData->kkeditVersion=VERSION;
 
-/*
-	for(int j=0;j<globalPlugins->plugCount;j++)
-		{
-			struct pluginData
-{
-	char*		name;
-	bool		enabled;
-	GModule*	module;
-	bool		loaded;
-	char*       path;
-};
-			pluginData* pd=(pluginData*)g_list_nth_data(globalPlugins->plugins,j);
-			printf("num %i name=%s\n",j,pd->name);
-			printf("num %i enabled=%i\n",j,(int)pd->enabled);
-			printf("num %i path=%s\n",j,pd->path);
-		}
-*/
+	/*
+		for(int j=0;j<globalPlugins->plugCount;j++)
+			{
+				struct pluginData
+	{
+		char*		name;
+		bool		enabled;
+		GModule*	module;
+		bool		loaded;
+		char*       path;
+	};
+				pluginData* pd=(pluginData*)g_list_nth_data(globalPlugins->plugins,j);
+				printf("num %i name=%s\n",j,pd->name);
+				printf("num %i enabled=%i\n",j,(int)pd->enabled);
+				printf("num %i path=%s\n",j,pd->path);
+			}
+	*/
 //time to nag?
 
 	timeToNag=false;
@@ -311,7 +204,7 @@ void doNagStuff(void)
 	unsigned int	thisupdate=0;
 	char*			kkeditupdatemessage=strdup("");
 	char*			plugupdatemessage=strdup("");
-	
+
 	asprintf(&command,"KKEditProgressBar \"Checking for updates ...\" %s/updatecontrol &",tmpFolderName);
 	system(command);
 	while(gtk_events_pending())
@@ -368,11 +261,11 @@ void doNagStuff(void)
 									free(kkeditupdatemessage);
 									asprintf(&kkeditupdatemessage,"KKEdit update available to <b>%s</b> from <b>%s</b>\nFrom here:\n<b>%s</b>\n",vers,VERSION,MYWEBSITE);
 								}
-						
+
 							if(lastPlugUpdate<atol(plugt))
 								{
 									free(plugupdatemessage);
-									asprintf(&plugupdatemessage,"\nPlugin updates are available from here:\n<b>https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins</b>"); 
+									asprintf(&plugupdatemessage,"\nPlugin updates are available from here:\n<b>https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins</b>");
 									lastPlugUpdate=thisupdate;
 								}
 
@@ -394,7 +287,7 @@ void doNagStuff(void)
 
 	asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
 	system(control);
-	debugFree(control,"control from do nag stuff");	
+	debugFree(control,"control from do nag stuff");
 }
 
 int main(int argc,char **argv)
@@ -487,17 +380,17 @@ int main(int argc,char **argv)
 					gtk_window_set_default_icon_name(PACKAGE "Root");
 					gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
 
-			}
+				}
 			setSensitive();
 
 			if(timeToNag==true)
 				doNagStuff();
-//walktree(menuItemOpen);
-find_child(gtk_menu_item_get_submenu((GtkMenuItem*)globalPlugins->globalPlugData->mlist.menuFile),"Save Session");
+
 			gtk_main();
-			
+
 			delete history;
 			delete globalSlice;
 		}
 }
+
 

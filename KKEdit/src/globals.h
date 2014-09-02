@@ -172,6 +172,9 @@ extern GtkWidget*		menucloseall;
 extern GtkWidget*		menusaveall;
 extern GtkWidget*		menurevert;
 
+extern GtkWidget*		menuSaveSession;
+extern GtkWidget*		menuRestoreSession;
+
 extern GtkWidget*		menuItemOpen;
 extern GtkWidget*		menuToolOut;
 extern GtkWidget*		menuStatusBar;

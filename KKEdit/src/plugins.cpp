@@ -174,7 +174,7 @@ void onRowSelected(GtkTreeView* treeview,gpointer userdata)
 		}
 }
 
-void doPlugPrefs(void)
+__attribute__((visibility("default"))) void doPlugPrefs(void)
 {
 	GtkWidget*		vbox;
 	GtkListStore*	store;

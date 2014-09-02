@@ -1,4 +1,7 @@
 0.2.3
+Added KKEdit version string to data passed to plugins.
+Added main notebook widget to data passed to plugins.
+Exposed main menu callbacks to plugins so they can be overridden.
 Improved open include now tries exact match -> best match.
 Open include file now only needs the cursor on the line with a #include no need to select the whole line, # **MUST** be the first character on the line.
 Improved search for definition now try's: exact match in open files->exact match in all files in current folder->best match in all files in current folder.

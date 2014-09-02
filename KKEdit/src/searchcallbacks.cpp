@@ -85,7 +85,7 @@ __attribute__((visibility("protected"))) void showDocView(int howtodisplay,char*
 	return;
 }
 
-void seachGtkDocs(GtkWidget* widget,gpointer data)
+__attribute__((visibility("default"))) void seachGtkDocs(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -193,7 +193,7 @@ void seachGtkDocs(GtkWidget* widget,gpointer data)
 		debugFree(selection,"seachGtkDocs selection");
 }
 
-void doDoxy(GtkWidget* widget,long data)
+__attribute__((visibility("default"))) void doDoxy(GtkWidget* widget,long data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	struct stat	sb;
@@ -239,7 +239,7 @@ void doDoxy(GtkWidget* widget,long data)
 }
 
 //find in doxy docs
-void doxyDocs(GtkWidget* widget,gpointer data)
+__attribute__((visibility("default"))) void doxyDocs(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -295,7 +295,7 @@ void doxyDocs(GtkWidget* widget,gpointer data)
 }
 
 //showDocViewWidget
-void searchQT5Docs(GtkWidget* widget,gpointer data)
+__attribute__((visibility("default"))) void searchQT5Docs(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -924,7 +924,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 		regexFind(response_id);
 }
 
-void find(GtkWidget* widget,gpointer data)
+__attribute__((visibility("default"))) void find(GtkWidget* widget,gpointer data)
 {
 	gtk_widget_show(findReplaceDialog);
 	gtk_dialog_run((GtkDialog *)findReplaceDialog);

@@ -337,7 +337,7 @@ __attribute__((visibility("default"))) bool saveFile(GtkWidget* widget,gpointer 
 	return(true);
 }
 
-void openAsHexDump(GtkWidget *widget,gpointer user_data)
+__attribute__((visibility("default"))) void openAsHexDump(GtkWidget *widget,gpointer user_data)
 {
 	GtkWidget*		dialog;
 	char*			filepath;
@@ -391,7 +391,7 @@ void openAsHexDump(GtkWidget *widget,gpointer user_data)
 	refreshMainWindow();
 }
 
-void reloadFile(GtkWidget* widget,gpointer data)
+__attribute__((visibility("default"))) void reloadFile(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	gchar*		buffer;
@@ -411,7 +411,7 @@ void reloadFile(GtkWidget* widget,gpointer data)
 		}
 }
 
-void saveSession(GtkWidget* widget,gpointer data)
+__attribute__((visibility("default"))) void saveSession(GtkWidget* widget,gpointer data)
 {
 	pageStruct*		page;
 	FILE*			fd=NULL;
@@ -456,7 +456,7 @@ void saveSession(GtkWidget* widget,gpointer data)
 		}
 }
 
-void restoreSession(GtkWidget* widget,gpointer data)
+__attribute__((visibility("default"))) void restoreSession(GtkWidget* widget,gpointer data)
 {
 	FILE*		fd=NULL;
 	char*		filename;

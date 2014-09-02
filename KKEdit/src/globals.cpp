@@ -24,7 +24,7 @@ GtkWidget*		menuView=NULL;
 GtkWidget*		menuToolOut=NULL;
 GtkWidget*		menuStatusBar=NULL;
 
-GList*			newBookMarksList=NULL;
+__attribute__((visibility("default"))) GList*			newBookMarksList=NULL;
 GtkWidget*		menuBookMark;
 GtkWidget*		menuBookMarkSubMenu;
 char*			highlightColour;
@@ -42,6 +42,9 @@ GtkWidget*		menuclose;
 GtkWidget*		menucloseall;
 GtkWidget*		menusaveall;
 GtkWidget*		menurevert;
+
+__attribute__((visibility("default"))) GtkWidget*		menuSaveSession;
+__attribute__((visibility("default"))) GtkWidget*		menuRestoreSession;
 
 GtkWidget*		redoMenu;
 GtkWidget*		undoMenu;
@@ -944,7 +947,7 @@ void rebuildBookMarkMenu(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
 }
 
-void goBack(GtkWidget* widget,gpointer data)
+__attribute__((visibility("default"))) void goBack(GtkWidget* widget,gpointer data)
 {
 	HistoryClass*	hist=new HistoryClass;
 

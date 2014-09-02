@@ -950,7 +950,7 @@ void buildKeys()
 	gtk_widget_show_all(keysWindow);
 }
 
-void doPrefs(void)
+__attribute__((visibility("default"))) void doPrefs(void)
 {
 	GtkWidget*	vbox;
 	GtkWidget*	hbox;
@@ -1782,6 +1782,7 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->rightUserBox=mainRightUserVBox;
 	globalPlugins->globalPlugData->bottomUserBox=mainBottomUserVBox;
 	globalPlugins->globalPlugData->mainWindow=window;
+	globalPlugins->globalPlugData->notebook=notebook;
 	globalPlugins->globalPlugData->mainWindowHPane=mainWindowHPane;
 
 	globalPlugins->globalPlugData->leftShow=0;
