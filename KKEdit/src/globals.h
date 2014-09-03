@@ -172,9 +172,6 @@ extern GtkWidget*		menucloseall;
 extern GtkWidget*		menusaveall;
 extern GtkWidget*		menurevert;
 
-extern GtkWidget*		menuSaveSession;
-extern GtkWidget*		menuRestoreSession;
-
 extern GtkWidget*		menuItemOpen;
 extern GtkWidget*		menuToolOut;
 extern GtkWidget*		menuStatusBar;
@@ -405,6 +402,9 @@ extern char*			windowAllocData;
 extern args				kkedit_window_rc[];
 extern args				kkedit_rc[];
 extern args				tool_vars[];
+
+//status bar message
+extern char*			statusMessage;
 
 void plugRunFunction(gpointer data,gpointer funcname);
 

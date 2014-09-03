@@ -1,4 +1,6 @@
 0.2.3
+Status bar now shows number of replacements when using find/replace.
+Fixed 'handles' showing on side/top/bottom on startup when not showing the user panes.
 Added message dialog when disabling a plugin that can't be unloaded without a restart.
 Added KKEdit version string to data passed to plugins.
 Added main notebook widget to data passed to plugins.

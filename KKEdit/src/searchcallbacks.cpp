@@ -11,6 +11,7 @@
 int currentFindPage=-1;
 int firstPage=-1;
 int pagesChecked=0;
+int	itemsReplaced=-1;
 
 #ifdef _BUILDDOCVIEWER_
 
@@ -31,7 +32,7 @@ void webKitGoHome(GtkWidget* widget,gpointer data)
 }
 #endif
 
-__attribute__((visibility("protected"))) void showDocView(int howtodisplay,char* text,const char* title)
+PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 {
 
 #ifdef _BUILDDOCVIEWER_
@@ -85,7 +86,7 @@ __attribute__((visibility("protected"))) void showDocView(int howtodisplay,char*
 	return;
 }
 
-__attribute__((visibility("default"))) void seachGtkDocs(GtkWidget* widget,gpointer data)
+VISIBLE void seachGtkDocs(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -193,7 +194,7 @@ __attribute__((visibility("default"))) void seachGtkDocs(GtkWidget* widget,gpoin
 		debugFree(selection,"seachGtkDocs selection");
 }
 
-__attribute__((visibility("default"))) void doDoxy(GtkWidget* widget,long data)
+VISIBLE void doDoxy(GtkWidget* widget,long data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	struct stat	sb;
@@ -239,7 +240,7 @@ __attribute__((visibility("default"))) void doDoxy(GtkWidget* widget,long data)
 }
 
 //find in doxy docs
-__attribute__((visibility("default"))) void doxyDocs(GtkWidget* widget,gpointer data)
+VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -295,7 +296,7 @@ __attribute__((visibility("default"))) void doxyDocs(GtkWidget* widget,gpointer 
 }
 
 //showDocViewWidget
-__attribute__((visibility("default"))) void searchQT5Docs(GtkWidget* widget,gpointer data)
+VISIBLE void searchQT5Docs(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -483,6 +484,7 @@ void regexFind(int dowhat)
 	int						charendpos;
 	bool					found=false;
 	GtkTextIter				hastart,haend;
+	int						matchedcnt=-1;
 
 	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
 		return;
@@ -590,6 +592,7 @@ void regexFind(int dowhat)
 					{
 						if(yesNo((char*)"Do you want to replace in ALL open files?",(char*)"")==GTK_RESPONSE_YES)
 							{
+								matchedcnt=-1;
 								for(pageloop=0;pageloop<gtk_notebook_get_n_pages(notebook);pageloop++)
 									{
 										gtk_notebook_set_current_page(notebook,currentFindPage);
@@ -597,6 +600,18 @@ void regexFind(int dowhat)
 										gtk_text_buffer_get_start_iter((GtkTextBuffer*)tmppage->buffer,&start);
 										gtk_text_buffer_get_end_iter((GtkTextBuffer*)tmppage->buffer,&end);
 										text=gtk_text_buffer_get_text((GtkTextBuffer*)tmppage->buffer,&start,&end,false);
+	
+										if(g_regex_match_full(regex,text,-1,0,matchflags,&match_info,NULL))
+											{
+												while (g_match_info_matches(match_info))
+													{
+														matchedcnt++;
+														g_match_info_next(match_info,NULL);
+													}
+												itemsReplaced=matchedcnt;
+											}
+										g_match_info_free(match_info);
+
 										reptext=g_regex_replace(regex,text,-1,0,replacetext,matchflags,NULL);
 										if(strcmp(reptext,text)!=0)
 											{
@@ -625,6 +640,19 @@ void regexFind(int dowhat)
 						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 						gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
 						text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+
+						if(g_regex_match_full(regex,text,-1,0,matchflags,&match_info,NULL))
+							{
+								matchedcnt=-1;
+								while (g_match_info_matches(match_info))
+									{
+										matchedcnt++;
+										g_match_info_next(match_info,NULL);
+									}
+								itemsReplaced=matchedcnt;
+							}
+						g_match_info_free(match_info);
+
 						reptext=g_regex_replace(regex,text,-1,0,replacetext,matchflags,NULL);
 						if(strcmp(reptext,text)!=0)
 							{
@@ -647,6 +675,7 @@ void regexFind(int dowhat)
 									{
 										gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 										gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,reptext,-1);
+										
 										regexFind(FINDNEXT);
 									}
 							}
@@ -832,6 +861,7 @@ void basicFind(int dowhat)
 								selectedtext=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end,false);
 								if((insensitiveSearch==true && strcasecmp(selectedtext,searchtext)==0) ||(insensitiveSearch==false && strcmp(selectedtext,searchtext)==0))
 									{
+										itemsReplaced++;
 										gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 										gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,replacetext,-1);
 										gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
@@ -863,6 +893,20 @@ void pasteFRClip(GtkWidget* widget,gpointer data)
 	gtk_entry_set_text((GtkEntry*)data,gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget));
 }
 
+void showOnStatus(const char* from,const char* to)
+{
+	char*	message=NULL;
+
+	if( (showStatus==false))
+			return;
+
+	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
+	asprintf(&message,"Replaced %i instances of '%s' with '%s'",itemsReplaced+1,from,to);
+	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
+	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
+	statusMessage=message;
+}
+
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 {
 	bool		flag=false;
@@ -884,6 +928,8 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 			drop=replaceDropBox;
 			list=replaceList;
 		}
+
+	itemsReplaced=-1;
 
 	edata=gtk_entry_get_text((GtkEntry*)entry);
 
@@ -922,9 +968,12 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 		basicFind(response_id);
 	else
 		regexFind(response_id);
+
+	if(itemsReplaced>-1)
+		showOnStatus(gtk_entry_get_text((GtkEntry*)findBox),gtk_entry_get_text((GtkEntry*)replaceBox));
 }
 
-__attribute__((visibility("default"))) void find(GtkWidget* widget,gpointer data)
+VISIBLE void find(GtkWidget* widget,gpointer data)
 {
 	gtk_widget_show(findReplaceDialog);
 	gtk_dialog_run((GtkDialog *)findReplaceDialog);

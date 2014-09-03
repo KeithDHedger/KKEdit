@@ -950,7 +950,7 @@ void buildKeys()
 	gtk_widget_show_all(keysWindow);
 }
 
-__attribute__((visibility("default"))) void doPrefs(void)
+VISIBLE void doPrefs(void)
 {
 	GtkWidget*	vbox;
 	GtkWidget*	hbox;

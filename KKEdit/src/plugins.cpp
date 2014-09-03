@@ -178,7 +178,7 @@ void onRowSelected(GtkTreeView* treeview,gpointer userdata)
 		}
 }
 
-__attribute__((visibility("default"))) void doPlugPrefs(void)
+VISIBLE void doPlugPrefs(void)
 {
 	GtkWidget*		vbox;
 	GtkListStore*	store;
@@ -240,7 +240,7 @@ __attribute__((visibility("default"))) void doPlugPrefs(void)
 }
 
 //left/right
-__attribute__((visibility("default"))) void showSide(bool left)
+VISIBLE void showSide(bool left)
 {
 	if(left==true)
 		{
@@ -254,7 +254,7 @@ __attribute__((visibility("default"))) void showSide(bool left)
 		}
 }
 
-__attribute__((visibility("default"))) void hideSide(bool left)
+VISIBLE void hideSide(bool left)
 {
 	if(left==true)
 		{
@@ -278,7 +278,7 @@ __attribute__((visibility("default"))) void hideSide(bool left)
 }
 
 //top/bottom
-__attribute__((visibility("default"))) void showTop(bool top)
+VISIBLE void showTop(bool top)
 {
 	if(top==true)
 		{
@@ -292,7 +292,7 @@ __attribute__((visibility("default"))) void showTop(bool top)
 		}
 }
 
-__attribute__((visibility("default"))) void hideTop(bool top)
+VISIBLE void hideTop(bool top)
 {
 	if(top==true)
 		{

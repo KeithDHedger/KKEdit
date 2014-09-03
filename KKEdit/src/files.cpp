@@ -13,7 +13,7 @@ char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
 bool		dropTextFile=false;
 
-__attribute__((visibility("default"))) void saveVarsToFile(char* filepath,args* dataptr)
+VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 {
 	FILE*	fd=NULL;
 	int		cnt=0;
@@ -44,7 +44,7 @@ __attribute__((visibility("default"))) void saveVarsToFile(char* filepath,args* 
 		}
 }
 
-__attribute__((visibility("default"))) void loadVarsFromFile(char* filepath,args* dataptr)
+VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 {
 	FILE*	fd=NULL;
 	char	buffer[2048];
@@ -254,7 +254,7 @@ bool getSaveFile(void)
 	return(retval);
 }
 
-__attribute__((visibility("default"))) bool saveFile(GtkWidget* widget,gpointer data)
+VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start,end;
@@ -337,7 +337,7 @@ __attribute__((visibility("default"))) bool saveFile(GtkWidget* widget,gpointer 
 	return(true);
 }
 
-__attribute__((visibility("default"))) void openAsHexDump(GtkWidget *widget,gpointer user_data)
+VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 {
 	GtkWidget*		dialog;
 	char*			filepath;
@@ -391,7 +391,7 @@ __attribute__((visibility("default"))) void openAsHexDump(GtkWidget *widget,gpoi
 	refreshMainWindow();
 }
 
-__attribute__((visibility("default"))) void reloadFile(GtkWidget* widget,gpointer data)
+VISIBLE void reloadFile(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	gchar*		buffer;
@@ -411,7 +411,7 @@ __attribute__((visibility("default"))) void reloadFile(GtkWidget* widget,gpointe
 		}
 }
 
-__attribute__((visibility("default"))) void saveSession(GtkWidget* widget,gpointer data)
+VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 {
 	pageStruct*		page;
 	FILE*			fd=NULL;
@@ -456,7 +456,7 @@ __attribute__((visibility("default"))) void saveSession(GtkWidget* widget,gpoint
 		}
 }
 
-__attribute__((visibility("default"))) void restoreSession(GtkWidget* widget,gpointer data)
+VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 {
 	FILE*		fd=NULL;
 	char*		filename;
@@ -583,6 +583,17 @@ void add_source_mark_pixbufs (GtkSourceView *view)
 	gtk_source_view_set_mark_category_priority(view,MARK_TYPE_1,1);
 }
 
+gboolean clickInView(GtkWidget* widget,gpointer data)
+{
+	if((statusMessage!=NULL))
+		{
+			free(statusMessage);
+			statusMessage=NULL;
+			
+		}
+	return(false);
+}
+
 pageStruct* makeNewPage(void)
 {
 	pageStruct*			page;
@@ -637,6 +648,7 @@ pageStruct* makeNewPage(void)
 	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);
 	gtk_drag_dest_add_text_targets((GtkWidget*)page->view);
 	g_signal_connect_after(G_OBJECT(page->view),"drag-data-received",G_CALLBACK(dropText),(void*)page);
+	g_signal_connect(G_OBJECT(page->view),"button-press-event",G_CALLBACK(clickInView),NULL);
 
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
@@ -650,7 +662,7 @@ pageStruct* makeNewPage(void)
 	return(page);
 }
 
-__attribute__((visibility("default"))) bool openFile(const gchar *filepath,int linenumber,bool warn)
+VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
 	GtkTextIter				iter;
 	GtkWidget*				label;
@@ -667,12 +679,9 @@ __attribute__((visibility("default"))) bool openFile(const gchar *filepath,int l
 	GRegex*					regex;
 	GRegexCompileFlags		compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED|G_REGEX_CASELESS);
 	GRegexMatchFlags		matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
-
 	GtkWidget*				dialog;
-
 	char*					searchtext=NULL;
 	char*					replacetext=NULL;
-
 	struct stat				sb;
 	char*					linkname=NULL;
 	ssize_t					r;
@@ -847,7 +856,7 @@ __attribute__((visibility("default"))) bool openFile(const gchar *filepath,int l
 	return TRUE;
 }
 
-__attribute__((visibility("default"))) void newFile(GtkWidget* widget,gpointer data)
+VISIBLE void newFile(GtkWidget* widget,gpointer data)
 {
 	GtkTextIter	iter;
 	GtkWidget*	label;

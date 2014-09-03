@@ -24,7 +24,7 @@ GtkWidget*		menuView=NULL;
 GtkWidget*		menuToolOut=NULL;
 GtkWidget*		menuStatusBar=NULL;
 
-__attribute__((visibility("default"))) GList*			newBookMarksList=NULL;
+VISIBLE GList*	newBookMarksList=NULL;
 GtkWidget*		menuBookMark;
 GtkWidget*		menuBookMarkSubMenu;
 char*			highlightColour;
@@ -42,9 +42,6 @@ GtkWidget*		menuclose;
 GtkWidget*		menucloseall;
 GtkWidget*		menusaveall;
 GtkWidget*		menurevert;
-
-__attribute__((visibility("default"))) GtkWidget*		menuSaveSession;
-__attribute__((visibility("default"))) GtkWidget*		menuRestoreSession;
 
 GtkWidget*		redoMenu;
 GtkWidget*		undoMenu;
@@ -370,6 +367,9 @@ args			tool_vars[]=
 	{NULL,0,NULL}
 };
 
+//status bar message
+char*			statusMessage=NULL;
+
 void plugRunFunction(gpointer data,gpointer funcname)
 {
 	globalPlugins->runPlugFunction((moduleData*)data,(const char*)funcname);
@@ -383,7 +383,7 @@ void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 		gtk_text_view_scroll_to_iter((GtkTextView*)page->view2,iter,0,true,0,0.5);
 }
 
-__attribute__((visibility("default"))) pageStruct* getPageStructPtr(int pagenum)
+VISIBLE pageStruct* getPageStructPtr(int pagenum)
 {
 	int			thispage;
 	GtkWidget*	pageBox;
@@ -488,7 +488,7 @@ void setLanguage(pageStruct* page)
 		debugFree(mimetype,"setLanguage mimetype");
 }
 
-__attribute__((visibility("default"))) void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title)
+VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title)
 {
 	char*		command;
 	FILE*		fp=NULL;
@@ -947,7 +947,7 @@ void rebuildBookMarkMenu(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
 }
 
-__attribute__((visibility("default"))) void goBack(GtkWidget* widget,gpointer data)
+VISIBLE void goBack(GtkWidget* widget,gpointer data)
 {
 	HistoryClass*	hist=new HistoryClass;
 
@@ -1024,7 +1024,7 @@ void killBarberPole(void)
 	progressBar=NULL;
 }
 
-__attribute__((visibility("default"))) void debugFree(gpointer ptr,const char* message)
+VISIBLE void debugFree(gpointer ptr,const char* message)
 {
 #ifdef _DEBUG_FREE_
 	fprintf(stderr,"free :%s\n",message);

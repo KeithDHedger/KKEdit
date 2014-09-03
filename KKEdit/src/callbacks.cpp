@@ -13,6 +13,7 @@ char				defineText[1024];
 GtkPrintSettings*	settings=NULL;
 bool				closingAll=false;
 
+
 void releasePlugs(gpointer data,gpointer user_data)
 {
 	if(((moduleData*)data)->module!=NULL)
@@ -181,7 +182,7 @@ void destroyBMData(gpointer data)
 	debugFree(((bookMarksNew*)data)->markName,"destroyBMData markName");
 }
 
-__attribute__((visibility("default"))) void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer)
+VISIBLE void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer)
 {
 	pageStruct*	page=NULL;
 	int			numpages;
@@ -202,7 +203,7 @@ __attribute__((visibility("default"))) void removeAllBookmarks(GtkWidget* widget
 	gtk_widget_show_all(menuBookMark);
 }
 
-__attribute__((visibility("default"))) void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
+VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 {
 	pageStruct*		page=getPageStructPtr(-1);
 	GtkWidget*		menuitem;
@@ -344,7 +345,7 @@ int yesNo(char* question,char* file)
 	return(result);
 }
 
-__attribute__((visibility("default"))) void doOpenFile(GtkWidget* widget,gpointer data)
+VISIBLE void doOpenFile(GtkWidget* widget,gpointer data)
 {
 	GtkWidget*	dialog;
 	char*		filename;
@@ -389,6 +390,7 @@ int show_question(char* filename)
 	return(result);
 }
 
+
 void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data)
 {
 	pageStruct* page=(pageStruct*)data;
@@ -396,6 +398,9 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 	char*		message=NULL;
 	const char*	path;
 	const char*	lang;
+
+	if((statusMessage!=NULL))
+		return;
 
 	pageStruct* pagecheck=getPageStructPtr(currentTabNumber);
 
@@ -501,7 +506,7 @@ void setSensitive(void)
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"setSensitive");
 }
 
-__attribute__((visibility("default"))) void closeTab(GtkWidget* widget,gpointer data)
+VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 {
 	long		thispage;
 	int			result;
@@ -590,7 +595,7 @@ __attribute__((visibility("default"))) void closeTab(GtkWidget* widget,gpointer 
 	setSensitive();
 }
 
-__attribute__((visibility("default"))) void closeAllTabs(GtkWidget* widget,gpointer data)
+VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
 {
 	int	numtabs=gtk_notebook_get_n_pages(notebook);
 
@@ -721,20 +726,20 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 
 }
 
-__attribute__((visibility("default"))) void copyToClip(GtkWidget* widget,gpointer data)
+VISIBLE void copyToClip(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	gtk_text_buffer_copy_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD));
 }
 
-__attribute__((visibility("default"))) void cutToClip(GtkWidget* widget,gpointer data)
+VISIBLE void cutToClip(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	gtk_text_buffer_cut_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),true);
 	setSensitive();
 }
 
-__attribute__((visibility("default"))) void pasteFromClip(GtkWidget* widget,gpointer data)
+VISIBLE void pasteFromClip(GtkWidget* widget,gpointer data)
 {
 	pageStruct*		page=getPageStructPtr(-1);
 	char*			clipdata=NULL;
@@ -752,7 +757,7 @@ __attribute__((visibility("default"))) void pasteFromClip(GtkWidget* widget,gpoi
 	setSensitive();
 }
 
-__attribute__((visibility("default"))) void undo(GtkWidget* widget,gpointer data)
+VISIBLE void undo(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 
@@ -764,7 +769,7 @@ __attribute__((visibility("default"))) void undo(GtkWidget* widget,gpointer data
 	}
 }
 
-__attribute__((visibility("default"))) void unRedoAll(GtkWidget* widget,gpointer data)
+VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 
@@ -786,7 +791,7 @@ __attribute__((visibility("default"))) void unRedoAll(GtkWidget* widget,gpointer
 }
 
 
-__attribute__((visibility("default"))) void redo(GtkWidget* widget,gpointer data)
+VISIBLE void redo(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 
@@ -798,7 +803,7 @@ __attribute__((visibility("default"))) void redo(GtkWidget* widget,gpointer data
 	}
 }
 
-__attribute__((visibility("default"))) void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
+VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
 {
 	gchar**	array=gtk_selection_data_get_uris(selection_data);
 	int		cnt=g_strv_length(array);
@@ -941,7 +946,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	delete slice;
 }
 
-__attribute__((visibility("default"))) void openHelp(GtkWidget* widget,gpointer data)
+VISIBLE void openHelp(GtkWidget* widget,gpointer data)
 {
 	asprintf(&thePage,"file://%s/help/help.html",DATADIR);
 #ifdef _BUILDDOCVIEWER_
@@ -1392,7 +1397,7 @@ void writeConfig(void)
 	debugFree(filename,"writeConfig filename");
 }
 
-__attribute__((visibility("default"))) bool doSaveAll(GtkWidget* widget,gpointer data)
+VISIBLE bool doSaveAll(GtkWidget* widget,gpointer data)
 {
 	int			numpages=gtk_notebook_get_n_pages(notebook);
 	int			result;
@@ -1430,7 +1435,7 @@ __attribute__((visibility("default"))) bool doSaveAll(GtkWidget* widget,gpointer
 	return(true);
 }
 
-__attribute__((visibility("default"))) void doShutdown(GtkWidget* widget,gpointer data)
+VISIBLE void doShutdown(GtkWidget* widget,gpointer data)
 {
 	char*	command;
 
@@ -1676,7 +1681,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 	debugFree(dirname,"setToolOptions dirname");
 }
 
-__attribute__((visibility("default"))) void doAbout(GtkWidget* widget,gpointer data)
+VISIBLE void doAbout(GtkWidget* widget,gpointer data)
 {
 	const char*	authors[]= {"K.D.Hedger <"MYEMAIL">\n",MYWEBSITE,"\nMore by the same author\n","Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
 	const char	copyright[] ="Copyright \xc2\xa9 2013 K.D.Hedger";
@@ -1737,7 +1742,7 @@ void beginPrint(GtkPrintOperation *operation,GtkPrintContext *context,gpointer u
 	gtk_print_operation_set_n_pages(operation,n_pages);
 }
 
-__attribute__((visibility("default"))) void printFile(GtkWidget* widget,gpointer data)
+VISIBLE void printFile(GtkWidget* widget,gpointer data)
 {
 	doCombineBuffers();
 	GtkSourcePrintCompositor*	printview=gtk_source_print_compositor_new_from_view(printView);
@@ -1781,7 +1786,7 @@ void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 		}
 }
 
-__attribute__((visibility("default"))) void newEditor(GtkWidget* widget,gpointer data)
+VISIBLE void newEditor(GtkWidget* widget,gpointer data)
 {
 	char*	command=NULL;
 
@@ -1807,14 +1812,13 @@ __attribute__((visibility("default"))) void newEditor(GtkWidget* widget,gpointer
 
 void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButton* ev,pageStruct* page)
 {
-
 	if(ev->button!=1)
 		return;
 
 	toggleBookmark(NULL,iter);
 }
 
-__attribute__((visibility("default"))) void showToolOutput(bool immediate)
+VISIBLE void showToolOutput(bool immediate)
 {
 	showToolOutWin=true;
 	gtk_widget_show(toolOutVBox);
@@ -1826,7 +1830,7 @@ __attribute__((visibility("default"))) void showToolOutput(bool immediate)
 		}
 }
 
-__attribute__((visibility("default"))) void hideToolOutput(bool immediate)
+VISIBLE void hideToolOutput(bool immediate)
 {
 	showToolOutWin=false;;
 	gtk_widget_show(toolOutVBox);
@@ -1838,7 +1842,7 @@ __attribute__((visibility("default"))) void hideToolOutput(bool immediate)
 		}
 }
 
-__attribute__((visibility("default"))) void toggleToolOutput(GtkWidget* widget,gpointer data)
+VISIBLE void toggleToolOutput(GtkWidget* widget,gpointer data)
 {
 	showToolOutWin=!showToolOutWin;
 	if(showToolOutWin)
@@ -1853,7 +1857,7 @@ __attribute__((visibility("default"))) void toggleToolOutput(GtkWidget* widget,g
 		}
 }
 
-__attribute__((visibility("default"))) void toggleBookMarkBar(GtkWidget* widget,gpointer data)
+VISIBLE void toggleBookMarkBar(GtkWidget* widget,gpointer data)
 {
 	showBMBar=!showBMBar;
 	if(showBMBar)
@@ -1863,7 +1867,7 @@ __attribute__((visibility("default"))) void toggleBookMarkBar(GtkWidget* widget,
 	resetAllFilePrefs();
 }
 
-__attribute__((visibility("default"))) void toggleToolBar(GtkWidget* widget,gpointer data)
+VISIBLE void toggleToolBar(GtkWidget* widget,gpointer data)
 {
 	showToolBar=!showToolBar;
 	if(showToolBar)
@@ -1874,7 +1878,7 @@ __attribute__((visibility("default"))) void toggleToolBar(GtkWidget* widget,gpoi
 }
 
 //toggleStatusBar
-__attribute__((visibility("default"))) void toggleStatusBar(GtkWidget* widget,gpointer data)
+VISIBLE void toggleStatusBar(GtkWidget* widget,gpointer data)
 {
 	showStatus=!showStatus;
 	if(showStatus)
@@ -1886,7 +1890,7 @@ __attribute__((visibility("default"))) void toggleStatusBar(GtkWidget* widget,gp
 
 #ifdef _BUILDDOCVIEWER_
 
-__attribute__((visibility("default"))) void toggleDocviewer(GtkWidget* widget,gpointer data)
+VISIBLE void toggleDocviewer(GtkWidget* widget,gpointer data)
 {
 	showHideDocviewer=!showHideDocviewer;
 	if(showHideDocviewer)
@@ -2067,7 +2071,7 @@ void loadKeybindings(void)
 		}
 }
 
-__attribute__((visibility("default"))) gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
+VISIBLE gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 {
 	int		loop;
 	bool	gotKey=false;
@@ -2096,7 +2100,7 @@ __attribute__((visibility("default"))) gboolean keyShortCut(GtkWidget* window,Gd
 	return(false);
 }
 
-__attribute__((visibility("default"))) void getPlugins(GtkWidget* widget,gpointer data)
+VISIBLE void getPlugins(GtkWidget* widget,gpointer data)
 {
 	char*	command;
 
