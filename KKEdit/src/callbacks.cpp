@@ -1439,12 +1439,12 @@ VISIBLE void doShutdown(GtkWidget* widget,gpointer data)
 {
 	char*	command;
 
-	if(doSaveAll(widget,(void*)true)==true)
-		{
-			if(onExitSaveSession)
-				saveSession(NULL,NULL);
-			writeExitData();
-		}
+	if(doSaveAll(widget,(void*)true)==false)
+		return;
+
+	if(onExitSaveSession)
+		saveSession(NULL,NULL);
+	writeExitData();
 
 #ifdef _ASPELL_
 	delete_aspell_config(aspellConfig);

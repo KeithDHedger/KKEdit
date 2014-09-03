@@ -1,4 +1,5 @@
 0.2.3
+Cancel quit properly if 'Cancel' selected in unsaved documents dialog.
 Status bar now shows number of replacements when using find/replace.
 Fixed 'handles' showing on side/top/bottom on startup when not showing the user panes.
 Added message dialog when disabling a plugin that can't be unloaded without a restart.
