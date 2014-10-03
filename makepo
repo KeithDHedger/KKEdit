@@ -16,16 +16,16 @@ if [ "X$1" = "Xmakemos" ];then
 	MAKEMOS=1
 fi
 
-langs="es_ES fr_FR"
-xgettext --package-name  ${DOMAINNAME} --package-version 1.2 --default-domain  ${DOMAINNAME} --output ${DOMAINNAME}.pot KKEdit/src/*.cpp
+langs="fr_FR"
+xgettext --package-name  ${DOMAINNAME} --join-existing --package-version 1.2 --default-domain  ${DOMAINNAME} --output ${DOMAINNAME}.pot KKEdit/src/*.cpp
 
 for arg in $langs
 	do
-		mkdir --parents ./${arg}/LC_MESSAGES
+		mkdir --parents po/${arg}/LC_MESSAGES
 		if [ $MAKEPOS -eq 1 ];then
-			msginit --no-translator --locale $arg --output-file ${arg}.po --input  ${DOMAINNAME}.pot
+			msginit --no-translator --locale $arg --output-file ${arg}.po --input ${DOMAINNAME}.pot
 		fi
 		if [ $MAKEMOS -eq 1 ];then
-			msgfmt --check --verbose --output-file ./${arg}/LC_MESSAGES/${DOMAINNAME}.mo ${arg}.po
+			msgfmt --check --verbose --output-file po/${arg}/LC_MESSAGES/${DOMAINNAME}.mo ${arg}.po
 		fi
 	done

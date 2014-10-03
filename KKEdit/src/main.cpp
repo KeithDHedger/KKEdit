@@ -6,6 +6,8 @@
 
 #include "kkedit-includes.h"
 #include <time.h>
+#include <libintl.h>
+#include <locale.h>
 
 bool	singleOverRide=false;
 bool	loadPluginsFlag=true;
@@ -207,7 +209,7 @@ void doNagStuff(void)
 	char*			kkeditupdatemessage=strdup("");
 	char*			plugupdatemessage=strdup("");
 
-	asprintf(&command,"KKEditProgressBar \"Checking for updates ...\" %s/updatecontrol &",tmpFolderName);
+	asprintf(&command,gettext("KKEditProgressBar \"Checking for updates ...\" %s/updatecontrol &"),tmpFolderName);
 	system(command);
 	while(gtk_events_pending())
 		gtk_main_iteration();
@@ -301,6 +303,10 @@ int main(int argc,char **argv)
 	UniqueBackend*		back;
 	char*				dbusname;
 	int					w,h;
+
+	setlocale(LC_ALL,"");
+	bindtextdomain("kkedit", "po");
+	textdomain( "kkedit");
 
 	gtk_init(&argc,&argv);
 	back=unique_backend_create();
