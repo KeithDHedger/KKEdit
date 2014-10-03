@@ -981,8 +981,7 @@ VISIBLE void doPrefs(void)
 //end customize
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
-	hbox=gtk_hbox_new(false,8);
-
+	hbox=gtk_hbox_new(true,8);
 //appearence 1
 	label=gtk_label_new("<b>General Appearance</b>");
 	gtk_label_set_use_markup((GtkLabel*)label,true);
@@ -1001,7 +1000,7 @@ VISIBLE void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 //wraplines
-	item=gtk_check_button_new_with_label("Wrap Lines");
+	item=gtk_check_button_new_with_label("Wrap Lines\t");
 	gtk_widget_set_name(item,"wrap");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,lineWrap);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
@@ -1018,14 +1017,14 @@ VISIBLE void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 
 //apperance 2
-	hbox=gtk_hbox_new(false,8);
+	hbox=gtk_hbox_new(true,8);
+
+//no highlight
 	item=gtk_check_button_new_with_label("No Syntax Highlighting");
 	gtk_widget_set_name(item,"nosyntax");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,noSyntax);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-
-//no highlight
 
 //single instance
 	item=gtk_check_button_new_with_label("Use Single Instance");
@@ -1053,7 +1052,7 @@ VISIBLE void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 
 //apperance 3
-	hbox=gtk_hbox_new(false,8);
+	hbox=gtk_hbox_new(true,8);
 
 //no duplicates
 	item=gtk_check_button_new_with_label("Don't Open Duplicate File");
