@@ -17,7 +17,7 @@ mv /tmp/KKEdit /tmp/KKEdit-${VERSION}
 
 cd /tmp/KKEdit-${VERSION}
 ./autogen.sh --prefix=/usr
-make
+make clean
 make distclean
 cd ..
 tar -czvhf KKEdit-${VERSION}.tar.gz KKEdit-${VERSION}
