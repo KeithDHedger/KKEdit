@@ -155,6 +155,11 @@ void setFilePrefs(pageStruct* page)
 	attr=gtk_text_view_get_default_attributes((GtkTextView*)page->view);
 	g_object_set((gpointer)page->highlightTag,"background",gdk_color_to_string((const GdkColor*)&attr->appearance.fg_color),"foreground",gdk_color_to_string((const GdkColor*)&attr->appearance.bg_color),NULL);
 	gtk_text_attributes_unref(attr);
+
+	if(noSyntax==true)
+		gtk_source_buffer_set_highlight_syntax (page->buffer,false);
+	else
+		gtk_source_buffer_set_highlight_syntax (page->buffer,true);
 }
 
 void resetAllFilePrefs(void)

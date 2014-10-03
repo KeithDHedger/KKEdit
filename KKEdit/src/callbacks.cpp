@@ -1470,6 +1470,8 @@ void setPrefs(GtkWidget* widget,gpointer data)
 		tmpLineNumbers=gtk_toggle_button_get_active((GtkToggleButton*)data);
 	if(strcmp(gtk_widget_get_name(widget),"wrap")==0)
 		tmpLineWrap=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"nosyntax")==0)
+		tmpNoSyntax=gtk_toggle_button_get_active((GtkToggleButton*)data);
 	if(strcmp(gtk_widget_get_name(widget),"high")==0)
 		tmpHighLight=gtk_toggle_button_get_active((GtkToggleButton*)data);
 	if(strcmp(gtk_widget_get_name(widget),"single")==0)
@@ -1519,6 +1521,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			indent=tmpIndent;
 			lineNumbers=tmpLineNumbers;
 			lineWrap=tmpLineWrap;
+			noSyntax=tmpNoSyntax;
 			highLight=tmpHighLight;
 			noDuplicates=tmpNoDuplicates;
 			noWarnings=tmpNoWarnings;

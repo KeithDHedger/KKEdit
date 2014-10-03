@@ -1,3 +1,6 @@
+0.2.4
+Added 'No Syntax Highlighting' to prefs to turn off syntax highlighting.
+
 0.2.3
 Cancel quit properly if 'Cancel' selected in unsaved documents dialog.
 Status bar now shows number of replacements when using find/replace.

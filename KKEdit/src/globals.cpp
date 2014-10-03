@@ -77,6 +77,7 @@ bool			indent;
 bool			lineNumbers;
 bool			lineWrap;
 bool			highLight;
+bool			noSyntax;
 bool			singleUse;
 int				tabWidth;
 char*			fontAndSize;
@@ -106,6 +107,7 @@ bool			tmpIndent;
 bool			tmpLineNumbers;
 bool			tmpLineWrap;
 bool			tmpHighLight;
+bool			tmpNoSyntax;
 bool			tmpSingleUse;
 int				tmpTabWidth;
 int				tmpDepth;
@@ -315,6 +317,7 @@ args			kkedit_rc[]=
 	{"showlinenumbers",TYPEBOOL,&lineNumbers},
 	{"wrapline",TYPEBOOL,&lineWrap},
 	{"highlightcurrentline",TYPEBOOL,&highLight},
+	{"nosyntax",TYPEBOOL,&noSyntax},
 	{"singleuse",TYPEBOOL,&singleUse},
 	{"noduplicates",TYPEBOOL,&noDuplicates},
 	{"warning",TYPEBOOL,&noWarnings},

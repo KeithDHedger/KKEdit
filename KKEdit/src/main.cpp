@@ -46,6 +46,7 @@ void init(void)
 	lineNumbers=true;
 	lineWrap=true;
 	highLight=true;
+	noSyntax=false;
 	tabWidth=4;
 	depth=1;
 	singleUse=true;
@@ -107,6 +108,7 @@ void init(void)
 	tmpIndent=indent;
 	tmpLineNumbers=lineNumbers;
 	tmpLineWrap=lineWrap;
+	tmpNoSyntax=noSyntax;
 	tmpHighLight=highLight;
 	tmpSingleUse=singleUse;
 	tmpTabWidth=tabWidth;
