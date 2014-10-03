@@ -4,7 +4,7 @@
 
 MAKEPOS=0
 MAKEMOS=0
-DOMAINNAME=hellogt
+DOMAINNAME=kkedit
 
 if [ "X$1" = "Xmakepos" ];then
 	MAKEPOS=1
@@ -17,7 +17,7 @@ if [ "X$1" = "Xmakemos" ];then
 fi
 
 langs="es_ES fr_FR"
-xgettext --package-name  ${DOMAINNAME} --package-version 1.2 --default-domain  ${DOMAINNAME} --output ${DOMAINNAME}.pot ../hellogt.cxx
+xgettext --package-name  ${DOMAINNAME} --package-version 1.2 --default-domain  ${DOMAINNAME} --output ${DOMAINNAME}.pot KKEdit/src/*.cpp
 
 for arg in $langs
 	do
