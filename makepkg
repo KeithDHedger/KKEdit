@@ -2,7 +2,7 @@
 
 #©keithhedger Wed 22 May 19:55:26 BST 2013 kdhedger68713@gmail.com
 
-make clean
+make clean ||true
 
 VERSION=$(head ./configure.ac|grep AC_INIT|awk -F [ '{print $3}'|awk -F ] '{print $1}')
 
