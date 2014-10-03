@@ -19,16 +19,6 @@ cd /tmp/KKEdit-${VERSION}
 ./autogen.sh --prefix=/usr
 make
 make distclean
-
-#
-#./remakesourcelist
-#aclocal
-#autoheader
-#touch NEWS README AUTHORS
-#automake --add-missing --copy
-#autoconf
-#rm -rf ./autom4te.cache
-#rm ./compile ./missing ./COPYING ./AUTHORS ./NEWS
 cd ..
 tar -czvhf KKEdit-${VERSION}.tar.gz KKEdit-${VERSION}
 rm -r /tmp/KKEdit-${VERSION}
