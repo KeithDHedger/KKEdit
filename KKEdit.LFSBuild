@@ -51,3 +51,4 @@ case $DOWHAT in
 esac
 
 rm -r "$PKG" "${TARNAME}-${VERSION}"
+gtk-update-icon-cache --ignore-theme-index --force ${prefix}/share/icons/hicolor||true

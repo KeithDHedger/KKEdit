@@ -44,6 +44,5 @@ install-exec-hook:
 	mkdir -vp $(DESTDIR)$(pkgdatadir)/plugins
 	mkdir -vp "$(DESTDIR)$(pkgdatadir)/Example External Tools"
 	cp -r "../resources/Example External Tools" "$(DESTDIR)$(pkgdatadir)"
-	gtk-update-icon-cache --ignore-theme-index --force ${prefix}/share/icons/hicolor||true
 
 
