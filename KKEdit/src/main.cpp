@@ -183,23 +183,18 @@ void init(void)
 	globalSlice->setReturnDupString(true);
 }
 
-const char* donate=gettext("Please donate");
-const char* paypal=gettext("If you have a PayPal account you can donate any amount you like by logging into yor account and click the 'Send Money' tab, enter my email address");
-const char*	send=gettext("and then send it.");
-const char*	thanks=gettext("Thank you for helping to support Free software.");
-
 void doNagScreen(void)
 {
 	GtkWidget* dialog;
 
-	dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",donate);
-	gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s\n<b>%s</b>\n%s\n\n%s",paypal,MYEMAIL,send,thanks);
+	dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",gettext("Please donate"));
+	gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s\n<b>%s</b>\n%s\n\n%s",gettext("If you have a PayPal account you can donate any amount you like by logging into yor account and click the 'Send Money' tab, enter my email address"),MYEMAIL,gettext("and then send it."),gettext("Thank you for helping to support Free software."));
 
 	gtk_dialog_run(GTK_DIALOG (dialog));
 	gtk_widget_destroy(dialog);
 }
 
-const char* updatecheck=gettext("Checking for updates ...");
+
 
 void doNagStuff(void)
 {
@@ -216,7 +211,7 @@ void doNagStuff(void)
 	char*			kkeditupdatemessage=strdup("");
 	char*			plugupdatemessage=strdup("");
 
-	asprintf(&command,"KKEditProgressBar \"%s\" %s/updatecontrol &",updatecheck,tmpFolderName);
+	asprintf(&command,"KKEditProgressBar \"%s\" %s/updatecontrol &",gettext("Checking for updates ..."),tmpFolderName);
 	system(command);
 	while(gtk_events_pending())
 		gtk_main_iteration();
@@ -293,7 +288,7 @@ void doNagStuff(void)
 			debugFree(command,"command from donagstuff");
 		}
 
-	if((nagScreen==false))
+//	if((nagScreen==false))
 		doNagScreen();
 
 	asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
@@ -312,12 +307,12 @@ int main(int argc,char **argv)
 	int					w,h;
 
 	setlocale(LC_ALL,"");
-	bindtextdomain("kkedit", "po");
+	bindtextdomain("kkedit","/media/LinuxData/Development/Projects/KKEdit/po");
 	textdomain( "kkedit");
+	bind_textdomain_codeset ("kkedit","UTF-8");
 
 	gtk_init(&argc,&argv);
 	back=unique_backend_create();
-
 	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace(back));
 	app=unique_app_new(dbusname,NULL);
 	message=unique_message_data_new();
@@ -398,7 +393,7 @@ int main(int argc,char **argv)
 				}
 			setSensitive();
 
-			if(timeToNag==true)
+			//if(timeToNag==true)
 				doNagStuff();
 
 			gtk_main();
