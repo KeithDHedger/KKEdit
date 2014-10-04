@@ -265,7 +265,11 @@ void doNagStuff(void)
 							if(strcmp(VERSION,vers)!=0)
 								{
 									free(kkeditupdatemessage);
-									asprintf(&kkeditupdatemessage,"KKEdit update available to <b>%s</b> from <b>%s</b>\nFrom here:\n<b>%s</b>\n",vers,VERSION,MYWEBSITE);
+									//asprintf(&kkeditupdatemessage,"%s <b>%s</b> from <b>%s</b>\nFrom here:\n<b>%s</b>\n",gettext("KKEdit update available to"),vers,VERSION,MYWEBSITE);
+
+									asprintf(&kkeditupdatemessage,"%s <b>%s</b> %s <b>%s</b>\n%s:\n<b>%s</b>\n",gettext("KKEdit update available to"),vers,gettext("from"),VERSION,gettext("From here"),MYWEBSITE);
+
+
 								}
 
 							if(lastPlugUpdate<atol(plugt))
