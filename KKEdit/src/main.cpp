@@ -183,16 +183,23 @@ void init(void)
 	globalSlice->setReturnDupString(true);
 }
 
+const char* donate=gettext("Please donate");
+const char* paypal=gettext("If you have a PayPal account you can donate any amount you like by logging into yor account and click the 'Send Money' tab, enter my email address");
+const char*	send=gettext("and then send it.");
+const char*	thanks=gettext("Thank you for helping to support Free software.");
+
 void doNagScreen(void)
 {
 	GtkWidget* dialog;
 
-	dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"Please donate");
-	gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"If you have a PayPal account you can donate any amount you like by logging into yor account and click the 'Send Money' tab, enter my email address\n<b>%s</b>\nand then send it.\n\nThank you for helping to support Free software.",MYEMAIL);
+	dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",donate);
+	gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s\n<b>%s</b>\n%s\n\n%s",paypal,MYEMAIL,send,thanks);
 
 	gtk_dialog_run(GTK_DIALOG (dialog));
 	gtk_widget_destroy(dialog);
 }
+
+const char* updatecheck=gettext("Checking for updates ...");
 
 void doNagStuff(void)
 {
@@ -209,7 +216,7 @@ void doNagStuff(void)
 	char*			kkeditupdatemessage=strdup("");
 	char*			plugupdatemessage=strdup("");
 
-	asprintf(&command,gettext("KKEditProgressBar \"Checking for updates ...\" %s/updatecontrol &"),tmpFolderName);
+	asprintf(&command,"KKEditProgressBar \"%s\" %s/updatecontrol &",updatecheck,tmpFolderName);
 	system(command);
 	while(gtk_events_pending())
 		gtk_main_iteration();

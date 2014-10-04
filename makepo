@@ -17,7 +17,11 @@ if [ "X$1" = "Xmakemos" ];then
 fi
 
 langs="fr_FR"
-xgettext --package-name  ${DOMAINNAME} --join-existing --package-version 1.2 --default-domain  ${DOMAINNAME} --output ${DOMAINNAME}.pot KKEdit/src/*.cpp
+if [ -e ${DOMAINNAME}.pot ];then
+	xgettext --package-name  ${DOMAINNAME}  --package-version 1.2  --join-existing --default-domain  ${DOMAINNAME} --output ${DOMAINNAME}.pot KKEdit/src/*.cpp
+else
+	xgettext --package-name  ${DOMAINNAME}  --package-version 1.2 --default-domain  ${DOMAINNAME} --output ${DOMAINNAME}.pot KKEdit/src/*.cpp
+fi
 
 for arg in $langs
 	do
