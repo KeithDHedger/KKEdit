@@ -194,8 +194,6 @@ void doNagScreen(void)
 	gtk_widget_destroy(dialog);
 }
 
-
-
 void doNagStuff(void)
 {
 	char*			command=NULL;
@@ -265,21 +263,17 @@ void doNagStuff(void)
 							if(strcmp(VERSION,vers)!=0)
 								{
 									free(kkeditupdatemessage);
-									//asprintf(&kkeditupdatemessage,"%s <b>%s</b> from <b>%s</b>\nFrom here:\n<b>%s</b>\n",gettext("KKEdit update available to"),vers,VERSION,MYWEBSITE);
-
 									asprintf(&kkeditupdatemessage,"%s <b>%s</b> %s <b>%s</b>\n%s:\n<b>%s</b>\n",gettext("KKEdit update available to"),vers,gettext("from"),VERSION,gettext("From here"),MYWEBSITE);
-
-
 								}
 
 							if(lastPlugUpdate<atol(plugt))
 								{
 									free(plugupdatemessage);
-									asprintf(&plugupdatemessage,"\nPlugin updates are available from here:\n<b>https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins</b>");
+									asprintf(&plugupdatemessage,"\n%s:\n<b>https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins</b>",gettext("Plugin updates are available from here"));
 									lastPlugUpdate=thisupdate;
 								}
 
-							dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"Updates Available");
+							dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",gettext("Updates Available"));
 							gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s%s",kkeditupdatemessage,plugupdatemessage);
 
 							gtk_dialog_run(GTK_DIALOG (dialog));
@@ -292,7 +286,7 @@ void doNagStuff(void)
 			debugFree(command,"command from donagstuff");
 		}
 
-//	if((nagScreen==false))
+	if((nagScreen==false))
 		doNagScreen();
 
 	asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
@@ -312,8 +306,8 @@ int main(int argc,char **argv)
 
 	setlocale(LC_ALL,"");
 	bindtextdomain("kkedit","/media/LinuxData/Development/Projects/KKEdit/po");
-	textdomain( "kkedit");
-	bind_textdomain_codeset ("kkedit","UTF-8");
+	textdomain("kkedit");
+	bind_textdomain_codeset("kkedit","UTF-8");
 
 	gtk_init(&argc,&argv);
 	back=unique_backend_create();
@@ -393,11 +387,10 @@ int main(int argc,char **argv)
 				{
 					gtk_window_set_default_icon_name(PACKAGE "Root");
 					gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
-
 				}
 			setSensitive();
 
-			//if(timeToNag==true)
+			if(timeToNag==true)
 				doNagStuff();
 
 			gtk_main();
