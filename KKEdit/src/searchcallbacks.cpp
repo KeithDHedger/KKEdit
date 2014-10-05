@@ -56,7 +56,7 @@ PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 	gtk_window_present((GtkWindow*)docView);
 
 	showHideDocviewer=true;
-	gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,"Hide Docviewer");
+	gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,gettext("Hide Docviewer"));
 
 #else
 	char*		command;
@@ -180,7 +180,7 @@ VISIBLE void seachGtkDocs(GtkWidget* widget,gpointer data)
 					asprintf(&thePage,"file://%s",searchdata[0][1]);
 				}
 
-			showDocView(USEURI,selection,"Gtk Docs");
+			showDocView(USEURI,selection,gettext("Gtk Docs"));
 		}
 
 	for(int loop=0;loop<cnt;loop++)
@@ -210,7 +210,7 @@ VISIBLE void doDoxy(GtkWidget* widget,long data)
 	if(page==NULL)
 		return;
 
-	showBarberPole("Building Documentaion ...");
+	showBarberPole(gettext("Building Documentaion ..."));
 	chdir(page->dirName);
 
 	stat("./html/index.html",&sb);
@@ -258,7 +258,7 @@ VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
 
 	if(selection!=NULL)
 		{
-			showBarberPole("Searching ...");
+			showBarberPole(gettext("Searching ..."));
 
 			asprintf(&findcommand,"find %s/html -name \"*.html\"",page->dirName);
 			findfile=popen(findcommand,"r");
@@ -353,7 +353,7 @@ VISIBLE void searchQT5Docs(GtkWidget* widget,gpointer data)
 			else
 				thePage=strdup(htmlURI);
 
-			showDocView(USEURI,(char*)str->str,"Qt5 Docs");
+			showDocView(USEURI,(char*)str->str,gettext("Qt5 Docs"));
 
 			g_string_free(str,true);
 			debugFree(selection,"searchQT5Docs selection");
@@ -590,7 +590,7 @@ void regexFind(int dowhat)
 			case REPLACE:
 				if((findInAllFiles==true) && (replaceAll==true))
 					{
-						if(yesNo((char*)"Do you want to replace in ALL open files?",(char*)"")==GTK_RESPONSE_YES)
+						if(yesNo((char*)gettext("Do you want to replace in ALL open files?"),(char*)"")==GTK_RESPONSE_YES)
 							{
 								matchedcnt=-1;
 								for(pageloop=0;pageloop<gtk_notebook_get_n_pages(notebook);pageloop++)
@@ -826,7 +826,7 @@ void basicFind(int dowhat)
 
 		if((dowhat==REPLACE) && (findInAllFiles==true) && (replaceAll==true))
 			{
-				if(yesNo((char*)"Do you want to replace in ALL open files?",(char*)"")==GTK_RESPONSE_CANCEL)
+				if(yesNo((char*)gettext("Do you want to replace in ALL open files?"),(char*)"")==GTK_RESPONSE_CANCEL)
 					return;
 						findInAllFiles=false;
 						for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
@@ -901,7 +901,7 @@ void showOnStatus(const char* from,const char* to)
 			return;
 
 	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
-	asprintf(&message,"Replaced %i instances of '%s' with '%s'",itemsReplaced+1,from,to);
+	asprintf(&message,gettext("Replaced %i instances of '%s' with '%s'"),itemsReplaced+1,from,to);
 	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
 	statusMessage=message;
@@ -995,9 +995,9 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 				replaceAll=gtk_toggle_button_get_active((GtkToggleButton*)widget);
 				button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACE);
 				if(replaceAll==false)
-					gtk_button_set_label((GtkButton*)button,"Replace");
+					gtk_button_set_label((GtkButton*)button,gettext("Replace"));
 				else
-					gtk_button_set_label((GtkButton*)button,"Replace All");
+					gtk_button_set_label((GtkButton*)button,gettext("Replace All"));
 				break;
 			case 4:
 				findInAllFiles=gtk_toggle_button_get_active((GtkToggleButton*)widget);
@@ -1071,10 +1071,3 @@ void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
 		}
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 }
-
-
-
-
-
-
-

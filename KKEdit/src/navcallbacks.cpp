@@ -145,10 +145,10 @@ int showLineEntry(void)
 	GtkWidget*	entrybox;
 	char		line[48];
 
-	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,"Enter Line Number");
+	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,gettext("Enter Line Number"));
 
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OK,GTK_RESPONSE_YES,NULL);
-	gtk_window_set_title(GTK_WINDOW(dialog),"Go To Line");
+	gtk_window_set_title(GTK_WINDOW(dialog),gettext("Go To Line"));
 
 	content_area=gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 	entrybox=gtk_entry_new();
@@ -346,7 +346,7 @@ bool readFile(char *name)
 	file=fopen(name,"rb");
 	if (!file)
 		{
-			fprintf(stderr,"Unable to open file %s",name);
+			fprintf(stderr,gettext("Unable to open file %s"),name);
 			return(false);
 		}
 
@@ -359,7 +359,7 @@ bool readFile(char *name)
 	filebuffer=(char*)malloc(fileLen+1);
 	if (!filebuffer)
 		{
-			fprintf(stderr,"Memory error!");
+			fprintf(stderr,gettext("Memory error!"));
 			fclose(file);
 			return(false);
 		}
@@ -569,7 +569,6 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 			doxydata=getDoxyFileData((char*)uri);
 			if(doxydata==NULL)
 				return(false);
-//			printf("source=%snpath=%snname=%snline=%inhahtag=%sn",doxydata->sourceFile,doxydata->filePath,doxydata->fileName,doxydata->lineNum,doxydata->hashTag);
 
 //check in open tabs
 			buf=new TextBuffer;
@@ -580,7 +579,6 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 						{
 							gtk_notebook_set_current_page(notebook,j);
 							buf->textBuffer=(GtkTextBuffer*)page->buffer;
-							//buf->scroll2LineM((GtkTextView*)page->view,doxydata->lineNum-1);
 							buf->scroll2LineM(page,doxydata->lineNum-1);
 							delete buf;
 							debugFree(doxydata,"docLinkTrap doxydata");
