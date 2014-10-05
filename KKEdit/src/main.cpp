@@ -305,7 +305,7 @@ int main(int argc,char **argv)
 	int					w,h;
 
 	setlocale(LC_ALL,"");
-	bindtextdomain("kkedit","/media/LinuxData/Development/Projects/KKEdit/po");
+	bindtextdomain("kkedit",LOCALEDIR);
 	textdomain("kkedit");
 	bind_textdomain_codeset("kkedit","UTF-8");
 

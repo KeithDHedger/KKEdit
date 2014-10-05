@@ -28,6 +28,9 @@ docfiles_DATA = ../resources/docs/*
 stylefilesdir = $(pkgdatadir)/styles
 stylefiles_DATA = ../resources/styles/*
 
+transfilesdir = $(localedir)/fr_FR/LC_MESSAGES
+transfiles_DATA = ../../po/*/*/kkedit.mo
+
 include_HEADERS = ../src/kkedit-plugins.h
 
 bin_PROGRAMS = kkedit KKEditProgressBar
