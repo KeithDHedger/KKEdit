@@ -29,7 +29,7 @@ stylefilesdir = $(pkgdatadir)/styles
 stylefiles_DATA = ../resources/styles/*
 
 transfilesdir = $(localedir)/fr_FR/LC_MESSAGES
-transfiles_DATA = ../../po/*/*/kkedit.mo
+transfiles_DATA = ../../po/fr_FR/LC_MESSAGES/kkedit.mo
 
 include_HEADERS = ../src/kkedit-plugins.h
 

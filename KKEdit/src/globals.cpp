@@ -534,7 +534,7 @@ VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int u
 						{
 							showToolOutWin=true;
 							gtk_widget_show(toolOutVBox);
-							gtk_menu_item_set_label((GtkMenuItem*)menuToolOut,"Hide Tool Output");
+							gtk_menu_item_set_label((GtkMenuItem*)menuToolOut,gettext("Hide Tool Output"));
 							while(fgets(line,1024,fp))
 								{
 									gtk_text_buffer_insert_at_cursor(toolOutputBuffer,line,strlen(line));
@@ -938,11 +938,11 @@ void rebuildBookMarkMenu(void)
 	menuBookMarkSubMenu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuBookMark),menuBookMarkSubMenu);
 
-	menuitem=gtk_menu_item_new_with_label("Remove All Bookmarks");
+	menuitem=gtk_menu_item_new_with_label(gettext("Remove All Bookmarks"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(removeAllBookmarks),NULL);
 
-	menuitem=gtk_menu_item_new_with_label("Toggle Bookmark");
+	menuitem=gtk_menu_item_new_with_label(gettext("Toggle Bookmark"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);
 

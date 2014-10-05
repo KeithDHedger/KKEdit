@@ -271,7 +271,7 @@ VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 			bookmarkdata=(bookMarksNew*)malloc(sizeof(bookMarksNew));
 			newBookMarksList=g_list_append(newBookMarksList,(gpointer)bookmarkdata);
 			bookmarkdata->page=page;
-			asprintf(&bookmarkdata->markName,"Bookmark-%i",bmMarkNumber++);
+			asprintf(&bookmarkdata->markName,"%s-%i",gettext("Bookmark"),bmMarkNumber++);
 			bookmarkdata->mark=gtk_source_buffer_create_source_mark(page->buffer,bookmarkdata->markName,mark_type,iter);
 //preview text for menu
 			line=gtk_text_iter_get_line(iter);
@@ -337,7 +337,7 @@ int yesNo(char* question,char* file)
 	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,"%s %s",question,file);
 
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_YES,GTK_RESPONSE_YES,GTK_STOCK_NO,GTK_RESPONSE_CANCEL,NULL);
-	gtk_window_set_title(GTK_WINDOW(dialog),"What Do You Want To Do?");
+	gtk_window_set_title(GTK_WINDOW(dialog),gettext("What Do You Want To Do?"));
 
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
@@ -352,7 +352,7 @@ VISIBLE void doOpenFile(GtkWidget* widget,gpointer data)
 	GSList*		filenames;
 	GSList*		thisnext;
 
-	dialog=gtk_file_chooser_dialog_new("Open File",NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,NULL);
+	dialog=gtk_file_chooser_dialog_new(gettext("Open File"),NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,NULL);
 	gtk_file_chooser_set_select_multiple((GtkFileChooser*)dialog,true);
 	if (gtk_dialog_run(GTK_DIALOG (dialog))==GTK_RESPONSE_ACCEPT)
 		{
@@ -377,11 +377,11 @@ int show_question(char* filename)
 	gint		result;
 	char*		message;
 
-	asprintf(&message,"Save file %s before closing?",filename);
+	asprintf(&message,gettext("Save file %s before closing?"),filename);
 	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
 
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_SAVE,GTK_RESPONSE_YES,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_NO,GTK_RESPONSE_NO,NULL);
-	gtk_window_set_title(GTK_WINDOW(dialog),"Warning unsaved data!");
+	gtk_window_set_title(GTK_WINDOW(dialog),gettext("Warning unsaved data!"));
 
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 
@@ -426,7 +426,7 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 	buf=new TextBuffer(textbuffer);
 
 	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
-	asprintf(&message,"Line %i Column %i \t\tSyntax Highlighting %s\t\tFilePath %s",buf->lineNum,buf->column,lang,path);
+	asprintf(&message,gettext("Line %i Column %i \t\tSyntax Highlighting %s\t\tFilePath %s"),buf->lineNum,buf->column,lang,path);
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
 	debugFree(message,"updateStatuBar message");
 	delete buf;
@@ -790,7 +790,6 @@ VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
 		}
 }
 
-
 VISIBLE void redo(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
@@ -950,10 +949,10 @@ VISIBLE void openHelp(GtkWidget* widget,gpointer data)
 {
 	asprintf(&thePage,"file://%s/help/help.html",DATADIR);
 #ifdef _BUILDDOCVIEWER_
-	showDocView(USEURI,(char*)"KKEdit","KKEdit Help");
+	showDocView(USEURI,(char*)"KKEdit",gettext("KKEdit Help"));
 #else
 	asprintf(&thePage,"%s %s/help/help.html",browserCommand,DATADIR);
-	runCommand(thePage,NULL,false,8,0,(char*)"KKEdit Help");
+	runCommand(thePage,NULL,false,8,0,(char*)gettext("KKEdit Help"));
 	debugFree(thePage,"openHelp thePage");
 	thePage=NULL;
 #endif
@@ -994,7 +993,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 							destroyData(fdata);
 
 							image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
-							menuitem=gtk_image_menu_item_new_with_label("Go To Definition");
+							menuitem=gtk_image_menu_item_new_with_label(gettext("Go To Definition"));
 							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
@@ -1002,19 +1001,19 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 
 					if(gotDoxygen==0)
 						{
-							menuitem=gtk_image_menu_item_new_with_label("Find In Documentation");
+							menuitem=gtk_image_menu_item_new_with_label(gettext("Find In Documentation"));
 							image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
 							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doxyDocs),NULL);
 						}
-					menuitem=gtk_image_menu_item_new_with_label("Search In Qt5 Docs");
+					menuitem=gtk_image_menu_item_new_with_label(gettext("Search In Qt5 Docs"));
 					image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
 					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(searchQT5Docs),NULL);
 
-					menuitem=gtk_image_menu_item_new_with_label("Search In Gtk Docs");
+					menuitem=gtk_image_menu_item_new_with_label(gettext("Search In Gtk Docs"));
 					image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
 					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
@@ -1024,7 +1023,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 //spell check
 					if((spellChecker!=NULL) && (aspellConfig!=NULL))
 						{
-							menuitem=gtk_image_menu_item_new_with_label("Check Spellling");
+							menuitem=gtk_image_menu_item_new_with_label(gettext("Check Spellling"));
 							image=gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK,GTK_ICON_SIZE_MENU);
 							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
@@ -1070,7 +1069,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	menuitem=gtk_menu_item_new_with_label("Toggle Bookmark");
+	menuitem=gtk_menu_item_new_with_label(gettext("Toggle Bookmark"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);
 
@@ -1180,19 +1179,19 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 
 //copy dirname
 			image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
-			menuitem=gtk_image_menu_item_new_with_label("Copy Folder Path");
+			menuitem=gtk_image_menu_item_new_with_label(gettext("Copy Folder Path"));
 			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doTabMenu),(void*)page->dirName);
 //copy filepath
 			image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
-			menuitem=gtk_image_menu_item_new_with_label("Copy Filepath");
+			menuitem=gtk_image_menu_item_new_with_label(gettext("Copy Filepath"));
 			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doTabMenu),(void*)page->filePath);
 //copy filename
 			image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
-			menuitem=gtk_image_menu_item_new_with_label("Copy FileName");
+			menuitem=gtk_image_menu_item_new_with_label(gettext("Copy FileName"));
 			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doTabMenu),(void*)page->fileName);
@@ -1202,7 +1201,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 			if((spellChecker!=NULL) && (aspellConfig!=NULL))
 				{
 					image=gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK,GTK_ICON_SIZE_MENU);
-					menuitem=gtk_image_menu_item_new_with_label("Spell Check Document");
+					menuitem=gtk_image_menu_item_new_with_label(gettext("Spell Check Document"));
 					gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 					gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doSpellCheckDoc),(void*)page->filePath);
@@ -1212,9 +1211,9 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 //paned view
 			image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
 			if(page->isSplit==true)
-				menuitem=gtk_image_menu_item_new_with_label("Un-Split View");
+				menuitem=gtk_image_menu_item_new_with_label(gettext("Un-Split View"));
 			else
-				menuitem=gtk_image_menu_item_new_with_label("Split View");
+				menuitem=gtk_image_menu_item_new_with_label(gettext("Split View"));
 
 			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
@@ -1225,7 +1224,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 			ids=gtk_source_language_manager_get_language_ids(lm);
 
 			image=gtk_image_new_from_stock(GTK_STOCK_SELECT_COLOR,GTK_ICON_SIZE_MENU);
-			menuitem=gtk_image_menu_item_new_with_label("Source Highlight");
+			menuitem=gtk_image_menu_item_new_with_label(gettext("Source Highlight"));
 			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 
@@ -1668,7 +1667,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 
 	if(strcmp(gtk_widget_get_name(widget),"delete")==0)
 		{
-			if((gtk_entry_get_text((GtkEntry*)toolNameWidget)!=NULL) && (yesNo((char*)"Are you sure you want to delete",(char*)gtk_entry_get_text((GtkEntry*)toolNameWidget))==GTK_RESPONSE_YES))
+			if((gtk_entry_get_text((GtkEntry*)toolNameWidget)!=NULL) && (yesNo((char*)gettext("Are you sure you want to delete"),(char*)gtk_entry_get_text((GtkEntry*)toolNameWidget))==GTK_RESPONSE_YES))
 				{
 					asprintf(&dirname,"rm \"%s\"",toolpath);
 					system(dirname);
@@ -1684,6 +1683,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 	debugFree(dirname,"setToolOptions dirname");
 }
 
+//TODO//
 VISIBLE void doAbout(GtkWidget* widget,gpointer data)
 {
 	const char*	authors[]= {"K.D.Hedger <"MYEMAIL">\n",MYWEBSITE,"\nMore by the same author\n","Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
@@ -1825,7 +1825,7 @@ VISIBLE void showToolOutput(bool immediate)
 {
 	showToolOutWin=true;
 	gtk_widget_show(toolOutVBox);
-	gtk_menu_item_set_label((GtkMenuItem*)menuToolOut,"Hide Tool Output");
+	gtk_menu_item_set_label((GtkMenuItem*)menuToolOut,gettext("Hide Tool Output"));
 	if(immediate==true)
 		{
 			while(gtk_events_pending())
@@ -1837,7 +1837,7 @@ VISIBLE void hideToolOutput(bool immediate)
 {
 	showToolOutWin=false;;
 	gtk_widget_show(toolOutVBox);
-	gtk_menu_item_set_label((GtkMenuItem*)menuToolOut,"Show Tool Output");
+	gtk_menu_item_set_label((GtkMenuItem*)menuToolOut,gettext("Show Tool Output"));
 	if(immediate==true)
 		{
 			while(gtk_events_pending())
@@ -1851,12 +1851,12 @@ VISIBLE void toggleToolOutput(GtkWidget* widget,gpointer data)
 	if(showToolOutWin)
 		{
 			gtk_widget_show(toolOutVBox);
-			gtk_menu_item_set_label((GtkMenuItem*)widget,"Hide Tool Output");
+			gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Hide Tool Output"));
 		}
 	else
 		{
 			gtk_widget_hide(toolOutVBox);
-			gtk_menu_item_set_label((GtkMenuItem*)widget,"Show Tool Output");
+			gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Show Tool Output"));
 		}
 }
 
@@ -1864,9 +1864,9 @@ VISIBLE void toggleBookMarkBar(GtkWidget* widget,gpointer data)
 {
 	showBMBar=!showBMBar;
 	if(showBMBar)
-		gtk_menu_item_set_label((GtkMenuItem*)widget,"Hide Bookmarks Bar");
+		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Hide Bookmarks Bar"));
 	else
-		gtk_menu_item_set_label((GtkMenuItem*)widget,"Show Bookmarks Bar");
+		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Show Bookmarks Bar"));
 	resetAllFilePrefs();
 }
 
@@ -1874,9 +1874,9 @@ VISIBLE void toggleToolBar(GtkWidget* widget,gpointer data)
 {
 	showToolBar=!showToolBar;
 	if(showToolBar)
-		gtk_menu_item_set_label((GtkMenuItem*)widget,"Hide Tool Bar");
+		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Hide Tool Bar"));
 	else
-		gtk_menu_item_set_label((GtkMenuItem*)widget,"Show Tool Bar");
+		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Show Tool Bar"));
 	refreshMainWindow();
 }
 
@@ -1898,13 +1898,13 @@ VISIBLE void toggleDocviewer(GtkWidget* widget,gpointer data)
 	showHideDocviewer=!showHideDocviewer;
 	if(showHideDocviewer)
 		{
-			gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,"Hide Docviewer");
+			gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,gettext("Hide Docviewer"));
 			gtk_widget_show_all(docView);
 			gtk_window_present((GtkWindow*)docView);
 		}
 	else
 		{
-			gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,"Show Docviewer");
+			gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,gettext("Show Docviewer"));
 			gtk_widget_hide(docView);
 		}
 }

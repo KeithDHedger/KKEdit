@@ -12,6 +12,7 @@ GtkIconView*	iconView=NULL;
 GtkListStore*	listStore=NULL;
 
 GtkWidget*		entries[NUMSHORTCUTS];
+//TODO//
 const char* 	shortcuttext[NUMSHORTCUTS]={"Delete Current Line","Delete To End Of Line","Delete To Beginning Of Line","Select Word Under Cursor","Delete Word Under Cursor","Duplicate Current Line","Select Current Line","Move Current Line Up","Move Current Line Down","Select From Cursor To End Of Line","Select From Beginning Of Line To Cursor","Move Selection Up","Move Selection Down"};
 
 void findTool(toolStruct* data,char* toolname)

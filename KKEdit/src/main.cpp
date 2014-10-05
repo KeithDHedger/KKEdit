@@ -5,9 +5,6 @@
 */
 
 #include "kkedit-includes.h"
-#include <time.h>
-#include <libintl.h>
-#include <locale.h>
 
 bool	singleOverRide=false;
 bool	loadPluginsFlag=true;
