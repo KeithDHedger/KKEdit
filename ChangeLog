@@ -1,4 +1,5 @@
 0.2.4
+Set widget names on menus to help find them from plugins.
 Added french translation.
 Tweaked prefs layout.
 Added 'No Syntax Highlighting' to prefs to turn off syntax highlighting.

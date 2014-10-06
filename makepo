@@ -25,9 +25,9 @@ for arg in $langs
 	do
 		mkdir --parents po/${arg}/LC_MESSAGES
 		if [ $MAKEPOS -eq 1 ];then
-			msginit --no-translator --locale $arg --output-file ${arg}.po --input ${DOMAINNAME}.pot
+			msginit --no-translator --locale $arg --output-file ${DOMAINNAME}_${arg}.po --input ${DOMAINNAME}.pot
 		fi
 		if [ $MAKEMOS -eq 1 ];then
-			msgfmt --check --verbose --output-file po/${arg}/LC_MESSAGES/${DOMAINNAME}.mo ${arg}.po
+			msgfmt --check --verbose --output-file po/${arg}/LC_MESSAGES/${DOMAINNAME}.mo ${DOMAINNAME}_${arg}.po
 		fi
 	done
