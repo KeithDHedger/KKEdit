@@ -1608,6 +1608,7 @@ void buildMainGui(void)
 		menuitem=gtk_menu_item_new_with_label(gettext("Show Bookmarks Bar"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookMarkBar),NULL);
+	gtk_widget_set_name(menuitem,SHOWBMBARMENUNAME);
 
 //toggle toolbar bar
 	if(showToolBar)
@@ -1616,6 +1617,7 @@ void buildMainGui(void)
 		menuitem=gtk_menu_item_new_with_label(gettext("Show Tool Bar"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleToolBar),NULL);
+	gtk_widget_set_name(menuitem,SHOWTOOLBARMENUNAME);
 
 //tooloutput
 	if(showToolOutWin)
@@ -1624,6 +1626,8 @@ void buildMainGui(void)
 		menuToolOut=gtk_menu_item_new_with_label(gettext("Show Tool Output"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuToolOut);
 	gtk_signal_connect(GTK_OBJECT(menuToolOut),"activate",G_CALLBACK(toggleToolOutput),NULL);
+	gtk_widget_set_name(menuToolOut,SHOWTOOLOUTMENUNAME);
+
 //toggle statusbar
 	if(showStatus)
 		menuStatusBar=gtk_menu_item_new_with_label(gettext("Hide Status Bar"));
@@ -1631,12 +1635,14 @@ void buildMainGui(void)
 		menuStatusBar=gtk_menu_item_new_with_label(gettext("Show Status Bar"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuStatusBar);
 	gtk_signal_connect(GTK_OBJECT(menuStatusBar),"activate",G_CALLBACK(toggleStatusBar),NULL);
+	gtk_widget_set_name(menuStatusBar,SHOWSTATUSMENUNAME);
 
 #ifdef _BUILDDOCVIEWER_
 //toggle docviewer
 	showDocViewWidget=gtk_menu_item_new_with_label(gettext("Show Docviewer"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),showDocViewWidget);
 	gtk_signal_connect(GTK_OBJECT(showDocViewWidget),"activate",G_CALLBACK(toggleDocviewer),NULL);
+	gtk_widget_set_name(showDocViewWidget,SHOWDOCVIEWERMENUNAME);
 #endif
 
 //navigation menu
@@ -1644,6 +1650,7 @@ void buildMainGui(void)
 	gtk_menu_item_set_use_underline((GtkMenuItem*)menunav,true);
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),menu);
+
 //goto define
 	image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
 	menuitem=gtk_image_menu_item_new_with_label(gettext("Go To Definition"));
@@ -1651,6 +1658,8 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'D',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+	gtk_widget_set_name(menuitem,GOTODEFMENUNAME);
+
 //open include
 	menuitem=gtk_image_menu_item_new_with_label(gettext("Open Include File"));
 	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
@@ -1658,18 +1667,23 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(findFile),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'I',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+	gtk_widget_set_name(menuitem,OPENINCLUDEMENUNAME);
+
 //goto line number
 	menuitem=gtk_image_menu_item_new_with_label(gettext("Go To Line"));
 	image=gtk_image_new_from_stock(GTK_STOCK_GO_DOWN,GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToLine),NULL);
+	gtk_widget_set_name(menuitem,GOTOLINEMENUNAME);
+
 //find define
 	menuitem=gtk_image_menu_item_new_with_label(gettext("Search For Define"));
 	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(functionSearch),NULL);
+	gtk_widget_set_name(menuitem,SEARCHFORDEFMENUNAME);
 
 //find gtkdoc
 	menuitem=gtk_image_menu_item_new_with_label(gettext("Search In Gtk Docs"));
@@ -1677,6 +1691,7 @@ void buildMainGui(void)
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(seachGtkDocs),NULL);
+	gtk_widget_set_name(menuitem,SEARCHGTKMENUNAME);
 
 //find qt5
 	menuitem=gtk_image_menu_item_new_with_label(gettext("Search In Qt5 Docs"));
@@ -1684,6 +1699,7 @@ void buildMainGui(void)
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(searchQT5Docs),NULL);
+	gtk_widget_set_name(menuitem,SEARCHQT5MENUNAME);
 
 //goto doxy docs
 	if(gotDoxygen==0)
@@ -1693,11 +1709,13 @@ void buildMainGui(void)
 			gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doxyDocs),NULL);
+			gtk_widget_set_name(menuitem,SEARCHDOXYMENUNAME);
 		}
 //go back
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_GO_BACK,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goBack),NULL);
+	gtk_widget_set_name(menuitem,GOBACKMENUNAME);
 
 //function menu
 	menufunc=gtk_menu_item_new_with_label(gettext("Fun_ctions"));
@@ -1717,21 +1735,27 @@ void buildMainGui(void)
 	menuhelp=gtk_menu_item_new_with_label(gettext("_Help"));
 	gtk_menu_item_set_use_underline((GtkMenuItem*)menuhelp,true);
 	menu=gtk_menu_new();
-//about
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuhelp),menu);
+
+//about
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_ABOUT,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doAbout),NULL);
+	gtk_widget_set_name(menuitem,ABOUTMENUNAME);
+
 //help
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_HELP,NULL);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(openHelp),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_widget_set_name(menuitem,HELPMENUNAME);
+
 //get plugins
 	menuitem=gtk_image_menu_item_new_with_label(gettext("Get Plugins"));
 	image=gtk_image_new_from_file(DATADIR"/pixmaps/KKEditPlugMenu.png");
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(getPlugins),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_widget_set_name(menuitem,GETPLUGSMENUNAME);
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufile);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuedit);
