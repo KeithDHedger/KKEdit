@@ -21,6 +21,9 @@ void readConfig(void)
 	loadVarsFromFile(filename,kkedit_window_rc);
 	if(windowAllocData!=NULL)
 		sscanf(windowAllocData,"%i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
+
+	if(docWindowAllocData!=NULL)
+		sscanf(docWindowAllocData,"%i %i %i %i",(int*)&docWindowWidth,(int*)&docWindowHeight,(int*)&docWindowX,(int*)&docWindowY);
 	debugFree(filename,"readConfig filename");
 }
 
@@ -52,10 +55,16 @@ void init(void)
 	fontAndSize=strdup("mono 10");
 	terminalCommand=strdup("xterm -e");
 	rootCommand=strdup(GTKSUPATH);
+
 	windowWidth=800;
-	windowHeight=400;
+	windowHeight=600;
 	windowX=-1;
 	windowY=-1;
+	docWindowWidth=800;
+	docWindowHeight=600;
+	docWindowX=-1;
+	docWindowY=-1;
+
 	wrapSearch=true;
 	insensitiveSearch=true;
 	useRegex=false;

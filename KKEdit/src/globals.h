@@ -206,6 +206,12 @@ extern unsigned int		lastUpdate;
 extern unsigned int		lastPlugUpdate;
 extern unsigned int		updateWait;
 
+//docview size and position
+extern int				docWindowWidth;
+extern int				docWindowHeight;
+extern int				docWindowX;
+extern int				docWindowY;
+
 //prefs
 extern GtkWidget*		prefswin;
 extern bool				indent;
@@ -403,6 +409,7 @@ extern int				keycode;
 extern int				usebar;
 
 extern char*			windowAllocData;
+extern char*			docWindowAllocData;
 extern args				kkedit_window_rc[];
 extern args				kkedit_rc[];
 extern args				tool_vars[];
@@ -420,13 +427,13 @@ functionData* getFunctionByName(char* name,bool recurse);
 void destroyData(functionData* fdata);
 void getRecursiveTagList(char* filepath,void* ptr);
 void buildToolsList(void);
-char* deleteSlice(char* srcstring,char* delstr);
 void getRecursiveTagListFileName(char* filepath,void* ptr);
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
 void goBack(GtkWidget* widget,gpointer data);
 void showBarberPole(const char* title);
 void killBarberPole(void);
 void debugFree(gpointer ptr,const char* message);
+char* truncateWithElipses(char* str,unsigned int maxlen);
 
 #endif
 

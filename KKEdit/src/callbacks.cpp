@@ -10,6 +10,7 @@
 
 GtkWidget*			tabMenu;
 char				defineText[1024];
+//char				defineText[1024];
 GtkPrintSettings*	settings=NULL;
 bool				closingAll=false;
 
@@ -213,12 +214,11 @@ VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 	int				line;
 	GtkTextIter		startprev,endprev;
 	char*			previewtext;
-	char*			starttext;
-	char*			endtext;
 	GSList*			mark_list=NULL;
 	const gchar*	mark_type;
 	GList*			ptr=NULL;
 	bookMarksNew*	bookmarkdata;
+	char*			correctedpreview;
 
 	if(page==NULL)
 		return;
@@ -283,15 +283,9 @@ VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 			g_strchug(previewtext);
 			g_strchomp(previewtext);
 
-			if(strlen(previewtext)>BOOKMAXMARKMENULEN)
-				{
-					starttext=globalSlice->sliceLen(previewtext,0,BOOKMAXMARKMENULEN/2);
-					endtext=globalSlice->sliceLen(previewtext,strlen(previewtext)-BOOKMAXMARKMENULEN/2,-1);
-					debugFree(previewtext,"toggleBookmark previewtext");
-					asprintf(&previewtext,"%s...%s",starttext,endtext);
-					debugFree(starttext,"toggleBookmark starttext");
-					debugFree(endtext,"toggleBookmark endtext");
-				}
+			correctedpreview=truncateWithElipses(previewtext,BOOKMAXMARKMENULEN);
+			debugFree(previewtext,"toggleBookmark previewtext");
+			previewtext=correctedpreview;
 
 			bookmarkdata->label=previewtext;
 			bookmarkdata->line=line;
@@ -626,6 +620,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	GtkWidget*	whattypemenu;
 	GtkWidget*	typesubmenus[50]= {NULL,};
 	GtkWidget*	submenu;
+	char*		correctedstr;
 
 	if(arg1==NULL)
 		return;
@@ -654,8 +649,12 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 			tmpstr[0]=0;
 			sscanf (lineptr,"%*s %*s %i %[^\n]s",&linenum,tmpstr);
 
-			if(strlen(tmpstr)>MAXMENUFUNCLEN)
-				tmpstr[MAXMENUFUNCLEN-1]=0;
+//			if(strlen(tmpstr)>MAXMENUFUNCLEN)
+//				tmpstr[MAXMENUFUNCLEN-1]=0;
+
+			correctedstr=truncateWithElipses(tmpstr,MAXMENUFUNCLEN);
+			sprintf(tmpstr,"%s",correctedstr);
+			free(correctedstr);
 
 			if(strlen(tmpstr)>0)
 				{
@@ -977,9 +976,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	GtkWidget*		image;
 	GList*			ptr;
 	functionData*	fdata;
-	const char*		funcformat[16];
-
-	sprintf((char*)&funcformat,"%%.%is",MAXMENUFUNCLEN);
+	char*			temptext=NULL;
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
@@ -992,10 +989,11 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 					fdata=getFunctionByName(selection,false);
 					if(fdata!=NULL)
 						{
-							sprintf((char*)&defineText,(const char*)funcformat,fdata->define);
-							menuitem=gtk_menu_item_new_with_label(defineText);
-							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+							temptext=truncateWithElipses(fdata->define,MAXMENUFUNCLEN);
+							menuitem=gtk_menu_item_new_with_label(temptext);
+							free(temptext);
 							sprintf((char*)&defineText,"%s",fdata->define);
+							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)defineText);
 							destroyData(fdata);
 
@@ -1374,7 +1372,13 @@ void writeExitData(void)
 
 	gtk_widget_get_allocation(window,&alloc);
 	gtk_window_get_position((GtkWindow*)window,&winx,&winy);
-	asprintf(&windowAllocData,"%i %i %i %in",alloc.width,alloc.height,winx,winy);
+	asprintf(&windowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
+
+#ifdef _BUILDDOCVIEWER_
+	gtk_widget_get_allocation(docView,&alloc);
+	gtk_window_get_position((GtkWindow*)docView,&winx,&winy);
+#endif
+	asprintf(&docWindowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
 
 	toolOutHeight=gtk_paned_get_position((GtkPaned*)mainVPane);
 	bottomVPaneHite=gtk_paned_get_position((GtkPaned*)mainWindowVPane);

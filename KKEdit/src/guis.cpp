@@ -2063,8 +2063,11 @@ void buildGtkDocViewer(void)
 	WebKitWebSettings*	settings;
 
 	docView=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_default_size(GTK_WINDOW(docView),800,600);
 	gtk_window_set_title((GtkWindow*)docView,gettext("Doc Viewer"));
+
+	gtk_window_set_default_size((GtkWindow*)docView,docWindowWidth,docWindowHeight);
+	if(docWindowX!=-1 && docWindowY!=-1)
+		gtk_window_move((GtkWindow *)docView,docWindowX,docWindowY);
 
 	vbox=gtk_vbox_new(false,0);
 	hbox=gtk_hbox_new(false,4);

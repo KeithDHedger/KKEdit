@@ -71,6 +71,12 @@ unsigned int	lastUpdate=0;
 unsigned int	lastPlugUpdate=0;
 unsigned int	updateWait=2678400;
 
+//docview size and position
+int				docWindowWidth;
+int				docWindowHeight;
+int				docWindowX=-1;
+int				docWindowY=-1;
+
 //prefs
 GtkWidget*		prefswin;
 bool			indent;
@@ -286,6 +292,7 @@ PluginClass*	globalPlugins=NULL;
 
 //save and load var lists
 char*			windowAllocData=NULL;
+char*			docWindowAllocData=NULL;
 args			kkedit_window_rc[]=
 {
 	//bools
@@ -300,6 +307,7 @@ args			kkedit_window_rc[]=
 	{"highlightall",TYPEBOOL,&hightlightAll},
 	//strings
 	{"windowsize",TYPESTRING,&windowAllocData},
+	{"docwindowsize",TYPESTRING,&docWindowAllocData},
 	//ints
 	{"toolouthite",TYPEINT,&toolOutHeight},
 	{"bottomvpanehite",TYPEINT,&bottomVPaneHite},
@@ -372,6 +380,35 @@ args			tool_vars[]=
 
 //status bar message
 char*			statusMessage=NULL;
+
+//truncate string with elipses
+char* truncateWithElipses(char* str,unsigned int maxlen)
+{
+	char*	retstr;
+	char*	starttext;
+	char*	endtext;
+	bool	holddup;
+	int		sides;
+
+	if(strlen(str)<=maxlen)
+		retstr=strdup(str);
+	else
+		{
+			sides=(maxlen-5)/2;
+			holddup=globalSlice->getDuplicate();
+			globalSlice->setReturnDupString(true);
+
+			starttext=globalSlice->sliceLen(str,0,sides);
+			endtext=globalSlice->sliceLen(str,strlen(str)-sides,-1);
+			asprintf(&retstr,"%s ... %s",starttext,endtext);
+			debugFree(starttext,"truncateWithElipses starttext");
+			debugFree(endtext,"truncateWithElipses endtext");
+
+			globalSlice->setReturnDupString(holddup);
+		}
+
+	return(retstr);
+}
 
 void plugRunFunction(gpointer data,gpointer funcname)
 {
@@ -746,16 +783,6 @@ void destroyData(functionData* fdata)
 		}
 }
 
-char* deleteSlice(char* srcstring,char* delstr)
-{
-	GString*	str=g_string_new(srcstring);
-	char*		ptr;
-
-	ptr=strstr(str->str,delstr);
-	g_string_erase(str,(long)ptr-(long)str->str,strlen(delstr));
-	return(g_string_free(str,false));
-}
-
 void getRecursiveTagListFileName(char* filepath,void* ptr)
 {
 	FILE*		fp;
@@ -816,7 +843,7 @@ void getRecursiveTagList(char* filepath,void* ptr)
 	fp=popen(command, "r");
 	while(fgets(line,2048,fp))
 		{
-			newstr=deleteSlice(line,filepath);
+			newstr=globalSlice->deleteSlice(line,filepath);
 			g_string_append_printf(str,"%s",newstr);
 			debugFree(newstr,"getRecursiveTagList newstr");
 		}
