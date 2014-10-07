@@ -1,4 +1,6 @@
 0.2.4
+Truncated popup function menu entries when function def is over 100 characters ( copy and paste of the entry uses full definition ).
+Truncated function menu entries when function def is over 100 characters.
 Set widget names on menus to help find them from plugins.
 Added french translation.
 Tweaked prefs layout.

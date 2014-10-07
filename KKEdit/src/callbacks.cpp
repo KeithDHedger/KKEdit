@@ -654,6 +654,9 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 			tmpstr[0]=0;
 			sscanf (lineptr,"%*s %*s %i %[^\n]s",&linenum,tmpstr);
 
+			if(strlen(tmpstr)>MAXMENUFUNCLEN)
+				tmpstr[MAXMENUFUNCLEN-1]=0;
+
 			if(strlen(tmpstr)>0)
 				{
 					if(listFunction==4)
@@ -974,6 +977,9 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	GtkWidget*		image;
 	GList*			ptr;
 	functionData*	fdata;
+	const char*		funcformat[16];
+
+	sprintf((char*)&funcformat,"%%.%is",MAXMENUFUNCLEN);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
@@ -986,9 +992,10 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 					fdata=getFunctionByName(selection,false);
 					if(fdata!=NULL)
 						{
-							sprintf((char*)&defineText,"%s",fdata->define);
+							sprintf((char*)&defineText,(const char*)funcformat,fdata->define);
 							menuitem=gtk_menu_item_new_with_label(defineText);
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+							sprintf((char*)&defineText,"%s",fdata->define);
 							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)defineText);
 							destroyData(fdata);
 

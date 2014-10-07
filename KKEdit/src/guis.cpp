@@ -1339,7 +1339,7 @@ void buildMainGui(void)
 
 //menus
 //file menu
-	menufile=gtk_menu_item_new_with_label("_File");
+	menufile=gtk_menu_item_new_with_label(gettext("_File"));
 	gtk_menu_item_set_use_underline((GtkMenuItem*)menufile,true);
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufile),menu);
