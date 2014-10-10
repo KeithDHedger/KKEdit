@@ -2059,6 +2059,10 @@ void doKeyShortCut(int what)
 					gtk_text_buffer_end_user_action(buf->textBuffer);
 				}
 			break;
+//completion
+		case 13:
+			doCompletionPopUp(page);
+			break;
 		}
 	delete buf;
 }
