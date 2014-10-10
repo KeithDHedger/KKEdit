@@ -618,7 +618,7 @@ struct _TestProvider
 	GList *proposals;
 	gint priority;
 	gchar *name;
-
+GtkSourceCompletionContext  *context;
 	GdkPixbuf *icon;
 };
 
@@ -663,6 +663,7 @@ test_provider_populate (GtkSourceCompletionProvider *provider,
 	                                             provider,
 	                                             ((TestProvider *)provider)->proposals,
 	                                             TRUE);
+((TestProvider *)provider)->context=context;
 }
 
 static GdkPixbuf *
@@ -750,13 +751,14 @@ void addProposals(gpointer data,gpointer user_data)
 {
 GList *proposals = NULL;
 GtkSourceCompletionContext *context=(GtkSourceCompletionContext *)user_data;
+TestProvider * prov=(TestProvider *)data;
 
 printf("%s\n",gtk_source_completion_provider_get_name((GtkSourceCompletionProvider *)data));
 
  g_list_prepend (proposals,gtk_source_completion_item_new ("add 1", "add1", NULL, NULL));
  g_list_prepend (proposals,gtk_source_completion_item_new ("add 2", "add2", NULL, NULL));
  
-	gtk_source_completion_context_add_proposals(context,(GtkSourceCompletionProvider *)data,proposals,TRUE);
+	gtk_source_completion_context_add_proposals(prov->context,(GtkSourceCompletionProvider *)data,proposals,TRUE);
 
 }
 
