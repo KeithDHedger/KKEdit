@@ -663,7 +663,7 @@ test_provider_populate (GtkSourceCompletionProvider *provider,
 	                                             provider,
 	                                             ((TestProvider *)provider)->proposals,
 	                                             TRUE);
-((TestProvider *)provider)->context=context;
+provider->context=context;
 }
 
 static GdkPixbuf *
