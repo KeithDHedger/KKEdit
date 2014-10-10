@@ -746,6 +746,20 @@ void createCompletion(pageStruct* page)
 
 
 //completion
+void addProposals(gpointer data,gpointer user_data)
+{
+GList *proposals = NULL;
+GtkSourceCompletionContext *context=(GtkSourceCompletionContext *)user_data;
+
+printf("%s\n",gtk_source_completion_provider_get_name((GtkSourceCompletionProvider *)data));
+
+ g_list_prepend (proposals,gtk_source_completion_item_new ("add 1", "add1", NULL, NULL));
+ g_list_prepend (proposals,gtk_source_completion_item_new ("add 2", "add2", NULL, NULL));
+ 
+	gtk_source_completion_context_add_proposals(context,(GtkSourceCompletionProvider *)data,proposals,TRUE);
+
+}
+
 void doCompletionPopUp(pageStruct* page)
 {
 printf("XXXXXXX\n");
@@ -755,6 +769,8 @@ printf("XXXXXXX\n");
 GtkSourceCompletionContext *context= gtk_source_completion_create_context(completion,NULL);
 
 GList *          list=   gtk_source_completion_get_providers (completion);
+
+g_list_foreach(list,addProposals,context);
 
 gtk_source_completion_show  (completion,list,context);
 //return;
