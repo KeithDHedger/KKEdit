@@ -752,11 +752,11 @@ printf("XXXXXXX\n");
 		GtkSourceCompletion *completion;
 	completion=gtk_source_view_get_completion(page->view);
 	gtk_source_completion_unblock_interactive(completion);
-GtkSourceCompletionContext *context= gtk_source_completion_create_context(completion,NULL);
+//GtkSourceCompletionContext *context= gtk_source_completion_create_context(completion,NULL);
 
 GList *          list=   gtk_source_completion_get_providers (completion);
 
-gtk_source_completion_show  (completion,list,context);
+gtk_source_completion_show  (completion,list,NULL);
 //return;
 	//g_signal_emit_by_name ((gpointer)completion,"activate-proposal",completion,NULL);
 	gtk_source_completion_block_interactive(completion);
