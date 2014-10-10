@@ -24,6 +24,7 @@ void readConfig(void)
 
 	if(docWindowAllocData!=NULL)
 		sscanf(docWindowAllocData,"%i %i %i %i",(int*)&docWindowWidth,(int*)&docWindowHeight,(int*)&docWindowX,(int*)&docWindowY);
+
 	debugFree(filename,"readConfig filename");
 }
 

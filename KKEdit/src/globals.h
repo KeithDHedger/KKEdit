@@ -50,7 +50,7 @@
 
 #define	POLEPATH		PREFIX "/bin/KKEditProgressBar"
 
-#define NUMSHORTCUTS	13
+#define NUMSHORTCUTS	14
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 
@@ -387,7 +387,10 @@ extern AspellConfig*	aspellConfig;
 extern AspellSpeller*	spellChecker;
 #endif
 extern StringSlice*		globalSlice;
-extern unsigned int		shortCuts[100][2];
+
+extern unsigned int		shortCuts[NUMSHORTCUTS][2];
+extern char*			shortCutStrings[NUMSHORTCUTS];
+
 extern GtkWidget*		progressWindow;
 extern GtkWidget*		progressBar;
 
@@ -413,6 +416,7 @@ extern char*			docWindowAllocData;
 extern args				kkedit_window_rc[];
 extern args				kkedit_rc[];
 extern args				tool_vars[];
+extern args				keybindings_rc[];
 
 //status bar message
 extern char*			statusMessage;

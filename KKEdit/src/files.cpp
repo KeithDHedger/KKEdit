@@ -7,6 +7,12 @@
 */
 
 #include "kkedit-includes.h"
+#include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
+#include <gtksourceview/gtksourceview.h>
+#include <gtksourceview/gtksourcecompletion.h>
+#include <gtksourceview/gtksourcecompletioninfo.h>
+#include <gtksourceview/gtksourcecompletionitem.h>
+#include <gtksourceview/gtksourcelanguagemanager.h>
 
 GtkWidget*	vbox;
 char*		saveFileName=NULL;
@@ -599,11 +605,142 @@ gboolean clickInView(GtkWidget* widget,gpointer data)
 	return(false);
 }
 
+
+//COMPLETION
+
+typedef struct _TestProvider TestProvider;
+typedef struct _TestProviderClass TestProviderClass;
+
+struct _TestProvider
+{
+	GObject parent;
+
+	GList *proposals;
+	gint priority;
+	gchar *name;
+
+	GdkPixbuf *icon;
+};
+
+struct _TestProviderClass
+{
+	GObjectClass parent_class;
+};
+
+static void test_provider_iface_init (GtkSourceCompletionProviderIface *iface);
+GType test_provider_get_type (void);
+
+G_DEFINE_TYPE_WITH_CODE (TestProvider,
+			 test_provider,
+			 G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SOURCE_COMPLETION_PROVIDER,
+				 		test_provider_iface_init))
+
+static gchar *
+test_provider_get_name (GtkSourceCompletionProvider *provider)
+{
+	return g_strdup (((TestProvider *)provider)->name);
+}
+
+static gint
+test_provider_get_priority (GtkSourceCompletionProvider *provider)
+{
+	return ((TestProvider *)provider)->priority;
+}
+
+static gboolean
+test_provider_match (GtkSourceCompletionProvider *provider,
+                     GtkSourceCompletionContext  *context)
+{
+	return TRUE;
+}
+
+static void
+test_provider_populate (GtkSourceCompletionProvider *provider,
+                        GtkSourceCompletionContext  *context)
+{
+	gtk_source_completion_context_add_proposals (context,
+	                                             provider,
+	                                             ((TestProvider *)provider)->proposals,
+	                                             TRUE);
+}
+
+static GdkPixbuf *
+test_provider_get_icon (GtkSourceCompletionProvider *provider)
+{
+	TestProvider *tp = (TestProvider *)provider;
+
+	if (tp->icon == NULL)
+	{
+		GtkIconTheme *theme = gtk_icon_theme_get_default ();
+		tp->icon = gtk_icon_theme_load_icon (theme, GTK_STOCK_DIALOG_INFO, 16, (GtkIconLookupFlags)0, NULL);
+	}
+
+	return tp->icon;
+}
+
+static void
+test_provider_iface_init (GtkSourceCompletionProviderIface *iface)
+{
+	iface->get_name = test_provider_get_name;
+
+	iface->populate = test_provider_populate;
+	iface->match = test_provider_match;
+	iface->get_priority = test_provider_get_priority;
+
+	//iface->get_icon = test_provider_get_icon;
+}
+
+static void
+test_provider_class_init (TestProviderClass *klass)
+{
+}
+
+void test_provider_init (TestProvider *self)
+{
+	GList *proposals = NULL;
+	GdkPixbuf *icon = test_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER(self));
+
+	proposals = g_list_prepend (proposals,
+	                            gtk_source_completion_item_new ("Proposal 3", "Proposal 3", icon, NULL));
+
+	proposals = g_list_prepend (proposals,
+	                            gtk_source_completion_item_new ("Proposal 2", "Proposal 2", icon, NULL));
+
+	proposals = g_list_prepend (proposals,
+	                            gtk_source_completion_item_new ("Proposal 1", "Proposal 1", icon, NULL));
+
+	self->proposals = proposals;
+}
+
+void createCompletion(pageStruct* page)
+{
+	GtkSourceCompletionWords *prov_words;
+	GtkSourceCompletion *completion;
+
+	completion=gtk_source_view_get_completion(page->view);
+	prov_words=gtk_source_completion_words_new(NULL,NULL);
+	
+	gtk_source_completion_words_register(prov_words,gtk_text_view_get_buffer(GTK_TEXT_VIEW(page->view)));
+	
+	gtk_source_completion_add_provider(completion,GTK_SOURCE_COMPLETION_PROVIDER(prov_words),NULL);
+
+	g_object_set(prov_words, "priority",10, NULL);
+
+	TestProvider* tp=(TestProvider*)g_object_new(test_provider_get_type(),NULL);
+	tp->priority=1;
+	tp->name="Test Provider 1";
+
+	gtk_source_completion_add_provider(completion,GTK_SOURCE_COMPLETION_PROVIDER(tp),NULL);
+}
+
+
 pageStruct* makeNewPage(void)
 {
 	pageStruct*			page;
 	GtkTextIter			iter;
 	GtkTextAttributes*	attr;
+	GtkSourceCompletion *completion;
 
 	page=(pageStruct*)malloc(sizeof(pageStruct));
 	page->buffer=NULL;
@@ -619,6 +756,20 @@ pageStruct* makeNewPage(void)
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
+
+//completion
+	completion=gtk_source_view_get_completion(GTK_SOURCE_VIEW(page->view));
+	g_object_set(completion,"remember-info-visibility",true,NULL);
+	g_object_set(completion,"select-on-show",true,NULL);
+	g_object_set(completion,"show-headers",true,NULL);
+	g_object_set(completion,"show-icons",true,NULL);
+	gtk_source_completion_block_interactive(completion);
+//	toggle_active_property (completion, remember, "remember-info-visibility");
+//	toggle_active_property (completion, select_on_show, "select-on-show");
+//	toggle_active_property (completion, show_headers, "show-headers");
+//	toggle_active_property (completion, show_icons, "show-icons");
+
+	createCompletion(page);
 
 	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
 	page->view2=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);

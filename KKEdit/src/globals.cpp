@@ -255,7 +255,7 @@ AspellSpeller*	spellChecker=0;
 HistoryClass*	history;
 StringSlice*	globalSlice;
 
-unsigned int	shortCuts[100][2]=
+unsigned int	shortCuts[NUMSHORTCUTS][2]=
 {
 	{121,0},
 	{63,1},
@@ -269,8 +269,32 @@ unsigned int	shortCuts[100][2]=
 	{93,9},
 	{91,10},
 	{39,11},
-	{64,12}
+	{64,12},
+	{32,0}
 };
+
+char*			shortCutStrings[NUMSHORTCUTS]={NULL,};
+
+args	keybindings_rc[]=
+	{
+//string
+		{"deleteline",TYPESTRING,&shortCutStrings[0]},
+		{"deletetoeol",TYPESTRING,&shortCutStrings[1]},
+		{"deletetosol",TYPESTRING,&shortCutStrings[2]},
+		{"selectword",TYPESTRING,&shortCutStrings[3]},
+		{"deleteword",TYPESTRING,&shortCutStrings[4]},
+		{"duplicateline",TYPESTRING,&shortCutStrings[5]},
+		{"selectline",TYPESTRING,&shortCutStrings[6]},
+		{"lineup",TYPESTRING,&shortCutStrings[7]},
+		{"linedown",TYPESTRING,&shortCutStrings[8]},
+		{"selecttoeol",TYPESTRING,&shortCutStrings[9]},
+		{"selecttosol",TYPESTRING,&shortCutStrings[10]},
+		{"selectionup",TYPESTRING,&shortCutStrings[11]},
+		{"selectiondown",TYPESTRING,&shortCutStrings[12]},
+		{"complete",TYPESTRING,&shortCutStrings[13]},
+		{NULL,0,NULL}
+	};
+
 //121 0 ^y Delete Current Line
 //63 1 ^? Delete To End Of Line
 //107 2 ^k Delete To Beginning Of Line

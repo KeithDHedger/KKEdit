@@ -1375,8 +1375,18 @@ void writeExitData(void)
 	asprintf(&windowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
 
 #ifdef _BUILDDOCVIEWER_
-	gtk_widget_get_allocation(docView,&alloc);
-	gtk_window_get_position((GtkWindow*)docView,&winx,&winy);
+	if(gtk_widget_get_realized(docView)==true)
+		{
+			gtk_widget_get_allocation(docView,&alloc);
+			gtk_window_get_position((GtkWindow*)docView,&winx,&winy);
+		}
+	else
+		{
+			alloc.width=docWindowWidth;
+			alloc.height=docWindowHeight;
+			winx=docWindowX;
+			winy=docWindowY;
+		}
 #endif
 	asprintf(&docWindowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
 
@@ -1694,12 +1704,11 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 	debugFree(dirname,"setToolOptions dirname");
 }
 
-//TODO//
 VISIBLE void doAbout(GtkWidget* widget,gpointer data)
 {
-	const char*	authors[]= {"K.D.Hedger <"MYEMAIL">\n",MYWEBSITE,"\nMore by the same author\n","Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
+	const char*	authors[]= {"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,gettext("\nMore by the same author\n"),"Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
 	const char	copyright[] ="Copyright \xc2\xa9 2013 K.D.Hedger";
-	const char*	aboutboxstring="KKEdit Code Text Editor";
+	const char*	aboutboxstring=gettext("KKEdit Code Text Editor");
 	char*		licence;
 
 	g_file_get_contents(DATADIR"/docs/gpl-3.0.txt",&licence,NULL,NULL);
@@ -2056,33 +2065,17 @@ void doKeyShortCut(int what)
 
 void loadKeybindings(void)
 {
-	FILE*	fd=NULL;
 	char*	filename;
-	char	buffer[1024];
-	char	key[256];
-	char	func[256];
-	int		keycnt=0;
 
-	asprintf(&filename,"%s/.KKEdit/keybindings",getenv("HOME"));
-	fd=fopen(filename,"r");
-	if(fd!=NULL)
+	asprintf(&filename,"%s/.KKEdit/keybindings.rc",getenv("HOME"));
+
+	loadVarsFromFile(filename,keybindings_rc);
+	for(int j=0;j<NUMSHORTCUTS;j++)
 		{
-			while(feof(fd)==0)
-				{
-					buffer[0]=0;
-					key[0]=0;
-					func[0]=0;
-					fgets(buffer,1024,fd);
-					sscanf(buffer,"%s %s",(char*)&key,(char*)&func);
-					if(strlen(buffer)>3)
-						{
-							shortCuts[keycnt][0]=(int)atoi(key);
-							shortCuts[keycnt][1]=(int)atoi(func);
-							keycnt++;
-						}
-				}
-			fclose(fd);
+			if(shortCutStrings[j]!=NULL)
+				sscanf(shortCutStrings[j],"%i %i",(int*)&shortCuts[j][0],(int*)&shortCuts[j][1]);
 		}
+	debugFree(filename,"readConfig filename");
 }
 
 VISIBLE gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)

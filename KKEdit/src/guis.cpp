@@ -13,7 +13,7 @@ GtkListStore*	listStore=NULL;
 
 GtkWidget*		entries[NUMSHORTCUTS];
 
-const char* 	shortcuttext[NUMSHORTCUTS]={gettext("Delete Current Line"),gettext("Delete To End Of Line"),gettext("Delete To Beginning Of Line"),gettext("Select Word Under Cursor"),gettext("Delete Word Under Cursor"),gettext("Duplicate Current Line"),gettext("Select Current Line"),gettext("Move Current Line Up"),gettext("Move Current Line Down"),gettext("Select From Cursor To End Of Line"),gettext("Select From Beginning Of Line To Cursor"),gettext("Move Selection Up"),gettext("Move Selection Down")};
+const char* 	shortcuttext[NUMSHORTCUTS]={gettext("Delete Current Line"),gettext("Delete To End Of Line"),gettext("Delete To Beginning Of Line"),gettext("Select Word Under Cursor"),gettext("Delete Word Under Cursor"),gettext("Duplicate Current Line"),gettext("Select Current Line"),gettext("Move Current Line Up"),gettext("Move Current Line Down"),gettext("Select From Cursor To End Of Line"),gettext("Select From Beginning Of Line To Cursor"),gettext("Move Selection Up"),gettext("Move Selection Down"),gettext("Completion popup")};
 
 void findTool(toolStruct* data,char* toolname)
 {
@@ -845,9 +845,9 @@ void doIconView(void)
 
 void setKeyCuts(GtkWidget* widget,gpointer data)
 {
+
+	char*	filename;
 	const char*		text;
-	FILE*			fd=NULL;
-	char*			filename;
 
 	if(strcasecmp(gtk_widget_get_name(widget),"cancel")==0)
 		gtk_widget_hide(keysWindow);
@@ -859,20 +859,13 @@ void setKeyCuts(GtkWidget* widget,gpointer data)
 					text=gtk_entry_get_text((GtkEntry*)entries[j]);
 					shortCuts[j][0]=gdk_keyval_from_name(text);
 					shortCuts[j][1]=j;
+					if(shortCutStrings[j]!=NULL)
+						free(shortCutStrings[j]);
+					asprintf(&shortCutStrings[j],"%i %i - ^%c %s",shortCuts[j][0],shortCuts[j][1],shortCuts[j][0],shortcuttext[j]);
 				}
-			
+			asprintf(&filename,"%s/.KKEdit/keybindings.rc",getenv("HOME"));
+			saveVarsToFile(filename,keybindings_rc);
 			gtk_widget_hide(keysWindow);
-
-			asprintf(&filename,"%s/.KKEdit/keybindings",getenv("HOME"));
-			fd=fopen(filename,"w");
-			if(fd!=NULL)
-				{
-					for(int j=0;j<NUMSHORTCUTS;j++)
-						{
-							fprintf(fd,"%i %i ^%c %s\n",shortCuts[j][0],shortCuts[j][1],shortCuts[j][0],shortcuttext[j]);
-						}
-					fclose(fd);
-				}
 		}
 }
 

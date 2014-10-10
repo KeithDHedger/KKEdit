@@ -1,4 +1,6 @@
 0.2.4
+Changed key bindings file and format.
+Fixed bug where size of doc viewer being stored wrong if it hasn't been shown.
 Now remembers size and position of built in docviewer on quit.
 Removed redundant function 'deleteSlice' from globals.
 Truncated popup function menu entries when function/variable def is over 100 characters ( copy and paste of the entry uses full definition ).
