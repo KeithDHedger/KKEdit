@@ -10,5 +10,7 @@
 #ifndef _COMPLETION_
 #define _COMPLETION_
 
+void doCompletionPopUp(pageStruct* page);
+void createCompletion(pageStruct* page);
 
 #endif

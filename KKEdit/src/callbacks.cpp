@@ -649,9 +649,6 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 			tmpstr[0]=0;
 			sscanf (lineptr,"%*s %*s %i %[^\n]s",&linenum,tmpstr);
 
-//			if(strlen(tmpstr)>MAXMENUFUNCLEN)
-//				tmpstr[MAXMENUFUNCLEN-1]=0;
-
 			correctedstr=truncateWithElipses(tmpstr,MAXMENUFUNCLEN);
 			sprintf(tmpstr,"%s",correctedstr);
 			free(correctedstr);

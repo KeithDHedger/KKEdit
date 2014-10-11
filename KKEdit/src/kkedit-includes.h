@@ -58,6 +58,7 @@
 #include "spellcheck.h"
 #include "files.h"
 #include "encoding.h"
+#include "completion.h"
 
 #define VISIBLE __attribute__((visibility("default")))
 #define PROTECTED __attribute__((visibility("protected")))
