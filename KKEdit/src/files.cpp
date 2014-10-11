@@ -663,7 +663,7 @@ test_provider_populate (GtkSourceCompletionProvider *provider,
 	                                             provider,
 	                                             ((TestProvider *)provider)->proposals,
 	                                             TRUE);
-provider->context=context;
+((TestProvider *)provider)->context=context;
 }
 
 static GdkPixbuf *
@@ -747,6 +747,13 @@ void createCompletion(pageStruct* page)
 
 
 //completion
+void removeProv(gpointer data,gpointer user_data)
+{
+		GtkSourceCompletion * completion=(GtkSourceCompletion *)user_data;
+
+gtk_source_completion_remove_provider(completion,(GtkSourceCompletionProvider *)data,NULL);
+}
+
 void addProposals(gpointer data,gpointer user_data)
 {
 GList *proposals = NULL;
@@ -765,6 +772,7 @@ printf("%s\n",gtk_source_completion_provider_get_name((GtkSourceCompletionProvid
 void doCompletionPopUp(pageStruct* page)
 {
 printf("XXXXXXX\n");
+createCompletion(page);
 		GtkSourceCompletion *completion;
 	completion=gtk_source_view_get_completion(page->view);
 //	gtk_source_completion_unblock_interactive(completion);
@@ -772,9 +780,10 @@ GtkSourceCompletionContext *context= gtk_source_completion_create_context(comple
 
 GList *          list=   gtk_source_completion_get_providers (completion);
 
-g_list_foreach(list,addProposals,context);
 
-gtk_source_completion_show  (completion,list,context);
+gtk_source_completion_show(completion,list,context);
+g_list_foreach(list,removeProv,completion);
+printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
 //return;
 	//g_signal_emit_by_name ((gpointer)completion,"activate-proposal",completion,NULL);
 //	gtk_source_completion_block_interactive(completion);
@@ -817,7 +826,7 @@ pageStruct* makeNewPage(void)
 //	toggle_active_property (completion, show_headers, "show-headers");
 //	toggle_active_property (completion, show_icons, "show-icons");
 
-	createCompletion(page);
+//	createCompletion(page);
 
 	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
 	page->view2=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
