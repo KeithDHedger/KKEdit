@@ -1,4 +1,6 @@
 0.2.4
+Added auto-complete popup key to keybindings dialog.
+Started to add auto completion.
 Changed key bindings file and format.
 Fixed bug where size of doc viewer being stored wrong if it hasn't been shown.
 Now remembers size and position of built in docviewer on quit.
