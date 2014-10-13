@@ -56,6 +56,8 @@ void init(void)
 	fontAndSize=strdup("mono 10");
 	terminalCommand=strdup("xterm -e");
 	rootCommand=strdup(GTKSUPATH);
+	autoShowMinChars=4;
+	autoShowComps=false;
 
 	windowWidth=800;
 	windowHeight=600;
@@ -129,6 +131,7 @@ void init(void)
 	tmpNoWarnings=noWarnings;
 	tmpReadLinkFirst=readLinkFirst;
 	tmpAutoShowComps=autoShowComps;
+	tmpAutoShowMinChars=autoShowMinChars;
 
 	tmpNagScreen=nagScreen;
 	tmpHighlightColour=highlightColour;

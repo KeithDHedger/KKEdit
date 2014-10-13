@@ -101,6 +101,8 @@ bool			readLinkFirst;
 bool			tmpReadLinkFirst;
 bool			autoShowComps;
 bool			tmpAutoShowComps;
+bool			autoShowMinChars;
+bool			tmpAutoShowMinChars;
 
 GtkWidget*		fontButton;
 GtkWidget*		terminalBox;
@@ -372,6 +374,7 @@ args			kkedit_rc[]=
 	{"tabwidth",TYPEINT,&tabWidth},
 	{"depth",TYPEINT,&depth},
 	{"funcsort",TYPEINT,&listFunction},
+	{"minautochars",TYPEINT,&autoShowMinChars},
 	{NULL,0,NULL}
 };
 

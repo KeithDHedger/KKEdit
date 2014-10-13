@@ -42,22 +42,10 @@ gboolean function_provider_match(GtkSourceCompletionProvider* provider,GtkSource
 	return TRUE;
 }
 
-gboolean valid_word_char (gunichar ch, 
-                 gpointer data)
-{
-	return g_unichar_isprint (ch) && (ch == '_' || g_unichar_isalnum (ch));
-}
-
-gboolean valid_start_char (gunichar ch,
-                  gpointer data)
-{
-	return !g_unichar_isdigit (ch);
-}
-
 char* get_word_at_iter(GtkTextIter* iter,GtkTextBuffer *buffer)
 {
 	GtkTextMark*	mark;
-	GtkTextIter*		startiter;
+	GtkTextIter*	startiter;
 	char*			word;
 
 	if(gtk_text_iter_ends_word(iter)==true)
@@ -117,7 +105,7 @@ GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 						{
 							if(strcasecmp(functype,"function")==0)
 								{
-									if(strncasecmp(theword,correctedstr,strlen(theword))==0)
+									if(strncasecmp(correctedstr,theword,strlen(theword))==0)
 										newlist=g_list_append(newlist,gtk_source_completion_item_new(tmpstr,holdstr,icon,infostr));
 								}
 						}
@@ -125,7 +113,7 @@ GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 						{
 							if(strcasecmp(functype,"variable")==0)
 								{
-									if(strncasecmp(theword,correctedstr,strlen(theword))==0)
+									if(strncasecmp(correctedstr,theword,strlen(theword))==0)
 										newlist=g_list_append(newlist,gtk_source_completion_item_new(tmpstr,holdstr,icon,infostr));
 								}
 						}
@@ -145,8 +133,8 @@ GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 
 void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceCompletionContext* context)
 {
-	GtkTextIter iter;
-	gchar *word;
+	GtkTextIter 	iter;
+	gchar*			word=NULL;
 	GtkTextBuffer*	buffer;
 	GList*			wordlist;
 	pageStruct*		page;
@@ -157,8 +145,8 @@ void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceC
 			return;
 		}
 
-	gtk_source_completion_context_get_iter (context, &iter);
-	buffer = gtk_text_iter_get_buffer (&iter);
+	gtk_source_completion_context_get_iter(context,&iter);
+	buffer=gtk_text_iter_get_buffer(&iter);
 
 	word=get_word_at_iter(&iter,buffer);
 
@@ -172,9 +160,16 @@ void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceC
 	if(word!=NULL)
 		{
 			page=getPageStructPtr(-1);
-			wordlist=addPropsFromWord(page,word,(FunctionProvider *)provider);
-			gtk_source_completion_context_add_proposals(context,provider,wordlist,true);
+			if(page!=NULL)
+				{
+					wordlist=addPropsFromWord(page,word,(FunctionProvider *)provider);
+					gtk_source_completion_context_add_proposals(context,provider,wordlist,true);
+					if(wordlist!=NULL)
+						g_list_free_full(wordlist,g_object_unref);
+				}
 		}
+	if(word!=NULL)
+		free(word);
 }
 
 void function_provider_iface_init(GtkSourceCompletionProviderIface* iface)
@@ -265,14 +260,6 @@ void createCompletion(pageStruct* page)
 
 	removeProps();
 	addProp(page);
-}
-
-void hidewinXX(GtkSourceCompletion *completion,gpointer user_data)
-{
-	GtkSourceCompletionContext*	context;
-	removeProps();
-	addProp((pageStruct*)user_data);
-	context=gtk_source_completion_create_context(((pageStruct*)user_data)->completion,NULL);
 }
 
 void doCompletionPopUp(pageStruct* page)

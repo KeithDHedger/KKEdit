@@ -236,6 +236,8 @@ extern bool				readLinkFirst;
 extern bool				tmpReadLinkFirst;
 extern bool				autoShowComps;
 extern bool				tmpAutoShowComps;
+extern bool				autoShowMinChars;
+extern bool				tmpAutoShowMinChars;
 
 extern GtkWidget*		fontButton;
 extern GtkWidget*		terminalBox;
