@@ -635,12 +635,11 @@ pageStruct* makeNewPage(void)
 
 //completion
 	page->completion=gtk_source_view_get_completion(GTK_SOURCE_VIEW(page->view));
-	g_object_set(page->completion,"remember-info-visibility",false,NULL);
+	g_object_set(page->completion,"remember-info-visibility",true,NULL);
 	g_object_set(page->completion,"select-on-show",true,NULL);
 	g_object_set(page->completion,"show-headers",true,NULL);
 	g_object_set(page->completion,"show-icons",true,NULL);
 	g_object_set(page->completion,"accelerators",0,NULL);
-	g_object_set(page->completion,"auto-complete-delay",500,NULL);
 	createCompletion(page);
 
 	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
