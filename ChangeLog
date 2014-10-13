@@ -1,4 +1,6 @@
 0.2.4
+Added variable names to auto complete.
+Added function names to auto complete.
 Added auto-complete popup key to keybindings dialog.
 Started to add auto completion.
 Changed key bindings file and format.

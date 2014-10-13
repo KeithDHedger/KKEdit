@@ -99,6 +99,8 @@ bool			noWarnings;
 bool			tmpNoWarnings;
 bool			readLinkFirst;
 bool			tmpReadLinkFirst;
+bool			autoShowComps;
+bool			tmpAutoShowComps;
 
 GtkWidget*		fontButton;
 GtkWidget*		terminalBox;
@@ -357,6 +359,7 @@ args			kkedit_rc[]=
 	{"restorebookmarks",TYPEBOOL,&restoreBookmarks},
 	{"nagscreen",TYPEBOOL,&nagScreen},
 	{"readlink",TYPEBOOL,&readLinkFirst},
+	{"autocomp",TYPEBOOL,&autoShowComps},
 	//strings
 	{"stylename",TYPESTRING,&styleName},
 	{"higlightcolour",TYPESTRING,&highlightColour},

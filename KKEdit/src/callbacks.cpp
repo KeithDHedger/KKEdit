@@ -10,10 +10,8 @@
 
 GtkWidget*			tabMenu;
 char				defineText[1024];
-//char				defineText[1024];
 GtkPrintSettings*	settings=NULL;
 bool				closingAll=false;
-
 
 void releasePlugs(gpointer data,gpointer user_data)
 {
@@ -718,6 +716,9 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	gtk_widget_set_sensitive((GtkWidget*)menufunc,onefunc);
 	setSensitive();
 
+//	removeProps();
+//	addProp(page);
+createCompletion(page);
 //plug switch tab
 	globalPlugins->globalPlugData->page=page;
 	globalPlugins->globalPlugData->currentTab=currentTabNumber;
@@ -1502,6 +1503,8 @@ void setPrefs(GtkWidget* widget,gpointer data)
 		tmpNoDuplicates=gtk_toggle_button_get_active((GtkToggleButton*)data);
 	if(strcmp(gtk_widget_get_name(widget),"warning")==0)
 		tmpNoWarnings=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"autocomp")==0)
+		tmpAutoShowComps=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
 	if(strcmp(gtk_widget_get_name(widget),"readlink")==0)
 		tmpReadLinkFirst=gtk_toggle_button_get_active((GtkToggleButton*)data);
@@ -1543,6 +1546,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			noDuplicates=tmpNoDuplicates;
 			noWarnings=tmpNoWarnings;
 			readLinkFirst=tmpReadLinkFirst;
+			autoShowComps=tmpAutoShowComps;
 
 			if(styleName!=NULL)
 				{
@@ -1934,6 +1938,9 @@ void doKeyShortCut(int what)
 	pageStruct*		page=getPageStructPtr(-1);
 	GtkTextMark*	mark;
 
+	if(page==NULL)
+		return;
+
 	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 
 	switch(what)
@@ -2058,7 +2065,9 @@ void doKeyShortCut(int what)
 			break;
 //completion
 		case 13:
+			forcePopup=true;
 			doCompletionPopUp(page);
+			forcePopup=false;
 			break;
 		}
 	delete buf;

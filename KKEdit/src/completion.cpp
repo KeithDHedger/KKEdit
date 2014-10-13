@@ -15,213 +15,304 @@
 
 #include "kkedit-includes.h"
 
-typedef struct _TestProvider TestProvider;
-typedef struct _TestProviderClass TestProviderClass;
-
-struct _TestProvider
+struct _FunctionProviderClass
 {
-	GObject parent;
-
-	GList *proposals;
-	gint priority;
-	gchar *name;
-GtkSourceCompletionContext  *context;
-	GdkPixbuf *icon;
+	GObjectClass				parent_class;
 };
 
-struct _TestProviderClass
+
+G_DEFINE_TYPE_WITH_CODE(FunctionProvider,function_provider,G_TYPE_OBJECT,G_IMPLEMENT_INTERFACE (GTK_TYPE_SOURCE_COMPLETION_PROVIDER,function_provider_iface_init))
+
+FunctionProvider*				funcProv;
+FunctionProvider*				varsProv;
+bool							forcePopup=false;
+
+gchar* function_provider_get_name(GtkSourceCompletionProvider* provider)
 {
-	GObjectClass parent_class;
-};
-
-static void test_provider_iface_init (GtkSourceCompletionProviderIface *iface);
-GType test_provider_get_type (void);
-
-G_DEFINE_TYPE_WITH_CODE (TestProvider,
-			 test_provider,
-			 G_TYPE_OBJECT,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SOURCE_COMPLETION_PROVIDER,
-				 		test_provider_iface_init))
-
-static gchar *
-test_provider_get_name (GtkSourceCompletionProvider *provider)
-{
-	return g_strdup (((TestProvider *)provider)->name);
+	return g_strdup(((FunctionProvider *)provider)->name);
 }
 
-static gint
-test_provider_get_priority (GtkSourceCompletionProvider *provider)
+gint function_provider_get_priority(GtkSourceCompletionProvider* provider)
 {
-	return ((TestProvider *)provider)->priority;
+	return((FunctionProvider*)provider)->priority;
 }
 
-static gboolean
-test_provider_match (GtkSourceCompletionProvider *provider,
-                     GtkSourceCompletionContext  *context)
+gboolean function_provider_match(GtkSourceCompletionProvider* provider,GtkSourceCompletionContext*context)
 {
 	return TRUE;
 }
 
-static void
-test_provider_populate (GtkSourceCompletionProvider *provider,
-                        GtkSourceCompletionContext  *context)
+gboolean valid_word_char (gunichar ch, 
+                 gpointer data)
 {
-	gtk_source_completion_context_add_proposals (context,
-	                                             provider,
-	                                             ((TestProvider *)provider)->proposals,
-	                                             TRUE);
-((TestProvider *)provider)->context=context;
+	return g_unichar_isprint (ch) && (ch == '_' || g_unichar_isalnum (ch));
 }
 
-static GdkPixbuf *
-test_provider_get_icon (GtkSourceCompletionProvider *provider)
+gboolean valid_start_char (gunichar ch,
+                  gpointer data)
 {
-	TestProvider *tp = (TestProvider *)provider;
+	return !g_unichar_isdigit (ch);
+}
 
-	if (tp->icon == NULL)
-	{
-		GtkIconTheme *theme = gtk_icon_theme_get_default ();
-		tp->icon = gtk_icon_theme_load_icon (theme, GTK_STOCK_DIALOG_INFO, 16, (GtkIconLookupFlags)0, NULL);
-	}
+//gchar* get_word_at_iter (GtkTextIter    *iter,
+//                  CharacterCheck  valid,
+//                  CharacterCheck  valid_start,
+//                  gpointer        data)
+//{
+//	GtkTextIter end = *iter;
+//	
+//	if (!gtk_source_completion_words_utils_forward_word_end (iter, valid, data) ||
+//	    !gtk_text_iter_equal (iter, &end))
+//	{
+//		return NULL;
+//	}
+//	
+//	if (!gtk_source_completion_words_utils_backward_word_start (iter,
+//	                                                            valid,
+//	                                                            valid_start,
+//	                                                            data))
+//	{
+//		return NULL;
+//	}
+//	
+//	if (gtk_text_iter_equal (iter, &end))
+//	{
+//		return NULL;
+//	}
+//	else
+//	{
+//		return gtk_text_iter_get_text (iter, &end);
+//	}
+//}
 
+char* get_word_at_iter(GtkTextIter* iter,GtkTextBuffer *buffer)
+{
+	GtkTextMark*	mark;
+	GtkTextIter*		startiter;
+	char*			word;
+
+	if(gtk_text_iter_ends_word(iter)==true)
+		{
+			startiter=gtk_text_iter_copy(iter);
+			gtk_text_iter_backward_word_start(startiter);
+			word=gtk_text_buffer_get_text(buffer,startiter,iter,true);
+			if(strlen(word)>4)
+				return(word);
+		}
+	return(NULL);
+}
+
+GdkPixbuf* function_provider_get_icon(GtkSourceCompletionProvider* provider)
+{
+	FunctionProvider* tp=(FunctionProvider*)provider;
+
+	if (tp->icon==NULL)
+		{
+			GtkIconTheme* theme=gtk_icon_theme_get_default();
+			tp->icon=gtk_icon_theme_load_icon(theme,GTK_STOCK_DIALOG_INFO,16,(GtkIconLookupFlags)0,NULL);
+		}
 	return tp->icon;
 }
 
-static void
-test_provider_iface_init (GtkSourceCompletionProviderIface *iface)
+//completion
+GList* addPropsFroWord(pageStruct* page,char* theword,FunctionProvider* prov)
 {
-	iface->get_name = test_provider_get_name;
+	char*		functions=NULL;
+	char		tmpstr[1024];
+	char*		lineptr;
+	char*		correctedstr;
+	char		functype[63];
+	GList*		newlist=NULL;
 
-	iface->populate = test_provider_populate;
-	iface->match = test_provider_match;
-	iface->get_priority = test_provider_get_priority;
+	if(page->filePath==NULL)
+		return(newlist);
 
-	//iface->get_icon = test_provider_get_icon;
+	getRecursiveTagList(page->filePath,&functions);
+	lineptr=functions;
+	char*		holdstr;
+	GdkPixbuf *icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER(prov));
+
+	while (lineptr!=NULL)
+		{
+			tmpstr[0]=0;
+			sscanf (lineptr,"%s",tmpstr);
+			holdstr=strdup(tmpstr);
+			correctedstr=truncateWithElipses(tmpstr,MAXMENUFUNCLEN);
+			sprintf(tmpstr,"%s",correctedstr);
+			if(strlen(tmpstr)>0)
+				{
+					sscanf (lineptr,"%*s %s",functype);
+					if(funcProv==prov)
+						{
+							if(strcasecmp(functype,"function")==0)
+								{
+									if(strncasecmp(theword,correctedstr,strlen(theword))==0)
+										newlist=g_list_append(newlist,gtk_source_completion_item_new(tmpstr,holdstr,icon,NULL));
+								}
+						}
+					if(varsProv==prov)
+						{
+							if(strcasecmp(functype,"variable")==0)
+								{
+									if(strncasecmp(theword,correctedstr,strlen(theword))==0)
+										newlist=g_list_append(newlist,gtk_source_completion_item_new(tmpstr,holdstr,icon,NULL));
+								}
+						}
+				}
+			free(correctedstr);
+			free(holdstr);
+
+			lineptr=strchr(lineptr,'\n');
+			if (lineptr!=NULL)
+				lineptr++;
+		}
+	if(functions!=NULL)
+		debugFree(functions,"switchPage functions");
+
+	return(newlist);
 }
 
-static void
-test_provider_class_init (TestProviderClass *klass)
+void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceCompletionContext* context)
+{
+
+	GtkTextIter iter;
+	gchar *word;
+	GtkTextBuffer*	buffer;
+	GList*			wordlist;
+	pageStruct*		page;
+
+	if(forcePopup==true)
+		{
+			gtk_source_completion_context_add_proposals(context,provider,((FunctionProvider *)provider)->proposals,true);
+			return;
+		}
+
+	gtk_source_completion_context_get_iter (context, &iter);
+	buffer = gtk_text_iter_get_buffer (&iter);
+
+	word=get_word_at_iter(&iter,buffer);
+
+	if(word == NULL || strlen(word) < 4)
+		{
+			g_free (word);
+			gtk_source_completion_context_add_proposals (context,provider,NULL,true);
+			return;
+		}
+
+	if(word!=NULL)
+		{
+			page=getPageStructPtr(-1);
+			wordlist=addPropsFroWord(page,word,(FunctionProvider *)provider);
+			gtk_source_completion_context_add_proposals(context,provider,wordlist,true);
+		}
+}
+
+void function_provider_iface_init(GtkSourceCompletionProviderIface* iface)
+{
+	iface->get_name=function_provider_get_name;
+	iface->populate=function_provider_populate;
+	iface->match=function_provider_match;
+	iface->get_priority=function_provider_get_priority;
+	iface->get_icon=function_provider_get_icon;
+}
+
+void function_provider_class_init(FunctionProviderClass* klass)
 {
 }
 
-void test_provider_init (TestProvider *self)
+void function_provider_init(FunctionProvider* self)
 {
-	GList *proposals = NULL;
-	GdkPixbuf *icon = test_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER(self));
+	self->icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER(self));
+}
 
-	proposals = g_list_prepend (proposals,
-	                            gtk_source_completion_item_new ("Proposal 3", "Proposal 3", icon, NULL));
+//completion
+void addProp(pageStruct* page)
+{
+	char*		functions=NULL;
+	char		tmpstr[1024];
+	char*		lineptr;
+	char*		correctedstr;
+	char		functype[63];
 
-	proposals = g_list_prepend (proposals,
-	                            gtk_source_completion_item_new ("Proposal 2", "Proposal 2", icon, NULL));
+	if(page->filePath==NULL)
+		return;
 
-	proposals = g_list_prepend (proposals,
-	                            gtk_source_completion_item_new ("Proposal 1", "Proposal 1", icon, NULL));
+	getRecursiveTagList(page->filePath,&functions);
+	lineptr=functions;
+	char*		holdstr;
+	GdkPixbuf *icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER (funcProv));
 
-	self->proposals = proposals;
+	while (lineptr!=NULL)
+		{
+			tmpstr[0]=0;
+			sscanf (lineptr,"%s",tmpstr);
+			holdstr=strdup(tmpstr);
+			correctedstr=truncateWithElipses(tmpstr,MAXMENUFUNCLEN);
+			sprintf(tmpstr,"%s",correctedstr);
+			if(strlen(tmpstr)>0)
+				{
+					sscanf (lineptr,"%*s %s",functype);	
+					if(strcasecmp(functype,"function")==0)
+						funcProv->proposals=g_list_append(funcProv->proposals,gtk_source_completion_item_new(tmpstr,holdstr,icon,NULL));
+					if(strcasecmp(functype,"variable")==0)
+						varsProv->proposals=g_list_append(varsProv->proposals,gtk_source_completion_item_new(tmpstr,holdstr,icon,NULL));
+				}
+			free(correctedstr);
+			free(holdstr);
+
+			lineptr=strchr(lineptr,'\n');
+			if (lineptr!=NULL)
+				lineptr++;
+		}
+	if(functions!=NULL)
+		debugFree(functions,"switchPage functions");
+}
+
+void removeProps(void)
+{
+	g_list_free_full(funcProv->proposals,g_object_unref);
+	g_list_free_full(varsProv->proposals,g_object_unref);
+	funcProv->proposals=NULL;
+	varsProv->proposals=NULL;
 }
 
 void createCompletion(pageStruct* page)
 {
-	GtkSourceCompletionWords *prov_words;
-	GtkSourceCompletion *completion;
+	GtkSourceCompletionWords*	prov_words;
 
-	completion=gtk_source_view_get_completion(page->view);
 	prov_words=gtk_source_completion_words_new(NULL,NULL);
 	
 	gtk_source_completion_words_register(prov_words,gtk_text_view_get_buffer(GTK_TEXT_VIEW(page->view)));
-//	
-	gtk_source_completion_add_provider(completion,GTK_SOURCE_COMPLETION_PROVIDER(prov_words),NULL);
-//
-	g_object_set(prov_words, "priority",10, NULL);
+	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(prov_words),NULL);
+	g_object_set(prov_words,"priority",10,NULL);
+	g_object_set(prov_words,"minimum-word-size",5,NULL);
+	g_object_set(prov_words,"interactive-delay",50,NULL);
 
-	TestProvider* tp=(TestProvider*)g_object_new(test_provider_get_type(),NULL);
-	tp->priority=1;
-	tp->name="Test Provider 1";
+	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(funcProv),NULL);
+//	g_object_set(funcProv,"minimum-word-size",4,NULL);
+	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(varsProv),NULL);
 
-	gtk_source_completion_add_provider(completion,GTK_SOURCE_COMPLETION_PROVIDER(tp),NULL);
-
-//	tp = (TestProvider*)g_object_new (test_provider_get_type (), NULL);
-//	tp->priority = 5;
-//	tp->name = "Test Provider 5";
-//
-//	gtk_source_completion_add_provider (completion,
-//	                                    GTK_SOURCE_COMPLETION_PROVIDER (tp),
-//	                                    NULL);
-
-
+	removeProps();
+	addProp(page);
 }
 
 
-//completion
-void removeProv(gpointer data,gpointer user_data)
+void hidewin(GtkSourceCompletion *completion,gpointer user_data)
 {
-		GtkSourceCompletion * completion=(GtkSourceCompletion *)user_data;
-char* name=gtk_source_completion_provider_get_name((GtkSourceCompletionProvider *)data);
-printf("%s\n",name);
-if(strcasecmp(name,"Document Words")!=0)
-	gtk_source_completion_remove_provider(completion,(GtkSourceCompletionProvider *)data,NULL);
-}
-
-void addProposals(gpointer data,gpointer user_data)
-{
-GList *proposals = NULL;
-GtkSourceCompletionContext *context=(GtkSourceCompletionContext *)user_data;
-TestProvider * prov=(TestProvider *)data;
-
-printf("%s\n",gtk_source_completion_provider_get_name((GtkSourceCompletionProvider *)data));
-
- g_list_prepend (proposals,gtk_source_completion_item_new ("add 1", "add1", NULL, NULL));
- g_list_prepend (proposals,gtk_source_completion_item_new ("add 2", "add2", NULL, NULL));
- 
-	gtk_source_completion_context_add_proposals(prov->context,(GtkSourceCompletionProvider *)data,proposals,TRUE);
-
+	GtkSourceCompletionContext*	context;
+	removeProps();
+	addProp((pageStruct*)user_data);
+	context=gtk_source_completion_create_context(((pageStruct*)user_data)->completion,NULL);
 }
 
 void doCompletionPopUp(pageStruct* page)
 {
-printf("XXXXXXX\n");
-		GtkSourceCompletion *completion;
-	completion=gtk_source_view_get_completion(page->view);
-//	gtk_source_completion_unblock_interactive(completion);
-GtkSourceCompletionContext *context= gtk_source_completion_create_context(completion,NULL);
-//	GtkSourceCompletionWords *prov_words;
-//prov_words=gtk_source_completion_words_new(NULL,NULL);
+	GtkSourceCompletionContext*	context;
+	GList*						list;
 
-GList *          list=   gtk_source_completion_get_providers (completion);
-if(list!=NULL)
-	{
-		g_list_foreach(list,removeProv,completion);
-		createCompletion(page);
-//			doCompletionPopUp(page);
-
-//		completion=gtk_source_view_get_completion(page->view);
-//		prov_words=gtk_source_completion_words_new(NULL,NULL);
-//		gtk_source_completion_words_register(prov_words,gtk_text_view_get_buffer(GTK_TEXT_VIEW(page->view)));
-//		gtk_source_completion_add_provider(completion,GTK_SOURCE_COMPLETION_PROVIDER(prov_words),NULL);
-//		g_object_set(prov_words, "priority",10, NULL);
-	}
-else
-	{
-		createCompletion(page);
-//		completion=gtk_source_view_get_completion(page->view);
-//		prov_words=gtk_source_completion_words_new(NULL,NULL);
-//		gtk_source_completion_words_register(prov_words,gtk_text_view_get_buffer(GTK_TEXT_VIEW(page->view)));
-//		gtk_source_completion_add_provider(completion,GTK_SOURCE_COMPLETION_PROVIDER(prov_words),NULL);
-//		g_object_set(prov_words, "priority",10, NULL);
-//		list=   gtk_source_completion_get_providers (completion);
-	}
-
-//		completion=gtk_source_view_get_completion(page->view);
-//		context= gtk_source_completion_create_context(completion,NULL);
-		list=   gtk_source_completion_get_providers (completion);
-
-gtk_source_completion_show(completion,list,context);
-
-printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
-//return;
-	//g_signal_emit_by_name ((gpointer)completion,"activate-proposal",completion,NULL);
-//	gtk_source_completion_block_interactive(completion);
+	context=gtk_source_completion_create_context(page->completion,NULL);
+	list=gtk_source_completion_get_providers(page->completion);
+	gtk_source_completion_show(page->completion,list,context);
 }
 
 

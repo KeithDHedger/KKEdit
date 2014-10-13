@@ -128,6 +128,7 @@ void init(void)
 	tmpNoDuplicates=noDuplicates;
 	tmpNoWarnings=noWarnings;
 	tmpReadLinkFirst=readLinkFirst;
+	tmpAutoShowComps=autoShowComps;
 
 	tmpNagScreen=nagScreen;
 	tmpHighlightColour=highlightColour;
@@ -188,6 +189,17 @@ void init(void)
 
 	history=new HistoryClass;
 	globalSlice->setReturnDupString(true);
+
+	funcProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
+	funcProv->priority=1;
+	funcProv->name="Functions";
+	funcProv->proposals=NULL;
+
+	varsProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
+	varsProv->priority=2;
+	varsProv->name="Variables";
+	varsProv->proposals=NULL;
+
 }
 
 void doNagScreen(void)

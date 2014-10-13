@@ -97,7 +97,7 @@ struct pageStruct
 	GtkTextMark*		backMark;
 	GtkTextTag*			highlightTag;
 	GList*				userDataList;
-	gpointer			reserved1;
+	GtkSourceCompletion* completion;
 	gpointer			reserved2;
 	gpointer			reserved3;
 	gpointer			reserved4;
@@ -234,6 +234,8 @@ extern bool				noWarnings;
 extern bool				tmpNoWarnings;
 extern bool				readLinkFirst;
 extern bool				tmpReadLinkFirst;
+extern bool				autoShowComps;
+extern bool				tmpAutoShowComps;
 
 extern GtkWidget*		fontButton;
 extern GtkWidget*		terminalBox;

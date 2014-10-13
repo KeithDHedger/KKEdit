@@ -166,6 +166,12 @@ void setFilePrefs(pageStruct* page)
 		gtk_source_buffer_set_highlight_syntax (page->buffer,false);
 	else
 		gtk_source_buffer_set_highlight_syntax (page->buffer,true);
+
+	if(autoShowComps==true)
+		gtk_source_completion_unblock_interactive(page->completion);
+	else
+		gtk_source_completion_block_interactive(page->completion);
+
 }
 
 void resetAllFilePrefs(void)
@@ -605,21 +611,16 @@ gboolean clickInView(GtkWidget* widget,gpointer data)
 	return(false);
 }
 
-
-//COMPLETION
-
-
-
 pageStruct* makeNewPage(void)
 {
 	pageStruct*			page;
 	GtkTextIter			iter;
 	GtkTextAttributes*	attr;
-	GtkSourceCompletion *completion;
 
 	page=(pageStruct*)malloc(sizeof(pageStruct));
 	page->buffer=NULL;
 	page->userDataList=NULL;
+	page->filePath=NULL;
 
 	page->pane=gtk_vpaned_new();
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
@@ -633,17 +634,13 @@ pageStruct* makeNewPage(void)
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
 //completion
-	completion=gtk_source_view_get_completion(GTK_SOURCE_VIEW(page->view));
-	g_object_set(completion,"remember-info-visibility",true,NULL);
-	g_object_set(completion,"select-on-show",true,NULL);
-	g_object_set(completion,"show-headers",true,NULL);
-	g_object_set(completion,"show-icons",true,NULL);
-	gtk_source_completion_block_interactive(completion);
-//	toggle_active_property (completion, remember, "remember-info-visibility");
-//	toggle_active_property (completion, select_on_show, "select-on-show");
-//	toggle_active_property (completion, show_headers, "show-headers");
-//	toggle_active_property (completion, show_icons, "show-icons");
-
+	page->completion=gtk_source_view_get_completion(GTK_SOURCE_VIEW(page->view));
+	g_object_set(page->completion,"remember-info-visibility",false,NULL);
+	g_object_set(page->completion,"select-on-show",true,NULL);
+	g_object_set(page->completion,"show-headers",true,NULL);
+	g_object_set(page->completion,"show-icons",true,NULL);
+	g_object_set(page->completion,"accelerators",0,NULL);
+	g_object_set(page->completion,"auto-complete-delay",500,NULL);
 	createCompletion(page);
 
 	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
@@ -669,7 +666,6 @@ pageStruct* makeNewPage(void)
 	page->tabVbox=NULL;
 	page->showingChanged=false;
 	page->backMark=gtk_text_mark_new("back-mark",true);
-
 
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&iter);
 	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),page->backMark,&iter);

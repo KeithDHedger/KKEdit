@@ -1060,6 +1060,13 @@ VISIBLE void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
+//autoshow completion
+	item=gtk_check_button_new_with_label(gettext("Auto show Completions"));
+	gtk_widget_set_name(item,"autocomp");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,autoShowComps);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+
 //end apperance 3
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 
