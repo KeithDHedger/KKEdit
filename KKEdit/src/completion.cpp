@@ -54,37 +54,6 @@ gboolean valid_start_char (gunichar ch,
 	return !g_unichar_isdigit (ch);
 }
 
-//gchar* get_word_at_iter (GtkTextIter    *iter,
-//                  CharacterCheck  valid,
-//                  CharacterCheck  valid_start,
-//                  gpointer        data)
-//{
-//	GtkTextIter end = *iter;
-//	
-//	if (!gtk_source_completion_words_utils_forward_word_end (iter, valid, data) ||
-//	    !gtk_text_iter_equal (iter, &end))
-//	{
-//		return NULL;
-//	}
-//	
-//	if (!gtk_source_completion_words_utils_backward_word_start (iter,
-//	                                                            valid,
-//	                                                            valid_start,
-//	                                                            data))
-//	{
-//		return NULL;
-//	}
-//	
-//	if (gtk_text_iter_equal (iter, &end))
-//	{
-//		return NULL;
-//	}
-//	else
-//	{
-//		return gtk_text_iter_get_text (iter, &end);
-//	}
-//}
-
 char* get_word_at_iter(GtkTextIter* iter,GtkTextBuffer *buffer)
 {
 	GtkTextMark*	mark;
@@ -115,10 +84,11 @@ GdkPixbuf* function_provider_get_icon(GtkSourceCompletionProvider* provider)
 }
 
 //completion
-GList* addPropsFroWord(pageStruct* page,char* theword,FunctionProvider* prov)
+GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 {
 	char*		functions=NULL;
 	char		tmpstr[1024];
+	char		infostr[1024];
 	char*		lineptr;
 	char*		correctedstr;
 	char		functype[63];
@@ -136,6 +106,7 @@ GList* addPropsFroWord(pageStruct* page,char* theword,FunctionProvider* prov)
 		{
 			tmpstr[0]=0;
 			sscanf (lineptr,"%s",tmpstr);
+			sscanf (lineptr,"%*s %*s %*i %[^\n]s",infostr);
 			holdstr=strdup(tmpstr);
 			correctedstr=truncateWithElipses(tmpstr,MAXMENUFUNCLEN);
 			sprintf(tmpstr,"%s",correctedstr);
@@ -147,7 +118,7 @@ GList* addPropsFroWord(pageStruct* page,char* theword,FunctionProvider* prov)
 							if(strcasecmp(functype,"function")==0)
 								{
 									if(strncasecmp(theword,correctedstr,strlen(theword))==0)
-										newlist=g_list_append(newlist,gtk_source_completion_item_new(tmpstr,holdstr,icon,NULL));
+										newlist=g_list_append(newlist,gtk_source_completion_item_new(tmpstr,holdstr,icon,infostr));
 								}
 						}
 					if(varsProv==prov)
@@ -155,7 +126,7 @@ GList* addPropsFroWord(pageStruct* page,char* theword,FunctionProvider* prov)
 							if(strcasecmp(functype,"variable")==0)
 								{
 									if(strncasecmp(theword,correctedstr,strlen(theword))==0)
-										newlist=g_list_append(newlist,gtk_source_completion_item_new(tmpstr,holdstr,icon,NULL));
+										newlist=g_list_append(newlist,gtk_source_completion_item_new(tmpstr,holdstr,icon,infostr));
 								}
 						}
 				}
@@ -174,7 +145,6 @@ GList* addPropsFroWord(pageStruct* page,char* theword,FunctionProvider* prov)
 
 void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceCompletionContext* context)
 {
-
 	GtkTextIter iter;
 	gchar *word;
 	GtkTextBuffer*	buffer;
@@ -202,7 +172,7 @@ void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceC
 	if(word!=NULL)
 		{
 			page=getPageStructPtr(-1);
-			wordlist=addPropsFroWord(page,word,(FunctionProvider *)provider);
+			wordlist=addPropsFromWord(page,word,(FunctionProvider *)provider);
 			gtk_source_completion_context_add_proposals(context,provider,wordlist,true);
 		}
 }
@@ -233,6 +203,7 @@ void addProp(pageStruct* page)
 	char*		lineptr;
 	char*		correctedstr;
 	char		functype[63];
+	char		infostr[1024];
 
 	if(page->filePath==NULL)
 		return;
@@ -246,6 +217,7 @@ void addProp(pageStruct* page)
 		{
 			tmpstr[0]=0;
 			sscanf (lineptr,"%s",tmpstr);
+			sscanf (lineptr,"%*s %*s %*i %[^\n]s",infostr);
 			holdstr=strdup(tmpstr);
 			correctedstr=truncateWithElipses(tmpstr,MAXMENUFUNCLEN);
 			sprintf(tmpstr,"%s",correctedstr);
@@ -253,9 +225,9 @@ void addProp(pageStruct* page)
 				{
 					sscanf (lineptr,"%*s %s",functype);	
 					if(strcasecmp(functype,"function")==0)
-						funcProv->proposals=g_list_append(funcProv->proposals,gtk_source_completion_item_new(tmpstr,holdstr,icon,NULL));
+						funcProv->proposals=g_list_append(funcProv->proposals,gtk_source_completion_item_new(tmpstr,holdstr,icon,infostr));
 					if(strcasecmp(functype,"variable")==0)
-						varsProv->proposals=g_list_append(varsProv->proposals,gtk_source_completion_item_new(tmpstr,holdstr,icon,NULL));
+						varsProv->proposals=g_list_append(varsProv->proposals,gtk_source_completion_item_new(tmpstr,holdstr,icon,infostr));
 				}
 			free(correctedstr);
 			free(holdstr);
@@ -289,13 +261,11 @@ void createCompletion(pageStruct* page)
 	g_object_set(prov_words,"interactive-delay",50,NULL);
 
 	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(funcProv),NULL);
-//	g_object_set(funcProv,"minimum-word-size",4,NULL);
 	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(varsProv),NULL);
 
 	removeProps();
 	addProp(page);
 }
-
 
 void hidewin(GtkSourceCompletion *completion,gpointer user_data)
 {

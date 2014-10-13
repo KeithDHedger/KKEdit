@@ -1,4 +1,5 @@
 0.2.4
+Added function/variable definition to 'Detail' on completion popup.
 Added variable names to auto complete.
 Added function names to auto complete.
 Added auto-complete popup key to keybindings dialog.
