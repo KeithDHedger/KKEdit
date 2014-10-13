@@ -267,7 +267,7 @@ void createCompletion(pageStruct* page)
 	addProp(page);
 }
 
-void hidewin(GtkSourceCompletion *completion,gpointer user_data)
+void hidewinXX(GtkSourceCompletion *completion,gpointer user_data)
 {
 	GtkSourceCompletionContext*	context;
 	removeProps();
