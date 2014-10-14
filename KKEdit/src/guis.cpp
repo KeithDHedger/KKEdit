@@ -1096,6 +1096,74 @@ VISIBLE void doPrefs(void)
 
 	gtk_notebook_append_page(notebook,pagevbox,label);
 
+//page3
+	pagevbox=gtk_vbox_new(false,0);
+//text appearence
+	GtkWidget* texthbox=gtk_hbox_new(true,0);
+	GtkWidget* widghbox=gtk_hbox_new(false,0);
+
+	label=gtk_label_new(gettext("Text Style"));
+//tabwidth
+	adj=gtk_adjustment_new(tmpTabWidth,1,64,1,1,0);
+	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
+	gtk_widget_set_name(item,"tabs");
+	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
+	gtk_box_pack_start(GTK_BOX(widghbox),gtk_label_new(gettext("Tab width: ")),false,false,0);
+	gtk_box_pack_start(GTK_BOX(widghbox),item,false,false,0);
+	gtk_box_pack_start(GTK_BOX(texthbox),widghbox,true,true,0);
+	gtk_box_pack_start(GTK_BOX(pagevbox),texthbox,false,false,0);
+
+//style
+	texthbox=gtk_hbox_new(true,0);
+	widghbox=gtk_hbox_new(false,0);
+
+	int cnt=0;
+	int foundname=0;
+	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(schemeManager);
+
+	gtk_box_pack_start(GTK_BOX(widghbox),gtk_label_new(gettext("Theme: ")),true,true,0);
+
+	item=gtk_combo_box_text_new();
+	gtk_widget_set_name(item,"style");
+	g_signal_connect(G_OBJECT(item),"changed",G_CALLBACK(setPrefs),(void*)item);
+	
+	while(ids[cnt]!=NULL)
+	{
+		gtk_combo_box_text_append_text((GtkComboBoxText*)item,ids[cnt]);
+		if(strcmp(ids[cnt],styleName)==0)
+			foundname=cnt;
+		cnt++;
+	}
+	gtk_combo_box_set_active((GtkComboBox*)item,foundname);
+	gtk_box_pack_start(GTK_BOX(widghbox),item,false,false,0);
+
+	gtk_box_pack_start(GTK_BOX(texthbox),widghbox,false,false,0);
+	gtk_box_pack_start(GTK_BOX(pagevbox),texthbox,false,false,0);
+
+//	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
+
+//font button
+	hbox2=gtk_hbox_new(false,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Font: "),true,true,0);
+	fontButton=gtk_font_button_new_with_font(fontAndSize);
+	gtk_box_pack_start(GTK_BOX(hbox2),fontButton,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
+	gtk_widget_set_name(fontButton,"fontbutton");
+
+//bm highlight colour
+	bmHighlightBox=gtk_entry_new();
+	gtk_widget_set_size_request((GtkWidget*)bmHighlightBox,72,-1);
+	hbox2=gtk_hbox_new(false,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new(gettext("BM Highlight Colour: ")),true,true,0);
+	gtk_container_add(GTK_CONTAINER(hbox2),bmHighlightBox);
+	gtk_box_pack_start(GTK_BOX(hbox),hbox2,false,false,0);
+	gtk_entry_set_text((GtkEntry*)bmHighlightBox,highlightColour);
+	gtk_widget_show_all(hbox2);
+
+
+	gtk_notebook_append_page(notebook,pagevbox,label);
+
+//end style
 //nag
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
