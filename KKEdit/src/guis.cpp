@@ -942,17 +942,18 @@ void buildKeys()
 	gtk_widget_show_all(keysWindow);
 }
 
+#define TABLECOLS 2
 VISIBLE void doPrefs(void)
 {
-	GtkWidget*	vbox;
-	GtkWidget*	hbox;
-	GtkWidget*	pagevbox;
-	GtkWidget*	hbox2;
-	GtkWidget*	hbox3;
-	GtkWidget*	item;
-	GtkWidget*	label;
-	GtkObject*	adj;
+	GtkWidget*		vbox;
+	GtkWidget*		hbox;
+	GtkWidget*		pagevbox;
+	GtkWidget*		item;
+	GtkWidget*		label;
+	GtkObject*		adj;
 	GtkNotebook*	notebook;
+	GtkTable*		table;
+	GtkAlignment*	align;
 
 	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)prefswin,"Preferences");
@@ -982,97 +983,88 @@ VISIBLE void doPrefs(void)
 //page1
 	pagevbox=gtk_vbox_new(false,0);
 //appearence 1
+	table=(GtkTable*)gtk_table_new(10,TABLECOLS,true);
 
 //indent
 	item=gtk_check_button_new_with_label(gettext("Auto Indent Lines"));
 	gtk_widget_set_name(item,"indent");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,indent);
-	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+	gtk_table_attach_defaults(table,item,0,1,0,1);
 //linenumbers
 	item=gtk_check_button_new_with_label(gettext("Show Line Numbers"));
 	gtk_widget_set_name(item,"show");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,lineNumbers);
-	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+	gtk_table_attach_defaults(table,item,0,1,1,2);
 //wraplines
-	item=gtk_check_button_new_with_label(gettext("Wrap Lines\t"));
+	item=gtk_check_button_new_with_label(gettext("Wrap Lines"));
 	gtk_widget_set_name(item,"wrap");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,lineWrap);
-	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+	gtk_table_attach_defaults(table,item,0,1,2,3);
 //highlite
 	item=gtk_check_button_new_with_label(gettext("Highlight Current Line"));
 	gtk_widget_set_name(item,"high");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,highLight);
-	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+	gtk_table_attach_defaults(table,item,0,1,3,4);
 //no highlight
 	item=gtk_check_button_new_with_label(gettext("No Syntax Highlighting"));
 	gtk_widget_set_name(item,"nosyntax");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,noSyntax);
-	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+	gtk_table_attach_defaults(table,item,0,1,4,5);
 //single instance
 	item=gtk_check_button_new_with_label(gettext("Use Single Instance"));
 	gtk_widget_set_name(item,"single");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,singleUse);
-	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+	gtk_table_attach_defaults(table,item,0,1,5,6);
 
 //auto save session
-	GtkWidget* savesesshbox=gtk_hbox_new(true,0);
-
 	item=gtk_check_button_new_with_label(gettext("Auto Save/Restore Session"));
 	gtk_widget_set_name(item,"save");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,onExitSaveSession);
-	gtk_box_pack_start(GTK_BOX(savesesshbox),item,true,true,0);
+	gtk_table_attach_defaults(table,item,0,1,6,7);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 //auto restore bookmarks
 	restoreBMs=gtk_check_button_new_with_label(gettext("Restore Session Bookmarks"));
 	gtk_widget_set_name(restoreBMs,"marks");
 	gtk_toggle_button_set_active((GtkToggleButton*)restoreBMs,restoreBookmarks);
-	gtk_box_pack_start(GTK_BOX(savesesshbox),restoreBMs,true,true,0);
-	gtk_box_pack_start(GTK_BOX(pagevbox),savesesshbox,true,true,0);
 	g_signal_connect(G_OBJECT(restoreBMs),"toggled",G_CALLBACK(setPrefs),(void*)restoreBMs);
 	gtk_widget_set_sensitive(restoreBMs,onExitSaveSession);
+	gtk_table_attach_defaults(table,restoreBMs,1,2,6,7);
 
 //no duplicates
 	item=gtk_check_button_new_with_label(gettext("Don't Open Duplicate File"));
 	gtk_widget_set_name(item,"duplicates");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,noDuplicates);
-	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+	gtk_table_attach_defaults(table,item,0,1,7,8);
 //turn off warnings
 	item=gtk_check_button_new_with_label(gettext("Don't Warn On File Change"));
 	gtk_widget_set_name(item,"warning");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,noWarnings);
-	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+	gtk_table_attach_defaults(table,item,0,1,8,9);
 
-//completeion min chars
-	GtkWidget* comphbox=gtk_hbox_new(true,0);
-	GtkWidget* adjhbox=gtk_hbox_new(false,0);
-	
-	adj=gtk_adjustment_new(tmpAutoShowMinChars,2,64,1,1,0);
 //autoshow completion
 	item=gtk_check_button_new_with_label(gettext("Auto show Completions"));
 	gtk_widget_set_name(item,"autocomp");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,autoShowComps);
-	gtk_box_pack_start(GTK_BOX(comphbox),item,true,true,0);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+	gtk_table_attach_defaults(table,item,0,1,9,10);
 
+//completeion min chars
+	adj=gtk_adjustment_new(tmpAutoShowMinChars,2,64,1,1,0);
 	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
 	gtk_widget_set_name(item,"minautochars");
 	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
-	gtk_box_pack_start(GTK_BOX(adjhbox),gtk_label_new(gettext("Min wordsize: ")),false,false,0);
-	gtk_box_pack_start(GTK_BOX(adjhbox),item,false,false,0);
+	gtk_table_attach_defaults(table,item,1,2,9,10);
 
-	gtk_box_pack_start(GTK_BOX(comphbox),adjhbox,true,true,0);
-
-	gtk_box_pack_start(GTK_BOX(pagevbox),comphbox,false,false,0);
-
-	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new("General Appearance"));
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
+	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("General Appearance")));
 
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)notebook,true,true,0);
 
@@ -1099,8 +1091,8 @@ VISIBLE void doPrefs(void)
 //page3
 	pagevbox=gtk_vbox_new(false,0);
 //text appearence
-	GtkTable*		table=(GtkTable*)gtk_table_new(4,4,true);
-	GtkAlignment*	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	table=(GtkTable*)gtk_table_new(4,TABLECOLS,true);
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 
 //tabwidth
 	adj=gtk_adjustment_new(tmpTabWidth,1,64,1,1,0);
@@ -1136,363 +1128,91 @@ VISIBLE void doPrefs(void)
 	gtk_table_attach_defaults(table,item,1,2,1,2);
 
 //font button
-//	hbox2=gtk_hbox_new(false,0);
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Font: ")));
-	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,1,2);
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,2,3);
 
-//	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Font: "),true,true,0);
 	fontButton=gtk_font_button_new_with_font(fontAndSize);
-//	gtk_box_pack_start(GTK_BOX(hbox2),fontButton,true,true,0);
-//	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
 	gtk_widget_set_name(fontButton,"fontbutton");
-	gtk_table_attach_defaults(table,fontButton,1,2,1,2);
+	gtk_table_attach_defaults(table,fontButton,1,2,2,3);
 
 //bm highlight colour
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("BM Highlight Colour: ")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,3,4);
+
 	bmHighlightBox=gtk_entry_new();
-	gtk_widget_set_size_request((GtkWidget*)bmHighlightBox,72,-1);
-	hbox2=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new(gettext("BM Highlight Colour: ")),true,true,0);
-	gtk_container_add(GTK_CONTAINER(hbox2),bmHighlightBox);
-	gtk_box_pack_start(GTK_BOX(hbox),hbox2,false,false,0);
 	gtk_entry_set_text((GtkEntry*)bmHighlightBox,highlightColour);
-	gtk_widget_show_all(hbox2);
+	gtk_table_attach_defaults(table,bmHighlightBox,1,2,3,4);
 
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
-	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("<b>Text Style</b>")));
-
+	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("Text Style")));
 //end style
-//nag
-	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
-	label=gtk_label_new(gettext("<b>Be Kind To Poor Programmers</b>"));
-	gtk_label_set_use_markup((GtkLabel*)label,true);
-	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
-	hbox=gtk_hbox_new(true,0);
-
-	item=gtk_check_button_new_with_label(gettext("I have donated"));
-	gtk_widget_set_name(item,"ihavedonated");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,nagScreen);
-
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_alignment_new(0,0,1,0),true,true,0);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_alignment_new(0,0,1,0),true,true,0);
-	gtk_widget_show_all(hbox);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
-
-	gtk_box_pack_start(GTK_BOX(vbox),gtk_label_new(gettext("I have really donated some some money to the author.\nMy conscience is clear and my Karma is squeaky clean :)")),false,false,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-
-//buttons
-	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
-
-	hbox=gtk_hbox_new(true,4);
-	item=gtk_button_new_from_stock(GTK_STOCK_APPLY);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
-	gtk_widget_set_name(item,"apply");
-	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setPrefs),(void*)item);	
-
-	item=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
-	gtk_widget_set_name(item,"cancel");
-	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setPrefs),(void*)item);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,2);
-
-//show it
-	gtk_container_add(GTK_CONTAINER(prefswin),(GtkWidget*)vbox);
-	gtk_widget_show_all(prefswin);
-}
-
-VISIBLE void doPrefsX(void)
-{
-	GtkWidget*	vbox;
-	GtkWidget*	hbox;
-	GtkWidget*	hbox2;
-	GtkWidget*	hbox3;
-	GtkWidget*	item;
-	GtkWidget*	label;
-	GtkObject*	adj;
-
-	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title((GtkWindow*)prefswin,"Preferences");
-	vbox=gtk_vbox_new(false,8);
-	hbox=gtk_hbox_new(false,8);
-
-//toolbar dnd
-	iconViewBox=gtk_hbox_new(false,0);
-	fromHBox=gtk_hbox_new(false,0);
-
-	label=gtk_label_new(gettext("<b>Customize Tool Bar</b>"));
-	gtk_label_set_use_markup((GtkLabel*)label,true);
-	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
-
-	gtk_box_pack_start(GTK_BOX(vbox),iconViewBox,true,false,2);
-	gtk_box_pack_start(GTK_BOX(vbox),fromHBox,true,false,2);
-
-	populateDnD();
-	doIconView();
-	
-//end customize
-	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
-
-	hbox=gtk_hbox_new(true,8);
-//appearence 1
-	label=gtk_label_new(gettext("<b>General Appearance</b>"));
-	gtk_label_set_use_markup((GtkLabel*)label,true);
-	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
-
-//indent
-	item=gtk_check_button_new_with_label(gettext("Auto Indent Lines"));
-	gtk_widget_set_name(item,"indent");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,indent);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-//linenumbers
-	item=gtk_check_button_new_with_label(gettext("Show Line Numbers"));
-	gtk_widget_set_name(item,"show");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,lineNumbers);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-//wraplines
-	item=gtk_check_button_new_with_label(gettext("Wrap Lines\t"));
-	gtk_widget_set_name(item,"wrap");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,lineWrap);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-
-//highlite
-	item=gtk_check_button_new_with_label(gettext("Highlight Current Line"));
-	gtk_widget_set_name(item,"high");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,highLight);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-
-//end appearance 1
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
-
-//apperance 2
-	hbox=gtk_hbox_new(true,8);
-
-//no highlight
-	item=gtk_check_button_new_with_label(gettext("No Syntax Highlighting"));
-	gtk_widget_set_name(item,"nosyntax");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,noSyntax);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-
-//single instance
-	item=gtk_check_button_new_with_label(gettext("Use Single Instance"));
-	gtk_widget_set_name(item,"single");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,singleUse);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-
-//auto save session
-	item=gtk_check_button_new_with_label(gettext("Auto Save/Restore Session"));
-	gtk_widget_set_name(item,"save");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,onExitSaveSession);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-
-//auto restore bookmarks
-	restoreBMs=gtk_check_button_new_with_label(gettext("Restore Session Bookmarks"));
-	gtk_widget_set_name(restoreBMs,"marks");
-	gtk_toggle_button_set_active((GtkToggleButton*)restoreBMs,restoreBookmarks);
-	gtk_box_pack_start(GTK_BOX(hbox),restoreBMs,true,true,0);
-	g_signal_connect(G_OBJECT(restoreBMs),"toggled",G_CALLBACK(setPrefs),(void*)restoreBMs);
-	gtk_widget_set_sensitive(restoreBMs,onExitSaveSession);
-
-//end apperance 2
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
-
-//apperance 3
-	hbox=gtk_hbox_new(true,8);
-
-//no duplicates
-	item=gtk_check_button_new_with_label(gettext("Don't Open Duplicate File"));
-	gtk_widget_set_name(item,"duplicates");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,noDuplicates);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-
-//turn off warnings
-	item=gtk_check_button_new_with_label(gettext("Don't Warn On File Change"));
-	gtk_widget_set_name(item,"warning");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,noWarnings);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-
-//autoshow completion
-	item=gtk_check_button_new_with_label(gettext("Auto show Completions"));
-	gtk_widget_set_name(item,"autocomp");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,autoShowComps);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-
-//completeion min chars
-	adj=gtk_adjustment_new(tmpAutoShowMinChars,2,64,1,1,0);
-	hbox2=gtk_hbox_new(false,0);
-	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
-	gtk_widget_set_name(item,"minautochars");
-	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new(gettext("Min wordsize: ")),false,false,0);
-	gtk_container_add(GTK_CONTAINER(hbox2),item);
-	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
-	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
-
-//end apperance 3
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
-
-//sort functions
-	label=gtk_label_new(gettext("<b>Function List Sorting</b>"));
-	gtk_label_set_use_markup((GtkLabel*)label,true);
-	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
-
-	hbox=gtk_hbox_new(false,8);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,true,0);
-	funcListDrop=gtk_combo_box_text_new();
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and alphabetically"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and file position"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by file position"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu alphabetically"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu in categorised format"));
-
-	gtk_combo_box_set_active((GtkComboBox*)funcListDrop,listFunction);
-	gtk_box_pack_start(GTK_BOX(hbox),funcListDrop,false,false,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,true,0);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,false,0);
-
-	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
-
-//text appearence
-	label=gtk_label_new(gettext("<b>Text Style</b>"));
-	gtk_label_set_use_markup((GtkLabel*)label,true);
-	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
-	hbox=gtk_hbox_new(false,8);
-
-//tabwidth
-	adj=gtk_adjustment_new(tmpTabWidth,1,64,1,1,0);
-	hbox2=gtk_hbox_new(false,0);
-	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
-	gtk_widget_set_name(item,"tabs");
-	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new(gettext("Tab width: ")),true,true,0);
-	gtk_container_add(GTK_CONTAINER(hbox2),item);
-	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
-	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
-
-//style
-	int cnt=0;
-	int foundname=0;
-	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(schemeManager);
-
-	hbox2=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new(gettext("Theme: ")),true,true,0);
-
-	item=gtk_combo_box_text_new();
-	gtk_widget_set_name(item,"style");
-	
-	while(ids[cnt]!=NULL)
-	{
-		gtk_combo_box_text_append_text((GtkComboBoxText*)item,ids[cnt]);
-		if(strcmp(ids[cnt],styleName)==0)
-			foundname=cnt;
-		cnt++;
-	}
-	gtk_combo_box_set_active((GtkComboBox*)item,foundname);
-	gtk_box_pack_start(GTK_BOX(hbox2),item,true,true,0);
-
-	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
-	g_signal_connect(G_OBJECT(item),"changed",G_CALLBACK(setPrefs),(void*)item);
-
-//font button
-	hbox2=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Font: "),true,true,0);
-	fontButton=gtk_font_button_new_with_font(fontAndSize);
-	gtk_box_pack_start(GTK_BOX(hbox2),fontButton,true,true,0);
-	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
-	gtk_widget_set_name(fontButton,"fontbutton");
-
-//bm highlight colour
-	bmHighlightBox=gtk_entry_new();
-	gtk_widget_set_size_request((GtkWidget*)bmHighlightBox,72,-1);
-	hbox2=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new(gettext("BM Highlight Colour: ")),true,true,0);
-	gtk_container_add(GTK_CONTAINER(hbox2),bmHighlightBox);
-	gtk_box_pack_start(GTK_BOX(hbox),hbox2,false,false,0);
-	gtk_entry_set_text((GtkEntry*)bmHighlightBox,highlightColour);
-	gtk_widget_show_all(hbox2);
-
-//end style
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
-	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
-
+//page 4
+	pagevbox=gtk_vbox_new(false,0);
 //admin
-	label=gtk_label_new(gettext("<b>Administration</b>"));
-	gtk_label_set_use_markup((GtkLabel*)label,true);
-	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
-	hbox=gtk_hbox_new(false,8);
+	table=(GtkTable*)gtk_table_new(7,TABLECOLS,true);
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+
 //function search depth
 	GtkObject*	adjdepth=gtk_adjustment_new(tmpDepth,1,64,1,1,0);
-	hbox2=gtk_hbox_new(false,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Tag File Search Depth: ")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,0,1);
+
 	item=gtk_spin_button_new((GtkAdjustment*)adjdepth,1,0);
 	gtk_widget_set_name(item,"depth");
-	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new(gettext("Tag File Search Depth: ")),true,true,0);
-	gtk_container_add(GTK_CONTAINER(hbox2),item);
-	gtk_box_pack_start(GTK_BOX(hbox),hbox2,false,false,0);
 	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
+	gtk_table_attach_defaults(table,item,1,2,0,1);
 
 //terminalcommand
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Terminal Command: ")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,1,2);
+
 	terminalBox=gtk_entry_new();
-	hbox2=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new(gettext("Terminal Command: ")),false,false,0);
-	gtk_container_add(GTK_CONTAINER(hbox2),terminalBox);
-	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
 	gtk_entry_set_text((GtkEntry*)terminalBox,terminalCommand);
-	gtk_widget_show_all(hbox2);
+	gtk_table_attach_defaults(table,terminalBox,1,2,1,2);
 
 //root command
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Run As Root Command: ")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,2,3);
+
 	rootCommandBox=gtk_entry_new();
-	hbox2=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new(gettext("Run As Root Command: ")),false,false,0);
-	gtk_container_add(GTK_CONTAINER(hbox2),rootCommandBox);
-	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
 	if(rootCommand!=NULL)
 		gtk_entry_set_text((GtkEntry*)rootCommandBox,rootCommand);
-	gtk_widget_show_all(hbox2);
+	gtk_table_attach_defaults(table,rootCommandBox,1,2,2,3);
+
+//set default browser
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Default Browser: ")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,3,4);
+
+	defaultBrowserBox=gtk_entry_new();
+	gtk_widget_set_name(defaultBrowserBox,"defaultbrowser");
+	if(browserCommand!=NULL)
+		gtk_entry_set_text((GtkEntry*)defaultBrowserBox,browserCommand);
+	gtk_table_attach_defaults(table,defaultBrowserBox,1,2,3,4);
 
 //show keybindings dialog
-	hbox2=gtk_hbox_new(true,0);
 	item=gtk_button_new_with_label(gettext("Customize Keyboard Shortcuts"));
-	gtk_box_pack_start(GTK_BOX(hbox2),item,false,false,0);
 	gtk_widget_set_name(item,"makekeys");
 	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
+	gtk_table_attach_defaults(table,item,0,1,5,6);
 
 //do readlink
 	item=gtk_check_button_new_with_label(gettext("Read Link Before Opening File"));
 	gtk_widget_set_name(item,"readlink");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,readLinkFirst);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-	gtk_box_pack_start(GTK_BOX(hbox2),item,false,false,0);
+	gtk_table_attach_defaults(table,item,0,1,6,7);
 
-//set default browser
-	hbox3=gtk_hbox_new(false,0);
-	defaultBrowserBox=gtk_entry_new();
-	gtk_widget_set_name(defaultBrowserBox,"defaultbrowser");
-	gtk_box_pack_start(GTK_BOX(hbox3),gtk_label_new(gettext("Default Browser: ")),false,false,0);
-	gtk_container_add(GTK_CONTAINER(hbox3),defaultBrowserBox);
-	gtk_box_pack_start(GTK_BOX(hbox2),hbox3,true,true,0);
-
-	if(browserCommand!=NULL)
-		gtk_entry_set_text((GtkEntry*)defaultBrowserBox,browserCommand);
-	gtk_widget_show_all(hbox3);
-
-	gtk_box_pack_start(GTK_BOX(vbox),hbox2,false,false,0);
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
+	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("Administration")));
 
 //end admin
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
-
 //nag
-	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
-
 	label=gtk_label_new(gettext("<b>Be Kind To Poor Programmers</b>"));
 	gtk_label_set_use_markup((GtkLabel*)label,true);
 	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);

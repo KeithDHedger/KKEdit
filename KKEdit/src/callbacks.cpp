@@ -1580,7 +1580,6 @@ void setPrefs(GtkWidget* widget,gpointer data)
 					debugFree(rootCommand,"setPrefs rootCommand");
 					rootCommand=strdup(gtk_entry_get_text((GtkEntry*)rootCommandBox));
 				}
-printf("XXXXXXX\n");
 
 			if(fontAndSize!=NULL)
 				{

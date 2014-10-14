@@ -101,7 +101,7 @@ bool			readLinkFirst;
 bool			tmpReadLinkFirst;
 bool			autoShowComps;
 bool			tmpAutoShowComps;
-int				autoShowMinChars;
+uint				autoShowMinChars;
 int				tmpAutoShowMinChars;
 
 GtkWidget*		fontButton;
