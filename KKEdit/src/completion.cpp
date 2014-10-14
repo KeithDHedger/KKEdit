@@ -153,7 +153,7 @@ void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceC
 	if(word==NULL || strlen(word)<autoShowMinChars)
 		{
 			g_free (word);
-			gtk_source_completion_context_add_proposals (context,provider,NULL,true);
+			gtk_source_completion_context_add_proposals(context,provider,NULL,true);
 			return;
 		}
 
@@ -162,7 +162,7 @@ void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceC
 			page=getPageStructPtr(-1);
 			if(page!=NULL)
 				{
-					wordlist=addPropsFromWord(page,word,(FunctionProvider *)provider);
+					wordlist=addPropsFromWord(page,word,(FunctionProvider*)provider);
 					gtk_source_completion_context_add_proposals(context,provider,wordlist,true);
 					if(wordlist!=NULL)
 						g_list_free_full(wordlist,g_object_unref);
@@ -199,14 +199,16 @@ void addProp(pageStruct* page)
 	char*		correctedstr;
 	char		functype[63];
 	char		infostr[1024];
+	char*		holdstr;
+	GdkPixbuf*	icon;
 
 	if(page->filePath==NULL)
 		return;
 
 	getRecursiveTagList(page->filePath,&functions);
 	lineptr=functions;
-	char*		holdstr;
-	GdkPixbuf *icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER (funcProv));
+
+	icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER (funcProv));
 
 	while (lineptr!=NULL)
 		{

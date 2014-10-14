@@ -1262,7 +1262,7 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 
 	itemlist=gtk_recent_chooser_get_items(chooser);
 
-	for (l = itemlist; l != NULL; l = l->next)
+	for (l=itemlist;l !=NULL;l=l->next)
 		{
 			const gchar *menuname;
 			GtkRecentInfo *info = (GtkRecentInfo*)l->data;
