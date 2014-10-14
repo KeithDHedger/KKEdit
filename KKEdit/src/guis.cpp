@@ -1099,29 +1099,27 @@ VISIBLE void doPrefs(void)
 //page3
 	pagevbox=gtk_vbox_new(false,0);
 //text appearence
-	GtkWidget* texthbox=gtk_hbox_new(true,0);
-	GtkWidget* widghbox=gtk_hbox_new(false,0);
+	GtkTable*		table=(GtkTable*)gtk_table_new(4,4,true);
+	GtkAlignment*	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 
-	label=gtk_label_new(gettext("Text Style"));
 //tabwidth
 	adj=gtk_adjustment_new(tmpTabWidth,1,64,1,1,0);
 	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
 	gtk_widget_set_name(item,"tabs");
 	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
-	gtk_box_pack_start(GTK_BOX(widghbox),gtk_label_new(gettext("Tab width: ")),false,false,0);
-	gtk_box_pack_start(GTK_BOX(widghbox),item,false,false,0);
-	gtk_box_pack_start(GTK_BOX(texthbox),widghbox,true,true,0);
-	gtk_box_pack_start(GTK_BOX(pagevbox),texthbox,false,false,0);
+
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Tab width: ")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,0,1);
+	gtk_table_attach_defaults(table,item,1,2,0,1);
 
 //style
-	texthbox=gtk_hbox_new(true,0);
-	widghbox=gtk_hbox_new(false,0);
-
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 	int cnt=0;
 	int foundname=0;
 	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(schemeManager);
 
-	gtk_box_pack_start(GTK_BOX(widghbox),gtk_label_new(gettext("Theme: ")),true,true,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Theme: ")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,1,2);
 
 	item=gtk_combo_box_text_new();
 	gtk_widget_set_name(item,"style");
@@ -1135,12 +1133,7 @@ VISIBLE void doPrefs(void)
 		cnt++;
 	}
 	gtk_combo_box_set_active((GtkComboBox*)item,foundname);
-	gtk_box_pack_start(GTK_BOX(widghbox),item,false,false,0);
-
-	gtk_box_pack_start(GTK_BOX(texthbox),widghbox,false,false,0);
-	gtk_box_pack_start(GTK_BOX(pagevbox),texthbox,false,false,0);
-
-//	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
+	gtk_table_attach_defaults(table,item,1,2,1,2);
 
 //font button
 	hbox2=gtk_hbox_new(false,0);
@@ -1160,8 +1153,8 @@ VISIBLE void doPrefs(void)
 	gtk_entry_set_text((GtkEntry*)bmHighlightBox,highlightColour);
 	gtk_widget_show_all(hbox2);
 
-
-	gtk_notebook_append_page(notebook,pagevbox,label);
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
+	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("<b>Text Style</b>")));
 
 //end style
 //nag
