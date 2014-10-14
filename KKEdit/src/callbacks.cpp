@@ -1551,7 +1551,6 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			readLinkFirst=tmpReadLinkFirst;
 			autoShowComps=tmpAutoShowComps;
 			autoShowMinChars=tmpAutoShowMinChars;
-
 			if(styleName!=NULL)
 				{
 					debugFree(styleName,"setPrefs tmpStyleName");
@@ -1581,6 +1580,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 					debugFree(rootCommand,"setPrefs rootCommand");
 					rootCommand=strdup(gtk_entry_get_text((GtkEntry*)rootCommandBox));
 				}
+printf("XXXXXXX\n");
 
 			if(fontAndSize!=NULL)
 				{
@@ -2129,9 +2129,4 @@ VISIBLE void getPlugins(GtkWidget* widget,gpointer data)
 	system(command);
 	free(command);
 }
-
-
-
-
-
 

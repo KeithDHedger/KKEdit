@@ -249,9 +249,7 @@ void createCompletion(pageStruct* page)
 	removeProps();
 
 	gtk_source_completion_words_register(docWordsProv,gtk_text_view_get_buffer(GTK_TEXT_VIEW(page->view)));
-	g_object_set(docWordsProv,"priority",10,NULL);
 	g_object_set(docWordsProv,"minimum-word-size",autoShowMinChars,NULL);
-	g_object_set(docWordsProv,"interactive-delay",50,NULL);
 
 	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(docWordsProv),NULL);
 	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(funcProv),NULL);
@@ -269,5 +267,3 @@ void doCompletionPopUp(pageStruct* page)
 	list=gtk_source_completion_get_providers(page->completion);
 	gtk_source_completion_show(page->completion,list,context);
 }
-
-

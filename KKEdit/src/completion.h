@@ -6,6 +6,7 @@
 *     completion.h
 * 
 ******************************************************/
+
 #include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
 
 #ifndef _COMPLETION_
@@ -23,7 +24,6 @@ struct _FunctionProvider
 	GtkSourceCompletionContext*	context;
 	GdkPixbuf*					icon;
 };
-
 
 void function_provider_iface_init(GtkSourceCompletionProviderIface* iface);
 GType function_provider_get_type(void);

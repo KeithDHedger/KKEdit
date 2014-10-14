@@ -946,6 +946,201 @@ VISIBLE void doPrefs(void)
 {
 	GtkWidget*	vbox;
 	GtkWidget*	hbox;
+	GtkWidget*	pagevbox;
+	GtkWidget*	hbox2;
+	GtkWidget*	hbox3;
+	GtkWidget*	item;
+	GtkWidget*	label;
+	GtkObject*	adj;
+	GtkNotebook*	notebook;
+
+	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_title((GtkWindow*)prefswin,"Preferences");
+	vbox=gtk_vbox_new(false,8);
+	hbox=gtk_hbox_new(false,8);
+
+//toolbar dnd
+	iconViewBox=gtk_hbox_new(false,0);
+	fromHBox=gtk_hbox_new(false,0);
+
+	label=gtk_label_new(gettext("<b>Customize Tool Bar</b>"));
+	gtk_label_set_use_markup((GtkLabel*)label,true);
+	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
+
+	gtk_box_pack_start(GTK_BOX(vbox),iconViewBox,true,false,2);
+	gtk_box_pack_start(GTK_BOX(vbox),fromHBox,true,false,2);
+
+	populateDnD();
+	doIconView();
+	
+//end customize
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
+
+	notebook=(GtkNotebook*)gtk_notebook_new();
+
+//pages
+//page1
+	pagevbox=gtk_vbox_new(false,0);
+//appearence 1
+
+//indent
+	item=gtk_check_button_new_with_label(gettext("Auto Indent Lines"));
+	gtk_widget_set_name(item,"indent");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,indent);
+	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+//linenumbers
+	item=gtk_check_button_new_with_label(gettext("Show Line Numbers"));
+	gtk_widget_set_name(item,"show");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,lineNumbers);
+	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+//wraplines
+	item=gtk_check_button_new_with_label(gettext("Wrap Lines\t"));
+	gtk_widget_set_name(item,"wrap");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,lineWrap);
+	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+//highlite
+	item=gtk_check_button_new_with_label(gettext("Highlight Current Line"));
+	gtk_widget_set_name(item,"high");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,highLight);
+	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+//no highlight
+	item=gtk_check_button_new_with_label(gettext("No Syntax Highlighting"));
+	gtk_widget_set_name(item,"nosyntax");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,noSyntax);
+	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+//single instance
+	item=gtk_check_button_new_with_label(gettext("Use Single Instance"));
+	gtk_widget_set_name(item,"single");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,singleUse);
+	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+
+//auto save session
+	GtkWidget* savesesshbox=gtk_hbox_new(true,0);
+
+	item=gtk_check_button_new_with_label(gettext("Auto Save/Restore Session"));
+	gtk_widget_set_name(item,"save");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,onExitSaveSession);
+	gtk_box_pack_start(GTK_BOX(savesesshbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+//auto restore bookmarks
+	restoreBMs=gtk_check_button_new_with_label(gettext("Restore Session Bookmarks"));
+	gtk_widget_set_name(restoreBMs,"marks");
+	gtk_toggle_button_set_active((GtkToggleButton*)restoreBMs,restoreBookmarks);
+	gtk_box_pack_start(GTK_BOX(savesesshbox),restoreBMs,true,true,0);
+	gtk_box_pack_start(GTK_BOX(pagevbox),savesesshbox,true,true,0);
+	g_signal_connect(G_OBJECT(restoreBMs),"toggled",G_CALLBACK(setPrefs),(void*)restoreBMs);
+	gtk_widget_set_sensitive(restoreBMs,onExitSaveSession);
+
+//no duplicates
+	item=gtk_check_button_new_with_label(gettext("Don't Open Duplicate File"));
+	gtk_widget_set_name(item,"duplicates");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,noDuplicates);
+	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+//turn off warnings
+	item=gtk_check_button_new_with_label(gettext("Don't Warn On File Change"));
+	gtk_widget_set_name(item,"warning");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,noWarnings);
+	gtk_box_pack_start(GTK_BOX(pagevbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+
+//completeion min chars
+	GtkWidget* comphbox=gtk_hbox_new(true,0);
+	GtkWidget* adjhbox=gtk_hbox_new(false,0);
+	
+	adj=gtk_adjustment_new(tmpAutoShowMinChars,2,64,1,1,0);
+//autoshow completion
+	item=gtk_check_button_new_with_label(gettext("Auto show Completions"));
+	gtk_widget_set_name(item,"autocomp");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,autoShowComps);
+	gtk_box_pack_start(GTK_BOX(comphbox),item,true,true,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+
+	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
+	gtk_widget_set_name(item,"minautochars");
+	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
+	gtk_box_pack_start(GTK_BOX(adjhbox),gtk_label_new(gettext("Min wordsize: ")),false,false,0);
+	gtk_box_pack_start(GTK_BOX(adjhbox),item,false,false,0);
+
+	gtk_box_pack_start(GTK_BOX(comphbox),adjhbox,true,true,0);
+
+	gtk_box_pack_start(GTK_BOX(pagevbox),comphbox,false,false,0);
+
+	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new("General Appearance"));
+
+	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)notebook,true,true,0);
+
+//page2
+	pagevbox=gtk_vbox_new(true,0);
+//sort functions
+	GtkWidget* funchbox=gtk_hbox_new(true,0);
+
+	label=gtk_label_new(gettext("Function List Sorting"));
+	funcListDrop=gtk_combo_box_text_new();
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and alphabetically"));
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and file position"));
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by file position"));
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu alphabetically"));
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu in categorised format"));
+
+	gtk_combo_box_set_active((GtkComboBox*)funcListDrop,listFunction);
+	gtk_box_pack_start(GTK_BOX(funchbox),funcListDrop,false,false,0);
+
+	gtk_box_pack_start(GTK_BOX(pagevbox),funchbox,false,false,0);
+
+	gtk_notebook_append_page(notebook,pagevbox,label);
+
+//nag
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
+
+	label=gtk_label_new(gettext("<b>Be Kind To Poor Programmers</b>"));
+	gtk_label_set_use_markup((GtkLabel*)label,true);
+	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
+	hbox=gtk_hbox_new(true,0);
+
+	item=gtk_check_button_new_with_label(gettext("I have donated"));
+	gtk_widget_set_name(item,"ihavedonated");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,nagScreen);
+
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_alignment_new(0,0,1,0),true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_alignment_new(0,0,1,0),true,true,0);
+	gtk_widget_show_all(hbox);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_label_new(gettext("I have really donated some some money to the author.\nMy conscience is clear and my Karma is squeaky clean :)")),false,false,0);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+
+//buttons
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
+
+	hbox=gtk_hbox_new(true,4);
+	item=gtk_button_new_from_stock(GTK_STOCK_APPLY);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
+	gtk_widget_set_name(item,"apply");
+	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setPrefs),(void*)item);	
+
+	item=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
+	gtk_widget_set_name(item,"cancel");
+	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setPrefs),(void*)item);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,2);
+
+//show it
+	gtk_container_add(GTK_CONTAINER(prefswin),(GtkWidget*)vbox);
+	gtk_widget_show_all(prefswin);
+}
+
+VISIBLE void doPrefsX(void)
+{
+	GtkWidget*	vbox;
+	GtkWidget*	hbox;
 	GtkWidget*	hbox2;
 	GtkWidget*	hbox3;
 	GtkWidget*	item;
@@ -1069,7 +1264,7 @@ VISIBLE void doPrefs(void)
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
 //completeion min chars
-	adj=gtk_adjustment_new(tmpAutoShowMinChars,1,64,1,1,0);
+	adj=gtk_adjustment_new(tmpAutoShowMinChars,2,64,1,1,0);
 	hbox2=gtk_hbox_new(false,0);
 	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
 	gtk_widget_set_name(item,"minautochars");

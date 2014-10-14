@@ -204,6 +204,9 @@ void init(void)
 	varsProv->proposals=NULL;
 
 	docWordsProv=gtk_source_completion_words_new(NULL,NULL);
+	g_object_set(docWordsProv,"priority",10,NULL);
+	g_object_set(docWordsProv,"minimum-word-size",autoShowMinChars,NULL);
+	g_object_set(docWordsProv,"interactive-delay",50,NULL);
 
 }
 
