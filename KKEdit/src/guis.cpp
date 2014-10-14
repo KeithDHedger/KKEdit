@@ -1136,12 +1136,17 @@ VISIBLE void doPrefs(void)
 	gtk_table_attach_defaults(table,item,1,2,1,2);
 
 //font button
-	hbox2=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Font: "),true,true,0);
+//	hbox2=gtk_hbox_new(false,0);
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Font: ")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,1,2);
+
+//	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new("Font: "),true,true,0);
 	fontButton=gtk_font_button_new_with_font(fontAndSize);
-	gtk_box_pack_start(GTK_BOX(hbox2),fontButton,true,true,0);
-	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
+//	gtk_box_pack_start(GTK_BOX(hbox2),fontButton,true,true,0);
+//	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
 	gtk_widget_set_name(fontButton,"fontbutton");
+	gtk_table_attach_defaults(table,fontButton,1,2,1,2);
 
 //bm highlight colour
 	bmHighlightBox=gtk_entry_new();
