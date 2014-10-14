@@ -6,6 +6,7 @@
 *     completion.h
 * 
 ******************************************************/
+#include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
 
 #ifndef _COMPLETION_
 #define _COMPLETION_
@@ -27,9 +28,10 @@ struct _FunctionProvider
 void function_provider_iface_init(GtkSourceCompletionProviderIface* iface);
 GType function_provider_get_type(void);
 
-extern FunctionProvider*	funcProv;
-extern FunctionProvider*	varsProv;
-extern bool					forcePopup;
+extern FunctionProvider*			funcProv;
+extern FunctionProvider*			varsProv;
+extern GtkSourceCompletionWords*	docWordsProv;
+extern bool							forcePopup;
 
 void doCompletionPopUp(pageStruct* page);
 void createCompletion(pageStruct* page);

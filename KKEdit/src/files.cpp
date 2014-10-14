@@ -171,7 +171,7 @@ void setFilePrefs(pageStruct* page)
 		gtk_source_completion_unblock_interactive(page->completion);
 	else
 		gtk_source_completion_block_interactive(page->completion);
-
+createCompletion(page);
 }
 
 void resetAllFilePrefs(void)

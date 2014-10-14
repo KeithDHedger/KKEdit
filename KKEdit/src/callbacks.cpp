@@ -1524,7 +1524,10 @@ void setPrefs(GtkWidget* widget,gpointer data)
 	gtk_widget_set_sensitive(restoreBMs,tmpSaveSessionOnExit);
 
 	if(strcmp(gtk_widget_get_name(widget),"tabs")==0)
-		tmpTabWidth=(int)gtk_spin_button_get_value((GtkSpinButton*)data);
+		tmpTabWidth=gtk_spin_button_get_value_as_int((GtkSpinButton*)data);
+
+	if(strcmp(gtk_widget_get_name(widget),"minautochars")==0)
+		tmpAutoShowMinChars=gtk_spin_button_get_value_as_int((GtkSpinButton*)data);
 
 	if(strcmp(gtk_widget_get_name(widget),"depth")==0)
 		tmpDepth=(int)gtk_spin_button_get_value((GtkSpinButton*)data);
@@ -1547,6 +1550,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			noWarnings=tmpNoWarnings;
 			readLinkFirst=tmpReadLinkFirst;
 			autoShowComps=tmpAutoShowComps;
+			autoShowMinChars=tmpAutoShowMinChars;
 
 			if(styleName!=NULL)
 				{

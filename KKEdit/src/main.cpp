@@ -203,6 +203,8 @@ void init(void)
 	varsProv->name="Variables";
 	varsProv->proposals=NULL;
 
+	docWordsProv=gtk_source_completion_words_new(NULL,NULL);
+
 }
 
 void doNagScreen(void)

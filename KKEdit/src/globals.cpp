@@ -101,8 +101,8 @@ bool			readLinkFirst;
 bool			tmpReadLinkFirst;
 bool			autoShowComps;
 bool			tmpAutoShowComps;
-bool			autoShowMinChars;
-bool			tmpAutoShowMinChars;
+int				autoShowMinChars;
+int				tmpAutoShowMinChars;
 
 GtkWidget*		fontButton;
 GtkWidget*		terminalBox;

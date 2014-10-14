@@ -17,15 +17,16 @@
 
 struct _FunctionProviderClass
 {
-	GObjectClass				parent_class;
+	GObjectClass			parent_class;
 };
 
 
 G_DEFINE_TYPE_WITH_CODE(FunctionProvider,function_provider,G_TYPE_OBJECT,G_IMPLEMENT_INTERFACE (GTK_TYPE_SOURCE_COMPLETION_PROVIDER,function_provider_iface_init))
 
-FunctionProvider*				funcProv;
-FunctionProvider*				varsProv;
-bool							forcePopup=false;
+FunctionProvider*			funcProv;
+FunctionProvider*			varsProv;
+bool						forcePopup=false;
+GtkSourceCompletionWords*	docWordsProv;
 
 gchar* function_provider_get_name(GtkSourceCompletionProvider* provider)
 {
@@ -53,7 +54,7 @@ char* get_word_at_iter(GtkTextIter* iter,GtkTextBuffer *buffer)
 			startiter=gtk_text_iter_copy(iter);
 			gtk_text_iter_backward_word_start(startiter);
 			word=gtk_text_buffer_get_text(buffer,startiter,iter,true);
-			if(strlen(word)>4)
+			if(strlen(word)>=autoShowMinChars)
 				return(word);
 		}
 	return(NULL);
@@ -150,7 +151,7 @@ void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceC
 
 	word=get_word_at_iter(&iter,buffer);
 
-	if(word == NULL || strlen(word) < 4)
+	if(word==NULL || strlen(word)<autoShowMinChars)
 		{
 			g_free (word);
 			gtk_source_completion_context_add_proposals (context,provider,NULL,true);
@@ -245,20 +246,17 @@ void removeProps(void)
 
 void createCompletion(pageStruct* page)
 {
-	GtkSourceCompletionWords*	prov_words;
+	removeProps();
 
-	prov_words=gtk_source_completion_words_new(NULL,NULL);
-	
-	gtk_source_completion_words_register(prov_words,gtk_text_view_get_buffer(GTK_TEXT_VIEW(page->view)));
-	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(prov_words),NULL);
-	g_object_set(prov_words,"priority",10,NULL);
-	g_object_set(prov_words,"minimum-word-size",5,NULL);
-	g_object_set(prov_words,"interactive-delay",50,NULL);
+	gtk_source_completion_words_register(docWordsProv,gtk_text_view_get_buffer(GTK_TEXT_VIEW(page->view)));
+	g_object_set(docWordsProv,"priority",10,NULL);
+	g_object_set(docWordsProv,"minimum-word-size",autoShowMinChars,NULL);
+	g_object_set(docWordsProv,"interactive-delay",50,NULL);
 
+	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(docWordsProv),NULL);
 	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(funcProv),NULL);
 	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(varsProv),NULL);
 
-	removeProps();
 	addProp(page);
 }
 

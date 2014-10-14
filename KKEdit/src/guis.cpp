@@ -1069,11 +1069,11 @@ VISIBLE void doPrefs(void)
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
 //completeion min chars
-	adj=gtk_adjustment_new(tmpTabWidth,1,64,1,1,0);
+	adj=gtk_adjustment_new(tmpAutoShowMinChars,1,64,1,1,0);
 	hbox2=gtk_hbox_new(false,0);
 	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
 	gtk_widget_set_name(item,"minautochars");
-	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new(gettext("Min wordsize: ")),true,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),gtk_label_new(gettext("Min wordsize: ")),false,false,0);
 	gtk_container_add(GTK_CONTAINER(hbox2),item);
 	gtk_box_pack_start(GTK_BOX(hbox),hbox2,true,true,0);
 	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
