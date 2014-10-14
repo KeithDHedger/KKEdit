@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kkedit 1.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-10-08 15:12+0100\n"
-"PO-Revision-Date: 2014-10-12 12:33-0000\n"
+"PO-Revision-Date: 2014-10-14 10:48-0000\n"
 "Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
@@ -118,7 +118,7 @@ msgstr ""
 
 #: KKEdit/src/callbacks.cpp:1701
 msgid "KKEdit Code Text Editor"
-msgstr ""
+msgstr "Éditeur de code source KKEdit"
 
 #: KKEdit/src/callbacks.cpp:1838 KKEdit/src/callbacks.cpp:1864
 #: KKEdit/src/globals.cpp:574 KKEdit/src/guis.cpp:1624
@@ -280,7 +280,7 @@ msgstr "Chercher/Remplacer"
 
 #: KKEdit/src/guis.cpp:189 KKEdit/src/guis.cpp:769
 msgid "Go Back"
-msgstr ""
+msgstr "Vue précédente"
 
 #: KKEdit/src/guis.cpp:199 KKEdit/src/guis.cpp:771 KKEdit/src/guis.cpp:1673
 #: KKEdit/src/navcallbacks.cpp:151
@@ -301,7 +301,7 @@ msgstr "Chercher une déclaration"
 
 #: KKEdit/src/guis.cpp:236 KKEdit/src/guis.cpp:775
 msgid "Live Search"
-msgstr ""
+msgstr "Recherche rapide"
 
 #: KKEdit/src/guis.cpp:283
 msgid "Edit External Tools"
@@ -385,7 +385,7 @@ msgstr "Séparateur"
 
 #: KKEdit/src/guis.cpp:777
 msgid "Expander"
-msgstr ""
+msgstr "Étendre"
 
 #: KKEdit/src/guis.cpp:904
 msgid "Define Keyboard Shortcuts"
@@ -486,7 +486,7 @@ msgstr "<b>Administration</b>"
 
 #: KKEdit/src/guis.cpp:1166
 msgid "Tag File Search Depth: "
-msgstr ""
+msgstr "Profondeur de recherche dans les sous-répertoires:"
 
 #: KKEdit/src/guis.cpp:1174
 msgid "Terminal Command: "
@@ -650,7 +650,7 @@ msgstr "Utiliser une expression régulière"
 
 #: KKEdit/src/guis.cpp:1922
 msgid "Wrap"
-msgstr ""
+msgstr "Recherche circulaire"
 
 #: KKEdit/src/guis.cpp:1929
 msgid "All Files"
@@ -715,17 +715,19 @@ msgstr "Merci d'aider à soutenir le logiciel libre."
 msgid "Checking for updates ..."
 msgstr "Recherche de mises à jour ..."
 
+# it goes with "from"
 #: KKEdit/src/main.cpp:272
 msgid "KKEdit update available to"
-msgstr ""
+msgstr "Mises à jour pour KKEdit disponibles de"
 
+# it goes with "KKEdit update available to"
 #: KKEdit/src/main.cpp:272
 msgid "from"
-msgstr "à partir de"
+msgstr "vers"
 
 #: KKEdit/src/main.cpp:272
 msgid "From here"
-msgstr ""
+msgstr "vers"
 
 #: KKEdit/src/main.cpp:278
 msgid "Plugin updates are available from here"
@@ -789,4 +791,4 @@ msgstr "Voulez-vous remplacer dans tous les fichiers ouverts ?"
 #: KKEdit/src/searchcallbacks.cpp:904
 #, c-format
 msgid "Replaced %i instances of '%s' with '%s'"
-msgstr ""
+msgstr "%i instances de '%s' remplacées par '%s'"
