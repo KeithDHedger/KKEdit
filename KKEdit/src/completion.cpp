@@ -45,7 +45,6 @@ gboolean function_provider_match(GtkSourceCompletionProvider* provider,GtkSource
 
 char* get_word_at_iter(GtkTextIter* iter,GtkTextBuffer *buffer)
 {
-	GtkTextMark*	mark;
 	GtkTextIter*	startiter;
 	char*			word;
 
