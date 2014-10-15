@@ -101,7 +101,9 @@ bool			readLinkFirst;
 bool			tmpReadLinkFirst;
 bool			autoShowComps;
 bool			tmpAutoShowComps;
-uint				autoShowMinChars;
+bool			autoCheck;
+bool			tmpAutoCheck;
+uint			autoShowMinChars;
 int				tmpAutoShowMinChars;
 
 GtkWidget*		fontButton;
@@ -362,6 +364,7 @@ args			kkedit_rc[]=
 	{"nagscreen",TYPEBOOL,&nagScreen},
 	{"readlink",TYPEBOOL,&readLinkFirst},
 	{"autocomp",TYPEBOOL,&autoShowComps},
+	{"updatecheck",TYPEBOOL,&autoCheck},
 	//strings
 	{"stylename",TYPESTRING,&styleName},
 	{"higlightcolour",TYPESTRING,&highlightColour},

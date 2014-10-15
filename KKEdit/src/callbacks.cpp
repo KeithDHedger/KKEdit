@@ -1505,6 +1505,8 @@ void setPrefs(GtkWidget* widget,gpointer data)
 		tmpNoWarnings=gtk_toggle_button_get_active((GtkToggleButton*)data);
 	if(strcmp(gtk_widget_get_name(widget),"autocomp")==0)
 		tmpAutoShowComps=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	if(strcmp(gtk_widget_get_name(widget),"updatecheck")==0)
+		tmpAutoCheck=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
 	if(strcmp(gtk_widget_get_name(widget),"readlink")==0)
 		tmpReadLinkFirst=gtk_toggle_button_get_active((GtkToggleButton*)data);
@@ -1551,6 +1553,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			readLinkFirst=tmpReadLinkFirst;
 			autoShowComps=tmpAutoShowComps;
 			autoShowMinChars=tmpAutoShowMinChars;
+			autoCheck=tmpAutoCheck;
 			if(styleName!=NULL)
 				{
 					debugFree(styleName,"setPrefs tmpStyleName");

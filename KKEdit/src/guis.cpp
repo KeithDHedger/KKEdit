@@ -1217,6 +1217,13 @@ VISIBLE void doPrefs(void)
 		gtk_entry_set_text((GtkEntry*)defaultBrowserBox,browserCommand);
 	gtk_table_attach_defaults(table,defaultBrowserBox,1,2,3,4);
 
+//check for update
+	item=gtk_check_button_new_with_label(gettext("Check For Updates"));
+	gtk_widget_set_name(item,"updatecheck");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,autoCheck);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+	gtk_table_attach_defaults(table,item,0,1,4,5);
+
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
 	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("Administration")));
 //end admin

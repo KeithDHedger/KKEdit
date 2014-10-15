@@ -58,6 +58,7 @@ void init(void)
 	rootCommand=strdup(GTKSUPATH);
 	autoShowMinChars=4;
 	autoShowComps=false;
+	autoCheck=true;
 
 	windowWidth=800;
 	windowHeight=600;
@@ -132,7 +133,7 @@ void init(void)
 	tmpReadLinkFirst=readLinkFirst;
 	tmpAutoShowComps=autoShowComps;
 	tmpAutoShowMinChars=autoShowMinChars;
-
+	tmpAutoCheck=autoCheck;
 	tmpNagScreen=nagScreen;
 	tmpHighlightColour=highlightColour;
 
@@ -421,7 +422,7 @@ int main(int argc,char **argv)
 				}
 			setSensitive();
 
-			if(timeToNag==true)
+			if((timeToNag==true) && (autoCheck==true))
 				doNagStuff();
 
 			gtk_main();

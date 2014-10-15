@@ -231,6 +231,9 @@ extern bool				readLinkFirst;
 extern bool				tmpReadLinkFirst;
 extern bool				autoShowComps;
 extern bool				tmpAutoShowComps;
+extern bool				autoCheck;
+extern bool				tmpAutoCheck;
+
 extern uint				autoShowMinChars;
 extern int				tmpAutoShowMinChars;
 
