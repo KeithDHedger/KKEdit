@@ -13,7 +13,7 @@ GtkListStore*	listStore=NULL;
 
 GtkWidget*		entries[NUMSHORTCUTS];
 
-const char* 	shortcuttext[NUMSHORTCUTS]={gettext("Delete Current Line"),gettext("Delete To End Of Line"),gettext("Delete To Beginning Of Line"),gettext("Select Word Under Cursor"),gettext("Delete Word Under Cursor"),gettext("Duplicate Current Line"),gettext("Select Current Line"),gettext("Move Current Line Up"),gettext("Move Current Line Down"),gettext("Select From Cursor To End Of Line"),gettext("Select From Beginning Of Line To Cursor"),gettext("Move Selection Up"),gettext("Move Selection Down"),gettext("Completion popup")};
+const char* 	shortcuttext[NUMSHORTCUTS]={gettext("Delete Current Line"),gettext("Delete To End Of Line"),gettext("Delete To Beginning Of Line"),gettext("Select Word Under Cursor"),gettext("Delete Word Under Cursor"),gettext("Duplicate Current Line"),gettext("Select Current Line"),gettext("Move Current Line Up"),gettext("Move Current Line Down"),gettext("Select From Cursor To End Of Line"),gettext("Select From Beginning Of Line To Cursor"),gettext("Move Selection Up"),gettext("Move Selection Down"),gettext("Show Completion")};
 
 void findTool(toolStruct* data,char* toolname)
 {
@@ -1138,14 +1138,6 @@ VISIBLE void doPrefs(void)
 
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
 
-//show keybindings dialog
-	align=(GtkAlignment*)gtk_alignment_new(0.5,1,0,0);
-	item=gtk_button_new_with_label(gettext("Customize Keyboard Shortcuts"));
-	gtk_widget_set_name(item,"makekeys");
-	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
-	gtk_container_add(GTK_CONTAINER(align),item);
-	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,16);
-
 //sort functions
 	align=(GtkAlignment*)gtk_alignment_new(0.5,1,0,0);
 
@@ -1158,9 +1150,18 @@ VISIBLE void doPrefs(void)
 
 	gtk_combo_box_set_active((GtkComboBox*)funcListDrop,listFunction);
 	gtk_container_add(GTK_CONTAINER(align),(GtkWidget*)funcListDrop);
-	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,0);
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,16);
 
 	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("Text Style")));
+
+//show keybindings dialog
+	align=(GtkAlignment*)gtk_alignment_new(0.5,1,0,0);
+	item=gtk_button_new_with_label(gettext("Customize Keyboard Shortcuts"));
+	gtk_widget_set_name(item,"makekeys");
+	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
+	gtk_container_add(GTK_CONTAINER(align),item);
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,0);
+
 //end style
 
 //page 3
