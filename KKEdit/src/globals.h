@@ -37,8 +37,6 @@
 #define MAXRECENT 10
 #define MAXMENUFUNCLEN 100
 
-#define KEYCUTSINFO "To set a custom shortcut:\nClick in the appropriate box and press CONTROL ( and optionally SHIFT ) plus your custom key.\nJust press 'Delete' to remove the shortcut\nClick 'Apply' to keep changes or 'Cancel' to discard any changes."
-
 #define MARK_TYPE_1		"one"
 #define MARK_TYPE_2		"two"
 

@@ -279,7 +279,7 @@ unsigned int	shortCuts[NUMSHORTCUTS][2]=
 
 char*			shortCutStrings[NUMSHORTCUTS]={NULL,};
 
-args	keybindings_rc[]=
+args			keybindings_rc[]=
 	{
 //string
 		{"deleteline",TYPESTRING,&shortCutStrings[0]},

@@ -895,6 +895,7 @@ void buildKeys()
 	GtkWidget*	hbox;
 	char		keystring[32];
 	int			loop;
+	char*		keycutsinfo;
 
 	if(keysWindow==NULL)
 		{
@@ -902,10 +903,12 @@ void buildKeys()
 			gtk_window_set_title((GtkWindow*)keysWindow,gettext("Define Keyboard Shortcuts"));
 			vbox=gtk_vbox_new(false,8);
 
-			item=gtk_label_new(KEYCUTSINFO);
+			asprintf(&keycutsinfo,"%s",gettext("To set a custom shortcut:\nClick in the appropriate box and press CONTROL ( and optionally SHIFT ) plus your custom key.\nJust press 'Delete' to remove the shortcut\nClick 'Apply' to keep changes or 'Cancel' to discard any changes."));
+			item=gtk_label_new(keycutsinfo);
 			gtk_label_set_justify((GtkLabel*)item,GTK_JUSTIFY_CENTER);
 			gtk_label_set_line_wrap((GtkLabel*)item,true);
 			gtk_box_pack_start(GTK_BOX(vbox),item,false,false,0);
+			free(keycutsinfo);
 //functions
 			for(loop=0;loop<NUMSHORTCUTS;loop++)
 				{

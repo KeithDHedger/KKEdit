@@ -205,7 +205,7 @@ void init(void)
 
 	customProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
 	customProv->priority=11;
-	customProv->name=gettext("Custom");
+	customProv->name=gettext("Custom Words");
 	customProv->proposals=NULL;
 
 	docWordsProv=gtk_source_completion_words_new(NULL,NULL);
