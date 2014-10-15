@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kkedit 1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-15 13:02+0100\n"
-"PO-Revision-Date: 2014-10-15 13:09-0000\n"
+"POT-Creation-Date: 2014-10-15 13:24+0100\n"
+"PO-Revision-Date: 2014-10-15 13:24-0000\n"
 "Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
@@ -251,7 +251,7 @@ msgid "Move Selection Down"
 msgstr "Déplacer la sélection à la ligne du dessous"
 
 #: KKEdit/src/guis.cpp:16
-msgid "Completion popup"
+msgid "Show Completion"
 msgstr ""
 
 #: KKEdit/src/guis.cpp:114 KKEdit/src/guis.cpp:759
@@ -324,8 +324,8 @@ msgid "Command: \t"
 msgstr "Commande:    \t"
 
 #: KKEdit/src/guis.cpp:313
-msgid "Shortcut:   \t"
-msgstr "Raccourci:      \t"
+msgid "Shortcut:\t\t"
+msgstr "Raccourci:\t\t"
 
 #: KKEdit/src/guis.cpp:323
 msgid "Comment:  \t"
@@ -456,7 +456,7 @@ msgid "General Appearance"
 msgstr "Apparence général"
 
 #: KKEdit/src/guis.cpp:1082
-msgid "Tab width: "
+msgid "Tab width:"
 msgstr "Largeur de tabulation:"
 
 #: KKEdit/src/guis.cpp:1092
@@ -475,34 +475,34 @@ msgstr "Couleur de surlignage (hexadécimal):"
 msgid "Completion Minimum Word Size:"
 msgstr ""
 
-#: KKEdit/src/guis.cpp:1143
-msgid "Customize Keyboard Shortcuts"
-msgstr "Personnaliser les raccourcis clavier"
-
-#: KKEdit/src/guis.cpp:1153
+#: KKEdit/src/guis.cpp:1145
 msgid "Display functions etc in menu by type and alphabetically"
 msgstr ""
 "Afficher les fonctions dans le menu selon leur type et par ordre alphabétique"
 
-#: KKEdit/src/guis.cpp:1154
+#: KKEdit/src/guis.cpp:1146
 msgid "Display functions etc in menu by type and file position"
 msgstr "Afficher les fonctions dans le menu selon leur type et leur position"
 
-#: KKEdit/src/guis.cpp:1155
+#: KKEdit/src/guis.cpp:1147
 msgid "Display functions etc in menu by file position"
 msgstr "Afficher les fonctions dans le menu selon leur position"
 
-#: KKEdit/src/guis.cpp:1156
+#: KKEdit/src/guis.cpp:1148
 msgid "Display functions etc in menu alphabetically"
 msgstr "Afficher les fonctions dans le menu par ordre alphabétique"
 
-#: KKEdit/src/guis.cpp:1157
+#: KKEdit/src/guis.cpp:1149
 msgid "Display functions etc in menu in categorised format"
 msgstr "Afficher les fonctions dans le menu par catégorie"
 
-#: KKEdit/src/guis.cpp:1163
+#: KKEdit/src/guis.cpp:1155
 msgid "Text Style"
 msgstr "Style du texte"
+
+#: KKEdit/src/guis.cpp:1159
+msgid "Customize Keyboard Shortcuts"
+msgstr "Personnaliser les raccourcis clavier"
 
 #: KKEdit/src/guis.cpp:1174
 msgid "Tag File Search Depth:"

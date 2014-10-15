@@ -279,6 +279,10 @@ void doMakeTool(void)
 	GtkWidget*	toolwin;
 	GtkWidget*	infolabel;
 
+	char*		placeholderinfo;
+
+	asprintf(&placeholderinfo,"%s",gettext("PLACEHOLDERS:\n%t - Currently selected text. Passed to command as $KKEDIT_SELECTION\n%f - Filepath of the current document. Passed to command as $KKEDIT_CURRENTFILE\n%d - Directory of the current document or $HOME. Passed to command as $KKEDIT_CURRENTDIR\n%i - The location of the globally installed tools. Passed to command as $KKEDIT_DATADIR\n%h - Tempory file for displaying html in doc viewer. Passed to command as $KKEDIT_HTMLFILE\n%l - Highlihting language. Passed to command as $KKEDIT_SOURCE_LANG"));
+
 	toolwin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)toolwin,gettext("Edit External Tools"));
 	vbox=gtk_vbox_new(false,8);
@@ -310,7 +314,7 @@ void doMakeTool(void)
 	keyWidget=gtk_entry_new();
 	gtk_widget_show(keyWidget);
 	hbox=gtk_hbox_new(false,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(gettext("Shortcut:   \t")),false,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(gettext("Shortcut:\t\t")),false,true,0);
 	gtk_box_pack_start(GTK_BOX(hbox),keyWidget,true,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_entry_set_text((GtkEntry*)keyWidget,"");
@@ -326,9 +330,10 @@ void doMakeTool(void)
 	gtk_entry_set_text((GtkEntry*)commentWidget,"");
 
 //info
-	infolabel=gtk_label_new(PLACEHOLDERINFO);
+	infolabel=gtk_label_new(placeholderinfo);
 	gtk_label_set_selectable((GtkLabel*)infolabel,true);
 	gtk_box_pack_start(GTK_BOX(vbox),infolabel,false,false,0);
+	free(placeholderinfo);
 //in terminal
 	inTermWidget=gtk_check_button_new_with_label(gettext("Run Tool In Terminal"));
 	gtk_widget_set_name(inTermWidget,"interm");
@@ -1079,7 +1084,7 @@ VISIBLE void doPrefs(void)
 	gtk_widget_set_name(item,"tabs");
 	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
 
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Tab width: ")));
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Tab width:")));
 	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,0,1);
 	gtk_table_attach_defaults(table,item,1,2,0,1);
 
@@ -1161,7 +1166,6 @@ VISIBLE void doPrefs(void)
 	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
 	gtk_container_add(GTK_CONTAINER(align),item);
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,0);
-
 //end style
 
 //page 3
