@@ -25,6 +25,8 @@ G_DEFINE_TYPE_WITH_CODE(FunctionProvider,function_provider,G_TYPE_OBJECT,G_IMPLE
 
 FunctionProvider*			funcProv;
 FunctionProvider*			varsProv;
+FunctionProvider*			customProv;
+
 bool						forcePopup=false;
 GtkSourceCompletionWords*	docWordsProv;
 
@@ -74,6 +76,34 @@ GdkPixbuf* function_provider_get_icon(GtkSourceCompletionProvider* provider)
 //completion
 GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 {
+	char*	infostr;
+	GList*	newlist=NULL;
+	GList*	customlist=customProv->proposals;
+	char*	text;
+
+	if(page->filePath==NULL)
+		return(newlist);
+
+	GdkPixbuf *icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER(prov));
+
+	customlist=prov->proposals;
+	while(customlist!=NULL)
+		{
+			text=gtk_source_completion_proposal_get_text((GtkSourceCompletionProposal*)customlist->data);
+			infostr=gtk_source_completion_proposal_get_info((GtkSourceCompletionProposal*)customlist->data);
+			if(text!=NULL)
+				{
+					if(strncasecmp(text,theword,strlen(theword))==0)
+						newlist=g_list_append(newlist,gtk_source_completion_item_new(text,text,icon,infostr));
+					free(text);
+				}
+			customlist=customlist->next;
+		}
+	return(newlist);
+}
+#if 0
+GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
+{
 	char*		functions=NULL;
 	char		tmpstr[1024];
 	char		infostr[1024];
@@ -81,14 +111,35 @@ GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 	char*		correctedstr;
 	char		functype[63];
 	GList*		newlist=NULL;
+	GList*	customlist=customProv->proposals;
+	char*	text;
 
 	if(page->filePath==NULL)
 		return(newlist);
 
+	GdkPixbuf *icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER(prov));
+
+					if(customProv==prov)
+						{
+							GList*	customlist=customProv->proposals;
+							char*	text;
+							while(customlist!=NULL)
+								{
+									g_object_get(customlist->data,"text",&text,NULL);
+									if(text!=NULL)
+										{
+											if(strncasecmp(text,theword,strlen(theword))==0)
+												newlist=g_list_append(newlist,gtk_source_completion_item_new(text,text,icon,NULL));
+											free(text);
+										}
+									customlist=customlist->next;
+								}
+							return(newlist);
+						}
+
 	getRecursiveTagList(page->filePath,&functions);
 	lineptr=functions;
 	char*		holdstr;
-	GdkPixbuf *icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER(prov));
 
 	while (lineptr!=NULL)
 		{
@@ -130,7 +181,7 @@ GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 
 	return(newlist);
 }
-
+#endif
 void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceCompletionContext* context)
 {
 	GtkTextIter 	iter;
@@ -205,10 +256,39 @@ void addProp(pageStruct* page)
 	if(page->filePath==NULL)
 		return;
 
+//	icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER (funcProv));
+	icon=NULL;
+
+//custom
+	FILE*	fd=NULL;
+	char	buffer[2048];
+	int		cnt;
+	char*	argname=NULL;
+	char*	strarg=NULL;
+
+	char*	customfile;
+
+	asprintf(&customfile,"%s/.KKEdit/customcompletions",getenv("HOME"));
+	fd=fopen(customfile,"r");
+	if(fd!=NULL)
+		{
+			while(feof(fd)==0)
+				{
+					buffer[0]=0;
+					fgets(buffer,2048,fd);
+					if(strlen(buffer)>2)
+						{
+							buffer[strlen(buffer)-1]=0;
+							customProv->proposals=g_list_append(customProv->proposals,gtk_source_completion_item_new(buffer,buffer,icon,NULL));
+						}
+				}
+			fclose(fd);
+		}
+
+//function and variable compitions
 	getRecursiveTagList(page->filePath,&functions);
 	lineptr=functions;
 
-	icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER (funcProv));
 
 	while (lineptr!=NULL)
 		{
@@ -241,8 +321,10 @@ void removeProps(void)
 {
 	g_list_free_full(funcProv->proposals,g_object_unref);
 	g_list_free_full(varsProv->proposals,g_object_unref);
+	g_list_free_full(customProv->proposals,g_object_unref);
 	funcProv->proposals=NULL;
 	varsProv->proposals=NULL;
+	customProv->proposals=NULL;
 }
 
 void createCompletion(pageStruct* page)
@@ -255,6 +337,7 @@ void createCompletion(pageStruct* page)
 	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(docWordsProv),NULL);
 	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(funcProv),NULL);
 	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(varsProv),NULL);
+	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(customProv),NULL);
 
 	addProp(page);
 }

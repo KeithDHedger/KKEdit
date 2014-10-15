@@ -203,6 +203,11 @@ void init(void)
 	varsProv->name="Variables";
 	varsProv->proposals=NULL;
 
+	customProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
+	customProv->priority=11;
+	customProv->name="Custom";
+	customProv->proposals=NULL;
+
 	docWordsProv=gtk_source_completion_words_new(NULL,NULL);
 	g_object_set(docWordsProv,"priority",10,NULL);
 	g_object_set(docWordsProv,"minimum-word-size",autoShowMinChars,NULL);

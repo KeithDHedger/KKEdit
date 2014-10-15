@@ -31,6 +31,7 @@ GType function_provider_get_type(void);
 extern FunctionProvider*			funcProv;
 extern FunctionProvider*			varsProv;
 extern GtkSourceCompletionWords*	docWordsProv;
+extern FunctionProvider*			customProv;
 extern bool							forcePopup;
 
 void doCompletionPopUp(pageStruct* page);
