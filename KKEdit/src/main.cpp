@@ -27,7 +27,7 @@ void readConfig(void)
 
 	debugFree(filename,"readConfig filename");
 }
-readco
+
 void init(void)
 {
 	char*		filename;
