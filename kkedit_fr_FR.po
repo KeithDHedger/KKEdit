@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kkedit 1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-14 19:34+0100\n"
-"PO-Revision-Date: 2014-10-14 19:37-0000\n"
+"POT-Creation-Date: 2014-10-15 12:02+0100\n"
+"PO-Revision-Date: 2014-10-15 12:03-0000\n"
 "Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
@@ -706,11 +706,23 @@ msgstr "Chercher une fonction"
 msgid "Doc Viewer"
 msgstr "Visionneur de documents"
 
-#: KKEdit/src/main.cpp:216
+#: KKEdit/src/main.cpp:198
+msgid "Functions"
+msgstr "Fonctions"
+
+#: KKEdit/src/main.cpp:203
+msgid "Variables"
+msgstr ""
+
+#: KKEdit/src/main.cpp:208
+msgid "Custom"
+msgstr ""
+
+#: KKEdit/src/main.cpp:221
 msgid "Please donate"
 msgstr "Faites un don, s'il vous plaît"
 
-#: KKEdit/src/main.cpp:217
+#: KKEdit/src/main.cpp:222
 msgid ""
 "If you have a PayPal account you can donate any amount you like by logging "
 "into yor account and click the 'Send Money' tab, enter my email address"
@@ -719,37 +731,37 @@ msgstr ""
 "quel montant en vous connectant à votre compte et en allant dans l'onglet "
 "'Envoi d'argent'. Entrez mon adresse courriel"
 
-#: KKEdit/src/main.cpp:217
+#: KKEdit/src/main.cpp:222
 msgid "and then send it."
 msgstr " et envoyez."
 
-#: KKEdit/src/main.cpp:217
+#: KKEdit/src/main.cpp:222
 msgid "Thank you for helping to support Free software."
 msgstr "Merci d'aider à soutenir le logiciel libre."
 
-#: KKEdit/src/main.cpp:238
+#: KKEdit/src/main.cpp:243
 msgid "Checking for updates ..."
 msgstr "Recherche de mises à jour ..."
 
 # it goes with "from"
-#: KKEdit/src/main.cpp:292
+#: KKEdit/src/main.cpp:297
 msgid "KKEdit update available to"
 msgstr "Mises à jour pour KKEdit disponibles de"
 
 # it goes with "KKEdit update available to"
-#: KKEdit/src/main.cpp:292
+#: KKEdit/src/main.cpp:297
 msgid "from"
 msgstr "vers"
 
-#: KKEdit/src/main.cpp:292
+#: KKEdit/src/main.cpp:297
 msgid "From here"
 msgstr "vers"
 
-#: KKEdit/src/main.cpp:298
+#: KKEdit/src/main.cpp:303
 msgid "Plugin updates are available from here"
 msgstr "Des mises à jour pour les greffons sont disponibles ici"
 
-#: KKEdit/src/main.cpp:302
+#: KKEdit/src/main.cpp:307
 msgid "Updates Available"
 msgstr "Mises à jour disponibles"
 

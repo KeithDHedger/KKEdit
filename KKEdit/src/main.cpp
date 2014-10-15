@@ -195,17 +195,17 @@ void init(void)
 
 	funcProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
 	funcProv->priority=1;
-	funcProv->name="Functions";
+	funcProv->name=gettext("Functions");
 	funcProv->proposals=NULL;
 
 	varsProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
 	varsProv->priority=2;
-	varsProv->name="Variables";
+	varsProv->name=gettext("Variables");
 	varsProv->proposals=NULL;
 
 	customProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
 	customProv->priority=11;
-	customProv->name="Custom";
+	customProv->name=gettext("Custom");
 	customProv->proposals=NULL;
 
 	docWordsProv=gtk_source_completion_words_new(NULL,NULL);

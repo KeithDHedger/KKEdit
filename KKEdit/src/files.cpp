@@ -638,7 +638,7 @@ pageStruct* makeNewPage(void)
 	g_object_set(page->completion,"remember-info-visibility",true,NULL);
 	g_object_set(page->completion,"select-on-show",true,NULL);
 	g_object_set(page->completion,"show-headers",true,NULL);
-	g_object_set(page->completion,"show-icons",true,NULL);
+	g_object_set(page->completion,"show-icons",false,NULL);
 	g_object_set(page->completion,"accelerators",0,NULL);
 	createCompletion(page);
 

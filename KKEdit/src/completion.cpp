@@ -65,11 +65,11 @@ GdkPixbuf* function_provider_get_icon(GtkSourceCompletionProvider* provider)
 {
 	FunctionProvider* tp=(FunctionProvider*)provider;
 
-	if (tp->icon==NULL)
-		{
-			GtkIconTheme* theme=gtk_icon_theme_get_default();
-			tp->icon=gtk_icon_theme_load_icon(theme,GTK_STOCK_DIALOG_INFO,16,(GtkIconLookupFlags)0,NULL);
-		}
+//	if (tp->icon==NULL)
+//		{
+//			GtkIconTheme* theme=gtk_icon_theme_get_default();
+//			tp->icon=gtk_icon_theme_load_icon(theme,GTK_STOCK_DIALOG_INFO,16,(GtkIconLookupFlags)0,NULL);
+//		}
 	return tp->icon;
 }
 
@@ -84,8 +84,6 @@ GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 	if(page->filePath==NULL)
 		return(newlist);
 
-	GdkPixbuf *icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER(prov));
-
 	customlist=prov->proposals;
 	while(customlist!=NULL)
 		{
@@ -94,94 +92,14 @@ GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 			if(text!=NULL)
 				{
 					if(strncasecmp(text,theword,strlen(theword))==0)
-						newlist=g_list_append(newlist,gtk_source_completion_item_new(text,text,icon,infostr));
+						newlist=g_list_append(newlist,gtk_source_completion_item_new(text,text,NULL,infostr));
 					free(text);
 				}
 			customlist=customlist->next;
 		}
 	return(newlist);
 }
-#if 0
-GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
-{
-	char*		functions=NULL;
-	char		tmpstr[1024];
-	char		infostr[1024];
-	char*		lineptr;
-	char*		correctedstr;
-	char		functype[63];
-	GList*		newlist=NULL;
-	GList*	customlist=customProv->proposals;
-	char*	text;
 
-	if(page->filePath==NULL)
-		return(newlist);
-
-	GdkPixbuf *icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER(prov));
-
-					if(customProv==prov)
-						{
-							GList*	customlist=customProv->proposals;
-							char*	text;
-							while(customlist!=NULL)
-								{
-									g_object_get(customlist->data,"text",&text,NULL);
-									if(text!=NULL)
-										{
-											if(strncasecmp(text,theword,strlen(theword))==0)
-												newlist=g_list_append(newlist,gtk_source_completion_item_new(text,text,icon,NULL));
-											free(text);
-										}
-									customlist=customlist->next;
-								}
-							return(newlist);
-						}
-
-	getRecursiveTagList(page->filePath,&functions);
-	lineptr=functions;
-	char*		holdstr;
-
-	while (lineptr!=NULL)
-		{
-			tmpstr[0]=0;
-			sscanf (lineptr,"%s",tmpstr);
-			sscanf (lineptr,"%*s %*s %*i %[^\n]s",infostr);
-			holdstr=strdup(tmpstr);
-			correctedstr=truncateWithElipses(tmpstr,MAXMENUFUNCLEN);
-			sprintf(tmpstr,"%s",correctedstr);
-			if(strlen(tmpstr)>0)
-				{
-					sscanf (lineptr,"%*s %s",functype);
-					if(funcProv==prov)
-						{
-							if(strcasecmp(functype,"function")==0)
-								{
-									if(strncasecmp(correctedstr,theword,strlen(theword))==0)
-										newlist=g_list_append(newlist,gtk_source_completion_item_new(tmpstr,holdstr,icon,infostr));
-								}
-						}
-					if(varsProv==prov)
-						{
-							if(strcasecmp(functype,"variable")==0)
-								{
-									if(strncasecmp(correctedstr,theword,strlen(theword))==0)
-										newlist=g_list_append(newlist,gtk_source_completion_item_new(tmpstr,holdstr,icon,infostr));
-								}
-						}
-				}
-			free(correctedstr);
-			free(holdstr);
-
-			lineptr=strchr(lineptr,'\n');
-			if (lineptr!=NULL)
-				lineptr++;
-		}
-	if(functions!=NULL)
-		debugFree(functions,"switchPage functions");
-
-	return(newlist);
-}
-#endif
 void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceCompletionContext* context)
 {
 	GtkTextIter 	iter;
@@ -251,23 +169,14 @@ void addProp(pageStruct* page)
 	char		functype[63];
 	char		infostr[1024];
 	char*		holdstr;
-	GdkPixbuf*	icon;
+	FILE*		fd=NULL;
+	char		buffer[2048];
+	char*		customfile;
 
 	if(page->filePath==NULL)
 		return;
 
-//	icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER (funcProv));
-	icon=NULL;
-
 //custom
-	FILE*	fd=NULL;
-	char	buffer[2048];
-	int		cnt;
-	char*	argname=NULL;
-	char*	strarg=NULL;
-
-	char*	customfile;
-
 	asprintf(&customfile,"%s/.KKEdit/customcompletions",getenv("HOME"));
 	fd=fopen(customfile,"r");
 	if(fd!=NULL)
@@ -279,7 +188,7 @@ void addProp(pageStruct* page)
 					if(strlen(buffer)>2)
 						{
 							buffer[strlen(buffer)-1]=0;
-							customProv->proposals=g_list_append(customProv->proposals,gtk_source_completion_item_new(buffer,buffer,icon,NULL));
+							customProv->proposals=g_list_append(customProv->proposals,gtk_source_completion_item_new(buffer,buffer,NULL,NULL));
 						}
 				}
 			fclose(fd);
@@ -302,9 +211,9 @@ void addProp(pageStruct* page)
 				{
 					sscanf (lineptr,"%*s %s",functype);	
 					if(strcasecmp(functype,"function")==0)
-						funcProv->proposals=g_list_append(funcProv->proposals,gtk_source_completion_item_new(tmpstr,holdstr,icon,infostr));
+						funcProv->proposals=g_list_append(funcProv->proposals,gtk_source_completion_item_new(tmpstr,holdstr,NULL,infostr));
 					if(strcasecmp(functype,"variable")==0)
-						varsProv->proposals=g_list_append(varsProv->proposals,gtk_source_completion_item_new(tmpstr,holdstr,icon,infostr));
+						varsProv->proposals=g_list_append(varsProv->proposals,gtk_source_completion_item_new(tmpstr,holdstr,NULL,infostr));
 				}
 			free(correctedstr);
 			free(holdstr);

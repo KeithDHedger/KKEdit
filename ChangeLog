@@ -1,4 +1,5 @@
 0.2.4
+Added support for custom word completions.
 Redone prefs dialog.
 Added function/variable definition to 'Detail' on completion popup.
 Added variable names to auto complete.

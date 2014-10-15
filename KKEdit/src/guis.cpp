@@ -983,7 +983,7 @@ VISIBLE void doPrefs(void)
 //page1
 	pagevbox=gtk_vbox_new(false,0);
 //appearence 1
-	table=(GtkTable*)gtk_table_new(10,TABLECOLS,true);
+	table=(GtkTable*)gtk_table_new(11,TABLECOLS,true);
 
 //indent
 	item=gtk_check_button_new_with_label(gettext("Auto Indent Lines"));
@@ -1048,20 +1048,19 @@ VISIBLE void doPrefs(void)
 	gtk_toggle_button_set_active((GtkToggleButton*)item,noWarnings);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 	gtk_table_attach_defaults(table,item,0,1,8,9);
+//do readlink
+	item=gtk_check_button_new_with_label(gettext("Read Link Before Opening File"));
+	gtk_widget_set_name(item,"readlink");
+	gtk_toggle_button_set_active((GtkToggleButton*)item,readLinkFirst);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+	gtk_table_attach_defaults(table,item,0,1,9,10);
 
 //autoshow completion
 	item=gtk_check_button_new_with_label(gettext("Auto show Completions"));
 	gtk_widget_set_name(item,"autocomp");
 	gtk_toggle_button_set_active((GtkToggleButton*)item,autoShowComps);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-	gtk_table_attach_defaults(table,item,0,1,9,10);
-
-//completeion min chars
-	adj=gtk_adjustment_new(tmpAutoShowMinChars,2,64,1,1,0);
-	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
-	gtk_widget_set_name(item,"minautochars");
-	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
-	gtk_table_attach_defaults(table,item,1,2,9,10);
+	gtk_table_attach_defaults(table,item,0,1,10,11);
 
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
 	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("General Appearance")));
@@ -1069,29 +1068,9 @@ VISIBLE void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)notebook,true,true,0);
 
 //page2
-	pagevbox=gtk_vbox_new(true,0);
-//sort functions
-	GtkWidget* funchbox=gtk_hbox_new(true,0);
-
-	label=gtk_label_new(gettext("Function List Sorting"));
-	funcListDrop=gtk_combo_box_text_new();
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and alphabetically"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and file position"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by file position"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu alphabetically"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu in categorised format"));
-
-	gtk_combo_box_set_active((GtkComboBox*)funcListDrop,listFunction);
-	gtk_box_pack_start(GTK_BOX(funchbox),funcListDrop,false,false,0);
-
-	gtk_box_pack_start(GTK_BOX(pagevbox),funchbox,false,false,0);
-
-	gtk_notebook_append_page(notebook,pagevbox,label);
-
-//page3
 	pagevbox=gtk_vbox_new(false,0);
 //text appearence
-	table=(GtkTable*)gtk_table_new(4,TABLECOLS,true);
+	table=(GtkTable*)gtk_table_new(5,TABLECOLS,true);
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 
 //tabwidth
@@ -1110,7 +1089,7 @@ VISIBLE void doPrefs(void)
 	int foundname=0;
 	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(schemeManager);
 
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Theme: ")));
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Theme:")));
 	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,1,2);
 
 	item=gtk_combo_box_text_new();
@@ -1129,7 +1108,7 @@ VISIBLE void doPrefs(void)
 
 //font button
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Font: ")));
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Font:")));
 	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,2,3);
 
 	fontButton=gtk_font_button_new_with_font(fontAndSize);
@@ -1138,18 +1117,53 @@ VISIBLE void doPrefs(void)
 
 //bm highlight colour
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("BM Highlight Colour: ")));
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("BM Highlight Colour:")));
 	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,3,4);
 
 	bmHighlightBox=gtk_entry_new();
 	gtk_entry_set_text((GtkEntry*)bmHighlightBox,highlightColour);
 	gtk_table_attach_defaults(table,bmHighlightBox,1,2,3,4);
 
+//autoshow completion
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Completion Minimum Word Size:")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,4,5);
+
+//completeion min chars
+	adj=gtk_adjustment_new(tmpAutoShowMinChars,2,64,1,1,0);
+	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
+	gtk_widget_set_name(item,"minautochars");
+	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
+	gtk_table_attach_defaults(table,item,1,2,4,5);
+
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
+
+//show keybindings dialog
+	align=(GtkAlignment*)gtk_alignment_new(0.5,1,0,0);
+	item=gtk_button_new_with_label(gettext("Customize Keyboard Shortcuts"));
+	gtk_widget_set_name(item,"makekeys");
+	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
+	gtk_container_add(GTK_CONTAINER(align),item);
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,16);
+
+//sort functions
+	align=(GtkAlignment*)gtk_alignment_new(0.5,1,0,0);
+
+	funcListDrop=gtk_combo_box_text_new();
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and alphabetically"));
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and file position"));
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by file position"));
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu alphabetically"));
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu in categorised format"));
+
+	gtk_combo_box_set_active((GtkComboBox*)funcListDrop,listFunction);
+	gtk_container_add(GTK_CONTAINER(align),(GtkWidget*)funcListDrop);
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,0);
+
 	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("Text Style")));
 //end style
 
-//page 4
+//page 3
 	pagevbox=gtk_vbox_new(false,0);
 //admin
 	table=(GtkTable*)gtk_table_new(7,TABLECOLS,true);
@@ -1157,7 +1171,7 @@ VISIBLE void doPrefs(void)
 
 //function search depth
 	GtkObject*	adjdepth=gtk_adjustment_new(tmpDepth,1,64,1,1,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Tag File Search Depth: ")));
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Tag File Search Depth:")));
 	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,0,1);
 
 	item=gtk_spin_button_new((GtkAdjustment*)adjdepth,1,0);
@@ -1167,7 +1181,7 @@ VISIBLE void doPrefs(void)
 
 //terminalcommand
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Terminal Command: ")));
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Terminal Command:")));
 	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,1,2);
 
 	terminalBox=gtk_entry_new();
@@ -1176,7 +1190,7 @@ VISIBLE void doPrefs(void)
 
 //root command
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Run As Root Command: ")));
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Run As Root Command:")));
 	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,2,3);
 
 	rootCommandBox=gtk_entry_new();
@@ -1186,7 +1200,7 @@ VISIBLE void doPrefs(void)
 
 //set default browser
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Default Browser: ")));
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Default Browser:")));
 	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,3,4);
 
 	defaultBrowserBox=gtk_entry_new();
@@ -1195,23 +1209,10 @@ VISIBLE void doPrefs(void)
 		gtk_entry_set_text((GtkEntry*)defaultBrowserBox,browserCommand);
 	gtk_table_attach_defaults(table,defaultBrowserBox,1,2,3,4);
 
-//show keybindings dialog
-	item=gtk_button_new_with_label(gettext("Customize Keyboard Shortcuts"));
-	gtk_widget_set_name(item,"makekeys");
-	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
-	gtk_table_attach_defaults(table,item,0,1,5,6);
-
-//do readlink
-	item=gtk_check_button_new_with_label(gettext("Read Link Before Opening File"));
-	gtk_widget_set_name(item,"readlink");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,readLinkFirst);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-	gtk_table_attach_defaults(table,item,0,1,6,7);
-
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
 	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("Administration")));
-
 //end admin
+
 //nag
 	label=gtk_label_new(gettext("<b>Be Kind To Poor Programmers</b>"));
 	gtk_label_set_use_markup((GtkLabel*)label,true);
