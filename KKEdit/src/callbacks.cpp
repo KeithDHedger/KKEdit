@@ -964,6 +964,30 @@ void copyToClipboard(GtkWidget* widget,gpointer data)
 	gtk_clipboard_set_text(clipboard,(char*)data,-1);
 }
 
+VISIBLE void addtoCustomWordList(GtkWidget* widget,gpointer data)
+{
+	pageStruct*		page=(pageStruct*)data;
+	GtkTextIter		start;
+	GtkTextIter		end;
+	char*			selection=NULL;
+	char*			command;
+
+	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+		{
+			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+			if(selection==NULL)
+				return;
+		}
+	else
+		return;
+
+	asprintf(&command,"echo '%s'|cat - %s/%s|sort -u -o %s/%s.tmp;mv %s/%s.tmp %s/%s",selection,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE);
+	system(command);
+	free(command);
+	free(selection);
+	createCompletion(page);
+}
+
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 {
 	pageStruct*		page=getPageStructPtr(-1);
@@ -1021,6 +1045,12 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(seachGtkDocs),NULL);
+
+					menuitem=gtk_image_menu_item_new_with_label(gettext("Add To Custom Word List"));
+					image=gtk_image_new_from_stock(GTK_STOCK_EDIT,GTK_ICON_SIZE_MENU);
+					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(addtoCustomWordList),(void*)page);
 
 #ifdef _ASPELL_
 //spell check

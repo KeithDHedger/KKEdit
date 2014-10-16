@@ -44,6 +44,7 @@
 #define USEFILE			-2
 
 #define	POLEPATH		PREFIX "/bin/KKEditProgressBar"
+#define CUSTOMWORDFILE ".KKEdit/customcompletions"
 
 #define NUMSHORTCUTS	14
 

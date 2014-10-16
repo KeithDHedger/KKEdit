@@ -177,7 +177,7 @@ void addProp(pageStruct* page)
 		return;
 
 //custom
-	asprintf(&customfile,"%s/.KKEdit/customcompletions",getenv("HOME"));
+	asprintf(&customfile,"%s/%s",getenv("HOME"),CUSTOMWORDFILE);
 	fd=fopen(customfile,"r");
 	if(fd!=NULL)
 		{

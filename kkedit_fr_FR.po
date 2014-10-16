@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kkedit 1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-15 20:36+0100\n"
-"PO-Revision-Date: 2014-10-15 20:38-0000\n"
+"POT-Creation-Date: 2014-10-16 13:13+0100\n"
+"PO-Revision-Date: 2014-10-16 13:14-0000\n"
 "Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
@@ -51,64 +51,68 @@ msgstr ""
 msgid "KKEdit Help"
 msgstr "Aide"
 
-#: KKEdit/src/callbacks.cpp:999 KKEdit/src/guis.cpp:182
+#: KKEdit/src/callbacks.cpp:1023 KKEdit/src/guis.cpp:182
 #: KKEdit/src/guis.cpp:773 KKEdit/src/guis.cpp:1664
 msgid "Go To Definition"
 msgstr "Aller à la déclaration"
 
-#: KKEdit/src/callbacks.cpp:1007 KKEdit/src/guis.cpp:1715
+#: KKEdit/src/callbacks.cpp:1031 KKEdit/src/guis.cpp:1715
 msgid "Find In Documentation"
 msgstr "Rechercher dans la documentation"
 
-#: KKEdit/src/callbacks.cpp:1013 KKEdit/src/guis.cpp:1705
+#: KKEdit/src/callbacks.cpp:1037 KKEdit/src/guis.cpp:1705
 msgid "Search In Qt5 Docs"
 msgstr "Chercher dans la documentation Qt5"
 
-#: KKEdit/src/callbacks.cpp:1019 KKEdit/src/guis.cpp:1697
+#: KKEdit/src/callbacks.cpp:1043 KKEdit/src/guis.cpp:1697
 msgid "Search In Gtk Docs"
 msgstr "Chercher dans la documentation Gtk"
 
-#: KKEdit/src/callbacks.cpp:1029
+#: KKEdit/src/callbacks.cpp:1049
+msgid "Add To Custom Word List"
+msgstr "Ajouter à la liste de mots personnalisée"
+
+#: KKEdit/src/callbacks.cpp:1059
 msgid "Check Spellling"
 msgstr "Vérifier l'orthographe"
 
-#: KKEdit/src/callbacks.cpp:1075 KKEdit/src/globals.cpp:1005
+#: KKEdit/src/callbacks.cpp:1105 KKEdit/src/globals.cpp:1005
 msgid "Toggle Bookmark"
 msgstr "Placer un signet"
 
-#: KKEdit/src/callbacks.cpp:1185
+#: KKEdit/src/callbacks.cpp:1215
 msgid "Copy Folder Path"
 msgstr "Copier le chemin du dossier parent"
 
-#: KKEdit/src/callbacks.cpp:1191
+#: KKEdit/src/callbacks.cpp:1221
 msgid "Copy Filepath"
 msgstr "Copier le chemin du fichier"
 
-#: KKEdit/src/callbacks.cpp:1197
+#: KKEdit/src/callbacks.cpp:1227
 msgid "Copy FileName"
 msgstr "Copier le nom du fichier"
 
-#: KKEdit/src/callbacks.cpp:1207
+#: KKEdit/src/callbacks.cpp:1237
 msgid "Spell Check Document"
 msgstr "Vérifier l'orthographe du document"
 
-#: KKEdit/src/callbacks.cpp:1217
+#: KKEdit/src/callbacks.cpp:1247
 msgid "Un-Split View"
 msgstr "Unifier la vue"
 
-#: KKEdit/src/callbacks.cpp:1219
+#: KKEdit/src/callbacks.cpp:1249
 msgid "Split View"
 msgstr "Scinder la vue"
 
-#: KKEdit/src/callbacks.cpp:1230
+#: KKEdit/src/callbacks.cpp:1260
 msgid "Source Highlight"
 msgstr "Coloration syntaxique"
 
-#: KKEdit/src/callbacks.cpp:1698
+#: KKEdit/src/callbacks.cpp:1728
 msgid "Are you sure you want to delete"
 msgstr "Êtes-vous sûr de vouloir supprimer"
 
-#: KKEdit/src/callbacks.cpp:1716
+#: KKEdit/src/callbacks.cpp:1746
 msgid ""
 "\n"
 "More by the same author\n"
@@ -116,45 +120,45 @@ msgstr ""
 "\n"
 "Plus du même auteur\n"
 
-#: KKEdit/src/callbacks.cpp:1718
+#: KKEdit/src/callbacks.cpp:1748
 msgid "KKEdit Code Text Editor"
 msgstr "Éditeur de code source KKEdit"
 
-#: KKEdit/src/callbacks.cpp:1722
+#: KKEdit/src/callbacks.cpp:1752
 msgid "French Translation"
 msgstr ""
 
-#: KKEdit/src/callbacks.cpp:1858 KKEdit/src/callbacks.cpp:1884
+#: KKEdit/src/callbacks.cpp:1888 KKEdit/src/callbacks.cpp:1914
 #: KKEdit/src/globals.cpp:607 KKEdit/src/guis.cpp:1632
 msgid "Hide Tool Output"
 msgstr "Cacher la sortie des outils"
 
-#: KKEdit/src/callbacks.cpp:1870 KKEdit/src/callbacks.cpp:1889
+#: KKEdit/src/callbacks.cpp:1900 KKEdit/src/callbacks.cpp:1919
 #: KKEdit/src/guis.cpp:1634
 msgid "Show Tool Output"
 msgstr "Montrer la sortie des outils"
 
-#: KKEdit/src/callbacks.cpp:1897 KKEdit/src/guis.cpp:1614
+#: KKEdit/src/callbacks.cpp:1927 KKEdit/src/guis.cpp:1614
 msgid "Hide Bookmarks Bar"
 msgstr "Cacher la barre des signets"
 
-#: KKEdit/src/callbacks.cpp:1899 KKEdit/src/guis.cpp:1616
+#: KKEdit/src/callbacks.cpp:1929 KKEdit/src/guis.cpp:1616
 msgid "Show Bookmarks Bar"
 msgstr "Montrer la barre des signets"
 
-#: KKEdit/src/callbacks.cpp:1907 KKEdit/src/guis.cpp:1623
+#: KKEdit/src/callbacks.cpp:1937 KKEdit/src/guis.cpp:1623
 msgid "Hide Tool Bar"
 msgstr "Cacher la barre d'outils"
 
-#: KKEdit/src/callbacks.cpp:1909 KKEdit/src/guis.cpp:1625
+#: KKEdit/src/callbacks.cpp:1939 KKEdit/src/guis.cpp:1625
 msgid "Show Tool Bar"
 msgstr "Montrer la barre d'outils"
 
-#: KKEdit/src/callbacks.cpp:1931 KKEdit/src/searchcallbacks.cpp:59
+#: KKEdit/src/callbacks.cpp:1961 KKEdit/src/searchcallbacks.cpp:59
 msgid "Hide Docviewer"
 msgstr "Cacher le visionneur de documents"
 
-#: KKEdit/src/callbacks.cpp:1937 KKEdit/src/guis.cpp:1650
+#: KKEdit/src/callbacks.cpp:1967 KKEdit/src/guis.cpp:1650
 msgid "Show Docviewer"
 msgstr "Montrer le visionneur de documents"
 
