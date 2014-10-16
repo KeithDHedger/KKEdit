@@ -258,6 +258,8 @@ AspellConfig*	aspellConfig;
 AspellSpeller*	spellChecker=0;
 #endif
 
+const char*		localeLang;
+
 HistoryClass*	history;
 StringSlice*	globalSlice;
 

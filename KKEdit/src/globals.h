@@ -424,8 +424,9 @@ extern args				keybindings_rc[];
 //status bar message
 extern char*			statusMessage;
 
-void plugRunFunction(gpointer data,gpointer funcname);
+extern const char*		localeLang;
 
+void plugRunFunction(gpointer data,gpointer funcname);
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);

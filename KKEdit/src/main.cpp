@@ -191,6 +191,8 @@ void init(void)
 			lastNagTime=nagTime;
 		}
 
+	localeLang=getenv("LANG");
+
 	history=new HistoryClass;
 	globalSlice->setReturnDupString(true);
 

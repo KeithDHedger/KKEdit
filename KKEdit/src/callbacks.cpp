@@ -947,11 +947,18 @@ void externalTool(GtkWidget* widget,gpointer data)
 
 VISIBLE void openHelp(GtkWidget* widget,gpointer data)
 {
-	asprintf(&thePage,"file://%s/help/help.html",DATADIR);
+	const char* lang;
+
+	if(strncmp(localeLang,"en",2)==0)
+		lang="en";
+	else
+		lang="fr";
+
+	asprintf(&thePage,"file://%s/help/%s/help.html",DATADIR,lang);
 #ifdef _BUILDDOCVIEWER_
 	showDocView(USEURI,(char*)"KKEdit",gettext("KKEdit Help"));
 #else
-	asprintf(&thePage,"%s %s/help/help.html",browserCommand,DATADIR);
+	asprintf(&thePage,"%s %s/help/%s/help.html",browserCommand,DATADIR,lang);
 	runCommand(thePage,NULL,false,8,0,(char*)gettext("KKEdit Help"));
 	debugFree(thePage,"openHelp thePage");
 	thePage=NULL;
