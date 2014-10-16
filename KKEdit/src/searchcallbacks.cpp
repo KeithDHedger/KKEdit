@@ -86,7 +86,7 @@ PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 	return;
 }
 
-VISIBLE void seachGtkDocs(GtkWidget* widget,gpointer data)
+VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -382,7 +382,7 @@ void docSearchFromBar(GtkWidget* widget,gpointer data)
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
 	if(text!=NULL && strlen(text)>0)
-		seachGtkDocs(NULL,(void*)text);
+		searchGtkDocs(NULL,(void*)text);
 }
 
 #ifdef _BUILDDOCVIEWER_
