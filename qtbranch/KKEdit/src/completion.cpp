@@ -6,13 +6,14 @@
 *     completion.cpp
 * 
 ******************************************************/
+#ifndef _USEQT5_
 #include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
 #include <gtksourceview/gtksourceview.h>
 #include <gtksourceview/gtksourcecompletion.h>
 #include <gtksourceview/gtksourcecompletioninfo.h>
 #include <gtksourceview/gtksourcecompletionitem.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
-
+#endif
 #include "kkedit-includes.h"
 
 struct _FunctionProviderClass

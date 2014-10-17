@@ -13,6 +13,18 @@
 
 #undef _DEBUG_FREE_
 
+#ifndef _USEQT5_
+	#include <gtk/gtk.h>
+	typedef GtkWidget Widget;
+#else
+	#include <glib.h>
+	#include <QtWidgets>
+	typedef QWidget Widget;
+
+	extern QApplication*	holdapp;
+#endif
+
+
 #define REPLACE			100
 #define FINDNEXT		200
 #define FINDPREV		300

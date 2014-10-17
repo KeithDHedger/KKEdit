@@ -8,6 +8,10 @@
 
 #include "kkedit-includes.h"
 
+#ifdef _USEQT5_
+	QApplication*	holdapp;
+#endif
+
 GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;
 GtkNotebook*	notebook=NULL;

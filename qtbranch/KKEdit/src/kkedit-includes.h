@@ -15,6 +15,9 @@
 #include <sys/stat.h>
 #include <glib.h>
 
+#include "config.h"
+
+#ifndef _USEQT5_
 #include <gtksourceview/gtksourcestyleschememanager.h>
 #include <gtksourceview/gtksourceview.h>
 #include <gtksourceview/gtksourcebuffer.h>
@@ -23,6 +26,10 @@
 
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <gtksourceview/gtksourceprintcompositor.h>
+#else
+	#include <QtWidgets>
+#endif
+
 #include <ctype.h>
 #include <gdk/gdkkeysyms.h>
 

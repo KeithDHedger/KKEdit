@@ -7,7 +7,9 @@
 * 
 ******************************************************/
 
+#ifndef _USEQT5_
 #include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
+#endif
 
 #ifndef _COMPLETION_
 #define _COMPLETION_

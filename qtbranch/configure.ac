@@ -1,6 +1,6 @@
 #
 #
-AC_INIT([KKEdit],[0.2.4.rc2],[PROJ],[KKEdit])
+AC_INIT([KKEdit],[0.3.0],[PROJ],[KKEdit])
 
 AC_CONFIG_HEADER([config.h])
 AC_PROG_CXX
@@ -20,16 +20,41 @@ AC_SUBST(CXXFLAGS)
 
 CFLAGS=-Wall
 AC_SUBST(CFLAGS)
+PKG_PROG_PKG_CONFIG
 
-GTK_MODULES="gtk+-2.0 >= 2.24.0"
-PKG_CHECK_MODULES(GTK, $GTK_MODULES)
-AC_SUBST(GTK_CFLAGS)
-AC_SUBST(GTK_LIBS)
+#AC_ARG_ENABLE(qt5,[  --enable-qt5		Enable QT5.],[enable_qt5=$enableval],[enable_qt5="no"])
 
-GTKSRC_MODULES="gtksourceview-2.0 >= 2.9.9"
-PKG_CHECK_MODULES(GTKSRC, $GTKSRC_MODULES)
-AC_SUBST(GTKSRC_CFLAGS)
-AC_SUBST(GTKSRC_LIBS)
+AC_ARG_ENABLE(qt5,AS_HELP_STRING([--enable-qt5],[Enable QT5]),[enable_qt5=$enableval],[enable_qt5="no"])
+
+if test $enable_qt5 = "yes" ;then
+	QTWIDGETS_MODULES="Qt5Widgets >= 5.2.1"
+	PKG_CHECK_MODULES(QTWIDGETS, $QTWIDGETS_MODULES)
+	AC_SUBST(QTWIDGETS_CFLAGS)
+	AC_SUBST(QTWIDGETS_LIBS)
+	AC_DEFINE([_USEQT5_], [], [Build Qt5])
+else
+	GTK_MODULES="gtk+-2.0 >= 2.24.0"
+	PKG_CHECK_MODULES(GTK, $GTK_MODULES)
+	AC_SUBST(GTK_CFLAGS)
+	AC_SUBST(GTK_LIBS)
+
+	GTKSRC_MODULES="gtksourceview-2.0 >= 2.9.9"
+	PKG_CHECK_MODULES(GTKSRC, $GTKSRC_MODULES)
+	AC_SUBST(GTKSRC_CFLAGS)
+	AC_SUBST(GTKSRC_LIBS)
+fi
+
+AM_CONDITIONAL([USEQT5], [test x$enable_qt5 = "xyes"])
+
+#GTK_MODULES="gtk+-2.0 >= 2.24.0"
+#PKG_CHECK_MODULES(GTK, $GTK_MODULES)
+#AC_SUBST(GTK_CFLAGS)
+#AC_SUBST(GTK_LIBS)
+
+#GTKSRC_MODULES="gtksourceview-2.0 >= 2.9.9"
+#PKG_CHECK_MODULES(GTKSRC, $GTKSRC_MODULES)
+#AC_SUBST(GTKSRC_CFLAGS)
+#AC_SUBST(GTKSRC_LIBS)
 
 UNIQ_MODULES="unique-1.0 >= 1.1.6"
 PKG_CHECK_MODULES(UNIQ, $UNIQ_MODULES)
@@ -54,7 +79,7 @@ if test "$enable_docviewer" = "yes"; then
 	AC_DEFINE([_BUILDDOCVIEWER_], [], [Build gtk-doc viewer])
 fi
 
-AC_ARG_WITH(qt5-docdir,AS_HELP_STRING([ --with-qt5-docdir],[Installtion DIR for Qt5 documentation]),
+AC_ARG_WITH(qt5-docdir,AS_HELP_STRING([--with-qt5-docdir],[Installtion DIR for Qt5 documentation]),
     [with_qt5_docdir=$withval],
     [with_qt5_docdir="/usr/share/doc/qt5"])
 
@@ -77,7 +102,6 @@ if test $CTAGS = false; then
 	AC_MSG_ERROR([No ctags program found!])
 fi
 
-
 AC_CHECK_PROG(GTKSU, gtksu ,true,false)
 if test $GTKSU = false; then
 	AC_MSG_NOTICE([No GtkSu program found!])
@@ -92,7 +116,7 @@ if test $MANPAGEEDITOR = false; then
 	AC_MSG_NOTICE([http://gtk-apps.org/content/show.php?content=160219])
 fi
 
-AC_ARG_WITH(gsu-path,AS_HELP_STRING([ --with-gsu-path],[Path to graphical su app]),
+AC_ARG_WITH(gsu-path,AS_HELP_STRING([--with-gsu-path],[Path to graphical su app]),
     [with_gsu_path=$withval],
     [with_gsu_path="gtksu -- "])
 
