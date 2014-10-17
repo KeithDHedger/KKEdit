@@ -13,7 +13,8 @@
 #include <time.h>
 
 #include "kkedit-includes.h"
-
+#if 0
+#if 0
 const char* NAMED_ENTITIES[][2] = {
 	{"ge;","≥"},
 	{"gt;",">"},
@@ -268,8 +269,9 @@ const char* NAMED_ENTITIES[][2] = {
 	{"zeta;","ζ"},
 	{"zwj;","\xE2\x80\x8D"},
 	{"zwnj;","\xE2\x80\x8C"}
-#endif
+
 };
+#endif
 
 StringSlice::StringSlice()
 {
@@ -828,4 +830,4 @@ char* StringSlice::randomName(int len)
 #endif
 }
 
-
+#endif

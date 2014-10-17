@@ -9,6 +9,7 @@
 
 #include "globals.h"
 
+#if 0
 TextBuffer::TextBuffer()
 {
 #if 0
@@ -231,4 +232,4 @@ void TextBuffer::scroll2Iter(GtkTextView* view,GtkTextIter iter)
 #endif
 }
 
-
+#endif

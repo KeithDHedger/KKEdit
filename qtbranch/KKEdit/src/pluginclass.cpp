@@ -9,6 +9,7 @@
 
 #include "sliceclass.h"
 #include "pluginclass.h"
+#if 0
 
 PluginClass::PluginClass(bool loadPlugs)
 {
@@ -243,7 +244,8 @@ int PluginClass::runPlugFunction(moduleData* pdata,const char* func)
 }
 
 bool PluginClass::enablePlugin(char* name,bool wanttounload)
-{	
+{
+#if 0
 	moduleData*	pd=NULL;
 	pd=getPluginByName(name);
 	if(pd!=NULL)
@@ -303,3 +305,4 @@ bool PluginClass::checkForFunction(char* name,const char* func)
 #endif
 }
 
+#endif
