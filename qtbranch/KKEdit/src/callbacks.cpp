@@ -7,7 +7,7 @@
 */
 
 #include "kkedit-includes.h"
-
+#if 0
 Widget*			tabMenu;
 char				defineText[1024];
 GtkPrintSettings*	settings=NULL;
@@ -15,12 +15,15 @@ bool				closingAll=false;
 
 void releasePlugs(gpointer data,gpointer user_data)
 {
+#if 0
 	if(((moduleData*)data)->module!=NULL)
 		g_module_close((GModule*)((moduleData*)data)->module);
+#endif
 }
 
 void setToobarSensitive(void)
 {
+#if 0
 	pageStruct*	page=getPageStructPtr(currentTabNumber);
 
 	for(int j=0; j<(int)strlen(toolBarLayout); j++)
@@ -174,15 +177,19 @@ void setToobarSensitive(void)
 					break;
 				}
 		}
+#endif
 }
 
 void destroyBMData(gpointer data)
 {
+#if 0
 	debugFree(((bookMarksNew*)data)->markName,"destroyBMData markName");
+#endif
 }
 
 VISIBLE void removeAllBookmarks(Widget* widget,GtkTextIter* titer)
 {
+#if 0
 	pageStruct*	page=NULL;
 	int			numpages;
 	GtkTextIter	startiter;
@@ -200,10 +207,12 @@ VISIBLE void removeAllBookmarks(Widget* widget,GtkTextIter* titer)
 	newBookMarksList=NULL;
 	rebuildBookMarkMenu();
 	gtk_widget_show_all(menuBookMark);
+#endif
 }
 
 VISIBLE void toggleBookmark(Widget* widget,GtkTextIter* titer)
 {
+#if 0
 	pageStruct*		page=getPageStructPtr(-1);
 	Widget*		menuitem;
 	GtkTextMark*	mark;
@@ -292,10 +301,12 @@ VISIBLE void toggleBookmark(Widget* widget,GtkTextIter* titer)
 			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)bookmarkdata);
 			gtk_widget_show_all(menuBookMark);
 		}
+#endif
 }
 
 void refreshMainWindow(void)
 {
+#if 0
 	gtk_widget_show(window);
 	gtk_widget_show(mainWindowVBox);
 	gtk_widget_show(mainVPane);
@@ -319,10 +330,12 @@ void refreshMainWindow(void)
 		gtk_widget_show((Widget*)toolBarBox);
 	else
 		gtk_widget_hide((Widget*)toolBarBox);
+#endif
 }
 
 int yesNo(char* question,char* file)
 {
+#if 0
 	Widget*	dialog;
 	int			result;
 
@@ -335,10 +348,12 @@ int yesNo(char* question,char* file)
 	gtk_widget_destroy(dialog);
 
 	return(result);
+#endif
 }
 
 VISIBLE void doOpenFile(Widget* widget,gpointer data)
 {
+#if 0
 	Widget*	dialog;
 	char*		filename;
 	GSList*		filenames;
@@ -361,10 +376,12 @@ VISIBLE void doOpenFile(Widget* widget,gpointer data)
 		}
 	gtk_widget_destroy (dialog);
 	refreshMainWindow();
+#endif
 }
 
 int show_question(char* filename)
 {
+#if 0
 	Widget*	dialog;
 	gint		result;
 	char*		message;
@@ -380,11 +397,13 @@ int show_question(char* filename)
 	gtk_widget_destroy(dialog);
 	debugFree(message,"show_question message");
 	return(result);
+#endif
 }
 
 
 void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data)
 {
+#if 0
 	pageStruct* page=(pageStruct*)data;
 	TextBuffer*	buf;
 	char*		message=NULL;
@@ -422,10 +441,12 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
 	debugFree(message,"updateStatuBar message");
 	delete buf;
+#endif
 }
 
 void setSensitive(void)
 {
+#if 0
 	pageStruct*		page=getPageStructPtr(-1);
 	const gchar*	text;
 	char*			newlabel;
@@ -496,10 +517,12 @@ void setSensitive(void)
 //do plugin sensitive
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"setSensitive");
+#endif
 }
 
 VISIBLE void closeTab(Widget* widget,gpointer data)
 {
+#if 0
 	long		thispage;
 	int			result;
 	pageStruct*	page;
@@ -585,10 +608,12 @@ VISIBLE void closeTab(Widget* widget,gpointer data)
 	currentPage--;
 	gtk_notebook_remove_page(notebook,thispage);
 	setSensitive();
+#endif
 }
 
 VISIBLE void closeAllTabs(Widget* widget,gpointer data)
 {
+#if 0
 	int	numtabs=gtk_notebook_get_n_pages(notebook);
 
 	for(int loop=0; loop<numtabs; loop++)
@@ -600,10 +625,12 @@ VISIBLE void closeAllTabs(Widget* widget,gpointer data)
 //rebuild bookmark menu
 	rebuildBookMarkMenu();
 	gtk_widget_show_all(menuBookMark);
+#endif
 }
 
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
 {
+#if 0
 	pageStruct*	page;
 	char*		functions=NULL;
 	Widget*	menuitem;
@@ -724,23 +751,29 @@ createCompletion(page);
 	globalPlugins->globalPlugData->currentTab=currentTabNumber;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"switchTab");
 
+#endif
 }
 
 VISIBLE void copyToClip(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*	page=getPageStructPtr(-1);
 	gtk_text_buffer_copy_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD));
+#endif
 }
 
 VISIBLE void cutToClip(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*	page=getPageStructPtr(-1);
 	gtk_text_buffer_cut_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),true);
 	setSensitive();
+#endif
 }
 
 VISIBLE void pasteFromClip(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*		page=getPageStructPtr(-1);
 	char*			clipdata=NULL;
 	GtkClipboard*	mainclipboard;
@@ -755,10 +788,12 @@ VISIBLE void pasteFromClip(Widget* widget,gpointer data)
 	gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)clipdata,-1);
 	gtk_text_buffer_end_user_action   ((GtkTextBuffer*)page->buffer);
 	setSensitive();
+#endif
 }
 
 VISIBLE void undo(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*	page=getPageStructPtr(-1);
 
 	if(gtk_source_buffer_can_undo(page->buffer));
@@ -767,10 +802,12 @@ VISIBLE void undo(Widget* widget,gpointer data)
 		page->isFirst=true;
 		setSensitive();
 	}
+#endif
 }
 
 VISIBLE void unRedoAll(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*	page=getPageStructPtr(-1);
 
 	if(page!=NULL)
@@ -788,10 +825,12 @@ VISIBLE void unRedoAll(Widget* widget,gpointer data)
 			page->isFirst=true;
 			setSensitive();
 		}
+#endif
 }
 
 VISIBLE void redo(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*	page=getPageStructPtr(-1);
 
 	if(gtk_source_buffer_can_redo(page->buffer));
@@ -800,10 +839,12 @@ VISIBLE void redo(Widget* widget,gpointer data)
 		page->isFirst=true;
 		setSensitive();
 	}
+#endif
 }
 
 VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
 {
+#if 0
 	gchar**	array=gtk_selection_data_get_uris(selection_data);
 	int		cnt=g_strv_length(array);
 	char*	filename;
@@ -815,10 +856,12 @@ VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,Gtk
 		}
 
 	g_strfreev(array);
+#endif
 }
 
 void externalTool(Widget* widget,gpointer data)
 {
+#if 0
 	toolStruct*		tool=(toolStruct*)data;
 	pageStruct*		page=getPageStructPtr(-1);
 	char*			docdirname=NULL;
@@ -943,10 +986,12 @@ void externalTool(Widget* widget,gpointer data)
 		}
 	debugFree(barcontrol,"externalTool barcontrol");
 	delete slice;
+#endif
 }
 
 VISIBLE void openHelp(Widget* widget,gpointer data)
 {
+#if 0
 	const char* lang;
 
 	if(strncmp(localeLang,"en",2)==0)
@@ -963,16 +1008,20 @@ VISIBLE void openHelp(Widget* widget,gpointer data)
 	debugFree(thePage,"openHelp thePage");
 	thePage=NULL;
 #endif
+#endif
 }
 
 void copyToClipboard(Widget* widget,gpointer data)
 {
+#if 0
 	GtkClipboard*	clipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
 	gtk_clipboard_set_text(clipboard,(char*)data,-1);
+#endif
 }
 
 VISIBLE void addtoCustomWordList(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*		page=(pageStruct*)data;
 	GtkTextIter		start;
 	GtkTextIter		end;
@@ -993,10 +1042,12 @@ VISIBLE void addtoCustomWordList(Widget* widget,gpointer data)
 	free(command);
 	free(selection);
 	createCompletion(page);
+#endif
 }
 
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 {
+#if 0
 	pageStruct*		page=getPageStructPtr(-1);
 	GtkTextIter		start;
 	GtkTextIter		end;
@@ -1118,18 +1169,22 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToContext");
 
 	gtk_widget_show_all((Widget*)menu);
+#endif
 }
 
 void doTabMenu(GtkWidget *widget,gpointer user_data)
 {
+#if 0
 	GtkClipboard*	clipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
 
 	gtk_clipboard_set_text(clipboard,(char*)user_data,-1);
 	gtk_widget_destroy(tabMenu);
+#endif
 }
 
 gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
 {
+#if 0
 	pageStruct* page=(pageStruct*)getPageStructPtr(-1);
 
 	if((long)data==1)
@@ -1138,10 +1193,12 @@ gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
 		page->inTop=false;
 
 	return(false);
+#endif
 }
 
 void doSplitView(GtkWidget *widget,gpointer user_data)
 {
+#if 0
 	pageStruct* page=(pageStruct*)user_data;
 
 	if(gtk_paned_get_child2((GtkPaned*)page->pane)==NULL)
@@ -1167,10 +1224,12 @@ void doSplitView(GtkWidget *widget,gpointer user_data)
 		}
 
 	gtk_widget_show_all(page->pane);
+#endif
 }
 
 void changeSourceStyle(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*					page=getPageStructPtr(-1);
 	GtkSourceLanguageManager*	lm=gtk_source_language_manager_get_default();
 	const gchar* const*			ids=gtk_source_language_manager_get_language_ids(lm);
@@ -1179,19 +1238,23 @@ void changeSourceStyle(Widget* widget,gpointer data)
 
 	gtk_source_buffer_set_language(page->buffer,lang);
 	page->lang=langname;
+#endif
 }
 
 void openFromTab(GtkMenuItem* widget,pageStruct* page)
 {
+#if 0
 	char*		filepath=NULL;
 
 	asprintf(&filepath,"%s/%s",page->dirName,gtk_menu_item_get_label(widget));
 	openFile(filepath,0,true);
 	debugFree(filepath,"openFromTab filepath");
+#endif
 }
 
 bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 {
+#if 0
 	pageStruct*					page;
 	Widget*					menuitem;
 	Widget*					image;
@@ -1359,10 +1422,12 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 		}
 	else
 		return(false);
+#endif
 }
 
 void messageOpen(UniqueMessageData *message)
 {
+#if 0
 	int argc;
 
 	gchar** uris=unique_message_data_get_uris(message);
@@ -1370,10 +1435,12 @@ void messageOpen(UniqueMessageData *message)
 
 	for (int loop=1; loop<argc; loop++)
 		openFile(uris[loop],1,true);
+#endif
 }
 
 UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessageData *message,guint time,gpointer user_data)
 {
+#if 0
 	UniqueResponse	res;
 
 	switch(command)
@@ -1396,10 +1463,12 @@ UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessag
 			break;
 		}
 	return(res);
+#endif
 }
 
 void writeExitData(void)
 {
+#if 0
 	GtkAllocation	alloc;
 	char*			filename;
 	int				winx;
@@ -1437,10 +1506,12 @@ void writeExitData(void)
 	saveVarsToFile(filename,kkedit_window_rc);
 	debugFree(filename,"writeExitData filename");
 	debugFree(windowAllocData,"writeExitData windowAllocData");
+#endif
 }
 
 void writeConfig(void)
 {
+#if 0
 	char*			filename;
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
@@ -1450,10 +1521,12 @@ void writeConfig(void)
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	saveVarsToFile(filename,kkedit_rc);
 	debugFree(filename,"writeConfig filename");
+#endif
 }
 
 VISIBLE bool doSaveAll(Widget* widget,gpointer data)
 {
+#if 0
 	int			numpages=gtk_notebook_get_n_pages(notebook);
 	int			result;
 	pageStruct*	page;
@@ -1488,10 +1561,12 @@ VISIBLE bool doSaveAll(Widget* widget,gpointer data)
 				}
 		}
 	return(true);
+#endif
 }
 
 VISIBLE void doShutdown(Widget* widget,gpointer data)
 {
+#if 0
 	char*	command;
 
 	if(doSaveAll(widget,(void*)true)==false)
@@ -1513,10 +1588,12 @@ VISIBLE void doShutdown(Widget* widget,gpointer data)
 	debugFree(command,"doShutdown command");
 	system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
 	gtk_main_quit();
+#endif
 }
 
 void setPrefs(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*			tpage=getPageStructPtr(-1);
 
 	if(strcmp(gtk_widget_get_name(widget),"indent")==0)
@@ -1656,10 +1733,12 @@ void setPrefs(Widget* widget,gpointer data)
 			setSensitive();
 			refreshMainWindow();
 		}
+#endif
 }
 
 void setToolOptions(Widget* widget,gpointer data)
 {
+#if 0
 	char*		dirname;
 	char*		text;
 	char*		toolpath;
@@ -1746,10 +1825,12 @@ void setToolOptions(Widget* widget,gpointer data)
 	debugFree(toolpath,"setToolOptions toolpath");
 	debugFree(text,"setToolOptions text");
 	debugFree(dirname,"setToolOptions dirname");
+#endif
 }
 
 VISIBLE void doAbout(Widget* widget,gpointer data)
 {
+#if 0
 	const char*	authors[]= {"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,gettext("\nMore by the same author\n"),"Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
 	const char	copyright[] ="Copyright \xc2\xa9 2013 K.D.Hedger";
 	const char*	aboutboxstring=gettext("KKEdit Code Text Editor");
@@ -1763,6 +1844,7 @@ VISIBLE void doAbout(Widget* widget,gpointer data)
 
 	debugFree(licence,"doAbout licence");
 	debugFree(translators,"doAbout licence");
+#endif
 }
 
 GtkSourceBuffer*	printBuffer;
@@ -1770,6 +1852,7 @@ GtkSourceView*		printView;
 
 void doCombineBuffers(void)
 {
+#if 0
 	pageStruct*	page;
 	GtkTextIter	iter;
 	GtkTextIter	fromstart;
@@ -1788,19 +1871,23 @@ void doCombineBuffers(void)
 			gtk_text_buffer_insert((GtkTextBuffer*)printBuffer,&iter,gtk_text_buffer_get_text((GtkTextBuffer *)page->buffer,&fromstart,&fromend,true),-1);
 			gtk_text_buffer_get_end_iter((GtkTextBuffer*)printBuffer,&iter);
 		}
+#endif
 }
 
 
 void drawPage(GtkPrintOperation *operation,GtkPrintContext *context,gint page_nr,gpointer user_data)
 {
+#if 0
 	GtkSourcePrintCompositor *compositor;
 
 	compositor=GTK_SOURCE_PRINT_COMPOSITOR(user_data);
 	gtk_source_print_compositor_draw_page(compositor,context,page_nr);
+#endif
 }
 
 void beginPrint(GtkPrintOperation *operation,GtkPrintContext *context,gpointer user_data)
 {
+#if 0
 	GtkSourcePrintCompositor*	compositor;
 	gint						n_pages;
 
@@ -1810,10 +1897,12 @@ void beginPrint(GtkPrintOperation *operation,GtkPrintContext *context,gpointer u
 
 	n_pages=gtk_source_print_compositor_get_n_pages(compositor);
 	gtk_print_operation_set_n_pages(operation,n_pages);
+#endif
 }
 
 VISIBLE void printFile(Widget* widget,gpointer data)
 {
+#if 0
 	doCombineBuffers();
 	GtkSourcePrintCompositor*	printview=gtk_source_print_compositor_new_from_view(printView);
 	GtkPrintOperation*			print;
@@ -1833,10 +1922,12 @@ VISIBLE void printFile(Widget* widget,gpointer data)
 		}
 	g_object_unref(print);
 	g_object_unref(printview);
+#endif
 }
 
 void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 {
+#if 0
 	gchar*	uri=NULL;
 	char*	filename;
 
@@ -1854,10 +1945,12 @@ void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 			g_free (uri);
 			debugFree(filename,"recentFileMenu filename");
 		}
+#endif
 }
 
 VISIBLE void newEditor(Widget* widget,gpointer data)
 {
+#if 0
 	char*	command=NULL;
 
 	switch((long)data)
@@ -1878,18 +1971,22 @@ VISIBLE void newEditor(Widget* widget,gpointer data)
 				system("manpageeditor 2>&1 >/dev/null &");
 			break;
 		}
+#endif
 }
 
 void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButton* ev,pageStruct* page)
 {
+#if 0
 	if(ev->button!=1)
 		return;
 
 	toggleBookmark(NULL,iter);
+#endif
 }
 
 VISIBLE void showToolOutput(bool immediate)
 {
+#if 0
 	showToolOutWin=true;
 	gtk_widget_show(toolOutVBox);
 	gtk_menu_item_set_label((GtkMenuItem*)menuToolOut,gettext("Hide Tool Output"));
@@ -1898,10 +1995,12 @@ VISIBLE void showToolOutput(bool immediate)
 			while(gtk_events_pending())
 				gtk_main_iteration();
 		}
+#endif
 }
 
 VISIBLE void hideToolOutput(bool immediate)
 {
+#if 0
 	showToolOutWin=false;;
 	gtk_widget_show(toolOutVBox);
 	gtk_menu_item_set_label((GtkMenuItem*)menuToolOut,gettext("Show Tool Output"));
@@ -1910,10 +2009,12 @@ VISIBLE void hideToolOutput(bool immediate)
 			while(gtk_events_pending())
 				gtk_main_iteration();
 		}
+#endif
 }
 
 VISIBLE void toggleToolOutput(Widget* widget,gpointer data)
 {
+#if 0
 	showToolOutWin=!showToolOutWin;
 	if(showToolOutWin)
 		{
@@ -1925,43 +2026,51 @@ VISIBLE void toggleToolOutput(Widget* widget,gpointer data)
 			gtk_widget_hide(toolOutVBox);
 			gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Show Tool Output"));
 		}
+#endif
 }
 
 VISIBLE void toggleBookMarkBar(Widget* widget,gpointer data)
 {
+#if 0
 	showBMBar=!showBMBar;
 	if(showBMBar)
 		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Hide Bookmarks Bar"));
 	else
 		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Show Bookmarks Bar"));
 	resetAllFilePrefs();
+#endif
 }
 
 VISIBLE void toggleToolBar(Widget* widget,gpointer data)
 {
+#if 0
 	showToolBar=!showToolBar;
 	if(showToolBar)
 		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Hide Tool Bar"));
 	else
 		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Show Tool Bar"));
 	refreshMainWindow();
+#endif
 }
 
 //toggleStatusBar
 VISIBLE void toggleStatusBar(Widget* widget,gpointer data)
 {
+#if 0
 	showStatus=!showStatus;
 	if(showStatus)
 		gtk_menu_item_set_label((GtkMenuItem*)widget,"Hide Status Bar");
 	else
 		gtk_menu_item_set_label((GtkMenuItem*)widget,"Show Status Bar");
 	refreshMainWindow();
+#endif
 }
 
 #ifdef _BUILDDOCVIEWER_
 
 VISIBLE void toggleDocviewer(Widget* widget,gpointer data)
 {
+#if 0
 	showHideDocviewer=!showHideDocviewer;
 	if(showHideDocviewer)
 		{
@@ -1974,11 +2083,13 @@ VISIBLE void toggleDocviewer(Widget* widget,gpointer data)
 			gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,gettext("Show Docviewer"));
 			gtk_widget_hide(docView);
 		}
+#endif
 }
 #endif
 
 void doKeyShortCut(int what)
 {
+#if 0
 	TextBuffer*		buf;
 	char*			text;
 	pageStruct*		page=getPageStructPtr(-1);
@@ -2117,10 +2228,12 @@ void doKeyShortCut(int what)
 			break;
 		}
 	delete buf;
+#endif
 }
 
 void loadKeybindings(void)
 {
+#if 0
 	char*	filename;
 
 	asprintf(&filename,"%s/.KKEdit/keybindings.rc",getenv("HOME"));
@@ -2132,10 +2245,12 @@ void loadKeybindings(void)
 				sscanf(shortCutStrings[j],"%i %i",(int*)&shortCuts[j][0],(int*)&shortCuts[j][1]);
 		}
 	debugFree(filename,"readConfig filename");
+#endif
 }
 
 VISIBLE gboolean keyShortCut(Widget* window,GdkEventKey* event,gpointer data)
 {
+#if 0
 	int		loop;
 	bool	gotKey=false;
 
@@ -2161,14 +2276,18 @@ VISIBLE gboolean keyShortCut(Widget* window,GdkEventKey* event,gpointer data)
 		}
 
 	return(false);
+#endif
 }
 
 VISIBLE void getPlugins(Widget* widget,gpointer data)
 {
+#if 0
 	char*	command;
 
 	asprintf(&command,"%s \"%s\" &",browserCommand,PLUGINSLINK);
 	system(command);
 	free(command);
+#endif
 }
 
+#endif

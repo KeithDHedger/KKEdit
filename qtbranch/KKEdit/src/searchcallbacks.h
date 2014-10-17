@@ -8,7 +8,7 @@
 
 #ifndef _FUNCCALLBACKS_
 #define _FUNCCALLBACKS_
-
+#if 0
 #ifdef _BUILDDOCVIEWER_
 void webKitGoBack(Widget* widget,gpointer data);
 void webKitGoForward(Widget* widget,gpointer data);
@@ -33,4 +33,5 @@ void pasteFRClip(Widget* widget,gpointer data);
 void doDoxy(Widget* widget,long data);
 void doxyDocs(Widget* widget,gpointer data);
 
+#endif
 #endif

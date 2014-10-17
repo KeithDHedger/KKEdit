@@ -6,6 +6,9 @@
 *     completion.cpp
 * 
 ******************************************************/
+
+#include "kkedit-includes.h"
+
 #ifndef _USEQT5_
 #include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
 #include <gtksourceview/gtksourceview.h>
@@ -14,11 +17,14 @@
 #include <gtksourceview/gtksourcecompletionitem.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #endif
-#include "kkedit-includes.h"
 
+
+#if 0
 struct _FunctionProviderClass
 {
+#if 0
 	GObjectClass			parent_class;
+#endif
 };
 
 
@@ -33,21 +39,28 @@ GtkSourceCompletionWords*	docWordsProv;
 
 gchar* function_provider_get_name(GtkSourceCompletionProvider* provider)
 {
+#if 0
 	return g_strdup(((FunctionProvider *)provider)->name);
+#endif
 }
 
 gint function_provider_get_priority(GtkSourceCompletionProvider* provider)
 {
+#if 0
 	return((FunctionProvider*)provider)->priority;
+#endif
 }
 
 gboolean function_provider_match(GtkSourceCompletionProvider* provider,GtkSourceCompletionContext*context)
 {
+#if 0
 	return TRUE;
+#endif
 }
 
 char* get_word_at_iter(GtkTextIter* iter,GtkTextBuffer *buffer)
 {
+#if 0
 	GtkTextIter*	startiter;
 	char*			word;
 
@@ -60,10 +73,12 @@ char* get_word_at_iter(GtkTextIter* iter,GtkTextBuffer *buffer)
 				return(word);
 		}
 	return(NULL);
+#endif
 }
 
 GdkPixbuf* function_provider_get_icon(GtkSourceCompletionProvider* provider)
 {
+#if 0
 	FunctionProvider* tp=(FunctionProvider*)provider;
 
 //	if (tp->icon==NULL)
@@ -72,11 +87,13 @@ GdkPixbuf* function_provider_get_icon(GtkSourceCompletionProvider* provider)
 //			tp->icon=gtk_icon_theme_load_icon(theme,GTK_STOCK_DIALOG_INFO,16,(GtkIconLookupFlags)0,NULL);
 //		}
 	return tp->icon;
+#endif
 }
 
 //completion
 GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 {
+#if 0
 	char*	infostr;
 	GList*	newlist=NULL;
 	GList*	customlist=customProv->proposals;
@@ -99,10 +116,12 @@ GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 			customlist=customlist->next;
 		}
 	return(newlist);
+#endif
 }
 
 void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceCompletionContext* context)
 {
+#if 0
 	GtkTextIter 	iter;
 	gchar*			word=NULL;
 	GtkTextBuffer*	buffer;
@@ -140,29 +159,37 @@ void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceC
 		}
 	if(word!=NULL)
 		free(word);
+#endif
 }
 
 void function_provider_iface_init(GtkSourceCompletionProviderIface* iface)
 {
+#if 0
 	iface->get_name=function_provider_get_name;
 	iface->populate=function_provider_populate;
 	iface->match=function_provider_match;
 	iface->get_priority=function_provider_get_priority;
 	iface->get_icon=function_provider_get_icon;
+#endif
 }
 
 void function_provider_class_init(FunctionProviderClass* klass)
 {
+#if 0
+#endif
 }
 
 void function_provider_init(FunctionProvider* self)
 {
+#if 0
 	self->icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER(self));
+#endif
 }
 
 //completion
 void addProp(pageStruct* page)
 {
+#if 0
 	char*		functions=NULL;
 	char		tmpstr[1024];
 	char*		lineptr;
@@ -225,20 +252,24 @@ void addProp(pageStruct* page)
 		}
 	if(functions!=NULL)
 		debugFree(functions,"switchPage functions");
+#endif
 }
 
 void removeProps(void)
 {
+#if 0
 	g_list_free_full(funcProv->proposals,g_object_unref);
 	g_list_free_full(varsProv->proposals,g_object_unref);
 	g_list_free_full(customProv->proposals,g_object_unref);
 	funcProv->proposals=NULL;
 	varsProv->proposals=NULL;
 	customProv->proposals=NULL;
+#endif
 }
 
 void createCompletion(pageStruct* page)
 {
+#if 0
 	removeProps();
 
 	gtk_source_completion_words_register(docWordsProv,gtk_text_view_get_buffer(GTK_TEXT_VIEW(page->view)));
@@ -250,14 +281,19 @@ void createCompletion(pageStruct* page)
 	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(customProv),NULL);
 
 	addProp(page);
+#endif
 }
 
 void doCompletionPopUp(pageStruct* page)
 {
+#if 0
 	GtkSourceCompletionContext*	context;
 	GList*						list;
 
 	context=gtk_source_completion_create_context(page->completion,NULL);
 	list=gtk_source_completion_get_providers(page->completion);
 	gtk_source_completion_show(page->completion,list,context);
+#endif
 }
+
+#endif

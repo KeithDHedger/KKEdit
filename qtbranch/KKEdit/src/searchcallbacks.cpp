@@ -7,7 +7,7 @@
 */
 
 #include "kkedit-includes.h"
-
+#if 0
 int currentFindPage=-1;
 int firstPage=-1;
 int pagesChecked=0;
@@ -17,23 +17,30 @@ int	itemsReplaced=-1;
 
 void webKitGoBack(Widget* widget,gpointer data)
 {
+#if 0
 	webkit_web_view_go_back((WebKitWebView*)data);
+#endif
 }
 
 void webKitGoForward(Widget* widget,gpointer data)
 {
+#if 0
 	webkit_web_view_go_forward((WebKitWebView*)data);
+#endif
 }
 
 void webKitGoHome(Widget* widget,gpointer data)
 {
+#if 0
 	if(g_file_test(htmlFile,G_FILE_TEST_EXISTS)==true)
 		webkit_web_view_load_uri((WebKitWebView*)data,htmlURI);
+#endif
 }
 #endif
 
 PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 {
+#if 0
 
 #ifdef _BUILDDOCVIEWER_
 
@@ -84,10 +91,12 @@ PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 	thePage=NULL;
 		
 	return;
+#endif
 }
 
 VISIBLE void searchGtkDocs(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
@@ -192,10 +201,12 @@ VISIBLE void searchGtkDocs(Widget* widget,gpointer data)
 		}
 	if((selection!=NULL) && (data==NULL))
 		debugFree(selection,"seachGtkDocs selection");
+#endif
 }
 
 VISIBLE void doDoxy(Widget* widget,long data)
 {
+#if 0
 	pageStruct*	page=getPageStructPtr(-1);
 	struct stat	sb;
 	bool		dorebuild;
@@ -237,11 +248,13 @@ VISIBLE void doDoxy(Widget* widget,long data)
 		}
 	showDocView(USEURI,thePage,"Doxygen Documentation");
 	killBarberPole();
+#endif
 }
 
 //find in doxy docs
 VISIBLE void doxyDocs(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
@@ -293,11 +306,13 @@ VISIBLE void doxyDocs(Widget* widget,gpointer data)
 			debugFree(findcommand,"doxyDocs findcommand 2");
 			killBarberPole();
 		}
+#endif
 }
 
 //showDocViewWidget
 VISIBLE void searchQT5Docs(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
@@ -358,10 +373,12 @@ VISIBLE void searchQT5Docs(Widget* widget,gpointer data)
 			g_string_free(str,true);
 			debugFree(selection,"searchQT5Docs selection");
 		}
+#endif
 }
 
 void defSearchFromBar(Widget* widget,gpointer data)
 {
+#if 0
 	functionData* fdata;
 
 	functionSearchText=strdup(gtk_entry_get_text((GtkEntry*)widget));
@@ -375,44 +392,54 @@ void defSearchFromBar(Widget* widget,gpointer data)
 				}
 			debugFree(functionSearchText,"defSearchFromBar functionSearchText");
 		}
+#endif
 }
 
 void docSearchFromBar(Widget* widget,gpointer data)
 {
+#if 0
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
 	if(text!=NULL && strlen(text)>0)
 		searchGtkDocs(NULL,(void*)text);
+#endif
 }
 
 #ifdef _BUILDDOCVIEWER_
 void docSearchInPageFoward(Widget* widget,gpointer data)
 {
+#if 0
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
 	if(text!=NULL && strlen(text)>0)
 		webkit_web_view_search_text(webView,text,false,true,true);
+#endif
 }
 
 void docSearchInPageBack(Widget* widget,gpointer data)
 {
+#if 0
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
 	if(text!=NULL && strlen(text)>0)
 		webkit_web_view_search_text(webView,text,false,false,true);
+#endif
 }
 #endif
 
 void qt5DocSearchFromBar(Widget* widget,gpointer data)
 {
+#if 0
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
 	if(text!=NULL && strlen(text)>0)
 		searchQT5Docs(NULL,(void*)text);
+#endif
 }
 
 void doAllFiles(int dowhat,bool found)
 {
+#if 0
 	pageStruct*	page=NULL;
 
 	if((findInAllFiles==true) && (found==false))
@@ -462,10 +489,12 @@ void doAllFiles(int dowhat,bool found)
 		basicFind(dowhat);
 	else
 		regexFind(dowhat);
+#endif
 }
 
 void regexFind(int dowhat)
 {
+#if 0
 	char*					searchtext=NULL;
 	char*					replacetext=NULL;
 	GtkTextIter				start,end;
@@ -688,10 +717,12 @@ void regexFind(int dowhat)
 		debugFree(text,"regexFind text");
 	if(reptext!=NULL)
 	debugFree(reptext,"regexFind reptext");
+#endif
 }
 
 void basicFind(int dowhat)
 {
+#if 0
 	pageStruct*				page=NULL;
 	char*					searchtext=NULL;
 	char*					replacetext;
@@ -886,15 +917,19 @@ void basicFind(int dowhat)
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 	debugFree(searchtext,"basicFind searchtext");
 	debugFree(replacetext,"basicFind replacetext");
+#endif
 }
 
 void pasteFRClip(Widget* widget,gpointer data)
 {
+#if 0
 	gtk_entry_set_text((GtkEntry*)data,gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget));
+#endif
 }
 
 void showOnStatus(const char* from,const char* to)
 {
+#if 0
 	char*	message=NULL;
 
 	if( (showStatus==false))
@@ -905,10 +940,12 @@ void showOnStatus(const char* from,const char* to)
 	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
 	statusMessage=message;
+#endif
 }
 
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 {
+#if 0
 	bool		flag=false;
 	GSList*		tlist;
 	const char*	edata;
@@ -971,16 +1008,20 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 	if(itemsReplaced>-1)
 		showOnStatus(gtk_entry_get_text((GtkEntry*)findBox),gtk_entry_get_text((GtkEntry*)replaceBox));
+#endif
 }
 
 VISIBLE void find(Widget* widget,gpointer data)
 {
+#if 0
 	gtk_widget_show(findReplaceDialog);
 	gtk_dialog_run((GtkDialog *)findReplaceDialog);
+#endif
 }
 
 void doSearchPrefs(Widget* widget,gpointer data)
 {
+#if 0
 	Widget*	button;
 
 	switch ((long)data)
@@ -1011,10 +1052,12 @@ void doSearchPrefs(Widget* widget,gpointer data)
 				hightlightAll=gtk_toggle_button_get_active((GtkToggleButton*)widget);
 				break;
 		}
+#endif
 }
 
 void doLiveSearch(Widget* widget,GdkEvent *event,gpointer data)
 {
+#if 0
 	pageStruct* 			page=getPageStructPtr(-1);
 	GtkSourceSearchFlags	flags;
 	char*					searchtext;
@@ -1070,4 +1113,6 @@ void doLiveSearch(Widget* widget,GdkEvent *event,gpointer data)
 				}
 		}
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+#endif
 }
+#endif

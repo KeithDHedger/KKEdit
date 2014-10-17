@@ -8,7 +8,7 @@
 
 #include "kkedit-includes.h"
 #include "config.h"
-
+#if 0
 #ifdef _USEQT5_
 	QApplication*	holdapp;
 #endif
@@ -270,6 +270,7 @@ StringSlice*	globalSlice;
 
 unsigned int	shortCuts[NUMSHORTCUTS][2]=
 {
+#if 0
 	{121,0},
 	{63,1},
 	{107,2},
@@ -284,6 +285,7 @@ unsigned int	shortCuts[NUMSHORTCUTS][2]=
 	{39,11},
 	{64,12},
 	{32,0}
+#endif
 };
 
 char*			shortCutStrings[NUMSHORTCUTS]={NULL,};
@@ -332,6 +334,7 @@ char*			windowAllocData=NULL;
 char*			docWindowAllocData=NULL;
 args			kkedit_window_rc[]=
 {
+#if 0
 	//bools
 	{"insenssearch",TYPEBOOL,&insensitiveSearch},
 	{"useregex",TYPEBOOL,&useRegex},
@@ -353,10 +356,12 @@ args			kkedit_window_rc[]=
 	{"lastupdate",TYPEINT,&lastUpdate},
 	{"lastplugupdate",TYPEINT,&lastPlugUpdate},
 	{NULL,0,NULL}
+#endif
 };
 
 args			kkedit_rc[]=
 {
+#if 0
 	//bools
 	{"indentcode",TYPEBOOL,&indent},
 	{"showlinenumbers",TYPEBOOL,&lineNumbers},
@@ -386,6 +391,7 @@ args			kkedit_rc[]=
 	{"funcsort",TYPEINT,&listFunction},
 	{"minautochars",TYPEINT,&autoShowMinChars},
 	{NULL,0,NULL}
+#endif
 };
 
 int				intermarg=0;
@@ -402,6 +408,7 @@ int				usebar=0;
 
 args			tool_vars[]=
 {
+#if 0
 	//strings
 	{"name",TYPESTRING,&menuname},
 	{"command",TYPESTRING,&commandarg},
@@ -416,6 +423,7 @@ args			tool_vars[]=
 	{"usebar",TYPEINT,&usebar},
 	{"shortcutkey",TYPEINT,&keycode},
 	{NULL,0,NULL}
+#endif
 };
 
 //status bar message
@@ -424,6 +432,7 @@ char*			statusMessage=NULL;
 //truncate string with elipses
 char* truncateWithElipses(char* str,unsigned int maxlen)
 {
+#if 0
 	char*	retstr;
 	char*	starttext;
 	char*	endtext;
@@ -448,23 +457,29 @@ char* truncateWithElipses(char* str,unsigned int maxlen)
 		}
 
 	return(retstr);
+#endif
 }
 
 void plugRunFunction(gpointer data,gpointer funcname)
 {
+#if 0
 	globalPlugins->runPlugFunction((moduleData*)data,(const char*)funcname);
+#endif
 }
 
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 {
+#if 0
 	if(page->inTop==true)
 		gtk_text_view_scroll_to_iter((GtkTextView*)page->view,iter,0,true,0,0.5);
 	else
 		gtk_text_view_scroll_to_iter((GtkTextView*)page->view2,iter,0,true,0,0.5);
+#endif
 }
 
 VISIBLE pageStruct* getPageStructPtr(int pagenum)
 {
+#if 0
 	int			thispage;
 	Widget*	pageBox;
 
@@ -478,10 +493,12 @@ VISIBLE pageStruct* getPageStructPtr(int pagenum)
 		return(NULL);
 	else
 		return((pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata"));
+#endif
 }
 
 void getMimeType(char* filepath,void* ptr)
 {
+#if 0
 	char*	command;
 	gchar	*stdout=NULL;
 	gchar	*stderr=NULL;
@@ -496,10 +513,12 @@ void getMimeType(char* filepath,void* ptr)
 			debugFree(stdout,"getMimeType stdout");
 			debugFree(stderr,"getMimeType stderr");
 		}
+#endif
 }
 
 void setLanguage(pageStruct* page)
 {
+#if 0
 	GtkSourceLanguage*			lang=NULL;
 	GtkSourceLanguageManager*	lm=NULL;
 	char*						mimetype;
@@ -566,10 +585,12 @@ void setLanguage(pageStruct* page)
 
 	if(mimetype!=NULL)
 		debugFree(mimetype,"setLanguage mimetype");
+#endif
 }
 
 VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title)
 {
+#if 0
 	char*		command;
 	FILE*		fp=NULL;
 	GString*	str=NULL;
@@ -639,10 +660,12 @@ VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int u
 
 	debugFree(command,"runCommand command");
 	debugFree(asroot,"runCommand asroot");
+#endif
 }
 
 functionData* getFunctionByName(char* name,bool recurse)
 {
+#if 0
 	pageStruct*		page;
 	int				numpages=gtk_notebook_get_n_pages(notebook);
 	char*			lineptr;
@@ -805,10 +828,12 @@ functionData* getFunctionByName(char* name,bool recurse)
 		}
 
 	return(NULL);
+#endif
 }
 
 void destroyData(functionData* fdata)
 {
+#if 0
 	if(fdata!=NULL)
 		{
 			if(fdata->name!=NULL)
@@ -821,10 +846,12 @@ void destroyData(functionData* fdata)
 				debugFree(fdata->define,"destroyData define");
 			debugFree(fdata,"destroyData fdata");
 		}
+#endif
 }
 
 void getRecursiveTagListFileName(char* filepath,void* ptr)
 {
+#if 0
 	FILE*		fp;
 	char		line[1024];
 	GString*	str=g_string_new(NULL);
@@ -845,10 +872,12 @@ void getRecursiveTagListFileName(char* filepath,void* ptr)
 	g_string_free(str,false);
 
 	debugFree(command,"getRecursiveTagListFileName command");
+#endif
 }
 
 void getRecursiveTagList(char* filepath,void* ptr)
 {
+#if 0
 	FILE*		fp;
 	char		line[2048];
 	GString*	str=g_string_new(NULL);
@@ -893,10 +922,12 @@ void getRecursiveTagList(char* filepath,void* ptr)
 	g_string_free(str,false);
 	debugFree(command,"getRecursiveTagList command");
 	debugFree(sort,"getRecursiveTagList sort");
+#endif
 }
 
 void destroyTool(gpointer data)
 {
+#if 0
 	if(((toolStruct*)data)->menuName!=NULL)
 		debugFree(((toolStruct*)data)->menuName,"destroyTool menuName");
 	if(((toolStruct*)data)->filePath!=NULL)
@@ -904,15 +935,19 @@ void destroyTool(gpointer data)
 	if(((toolStruct*)data)->command!=NULL)
 		debugFree(((toolStruct*)data)->command,"destroyTool command");
 	debugFree(data,"destroyTool data");
+#endif
 }
 
 gint sortTools(gconstpointer a,gconstpointer b)
 {
+#if 0
 	return(strcasecmp(((toolStruct*)a)->menuName,((toolStruct*)b)->menuName));
+#endif
 }
 
 void buildToolsList(void)
 {
+#if 0
 	GDir*			folder;
 	const gchar*	entry=NULL;
 	char*			filepath;
@@ -991,10 +1026,12 @@ void buildToolsList(void)
 	debugFree(datafolder[1],"buildToolsList datafolder[1]");
 
 	toolsList=g_list_sort(toolsList,sortTools);
+#endif
 }
 
 void rebuildBookMarkMenu(void)
 {
+#if 0
 	Widget*	menuitem;
 	Widget*	submenu;
 
@@ -1015,10 +1052,12 @@ void rebuildBookMarkMenu(void)
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+#endif
 }
 
 VISIBLE void goBack(Widget* widget,gpointer data)
 {
+#if 0
 	HistoryClass*	hist=new HistoryClass;
 
 	GtkTextIter		iter;
@@ -1051,10 +1090,12 @@ VISIBLE void goBack(Widget* widget,gpointer data)
 			delete history;
 			history=hist;
 		}
+#endif
 }
 
 gboolean idleScroll(gpointer data)
 {
+#if 0
 	gtk_main_iteration_do(false);
 	if(progressBar!=NULL)
 		{
@@ -1063,10 +1104,12 @@ gboolean idleScroll(gpointer data)
 		}
 	else
 		return(false);
+#endif
 }
 
 void showBarberPole(const char* title)
 {
+#if 0
 	Widget*		vbox;
 
 	progressWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -1086,21 +1129,25 @@ void showBarberPole(const char* title)
 
 	gtk_widget_show_all(progressWindow);
 	g_timeout_add(100,idleScroll,NULL);
+#endif
 }
 
 void killBarberPole(void)
 {
+#if 0
 	gtk_widget_destroy(progressWindow);
 	progressBar=NULL;
+#endif
 }
 
 VISIBLE void debugFree(gpointer ptr,const char* message)
 {
+#if 0
 #ifdef _DEBUG_FREE_
 	fprintf(stderr,"free :%s\n",message);
 #endif
 	free(ptr);
+#endif
 }
 
-
-
+#endif

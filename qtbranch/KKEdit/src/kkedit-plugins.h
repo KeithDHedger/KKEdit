@@ -8,7 +8,7 @@
 
 #ifndef _PLUGINS_
 #define _PLUGINS_
-
+#if 0
 #include "config.h"
 
 #ifndef _USEQT5_
@@ -230,4 +230,5 @@ bool		saveFile(Widget* widget,gpointer data);
 void		newFile(Widget* widget,gpointer data);
 void		loadVarsFromFile(char* filepath,args* dataptr);
 void		saveVarsToFile(char* filepath,args* dataptr);
+#endif
 #endif

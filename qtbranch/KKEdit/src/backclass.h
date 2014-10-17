@@ -9,7 +9,7 @@
 
 #ifndef _BACKCLASS_
 #define _BACKCLASS_
-
+#if 0
 class HistoryClass
 {
 	public:
@@ -27,4 +27,5 @@ class HistoryClass
 		TextBuffer*		buf;
 };
 
+#endif
 #endif

@@ -12,9 +12,10 @@
 ******************************************************/
 
 #include "kkedit-includes.h"
-
+#if 0
 const char *country_table[][MAX_COUNTRY_NUM] =
 {
+#if 0
 	/* LATIN1 */        {NULL},
 	/* LATIN2 */        {"cs","hr","hu","pl","ro","sk","sl","sq","sr","uz"},
 	/* LATIN3 */        {"eo","mt",NULL},
@@ -34,10 +35,12 @@ const char *country_table[][MAX_COUNTRY_NUM] =
 	/* VIETNAMESE */    {"vi",NULL},
 	/* THAI */          {"th",NULL},
 	/* GEORGIAN */      {"ka",NULL},
+#endif
 };
 
 const char *encoding_table[][ENCODING_MAX_ITEM_NUM] =
 {
+#if 0
 	                  /*  IANA           OpenI18N       Codepage */
 	/* LATIN1 */        { "ISO-8859-1","ISO-8859-15","CP1252" },
 	/* LATIN2 */        { "ISO-8859-2","ISO-8859-16","CP1250" },
@@ -58,10 +61,12 @@ const char *encoding_table[][ENCODING_MAX_ITEM_NUM] =
 	/* VIETNAMESE */    { NULL,"VISCII","CP1258" },
 	/* THAI */          { NULL,"TIS-620","CP874" },
 	/* GEORGIAN */      { NULL,"GEORGIAN-PS",NULL },
+#endif
 };
 
 guint get_encoding_code(void)
 {
+#if 0
 	guint 		code=END_CODE;
 	const char*	env;
 	guint		i,j=1;
@@ -91,10 +96,12 @@ guint get_encoding_code(void)
 	}
 	
 	return code;
+#endif
 }
 
 EncArray *get_encoding_items(guint code)
 {
+#if 0
 	gint		i;
 	EncArray*	array=NULL;
 	
@@ -106,10 +113,12 @@ EncArray *get_encoding_items(guint code)
 	}
 	
 	return array;
+#endif
 }
 
 char *detect_charset_cylillic(const gchar *text)
 {
+#if 0
 	guint8		c=*text;
 	gboolean	noniso=FALSE;
 	guint32		xc=0,xd=0,xef=0;
@@ -134,10 +143,12 @@ char *detect_charset_cylillic(const gchar *text)
 		charset=(char*)"CP1251";
 	
 	return charset;
+#endif
 }
 
 char *detect_charset_chinese(const gchar *text)
 {
+#if 0
 	guint8		c=*text;
 	
 	const char*	charset=get_encoding_items(get_encoding_code())->item[IANA];
@@ -181,10 +192,12 @@ char *detect_charset_chinese(const gchar *text)
 		}
 	
 	return (char*)charset;
+#endif
 }
 
 char *detect_charset_japanese(const gchar *text)
 {
+#if 0
 	guint8		c=*text;
 	const char*	charset=NULL;
 	
@@ -233,10 +246,12 @@ char *detect_charset_japanese(const gchar *text)
 		charset="EUC-JP";
 	
 	return (char*)charset;
+#endif
 }
 
 static const gchar *detect_charset_korean(const gchar *text)
 {
+#if 0
 	guint8		c=*text;
 	gboolean	noneuc=FALSE;
 	gboolean	nonjohab=FALSE;
@@ -301,10 +316,12 @@ static const gchar *detect_charset_korean(const gchar *text)
 		}
 	
 	return (char*)charset;
+#endif
 }
 
 static gboolean detect_noniso(const gchar *text)
 {
+#if 0
 	guint8 c=*text;
 	
 	while((c=*text++) != '\0')
@@ -313,19 +330,23 @@ static gboolean detect_noniso(const gchar *text)
 				return TRUE;
 		}
 	return FALSE;
+#endif
 }
 
 const gchar *get_default_charset(void)
 {
+#if 0
 	const gchar *charset;
 	
 	g_get_charset(&charset);
 	
 	return charset;
+#endif
 }
 
 const gchar *detect_charset(const gchar *text)
 {
+#if 0
 	guint8		c=*text;
 	const char*	charset=NULL;
 	
@@ -413,4 +434,6 @@ const gchar *detect_charset(const gchar *text)
 		}
 	
 	return charset;
+#endif
 }
+#endif

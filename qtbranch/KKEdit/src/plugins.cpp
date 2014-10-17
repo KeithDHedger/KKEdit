@@ -8,7 +8,7 @@
 ******************************************************/
 
 #include "kkedit-includes.h"
-
+#if 0
 #define COLUMN_ENABLE 0
 #define COLUMN_PLUGIN 1
 #define NUM_COLUMNS 2
@@ -20,6 +20,7 @@ Widget*	treeview;
 
 void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
 {
+#if 0
 	GtkTreeModel *model = (GtkTreeModel *)data;
 	GtkTreeIter  iter;
 	GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
@@ -37,20 +38,24 @@ void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
 
 	/* clean up */
 	gtk_tree_path_free (path);
+#endif
 }
 
 void getPlugName(gpointer data,gpointer store)
 {
+#if 0
 	GtkTreeIter		iter;
 	moduleData*		plugdata;
 
 	plugdata=(moduleData*)data;
 	gtk_list_store_append((GtkListStore*)store,&iter);
 	gtk_list_store_set((GtkListStore*)store,&iter,COLUMN_ENABLE,plugdata->enabled,COLUMN_PLUGIN,plugdata->name,-1);
+#endif
 }
 
 gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data)
 {
+#if 0
 	int			enabled;
 	char*		name=NULL;
 	moduleData*	pd;
@@ -111,19 +116,23 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 		}
 
 	return(false);
+#endif
 }
 
 void setPlugsEnabled(void)
 {
+#if 0
 	GtkTreeModel*	model;
 
 	globalPlugins->deleteBlackList();
 	model=gtk_tree_view_get_model((GtkTreeView*)treeview);
     gtk_tree_model_foreach(model,doSetPlugData,NULL);
+#endif
 }
 
 void setPlugPrefs(Widget* widget,gpointer data)
 {
+#if 0
 	GtkTreeModel*		model;
 	GtkTreeSelection*	selection=NULL;
 	GtkTreeIter			iter;
@@ -159,10 +168,12 @@ void setPlugPrefs(Widget* widget,gpointer data)
 				gtk_widget_destroy(plugwindow);
 				break;
 		}
+#endif
 }
 
 void onRowSelected(GtkTreeView* treeview,gpointer userdata)
 {
+#if 0
 	GtkTreeModel*		model;
 	GtkTreeSelection*	selection=NULL;
 	GtkTreeIter			iter;
@@ -176,10 +187,12 @@ void onRowSelected(GtkTreeView* treeview,gpointer userdata)
 			gtk_widget_set_sensitive(plugPrefsButton,globalPlugins->checkForFunction(plugname,"plugPrefs"));
 			debugFree(plugname,"onRowSelected plugname");
 		}
+#endif
 }
 
 VISIBLE void doPlugPrefs(void)
 {
+#if 0
 	Widget*		vbox;
 	GtkListStore*	store;
 	GtkTreeModel*	model=NULL;
@@ -237,11 +250,13 @@ VISIBLE void doPlugPrefs(void)
 	gtk_container_add (GTK_CONTAINER(vbox),hbox);
 	gtk_container_add (GTK_CONTAINER(plugwindow),vbox);
 	gtk_widget_show_all(plugwindow);
+#endif
 }
 
 //left/right
 VISIBLE void showSide(bool left)
 {
+#if 0
 	if(left==true)
 		{
 			gtk_widget_show(globalPlugins->globalPlugData->leftUserBox);
@@ -252,10 +267,12 @@ VISIBLE void showSide(bool left)
 			gtk_widget_show(globalPlugins->globalPlugData->rightUserBox);
 			globalPlugins->globalPlugData->rightShow++;
 		}
+#endif
 }
 
 VISIBLE void hideSide(bool left)
 {
+#if 0
 	if(left==true)
 		{
 			globalPlugins->globalPlugData->leftShow--;
@@ -275,11 +292,13 @@ VISIBLE void hideSide(bool left)
 				}
 		}
 	
+#endif
 }
 
 //top/bottom
 VISIBLE void showTop(bool top)
 {
+#if 0
 	if(top==true)
 		{
 			gtk_widget_show(globalPlugins->globalPlugData->topUserBox);
@@ -290,10 +309,12 @@ VISIBLE void showTop(bool top)
 			gtk_widget_show(globalPlugins->globalPlugData->bottomUserBox);
 			globalPlugins->globalPlugData->bottomShow++;
 		}
+#endif
 }
 
 VISIBLE void hideTop(bool top)
 {
+#if 0
 	if(top==true)
 		{
 			globalPlugins->globalPlugData->topShow--;
@@ -312,8 +333,7 @@ VISIBLE void hideTop(bool top)
 					globalPlugins->globalPlugData->bottomShow=0;
 				}
 		}
+#endif
 }
 
-
-
-
+#endif

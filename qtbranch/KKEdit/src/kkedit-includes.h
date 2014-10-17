@@ -16,7 +16,7 @@
 #include <glib.h>
 
 #include "config.h"
-
+#if 0
 #ifndef _USEQT5_
 #include <gtksourceview/gtksourcestyleschememanager.h>
 #include <gtksourceview/gtksourceview.h>
@@ -73,6 +73,4 @@
 #define PROTECTED __attribute__((visibility("protected")))
 
 #endif
-
-
-
+#endif

@@ -13,7 +13,7 @@
 
 #ifndef _COMPLETION_
 #define _COMPLETION_
-
+#if 0
 typedef struct _FunctionProvider FunctionProvider;
 typedef struct _FunctionProviderClass FunctionProviderClass;
 
@@ -41,4 +41,5 @@ void createCompletion(pageStruct* page);
 void addProp(pageStruct* page);
 void removeProps(void);
 
+#endif
 #endif

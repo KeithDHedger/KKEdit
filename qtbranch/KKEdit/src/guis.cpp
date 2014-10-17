@@ -5,7 +5,7 @@
 */
 
 #include "kkedit-includes.h"
-
+#if 0
 Widget*		recent;
 Widget*	tool[18]={NULL,};
 GtkIconView*	iconView=NULL;
@@ -17,12 +17,15 @@ const char* 	shortcuttext[NUMSHORTCUTS]={gettext("Delete Current Line"),gettext(
 
 void findTool(toolStruct* data,char* toolname)
 {
+#if 0
 	if(strcmp(toolname,data->menuName)==0)
 		selectedToolFromDrop=data;
+#endif
 }
 
 void selectToolOptions(Widget* widget,gpointer data)
 {
+#if 0
 	char*	text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
 	int		flags=0;
 
@@ -85,10 +88,12 @@ void selectToolOptions(Widget* widget,gpointer data)
 			else
 				gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,false);
 		}
+#endif
 }
 
 void setUpToolBar(void)
 {
+#if 0
 	Widget*		toolbutton;
 	GtkRecentFilter*	filter;
 
@@ -244,21 +249,27 @@ void setUpToolBar(void)
 						break;
 				}
 		}
+#endif
 }
 
 void addToolToDrop(gpointer data,gpointer user_data)
 {
+#if 0
 	if(((toolStruct*)data)->global==false)
 		gtk_combo_box_text_append_text((GtkComboBoxText*)toolSelect,((toolStruct*)data)->menuName);
+#endif
 }
 
 void fillCombo(GtkComboBoxText* combo)
 {
+#if 0
 	g_list_foreach(toolsList,addToolToDrop,NULL);
+#endif
 }
 
 gboolean getToolKey(GtkEntry* widget,GdkEventKey* event,gpointer data)
 {
+#if 0
 	if((event->type==GDK_KEY_PRESS) && (event->keyval==GDK_KEY_Delete))
 		{
 			gtk_entry_set_text(widget,"");
@@ -269,10 +280,12 @@ gboolean getToolKey(GtkEntry* widget,GdkEventKey* event,gpointer data)
 		gtk_entry_set_text(widget,gdk_keyval_name(event->keyval));
 
 	return(true);
+#endif
 }
 
 void doMakeTool(void)
 {
+#if 0
 	Widget*	vbox;
 	Widget*	hbox;
 	Widget*	button;
@@ -425,10 +438,12 @@ void doMakeTool(void)
 //show it
 	gtk_container_add(GTK_CONTAINER(toolwin),(Widget*)vbox);
 	gtk_widget_show_all(toolwin);
+#endif
 }
 
 void buildTools(void)
 {
+#if 0
 	Widget*		menuitem;
 	Widget*		menu;
 	Widget*		image;
@@ -511,10 +526,12 @@ void buildTools(void)
 				}
 			ptr=g_list_next(ptr);
 		}
+#endif
 }
 
 void populateStore(void)
 {
+#if 0
 	GdkPixbuf*	pbuf;
 	Widget*	image;
 	GtkTreeIter iter;
@@ -726,10 +743,12 @@ void populateStore(void)
 				}
 			debugFree(type,"populateStore type");
 		}
+#endif
 }
 
 void addToToolBar(Widget* widget,gpointer ptr)
 {
+#if 0
 	char*	holddata=toolBarLayout;
 	char*	type;
 
@@ -738,18 +757,22 @@ void addToToolBar(Widget* widget,gpointer ptr)
 	populateStore();
 	toolBarLayout=holddata;
 	debugFree(type,"addToToolBar type");
+#endif
 }
 
 void addIcon(const char* icon,const char* data,int toolnumber,const char* tooltip)
 {
+#if 0
 	tool[toolnumber]=gtk_tool_button_new_from_stock(icon);
 	gtk_box_pack_start(GTK_BOX(fromHBox),(Widget*)tool[toolnumber],false,false,2);
 	gtk_signal_connect(GTK_OBJECT(tool[toolnumber]),"clicked",G_CALLBACK(addToToolBar),(void*)data);
 	gtk_widget_set_tooltip_text((Widget*)tool[toolnumber],tooltip);
+#endif
 }
 
 void addPixbuf(const char* pixbuf,const char* data,int toolnumber,const char* tooltip)
 {
+#if 0
 	Widget*		image;
 	image=gtk_image_new_from_file(pixbuf);
 
@@ -757,10 +780,12 @@ void addPixbuf(const char* pixbuf,const char* data,int toolnumber,const char* to
 	gtk_box_pack_start(GTK_BOX(fromHBox),(Widget*)tool[toolnumber],false,false,2);
 	gtk_signal_connect(GTK_OBJECT(tool[toolnumber]),"clicked",G_CALLBACK(addToToolBar),(void*)data);
 	gtk_widget_set_tooltip_text((Widget*)tool[toolnumber],tooltip);
+#endif
 }
 
 void populateDnD(void)
 {
+#if 0
 	addIcon(GTK_STOCK_NEW,"N",0,gettext("New File"));
 	addIcon(GTK_STOCK_OPEN,"O",1,gettext("Open File"));
 	addIcon(GTK_STOCK_SAVE,"S",2,gettext("Save File"));
@@ -780,10 +805,12 @@ void populateDnD(void)
 	addPixbuf(DATADIR"/pixmaps/live.png","L",13,gettext("Live Search"));
 	addPixbuf(DATADIR"/pixmaps/sep.png","s",14,gettext("Separator"));
 	addPixbuf(DATADIR"/pixmaps/expand.png","E",15,gettext("Expander"));
+#endif
 }
 
 char* makeToolBarList(void)
 {
+#if 0
 	GtkTreeIter iter;
 	gboolean	valid;
 	gchar*		str_data;
@@ -800,10 +827,12 @@ char* makeToolBarList(void)
 			free(str_data);
 		}
 	return(g_string_free(str,false));
+#endif
 }
 
 void clickIt(Widget* widget,GdkEvent* event,gpointer data)
 {
+#if 0
 	GtkTreePath*	path=NULL;
 	GdkModifierType	mask;
 	GtkTreeIter		iter;
@@ -819,10 +848,12 @@ void clickIt(Widget* widget,GdkEvent* event,gpointer data)
 			gtk_widget_set_sensitive((Widget*)tool[button],true);
 			gtk_list_store_remove((GtkListStore*)listStore,&iter);
 		}
+#endif
 }
 
 void doIconView(void)
 {
+#if 0
 	GtkCellRenderer *renderer;
 
 	listStore=gtk_list_store_new(3,GDK_TYPE_PIXBUF,G_TYPE_STRING,G_TYPE_INT);
@@ -846,10 +877,12 @@ void doIconView(void)
 
 	gtk_box_pack_start(GTK_BOX(iconViewBox),(Widget*)iconView,false,false,2);
 	g_signal_connect(G_OBJECT(iconView),"button-press-event",G_CALLBACK(clickIt),NULL);
+#endif
 }
 
 void setKeyCuts(Widget* widget,gpointer data)
 {
+#if 0
 
 	char*	filename;
 	const char*		text;
@@ -872,10 +905,12 @@ void setKeyCuts(Widget* widget,gpointer data)
 			saveVarsToFile(filename,keybindings_rc);
 			gtk_widget_hide(keysWindow);
 		}
+#endif
 }
 
 gboolean setKeyInEntry(GtkEntry* widget,GdkEventKey* event,gpointer data)
 {
+#if 0
 	if((event->type==GDK_KEY_PRESS) && (event->keyval==GDK_KEY_Delete))
 		{
 			gtk_entry_set_text(widget,"");
@@ -886,10 +921,12 @@ gboolean setKeyInEntry(GtkEntry* widget,GdkEventKey* event,gpointer data)
 		gtk_entry_set_text(widget,gdk_keyval_name(event->keyval));
 
 	return(true);
+#endif
 }
 
 void buildKeys()
 {
+#if 0
 	Widget*	vbox;
 	Widget*	item;
 	Widget*	hbox;
@@ -948,11 +985,13 @@ void buildKeys()
 				}
 		}
 	gtk_widget_show_all(keysWindow);
+#endif
 }
 
 #define TABLECOLS 2
 VISIBLE void doPrefs(void)
 {
+#if 0
 	Widget*		vbox;
 	Widget*		hbox;
 	Widget*		pagevbox;
@@ -1265,10 +1304,12 @@ VISIBLE void doPrefs(void)
 //show it
 	gtk_container_add(GTK_CONTAINER(prefswin),(Widget*)vbox);
 	gtk_widget_show_all(prefswin);
+#endif
 }
 
 void addRecentToMenu(GtkRecentChooser* chooser,Widget* menu)
 {
+#if 0
 	GList*		itemlist=NULL;
 	GList*		l=NULL;
 	Widget*	menuitem;
@@ -1297,10 +1338,12 @@ void addRecentToMenu(GtkRecentChooser* chooser,Widget* menu)
 					g_free (uri);
 				}
 		}
+#endif
 }
 
 void buildMainGui(void)
 {
+#if 0
 	Widget*		menuitem;
 	Widget*		menu;
 	Widget*		image;
@@ -1866,10 +1909,12 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->locale=LOCALEDIR;
 
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
+#endif
 }
 
 void buildFindReplace(void)
 {
+#if 0
 	Widget*	content_area;
 	Widget*	replace;
 	Widget*	goback;
@@ -1973,11 +2018,13 @@ void buildFindReplace(void)
 
 	gtk_signal_connect_object(GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(findReplaceDialog));
 	gtk_signal_connect(GTK_OBJECT(findReplaceDialog),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
+#endif
 }
 
 #ifdef _ASPELL_
 void buildWordCheck(int documentCheck)
 {
+#if 0
 	Widget*	vbox;
 	Widget*	button;
 	Widget*	hbox;
@@ -2028,11 +2075,13 @@ void buildWordCheck(int documentCheck)
 
 	gtk_signal_connect_object(GTK_OBJECT(spellCheckWord),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(spellCheckWord));
 	gtk_signal_connect(GTK_OBJECT(spellCheckWord),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
+#endif
 }
 #endif
 
 int showFunctionEntry(void)
 {
+#if 0
 	Widget*	dialog;
 	gint		result;
 	Widget*	content_area;
@@ -2056,11 +2105,13 @@ int showFunctionEntry(void)
 	gtk_widget_destroy(dialog);
 
 	return(result);
+#endif
 }
 
 #ifdef _BUILDDOCVIEWER_
 void buildGtkDocViewer(void)
 {
+#if 0
 	Widget*	vbox;
 	Widget*	hbox;
 	Widget*	button;
@@ -2140,9 +2191,8 @@ void buildGtkDocViewer(void)
 	gtk_widget_grab_focus(GTK_WIDGET(webView));
 
 	gtk_signal_connect_object(GTK_OBJECT(docView),"delete-event",GTK_SIGNAL_FUNC(toggleDocviewer),GTK_OBJECT(docView));
+#endif
 }
 #endif
 
-
-
-
+#endif

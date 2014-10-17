@@ -8,7 +8,7 @@
 
 #ifndef _NAVCALLBACKS_
 #define _NAVCALLBACKS_
-
+#if 0
 void goToDefine(functionData* fdata);
 void goToDefinition(Widget* widget,gpointer data);
 void findFile(Widget* widget,gpointer data);
@@ -23,4 +23,5 @@ void rebuildBookMarkMenu(void);
 gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest* request,WebKitWebNavigationAction* navigation_action,WebKitWebPolicyDecision* policy_decision, gpointer user_data);
 #endif
 
+#endif
 #endif

@@ -7,7 +7,7 @@
 */
 #ifndef _FILES_
 #define _FILES_
-
+#if 0
 void saveVarsToFile(char* filepath,args* dataptr);
 void loadVarsFromFile(char* filepath,args* dataptr);
 bool openFile(const gchar *filepath,int linenumber,bool warn);
@@ -21,4 +21,5 @@ void restoreSession(Widget* widget,gpointer data);
 void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data);
 void setFilePrefs(pageStruct* page);
 
+#endif
 #endif

@@ -7,12 +7,13 @@
 */
 
 #include "kkedit-includes.h"
-
+#if 0
 int	theLineNum=0;
 int marknum=0;
 
 void goToDefine(functionData* fdata)
 {
+#if 0
 	pageStruct*	page;
 	TextBuffer*	buf;
 
@@ -33,10 +34,12 @@ void goToDefine(functionData* fdata)
 
 			delete buf;
 		}
+#endif
 }
 
 VISIBLE void goToDefinition(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*		page=getPageStructPtr(-1);
 	GtkTextIter		start;
 	GtkTextIter		end;
@@ -60,10 +63,12 @@ VISIBLE void goToDefinition(Widget* widget,gpointer data)
 			destroyData(fdata);
 		}
 	return;
+#endif
 }
 
 VISIBLE void findFile(Widget* widget,gpointer data)
 {
+#if 0
 	char*			command;
 	char			buffer[2048];
 	TextBuffer*		buf;
@@ -111,10 +116,12 @@ VISIBLE void findFile(Widget* widget,gpointer data)
 		}
 	delete buf;
 	delete slice;
+#endif
 }
 
 void gotoLine(Widget* widget,gpointer data)
 {
+#if 0
 	int			line=(long)data;
 	pageStruct*	page=getPageStructPtr(-1);
 	TextBuffer*	buf;
@@ -129,16 +136,20 @@ void gotoLine(Widget* widget,gpointer data)
 				buf->scroll2Line((GtkTextView*)page->view2,line-1);
 			delete buf;
 		}
+#endif
 }
 
 void jumpToLineFromBar(Widget* widget,gpointer data)
 {
+#if 0
 	theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
 	gotoLine(NULL,(gpointer)(long)theLineNum);
+#endif
 }
 
 int showLineEntry(void)
 {
+#if 0
 	Widget*	dialog;
 	gint		result;
 	Widget*	content_area;
@@ -164,16 +175,20 @@ int showLineEntry(void)
 	gtk_widget_destroy(dialog);
 
 	return(result);
+#endif
 }
 
 VISIBLE void jumpToLine(Widget* widget,gpointer data)
 {
+#if 0
 	if(showLineEntry()==GTK_RESPONSE_YES)
 		gotoLine(NULL,(gpointer)(long)theLineNum);
+#endif
 }
 
 VISIBLE void functionSearch(Widget* widget,gpointer data)
 {
+#if 0
 	functionData* fdata;
 
 	if(showFunctionEntry()==GTK_RESPONSE_YES)
@@ -188,10 +203,12 @@ VISIBLE void functionSearch(Widget* widget,gpointer data)
 						}
 				}
 		}
+#endif
 }
 
 void jumpToMark(Widget* widget,gpointer data)
 {
+#if 0
 	GtkTextMark*	mark;
 	pageStruct*		page;
 	pageStruct*		checkpage;
@@ -214,12 +231,14 @@ void jumpToMark(Widget* widget,gpointer data)
 				}
 		}
 	delete buf;
+#endif
 }
 
 #ifdef _BUILDDOCVIEWER_
 
 char* unEscapeFileNAme(char* name)
 {
+#if 0
 	char*	buffer;
 	int		charpos;
 	unsigned int		namepos;
@@ -322,21 +341,25 @@ char* unEscapeFileNAme(char* name)
 		}
 
 	return(buffer);
+#endif
 }
 
 struct docFileData
 {
+#if 0
 	char*	fileName;
 	char*	filePath;
 	int		lineNum;
 	char*	hashTag;
 	char*	sourceFile;
+#endif
 };
 
 char*	filebuffer=NULL;
 
 bool readFile(char *name)
 {
+#if 0
 	FILE*			file;
 	unsigned long	fileLen;
 
@@ -368,10 +391,12 @@ bool readFile(char *name)
 	fread(filebuffer,fileLen,1,file);
 	fclose(file);
 	return(true);
+#endif
 }
 
 int getLineFromXML(char* xml)
 {
+#if 0
 	StringSlice*	slice=new StringSlice;
 
 	char*			data;
@@ -383,6 +408,7 @@ int getLineFromXML(char* xml)
 		retline=atoi(slice->sliceBetween(data,(char*)"#l",NULL));
 	delete slice;
 	return(retline);
+#endif
 }
 
 bool	mustBeAClass=false;
@@ -391,6 +417,7 @@ char*	classFileName=NULL;
 
 char* getPathFromXML(char* xml)
 {
+#if 0
 	StringSlice*	slice=new StringSlice;
 	bool			done=false;
 	char*			data;
@@ -486,10 +513,12 @@ char* getPathFromXML(char* xml)
 		}
 	delete slice;
 	return(buffer);
+#endif
 }
 
 docFileData* getDoxyFileData(char* uri)
 {
+#if 0
 	char*	linetag=NULL;
 	bool	gotline=false;
 
@@ -552,10 +581,12 @@ docFileData* getDoxyFileData(char* uri)
 	debugFree(linetag,"getDoxyFileData linetag");
 	debugFree(filepath,"getDoxyFileData filepath");
 	return(doxydata);
+#endif
 }
 
 gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest* request,WebKitWebNavigationAction* navigationAction,WebKitWebPolicyDecision* policy_decision, gpointer user_data)
 {
+#if 0
 	int				mod=-1;
 	const char*		uri;
 	pageStruct*		page;
@@ -590,7 +621,9 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 			debugFree(doxydata,"docLinkTrap doxydata");
 		}
 	return(false);
+#endif
 }
 
 #endif
 
+#endif

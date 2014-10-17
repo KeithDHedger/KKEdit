@@ -18,21 +18,24 @@
 ******************************************************/
 
 #include "kkedit-includes.h"
-
+#if 0
 #ifdef _ASPELL_
 
 bool	cancelCheck=false;
 
 void doCancelCheck(Widget* widget,gpointer data)
 {
+#if 0
 	gtk_widget_destroy(spellCheckWord);
 	if(badWord!=NULL)
 		debugFree(badWord,"doCancelCheck badWord");
 	cancelCheck=true;
+#endif
 }
 
 void checkTheWord(char* word,int checkDoc)
 {
+#if 0
 	int							correct;
 	AspellWordList*				suggestions;
 	AspellStringEnumeration*	elements;
@@ -59,10 +62,12 @@ void checkTheWord(char* word,int checkDoc)
 			gtk_widget_show_all(spellCheckWord);
 			gtk_dialog_run((GtkDialog *)spellCheckWord);
 		}
+#endif
 }
 
 void checkWord(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
@@ -79,10 +84,12 @@ void checkWord(Widget* widget,gpointer data)
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 	checkTheWord(selection,false);
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+#endif
 }
 
 void doChangeWord(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
@@ -109,10 +116,12 @@ void doChangeWord(Widget* widget,gpointer data)
 	gtk_widget_destroy(spellCheckWord);
 	if(badWord!=NULL)
 		debugFree(badWord,"doChangeWord badWord");
+#endif
 }
 
 void doAddIgnoreWord(Widget* widget,gpointer data)
 {
+#if 0
 	if((long)data==1)
 		aspell_speller_add_to_session(spellChecker,badWord,-1);
 	else
@@ -124,10 +133,12 @@ void doAddIgnoreWord(Widget* widget,gpointer data)
 	gtk_widget_destroy(spellCheckWord);
 	if(badWord!=NULL)
 		debugFree(badWord,"doAddIgnoreWord badWord");
+#endif
 }
 
 void doSpellCheckDoc(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*				page=getPageStructPtr(-1);
 	gchar*					buffer;
 	long					filelen;
@@ -250,6 +261,8 @@ void doSpellCheckDoc(Widget* widget,gpointer data)
 		}
 
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+#endif
 }
 #endif
 
+#endif

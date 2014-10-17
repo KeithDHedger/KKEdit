@@ -8,20 +8,25 @@
 ******************************************************/
 
 #include "kkedit-includes.h"
-
+#if 0
 HistoryClass::HistoryClass()
 {
+#if 0
 	buf=new TextBuffer;
 	this->savedPage=NULL;
+#endif
 }
 
 HistoryClass::~HistoryClass()
 {
+#if 0
 	delete buf;
+#endif
 }
 
 void HistoryClass::getThisPoint(void)
 {
+#if 0
 	Widget*	pageBox;
 	int			tabNum=gtk_notebook_get_current_page(notebook);
 
@@ -30,34 +35,44 @@ void HistoryClass::getThisPoint(void)
 		savedPage=NULL;
 	else
 		savedPage=(pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata");
+#endif
 }
 
 pageStruct* HistoryClass::getPage(void)
 {
+#if 0
 	return(savedPage);
+#endif
 }
 
 void HistoryClass::setPage(pageStruct* page)
 {
+#if 0
 	savedPage=page;
+#endif
 }
 
 TextBuffer* HistoryClass::getTextBuffer(void)
 {
+#if 0
 	return(buf);
+#endif
 }
 
 void HistoryClass::savePosition(void)
 {
+#if 0
 	getThisPoint();
 
 	buf->textBuffer=(GtkTextBuffer*)savedPage->buffer;
 	buf->getLineData();
 	gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)savedPage->buffer,"back-mark",&buf->cursorPos);
+#endif
 }
 
 int HistoryClass::getTabNumForPage(void)
 {
+#if 0
 	pageStruct*	page;
 	int			numpages=gtk_notebook_get_n_pages(notebook);
 
@@ -68,20 +83,7 @@ int HistoryClass::getTabNumForPage(void)
 				return(loop);
 		}
 	return(0);
+#endif
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif

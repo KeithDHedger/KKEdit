@@ -8,7 +8,7 @@
 
 #ifndef _CALLBACKS_
 #define _CALLBACKS_
-
+#if 0
 void doOpenFile(Widget* widget,gpointer data);
 void closeTab(Widget* widget,gpointer data);
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint arg2,gpointer user_data);
@@ -57,4 +57,5 @@ void getPlugins(Widget* widget,gpointer data);
 void showToolOutput(bool immediate);
 void hideToolOutput(bool immediate);
 
+#endif
 #endif

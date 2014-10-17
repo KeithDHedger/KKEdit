@@ -7,6 +7,7 @@
 */
 
 #include "kkedit-includes.h"
+#if 0
 //#include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
 //#include <gtksourceview/gtksourceview.h>
 //#include <gtksourceview/gtksourcecompletion.h>
@@ -21,6 +22,7 @@ bool		dropTextFile=false;
 
 VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 {
+#if 0
 	FILE*	fd=NULL;
 	int		cnt=0;
 
@@ -48,10 +50,12 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 				}
 			fclose(fd);
 		}
+#endif
 }
 
 VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 {
+#if 0
 	FILE*	fd=NULL;
 	char	buffer[2048];
 	int		cnt;
@@ -97,10 +101,12 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 				}
 			fclose(fd);
 		}
+#endif
 }
 
 Widget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
+#if 0
 	Widget*	evbox=gtk_event_box_new();
 	Widget*	hbox=gtk_hbox_new(false,0);
 	Widget*	label=gtk_label_new(name);
@@ -132,10 +138,12 @@ Widget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"newTab");
 
 	return(evbox);
+#endif
 }
 
 void setFilePrefs(pageStruct* page)
 {
+#if 0
 	PangoFontDescription*	font_desc;
 	GdkColor				color;
 	GtkTextAttributes*		attr;
@@ -172,10 +180,12 @@ void setFilePrefs(pageStruct* page)
 	else
 		gtk_source_completion_block_interactive(page->completion);
 createCompletion(page);
+#endif
 }
 
 void resetAllFilePrefs(void)
 {
+#if 0
 	pageStruct*			page;
 
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
@@ -186,10 +196,12 @@ void resetAllFilePrefs(void)
 			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 			setFilePrefs(page);
 		}
+#endif
 }
 
 void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
 {
+#if 0
 	gchar**			array=NULL;
 	int				cnt;
 	char*			filename;
@@ -240,10 +252,12 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 		dropTextFile=false;
 
 	gtk_drag_finish (context,true,true,time);
+#endif
 }
 
 bool getSaveFile(void)
 {
+#if 0
 	Widget*	dialog;
 	bool		retval=false;
 
@@ -269,10 +283,12 @@ bool getSaveFile(void)
 	gtk_widget_destroy(dialog);
 	refreshMainWindow();
 	return(retval);
+#endif
 }
 
 VISIBLE bool saveFile(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start,end;
 	gchar*		text;
@@ -352,10 +368,12 @@ VISIBLE bool saveFile(Widget* widget,gpointer data)
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"saveFile");
 
 	return(true);
+#endif
 }
 
 VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 {
+#if 0
 	Widget*		dialog;
 	char*			filepath;
 	char*			filename;
@@ -406,10 +424,12 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 
 	gtk_widget_destroy (dialog);
 	refreshMainWindow();
+#endif
 }
 
 VISIBLE void reloadFile(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*	page=getPageStructPtr(-1);
 	gchar*		buffer;
 	long		filelen;
@@ -426,10 +446,12 @@ VISIBLE void reloadFile(Widget* widget,gpointer data)
 			gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
 			debugFree(buffer,"reloadFile buffer");
 		}
+#endif
 }
 
 VISIBLE void saveSession(Widget* widget,gpointer data)
 {
+#if 0
 	pageStruct*		page;
 	FILE*			fd=NULL;
 	char*			filename;
@@ -471,10 +493,12 @@ VISIBLE void saveSession(Widget* widget,gpointer data)
 			fclose(fd);
 			debugFree(filename,"saveSession filename");
 		}
+#endif
 }
 
 VISIBLE void restoreSession(Widget* widget,gpointer data)
 {
+#if 0
 	FILE*		fd=NULL;
 	char*		filename;
 	char		buffer[2048];
@@ -527,10 +551,12 @@ VISIBLE void restoreSession(Widget* widget,gpointer data)
 			debugFree(filename,"restoreSession filename");
 		}
 	delete buf;
+#endif
 }
 
 int showFileChanged(char* filename)
 {
+#if 0
 	Widget*	dialog;
 	gint		result;
 	char*		message;
@@ -546,10 +572,12 @@ int showFileChanged(char* filename)
 	gtk_widget_destroy(dialog);
 	debugFree(message,"showFileChanged message");
 	return(result);
+#endif
 }
 
 void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data)
 {
+#if 0
 	pageStruct*		page=(pageStruct*)user_data;
 	GtkTextIter		start;
 	GtkTextIter		end;
@@ -583,10 +611,12 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 			else
 				page->itsMe=false;
 		}
+#endif
 }
 
 void add_source_mark_pixbufs (GtkSourceView *view)
 {
+#if 0
 	GdkColor	color;
 	GtkImage*	image;
 	GdkPixbuf*	pbuf;
@@ -598,10 +628,12 @@ void add_source_mark_pixbufs (GtkSourceView *view)
 	gtk_source_view_set_mark_category_background(view,MARK_TYPE_1,&color);
 	gtk_source_view_set_mark_category_icon_from_pixbuf (view,MARK_TYPE_1,pbuf);
 	gtk_source_view_set_mark_category_priority(view,MARK_TYPE_1,1);
+#endif
 }
 
 gboolean clickInView(Widget* widget,gpointer data)
 {
+#if 0
 	if((statusMessage!=NULL))
 		{
 			free(statusMessage);
@@ -609,10 +641,12 @@ gboolean clickInView(Widget* widget,gpointer data)
 			
 		}
 	return(false);
+#endif
 }
 
 pageStruct* makeNewPage(void)
 {
+#if 0
 	pageStruct*			page;
 	GtkTextIter			iter;
 	GtkTextAttributes*	attr;
@@ -686,10 +720,12 @@ pageStruct* makeNewPage(void)
 	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(updateStatuBar),(void*)page);
 
 	return(page);
+#endif
 }
 
 VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
+#if 0
 	GtkTextIter				iter;
 	Widget*				label;
 	gchar*					filename=g_path_get_basename(filepath);
@@ -880,10 +916,12 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"openFile");
 
 	return TRUE;
+#endif
 }
 
 VISIBLE void newFile(Widget* widget,gpointer data)
 {
+#if 0
 	GtkTextIter	iter;
 	Widget*	label;
 	pageStruct*	page;
@@ -917,4 +955,7 @@ VISIBLE void newFile(Widget* widget,gpointer data)
 
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"newFile");
+#endif
 }
+
+#endif
