@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+#©keithhedger Tue 29 Jul 12:41:51 BST 2014 kdhedger68713@gmail.com
+
+#dropbox link
+#https://dl.dropboxusercontent.com/s/xcvp8af3qp7ffxg/NAGTIME
+date "+%s" >./NAGTIME
+cat config.h|grep "#define VERSION"|awk '{print $3}'|sed 's/"//g' >>  ./NAGTIME
+cat  /media/LinuxData/Development/Projects/KKEditPlugins/NAGTIME >>  ./NAGTIME
