@@ -1,0 +1,54 @@
+#!/bin/bash -e
+
+. /usr/share/LFSPkg/LFSFunctions
+
+PKGNAME="KKEdit"
+TARNAME="$PKGNAME"
+VERSION="0.2.4"
+BUILD=5
+SECTION="DESKTOP"
+SUFFIX="LFSPKG"
+TARBALL="${TARNAME}-${VERSION}.tar.gz"
+
+#wget --no-check-certificate -c "https://googledrive.com/host/0B3Xh0P904QQhckctbTkyekhza0k" -O ${TARBALL}
+
+PKG="${OUTPUT}/${PKGNAME}"
+
+DOWHAT=${1:-"build"}
+rm -rf "$PKG" || true
+mkdir -p "$PKG"
+tar -xvf "$TARBALL"
+
+pushd "${TARNAME}-${VERSION}"
+	CFLAGS="$LFSFLAGS" CXXFLAGS="$LFSFLAGS" ./configure ${CONFIGOPTIONS} --enable-aspell --enable-docviewer --with-qt5-docdir=/usr/share/doc/qt5 --with-gsu-path="gtksu --"
+	mkdir -vp $PKG/usr/share/icons/hicolor/128x128/apps
+	make $MAKEFLAGS ||make|| exit 1
+	make $MAKEFLAGS install DESTDIR=$PKG || exit 1
+popd
+
+if [ "$CHECKETC" -eq 1 ];then
+	checketc $PKG
+fi
+
+pushd "$PKG"
+	find | xargs file | grep -e "executable" -e "shared object" | grep ELF | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+	/usr/bin/lfspkg -n "$PKGNAME" -p "$VERSION" -d $SECTION -b $BUILD -s $SUFFIX -m
+popd
+
+case $DOWHAT in
+	up*)
+		lfspkg "^${PKGNAME}-[0-9][0-9]*" "${OUTPUT}/${PKGNAME}-${VERSION}-${BUILD}_${SECTION}_${SUFFIX}.tar.gz" -u
+		;;
+	"install")
+		lfspkg "${OUTPUT}/${PKGNAME}-${VERSION}-${BUILD}_${SECTION}_${SUFFIX}.tar.gz" -i
+		;;
+	"build")
+		echo "Just built"
+		;;
+	*)
+		echo "*** Unknown command ***"
+		exit 1
+esac
+
+rm -r "$PKG" "${TARNAME}-${VERSION}"
+gtk-update-icon-cache --ignore-theme-index --force /usr/share/icons/hicolor||true
