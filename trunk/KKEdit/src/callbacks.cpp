@@ -954,11 +954,11 @@ VISIBLE void openHelp(GtkWidget* widget,gpointer data)
 	else
 		lang="fr";
 
-	asprintf(&thePage,"file://%s/help/%s/help.html",DATADIR,lang);
+	asprintf(&thePage,"file://%s/help/help.%s.html",DATADIR,lang);
 #ifdef _BUILDDOCVIEWER_
 	showDocView(USEURI,(char*)"KKEdit",gettext("KKEdit Help"));
 #else
-	asprintf(&thePage,"%s %s/help/%s/help.html",browserCommand,DATADIR,lang);
+	asprintf(&thePage,"%s %s/help/help.%s.shtml",browserCommand,DATADIR,lang);
 	runCommand(thePage,NULL,false,8,0,(char*)gettext("KKEdit Help"));
 	debugFree(thePage,"openHelp thePage");
 	thePage=NULL;
