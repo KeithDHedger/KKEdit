@@ -49,7 +49,7 @@
 #define NUMSHORTCUTS	14
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
-
+#if 0
 #ifndef _PAGESTRUCT_
 #define _PAGESTRUCT_
 
@@ -61,6 +61,7 @@ struct args
 };
 
 enum {TYPEINT=1,TYPESTRING,TYPEBOOL};
+
 
 struct pageStruct
 {
@@ -98,6 +99,7 @@ struct pageStruct
 	gpointer			reserved3;
 	gpointer			reserved4;
 };
+#endif
 #endif
 
 struct toolStruct
