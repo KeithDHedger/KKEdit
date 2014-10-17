@@ -399,7 +399,7 @@ int main(int argc,char **argv)
 	else
 		{
 			init();
-//			buildMainGui();
+			buildMainGui();
 
 //			if(onExitSaveSession==true)
 //				restoreSession(NULL,(void*)restoreBookmarks);

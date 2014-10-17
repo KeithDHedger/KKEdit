@@ -1340,10 +1340,11 @@ void addRecentToMenu(GtkRecentChooser* chooser,Widget* menu)
 		}
 #endif
 }
+#endif
 
 void buildMainGui(void)
 {
-#if 0
+
 	Widget*		menuitem;
 	Widget*		menu;
 	Widget*		image;
@@ -1909,9 +1910,9 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->locale=LOCALEDIR;
 
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
-#endif
 }
 
+#if 0
 void buildFindReplace(void)
 {
 #if 0

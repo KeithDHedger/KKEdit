@@ -6,7 +6,7 @@
 
 #ifndef _GUIS_
 #define _GUIS_
-#if 0
+
 void buildMainGui(void);
 void buildTools(void);
 void buildFindReplace(void);
@@ -17,5 +17,5 @@ void buildGtkDocViewer(void);
 #endif
 void setUpToolBar(void);
 char* makeToolBarList(void);
-#endif
+
 #endif
