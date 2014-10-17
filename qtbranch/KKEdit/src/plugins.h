@@ -9,7 +9,7 @@
 
 #ifndef _PLUGINSTUFF_
 #define _PLUGINSTUFF_
-=if 0
+#if 0
 void doPlugPrefs(void);
 void showSide(bool left);
 void hideSide(bool left);

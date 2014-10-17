@@ -8,7 +8,7 @@
 
 #ifndef _PLUGINS_
 #define _PLUGINS_
-#if 0
+#if 1
 #include "config.h"
 
 #ifndef _USEQT5_

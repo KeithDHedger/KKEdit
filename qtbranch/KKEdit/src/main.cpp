@@ -11,7 +11,7 @@ bool	loadPluginsFlag=true;
 
 void readConfig(void)
 {
-#if 0
+#if 1
 	char*	filename;
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
@@ -32,7 +32,7 @@ void readConfig(void)
 
 void init(void)
 {
-#if 0
+#if 1
 	char*		filename;
 	int			exitstatus;
 	char		tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
@@ -104,6 +104,7 @@ void init(void)
 	g_mkdir_with_parents(filename,493);
 	debugFree(filename,"init filename");
 
+#if 0
 	schemeManager=gtk_source_style_scheme_manager_get_default();
 	asprintf(&filename,"%s/.gnome2/gedit/styles",getenv("HOME"));
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
@@ -111,14 +112,15 @@ void init(void)
 	asprintf(&filename,"%s/styles",DATADIR);
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
 	debugFree(filename,"init filename");
+#endif
 
 //toolbar layout
 	toolBarLayout=strdup("NOSsXCPsURsFGsE9ADL");
 
 	readConfig();
-	loadKeybindings();
+//	loadKeybindings();
 
-	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
+//	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
 	tmpIndent=indent;
 	tmpLineNumbers=lineNumbers;
@@ -143,6 +145,8 @@ void init(void)
 	asprintf(&htmlFile,"%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
 	asprintf(&htmlURI,"file://%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
 
+#endif
+#if 0
 #ifdef _ASPELL_
 	spellChecker=NULL;
 	aspellConfig=NULL;

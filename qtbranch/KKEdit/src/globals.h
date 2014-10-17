@@ -11,7 +11,7 @@
 
 #ifndef _GLOBALS_
 #define _GLOBALS_
-#if 0
+#if 1
 #undef _DEBUG_FREE_
 
 #ifndef _USEQT5_
@@ -63,7 +63,7 @@
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 
-#if 0
+#if 1
 #ifndef _PAGESTRUCT_
 #define _PAGESTRUCT_
 
@@ -151,7 +151,7 @@ struct bookMarksNew
 	int					line;
 };
 
-extern HistoryClass*	history;
+//extern HistoryClass*	history;
 
 extern Widget*		window;
 extern Widget*	accgroup;
@@ -386,8 +386,8 @@ extern char*			tmpFolderName;
 extern int				gotManEditor;
 extern int				gotDoxygen;
 
-extern //GtkSourceStyleSchemeManager*	schemeManager;
-extern //GtkSourceStyleScheme*		styleScheme;
+//extern //GtkSourceStyleSchemeManager*	schemeManager;
+//extern //GtkSourceStyleScheme*		styleScheme;
 
 #ifdef _BUILDDOCVIEWER_
 extern Widget*		docView;
@@ -396,8 +396,8 @@ extern bool				showHideDocviewer;
 extern Widget*		showDocViewWidget;
 #endif
 
-//extern Widget*		spellCheckWord;
-//extern Widget*		wordListDropbox;
+extern Widget*		spellCheckWord;
+extern Widget*		wordListDropbox;
 extern char*			badWord;
 extern char*			goodWord;
 #ifdef _ASPELL_
@@ -414,7 +414,7 @@ extern Widget*		progressBar;
 
 #include "pluginclass.h"
 
-extern PluginClass*		globalPlugins;
+//extern PluginClass*		globalPlugins;
 
 //save and load var lists
 extern int				intermarg;

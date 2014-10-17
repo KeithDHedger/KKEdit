@@ -9,7 +9,7 @@
 
 #ifndef _SLICECLASS_
 #define _SLICECLASS_
-#if 0
+#if 1
 #define NUMHTMLENTRIES 252
 /**
  *

@@ -7,7 +7,7 @@
 */
 #ifndef _FILES_
 #define _FILES_
-#if 0
+#if 1
 void saveVarsToFile(char* filepath,args* dataptr);
 void loadVarsFromFile(char* filepath,args* dataptr);
 bool openFile(const gchar *filepath,int linenumber,bool warn);

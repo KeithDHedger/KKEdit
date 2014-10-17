@@ -52,10 +52,10 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 		}
 #endif
 }
+#endif
 
 VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 {
-#if 0
 	FILE*	fd=NULL;
 	char	buffer[2048];
 	int		cnt;
@@ -101,9 +101,8 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 				}
 			fclose(fd);
 		}
-#endif
 }
-
+#if 0
 Widget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
 #if 0

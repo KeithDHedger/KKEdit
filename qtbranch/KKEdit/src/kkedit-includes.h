@@ -16,7 +16,7 @@
 #include <glib.h>
 
 #include "config.h"
-#if 0
+
 #ifndef _USEQT5_
 #include <gtksourceview/gtksourcestyleschememanager.h>
 #include <gtksourceview/gtksourceview.h>
@@ -32,6 +32,10 @@
 	typedef QWidget Widget;
 #endif
 
+#define VISIBLE __attribute__((visibility("default")))
+#define PROTECTED __attribute__((visibility("protected")))
+
+#if 1
 #include <ctype.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -42,7 +46,7 @@
 
 #include <unique/unique.h>
 
-#include "config.h"
+//#include "config.h"
 #include "sliceclass.h"
 #include "kkedit-plugins.h"
 
@@ -69,8 +73,8 @@
 #include "encoding.h"
 #include "completion.h"
 
-#define VISIBLE __attribute__((visibility("default")))
-#define PROTECTED __attribute__((visibility("protected")))
+//#define VISIBLE __attribute__((visibility("default")))
+//#define PROTECTED __attribute__((visibility("protected")))
 
 #endif
 #endif

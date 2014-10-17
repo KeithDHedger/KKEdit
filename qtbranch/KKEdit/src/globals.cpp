@@ -8,7 +8,8 @@
 
 #include "kkedit-includes.h"
 #include "config.h"
-#if 0
+
+#if 1
 #ifdef _USEQT5_
 	QApplication*	holdapp;
 #endif
@@ -254,8 +255,8 @@ Widget*		showDocViewWidget;
 #endif
 
 //spellcheck
-//Widget*		spellCheckWord;
-//Widget*		wordListDropbox;
+Widget*		spellCheckWord;
+Widget*		wordListDropbox;
 char*			badWord=NULL;
 char*			goodWord=NULL;
 #ifdef _ASPELL_
@@ -265,7 +266,7 @@ AspellSpeller*	spellChecker=0;
 
 const char*		localeLang;
 
-HistoryClass*	history;
+//HistoryClass*	history;
 StringSlice*	globalSlice;
 
 unsigned int	shortCuts[NUMSHORTCUTS][2]=
@@ -327,14 +328,14 @@ args			keybindings_rc[]=
 Widget*		progressWindow;
 Widget*		progressBar;
 
-PluginClass*	globalPlugins=NULL;
+//PluginClass*	globalPlugins=NULL;
 
 //save and load var lists
 char*			windowAllocData=NULL;
 char*			docWindowAllocData=NULL;
+
 args			kkedit_window_rc[]=
 {
-#if 0
 	//bools
 	{"insenssearch",TYPEBOOL,&insensitiveSearch},
 	{"useregex",TYPEBOOL,&useRegex},
@@ -356,12 +357,10 @@ args			kkedit_window_rc[]=
 	{"lastupdate",TYPEINT,&lastUpdate},
 	{"lastplugupdate",TYPEINT,&lastPlugUpdate},
 	{NULL,0,NULL}
-#endif
 };
 
 args			kkedit_rc[]=
 {
-#if 0
 	//bools
 	{"indentcode",TYPEBOOL,&indent},
 	{"showlinenumbers",TYPEBOOL,&lineNumbers},
@@ -391,7 +390,6 @@ args			kkedit_rc[]=
 	{"funcsort",TYPEINT,&listFunction},
 	{"minautochars",TYPEINT,&autoShowMinChars},
 	{NULL,0,NULL}
-#endif
 };
 
 int				intermarg=0;
@@ -408,7 +406,6 @@ int				usebar=0;
 
 args			tool_vars[]=
 {
-#if 0
 	//strings
 	{"name",TYPESTRING,&menuname},
 	{"command",TYPESTRING,&commandarg},
@@ -423,7 +420,6 @@ args			tool_vars[]=
 	{"usebar",TYPEINT,&usebar},
 	{"shortcutkey",TYPEINT,&keycode},
 	{NULL,0,NULL}
-#endif
 };
 
 //status bar message

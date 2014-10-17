@@ -6,9 +6,9 @@
 *     backclass.cpp
 * 
 ******************************************************/
-
-#include "kkedit-includes.h"
 #if 0
+#include "kkedit-includes.h"
+
 HistoryClass::HistoryClass()
 {
 #if 0
