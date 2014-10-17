@@ -15,17 +15,17 @@ int	itemsReplaced=-1;
 
 #ifdef _BUILDDOCVIEWER_
 
-void webKitGoBack(GtkWidget* widget,gpointer data)
+void webKitGoBack(Widget* widget,gpointer data)
 {
 	webkit_web_view_go_back((WebKitWebView*)data);
 }
 
-void webKitGoForward(GtkWidget* widget,gpointer data)
+void webKitGoForward(Widget* widget,gpointer data)
 {
 	webkit_web_view_go_forward((WebKitWebView*)data);
 }
 
-void webKitGoHome(GtkWidget* widget,gpointer data)
+void webKitGoHome(Widget* widget,gpointer data)
 {
 	if(g_file_test(htmlFile,G_FILE_TEST_EXISTS)==true)
 		webkit_web_view_load_uri((WebKitWebView*)data,htmlURI);
@@ -86,7 +86,7 @@ PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 	return;
 }
 
-VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
+VISIBLE void searchGtkDocs(Widget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -194,7 +194,7 @@ VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
 		debugFree(selection,"seachGtkDocs selection");
 }
 
-VISIBLE void doDoxy(GtkWidget* widget,long data)
+VISIBLE void doDoxy(Widget* widget,long data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	struct stat	sb;
@@ -240,7 +240,7 @@ VISIBLE void doDoxy(GtkWidget* widget,long data)
 }
 
 //find in doxy docs
-VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
+VISIBLE void doxyDocs(Widget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -296,7 +296,7 @@ VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
 }
 
 //showDocViewWidget
-VISIBLE void searchQT5Docs(GtkWidget* widget,gpointer data)
+VISIBLE void searchQT5Docs(Widget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -360,7 +360,7 @@ VISIBLE void searchQT5Docs(GtkWidget* widget,gpointer data)
 		}
 }
 
-void defSearchFromBar(GtkWidget* widget,gpointer data)
+void defSearchFromBar(Widget* widget,gpointer data)
 {
 	functionData* fdata;
 
@@ -377,7 +377,7 @@ void defSearchFromBar(GtkWidget* widget,gpointer data)
 		}
 }
 
-void docSearchFromBar(GtkWidget* widget,gpointer data)
+void docSearchFromBar(Widget* widget,gpointer data)
 {
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
@@ -386,7 +386,7 @@ void docSearchFromBar(GtkWidget* widget,gpointer data)
 }
 
 #ifdef _BUILDDOCVIEWER_
-void docSearchInPageFoward(GtkWidget* widget,gpointer data)
+void docSearchInPageFoward(Widget* widget,gpointer data)
 {
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
@@ -394,7 +394,7 @@ void docSearchInPageFoward(GtkWidget* widget,gpointer data)
 		webkit_web_view_search_text(webView,text,false,true,true);
 }
 
-void docSearchInPageBack(GtkWidget* widget,gpointer data)
+void docSearchInPageBack(Widget* widget,gpointer data)
 {
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
@@ -403,7 +403,7 @@ void docSearchInPageBack(GtkWidget* widget,gpointer data)
 }
 #endif
 
-void qt5DocSearchFromBar(GtkWidget* widget,gpointer data)
+void qt5DocSearchFromBar(Widget* widget,gpointer data)
 {
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
@@ -888,7 +888,7 @@ void basicFind(int dowhat)
 	debugFree(replacetext,"basicFind replacetext");
 }
 
-void pasteFRClip(GtkWidget* widget,gpointer data)
+void pasteFRClip(Widget* widget,gpointer data)
 {
 	gtk_entry_set_text((GtkEntry*)data,gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget));
 }
@@ -912,8 +912,8 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	bool		flag=false;
 	GSList*		tlist;
 	const char*	edata;
-	GtkWidget*	entry;
-	GtkWidget*	drop;
+	Widget*	entry;
+	Widget*	drop;
 	GSList*		list;
 
 	if(response_id!=REPLACE)
@@ -973,15 +973,15 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 		showOnStatus(gtk_entry_get_text((GtkEntry*)findBox),gtk_entry_get_text((GtkEntry*)replaceBox));
 }
 
-VISIBLE void find(GtkWidget* widget,gpointer data)
+VISIBLE void find(Widget* widget,gpointer data)
 {
 	gtk_widget_show(findReplaceDialog);
 	gtk_dialog_run((GtkDialog *)findReplaceDialog);
 }
 
-void doSearchPrefs(GtkWidget* widget,gpointer data)
+void doSearchPrefs(Widget* widget,gpointer data)
 {
-	GtkWidget*	button;
+	Widget*	button;
 
 	switch ((long)data)
 		{
@@ -1013,7 +1013,7 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 		}
 }
 
-void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
+void doLiveSearch(Widget* widget,GdkEvent *event,gpointer data)
 {
 	pageStruct* 			page=getPageStructPtr(-1);
 	GtkSourceSearchFlags	flags;

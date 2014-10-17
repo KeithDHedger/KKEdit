@@ -13,10 +13,10 @@
 #define COLUMN_PLUGIN 1
 #define NUM_COLUMNS 2
 
-GtkWidget*	plugAboutButton;
-GtkWidget*	plugPrefsButton;
-GtkWidget*	plugwindow;
-GtkWidget*	treeview;
+Widget*	plugAboutButton;
+Widget*	plugPrefsButton;
+Widget*	plugwindow;
+Widget*	treeview;
 
 void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
 {
@@ -55,7 +55,7 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 	char*		name=NULL;
 	moduleData*	pd;
 	char*		filepath;
-	GtkWidget*	dialog;
+	Widget*	dialog;
 
 	gtk_tree_model_get(model,iter,COLUMN_ENABLE,&enabled,COLUMN_PLUGIN,&name,-1);
 	if(!enabled)
@@ -122,7 +122,7 @@ void setPlugsEnabled(void)
     gtk_tree_model_foreach(model,doSetPlugData,NULL);
 }
 
-void setPlugPrefs(GtkWidget* widget,gpointer data)
+void setPlugPrefs(Widget* widget,gpointer data)
 {
 	GtkTreeModel*		model;
 	GtkTreeSelection*	selection=NULL;
@@ -180,13 +180,13 @@ void onRowSelected(GtkTreeView* treeview,gpointer userdata)
 
 VISIBLE void doPlugPrefs(void)
 {
-	GtkWidget*		vbox;
+	Widget*		vbox;
 	GtkListStore*	store;
 	GtkTreeModel*	model=NULL;
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
-	GtkWidget*		button;
-	GtkWidget*		hbox;
+	Widget*		button;
+	Widget*		hbox;
 
 	plugwindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 

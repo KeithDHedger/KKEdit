@@ -26,8 +26,10 @@
 
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <gtksourceview/gtksourceprintcompositor.h>
+	typedef GtkWidget Widget;
 #else
 	#include <QtWidgets>
+	typedef QWidget Widget;
 #endif
 
 #include <ctype.h>

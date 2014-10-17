@@ -23,7 +23,7 @@
 
 bool	cancelCheck=false;
 
-void doCancelCheck(GtkWidget* widget,gpointer data)
+void doCancelCheck(Widget* widget,gpointer data)
 {
 	gtk_widget_destroy(spellCheckWord);
 	if(badWord!=NULL)
@@ -61,7 +61,7 @@ void checkTheWord(char* word,int checkDoc)
 		}
 }
 
-void checkWord(GtkWidget* widget,gpointer data)
+void checkWord(Widget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -81,7 +81,7 @@ void checkWord(GtkWidget* widget,gpointer data)
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 }
 
-void doChangeWord(GtkWidget* widget,gpointer data)
+void doChangeWord(Widget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -111,7 +111,7 @@ void doChangeWord(GtkWidget* widget,gpointer data)
 		debugFree(badWord,"doChangeWord badWord");
 }
 
-void doAddIgnoreWord(GtkWidget* widget,gpointer data)
+void doAddIgnoreWord(Widget* widget,gpointer data)
 {
 	if((long)data==1)
 		aspell_speller_add_to_session(spellChecker,badWord,-1);
@@ -126,7 +126,7 @@ void doAddIgnoreWord(GtkWidget* widget,gpointer data)
 		debugFree(badWord,"doAddIgnoreWord badWord");
 }
 
-void doSpellCheckDoc(GtkWidget* widget,gpointer data)
+void doSpellCheckDoc(Widget* widget,gpointer data)
 {
 	pageStruct*				page=getPageStructPtr(-1);
 	gchar*					buffer;

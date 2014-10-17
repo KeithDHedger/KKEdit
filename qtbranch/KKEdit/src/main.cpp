@@ -219,7 +219,7 @@ void init(void)
 
 void doNagScreen(void)
 {
-	GtkWidget* dialog;
+	Widget* dialog;
 
 	dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",gettext("Please donate"));
 	gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s\n<b>%s</b>\n%s\n\n%s",gettext("If you have a PayPal account you can donate any amount you like by logging into yor account and click the 'Send Money' tab, enter my email address"),MYEMAIL,gettext("and then send it."),gettext("Thank you for helping to support Free software."));
@@ -292,7 +292,7 @@ void doNagStuff(void)
 					thisupdate=atol(t1);
 					if((thisupdate>lastUpdate) || (strcmp(VERSION,vers)!=0))
 						{
-							GtkWidget* dialog;
+							Widget* dialog;
 
 							if(strcmp(VERSION,vers)!=0)
 								{

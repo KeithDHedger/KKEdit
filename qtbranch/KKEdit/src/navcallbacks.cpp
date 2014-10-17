@@ -35,7 +35,7 @@ void goToDefine(functionData* fdata)
 		}
 }
 
-VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
+VISIBLE void goToDefinition(Widget* widget,gpointer data)
 {
 	pageStruct*		page=getPageStructPtr(-1);
 	GtkTextIter		start;
@@ -62,7 +62,7 @@ VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
 	return;
 }
 
-VISIBLE void findFile(GtkWidget* widget,gpointer data)
+VISIBLE void findFile(Widget* widget,gpointer data)
 {
 	char*			command;
 	char			buffer[2048];
@@ -113,7 +113,7 @@ VISIBLE void findFile(GtkWidget* widget,gpointer data)
 	delete slice;
 }
 
-void gotoLine(GtkWidget* widget,gpointer data)
+void gotoLine(Widget* widget,gpointer data)
 {
 	int			line=(long)data;
 	pageStruct*	page=getPageStructPtr(-1);
@@ -131,7 +131,7 @@ void gotoLine(GtkWidget* widget,gpointer data)
 		}
 }
 
-void jumpToLineFromBar(GtkWidget* widget,gpointer data)
+void jumpToLineFromBar(Widget* widget,gpointer data)
 {
 	theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
 	gotoLine(NULL,(gpointer)(long)theLineNum);
@@ -139,10 +139,10 @@ void jumpToLineFromBar(GtkWidget* widget,gpointer data)
 
 int showLineEntry(void)
 {
-	GtkWidget*	dialog;
+	Widget*	dialog;
 	gint		result;
-	GtkWidget*	content_area;
-	GtkWidget*	entrybox;
+	Widget*	content_area;
+	Widget*	entrybox;
 	char		line[48];
 
 	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,gettext("Enter Line Number"));
@@ -166,13 +166,13 @@ int showLineEntry(void)
 	return(result);
 }
 
-VISIBLE void jumpToLine(GtkWidget* widget,gpointer data)
+VISIBLE void jumpToLine(Widget* widget,gpointer data)
 {
 	if(showLineEntry()==GTK_RESPONSE_YES)
 		gotoLine(NULL,(gpointer)(long)theLineNum);
 }
 
-VISIBLE void functionSearch(GtkWidget* widget,gpointer data)
+VISIBLE void functionSearch(Widget* widget,gpointer data)
 {
 	functionData* fdata;
 
@@ -190,7 +190,7 @@ VISIBLE void functionSearch(GtkWidget* widget,gpointer data)
 		}
 }
 
-void jumpToMark(GtkWidget* widget,gpointer data)
+void jumpToMark(Widget* widget,gpointer data)
 {
 	GtkTextMark*	mark;
 	pageStruct*		page;

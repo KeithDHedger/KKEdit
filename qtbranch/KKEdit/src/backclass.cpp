@@ -22,7 +22,7 @@ HistoryClass::~HistoryClass()
 
 void HistoryClass::getThisPoint(void)
 {
-	GtkWidget*	pageBox;
+	Widget*	pageBox;
 	int			tabNum=gtk_notebook_get_current_page(notebook);
 
 	pageBox=gtk_notebook_get_nth_page(notebook,tabNum);
