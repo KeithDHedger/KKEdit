@@ -1354,7 +1354,6 @@ void buildMainGui(void)
 	Widget*		image;
 	Widget*		menurecent;
 
-
 	mainWindowVBox=gtk_vbox_new(false,0);
 	mainTopUserVBox=gtk_vbox_new(false,0);
 	mainLeftUserVBox=gtk_vbox_new(false,0);
