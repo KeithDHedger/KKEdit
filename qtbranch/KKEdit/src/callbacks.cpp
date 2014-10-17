@@ -1424,23 +1424,23 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 		return(false);
 #endif
 }
-
+#endif
 void messageOpen(UniqueMessageData *message)
 {
-#if 0
 	int argc;
 
 	gchar** uris=unique_message_data_get_uris(message);
 	argc=g_strv_length(uris);
 
-	for (int loop=1; loop<argc; loop++)
-		openFile(uris[loop],1,true);
-#endif
+//TODO
+//RC
+//	for (int loop=1; loop<argc; loop++)
+//		openFile(uris[loop],1,true);
 }
+
 
 UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessageData *message,guint time,gpointer user_data)
 {
-#if 0
 	UniqueResponse	res;
 
 	switch(command)
@@ -1463,9 +1463,8 @@ UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessag
 			break;
 		}
 	return(res);
-#endif
 }
-
+#if 0
 void writeExitData(void)
 {
 #if 0
@@ -2230,10 +2229,9 @@ void doKeyShortCut(int what)
 	delete buf;
 #endif
 }
-
+#endif
 void loadKeybindings(void)
 {
-#if 0
 	char*	filename;
 
 	asprintf(&filename,"%s/.KKEdit/keybindings.rc",getenv("HOME"));
@@ -2245,9 +2243,8 @@ void loadKeybindings(void)
 				sscanf(shortCutStrings[j],"%i %i",(int*)&shortCuts[j][0],(int*)&shortCuts[j][1]);
 		}
 	debugFree(filename,"readConfig filename");
-#endif
 }
-
+#if 0
 VISIBLE gboolean keyShortCut(Widget* window,GdkEventKey* event,gpointer data)
 {
 #if 0

@@ -32,7 +32,6 @@ void readConfig(void)
 
 void init(void)
 {
-#if 1
 	char*		filename;
 	int			exitstatus;
 	char		tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
@@ -118,7 +117,7 @@ void init(void)
 	toolBarLayout=strdup("NOSsXCPsURsFGsE9ADL");
 
 	readConfig();
-//	loadKeybindings();
+	loadKeybindings();
 
 //	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
@@ -145,8 +144,6 @@ void init(void)
 	asprintf(&htmlFile,"%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
 	asprintf(&htmlURI,"file://%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
 
-#endif
-#if 0
 #ifdef _ASPELL_
 	spellChecker=NULL;
 	aspellConfig=NULL;
@@ -199,9 +196,11 @@ void init(void)
 		}
 
 	localeLang=getenv("LANG");
-
+#if 0
 	history=new HistoryClass;
+#endif
 	globalSlice->setReturnDupString(true);
+#if 0
 
 	funcProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
 	funcProv->priority=1;
@@ -342,7 +341,7 @@ void doNagStuff(void)
 
 int main(int argc,char **argv)
 {
-#if 0
+
 	UniqueApp*			app;
 	UniqueMessageData*	message=NULL;
 	UniqueCommand 		command;
@@ -356,13 +355,15 @@ int main(int argc,char **argv)
 	textdomain("kkedit");
 	bind_textdomain_codeset("kkedit","UTF-8");
 
+#ifndef _USEQT5_
 	gtk_init(&argc,&argv);
+#endif
 	back=unique_backend_create();
 	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace(back));
 	app=unique_app_new(dbusname,NULL);
 	message=unique_message_data_new();
 
-	readConfig();
+//	readConfig();
 	if((argc>1) && (strcmp(argv[1],"-m")==0))
 		singleOverRide=true;
 
@@ -371,7 +372,7 @@ int main(int argc,char **argv)
 			singleOverRide=true;
 			loadPluginsFlag=false;
 		}
-
+#if 1
 	if((unique_app_is_running(app)==true) && (singleUse==true) && (singleOverRide==false))
 		{
 			if(argc==1)
@@ -398,19 +399,20 @@ int main(int argc,char **argv)
 	else
 		{
 			init();
-			buildMainGui();
+//			buildMainGui();
 
-			if(onExitSaveSession==true)
-				restoreSession(NULL,(void*)restoreBookmarks);
+//			if(onExitSaveSession==true)
+//				restoreSession(NULL,(void*)restoreBookmarks);
 
 			for(int j=1; j<argc; j++)
 				{
-					if((strncasecmp(argv[j],"-m",2)!=0) && (strncasecmp(argv[j],"-s",2)!=0))
-						openFile(argv[j],0,true);
+//					if((strncasecmp(argv[j],"-m",2)!=0) && (strncasecmp(argv[j],"-s",2)!=0))
+//						openFile(argv[j],0,true);
 				}
-			refreshMainWindow();
+//			refreshMainWindow();
 
-			buildFindReplace();
+	//		buildFindReplace();
+
 
 #ifdef _BUILDDOCVIEWER_
 			buildGtkDocViewer();
@@ -418,6 +420,7 @@ int main(int argc,char **argv)
 			unique_app_watch_window(app,(GtkWindow*)window);
 			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
 
+#if 0
 			gtk_window_get_size((GtkWindow*)window,&w,&h);
 			gtk_paned_set_position((GtkPaned*)mainVPane,toolOutHeight);
 
@@ -435,14 +438,15 @@ int main(int argc,char **argv)
 					gtk_window_set_default_icon_name(PACKAGE "Root");
 					gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
 				}
-			setSensitive();
+#endif
+//			setSensitive();
 
 			if((timeToNag==true) && (autoCheck==true))
 				doNagStuff();
 
-			gtk_main();
+//			gtk_main();
 
-			delete history;
+//			delete history;
 			delete globalSlice;
 		}
 #endif

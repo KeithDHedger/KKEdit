@@ -414,7 +414,7 @@ extern Widget*		progressBar;
 
 #include "pluginclass.h"
 
-//extern PluginClass*		globalPlugins;
+extern PluginClass*		globalPlugins;
 
 //save and load var lists
 extern int				intermarg;

@@ -328,7 +328,7 @@ args			keybindings_rc[]=
 Widget*		progressWindow;
 Widget*		progressBar;
 
-//PluginClass*	globalPlugins=NULL;
+PluginClass*	globalPlugins=NULL;
 
 //save and load var lists
 char*			windowAllocData=NULL;

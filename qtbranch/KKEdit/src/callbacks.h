@@ -8,7 +8,7 @@
 
 #ifndef _CALLBACKS_
 #define _CALLBACKS_
-#if 0
+#if 1
 void doOpenFile(Widget* widget,gpointer data);
 void closeTab(Widget* widget,gpointer data);
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint arg2,gpointer user_data);
@@ -39,18 +39,18 @@ void newEditor(Widget* widget,gpointer data);
 void changeSourceStyle(Widget* widget,gpointer data);
 int yesNo(char* question,char* file);
 
-void line_mark_activated (GtkSourceGutter *gutter,GtkTextIter *iter,GdkEventButton  *ev,pageStruct* page);
-void toggleBookmark(Widget*,GtkTextIter* titer);
+//void line_mark_activated (GtkSourceGutter *gutter,GtkTextIter *iter,GdkEventButton  *ev,pageStruct* page);
+//void toggleBookmark(Widget*,GtkTextIter* titer);
 void toggleBookMarkBar(Widget* widget,gpointer data);
 void setToobarSensitive(void);
 void toggleToolBar(Widget* widget,gpointer data);
 void toggleToolOutput(Widget* widget,gpointer data);
-void removeAllBookmarks(Widget* widget,GtkTextIter* titer);
+//void removeAllBookmarks(Widget* widget,GtkTextIter* titer);
 void unRedoAll(Widget* widget,gpointer data);
 gboolean keyShortCut(Widget* window,GdkEventKey* event,gpointer data);
 void loadKeybindings(void);
 void toggleStatusBar(Widget* widget,gpointer data);
-void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data);
+//void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data);
 void toggleDocviewer(Widget* widget,gpointer data);
 void closeDocViewer(GtkWidget *widget,GdkEvent *event,gpointer data);
 void getPlugins(Widget* widget,gpointer data);
