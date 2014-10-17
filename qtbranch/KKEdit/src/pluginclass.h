@@ -13,7 +13,7 @@
 
 #ifndef _PLUGINCLASS_
 #define _PLUGINCLASS_
-
+#if 0
 #ifndef _PLUGINDATA_
 #define _PLUGINDATA_
 
@@ -59,3 +59,5 @@ class PluginClass
 };
 
 #endif
+#endif
+

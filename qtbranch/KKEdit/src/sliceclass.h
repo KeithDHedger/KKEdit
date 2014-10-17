@@ -9,7 +9,7 @@
 
 #ifndef _SLICECLASS_
 #define _SLICECLASS_
-
+#if 0
 #define NUMHTMLENTRIES 252
 /**
  *
@@ -56,5 +56,6 @@ class StringSlice
 		unsigned int	bufferlen;
 };
 
+#endif
 #endif
 
