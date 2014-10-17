@@ -11,7 +11,6 @@ bool	loadPluginsFlag=true;
 
 void readConfig(void)
 {
-#if 0
 	char*	filename;
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
@@ -27,12 +26,10 @@ void readConfig(void)
 		sscanf(docWindowAllocData,"%i %i %i %i",(int*)&docWindowWidth,(int*)&docWindowHeight,(int*)&docWindowX,(int*)&docWindowY);
 
 	debugFree(filename,"readConfig filename");
-#endif
 }
 
 void init(void)
 {
-#if 0
 	char*		filename;
 	int			exitstatus;
 	char		tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
@@ -218,12 +215,10 @@ void init(void)
 	g_object_set(docWordsProv,"priority",10,NULL);
 	g_object_set(docWordsProv,"minimum-word-size",autoShowMinChars,NULL);
 	g_object_set(docWordsProv,"interactive-delay",50,NULL);
-#endif
 }
 
 void doNagScreen(void)
 {
-#if 0
 	GtkWidget* dialog;
 
 	dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",gettext("Please donate"));
@@ -231,12 +226,10 @@ void doNagScreen(void)
 
 	gtk_dialog_run(GTK_DIALOG (dialog));
 	gtk_widget_destroy(dialog);
-#endif
 }
 
 void doNagStuff(void)
 {
-#if 0
 	char*			command=NULL;
 	char*			control=NULL;
 	int				gotcurl=-1;
@@ -333,13 +326,10 @@ void doNagStuff(void)
 	asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
 	system(control);
 	debugFree(control,"control from do nag stuff");
-#endif
 }
 
 int main(int argc,char **argv)
 {
-return 0;
-#if 0
 	UniqueApp*			app;
 	UniqueMessageData*	message=NULL;
 	UniqueCommand 		command;
@@ -442,5 +432,4 @@ return 0;
 			delete history;
 			delete globalSlice;
 		}
-#endif
 }
