@@ -5,10 +5,10 @@ include ../flagsandlibs
 include ../sources
 
 kkedit_SOURCES = $(COMMONSRC)
-KKEditProgressBar_SOURCES = ../pole/main.cpp
-
-KKEditProgressBar_CFLAGS = -ggdb -O0
-KKEditProgressBar_CXXFLAGS =  -ggdb -O0
+#KKEditProgressBar_SOURCES = ../pole/main.cpp
+#
+#KKEditProgressBar_CFLAGS = -ggdb -O0
+#KKEditProgressBar_CXXFLAGS =  -ggdb -O0
 
 kkedit_CFLAGS = -ggdb -O0 -fvisibility=hidden
 kkedit_CXXFLAGS = -ggdb -O0 -fvisibility=hidden
@@ -33,7 +33,8 @@ transfiles_DATA = ../../po/fr_FR/LC_MESSAGES/kkedit.mo
 
 include_HEADERS = ../src/kkedit-plugins.h
 
-bin_PROGRAMS = kkedit KKEditProgressBar
+bin_PROGRAMS = kkedit
+# KKEditProgressBar
 
 install-exec-hook:
 	install -D ../resources/pixmaps/KKEditPlug.png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlug.png

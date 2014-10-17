@@ -17,6 +17,7 @@ typedef GtkWidget Widget;
 #else
 typedef QWidget Widget;
 #endif
+#include <gmodule.h>
 
 #define GLOBALPLUGS			1
 #define LOCALPLUGS			0
@@ -109,8 +110,8 @@ struct pageStruct
 //	GtkTextIter			match_end;
 	bool				isFirst;
 	char*				fileName;
-	GFile*				gFile; 
-	GFileMonitor*		monitor;
+//	GFile*				gFile; 
+//	GFileMonitor*		monitor;
 	bool				itsMe;
 	GList*				markList;
 	bool				inTop;
@@ -197,7 +198,7 @@ struct plugData
 //kkedit main window
 	Widget*		mainWindow;
 //tool output window buffer;
-	GtkTextBuffer*	toolOutBuffer;
+//	GtkTextBuffer*	toolOutBuffer;
 //tool output window
 	Widget*		toolOutWindow;
 //tab popup menu

@@ -1342,13 +1342,18 @@ void addRecentToMenu(GtkRecentChooser* chooser,Widget* menu)
 }
 #endif
 
+#ifdef _USEQT5_
+void buildMainGuiQT(void)
+{
+}
+#else
 void buildMainGui(void)
 {
-
 	Widget*		menuitem;
 	Widget*		menu;
 	Widget*		image;
 	Widget*		menurecent;
+
 
 	mainWindowVBox=gtk_vbox_new(false,0);
 	mainTopUserVBox=gtk_vbox_new(false,0);
@@ -1911,6 +1916,7 @@ void buildMainGui(void)
 
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
 }
+#endif
 
 #if 0
 void buildFindReplace(void)

@@ -342,11 +342,11 @@ void doNagStuff(void)
 int main(int argc,char **argv)
 {
 
-	UniqueApp*			app;
-	UniqueMessageData*	message=NULL;
-	UniqueCommand 		command;
-	UniqueResponse 		response;
-	UniqueBackend*		back;
+//	UniqueApp*			app;
+//	UniqueMessageData*	message=NULL;
+//	UniqueCommand 		command;
+//	UniqueResponse 		response;
+//	UniqueBackend*		back;
 	char*				dbusname;
 	int					w,h;
 
@@ -357,12 +357,12 @@ int main(int argc,char **argv)
 
 #ifndef _USEQT5_
 	gtk_init(&argc,&argv);
-#endif
+
 	back=unique_backend_create();
 	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace(back));
 	app=unique_app_new(dbusname,NULL);
 	message=unique_message_data_new();
-
+#endif
 //	readConfig();
 	if((argc>1) && (strcmp(argv[1],"-m")==0))
 		singleOverRide=true;
@@ -372,43 +372,47 @@ int main(int argc,char **argv)
 			singleOverRide=true;
 			loadPluginsFlag=false;
 		}
-#if 1
-	if((unique_app_is_running(app)==true) && (singleUse==true) && (singleOverRide==false))
-		{
-			if(argc==1)
-				{
-					command=UNIQUE_ACTIVATE;
-					response=unique_app_send_message(app,command,NULL);
-				}
-			else
-				{
-					command=UNIQUE_OPEN;
-					unique_message_data_set_uris(message,argv);
-					response=unique_app_send_message(app,command,message);
-				}
-
-			g_object_unref(app);
-			unique_message_data_free(message);
-
-			if(response==UNIQUE_RESPONSE_OK)
-				return 0;
-			else
-				printf("FAIL\n");
-			//handle_fail_or_user_cancel();
-		}
-	else
-		{
+//#if 1
+//	if((unique_app_is_running(app)==true) && (singleUse==true) && (singleOverRide==false))
+//		{
+//			if(argc==1)
+//				{
+//					command=UNIQUE_ACTIVATE;
+//					response=unique_app_send_message(app,command,NULL);
+//				}
+//			else
+//				{
+//					command=UNIQUE_OPEN;
+//					unique_message_data_set_uris(message,argv);
+//					response=unique_app_send_message(app,command,message);
+//				}
+//
+//			g_object_unref(app);
+//			unique_message_data_free(message);
+//
+//			if(response==UNIQUE_RESPONSE_OK)
+//				return 0;
+//			else
+//				printf("FAIL\n");
+//			//handle_fail_or_user_cancel();
+//		}
+//	else
+//		{
 			init();
+#ifndef _USEQT5_
 			buildMainGui();
+#else
+			buildMainGuiQT();
+#endif
 
 //			if(onExitSaveSession==true)
 //				restoreSession(NULL,(void*)restoreBookmarks);
 
-			for(int j=1; j<argc; j++)
-				{
+//			for(int j=1; j<argc; j++)
+//				{
 //					if((strncasecmp(argv[j],"-m",2)!=0) && (strncasecmp(argv[j],"-s",2)!=0))
 //						openFile(argv[j],0,true);
-				}
+//				}
 //			refreshMainWindow();
 
 	//		buildFindReplace();
@@ -417,8 +421,8 @@ int main(int argc,char **argv)
 #ifdef _BUILDDOCVIEWER_
 			buildGtkDocViewer();
 #endif
-			unique_app_watch_window(app,(GtkWindow*)window);
-			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
+//			unique_app_watch_window(app,(GtkWindow*)window);
+//			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
 
 #if 0
 			gtk_window_get_size((GtkWindow*)window,&w,&h);
@@ -448,6 +452,6 @@ int main(int argc,char **argv)
 
 //			delete history;
 			delete globalSlice;
-		}
-#endif
+//		}
+//#endif
 }

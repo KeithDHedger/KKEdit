@@ -17,5 +17,6 @@ void buildGtkDocViewer(void);
 #endif
 void setUpToolBar(void);
 char* makeToolBarList(void);
+void buildMainGuiQT(void);
 
 #endif

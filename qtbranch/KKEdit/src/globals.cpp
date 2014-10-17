@@ -40,7 +40,7 @@ Widget*		bmHighlightBox;
 int				bmMarkNumber=0;
 
 char*			toolBarLayout=NULL;
-GtkToolbar*		toolBar;
+Widget*		toolBar;
 Widget*		toolBarBox;
 
 Widget*		menuprint;
@@ -462,17 +462,17 @@ void plugRunFunction(gpointer data,gpointer funcname)
 	globalPlugins->runPlugFunction((moduleData*)data,(const char*)funcname);
 #endif
 }
-
+#if 0
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 {
-#if 0
+
 	if(page->inTop==true)
 		gtk_text_view_scroll_to_iter((GtkTextView*)page->view,iter,0,true,0,0.5);
 	else
 		gtk_text_view_scroll_to_iter((GtkTextView*)page->view2,iter,0,true,0,0.5);
-#endif
-}
 
+}
+#endif
 VISIBLE pageStruct* getPageStructPtr(int pagenum)
 {
 #if 0

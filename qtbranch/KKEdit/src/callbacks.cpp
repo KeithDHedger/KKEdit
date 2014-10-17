@@ -1424,7 +1424,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 		return(false);
 #endif
 }
-#endif
+
 void messageOpen(UniqueMessageData *message)
 {
 	int argc;
@@ -1464,7 +1464,7 @@ UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessag
 		}
 	return(res);
 }
-#if 0
+
 void writeExitData(void)
 {
 #if 0

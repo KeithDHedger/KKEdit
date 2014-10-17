@@ -167,7 +167,7 @@ extern Widget*		bmHighlightBox;
 extern int				bmMarkNumber;
 
 extern char*			toolBarLayout;
-extern GtkToolbar*		toolBar;
+extern Widget*		toolBar;
 extern Widget*		toolBarBox;
 
 extern Widget*		menubar;
@@ -451,7 +451,7 @@ void destroyData(functionData* fdata);
 void getRecursiveTagList(char* filepath,void* ptr);
 void buildToolsList(void);
 void getRecursiveTagListFileName(char* filepath,void* ptr);
-void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
+//void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
 void goBack(Widget* widget,gpointer data);
 void showBarberPole(const char* title);
 void killBarberPole(void);

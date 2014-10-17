@@ -14,11 +14,11 @@ bool openFile(const gchar *filepath,int linenumber,bool warn);
 bool saveFile(Widget* widget,gpointer data);
 void newFile(Widget* widget,gpointer data);
 void resetAllFilePrefs(void);
-void openAsHexDump(GtkWidget *widget,gpointer user_data);
+void openAsHexDump(Widget *widget,gpointer user_data);
 void reloadFile(Widget* widget,gpointer data);
 void saveSession(Widget* widget,gpointer data);
 void restoreSession(Widget* widget,gpointer data);
-void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data);
+//void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data);
 void setFilePrefs(pageStruct* page);
 
 #endif

@@ -10,14 +10,15 @@
 #define _KKEDIT_INCLUDES_
 
 #include <stdlib.h>
-#include <gtk/gtk.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <glib.h>
-
+#include <unistd.h>
+#include <sys/types.h>
 #include "config.h"
 
 #ifndef _USEQT5_
+#include <gtk/gtk.h>
 #include <gtksourceview/gtksourcestyleschememanager.h>
 #include <gtksourceview/gtksourceview.h>
 #include <gtksourceview/gtksourcebuffer.h>
@@ -37,14 +38,16 @@
 
 #if 1
 #include <ctype.h>
-#include <gdk/gdkkeysyms.h>
+//TODO
+//RC
+//#include <gdk/gdkkeysyms.h>
 
 #include <libgen.h>
 #include <time.h>
 #include <libintl.h>
 #include <locale.h>
 
-#include <unique/unique.h>
+//#include <unique/unique.h>
 
 //#include "config.h"
 #include "sliceclass.h"
