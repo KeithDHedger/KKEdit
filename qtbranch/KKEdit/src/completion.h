@@ -13,7 +13,9 @@
 
 #ifndef _COMPLETION_
 #define _COMPLETION_
-#if 0
+
+#ifndef _USEQT5_
+
 typedef struct _FunctionProvider FunctionProvider;
 typedef struct _FunctionProviderClass FunctionProviderClass;
 

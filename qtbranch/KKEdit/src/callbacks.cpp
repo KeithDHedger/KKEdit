@@ -1260,10 +1260,16 @@ void changeSourceStyle(Widget* widget,gpointer data)
 	page->lang=langname;
 #endif
 }
+#endif
 
+#ifndef _USEQT5_
 void openFromTab(GtkMenuItem* widget,pageStruct* page)
+#else
+//TODO
+void openFromTab(void)
+#endif
 {
-#if 0
+#ifndef _USEQT5_
 	char*		filepath=NULL;
 
 	asprintf(&filepath,"%s/%s",page->dirName,gtk_menu_item_get_label(widget));
@@ -1271,7 +1277,7 @@ void openFromTab(GtkMenuItem* widget,pageStruct* page)
 	debugFree(filepath,"openFromTab filepath");
 #endif
 }
-#endif
+
 
 #ifdef _USEQT5_
 bool tabPopUp(void)

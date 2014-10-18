@@ -7,13 +7,13 @@
 */
 
 #include "kkedit-includes.h"
-#if 0
-//#include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
-//#include <gtksourceview/gtksourceview.h>
-//#include <gtksourceview/gtksourcecompletion.h>
-//#include <gtksourceview/gtksourcecompletioninfo.h>
-//#include <gtksourceview/gtksourcecompletionitem.h>
-//#include <gtksourceview/gtksourcelanguagemanager.h>
+#ifndef _USEQT5_
+#include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
+#include <gtksourceview/gtksourceview.h>
+#include <gtksourceview/gtksourcecompletion.h>
+#include <gtksourceview/gtksourcecompletioninfo.h>
+#include <gtksourceview/gtksourcecompletionitem.h>
+#include <gtksourceview/gtksourcelanguagemanager.h>
 
 Widget*	vbox;
 char*		saveFileName=NULL;
@@ -22,7 +22,7 @@ bool		dropTextFile=false;
 
 VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 {
-#if 0
+#ifndef _USEQT5_
 	FILE*	fd=NULL;
 	int		cnt=0;
 
@@ -143,10 +143,10 @@ Widget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	return(evbox);
 #endif
 }
-#if 0
+#ifndef _USEQT5_
 void setFilePrefs(pageStruct* page)
 {
-#if 0
+#ifndef _USEQT5_
 	PangoFontDescription*	font_desc;
 	GdkColor				color;
 	GtkTextAttributes*		attr;
@@ -188,7 +188,7 @@ createCompletion(page);
 
 void resetAllFilePrefs(void)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*			page;
 
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
@@ -204,7 +204,7 @@ void resetAllFilePrefs(void)
 
 void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
 {
-#if 0
+#ifndef _USEQT5_
 	gchar**			array=NULL;
 	int				cnt;
 	char*			filename;
@@ -260,7 +260,7 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 
 bool getSaveFile(void)
 {
-#if 0
+#ifndef _USEQT5_
 	Widget*	dialog;
 	bool		retval=false;
 
@@ -291,7 +291,7 @@ bool getSaveFile(void)
 
 VISIBLE bool saveFile(Widget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start,end;
 	gchar*		text;
@@ -376,7 +376,7 @@ VISIBLE bool saveFile(Widget* widget,gpointer data)
 
 VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 {
-#if 0
+#ifndef _USEQT5_
 	Widget*		dialog;
 	char*			filepath;
 	char*			filename;
@@ -432,7 +432,7 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 
 VISIBLE void reloadFile(Widget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	gchar*		buffer;
 	long		filelen;
@@ -454,7 +454,7 @@ VISIBLE void reloadFile(Widget* widget,gpointer data)
 
 VISIBLE void saveSession(Widget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*		page;
 	FILE*			fd=NULL;
 	char*			filename;
@@ -501,7 +501,7 @@ VISIBLE void saveSession(Widget* widget,gpointer data)
 
 VISIBLE void restoreSession(Widget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	FILE*		fd=NULL;
 	char*		filename;
 	char		buffer[2048];
@@ -559,7 +559,7 @@ VISIBLE void restoreSession(Widget* widget,gpointer data)
 
 int showFileChanged(char* filename)
 {
-#if 0
+#ifndef _USEQT5_
 	Widget*	dialog;
 	gint		result;
 	char*		message;
@@ -580,7 +580,7 @@ int showFileChanged(char* filename)
 
 void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*		page=(pageStruct*)user_data;
 	GtkTextIter		start;
 	GtkTextIter		end;
@@ -619,7 +619,7 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 
 void add_source_mark_pixbufs (GtkSourceView *view)
 {
-#if 0
+#ifndef _USEQT5_
 	GdkColor	color;
 	GtkImage*	image;
 	GdkPixbuf*	pbuf;
@@ -636,7 +636,7 @@ void add_source_mark_pixbufs (GtkSourceView *view)
 
 gboolean clickInView(Widget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	if((statusMessage!=NULL))
 		{
 			free(statusMessage);
@@ -731,10 +731,10 @@ pageStruct* makeNewPage(void)
 #endif
 }
 
-#if 0
+#ifndef _USEQT5_
 VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
-#if 0
+#ifndef _USEQT5_
 	GtkTextIter				iter;
 	Widget*				label;
 	gchar*					filename=g_path_get_basename(filepath);

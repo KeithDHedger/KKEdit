@@ -273,8 +273,10 @@ char*			tmpFolderName=NULL;
 int				gotManEditor;
 int				gotDoxygen;
 
-//////GtkSourceStyleSchemeManager*	schemeManager;
-//////GtkSourceStyleScheme*			styleScheme;
+#ifndef _USEQT5_
+GtkSourceStyleSchemeManager*	schemeManager;
+GtkSourceStyleScheme*			styleScheme;
+#endif
 
 #ifdef _BUILDDOCVIEWER_
 Widget*		docView;
