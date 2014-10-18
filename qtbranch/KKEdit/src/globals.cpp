@@ -12,11 +12,14 @@
 #if 1
 #ifdef _USEQT5_
 	QApplication*	holdapp;
+	QWindow*		qtWindow=NULL;
+//#else
+//	
 #endif
 
-Widget*		window=NULL;
+Widget*			window=NULL;
 //GtkAccelGroup*	accgroup=NULL;
-Widget*	notebook=NULL;
+//Widget*	notebook=NULL;
 Widget*		menubar=NULL;
 Widget*		menufile;
 Widget*		menuedit;
@@ -183,13 +186,31 @@ int				topVPaneHite=200;
 
 Widget*		mainWindowScrollbox=NULL;
 
-Widget*		mainWindowVBox=NULL;
-Widget*		mainTopUserVBox=NULL;
-Widget*		mainWindowHBox=NULL;
-Widget*		mainLeftUserVBox=NULL;
-Widget*		mainNotebookVBox=NULL;
-Widget*		mainRightUserVBox=NULL;
-Widget*		mainBottomUserVBox=NULL;
+//cros-compile widgets
+#ifndef _USEQT5_
+GtkWidget*		mainWindowVBox=NULL;
+GtkWidget*		mainTopUserVBox=NULL;
+GtkWidget*		mainWindowHBox=NULL;
+GtkWidget*		mainLeftUserVBox=NULL;
+GtkWidget*		mainNotebookVBox=NULL;
+GtkWidget*		mainRightUserVBox=NULL;
+GtkWidget*		mainBottomUserVBox=NULL;
+
+//main notebook
+GtkWidget*		notebook=NULL;
+
+#else
+QVBoxLayout*	mainWindowVBox=NULL;
+QVBoxLayout*	mainTopUserVBox=NULL;
+QHBoxLayout*	mainWindowHBox=NULL;
+QVBoxLayout*	mainLeftUserVBox=NULL;
+QVBoxLayout*	mainNotebookVBox=NULL;
+QVBoxLayout*	mainRightUserVBox=NULL;
+QVBoxLayout*	mainBottomUserVBox=NULL;
+
+//main notebook
+QTabWidget*			notebook=NULL;
+#endif
 
 Widget*		mainWindowVPane=NULL;
 Widget*		secondWindowVPane=NULL;

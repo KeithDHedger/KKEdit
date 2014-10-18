@@ -16,13 +16,13 @@
 
 #ifndef _USEQT5_
 	#include <gtk/gtk.h>
-//	typedef GtkWidget Widget;
+	extern Widget*		window;
 #else
 	#include <glib.h>
 	#include <QtWidgets>
-//	typedef QWidget Widget;
 
 	extern QApplication*	holdapp;
+	extern QWindow*			qtWindow;
 #endif
 
 
@@ -155,7 +155,7 @@ struct bookMarksNew
 
 extern Widget*		window;
 extern Widget*	accgroup;
-extern Widget*		notebook;
+//extern Widget*		notebook;
 
 extern GList*			newBookMarksList;
 extern Widget*		menuBookMark;
@@ -325,13 +325,37 @@ extern int				topVPaneHite;
 
 extern Widget*		mainWindowScrollbox;
 
-extern Widget*		mainWindowVBox;
-extern Widget*		mainTopUserVBox;
-extern Widget*		mainWindowHBox;
-extern Widget*		mainLeftUserVBox;
-extern Widget*		mainNotebookVBox;
-extern Widget*		mainRightUserVBox;
-extern Widget*		mainBottomUserVBox;
+//cros-compile widgets
+#ifndef _USEQT5_
+extern GtkWidget*		mainWindowVBox;
+extern GtkWidget*		mainTopUserVBox;
+Gextern tkWidget*		mainWindowHBox;
+extern GtkWidget*		mainLeftUserVBox;
+extern GtkWidget*		mainNotebookVBox;
+extern GtkWidget*		mainRightUserVBox;
+extern GtkWidget*		mainBottomUserVBox;
+
+//main notebook
+extern GtkWidget*		notebook;
+
+#else
+extern QVBoxLayout*		mainWindowVBox;
+extern QVBoxLayout*		mainTopUserVBox;
+extern QHBoxLayout*		mainWindowHBox;
+extern QVBoxLayout*		mainLeftUserVBox;
+extern QVBoxLayout*		mainNotebookVBox;
+extern QVBoxLayout*		mainRightUserVBox;
+extern QVBoxLayout*		mainBottomUserVBox;
+extern QTabWidget*		notebook;
+#endif
+
+//extern Widget*		mainWindowVBox;
+//extern Widget*		mainTopUserVBox;
+//extern Widget*		mainWindowHBox;
+//extern Widget*		mainLeftUserVBox;
+//extern Widget*		mainNotebookVBox;
+//extern Widget*		mainRightUserVBox;
+//extern Widget*		mainBottomUserVBox;
 
 extern Widget*		mainWindowVPane;
 extern Widget*		secondWindowVPane;

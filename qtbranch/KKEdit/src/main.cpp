@@ -11,7 +11,6 @@ bool	loadPluginsFlag=true;
 
 void readConfig(void)
 {
-#if 1
 	char*	filename;
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
@@ -20,6 +19,7 @@ void readConfig(void)
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_window_rc);
+
 	if(windowAllocData!=NULL)
 		sscanf(windowAllocData,"%i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
 
@@ -27,7 +27,6 @@ void readConfig(void)
 		sscanf(docWindowAllocData,"%i %i %i %i",(int*)&docWindowWidth,(int*)&docWindowHeight,(int*)&docWindowX,(int*)&docWindowY);
 
 	debugFree(filename,"readConfig filename");
-#endif
 }
 
 void init(void)
@@ -402,7 +401,9 @@ int main(int argc,char **argv)
 #ifndef _USEQT5_
 			buildMainGui();
 #else
-			buildMainGuiQT();
+		QApplication	app(argc, argv);
+
+		buildMainGuiQT();
 #endif
 
 //			if(onExitSaveSession==true)
@@ -448,8 +449,11 @@ int main(int argc,char **argv)
 			if((timeToNag==true) && (autoCheck==true))
 				doNagStuff();
 
-//			gtk_main();
-
+#ifndef _USEQT5_
+			gtk_main();
+#else
+	app.exec();
+#endif
 //			delete history;
 			delete globalSlice;
 //		}
