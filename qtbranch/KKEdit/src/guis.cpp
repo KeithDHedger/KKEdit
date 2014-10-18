@@ -1341,39 +1341,11 @@ void addRecentToMenu(GtkRecentChooser* chooser,Widget* menu)
 #endif
 }
 #endif
-/*
-    QApplication app(argc, argv);
 
-    QWidget *widget = new QWidget;
-    QHBoxLayout *layout = new QHBoxLayout(widget);
-
-    Window *window = new Window();
-
-    QWidget *container = QWidget::createWindowContainer(window);
-    container->setMinimumSize(300, 300);
-    container->setMaximumSize(600, 600);
-    container->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    container->setFocusPolicy(Qt::StrongFocus);
-
-    window->setGeometry(100, 100, 300, 200);
-
-    layout->addWidget(new QLineEdit(QLatin1String("A QLineEdit")));
-    layout->addWidget(container);
-    layout->addWidget(new QLineEdit(QLatin1String("A QLabel")));
-
-    widget->show();
-
-*/
 #ifdef _USEQT5_
 void buildMainGuiQT(void)
 {
-	QWindow*	qtWindow=new QWindow;
-	QWidget*	container;
-	QVBoxLayout*	vbox=new QVBoxLayout(window);
-
 	window=new QWidget;
-
-	container=QWidget::createWindowContainer(qtWindow);
 
 	mainWindowVBox=new QVBoxLayout();
 	mainTopUserVBox=new QVBoxLayout;
@@ -1383,11 +1355,9 @@ void buildMainGuiQT(void)
 	mainBottomUserVBox=new QVBoxLayout;
 	mainWindowHBox=new QHBoxLayout;
 
-	container->setFocusPolicy(Qt::StrongFocus);
 	window->setGeometry(windowX,windowY,windowWidth,windowHeight);
 
-	vbox->addWidget(container);
-	container->setLayout(mainWindowVBox);
+	window->setLayout(mainWindowVBox);
 	notebook=new QTabWidget;
 
 
@@ -1398,7 +1368,7 @@ QTextBrowser*	text2=new QTextBrowser;
 	notebook->addTab(text,"Written By");
 	notebook->addTab(text2,"Written By");
 	mainWindowVBox->addWidget(notebook);
-	container->show();
+
  	window->show();
 }
 #else

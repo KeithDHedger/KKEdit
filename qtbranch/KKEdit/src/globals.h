@@ -154,6 +154,7 @@ struct bookMarksNew
 //extern HistoryClass*	history;
 
 extern Widget*		window;
+
 extern Widget*	accgroup;
 //extern Widget*		notebook;
 
@@ -348,14 +349,6 @@ extern QVBoxLayout*		mainRightUserVBox;
 extern QVBoxLayout*		mainBottomUserVBox;
 extern QTabWidget*		notebook;
 #endif
-
-//extern Widget*		mainWindowVBox;
-//extern Widget*		mainTopUserVBox;
-//extern Widget*		mainWindowHBox;
-//extern Widget*		mainLeftUserVBox;
-//extern Widget*		mainNotebookVBox;
-//extern Widget*		mainRightUserVBox;
-//extern Widget*		mainBottomUserVBox;
 
 extern Widget*		mainWindowVPane;
 extern Widget*		secondWindowVPane;

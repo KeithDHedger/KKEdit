@@ -12,12 +12,10 @@
 #if 1
 #ifdef _USEQT5_
 	QApplication*	holdapp;
-	QWindow*		qtWindow=NULL;
-//#else
-//	
 #endif
 
 Widget*			window=NULL;
+
 //GtkAccelGroup*	accgroup=NULL;
 //Widget*	notebook=NULL;
 Widget*		menubar=NULL;
