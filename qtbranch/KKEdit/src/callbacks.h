@@ -11,7 +11,14 @@
 #if 1
 void doOpenFile(Widget* widget,gpointer data);
 void closeTab(Widget* widget,gpointer data);
-void switchPage(Widget *notebook,gpointer arg1,guint arg2,gpointer user_data);
+
+#ifndef _USEQT5_
+void switchPage(GtkNotebook *notebook,gpointer arg1,guint arg2,gpointer user_data);
+#else
+//TODO
+void switchPage(void);
+#endif
+
 void setSensitive(void);
 void copyToClip(Widget* widget,gpointer data);
 void cutToClip(Widget* widget,gpointer data);

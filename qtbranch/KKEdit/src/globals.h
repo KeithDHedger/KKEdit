@@ -295,7 +295,7 @@ extern GtkWidget*		mainRightUserVBox;
 extern GtkWidget*		mainBottomUserVBox;
 
 //main notebook
-extern GtkWidget*		notebook;
+extern GtkNotebook*		notebook;
 
 #else
 extern QVBoxLayout*		mainWindowVBox;
@@ -361,8 +361,10 @@ extern char*			tmpFolderName;
 extern int				gotManEditor;
 extern int				gotDoxygen;
 
-//extern //GtkSourceStyleSchemeManager*	schemeManager;
-//extern //GtkSourceStyleScheme*		styleScheme;
+#ifndef _USEQT5_
+extern GtkSourceStyleSchemeManager*	schemeManager;
+extern GtkSourceStyleScheme*		styleScheme;
+#endif
 
 #ifdef _BUILDDOCVIEWER_
 extern Widget*		docView;

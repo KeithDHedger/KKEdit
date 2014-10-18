@@ -205,7 +205,7 @@ GtkWidget*		mainRightUserVBox=NULL;
 GtkWidget*		mainBottomUserVBox=NULL;
 
 //main notebook
-GtkWidget*		notebook=NULL;
+GtkNotebook*		notebook=NULL;
 
 #else
 QVBoxLayout*	mainWindowVBox=NULL;
