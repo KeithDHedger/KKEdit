@@ -93,6 +93,64 @@ enum {TYPEINT=1,TYPESTRING,TYPEBOOL};
 
 struct pageStruct
 {
+#ifndef _USEQT5_
+	GtkWidget*			pane;
+	GtkScrolledWindow*	pageWindow;
+	GtkScrolledWindow*	pageWindow2;
+	GtkSourceBuffer*	buffer;
+	GtkSourceView*		view;
+	GtkSourceView*		view2;
+	GtkMenuItem*		navSubMenu;
+#else
+	Widget*			pane;
+	Widget*	pageWindow;
+	Widget*	pageWindow2;
+	Widget*	buffer;
+	Widget*		view;
+	Widget*		view2;
+#endif
+	char*				filePath;
+	char*				realFilePath;
+	char*				dirName;
+	bool				rebuildMenu;
+	Widget*			tabName;
+#ifndef _USEQT5_
+	GtkTextIter			iter;
+	GtkTextIter			match_start;
+	GtkTextIter			match_end;
+	GFile*				gFile; 
+	GFileMonitor*		monitor;
+#else
+#endif
+	bool				isFirst;
+	char*				fileName;
+	bool				itsMe;
+	GList*				markList;
+	bool				inTop;
+	bool				isSplit;
+	const char*			lang;
+
+#ifndef _USEQT5_
+	Widget*				tabVbox;
+#else
+	QVBoxLayout*		tabVbox;
+#endif
+
+	bool				showingChanged;
+#ifndef _USEQT5_
+	GtkTextMark*		backMark;
+	GtkTextTag*			highlightTag;
+	GtkSourceCompletion* completion;
+#else
+#endif
+	GList*				userDataList;
+	gpointer			reserved2;
+	gpointer			reserved3;
+	gpointer			reserved4;
+};
+
+struct pageStructx
+{
 	Widget*			pane;
 	Widget*			pageWindow;
 	Widget*			pageWindow2;
@@ -117,7 +175,11 @@ struct pageStruct
 	bool				inTop;
 	bool				isSplit;
 	const char*			lang;
-	Widget*			tabVbox;
+#ifndef _USEQT5_
+	Widget*				tabVbox;
+#else
+	QVBoxLayout*		tabVbox;
+#endif
 	bool				showingChanged;
 //	GtkTextMark*		backMark;
 //	GtkTextTag*			highlightTag;
@@ -228,7 +290,14 @@ void		runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,
 void		debugFree(gpointer ptr,const char* message);
 bool		openFile(const gchar *filepath,int linenumber,bool warn);
 bool		saveFile(Widget* widget,gpointer data);
-void		newFile(Widget* widget,gpointer data);
+
+#ifndef _USEQT5_
+VISIBLE void newFile(Widget* widget,gpointer data);
+#else
+VISIBLE void newFile(void);
+#endif
+
+
 void		loadVarsFromFile(char* filepath,args* dataptr);
 void		saveVarsToFile(char* filepath,args* dataptr);
 #endif

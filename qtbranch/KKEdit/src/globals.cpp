@@ -18,13 +18,23 @@ Widget*			window=NULL;
 
 //GtkAccelGroup*	accgroup=NULL;
 //Widget*	notebook=NULL;
-Widget*		menubar=NULL;
-Widget*		menufile;
-Widget*		menuedit;
-Widget*		menufunc;
-Widget*		menunav;
-Widget*		menutools;
-Widget*		menuhelp;
+#ifndef _USEQT5_
+GtkWidget*		menubar=NULL;
+GtkWidget*		menufile;
+GtkWidget*		menuedit;
+GtkWidget*		menufunc;
+GtkWidget*		menunav;
+GtkWidget*		menutools;
+GtkWidget*		menuhelp;
+#else
+QMenuBar*		menubar=NULL;
+QMenu*		menufile;
+QMenu*		menuedit;
+QMenu*		menufunc;
+QMenu*		menunav;
+QMenu*		menutools;
+QMenu*		menuhelp;
+#endif
 
 Widget*		menuItemOpen=NULL;
 Widget*		menuView=NULL;

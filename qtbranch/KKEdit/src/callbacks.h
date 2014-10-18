@@ -24,6 +24,14 @@ void openHelp(Widget* widget,gpointer data);
 void printFile(Widget* widget,gpointer data);
 void populatePopupMenu(Widget *entry,Widget *menu,gpointer user_data);
 //bool tabPopUp(Widget *my_widget, GdkEventButton *event,gpointer user_data);
+
+#ifdef _USEQT5_
+bool tabPopUp(void);
+//TODO//
+#else
+bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data);
+#endif
+
 //UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessageData *message,guint time,gpointer user_data);
 void doShutdown(Widget* widget,gpointer data);
 void setPrefs(Widget* widget,gpointer data);

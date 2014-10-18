@@ -7,12 +7,15 @@
 */
 
 #include "kkedit-includes.h"
-#if 0
-Widget*			tabMenu;
+
+#ifndef _USEQT5_
+GtkWidget*			tabMenu;
 char				defineText[1024];
 GtkPrintSettings*	settings=NULL;
 bool				closingAll=false;
+#endif
 
+#if 0
 void releasePlugs(gpointer data,gpointer user_data)
 {
 #if 0
@@ -1171,8 +1174,14 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	gtk_widget_show_all((Widget*)menu);
 #endif
 }
+#endif
 
+#ifndef _USEQT5_
 void doTabMenu(GtkWidget *widget,gpointer user_data)
+#else
+//TODO
+void doTabMenu(void)
+#endif
 {
 #if 0
 	GtkClipboard*	clipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
@@ -1182,23 +1191,33 @@ void doTabMenu(GtkWidget *widget,gpointer user_data)
 #endif
 }
 
+#ifndef _USEQT5_
 gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
+#else
+//TODO
+gboolean whatPane(void)
+#endif
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct* page=(pageStruct*)getPageStructPtr(-1);
 
 	if((long)data==1)
 		page->inTop=true;
 	else
 		page->inTop=false;
-
-	return(false);
 #endif
+	return(false);
 }
 
+
+#ifndef _USEQT5_
 void doSplitView(GtkWidget *widget,gpointer user_data)
+#else
+//TODO
+void doSplitView(void)
+#endif
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct* page=(pageStruct*)user_data;
 
 	if(gtk_paned_get_child2((GtkPaned*)page->pane)==NULL)
@@ -1227,6 +1246,7 @@ void doSplitView(GtkWidget *widget,gpointer user_data)
 #endif
 }
 
+#if 0
 void changeSourceStyle(Widget* widget,gpointer data)
 {
 #if 0
@@ -1251,10 +1271,16 @@ void openFromTab(GtkMenuItem* widget,pageStruct* page)
 	debugFree(filepath,"openFromTab filepath");
 #endif
 }
+#endif
 
+#ifdef _USEQT5_
+bool tabPopUp(void)
+//TODO//
+#else
 bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
+#endif
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*					page;
 	Widget*					menuitem;
 	Widget*					image;
@@ -1423,8 +1449,10 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 	else
 		return(false);
 #endif
+return(false);
 }
 
+#if 0
 void messageOpen(UniqueMessageData *message)
 {
 	int argc;

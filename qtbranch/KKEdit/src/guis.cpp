@@ -1341,10 +1341,17 @@ void addRecentToMenu(GtkRecentChooser* chooser,Widget* menu)
 #endif
 }
 #endif
+void doApply(void)
+{
+printf("triggered\n");
+}
+
 
 #ifdef _USEQT5_
 void buildMainGuiQT(void)
 {
+	QAction*	menuitem;
+
 	window=new QWidget;
 
 	mainWindowVBox=new QVBoxLayout();
@@ -1359,14 +1366,22 @@ void buildMainGuiQT(void)
 
 	window->setLayout(mainWindowVBox);
 	notebook=new QTabWidget;
+	notebook->setDocumentMode(true);
+	notebook->setTabsClosable(true);
 
+	menubar=new QMenuBar;
+//file menu
+	menufile=new QMenu("&File");
+	menubar->addMenu(menufile);
 
-QTextBrowser*	text=new QTextBrowser;
-QTextBrowser*	text2=new QTextBrowser;
+//new
+	menuitem=menufile->addAction("New");
+	menuitem->setShortcuts(QKeySequence::New);
+	menuitem->setIcon(QIcon::fromTheme("document-new"));
+	menuitem->setObjectName(NEWMENUNAME);
+	menuitem->connect(menuitem,&QAction::triggered,newFile);
 
-
-	notebook->addTab(text,"Written By");
-	notebook->addTab(text2,"Written By");
+	mainWindowVBox->addWidget(menubar);
 	mainWindowVBox->addWidget(notebook);
 
  	window->show();

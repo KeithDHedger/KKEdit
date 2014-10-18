@@ -5,6 +5,9 @@
  * files.h
  *
 */
+
+#include "config.h"
+ 
 #ifndef _FILES_
 #define _FILES_
 #if 1
@@ -12,7 +15,12 @@ void saveVarsToFile(char* filepath,args* dataptr);
 void loadVarsFromFile(char* filepath,args* dataptr);
 bool openFile(const gchar *filepath,int linenumber,bool warn);
 bool saveFile(Widget* widget,gpointer data);
-void newFile(Widget* widget,gpointer data);
+#ifndef _USEQT5_
+VISIBLE void newFile(Widget* widget,gpointer data);
+#else
+VISIBLE void newFile(void);
+#endif
+
 void resetAllFilePrefs(void);
 void openAsHexDump(Widget *widget,gpointer user_data);
 void reloadFile(Widget* widget,gpointer data);

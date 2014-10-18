@@ -63,58 +63,6 @@
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 
-#if 1
-#ifndef _PAGESTRUCT_
-#define _PAGESTRUCT_
-
-struct args
-{
-	const char*	name;
-	int			type;
-	void*		data;
-};
-
-enum {TYPEINT=1,TYPESTRING,TYPEBOOL};
-
-struct pageStruct
-{
-	Widget*			pane;
-	GtkScrolledWindow*	pageWindow;
-	GtkScrolledWindow*	pageWindow2;
-	GtkSourceBuffer*	buffer;
-	GtkSourceView*		view;
-	GtkSourceView*		view2;
-	char*				filePath;
-	char*				realFilePath;
-	char*				dirName;
-	GtkMenuItem*		navSubMenu;
-	bool				rebuildMenu;
-	Widget*			tabName;
-	GtkTextIter			iter;
-	GtkTextIter			match_start;
-	GtkTextIter			match_end;
-	bool				isFirst;
-	char*				fileName;
-	GFile*				gFile; 
-	GFileMonitor*		monitor;
-	bool				itsMe;
-	GList*				markList;
-	bool				inTop;
-	bool				isSplit;
-	const char*			lang;
-	Widget*			tabVbox;
-	bool				showingChanged;
-	GtkTextMark*		backMark;
-	GtkTextTag*			highlightTag;
-	GList*				userDataList;
-	GtkSourceCompletion* completion;
-	gpointer			reserved2;
-	gpointer			reserved3;
-	gpointer			reserved4;
-};
-#endif
-#endif
-
 struct toolStruct
 {
 	char*				menuName;
@@ -171,15 +119,25 @@ extern char*			toolBarLayout;
 extern Widget*		toolBar;
 extern Widget*		toolBarBox;
 
-extern Widget*		menubar;
-extern Widget*		menufile;
-extern Widget*		menuedit;
-extern Widget*		menufunc;
-extern Widget*		menunav;
-extern Widget*		menutools;
-extern Widget*		menuView;
+#ifndef _USEQT5_
+extern GtkWidget*		menubar;
+extern GtkWidget*		menufile;
+extern GtkWidget*		menuedit;
+extern GtkWidget*		menufunc;
+extern GtkWidget*		menunav;
+extern GtkWidget*		menutools;
+extern GtkWidget*		menuhelp;
+#else
+extern QMenuBar*		menubar;
+extern QMenu*		menufile;
+extern QMenu*		menuedit;
+extern QMenu*		menufunc;
+extern QMenu*		menunav;
+extern QMenu*		menutools;
+extern QMenu*		menuhelp;
+#endif
 
-extern Widget*		menuhelp;
+//extern Widget*		menuhelp;
 extern Widget*		menuprint;
 extern Widget*		menuclose;
 extern Widget*		menucloseall;
@@ -330,7 +288,7 @@ extern Widget*		mainWindowScrollbox;
 #ifndef _USEQT5_
 extern GtkWidget*		mainWindowVBox;
 extern GtkWidget*		mainTopUserVBox;
-Gextern tkWidget*		mainWindowHBox;
+extern GtkWidget*		mainWindowHBox;
 extern GtkWidget*		mainLeftUserVBox;
 extern GtkWidget*		mainNotebookVBox;
 extern GtkWidget*		mainRightUserVBox;
