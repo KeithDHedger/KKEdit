@@ -36,6 +36,10 @@ QMenu*			menunav;
 QMenu*			menutools;
 QMenu*			menuhelp;
 
+QAction*			menuItemOpen=NULL;
+
+
+
 #endif
 
 VISIBLE GList*	newBookMarksList=NULL;

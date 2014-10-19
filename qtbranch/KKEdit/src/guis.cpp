@@ -1418,6 +1418,13 @@ void buildMainGuiQT(void)
 	menuitem->setObjectName(NEWMENUNAME);
 	menuitem->connect(menuitem,&QAction::triggered,newFile);
 
+//open
+	menuItemOpen=menufile->addAction("Open");
+	menuitem->setShortcuts(QKeySequence::Open);
+	menuitem->setIcon(QIcon::fromTheme("document-open"));
+	menuitem->setObjectName(OPENMENUNAME);
+	menuitem->connect(menuitem,&QAction::triggered,doOpenFile);
+
 	mainWindowVBox->addWidget(menubar);
 	mainWindowVBox->addWidget(notebook);
 

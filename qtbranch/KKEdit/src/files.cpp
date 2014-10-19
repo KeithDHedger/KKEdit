@@ -54,7 +54,6 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 
 VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 {
-#ifndef _USEQT5_
 	FILE*	fd=NULL;
 	char	buffer[2048];
 	int		cnt;
@@ -100,17 +99,19 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 				}
 			fclose(fd);
 		}
-#endif
 }
 
 #ifndef _USEQT5_
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 #else
 //TODO//
-void makeNewTab(char* name,char* tooltip,pageStruct* page)
+QWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 #endif
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	page->tabName=NULL;
+	return(NULL);
+#else
 	GtkWidget*	evbox=gtk_event_box_new();
 	GtkWidget*	hbox=gtk_hbox_new(false,0);
 	GtkWidget*	label=gtk_label_new(name);
@@ -695,7 +696,11 @@ gboolean clickInView(void)
 
 pageStruct* makeNewPage(void)
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	pageStruct*			page;
+	page=(pageStruct*)malloc(sizeof(pageStruct));
+	return(page);
+#else
 	pageStruct*			page;
 	GtkTextIter			iter;
 	GtkTextAttributes*	attr;
@@ -774,6 +779,7 @@ pageStruct* makeNewPage(void)
 
 VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
+printf("openfile %s\n",filepath);
 #ifndef _USEQT5_
 	GtkTextIter				iter;
 	GtkWidget*				label;
@@ -975,7 +981,25 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 VISIBLE void newFile(void)
 #endif
 {
-#ifndef _USEQT5_
+printf("triggered newfile\n");
+#ifdef _USEQT5_
+	QWidget*		label;
+	pageStruct*		page;
+
+	QTextEdit*	text=new QTextEdit;
+
+	page=makeNewPage();
+	page->tabVbox=new QVBoxLayout();
+	page->filePath=NULL;
+	page->dirName=NULL;
+
+	asprintf(&page->fileName,"%s-%i",gettext("Untitled"),untitledNumber);
+	untitledNumber++;
+
+	label=makeNewTab(page->fileName,NULL,page);
+	notebook->addTab(text,page->fileName);
+	
+#else
 	GtkTextIter	iter;
 	GtkWidget*	label;
 	pageStruct*	page;

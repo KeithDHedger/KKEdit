@@ -218,6 +218,8 @@ extern QMenu*			menunav;
 extern QMenu*			menutools;
 extern QMenu*			menuhelp;
 
+extern QAction*			menuItemOpen;
+
 #endif
 
 extern int				currentPage;

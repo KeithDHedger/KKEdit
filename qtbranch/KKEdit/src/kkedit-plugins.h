@@ -108,6 +108,7 @@ struct pageStruct
 	GtkSourceCompletion* completion;
 #else
 	QVBoxLayout*		tabVbox;
+	QWidget*			tabName;
 #endif
 	char*				filePath;
 	char*				realFilePath;

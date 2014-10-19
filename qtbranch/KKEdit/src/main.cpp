@@ -413,10 +413,32 @@ int main(int argc,char **argv)
 //	else
 //		{
 			init();
+
+
+			for(int j=1; j<argc; j++)
+				{
+				printf("%i - %s\n",j,argv[j]);
+				}
+
+
+
+
 #ifndef _USEQT5_
 			buildMainGui();
 #else
 		QApplication	app(argc, argv);
+QStringList	strs=app.arguments();
+QString str=strs.at(0);
+//QChar *data = str.data();
+//while (!data->isNull()) {
+ //   qDebug() << data->unicode();
+//    ++data;
+//    }
+//printf("%s\n",data->unicode());
+char* s;
+			QByteArray byteArray=str.toUtf8();
+			s=(char*)byteArray.constData();
+printf("%i %s\n",strs.count(),s);
 
 		buildMainGuiQT();
 #endif
@@ -428,6 +450,7 @@ int main(int argc,char **argv)
 #endif
 			for(int j=1; j<argc; j++)
 				{
+				printf("%i - %s\n",j,argv[j]);
 					if((strncasecmp(argv[j],"-m",2)!=0) && (strncasecmp(argv[j],"-s",2)!=0))
 						openFile(argv[j],0,true);
 				}
@@ -471,6 +494,7 @@ int main(int argc,char **argv)
 #ifndef _USEQT5_
 			gtk_main();
 #else
+//			QApplication	app(argc, argv);
 			app.exec();
 #endif
 			delete history;
