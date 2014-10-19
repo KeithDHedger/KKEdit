@@ -25,7 +25,12 @@ struct _FunctionProvider
 	GdkPixbuf*					icon;
 };
 
+#ifndef _USEQT5_
 void function_provider_iface_init(GtkSourceCompletionProviderIface* iface);
+#else
+//TODO//
+void function_provider_iface_init(void);
+#endif
 GType function_provider_get_type(void);
 
 extern FunctionProvider*			funcProv;

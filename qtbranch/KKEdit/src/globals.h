@@ -438,8 +438,18 @@ void destroyData(functionData* fdata);
 void getRecursiveTagList(char* filepath,void* ptr);
 void buildToolsList(void);
 void getRecursiveTagListFileName(char* filepath,void* ptr);
+#ifndef _USEQT5_
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
+#else
+//TODO//
+void scrollToIterInPane(void);
+#endif
+#ifndef _USEQT5_
 void goBack(GtkWidget* widget,gpointer data);
+#else
+//TODO//
+void goBack(void);
+#endif
 void showBarberPole(const char* title);
 void killBarberPole(void);
 void debugFree(gpointer ptr,const char* message);

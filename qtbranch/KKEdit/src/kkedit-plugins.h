@@ -234,8 +234,18 @@ void		hideTop(bool top);
 void		runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title);
 void		debugFree(gpointer ptr,const char* message);
 bool		openFile(const gchar *filepath,int linenumber,bool warn);
+#ifndef _USEQT5_
 bool		saveFile(GtkWidget* widget,gpointer data);
+#else
+//TODO//
+bool		saveFile(void);
+#endif
+#ifndef _USEQT5_
 void		newFile(GtkWidget* widget,gpointer data);
+#else
+//TODO//
+void		newFile(void);
+#endif
 void		loadVarsFromFile(char* filepath,args* dataptr);
 void		saveVarsToFile(char* filepath,args* dataptr);
 
