@@ -26,7 +26,7 @@ TextBuffer::~TextBuffer()
 TextBuffer::TextBuffer(GtkTextBuffer* buffer)
 #else
 //TODO//
-TextBuffer::TextBuffer(void)
+TextBuffer::TextBuffer(int num)
 #endif
 {
 #ifndef _USEQT5_

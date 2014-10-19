@@ -6,22 +6,31 @@
 *     completion.cpp
 * 
 ******************************************************/
+
+#include "kkedit-includes.h"
+
+#ifndef _USEQT5_
 #include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
 #include <gtksourceview/gtksourceview.h>
 #include <gtksourceview/gtksourcecompletion.h>
 #include <gtksourceview/gtksourcecompletioninfo.h>
 #include <gtksourceview/gtksourcecompletionitem.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
-
-#include "kkedit-includes.h"
+#else
+//TODO//
+#endif
 
 struct _FunctionProviderClass
 {
+#ifndef _USEQT5_
 	GObjectClass			parent_class;
+#else
+//TODO//
+#endif
 };
 
 
-G_DEFINE_TYPE_WITH_CODE(FunctionProvider,function_provider,G_TYPE_OBJECT,G_IMPLEMENT_INTERFACE (GTK_TYPE_SOURCE_COMPLETION_PROVIDER,function_provider_iface_init))
+//G_DEFINE_TYPE_WITH_CODE(FunctionProvider,function_provider,G_TYPE_OBJECT,G_IMPLEMENT_INTERFACE (GTK_TYPE_SOURCE_COMPLETION_PROVIDER,function_provider_iface_init))
 
 FunctionProvider*			funcProv;
 FunctionProvider*			varsProv;
@@ -93,7 +102,7 @@ char* get_word_at_iter(void)
 GdkPixbuf* function_provider_get_icon(GtkSourceCompletionProvider* provider)
 #else
 //TODO//
-GdkPixbuf* function_provider_get_icon(void)
+void function_provider_get_icon(void)
 #endif
 {
 #ifndef _USEQT5_

@@ -19,15 +19,18 @@ class TextBuffer
 		TextBuffer(GtkTextBuffer* buffer);
 #else
 //TODO//
-		TextBuffer(void);
+		TextBuffer(int num);
 #endif
 
+#ifndef _USEQT5_
 		GtkTextIter		lineStart;
 		GtkTextIter		lineEnd;
 		GtkTextIter		visibleLineEnd;
 		GtkTextIter		cursorPos;
 		GtkTextBuffer*	textBuffer;
-
+#else
+//TODO//
+#endif
 		int				lineNum;
 		int				numChars;
 		int				column;

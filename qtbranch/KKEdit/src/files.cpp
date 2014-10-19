@@ -604,7 +604,12 @@ int showFileChanged(char* filename)
 #endif
 }
 
+#ifndef _USEQT5_
 void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data)
+#else
+//TODO
+void fileChangedOnDisk(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*		page=(pageStruct*)user_data;

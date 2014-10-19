@@ -132,12 +132,15 @@ struct pageStruct
 #define _PLUGINDATA_
 struct moduleData
 {
+#ifndef _USEQT5_
 	char*		name;
 	bool		enabled;
 	GModule*	module;
 	bool		loaded;
 	char*		path;
 	bool		unload;
+#else
+#endif
 };
 #endif
 

@@ -48,7 +48,12 @@ void restoreSession(GtkWidget* widget,gpointer data);
 //TODO//
 void restoreSession(void);
 #endif
+#ifndef _USEQT5_
 void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data);
+#else
+//TODO//
+void fileChangedOnDisk(void);
+#endif
 void setFilePrefs(pageStruct* page);
 
 #endif

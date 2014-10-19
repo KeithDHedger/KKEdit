@@ -10,7 +10,6 @@
 #define _KKEDIT_INCLUDES_
 
 #include <stdlib.h>
-#include <gtk/gtk.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <glib.h>
@@ -19,6 +18,7 @@
 #include "config.h"
 
 #ifndef _USEQT5_
+#include <gtk/gtk.h>
 #include <gtksourceview/gtksourcestyleschememanager.h>
 #include <gtksourceview/gtksourceview.h>
 #include <gtksourceview/gtksourcebuffer.h>

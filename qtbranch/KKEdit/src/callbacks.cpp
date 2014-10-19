@@ -1551,9 +1551,9 @@ bool tabPopUp(void)
 #endif
 }
 
+#ifndef _USEQT5_
 void messageOpen(UniqueMessageData *message)
 {
-#ifndef _USEQT5_
 	int argc;
 
 	gchar** uris=unique_message_data_get_uris(message);
@@ -1561,12 +1561,10 @@ void messageOpen(UniqueMessageData *message)
 
 	for (int loop=1; loop<argc; loop++)
 		openFile(uris[loop],1,true);
-#endif
 }
 
 UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessageData *message,guint time,gpointer user_data)
 {
-#ifndef _USEQT5_
 	UniqueResponse	res;
 
 	switch(command)
@@ -1589,8 +1587,8 @@ UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessag
 			break;
 		}
 	return(res);
-#endif
 }
+#endif
 
 void writeExitData(void)
 {
@@ -1998,8 +1996,12 @@ VISIBLE void doAbout(void)
 #endif
 }
 
+#ifndef _USEQT5_
 GtkSourceBuffer*	printBuffer;
 GtkSourceView*		printView;
+#else
+//TODO//
+#endif
 
 void doCombineBuffers(void)
 {
