@@ -23,7 +23,12 @@
 
 bool	cancelCheck=false;
 
+#ifndef _USEQT5_
 void doCancelCheck(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void doCancelCheck(void)
+#endif
 {
 #ifndef _USEQT5_
 	gtk_widget_destroy(spellCheckWord);
@@ -65,7 +70,12 @@ void checkTheWord(char* word,int checkDoc)
 #endif
 }
 
+#ifndef _USEQT5_
 void checkWord(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void checkWord(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
@@ -87,7 +97,12 @@ void checkWord(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void doChangeWord(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void doChangeWord(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
@@ -119,7 +134,12 @@ void doChangeWord(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void doAddIgnoreWord(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void doAddIgnoreWord(void)
+#endif
 {
 #ifndef _USEQT5_
 	if((long)data==1)
@@ -136,7 +156,12 @@ void doAddIgnoreWord(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void doSpellCheckDoc(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void doSpellCheckDoc(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*				page=getPageStructPtr(-1);

@@ -2231,7 +2231,12 @@ VISIBLE void toggleBookMarkBar(void)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void toggleToolBar(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void toggleToolBar(void)
+#endif
 {
 #ifndef _USEQT5_
 	showToolBar=!showToolBar;
@@ -2244,7 +2249,12 @@ VISIBLE void toggleToolBar(GtkWidget* widget,gpointer data)
 }
 
 //toggleStatusBar
+#ifndef _USEQT5_
 VISIBLE void toggleStatusBar(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void toggleStatusBar(void)
+#endif
 {
 #ifndef _USEQT5_
 	showStatus=!showStatus;
@@ -2258,7 +2268,12 @@ VISIBLE void toggleStatusBar(GtkWidget* widget,gpointer data)
 
 #ifdef _BUILDDOCVIEWER_
 
+#ifndef _USEQT5_
 VISIBLE void toggleDocviewer(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void toggleDocviewer(void)
+#endif
 {
 #ifndef _USEQT5_
 	showHideDocviewer=!showHideDocviewer;
@@ -2438,7 +2453,12 @@ void loadKeybindings(void)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
+#else
+//TODO//
+VISIBLE gboolean keyShortCut(void)
+#endif
 {
 #ifndef _USEQT5_
 	int		loop;
@@ -2469,7 +2489,12 @@ VISIBLE gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void getPlugins(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void getPlugins(void)
+#endif
 {
 #ifndef _USEQT5_
 	char*	command;

@@ -30,28 +30,48 @@ FunctionProvider*			customProv;
 bool						forcePopup=false;
 GtkSourceCompletionWords*	docWordsProv;
 
+#ifndef _USEQT5_
 gchar* function_provider_get_name(GtkSourceCompletionProvider* provider)
+#else
+//TODO//
+gchar* function_provider_get_name(void)
+#endif
 {
 #ifndef _USEQT5_
 	return g_strdup(((FunctionProvider *)provider)->name);
 #endif
 }
 
+#ifndef _USEQT5_
 gint function_provider_get_priority(GtkSourceCompletionProvider* provider)
+#else
+//TODO//
+gint function_provider_get_priority(void)
+#endif
 {
 #ifndef _USEQT5_
 	return((FunctionProvider*)provider)->priority;
 #endif
 }
 
+#ifndef _USEQT5_
 gboolean function_provider_match(GtkSourceCompletionProvider* provider,GtkSourceCompletionContext*context)
+#else
+//TODO//
+gboolean function_provider_match(void)
+#endif
 {
 #ifndef _USEQT5_
 	return TRUE;
 #endif
 }
 
+#ifndef _USEQT5_
 char* get_word_at_iter(GtkTextIter* iter,GtkTextBuffer *buffer)
+#else
+//TODO//
+char* get_word_at_iter(void)
+#endif
 {
 #ifndef _USEQT5_
 	GtkTextIter*	startiter;
@@ -69,7 +89,12 @@ char* get_word_at_iter(GtkTextIter* iter,GtkTextBuffer *buffer)
 #endif
 }
 
+#ifndef _USEQT5_
 GdkPixbuf* function_provider_get_icon(GtkSourceCompletionProvider* provider)
+#else
+//TODO//
+GdkPixbuf* function_provider_get_icon(void)
+#endif
 {
 #ifndef _USEQT5_
 	FunctionProvider* tp=(FunctionProvider*)provider;
@@ -112,7 +137,12 @@ GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 #endif
 }
 
+#ifndef _USEQT5_
 void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceCompletionContext* context)
+#else
+//TODO//
+void function_provider_populate(void)
+#endif
 {
 #ifndef _USEQT5_
 	GtkTextIter 	iter;
@@ -155,7 +185,12 @@ void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceC
 #endif
 }
 
+#ifndef _USEQT5_
 void function_provider_iface_init(GtkSourceCompletionProviderIface* iface)
+#else
+//TODO//
+void function_provider_iface_init(void)
+#endif
 {
 #ifndef _USEQT5_
 	iface->get_name=function_provider_get_name;

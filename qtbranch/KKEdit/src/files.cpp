@@ -198,7 +198,12 @@ void resetAllFilePrefs(void)
 #endif
 }
 
+#ifndef _USEQT5_
 void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
+#else
+//TODO//
+void dropText(void)
+#endif
 {
 #ifndef _USEQT5_
 	gchar**			array=NULL;
@@ -285,7 +290,12 @@ bool getSaveFile(void)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE bool saveFile(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
@@ -370,7 +380,12 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
+#else
+//TODO//
+VISIBLE void openAsHexDump(void)
+#endif
 {
 #ifndef _USEQT5_
 	GtkWidget*		dialog;
@@ -426,7 +441,12 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void reloadFile(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void reloadFile(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
@@ -448,7 +468,12 @@ VISIBLE void reloadFile(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void saveSession(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void saveSession(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*		page;
@@ -495,7 +520,12 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void restoreSession(void)
+#endif
 {
 #ifndef _USEQT5_
 	FILE*		fd=NULL;
@@ -613,7 +643,12 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 #endif
 }
 
+#ifndef _USEQT5_
 void add_source_mark_pixbufs (GtkSourceView *view)
+#else
+//TODO//
+void add_source_mark_pixbufs (void)
+#endif
 {
 #ifndef _USEQT5_
 	GdkColor	color;
@@ -630,7 +665,12 @@ void add_source_mark_pixbufs (GtkSourceView *view)
 #endif
 }
 
+#ifndef _USEQT5_
 gboolean clickInView(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+gboolean clickInView(void)
+#endif
 {
 #ifndef _USEQT5_
 	if((statusMessage!=NULL))
@@ -918,7 +958,12 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void newFile(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void newFile(void)
+#endif
 {
 #ifndef _USEQT5_
 	GtkTextIter	iter;

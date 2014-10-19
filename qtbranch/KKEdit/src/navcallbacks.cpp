@@ -37,7 +37,12 @@ void goToDefine(functionData* fdata)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void goToDefinition(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*		page=getPageStructPtr(-1);
@@ -66,7 +71,12 @@ VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void findFile(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void findFile(void)
+#endif
 {
 #ifndef _USEQT5_
 	char*			command;
@@ -119,7 +129,12 @@ VISIBLE void findFile(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void gotoLine(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void gotoLine(void)
+#endif
 {
 #ifndef _USEQT5_
 	int			line=(long)data;
@@ -139,7 +154,12 @@ void gotoLine(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void jumpToLineFromBar(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void jumpToLineFromBar(void)
+#endif
 {
 #ifndef _USEQT5_
 	theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
@@ -178,7 +198,12 @@ int showLineEntry(void)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void jumpToLine(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void jumpToLine(void)
+#endif
 {
 #ifndef _USEQT5_
 	if(showLineEntry()==GTK_RESPONSE_YES)
@@ -186,7 +211,12 @@ VISIBLE void jumpToLine(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void functionSearch(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void functionSearch(void)
+#endif
 {
 #ifndef _USEQT5_
 	functionData* fdata;
@@ -206,7 +236,12 @@ VISIBLE void functionSearch(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void jumpToMark(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void jumpToMark(void)
+#endif
 {
 #ifndef _USEQT5_
 	GtkTextMark*	mark;

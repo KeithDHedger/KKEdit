@@ -18,7 +18,12 @@ GtkWidget*	plugPrefsButton;
 GtkWidget*	plugwindow;
 GtkWidget*	treeview;
 
+#ifndef _USEQT5_
 void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
+#else
+//TODO//
+void enableToggled(void)
+#endif
 {
 #ifndef _USEQT5_
 	GtkTreeModel *model = (GtkTreeModel *)data;
@@ -53,7 +58,12 @@ void getPlugName(gpointer data,gpointer store)
 #endif
 }
 
+#ifndef _USEQT5_
 gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data)
+#else
+//TODO//
+gboolean doSetPlugData(void)
+#endif
 {
 #ifndef _USEQT5_
 	int			enabled;
@@ -130,7 +140,12 @@ void setPlugsEnabled(void)
 #endif
 }
 
+#ifndef _USEQT5_
 void setPlugPrefs(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void setPlugPrefs(void)
+#endif
 {
 #ifndef _USEQT5_
 	GtkTreeModel*		model;
@@ -171,7 +186,12 @@ void setPlugPrefs(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void onRowSelected(GtkTreeView* treeview,gpointer userdata)
+#else
+//TODO//
+void onRowSelected(void)
+#endif
 {
 #ifndef _USEQT5_
 	GtkTreeModel*		model;

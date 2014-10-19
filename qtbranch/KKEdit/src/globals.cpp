@@ -454,7 +454,12 @@ void plugRunFunction(gpointer data,gpointer funcname)
 #endif
 }
 
+#ifndef _USEQT5_
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
+#else
+//TODO//
+void scrollToIterInPane(void)
+#endif
 {
 #ifndef _USEQT5_
 	if(page->inTop==true)
@@ -1042,7 +1047,12 @@ void rebuildBookMarkMenu(void)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void goBack(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void goBack(void)
+#endif
 {
 #ifndef _USEQT5_
 	HistoryClass*	hist=new HistoryClass;

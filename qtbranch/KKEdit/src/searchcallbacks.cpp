@@ -15,21 +15,36 @@ int	itemsReplaced=-1;
 
 #ifdef _BUILDDOCVIEWER_
 
+#ifndef _USEQT5_
 void webKitGoBack(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void webKitGoBack(void)
+#endif
 {
 #ifndef _USEQT5_
 	webkit_web_view_go_back((WebKitWebView*)data);
 #endif
 }
 
+#ifndef _USEQT5_
 void webKitGoForward(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void webKitGoForward(void)
+#endif
 {
 #ifndef _USEQT5_
 	webkit_web_view_go_forward((WebKitWebView*)data);
 #endif
 }
 
+#ifndef _USEQT5_
 void webKitGoHome(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void webKitGoHome(void)
+#endif
 {
 #ifndef _USEQT5_
 	if(g_file_test(htmlFile,G_FILE_TEST_EXISTS)==true)
@@ -94,7 +109,12 @@ PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void searchGtkDocs(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
@@ -204,7 +224,12 @@ VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void doDoxy(GtkWidget* widget,long data)
+#else
+//TODO//
+VISIBLE void doDoxy(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
@@ -252,7 +277,12 @@ VISIBLE void doDoxy(GtkWidget* widget,long data)
 }
 
 //find in doxy docs
+#ifndef _USEQT5_
 VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void doxyDocs(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
@@ -310,7 +340,12 @@ VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
 }
 
 //showDocViewWidget
+#ifndef _USEQT5_
 VISIBLE void searchQT5Docs(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void searchQT5Docs(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
@@ -376,7 +411,12 @@ VISIBLE void searchQT5Docs(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void defSearchFromBar(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void defSearchFromBar(void)
+#endif
 {
 #ifndef _USEQT5_
 	functionData* fdata;
@@ -395,7 +435,12 @@ void defSearchFromBar(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void docSearchFromBar(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void docSearchFromBar(void)
+#endif
 {
 #ifndef _USEQT5_
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
@@ -406,7 +451,12 @@ void docSearchFromBar(GtkWidget* widget,gpointer data)
 }
 
 #ifdef _BUILDDOCVIEWER_
+#ifndef _USEQT5_
 void docSearchInPageFoward(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void docSearchInPageFoward(void)
+#endif
 {
 #ifndef _USEQT5_
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
@@ -416,7 +466,12 @@ void docSearchInPageFoward(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void docSearchInPageBack(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void docSearchInPageBack(void)
+#endif
 {
 #ifndef _USEQT5_
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
@@ -427,7 +482,12 @@ void docSearchInPageBack(GtkWidget* widget,gpointer data)
 }
 #endif
 
+#ifndef _USEQT5_
 void qt5DocSearchFromBar(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void qt5DocSearchFromBar(void)
+#endif
 {
 #ifndef _USEQT5_
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
@@ -920,7 +980,12 @@ void basicFind(int dowhat)
 #endif
 }
 
+#ifndef _USEQT5_
 void pasteFRClip(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void pasteFRClip(void)
+#endif
 {
 #ifndef _USEQT5_
 	gtk_entry_set_text((GtkEntry*)data,gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget));
@@ -943,7 +1008,12 @@ void showOnStatus(const char* from,const char* to)
 #endif
 }
 
+#ifndef _USEQT5_
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
+#else
+//TODO//
+void doFindReplace(void)
+#endif
 {
 #ifndef _USEQT5_
 	bool		flag=false;
@@ -1011,7 +1081,12 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void find(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void find(void)
+#endif
 {
 #ifndef _USEQT5_
 	gtk_widget_show(findReplaceDialog);
@@ -1019,7 +1094,12 @@ VISIBLE void find(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void doSearchPrefs(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void doSearchPrefs(void)
+#endif
 {
 #ifndef _USEQT5_
 	GtkWidget*	button;
@@ -1055,7 +1135,12 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
+#else
+//TODO//
+void doLiveSearch(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct* 			page=getPageStructPtr(-1);

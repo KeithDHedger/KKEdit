@@ -23,7 +23,12 @@ void findTool(toolStruct* data,char* toolname)
 #endif
 }
 
+#ifndef _USEQT5_
 void selectToolOptions(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void selectToolOptions(void)
+#endif
 {
 #ifndef _USEQT5_
 	char*	text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
@@ -260,14 +265,24 @@ void addToolToDrop(gpointer data,gpointer user_data)
 #endif
 }
 
+#ifndef _USEQT5_
 void fillCombo(GtkComboBoxText* combo)
+#else
+//TODO//
+void fillCombo(void)
+#endif
 {
 #ifndef _USEQT5_
 	g_list_foreach(toolsList,addToolToDrop,NULL);
 #endif
 }
 
+#ifndef _USEQT5_
 gboolean getToolKey(GtkEntry* widget,GdkEventKey* event,gpointer data)
+#else
+//TODO//
+gboolean getToolKey(void)
+#endif
 {
 #ifndef _USEQT5_
 	if((event->type==GDK_KEY_PRESS) && (event->keyval==GDK_KEY_Delete))
@@ -746,7 +761,12 @@ void populateStore(void)
 #endif
 }
 
+#ifndef _USEQT5_
 void addToToolBar(GtkWidget* widget,gpointer ptr)
+#else
+//TODO//
+void addToToolBar(void)
+#endif
 {
 #ifndef _USEQT5_
 	char*	holddata=toolBarLayout;
@@ -830,7 +850,12 @@ char* makeToolBarList(void)
 #endif
 }
 
+#ifndef _USEQT5_
 void clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
+#else
+//TODO//
+void clickIt(void)
+#endif
 {
 #ifndef _USEQT5_
 	GtkTreePath*	path=NULL;
@@ -880,7 +905,12 @@ void doIconView(void)
 #endif
 }
 
+#ifndef _USEQT5_
 void setKeyCuts(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void setKeyCuts(void)
+#endif
 {
 #ifndef _USEQT5_
 
@@ -908,7 +938,12 @@ void setKeyCuts(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 gboolean setKeyInEntry(GtkEntry* widget,GdkEventKey* event,gpointer data)
+#else
+//TODO//
+gboolean setKeyInEntry(void)
+#endif
 {
 #ifndef _USEQT5_
 	if((event->type==GDK_KEY_PRESS) && (event->keyval==GDK_KEY_Delete))
@@ -1307,7 +1342,12 @@ VISIBLE void doPrefs(void)
 #endif
 }
 
+#ifndef _USEQT5_
 void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
+#else
+//TODO//
+void addRecentToMenu(void)
+#endif
 {
 #ifndef _USEQT5_
 	GList*		itemlist=NULL;
