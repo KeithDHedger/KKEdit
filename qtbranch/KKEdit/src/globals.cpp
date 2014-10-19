@@ -26,8 +26,16 @@ GtkWidget*		menuToolOut=NULL;
 GtkWidget*		menuStatusBar=NULL;
 #else
 //TODO//
-QWidget*				window=NULL;
-QTabWidget*				notebook=NULL;
+QWidget*		window=NULL;
+QTabWidget*		notebook=NULL;
+QMenuBar*		menubar=NULL;
+QMenu*			menufile;
+QMenu*			menuedit;
+QMenu*			menufunc;
+QMenu*			menunav;
+QMenu*			menutools;
+QMenu*			menuhelp;
+
 #endif
 
 VISIBLE GList*	newBookMarksList=NULL;
@@ -216,6 +224,7 @@ int				toolOutHeight=200;
 int				bottomVPaneHite=200;
 int				topVPaneHite=200;
 
+//cross-compile widgets
 #ifndef _USEQT5_
 GtkWidget*		mainWindowScrollbox=NULL;
 GtkWidget*		mainWindowVBox=NULL;
@@ -233,6 +242,13 @@ GtkWidget*		mainWindowHPane=NULL;
 GtkWidget*		secondWindowHPane=NULL;
 #else
 //TODO//
+QVBoxLayout*	mainWindowVBox=NULL;
+QVBoxLayout*	mainTopUserVBox=NULL;
+QHBoxLayout*	mainWindowHBox=NULL;
+QVBoxLayout*	mainLeftUserVBox=NULL;
+QVBoxLayout*	mainNotebookVBox=NULL;
+QVBoxLayout*	mainRightUserVBox=NULL;
+QVBoxLayout*	mainBottomUserVBox=NULL;
 #endif
 
 int				currentTabNumber;

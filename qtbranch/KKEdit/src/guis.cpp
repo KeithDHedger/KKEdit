@@ -1384,13 +1384,50 @@ void addRecentToMenu(void)
 #endif
 }
 
+#ifdef _USEQT5_
 void buildMainGuiQT(void)
 {
-}
+	QAction*	menuitem;
 
+	window=new QWidget;
+
+	mainWindowVBox=new QVBoxLayout();
+	mainTopUserVBox=new QVBoxLayout;
+	mainLeftUserVBox=new QVBoxLayout;
+	mainNotebookVBox=new QVBoxLayout;
+	mainRightUserVBox=new QVBoxLayout;
+	mainBottomUserVBox=new QVBoxLayout;
+	mainWindowHBox=new QHBoxLayout;
+
+	window->setGeometry(windowX,windowY,windowWidth,windowHeight);
+
+	window->setLayout(mainWindowVBox);
+	notebook=new QTabWidget;
+	notebook->setDocumentMode(true);
+	notebook->setTabsClosable(true);
+
+	menubar=new QMenuBar;
+//file menu
+	menufile=new QMenu("&File");
+	menubar->addMenu(menufile);
+
+//new
+	menuitem=menufile->addAction("New");
+	menuitem->setShortcuts(QKeySequence::New);
+	menuitem->setIcon(QIcon::fromTheme("document-new"));
+	menuitem->setObjectName(NEWMENUNAME);
+	menuitem->connect(menuitem,&QAction::triggered,newFile);
+
+	mainWindowVBox->addWidget(menubar);
+	mainWindowVBox->addWidget(notebook);
+
+ 	window->show();
+}
+#endif
+
+#ifndef _USEQT5_
 void buildMainGui(void)
 {
-#ifndef _USEQT5_
 	GtkWidget*		menuitem;
 	GtkWidget*		menu;
 	GtkWidget*		image;
@@ -1956,8 +1993,8 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->locale=LOCALEDIR;
 
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
-#endif
 }
+#endif
 
 void buildFindReplace(void)
 {

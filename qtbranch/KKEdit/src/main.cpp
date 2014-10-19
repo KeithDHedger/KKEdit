@@ -11,7 +11,6 @@ bool	loadPluginsFlag=true;
 
 void readConfig(void)
 {
-#ifndef _USEQT5_
 	char*	filename;
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
@@ -27,12 +26,10 @@ void readConfig(void)
 		sscanf(docWindowAllocData,"%i %i %i %i",(int*)&docWindowWidth,(int*)&docWindowHeight,(int*)&docWindowX,(int*)&docWindowY);
 
 	debugFree(filename,"readConfig filename");
-#endif
 }
 
 void init(void)
 {
-#ifndef _USEQT5_
 	char*		filename;
 	int			exitstatus;
 	char		tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
@@ -104,6 +101,7 @@ void init(void)
 	g_mkdir_with_parents(filename,493);
 	debugFree(filename,"init filename");
 
+#ifndef _USEQT5_
 	schemeManager=gtk_source_style_scheme_manager_get_default();
 	asprintf(&filename,"%s/.gnome2/gedit/styles",getenv("HOME"));
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
@@ -111,6 +109,9 @@ void init(void)
 	asprintf(&filename,"%s/styles",DATADIR);
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
 	debugFree(filename,"init filename");
+#else
+//TODO//
+#endif
 
 //toolbar layout
 	toolBarLayout=strdup("NOSsXCPsURsFGsE9ADL");
@@ -118,7 +119,11 @@ void init(void)
 	readConfig();
 	loadKeybindings();
 
+#ifndef _USEQT5_
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
+#else
+//TODO//
+#endif
 
 	tmpIndent=indent;
 	tmpLineNumbers=lineNumbers;
@@ -156,6 +161,7 @@ void init(void)
 #endif
 
 //do plugins
+#ifndef _USEQT5_
 	globalPlugins=new PluginClass(loadPluginsFlag);
 //set up plugin data
 	globalPlugins->globalPlugData=(plugData*)malloc(sizeof(plugData));
@@ -167,7 +173,9 @@ void init(void)
 	globalPlugins->globalPlugData->currentTab=-1;
 	globalPlugins->globalPlugData->tmpFolder=tmpFolderName;
 	globalPlugins->globalPlugData->kkeditVersion=VERSION;
-
+#else
+//TODO//
+#endif
 	/*
 		for(int j=0;j<globalPlugins->plugCount;j++)
 			{
@@ -196,8 +204,10 @@ void init(void)
 
 	localeLang=getenv("LANG");
 
-	history=new HistoryClass;
 	globalSlice->setReturnDupString(true);
+
+#ifndef _USEQT5_
+	history=new HistoryClass;
 
 
 	funcProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
@@ -219,6 +229,8 @@ void init(void)
 	g_object_set(docWordsProv,"priority",10,NULL);
 	g_object_set(docWordsProv,"minimum-word-size",autoShowMinChars,NULL);
 	g_object_set(docWordsProv,"interactive-delay",50,NULL);
+#else
+//TODO//
 #endif
 }
 
@@ -404,7 +416,9 @@ int main(int argc,char **argv)
 #ifndef _USEQT5_
 			buildMainGui();
 #else
-			buildMainGuiQT();
+		QApplication	app(argc, argv);
+
+		buildMainGuiQT();
 #endif
 			if(onExitSaveSession==true)
 #ifndef _USEQT5_
@@ -457,7 +471,7 @@ int main(int argc,char **argv)
 #ifndef _USEQT5_
 			gtk_main();
 #else
-//TODO//
+			app.exec();
 #endif
 			delete history;
 			delete globalSlice;

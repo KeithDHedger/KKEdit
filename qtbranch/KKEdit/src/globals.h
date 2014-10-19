@@ -210,6 +210,14 @@ extern GtkWidget*		findDefWidget;
 extern GtkWidget*		liveSearchWidget;
 #else
 //TODO//
+extern QMenuBar*		menubar;
+extern QMenu*			menufile;
+extern QMenu*			menuedit;
+extern QMenu*			menufunc;
+extern QMenu*			menunav;
+extern QMenu*			menutools;
+extern QMenu*			menuhelp;
+
 #endif
 
 extern int				currentPage;
@@ -373,6 +381,14 @@ extern GtkWidget*		mainWindowHPane;
 extern GtkWidget*		secondWindowHPane;
 #else
 //TODO//
+extern QVBoxLayout*		mainWindowVBox;
+extern QVBoxLayout*		mainTopUserVBox;
+extern QHBoxLayout*		mainWindowHBox;
+extern QVBoxLayout*		mainLeftUserVBox;
+extern QVBoxLayout*		mainNotebookVBox;
+extern QVBoxLayout*		mainRightUserVBox;
+extern QVBoxLayout*		mainBottomUserVBox;
+
 #endif
 
 extern int				currentTabNumber;
