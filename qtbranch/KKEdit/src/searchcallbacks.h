@@ -8,30 +8,29 @@
 
 #ifndef _FUNCCALLBACKS_
 #define _FUNCCALLBACKS_
-#if 0
+
 #ifdef _BUILDDOCVIEWER_
-void webKitGoBack(Widget* widget,gpointer data);
-void webKitGoForward(Widget* widget,gpointer data);
-void webKitGoHome(Widget* widget,gpointer data);
-void docSearchInPageFoward(Widget* widget,gpointer data);
-void docSearchInPageBack(Widget* widget,gpointer data);
+void webKitGoBack(GtkWidget* widget,gpointer data);
+void webKitGoForward(GtkWidget* widget,gpointer data);
+void webKitGoHome(GtkWidget* widget,gpointer data);
+void docSearchInPageFoward(GtkWidget* widget,gpointer data);
+void docSearchInPageBack(GtkWidget* widget,gpointer data);
 #endif
 
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data);
-void find(Widget* widget,gpointer data);
-void doSearchPrefs(Widget* widget,gpointer data);
-void docSearchFromBar(Widget* widget,gpointer data);
-void defSearchFromBar(Widget* widget,gpointer data);
-void doLiveSearch(Widget* widget,GdkEvent *event,gpointer data);
+void find(GtkWidget* widget,gpointer data);
+void doSearchPrefs(GtkWidget* widget,gpointer data);
+void docSearchFromBar(GtkWidget* widget,gpointer data);
+void defSearchFromBar(GtkWidget* widget,gpointer data);
+void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data);
 void basicFind(int dowhat);
 void regexFind(int dowhat);
-void searchQT5Docs(Widget* widget,gpointer data);
-void qt5DocSearchFromBar(Widget* widget,gpointer data);
-void searchGtkDocs(Widget* widget,gpointer data);
+void searchQT5Docs(GtkWidget* widget,gpointer data);
+void qt5DocSearchFromBar(GtkWidget* widget,gpointer data);
+void searchGtkDocs(GtkWidget* widget,gpointer data);
 void showDocView(int howtodisplay,char* text,const char* title);
-void pasteFRClip(Widget* widget,gpointer data);
-void doDoxy(Widget* widget,long data);
-void doxyDocs(Widget* widget,gpointer data);
+void pasteFRClip(GtkWidget* widget,gpointer data);
+void doDoxy(GtkWidget* widget,long data);
+void doxyDocs(GtkWidget* widget,gpointer data);
 
-#endif
 #endif

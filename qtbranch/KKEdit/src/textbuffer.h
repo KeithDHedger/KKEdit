@@ -9,7 +9,7 @@
 
 #ifndef _TEXTBUFFERCLASS_
 #define _TEXTBUFFERCLASS_
-#if 0
+
 class TextBuffer
 {
 	public:
@@ -57,6 +57,4 @@ class TextBuffer
 	private:
 };
 
-
-#endif
 #endif

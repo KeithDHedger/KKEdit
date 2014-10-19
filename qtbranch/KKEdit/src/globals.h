@@ -7,24 +7,11 @@
 */
 
 #include "kkedit-includes.h"
-#include "config.h"
 
 #ifndef _GLOBALS_
 #define _GLOBALS_
-#if 1
+
 #undef _DEBUG_FREE_
-
-#ifndef _USEQT5_
-	#include <gtk/gtk.h>
-	extern Widget*		window;
-#else
-	#include <glib.h>
-	#include <QtWidgets>
-
-	extern QApplication*	holdapp;
-	extern QWindow*			qtWindow;
-#endif
-
 
 #define REPLACE			100
 #define FINDNEXT		200
@@ -62,6 +49,58 @@
 #define NUMSHORTCUTS	14
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
+#if 0
+#ifndef _PAGESTRUCT_
+#define _PAGESTRUCT_
+
+struct args
+{
+	const char*	name;
+	int			type;
+	void*		data;
+};
+
+enum {TYPEINT=1,TYPESTRING,TYPEBOOL};
+
+
+struct pageStruct
+{
+	GtkWidget*			pane;
+	GtkScrolledWindow*	pageWindow;
+	GtkScrolledWindow*	pageWindow2;
+	GtkSourceBuffer*	buffer;
+	GtkSourceView*		view;
+	GtkSourceView*		view2;
+	char*				filePath;
+	char*				realFilePath;
+	char*				dirName;
+	GtkMenuItem*		navSubMenu;
+	bool				rebuildMenu;
+	GtkWidget*			tabName;
+	GtkTextIter			iter;
+	GtkTextIter			match_start;
+	GtkTextIter			match_end;
+	bool				isFirst;
+	char*				fileName;
+	GFile*				gFile; 
+	GFileMonitor*		monitor;
+	bool				itsMe;
+	GList*				markList;
+	bool				inTop;
+	bool				isSplit;
+	const char*			lang;
+	GtkWidget*			tabVbox;
+	bool				showingChanged;
+	GtkTextMark*		backMark;
+	GtkTextTag*			highlightTag;
+	GList*				userDataList;
+	GtkSourceCompletion* completion;
+	gpointer			reserved2;
+	gpointer			reserved3;
+	gpointer			reserved4;
+};
+#endif
+#endif
 
 struct toolStruct
 {
@@ -94,76 +133,65 @@ struct bookMarksNew
 {
 	pageStruct*			page;
 	char*				label;
-	Widget*				mark;
+	GtkSourceMark*		mark;
 	char*				markName;
 	int					line;
 };
 
-//extern HistoryClass*	history;
+extern HistoryClass*	history;
 
-extern Widget*		window;
-
-extern Widget*	accgroup;
-//extern Widget*		notebook;
+extern GtkWidget*		window;
+extern GtkAccelGroup*	accgroup;
+extern GtkNotebook*		notebook;
 
 extern GList*			newBookMarksList;
-extern Widget*		menuBookMark;
-extern Widget*		menuBookMarkSubMenu;
+extern GtkWidget*		menuBookMark;
+extern GtkWidget*		menuBookMarkSubMenu;
 extern char*			highlightColour;
 extern char*			tmpHighlightColour;
 extern bool				showBMBar;
-extern Widget*		bmHighlightBox;
+extern GtkWidget*		bmHighlightBox;
 extern int				bmMarkNumber;
 
 extern char*			toolBarLayout;
-extern Widget*		toolBar;
-extern Widget*		toolBarBox;
+extern GtkToolbar*		toolBar;
+extern GtkWidget*		toolBarBox;
 
-#ifndef _USEQT5_
 extern GtkWidget*		menubar;
 extern GtkWidget*		menufile;
 extern GtkWidget*		menuedit;
 extern GtkWidget*		menufunc;
 extern GtkWidget*		menunav;
 extern GtkWidget*		menutools;
+extern GtkWidget*		menuView;
+
 extern GtkWidget*		menuhelp;
-#else
-extern QMenuBar*		menubar;
-extern QMenu*		menufile;
-extern QMenu*		menuedit;
-extern QMenu*		menufunc;
-extern QMenu*		menunav;
-extern QMenu*		menutools;
-extern QMenu*		menuhelp;
-#endif
+extern GtkWidget*		menuprint;
+extern GtkWidget*		menuclose;
+extern GtkWidget*		menucloseall;
+extern GtkWidget*		menusaveall;
+extern GtkWidget*		menurevert;
 
-//extern Widget*		menuhelp;
-extern Widget*		menuprint;
-extern Widget*		menuclose;
-extern Widget*		menucloseall;
-extern Widget*		menusaveall;
-extern Widget*		menurevert;
+extern GtkWidget*		menuItemOpen;
+extern GtkWidget*		menuToolOut;
+extern GtkWidget*		menuStatusBar;
 
-extern Widget*		menuItemOpen;
-extern Widget*		menuToolOut;
-extern Widget*		menuStatusBar;
+extern GtkWidget*		redoMenu;
+extern GtkWidget*		undoMenu;
+extern GtkWidget*		redoAllMenu;
+extern GtkWidget*		undoAllMenu;
+extern GtkWidget*		cutMenu;
+extern GtkWidget*		copyMenu;
+extern GtkWidget*		pasteMenu;
 
-extern Widget*		redoMenu;
-extern Widget*		undoMenu;
-extern Widget*		redoAllMenu;
-extern Widget*		undoAllMenu;
-extern Widget*		cutMenu;
-extern Widget*		copyMenu;
-extern Widget*		pasteMenu;
+extern GtkWidget*		saveMenu;
+extern GtkWidget*		saveAsMenu;
 
-extern Widget*		saveMenu;
-extern Widget*		saveAsMenu;
-
-extern Widget*		lineNumberWidget;
-extern Widget*		findApiWidget;
-extern Widget*		findQtApiWidget;
-extern Widget*		findDefWidget;
-extern Widget*		liveSearchWidget;
+extern GtkWidget*		lineNumberWidget;
+extern GtkWidget*		findApiWidget;
+extern GtkWidget*		findQtApiWidget;
+extern GtkWidget*		findDefWidget;
+extern GtkWidget*		liveSearchWidget;
 
 extern int				currentPage;
 //nag
@@ -183,7 +211,7 @@ extern int				docWindowX;
 extern int				docWindowY;
 
 //prefs
-extern Widget*		prefswin;
+extern GtkWidget*		prefswin;
 extern bool				indent;
 extern bool				lineNumbers;
 extern bool				lineWrap;
@@ -212,14 +240,14 @@ extern bool				tmpAutoCheck;
 extern uint				autoShowMinChars;
 extern int				tmpAutoShowMinChars;
 
-extern Widget*		fontButton;
-extern Widget*		terminalBox;
-extern Widget*		rootCommandBox;
-extern Widget*		defaultBrowserBox;
+extern GtkWidget*		fontButton;
+extern GtkWidget*		terminalBox;
+extern GtkWidget*		rootCommandBox;
+extern GtkWidget*		defaultBrowserBox;
 extern char*			browserCommand;
 
 //key short cuts
-extern Widget*		keysWindow;
+extern GtkWidget*		keysWindow;
 
 extern bool				tmpIndent;
 extern bool				tmpLineNumbers;
@@ -233,39 +261,39 @@ extern bool				tmpSaveSessionOnExit;
 extern bool				tmpRestoreBookmarks;
 extern char*			tmpStyleName;
 
-extern Widget*		toolNameWidget;
-extern Widget*		commandLineWidget;
-extern Widget*		keyWidget;
-extern Widget*		commentWidget;
-extern Widget*		inTermWidget;
-extern Widget*		inPopupWidget;
-extern Widget*		alwaysPopupWidget;
+extern GtkWidget*		toolNameWidget;
+extern GtkWidget*		commandLineWidget;
+extern GtkWidget*		keyWidget;
+extern GtkWidget*		commentWidget;
+extern GtkWidget*		inTermWidget;
+extern GtkWidget*		inPopupWidget;
+extern GtkWidget*		alwaysPopupWidget;
 
-extern Widget*		syncWidget;
-extern Widget*		ignoreWidget;
-extern Widget*		pasteWidget;
-extern Widget*		replaceWidget;
-extern Widget*		outputWidget;
-extern Widget*		showDocWidget;
-extern Widget*		toolSelect;
-extern Widget*		clearViewWidget;
-extern Widget*		runAsRootWidget;
-extern Widget*		useBarWidget;
+extern GtkWidget*		syncWidget;
+extern GtkWidget*		ignoreWidget;
+extern GtkWidget*		pasteWidget;
+extern GtkWidget*		replaceWidget;
+extern GtkWidget*		outputWidget;
+extern GtkWidget*		showDocWidget;
+extern GtkWidget*		toolSelect;
+extern GtkWidget*		clearViewWidget;
+extern GtkWidget*		runAsRootWidget;
+extern GtkWidget*		useBarWidget;
 
 extern toolStruct*		selectedToolFromDrop;
 
 //view tool output
-extern Widget*		mainVPane;
+extern GtkWidget*		mainVPane;
 extern bool				showToolOutWin;
-extern Widget*		toolOutputView;
-//extern GtkTextBuffer*	toolOutputBuffer;
-extern Widget*		toolOutVBox;
+extern GtkWidget*		toolOutputView;
+extern GtkTextBuffer*	toolOutputBuffer;
+extern GtkWidget*		toolOutVBox;
 extern bool				showStatus;
-extern Widget*		statusWidget;
+extern GtkWidget*		statusWidget;
 
 extern GList*			toolsList;
 
-extern Widget*		restoreBMs;
+extern GtkWidget*		restoreBMs;
 
 //main window
 extern int				windowWidth;
@@ -282,10 +310,8 @@ extern int				toolOutHeight;
 extern int				bottomVPaneHite;
 extern int				topVPaneHite;
 
-extern Widget*		mainWindowScrollbox;
+extern GtkWidget*		mainWindowScrollbox;
 
-//cros-compile widgets
-#ifndef _USEQT5_
 extern GtkWidget*		mainWindowVBox;
 extern GtkWidget*		mainTopUserVBox;
 extern GtkWidget*		mainWindowHBox;
@@ -294,62 +320,48 @@ extern GtkWidget*		mainNotebookVBox;
 extern GtkWidget*		mainRightUserVBox;
 extern GtkWidget*		mainBottomUserVBox;
 
-//main notebook
-extern GtkNotebook*		notebook;
+extern GtkWidget*		mainWindowVPane;
+extern GtkWidget*		secondWindowVPane;
 
-#else
-extern QVBoxLayout*		mainWindowVBox;
-extern QVBoxLayout*		mainTopUserVBox;
-extern QHBoxLayout*		mainWindowHBox;
-extern QVBoxLayout*		mainLeftUserVBox;
-extern QVBoxLayout*		mainNotebookVBox;
-extern QVBoxLayout*		mainRightUserVBox;
-extern QVBoxLayout*		mainBottomUserVBox;
-extern QTabWidget*		notebook;
-#endif
-
-extern Widget*		mainWindowVPane;
-extern Widget*		secondWindowVPane;
-
-extern Widget*		mainWindowHPane;
-extern Widget*		secondWindowHPane;
+extern GtkWidget*		mainWindowHPane;
+extern GtkWidget*		secondWindowHPane;
 
 extern int				currentTabNumber;
 extern int 				untitledNumber;
 
-extern Widget*		newButton;
-extern Widget*		openButton;
-extern Widget*		saveButton;
-extern Widget*		redoButton;
-extern Widget*		undoButton;
-extern Widget*		cutButton;
-extern Widget*		copyButton;
-extern Widget*		pasteButton;
-extern Widget*		findButton;
-extern Widget*		gotoDefButton;
-extern Widget*		backButton;
-extern Widget*		gotoLineButton;
-extern Widget*		findApiButton;
-extern Widget*		findQtApiButton;
-extern Widget*		findFuncDefButton;
-extern Widget*		liveSearchButton;
+extern GtkToolItem*		newButton;
+extern GtkToolItem*		openButton;
+extern GtkToolItem*		saveButton;
+extern GtkToolItem*		redoButton;
+extern GtkToolItem*		undoButton;
+extern GtkToolItem*		cutButton;
+extern GtkToolItem*		copyButton;
+extern GtkToolItem*		pasteButton;
+extern GtkToolItem*		findButton;
+extern GtkToolItem*		gotoDefButton;
+extern GtkToolItem*		backButton;
+extern GtkToolItem*		gotoLineButton;
+extern GtkToolItem*		findApiButton;
+extern GtkToolItem*		findQtApiButton;
+extern GtkToolItem*		findFuncDefButton;
+extern GtkToolItem*		liveSearchButton;
 
 //find replace
-extern Widget*		findReplaceDialog;
-extern Widget*		findBox;
-extern Widget*		replaceBox;
-extern Widget*		findDropBox;
-extern Widget*		replaceDropBox;
-//extern GSList*			findList;
-//extern GSList*			replaceList;
+extern GtkWidget*		findReplaceDialog;
+extern GtkWidget*		findBox;
+extern GtkWidget*		replaceBox;
+extern GtkWidget*		findDropBox;
+extern GtkWidget*		replaceDropBox;
+extern GSList*			findList;
+extern GSList*			replaceList;
 
 //custom toolbar
-extern Widget*		fromHBox;
-extern Widget*		iconViewBox;
+extern GtkWidget*		fromHBox;
+extern GtkWidget*		iconViewBox;
 extern bool				showToolBar;
 
 extern int				listFunction;
-extern Widget*		funcListDrop;
+extern GtkWidget*		funcListDrop;
 
 extern char*			functionSearchText;
 extern char*			thePage;
@@ -361,20 +373,18 @@ extern char*			tmpFolderName;
 extern int				gotManEditor;
 extern int				gotDoxygen;
 
-#ifndef _USEQT5_
 extern GtkSourceStyleSchemeManager*	schemeManager;
 extern GtkSourceStyleScheme*		styleScheme;
-#endif
 
 #ifdef _BUILDDOCVIEWER_
-extern Widget*		docView;
+extern GtkWidget*		docView;
 extern WebKitWebView*	webView;
 extern bool				showHideDocviewer;
-extern Widget*		showDocViewWidget;
+extern GtkWidget*		showDocViewWidget;
 #endif
 
-extern Widget*		spellCheckWord;
-extern Widget*		wordListDropbox;
+extern GtkWidget*		spellCheckWord;
+extern GtkWidget*		wordListDropbox;
 extern char*			badWord;
 extern char*			goodWord;
 #ifdef _ASPELL_
@@ -386,8 +396,8 @@ extern StringSlice*		globalSlice;
 extern unsigned int		shortCuts[NUMSHORTCUTS][2];
 extern char*			shortCutStrings[NUMSHORTCUTS];
 
-extern Widget*		progressWindow;
-extern Widget*		progressBar;
+extern GtkWidget*		progressWindow;
+extern GtkWidget*		progressBar;
 
 #include "pluginclass.h"
 
@@ -428,14 +438,13 @@ void destroyData(functionData* fdata);
 void getRecursiveTagList(char* filepath,void* ptr);
 void buildToolsList(void);
 void getRecursiveTagListFileName(char* filepath,void* ptr);
-//void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
-void goBack(Widget* widget,gpointer data);
+void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
+void goBack(GtkWidget* widget,gpointer data);
 void showBarberPole(const char* title);
 void killBarberPole(void);
 void debugFree(gpointer ptr,const char* message);
 char* truncateWithElipses(char* str,unsigned int maxlen);
 
-#endif
 #endif
 
 

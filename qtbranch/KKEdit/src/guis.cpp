@@ -5,27 +5,27 @@
 */
 
 #include "kkedit-includes.h"
-#if 0
-Widget*		recent;
-Widget*	tool[18]={NULL,};
+
+GtkWidget*		recent;
+GtkToolItem*	tool[18]={NULL,};
 GtkIconView*	iconView=NULL;
 GtkListStore*	listStore=NULL;
 
-Widget*		entries[NUMSHORTCUTS];
+GtkWidget*		entries[NUMSHORTCUTS];
 
 const char* 	shortcuttext[NUMSHORTCUTS]={gettext("Delete Current Line"),gettext("Delete To End Of Line"),gettext("Delete To Beginning Of Line"),gettext("Select Word Under Cursor"),gettext("Delete Word Under Cursor"),gettext("Duplicate Current Line"),gettext("Select Current Line"),gettext("Move Current Line Up"),gettext("Move Current Line Down"),gettext("Select From Cursor To End Of Line"),gettext("Select From Beginning Of Line To Cursor"),gettext("Move Selection Up"),gettext("Move Selection Down"),gettext("Show Completion")};
 
 void findTool(toolStruct* data,char* toolname)
 {
-#if 0
+#ifndef _USEQT5_
 	if(strcmp(toolname,data->menuName)==0)
 		selectedToolFromDrop=data;
 #endif
 }
 
-void selectToolOptions(Widget* widget,gpointer data)
+void selectToolOptions(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	char*	text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
 	int		flags=0;
 
@@ -93,8 +93,8 @@ void selectToolOptions(Widget* widget,gpointer data)
 
 void setUpToolBar(void)
 {
-#if 0
-	Widget*		toolbutton;
+#ifndef _USEQT5_
+	GtkToolItem*		toolbutton;
 	GtkRecentFilter*	filter;
 
 	recent=gtk_recent_chooser_menu_new();
@@ -116,7 +116,7 @@ void setUpToolBar(void)
 						newButton=gtk_tool_button_new_from_stock(GTK_STOCK_NEW);
 						gtk_toolbar_insert(toolBar,newButton,-1);
 						gtk_signal_connect(GTK_OBJECT(newButton),"clicked",G_CALLBACK(newFile),NULL);
-						gtk_widget_set_tooltip_text((Widget*)newButton,gettext("New File"));
+						gtk_widget_set_tooltip_text((GtkWidget*)newButton,gettext("New File"));
 						break;
 					case 'O':
 //open+recent
@@ -125,14 +125,14 @@ void setUpToolBar(void)
 						gtk_signal_connect(GTK_OBJECT(openButton),"clicked",G_CALLBACK(doOpenFile),NULL);
 						gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(openButton),gettext("Open Recent File"));
 						gtk_toolbar_insert(toolBar,openButton,-1);
-						gtk_widget_set_tooltip_text((Widget*)openButton,gettext("Open File"));
+						gtk_widget_set_tooltip_text((GtkWidget*)openButton,gettext("Open File"));
 						break;
 					case 'S':
 //save
 						saveButton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE);
 						gtk_signal_connect(GTK_OBJECT(saveButton),"clicked",G_CALLBACK(saveFile),NULL);
 						gtk_toolbar_insert(toolBar,saveButton,-1);
-						gtk_widget_set_tooltip_text((Widget*)saveButton,gettext("Save File"));
+						gtk_widget_set_tooltip_text((GtkWidget*)saveButton,gettext("Save File"));
 						break;
 					case 's':
 						gtk_toolbar_insert(toolBar,gtk_separator_tool_item_new(),-1);
@@ -142,56 +142,56 @@ void setUpToolBar(void)
 						cutButton=gtk_tool_button_new_from_stock(GTK_STOCK_CUT);
 						gtk_signal_connect(GTK_OBJECT(cutButton),"clicked",G_CALLBACK(cutToClip),NULL);
 						gtk_toolbar_insert(toolBar,cutButton,-1);
-						gtk_widget_set_tooltip_text((Widget*)cutButton,gettext("Cut"));
+						gtk_widget_set_tooltip_text((GtkWidget*)cutButton,gettext("Cut"));
 						break;
 					case 'C':
 //copy
 						copyButton=gtk_tool_button_new_from_stock(GTK_STOCK_COPY);
 						gtk_toolbar_insert(toolBar,copyButton,-1);
 						gtk_signal_connect(GTK_OBJECT(copyButton),"clicked",G_CALLBACK(copyToClip),NULL);
-						gtk_widget_set_tooltip_text((Widget*)copyButton,gettext("Copy"));
+						gtk_widget_set_tooltip_text((GtkWidget*)copyButton,gettext("Copy"));
 						break;
 					case 'P':
 //paste
 						pasteButton=gtk_tool_button_new_from_stock(GTK_STOCK_PASTE);
 						gtk_toolbar_insert(toolBar,pasteButton,-1);
 						gtk_signal_connect(GTK_OBJECT(pasteButton),"clicked",G_CALLBACK(pasteFromClip),NULL);
-						gtk_widget_set_tooltip_text((Widget*)pasteButton,gettext("Paste"));
+						gtk_widget_set_tooltip_text((GtkWidget*)pasteButton,gettext("Paste"));
 						break;
 					case 'U':
 //undo
 						undoButton=gtk_tool_button_new_from_stock(GTK_STOCK_UNDO);
 						gtk_toolbar_insert(toolBar,undoButton,-1);
 						gtk_signal_connect(GTK_OBJECT(undoButton),"clicked",G_CALLBACK(undo),NULL);
-						gtk_widget_set_tooltip_text((Widget*)undoButton,gettext("Undo"));
+						gtk_widget_set_tooltip_text((GtkWidget*)undoButton,gettext("Undo"));
 						break;
 					case 'R':
 //redo
 						redoButton=gtk_tool_button_new_from_stock(GTK_STOCK_REDO);
 						gtk_toolbar_insert(toolBar,redoButton,-1);
 						gtk_signal_connect(GTK_OBJECT(redoButton),"clicked",G_CALLBACK(redo),NULL);
-						gtk_widget_set_tooltip_text((Widget*)redoButton,gettext("Redo"));
+						gtk_widget_set_tooltip_text((GtkWidget*)redoButton,gettext("Redo"));
 						break;
 					case 'F':
 //find
 						findButton=gtk_tool_button_new_from_stock(GTK_STOCK_FIND);
 						gtk_toolbar_insert(toolBar,findButton,-1);
 						gtk_signal_connect(GTK_OBJECT(findButton),"clicked",G_CALLBACK(find),NULL);
-						gtk_widget_set_tooltip_text((Widget*)findButton,gettext("Find/Replace"));
+						gtk_widget_set_tooltip_text((GtkWidget*)findButton,gettext("Find/Replace"));
 						break;
 					case 'G':
 //navigation
 						gotoDefButton=gtk_tool_button_new_from_stock(GTK_STOCK_DIALOG_QUESTION);
 						gtk_toolbar_insert(toolBar,gotoDefButton,-1);
 						gtk_signal_connect(GTK_OBJECT(gotoDefButton),"clicked",G_CALLBACK(goToDefinition),NULL);
-						gtk_widget_set_tooltip_text((Widget*)gotoDefButton,gettext("Go To Definition"));
+						gtk_widget_set_tooltip_text((GtkWidget*)gotoDefButton,gettext("Go To Definition"));
 						break;
 //go back
 					case 'B':
 						backButton=gtk_tool_button_new_from_stock(GTK_STOCK_GO_BACK);
 						gtk_toolbar_insert(toolBar,backButton,-1);
 						gtk_signal_connect(GTK_OBJECT(backButton),"clicked",G_CALLBACK(goBack),NULL);
-						gtk_widget_set_tooltip_text((Widget*)backButton,gettext("Go Back"));
+						gtk_widget_set_tooltip_text((GtkWidget*)backButton,gettext("Go Back"));
 						break;
 
 					case '9':
@@ -200,8 +200,8 @@ void setUpToolBar(void)
 						gtk_container_add((GtkContainer *)gotoLineButton,lineNumberWidget);
 						gtk_toolbar_insert(toolBar,gotoLineButton,-1);
 						g_signal_connect_after(G_OBJECT(lineNumberWidget),"key-release-event",G_CALLBACK(jumpToLineFromBar),NULL);
-						gtk_widget_set_size_request((Widget*)gotoLineButton,48,-1);
-						gtk_widget_set_tooltip_text((Widget*)gotoLineButton,gettext("Go To Line"));
+						gtk_widget_set_size_request((GtkWidget*)gotoLineButton,48,-1);
+						gtk_widget_set_tooltip_text((GtkWidget*)gotoLineButton,gettext("Go To Line"));
 						break;
 					case 'A':
 //find in gtkdoc
@@ -210,7 +210,7 @@ void setUpToolBar(void)
 						gtk_container_add((GtkContainer *)findApiButton,findApiWidget);
 						gtk_toolbar_insert(toolBar,findApiButton,-1);
 						g_signal_connect_after(G_OBJECT(findApiWidget),"activate",G_CALLBACK(docSearchFromBar),(void*)findApiWidget);
-						gtk_widget_set_tooltip_text((Widget*)findApiButton,gettext("Find API In Gtk Docs"));
+						gtk_widget_set_tooltip_text((GtkWidget*)findApiButton,gettext("Find API In Gtk Docs"));
 						break;
 
 					case 'Q':
@@ -220,7 +220,7 @@ void setUpToolBar(void)
 						gtk_container_add((GtkContainer *)findQtApiButton,findQtApiWidget);
 						gtk_toolbar_insert(toolBar,findQtApiButton,-1);
 						g_signal_connect_after(G_OBJECT(findQtApiWidget),"activate",G_CALLBACK(qt5DocSearchFromBar),(void*)findQtApiWidget);
-						gtk_widget_set_tooltip_text((Widget*)findQtApiButton,gettext("Find API In Qt5 Docs"));
+						gtk_widget_set_tooltip_text((GtkWidget*)findQtApiButton,gettext("Find API In Qt5 Docs"));
 						break;
 					case 'D':
 //find in function def
@@ -229,7 +229,7 @@ void setUpToolBar(void)
 						gtk_container_add((GtkContainer *)findFuncDefButton,findDefWidget);
 						gtk_toolbar_insert(toolBar,findFuncDefButton,-1);
 						g_signal_connect_after(G_OBJECT(findDefWidget),"activate",G_CALLBACK(defSearchFromBar),(void*)findDefWidget);
-						gtk_widget_set_tooltip_text((Widget*)findFuncDefButton,gettext("Search For Define"));
+						gtk_widget_set_tooltip_text((GtkWidget*)findFuncDefButton,gettext("Search For Define"));
 						break;
 					case 'L':
 //livesearch
@@ -238,7 +238,7 @@ void setUpToolBar(void)
 						gtk_container_add((GtkContainer *)liveSearchButton,liveSearchWidget);
 						gtk_toolbar_insert(toolBar,liveSearchButton,-1);
 						g_signal_connect_after(G_OBJECT(liveSearchWidget),"key-release-event",G_CALLBACK(doLiveSearch),NULL);
-						gtk_widget_set_tooltip_text((Widget*)liveSearchButton,gettext("Live Search"));
+						gtk_widget_set_tooltip_text((GtkWidget*)liveSearchButton,gettext("Live Search"));
 						break;
 					case 'E':
 //expander
@@ -254,7 +254,7 @@ void setUpToolBar(void)
 
 void addToolToDrop(gpointer data,gpointer user_data)
 {
-#if 0
+#ifndef _USEQT5_
 	if(((toolStruct*)data)->global==false)
 		gtk_combo_box_text_append_text((GtkComboBoxText*)toolSelect,((toolStruct*)data)->menuName);
 #endif
@@ -262,14 +262,14 @@ void addToolToDrop(gpointer data,gpointer user_data)
 
 void fillCombo(GtkComboBoxText* combo)
 {
-#if 0
+#ifndef _USEQT5_
 	g_list_foreach(toolsList,addToolToDrop,NULL);
 #endif
 }
 
 gboolean getToolKey(GtkEntry* widget,GdkEventKey* event,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	if((event->type==GDK_KEY_PRESS) && (event->keyval==GDK_KEY_Delete))
 		{
 			gtk_entry_set_text(widget,"");
@@ -285,12 +285,12 @@ gboolean getToolKey(GtkEntry* widget,GdkEventKey* event,gpointer data)
 
 void doMakeTool(void)
 {
-#if 0
-	Widget*	vbox;
-	Widget*	hbox;
-	Widget*	button;
-	Widget*	toolwin;
-	Widget*	infolabel;
+#ifndef _USEQT5_
+	GtkWidget*	vbox;
+	GtkWidget*	hbox;
+	GtkWidget*	button;
+	GtkWidget*	toolwin;
+	GtkWidget*	infolabel;
 
 	char*		placeholderinfo;
 
@@ -436,24 +436,24 @@ void doMakeTool(void)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,false,2);
 
 //show it
-	gtk_container_add(GTK_CONTAINER(toolwin),(Widget*)vbox);
+	gtk_container_add(GTK_CONTAINER(toolwin),(GtkWidget*)vbox);
 	gtk_widget_show_all(toolwin);
 #endif
 }
 
 void buildTools(void)
 {
-#if 0
-	Widget*		menuitem;
-	Widget*		menu;
-	Widget*		image;
+#ifndef _USEQT5_
+	GtkWidget*		menuitem;
+	GtkWidget*		menu;
+	GtkWidget*		image;
 	GList*			ptr;
 	bool			gotglobal=false;
 	int				keyflags=0;
 
 	buildToolsList();
 
-	Widget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menutools);
+	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menutools);
 	if(submenu!=NULL)
 		gtk_menu_item_set_submenu((GtkMenuItem*)menutools,NULL);
 
@@ -489,7 +489,7 @@ void buildTools(void)
 						}
 
 					if(((toolStruct*)ptr->data)->comment!=NULL)
-						gtk_widget_set_tooltip_text((Widget*)menuitem,((toolStruct*)ptr->data)->comment);
+						gtk_widget_set_tooltip_text((GtkWidget*)menuitem,((toolStruct*)ptr->data)->comment);
 				}
 			ptr=g_list_next(ptr);
 		}
@@ -522,7 +522,7 @@ void buildTools(void)
 						}
 
 					if(((toolStruct*)ptr->data)->comment!=NULL)
-						gtk_widget_set_tooltip_text((Widget*)menuitem,((toolStruct*)ptr->data)->comment);
+						gtk_widget_set_tooltip_text((GtkWidget*)menuitem,((toolStruct*)ptr->data)->comment);
 				}
 			ptr=g_list_next(ptr);
 		}
@@ -531,13 +531,13 @@ void buildTools(void)
 
 void populateStore(void)
 {
-#if 0
+#ifndef _USEQT5_
 	GdkPixbuf*	pbuf;
-	Widget*	image;
+	GtkWidget*	image;
 	GtkTreeIter iter;
 	char*		type;
 
-	image=(Widget*)menuItemOpen;
+	image=(GtkWidget*)menuItemOpen;
 
 	for(int j=0;j<(int)strlen(toolBarLayout);j++)
 		{
@@ -553,7 +553,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,0,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[0],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[0],false);
 						break;
 					case 'O':
 //open+recent
@@ -564,7 +564,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,1,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[1],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[1],false);
 						break;
 					case 'S':
 //save
@@ -575,7 +575,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,2,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[2],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[2],false);
 						break;
 
 					case 'X':
@@ -587,7 +587,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,3,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[3],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[3],false);
 						break;
 					case 'C':
 //copy
@@ -598,7 +598,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,4,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[4],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[4],false);
 						break;
 					case 'P':
 //paste
@@ -609,7 +609,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,5,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[5],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[5],false);
 						break;
 					case 'U':
 //undo
@@ -620,7 +620,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,6,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[6],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[6],false);
 						break;
 					case 'R':
 //redo
@@ -631,7 +631,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,7,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[7],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[7],false);
 						break;
 					case 'F':
 //find
@@ -642,7 +642,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,8,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[8],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[8],false);
 						break;
 					case 'G':
 //navigation
@@ -653,7 +653,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,9,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[9],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[9],false);
 						break;
 //go back
 					case 'B':
@@ -664,7 +664,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,17,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[17],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[17],false);
 						break;
 
 					case '9':
@@ -675,7 +675,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,10,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[10],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[10],false);
 						break;
 
 					case 'A':
@@ -686,7 +686,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,11,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[11],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[11],false);
 						break;
 					case 'Q':
 						gtk_list_store_append (listStore, &iter);
@@ -696,7 +696,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,16,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[16],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[16],false);
 						break;
 					case 'D':
 						gtk_list_store_append (listStore, &iter);
@@ -706,7 +706,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,12,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[12],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[12],false);
 						break;
 					case 'L':
 						gtk_list_store_append (listStore, &iter);
@@ -716,7 +716,7 @@ void populateStore(void)
 								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,13,-1);
 								g_object_unref(pbuf);
 							}
-						gtk_widget_set_sensitive((Widget*)tool[13],false);
+						gtk_widget_set_sensitive((GtkWidget*)tool[13],false);
 						break;
 
 					case 's':
@@ -746,9 +746,9 @@ void populateStore(void)
 #endif
 }
 
-void addToToolBar(Widget* widget,gpointer ptr)
+void addToToolBar(GtkWidget* widget,gpointer ptr)
 {
-#if 0
+#ifndef _USEQT5_
 	char*	holddata=toolBarLayout;
 	char*	type;
 
@@ -762,30 +762,30 @@ void addToToolBar(Widget* widget,gpointer ptr)
 
 void addIcon(const char* icon,const char* data,int toolnumber,const char* tooltip)
 {
-#if 0
+#ifndef _USEQT5_
 	tool[toolnumber]=gtk_tool_button_new_from_stock(icon);
-	gtk_box_pack_start(GTK_BOX(fromHBox),(Widget*)tool[toolnumber],false,false,2);
+	gtk_box_pack_start(GTK_BOX(fromHBox),(GtkWidget*)tool[toolnumber],false,false,2);
 	gtk_signal_connect(GTK_OBJECT(tool[toolnumber]),"clicked",G_CALLBACK(addToToolBar),(void*)data);
-	gtk_widget_set_tooltip_text((Widget*)tool[toolnumber],tooltip);
+	gtk_widget_set_tooltip_text((GtkWidget*)tool[toolnumber],tooltip);
 #endif
 }
 
 void addPixbuf(const char* pixbuf,const char* data,int toolnumber,const char* tooltip)
 {
-#if 0
-	Widget*		image;
+#ifndef _USEQT5_
+	GtkWidget*		image;
 	image=gtk_image_new_from_file(pixbuf);
 
 	tool[toolnumber]=gtk_tool_button_new(image,NULL);
-	gtk_box_pack_start(GTK_BOX(fromHBox),(Widget*)tool[toolnumber],false,false,2);
+	gtk_box_pack_start(GTK_BOX(fromHBox),(GtkWidget*)tool[toolnumber],false,false,2);
 	gtk_signal_connect(GTK_OBJECT(tool[toolnumber]),"clicked",G_CALLBACK(addToToolBar),(void*)data);
-	gtk_widget_set_tooltip_text((Widget*)tool[toolnumber],tooltip);
+	gtk_widget_set_tooltip_text((GtkWidget*)tool[toolnumber],tooltip);
 #endif
 }
 
 void populateDnD(void)
 {
-#if 0
+#ifndef _USEQT5_
 	addIcon(GTK_STOCK_NEW,"N",0,gettext("New File"));
 	addIcon(GTK_STOCK_OPEN,"O",1,gettext("Open File"));
 	addIcon(GTK_STOCK_SAVE,"S",2,gettext("Save File"));
@@ -810,7 +810,7 @@ void populateDnD(void)
 
 char* makeToolBarList(void)
 {
-#if 0
+#ifndef _USEQT5_
 	GtkTreeIter iter;
 	gboolean	valid;
 	gchar*		str_data;
@@ -830,9 +830,9 @@ char* makeToolBarList(void)
 #endif
 }
 
-void clickIt(Widget* widget,GdkEvent* event,gpointer data)
+void clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	GtkTreePath*	path=NULL;
 	GdkModifierType	mask;
 	GtkTreeIter		iter;
@@ -845,7 +845,7 @@ void clickIt(Widget* widget,GdkEvent* event,gpointer data)
 		{
 			gtk_tree_model_get_iter((GtkTreeModel*)listStore,&iter,path);
 			gtk_tree_model_get((GtkTreeModel*)listStore,&iter,BUTTON_NUM,&button,-1);
-			gtk_widget_set_sensitive((Widget*)tool[button],true);
+			gtk_widget_set_sensitive((GtkWidget*)tool[button],true);
 			gtk_list_store_remove((GtkListStore*)listStore,&iter);
 		}
 #endif
@@ -853,7 +853,7 @@ void clickIt(Widget* widget,GdkEvent* event,gpointer data)
 
 void doIconView(void)
 {
-#if 0
+#ifndef _USEQT5_
 	GtkCellRenderer *renderer;
 
 	listStore=gtk_list_store_new(3,GDK_TYPE_PIXBUF,G_TYPE_STRING,G_TYPE_INT);
@@ -875,14 +875,14 @@ void doIconView(void)
 	renderer=gtk_cell_renderer_text_new();
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(iconView),renderer,false);
 
-	gtk_box_pack_start(GTK_BOX(iconViewBox),(Widget*)iconView,false,false,2);
+	gtk_box_pack_start(GTK_BOX(iconViewBox),(GtkWidget*)iconView,false,false,2);
 	g_signal_connect(G_OBJECT(iconView),"button-press-event",G_CALLBACK(clickIt),NULL);
 #endif
 }
 
-void setKeyCuts(Widget* widget,gpointer data)
+void setKeyCuts(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 
 	char*	filename;
 	const char*		text;
@@ -910,7 +910,7 @@ void setKeyCuts(Widget* widget,gpointer data)
 
 gboolean setKeyInEntry(GtkEntry* widget,GdkEventKey* event,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	if((event->type==GDK_KEY_PRESS) && (event->keyval==GDK_KEY_Delete))
 		{
 			gtk_entry_set_text(widget,"");
@@ -926,10 +926,10 @@ gboolean setKeyInEntry(GtkEntry* widget,GdkEventKey* event,gpointer data)
 
 void buildKeys()
 {
-#if 0
-	Widget*	vbox;
-	Widget*	item;
-	Widget*	hbox;
+#ifndef _USEQT5_
+	GtkWidget*	vbox;
+	GtkWidget*	item;
+	GtkWidget*	hbox;
 	char		keystring[32];
 	int			loop;
 	char*		keycutsinfo;
@@ -973,7 +973,7 @@ void buildKeys()
 			gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,2);
 
 //show it
-			gtk_container_add(GTK_CONTAINER(keysWindow),(Widget*)vbox);
+			gtk_container_add(GTK_CONTAINER(keysWindow),(GtkWidget*)vbox);
 		}
 
 	for(int j=0;j<NUMSHORTCUTS;j++)
@@ -991,14 +991,14 @@ void buildKeys()
 #define TABLECOLS 2
 VISIBLE void doPrefs(void)
 {
-#if 0
-	Widget*		vbox;
-	Widget*		hbox;
-	Widget*		pagevbox;
-	Widget*		item;
-	Widget*		label;
+#ifndef _USEQT5_
+	GtkWidget*		vbox;
+	GtkWidget*		hbox;
+	GtkWidget*		pagevbox;
+	GtkWidget*		item;
+	GtkWidget*		label;
 	GtkObject*		adj;
-	Widget*	notebook;
+	GtkNotebook*	notebook;
 	GtkTable*		table;
 	GtkAlignment*	align;
 
@@ -1024,7 +1024,7 @@ VISIBLE void doPrefs(void)
 //end customize
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
-	notebook=(Widget*)gtk_notebook_new();
+	notebook=(GtkNotebook*)gtk_notebook_new();
 
 //pages
 //page1
@@ -1109,10 +1109,10 @@ VISIBLE void doPrefs(void)
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 	gtk_table_attach_defaults(table,item,0,1,10,11);
 
-	gtk_box_pack_start(GTK_BOX(pagevbox),(Widget*)table,false,false,0);
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
 	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("General Appearance")));
 
-	gtk_box_pack_start(GTK_BOX(vbox),(Widget*)notebook,true,true,0);
+	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)notebook,true,true,0);
 
 //page2
 	pagevbox=gtk_vbox_new(false,0);
@@ -1127,7 +1127,7 @@ VISIBLE void doPrefs(void)
 	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
 
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Tab width:")));
-	gtk_table_attach_defaults(table,(Widget*)align,0,1,0,1);
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,0,1);
 	gtk_table_attach_defaults(table,item,1,2,0,1);
 
 //style
@@ -1137,7 +1137,7 @@ VISIBLE void doPrefs(void)
 	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(schemeManager);
 
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Theme:")));
-	gtk_table_attach_defaults(table,(Widget*)align,0,1,1,2);
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,1,2);
 
 	item=gtk_combo_box_text_new();
 	gtk_widget_set_name(item,"style");
@@ -1156,7 +1156,7 @@ VISIBLE void doPrefs(void)
 //font button
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Font:")));
-	gtk_table_attach_defaults(table,(Widget*)align,0,1,2,3);
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,2,3);
 
 	fontButton=gtk_font_button_new_with_font(fontAndSize);
 	gtk_widget_set_name(fontButton,"fontbutton");
@@ -1165,7 +1165,7 @@ VISIBLE void doPrefs(void)
 //bm highlight colour
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("BM Highlight Colour:")));
-	gtk_table_attach_defaults(table,(Widget*)align,0,1,3,4);
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,3,4);
 
 	bmHighlightBox=gtk_entry_new();
 	gtk_entry_set_text((GtkEntry*)bmHighlightBox,highlightColour);
@@ -1174,7 +1174,7 @@ VISIBLE void doPrefs(void)
 //autoshow completion
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Completion Minimum Word Size:")));
-	gtk_table_attach_defaults(table,(Widget*)align,0,1,4,5);
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,4,5);
 
 //completeion min chars
 	adj=gtk_adjustment_new(tmpAutoShowMinChars,2,64,1,1,0);
@@ -1183,7 +1183,7 @@ VISIBLE void doPrefs(void)
 	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
 	gtk_table_attach_defaults(table,item,1,2,4,5);
 
-	gtk_box_pack_start(GTK_BOX(pagevbox),(Widget*)table,false,false,0);
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
 
 //sort functions
 	align=(GtkAlignment*)gtk_alignment_new(0.5,1,0,0);
@@ -1196,8 +1196,8 @@ VISIBLE void doPrefs(void)
 	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu in categorised format"));
 
 	gtk_combo_box_set_active((GtkComboBox*)funcListDrop,listFunction);
-	gtk_container_add(GTK_CONTAINER(align),(Widget*)funcListDrop);
-	gtk_box_pack_start(GTK_BOX(pagevbox),(Widget*)align,false,false,16);
+	gtk_container_add(GTK_CONTAINER(align),(GtkWidget*)funcListDrop);
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,16);
 
 	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("Text Style")));
 
@@ -1207,7 +1207,7 @@ VISIBLE void doPrefs(void)
 	gtk_widget_set_name(item,"makekeys");
 	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
 	gtk_container_add(GTK_CONTAINER(align),item);
-	gtk_box_pack_start(GTK_BOX(pagevbox),(Widget*)align,false,false,0);
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,0);
 //end style
 
 //page 3
@@ -1219,7 +1219,7 @@ VISIBLE void doPrefs(void)
 //function search depth
 	GtkObject*	adjdepth=gtk_adjustment_new(tmpDepth,1,64,1,1,0);
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Tag File Search Depth:")));
-	gtk_table_attach_defaults(table,(Widget*)align,0,1,0,1);
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,0,1);
 
 	item=gtk_spin_button_new((GtkAdjustment*)adjdepth,1,0);
 	gtk_widget_set_name(item,"depth");
@@ -1229,7 +1229,7 @@ VISIBLE void doPrefs(void)
 //terminalcommand
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Terminal Command:")));
-	gtk_table_attach_defaults(table,(Widget*)align,0,1,1,2);
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,1,2);
 
 	terminalBox=gtk_entry_new();
 	gtk_entry_set_text((GtkEntry*)terminalBox,terminalCommand);
@@ -1238,7 +1238,7 @@ VISIBLE void doPrefs(void)
 //root command
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Run As Root Command:")));
-	gtk_table_attach_defaults(table,(Widget*)align,0,1,2,3);
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,2,3);
 
 	rootCommandBox=gtk_entry_new();
 	if(rootCommand!=NULL)
@@ -1248,7 +1248,7 @@ VISIBLE void doPrefs(void)
 //set default browser
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Default Browser:")));
-	gtk_table_attach_defaults(table,(Widget*)align,0,1,3,4);
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,3,4);
 
 	defaultBrowserBox=gtk_entry_new();
 	gtk_widget_set_name(defaultBrowserBox,"defaultbrowser");
@@ -1263,7 +1263,7 @@ VISIBLE void doPrefs(void)
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 	gtk_table_attach_defaults(table,item,0,1,4,5);
 
-	gtk_box_pack_start(GTK_BOX(pagevbox),(Widget*)table,false,false,0);
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
 	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("Administration")));
 //end admin
 
@@ -1302,17 +1302,17 @@ VISIBLE void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,2);
 
 //show it
-	gtk_container_add(GTK_CONTAINER(prefswin),(Widget*)vbox);
+	gtk_container_add(GTK_CONTAINER(prefswin),(GtkWidget*)vbox);
 	gtk_widget_show_all(prefswin);
 #endif
 }
 
-void addRecentToMenu(GtkRecentChooser* chooser,Widget* menu)
+void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 {
-#if 0
+#ifndef _USEQT5_
 	GList*		itemlist=NULL;
 	GList*		l=NULL;
-	Widget*	menuitem;
+	GtkWidget*	menuitem;
 	char*		uri=NULL;
 	char*		filename=NULL;
 	int			i=0;
@@ -1340,59 +1340,14 @@ void addRecentToMenu(GtkRecentChooser* chooser,Widget* menu)
 		}
 #endif
 }
-#endif
-void doApply(void)
-{
-printf("triggered\n");
-}
 
-
-#ifdef _USEQT5_
-void buildMainGuiQT(void)
-{
-	QAction*	menuitem;
-
-	window=new QWidget;
-
-	mainWindowVBox=new QVBoxLayout();
-	mainTopUserVBox=new QVBoxLayout;
-	mainLeftUserVBox=new QVBoxLayout;
-	mainNotebookVBox=new QVBoxLayout;
-	mainRightUserVBox=new QVBoxLayout;
-	mainBottomUserVBox=new QVBoxLayout;
-	mainWindowHBox=new QHBoxLayout;
-
-	window->setGeometry(windowX,windowY,windowWidth,windowHeight);
-
-	window->setLayout(mainWindowVBox);
-	notebook=new QTabWidget;
-	notebook->setDocumentMode(true);
-	notebook->setTabsClosable(true);
-
-	menubar=new QMenuBar;
-//file menu
-	menufile=new QMenu("&File");
-	menubar->addMenu(menufile);
-
-//new
-	menuitem=menufile->addAction("New");
-	menuitem->setShortcuts(QKeySequence::New);
-	menuitem->setIcon(QIcon::fromTheme("document-new"));
-	menuitem->setObjectName(NEWMENUNAME);
-	menuitem->connect(menuitem,&QAction::triggered,newFile);
-
-	mainWindowVBox->addWidget(menubar);
-	mainWindowVBox->addWidget(notebook);
-
- 	window->show();
-}
-#else
 void buildMainGui(void)
 {
-	Widget*		menuitem;
-	Widget*		menu;
-	Widget*		image;
-	Widget*		menurecent;
+#ifndef _USEQT5_
+	GtkWidget*		menuitem;
+	GtkWidget*		menu;
+	GtkWidget*		image;
+	GtkWidget*		menurecent;
 
 	mainWindowVBox=gtk_vbox_new(false,0);
 	mainTopUserVBox=gtk_vbox_new(false,0);
@@ -1416,7 +1371,7 @@ void buildMainGui(void)
 	accgroup=gtk_accel_group_new();
 	gtk_window_add_accel_group((GtkWindow*)window,accgroup);
 
-	notebook=(Widget*)gtk_notebook_new();
+	notebook=(GtkNotebook*)gtk_notebook_new();
 	gtk_notebook_set_scrollable(notebook,true);
 	gtk_signal_connect(GTK_OBJECT(notebook),"switch-page",G_CALLBACK(switchPage),NULL);
 	gtk_signal_connect(GTK_OBJECT(notebook),"page-reordered",G_CALLBACK(switchPage),NULL);
@@ -1431,7 +1386,7 @@ void buildMainGui(void)
 	g_signal_connect(G_OBJECT(mainWindowVBox),"drag_data_received",G_CALLBACK(dropUri),NULL);
 
 	setUpToolBar();
-	gtk_box_pack_start(GTK_BOX(toolBarBox),(Widget*)toolBar,true,true,0);
+	gtk_box_pack_start(GTK_BOX(toolBarBox),(GtkWidget*)toolBar,true,true,0);
 
 //menus
 //file menu
@@ -1525,7 +1480,7 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),saveAsMenu);
 	gtk_signal_connect(GTK_OBJECT(saveAsMenu),"activate",G_CALLBACK(saveFile),(void*)1);
 	gtk_widget_add_accelerator((GtkWidget *)saveAsMenu,"activate",accgroup,'S',(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
-	gtk_widget_set_sensitive((Widget*)saveAsMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
 	gtk_widget_set_name(saveAsMenu,SAVEASMENUNAME);
 //save all
 	menusaveall=gtk_image_menu_item_new_with_label(gettext("Save All"));
@@ -1873,8 +1828,8 @@ void buildMainGui(void)
 	gtk_scrolled_window_set_policy((GtkScrolledWindow*)mainWindowScrollbox,GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	toolOutputBuffer=gtk_text_buffer_new(NULL);
 	toolOutputView=gtk_text_view_new_with_buffer(toolOutputBuffer);
-	gtk_container_add(GTK_CONTAINER(mainWindowScrollbox),(Widget*)toolOutputView);
-	gtk_container_add(GTK_CONTAINER(toolOutVBox),(Widget*)mainWindowScrollbox);
+	gtk_container_add(GTK_CONTAINER(mainWindowScrollbox),(GtkWidget*)toolOutputView);
+	gtk_container_add(GTK_CONTAINER(toolOutVBox),(GtkWidget*)mainWindowScrollbox);
 
 //add main vbox to window
 	gtk_container_add((GtkContainer*)window,mainWindowVBox);
@@ -1888,7 +1843,7 @@ void buildMainGui(void)
 	gtk_paned_pack2((GtkPaned*)mainWindowHPane,secondWindowHPane,true,false);
 
 //add notebook
-	gtk_box_pack_start((GtkBox*)mainNotebookVBox,(Widget*)notebook,true,true,0);
+	gtk_box_pack_start((GtkBox*)mainNotebookVBox,(GtkWidget*)notebook,true,true,0);
 	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainVPane,true,true,0);
 	gtk_paned_pack1((GtkPaned*)secondWindowHPane,mainWindowHBox,true,false);
                                                          
@@ -1921,7 +1876,7 @@ void buildMainGui(void)
 	gtk_widget_hide(mainLeftUserVBox);
 	gtk_widget_hide(mainRightUserVBox);
 
-	gtk_widget_set_sensitive((Widget*)saveMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 
 	globalPlugins->globalPlugData->mlist.menuBar=menubar;
 	globalPlugins->globalPlugData->mlist.menuFile=menufile;
@@ -1954,21 +1909,20 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->locale=LOCALEDIR;
 
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
-}
 #endif
+}
 
-#if 0
 void buildFindReplace(void)
 {
-#if 0
-	Widget*	content_area;
-	Widget*	replace;
-	Widget*	goback;
-	Widget*	image;
-	Widget*	label;
-	Widget*	vbox;
-	Widget*	hbox;
-	Widget*	item;
+#ifndef _USEQT5_
+	GtkWidget*	content_area;
+	GtkWidget*	replace;
+	GtkWidget*	goback;
+	GtkWidget*	image;
+	GtkWidget*	label;
+	GtkWidget*	vbox;
+	GtkWidget*	hbox;
+	GtkWidget*	item;
 
 	findReplaceDialog=gtk_dialog_new_with_buttons(gettext("Find/Replace"),(GtkWindow*)window, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_GO_FORWARD,FINDNEXT,GTK_STOCK_GO_BACK,FINDPREV,gettext("Replace"),REPLACE,NULL);
 	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,GTK_RESPONSE_OK);
@@ -2070,12 +2024,12 @@ void buildFindReplace(void)
 #ifdef _ASPELL_
 void buildWordCheck(int documentCheck)
 {
-#if 0
-	Widget*	vbox;
-	Widget*	button;
-	Widget*	hbox;
-	Widget*	label;
-	Widget*	image;
+#ifndef _USEQT5_
+	GtkWidget*	vbox;
+	GtkWidget*	button;
+	GtkWidget*	hbox;
+	GtkWidget*	label;
+	GtkWidget*	image;
 	char*		labeltext[512];
 	int			docflag=documentCheck;
 
@@ -2116,8 +2070,8 @@ void buildWordCheck(int documentCheck)
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 
-	Widget* content=gtk_dialog_get_content_area((GtkDialog *)spellCheckWord);
-	gtk_container_add(GTK_CONTAINER(content),(Widget*)vbox);
+	GtkWidget* content=gtk_dialog_get_content_area((GtkDialog *)spellCheckWord);
+	gtk_container_add(GTK_CONTAINER(content),(GtkWidget*)vbox);
 
 	gtk_signal_connect_object(GTK_OBJECT(spellCheckWord),"delete_event",GTK_SIGNAL_FUNC(gtk_widget_hide),GTK_OBJECT(spellCheckWord));
 	gtk_signal_connect(GTK_OBJECT(spellCheckWord),"delete_event",GTK_SIGNAL_FUNC(gtk_true),NULL);
@@ -2127,11 +2081,11 @@ void buildWordCheck(int documentCheck)
 
 int showFunctionEntry(void)
 {
-#if 0
-	Widget*	dialog;
+#ifndef _USEQT5_
+	GtkWidget*	dialog;
 	gint		result;
-	Widget*	content_area;
-	Widget*	entrybox;
+	GtkWidget*	content_area;
+	GtkWidget*	entrybox;
 
 	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,gettext("Enter Function Name"));
 
@@ -2157,14 +2111,14 @@ int showFunctionEntry(void)
 #ifdef _BUILDDOCVIEWER_
 void buildGtkDocViewer(void)
 {
-#if 0
-	Widget*	vbox;
-	Widget*	hbox;
-	Widget*	button;
-	Widget*	scrolledWindow;
-	Widget*	entry;
-	Widget*	findbutton;
-	Widget*	findnextinpage;
+#ifndef _USEQT5_
+	GtkWidget*	vbox;
+	GtkWidget*	hbox;
+	GtkWidget*	button;
+	GtkWidget*	scrolledWindow;
+	GtkWidget*	entry;
+	GtkWidget*	findbutton;
+	GtkWidget*	findnextinpage;
 	WebKitWebSettings*	settings;
 
 	docView=gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -2241,4 +2195,6 @@ void buildGtkDocViewer(void)
 }
 #endif
 
-#endif
+
+
+

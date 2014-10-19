@@ -13,7 +13,7 @@
 
 #ifndef _ENCODING_
 #define _ENCODING_
-#if 0
+
 #define MAX_COUNTRY_NUM 10
 enum {
 	IANA = 0,
@@ -53,5 +53,4 @@ typedef struct
 const gchar *detect_charset(const gchar *text);
 const gchar *get_default_charset(void);
 
-#endif
 #endif

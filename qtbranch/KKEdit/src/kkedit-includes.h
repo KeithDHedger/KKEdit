@@ -10,15 +10,15 @@
 #define _KKEDIT_INCLUDES_
 
 #include <stdlib.h>
+#include <gtk/gtk.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <glib.h>
-#include <unistd.h>
-#include <sys/types.h>
+#include <ctype.h>
+
 #include "config.h"
 
 #ifndef _USEQT5_
-#include <gtk/gtk.h>
 #include <gtksourceview/gtksourcestyleschememanager.h>
 #include <gtksourceview/gtksourceview.h>
 #include <gtksourceview/gtksourcebuffer.h>
@@ -27,29 +27,17 @@
 
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <gtksourceview/gtksourceprintcompositor.h>
-	typedef GtkWidget Widget;
+#include <gdk/gdkkeysyms.h>
+#include <unique/unique.h>
 #else
 	#include <QtWidgets>
-	typedef QWidget Widget;
 #endif
-
-#define VISIBLE __attribute__((visibility("default")))
-#define PROTECTED __attribute__((visibility("protected")))
-
-#if 1
-#include <ctype.h>
-//TODO
-//RC
-//#include <gdk/gdkkeysyms.h>
 
 #include <libgen.h>
 #include <time.h>
 #include <libintl.h>
 #include <locale.h>
 
-//#include <unique/unique.h>
-
-//#include "config.h"
 #include "sliceclass.h"
 #include "kkedit-plugins.h"
 
@@ -76,8 +64,10 @@
 #include "encoding.h"
 #include "completion.h"
 
-//#define VISIBLE __attribute__((visibility("default")))
-//#define PROTECTED __attribute__((visibility("protected")))
+#define VISIBLE __attribute__((visibility("default")))
+#define PROTECTED __attribute__((visibility("protected")))
 
 #endif
-#endif
+
+
+

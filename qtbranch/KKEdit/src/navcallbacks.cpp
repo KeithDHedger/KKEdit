@@ -7,13 +7,13 @@
 */
 
 #include "kkedit-includes.h"
-#if 0
+
 int	theLineNum=0;
 int marknum=0;
 
 void goToDefine(functionData* fdata)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*	page;
 	TextBuffer*	buf;
 
@@ -37,9 +37,9 @@ void goToDefine(functionData* fdata)
 #endif
 }
 
-VISIBLE void goToDefinition(Widget* widget,gpointer data)
+VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*		page=getPageStructPtr(-1);
 	GtkTextIter		start;
 	GtkTextIter		end;
@@ -66,9 +66,9 @@ VISIBLE void goToDefinition(Widget* widget,gpointer data)
 #endif
 }
 
-VISIBLE void findFile(Widget* widget,gpointer data)
+VISIBLE void findFile(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	char*			command;
 	char			buffer[2048];
 	TextBuffer*		buf;
@@ -119,9 +119,9 @@ VISIBLE void findFile(Widget* widget,gpointer data)
 #endif
 }
 
-void gotoLine(Widget* widget,gpointer data)
+void gotoLine(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	int			line=(long)data;
 	pageStruct*	page=getPageStructPtr(-1);
 	TextBuffer*	buf;
@@ -139,9 +139,9 @@ void gotoLine(Widget* widget,gpointer data)
 #endif
 }
 
-void jumpToLineFromBar(Widget* widget,gpointer data)
+void jumpToLineFromBar(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
 	gotoLine(NULL,(gpointer)(long)theLineNum);
 #endif
@@ -149,11 +149,11 @@ void jumpToLineFromBar(Widget* widget,gpointer data)
 
 int showLineEntry(void)
 {
-#if 0
-	Widget*	dialog;
+#ifndef _USEQT5_
+	GtkWidget*	dialog;
 	gint		result;
-	Widget*	content_area;
-	Widget*	entrybox;
+	GtkWidget*	content_area;
+	GtkWidget*	entrybox;
 	char		line[48];
 
 	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,gettext("Enter Line Number"));
@@ -178,17 +178,17 @@ int showLineEntry(void)
 #endif
 }
 
-VISIBLE void jumpToLine(Widget* widget,gpointer data)
+VISIBLE void jumpToLine(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	if(showLineEntry()==GTK_RESPONSE_YES)
 		gotoLine(NULL,(gpointer)(long)theLineNum);
 #endif
 }
 
-VISIBLE void functionSearch(Widget* widget,gpointer data)
+VISIBLE void functionSearch(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	functionData* fdata;
 
 	if(showFunctionEntry()==GTK_RESPONSE_YES)
@@ -206,9 +206,9 @@ VISIBLE void functionSearch(Widget* widget,gpointer data)
 #endif
 }
 
-void jumpToMark(Widget* widget,gpointer data)
+void jumpToMark(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	GtkTextMark*	mark;
 	pageStruct*		page;
 	pageStruct*		checkpage;
@@ -238,7 +238,7 @@ void jumpToMark(Widget* widget,gpointer data)
 
 char* unEscapeFileNAme(char* name)
 {
-#if 0
+#ifndef _USEQT5_
 	char*	buffer;
 	int		charpos;
 	unsigned int		namepos;
@@ -346,20 +346,18 @@ char* unEscapeFileNAme(char* name)
 
 struct docFileData
 {
-#if 0
 	char*	fileName;
 	char*	filePath;
 	int		lineNum;
 	char*	hashTag;
 	char*	sourceFile;
-#endif
 };
 
 char*	filebuffer=NULL;
 
 bool readFile(char *name)
 {
-#if 0
+#ifndef _USEQT5_
 	FILE*			file;
 	unsigned long	fileLen;
 
@@ -396,7 +394,7 @@ bool readFile(char *name)
 
 int getLineFromXML(char* xml)
 {
-#if 0
+#ifndef _USEQT5_
 	StringSlice*	slice=new StringSlice;
 
 	char*			data;
@@ -417,7 +415,7 @@ char*	classFileName=NULL;
 
 char* getPathFromXML(char* xml)
 {
-#if 0
+#ifndef _USEQT5_
 	StringSlice*	slice=new StringSlice;
 	bool			done=false;
 	char*			data;
@@ -518,7 +516,7 @@ char* getPathFromXML(char* xml)
 
 docFileData* getDoxyFileData(char* uri)
 {
-#if 0
+#ifndef _USEQT5_
 	char*	linetag=NULL;
 	bool	gotline=false;
 
@@ -586,7 +584,7 @@ docFileData* getDoxyFileData(char* uri)
 
 gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest* request,WebKitWebNavigationAction* navigationAction,WebKitWebPolicyDecision* policy_decision, gpointer user_data)
 {
-#if 0
+#ifndef _USEQT5_
 	int				mod=-1;
 	const char*		uri;
 	pageStruct*		page;
@@ -626,4 +624,3 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 
 #endif
 
-#endif

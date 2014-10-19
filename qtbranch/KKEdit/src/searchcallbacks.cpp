@@ -7,7 +7,7 @@
 */
 
 #include "kkedit-includes.h"
-#if 0
+
 int currentFindPage=-1;
 int firstPage=-1;
 int pagesChecked=0;
@@ -15,23 +15,23 @@ int	itemsReplaced=-1;
 
 #ifdef _BUILDDOCVIEWER_
 
-void webKitGoBack(Widget* widget,gpointer data)
+void webKitGoBack(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	webkit_web_view_go_back((WebKitWebView*)data);
 #endif
 }
 
-void webKitGoForward(Widget* widget,gpointer data)
+void webKitGoForward(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	webkit_web_view_go_forward((WebKitWebView*)data);
 #endif
 }
 
-void webKitGoHome(Widget* widget,gpointer data)
+void webKitGoHome(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	if(g_file_test(htmlFile,G_FILE_TEST_EXISTS)==true)
 		webkit_web_view_load_uri((WebKitWebView*)data,htmlURI);
 #endif
@@ -40,7 +40,7 @@ void webKitGoHome(Widget* widget,gpointer data)
 
 PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 {
-#if 0
+#ifndef _USEQT5_
 
 #ifdef _BUILDDOCVIEWER_
 
@@ -94,9 +94,9 @@ PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 #endif
 }
 
-VISIBLE void searchGtkDocs(Widget* widget,gpointer data)
+VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
@@ -204,9 +204,9 @@ VISIBLE void searchGtkDocs(Widget* widget,gpointer data)
 #endif
 }
 
-VISIBLE void doDoxy(Widget* widget,long data)
+VISIBLE void doDoxy(GtkWidget* widget,long data)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	struct stat	sb;
 	bool		dorebuild;
@@ -252,9 +252,9 @@ VISIBLE void doDoxy(Widget* widget,long data)
 }
 
 //find in doxy docs
-VISIBLE void doxyDocs(Widget* widget,gpointer data)
+VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
@@ -310,9 +310,9 @@ VISIBLE void doxyDocs(Widget* widget,gpointer data)
 }
 
 //showDocViewWidget
-VISIBLE void searchQT5Docs(Widget* widget,gpointer data)
+VISIBLE void searchQT5Docs(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
@@ -376,9 +376,9 @@ VISIBLE void searchQT5Docs(Widget* widget,gpointer data)
 #endif
 }
 
-void defSearchFromBar(Widget* widget,gpointer data)
+void defSearchFromBar(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	functionData* fdata;
 
 	functionSearchText=strdup(gtk_entry_get_text((GtkEntry*)widget));
@@ -395,9 +395,9 @@ void defSearchFromBar(Widget* widget,gpointer data)
 #endif
 }
 
-void docSearchFromBar(Widget* widget,gpointer data)
+void docSearchFromBar(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
 	if(text!=NULL && strlen(text)>0)
@@ -406,9 +406,9 @@ void docSearchFromBar(Widget* widget,gpointer data)
 }
 
 #ifdef _BUILDDOCVIEWER_
-void docSearchInPageFoward(Widget* widget,gpointer data)
+void docSearchInPageFoward(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
 	if(text!=NULL && strlen(text)>0)
@@ -416,9 +416,9 @@ void docSearchInPageFoward(Widget* widget,gpointer data)
 #endif
 }
 
-void docSearchInPageBack(Widget* widget,gpointer data)
+void docSearchInPageBack(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
 	if(text!=NULL && strlen(text)>0)
@@ -427,9 +427,9 @@ void docSearchInPageBack(Widget* widget,gpointer data)
 }
 #endif
 
-void qt5DocSearchFromBar(Widget* widget,gpointer data)
+void qt5DocSearchFromBar(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
 	if(text!=NULL && strlen(text)>0)
@@ -439,7 +439,7 @@ void qt5DocSearchFromBar(Widget* widget,gpointer data)
 
 void doAllFiles(int dowhat,bool found)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*	page=NULL;
 
 	if((findInAllFiles==true) && (found==false))
@@ -494,7 +494,7 @@ void doAllFiles(int dowhat,bool found)
 
 void regexFind(int dowhat)
 {
-#if 0
+#ifndef _USEQT5_
 	char*					searchtext=NULL;
 	char*					replacetext=NULL;
 	GtkTextIter				start,end;
@@ -722,7 +722,7 @@ void regexFind(int dowhat)
 
 void basicFind(int dowhat)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*				page=NULL;
 	char*					searchtext=NULL;
 	char*					replacetext;
@@ -920,16 +920,16 @@ void basicFind(int dowhat)
 #endif
 }
 
-void pasteFRClip(Widget* widget,gpointer data)
+void pasteFRClip(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	gtk_entry_set_text((GtkEntry*)data,gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget));
 #endif
 }
 
 void showOnStatus(const char* from,const char* to)
 {
-#if 0
+#ifndef _USEQT5_
 	char*	message=NULL;
 
 	if( (showStatus==false))
@@ -945,12 +945,12 @@ void showOnStatus(const char* from,const char* to)
 
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 {
-#if 0
+#ifndef _USEQT5_
 	bool		flag=false;
 	GSList*		tlist;
 	const char*	edata;
-	Widget*	entry;
-	Widget*	drop;
+	GtkWidget*	entry;
+	GtkWidget*	drop;
 	GSList*		list;
 
 	if(response_id!=REPLACE)
@@ -1011,18 +1011,18 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 #endif
 }
 
-VISIBLE void find(Widget* widget,gpointer data)
+VISIBLE void find(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	gtk_widget_show(findReplaceDialog);
 	gtk_dialog_run((GtkDialog *)findReplaceDialog);
 #endif
 }
 
-void doSearchPrefs(Widget* widget,gpointer data)
+void doSearchPrefs(GtkWidget* widget,gpointer data)
 {
-#if 0
-	Widget*	button;
+#ifndef _USEQT5_
+	GtkWidget*	button;
 
 	switch ((long)data)
 		{
@@ -1055,9 +1055,9 @@ void doSearchPrefs(Widget* widget,gpointer data)
 #endif
 }
 
-void doLiveSearch(Widget* widget,GdkEvent *event,gpointer data)
+void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct* 			page=getPageStructPtr(-1);
 	GtkSourceSearchFlags	flags;
 	char*					searchtext;
@@ -1115,4 +1115,3 @@ void doLiveSearch(Widget* widget,GdkEvent *event,gpointer data)
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 #endif
 }
-#endif

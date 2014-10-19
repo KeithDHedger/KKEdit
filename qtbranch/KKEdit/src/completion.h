@@ -7,14 +7,10 @@
 * 
 ******************************************************/
 
-#ifndef _USEQT5_
 #include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
-#endif
 
 #ifndef _COMPLETION_
 #define _COMPLETION_
-
-#ifndef _USEQT5_
 
 typedef struct _FunctionProvider FunctionProvider;
 typedef struct _FunctionProviderClass FunctionProviderClass;
@@ -43,5 +39,4 @@ void createCompletion(pageStruct* page);
 void addProp(pageStruct* page);
 void removeProps(void);
 
-#endif
 #endif

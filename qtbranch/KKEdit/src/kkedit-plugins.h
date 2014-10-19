@@ -8,16 +8,11 @@
 
 #ifndef _PLUGINS_
 #define _PLUGINS_
-#if 1
-#include "config.h"
 
 #ifndef _USEQT5_
-typedef GtkWidget Widget;
 #include <gtksourceview/gtksourceview.h>
-#else
-typedef QWidget Widget;
-#endif
 #include <gmodule.h>
+#endif
 
 #define GLOBALPLUGS			1
 #define LOCALPLUGS			0
@@ -101,90 +96,32 @@ struct pageStruct
 	GtkSourceView*		view;
 	GtkSourceView*		view2;
 	GtkMenuItem*		navSubMenu;
-#else
-	Widget*			pane;
-	Widget*	pageWindow;
-	Widget*	pageWindow2;
-	Widget*	buffer;
-	Widget*		view;
-	Widget*		view2;
-#endif
-	char*				filePath;
-	char*				realFilePath;
-	char*				dirName;
-	bool				rebuildMenu;
-	Widget*			tabName;
-#ifndef _USEQT5_
+	GtkWidget*			tabName;
 	GtkTextIter			iter;
 	GtkTextIter			match_start;
 	GtkTextIter			match_end;
 	GFile*				gFile; 
 	GFileMonitor*		monitor;
-#else
-#endif
-	bool				isFirst;
-	char*				fileName;
-	bool				itsMe;
-	GList*				markList;
-	bool				inTop;
-	bool				isSplit;
-	const char*			lang;
-
-#ifndef _USEQT5_
-	Widget*				tabVbox;
-#else
-	QVBoxLayout*		tabVbox;
-#endif
-
-	bool				showingChanged;
-#ifndef _USEQT5_
+	GtkWidget*			tabVbox;
 	GtkTextMark*		backMark;
 	GtkTextTag*			highlightTag;
 	GtkSourceCompletion* completion;
 #else
+	QVBoxLayout*		tabVbox;
 #endif
-	GList*				userDataList;
-	gpointer			reserved2;
-	gpointer			reserved3;
-	gpointer			reserved4;
-};
-
-struct pageStructx
-{
-	Widget*			pane;
-	Widget*			pageWindow;
-	Widget*			pageWindow2;
-	Widget*			buffer;
-	Widget*			view;
-	Widget*			view2;
 	char*				filePath;
 	char*				realFilePath;
 	char*				dirName;
-	Widget*		navSubMenu;
 	bool				rebuildMenu;
-	Widget*			tabName;
-//	GtkTextIter			iter;
-//	GtkTextIter			match_start;
-//	GtkTextIter			match_end;
 	bool				isFirst;
 	char*				fileName;
-//	GFile*				gFile; 
-//	GFileMonitor*		monitor;
 	bool				itsMe;
 	GList*				markList;
 	bool				inTop;
 	bool				isSplit;
 	const char*			lang;
-#ifndef _USEQT5_
-	Widget*				tabVbox;
-#else
-	QVBoxLayout*		tabVbox;
-#endif
 	bool				showingChanged;
-//	GtkTextMark*		backMark;
-//	GtkTextTag*			highlightTag;
 	GList*				userDataList;
-//	GtkSourceCompletion* completion;
 	gpointer			reserved2;
 	gpointer			reserved3;
 	gpointer			reserved4;
@@ -207,19 +144,23 @@ struct moduleData
 //plugins
 struct plugMenuList
 {
-	Widget*		menuBar;
-	Widget*		menuFile;
-	Widget*		menuEdit;
-	Widget*		menuFunc;
-	Widget*		menuNav;
-	Widget*		menuTools;
-	Widget*		menuHelp;
-	Widget*		menuBookMark;
-	Widget*		menuView;
+#ifndef _USEQT5_
+	GtkWidget*		menuBar;
+	GtkWidget*		menuFile;
+	GtkWidget*		menuEdit;
+	GtkWidget*		menuFunc;
+	GtkWidget*		menuNav;
+	GtkWidget*		menuTools;
+	GtkWidget*		menuHelp;
+	GtkWidget*		menuBookMark;
+	GtkWidget*		menuView;
+#else
+#endif
 };
 
 struct plugData
 {
+#ifndef _USEQT5_
 //menus
 	plugMenuList	mlist;
 	moduleData*		modData;
@@ -237,7 +178,7 @@ struct plugData
 //location of variable that holds the uri to be disp[layed by showDoc
 	char**			thePage;
 //main notebook
-	Widget*	notebook;
+	GtkNotebook*	notebook;
 //current page MAYBE NULL!!
 	pageStruct*		page;
 //cuurent tab
@@ -246,27 +187,27 @@ struct plugData
 	char*			tmpFolder;
 //kkedits main window user box's
 //top
-	Widget*		topUserBox;
-	Widget*		mainWindowVPane;
+	GtkWidget*		topUserBox;
+	GtkWidget*		mainWindowVPane;
 //left
-	Widget*		leftUserBox;
-	Widget*		mainWindowHPane;
+	GtkWidget*		leftUserBox;
+	GtkWidget*		mainWindowHPane;
 //right
-	Widget*		rightUserBox;
-	Widget*		secondWindowHPane;
+	GtkWidget*		rightUserBox;
+	GtkWidget*		secondWindowHPane;
 //bottom
-	Widget*		bottomUserBox;
-	Widget*		secondWindowVPane;
+	GtkWidget*		bottomUserBox;
+	GtkWidget*		secondWindowVPane;
 //kkedit main window
-	Widget*		mainWindow;
+	GtkWidget*		mainWindow;
 //tool output window buffer;
-//	GtkTextBuffer*	toolOutBuffer;
+	GtkTextBuffer*	toolOutBuffer;
 //tool output window
-	Widget*		toolOutWindow;
+	GtkWidget*		toolOutWindow;
 //tab popup menu
-	Widget*		tabPopUpMenu;
+	GtkWidget*		tabPopUpMenu;
 //right click popup menu
-	Widget*		contextPopUpMenu;
+	GtkWidget*		contextPopUpMenu;
 
 //leftright user box visiblity ref
 	int				leftShow;
@@ -276,7 +217,11 @@ struct plugData
 	int				bottomShow;
 //locale dir for gettext
 	const char*		locale;
+#else
+#endif
 };
+
+#ifndef _USEQT5_
 
 void		showDocView(int howtodisplay,char* text,const char* title);
 pageStruct*	getPageStructPtr(int pagenum);
@@ -289,16 +234,12 @@ void		hideTop(bool top);
 void		runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title);
 void		debugFree(gpointer ptr,const char* message);
 bool		openFile(const gchar *filepath,int linenumber,bool warn);
-bool		saveFile(Widget* widget,gpointer data);
-
-#ifndef _USEQT5_
-VISIBLE void newFile(Widget* widget,gpointer data);
-#else
-VISIBLE void newFile(void);
-#endif
-
-
+bool		saveFile(GtkWidget* widget,gpointer data);
+void		newFile(GtkWidget* widget,gpointer data);
 void		loadVarsFromFile(char* filepath,args* dataptr);
 void		saveVarsToFile(char* filepath,args* dataptr);
+
+#else
 #endif
+
 #endif

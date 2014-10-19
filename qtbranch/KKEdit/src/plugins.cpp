@@ -8,19 +8,19 @@
 ******************************************************/
 
 #include "kkedit-includes.h"
-#if 0
+
 #define COLUMN_ENABLE 0
 #define COLUMN_PLUGIN 1
 #define NUM_COLUMNS 2
 
-Widget*	plugAboutButton;
-Widget*	plugPrefsButton;
-Widget*	plugwindow;
-Widget*	treeview;
+GtkWidget*	plugAboutButton;
+GtkWidget*	plugPrefsButton;
+GtkWidget*	plugwindow;
+GtkWidget*	treeview;
 
 void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	GtkTreeModel *model = (GtkTreeModel *)data;
 	GtkTreeIter  iter;
 	GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
@@ -43,7 +43,7 @@ void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
 
 void getPlugName(gpointer data,gpointer store)
 {
-#if 0
+#ifndef _USEQT5_
 	GtkTreeIter		iter;
 	moduleData*		plugdata;
 
@@ -55,12 +55,12 @@ void getPlugName(gpointer data,gpointer store)
 
 gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	int			enabled;
 	char*		name=NULL;
 	moduleData*	pd;
 	char*		filepath;
-	Widget*	dialog;
+	GtkWidget*	dialog;
 
 	gtk_tree_model_get(model,iter,COLUMN_ENABLE,&enabled,COLUMN_PLUGIN,&name,-1);
 	if(!enabled)
@@ -121,7 +121,7 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 
 void setPlugsEnabled(void)
 {
-#if 0
+#ifndef _USEQT5_
 	GtkTreeModel*	model;
 
 	globalPlugins->deleteBlackList();
@@ -130,9 +130,9 @@ void setPlugsEnabled(void)
 #endif
 }
 
-void setPlugPrefs(Widget* widget,gpointer data)
+void setPlugPrefs(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	GtkTreeModel*		model;
 	GtkTreeSelection*	selection=NULL;
 	GtkTreeIter			iter;
@@ -173,7 +173,7 @@ void setPlugPrefs(Widget* widget,gpointer data)
 
 void onRowSelected(GtkTreeView* treeview,gpointer userdata)
 {
-#if 0
+#ifndef _USEQT5_
 	GtkTreeModel*		model;
 	GtkTreeSelection*	selection=NULL;
 	GtkTreeIter			iter;
@@ -192,14 +192,14 @@ void onRowSelected(GtkTreeView* treeview,gpointer userdata)
 
 VISIBLE void doPlugPrefs(void)
 {
-#if 0
-	Widget*		vbox;
+#ifndef _USEQT5_
+	GtkWidget*		vbox;
 	GtkListStore*	store;
 	GtkTreeModel*	model=NULL;
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
-	Widget*		button;
-	Widget*		hbox;
+	GtkWidget*		button;
+	GtkWidget*		hbox;
 
 	plugwindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
@@ -256,7 +256,7 @@ VISIBLE void doPlugPrefs(void)
 //left/right
 VISIBLE void showSide(bool left)
 {
-#if 0
+#ifndef _USEQT5_
 	if(left==true)
 		{
 			gtk_widget_show(globalPlugins->globalPlugData->leftUserBox);
@@ -272,7 +272,7 @@ VISIBLE void showSide(bool left)
 
 VISIBLE void hideSide(bool left)
 {
-#if 0
+#ifndef _USEQT5_
 	if(left==true)
 		{
 			globalPlugins->globalPlugData->leftShow--;
@@ -298,7 +298,7 @@ VISIBLE void hideSide(bool left)
 //top/bottom
 VISIBLE void showTop(bool top)
 {
-#if 0
+#ifndef _USEQT5_
 	if(top==true)
 		{
 			gtk_widget_show(globalPlugins->globalPlugData->topUserBox);
@@ -314,7 +314,7 @@ VISIBLE void showTop(bool top)
 
 VISIBLE void hideTop(bool top)
 {
-#if 0
+#ifndef _USEQT5_
 	if(top==true)
 		{
 			globalPlugins->globalPlugData->topShow--;
@@ -336,4 +336,6 @@ VISIBLE void hideTop(bool top)
 #endif
 }
 
-#endif
+
+
+

@@ -9,23 +9,22 @@
 
 #include "globals.h"
 
-#if 0
 TextBuffer::TextBuffer()
 {
-#if 0
+#ifndef _USEQT5_
 	this->textBuffer=NULL;
 #endif
 }
 
 TextBuffer::~TextBuffer()
 {
-#if 0
+#ifndef _USEQT5_
 #endif
 }
 
 TextBuffer::TextBuffer(GtkTextBuffer* buffer)
 {
-#if 0
+#ifndef _USEQT5_
 	this->textBuffer=buffer;
 	this->getLineData();
 	this->getVisibleLine();
@@ -35,7 +34,7 @@ TextBuffer::TextBuffer(GtkTextBuffer* buffer)
 
 void TextBuffer::getLineData()
 {
-#if 0
+#ifndef _USEQT5_
 	gtk_text_buffer_get_iter_at_mark(textBuffer,&lineStart,gtk_text_buffer_get_insert(textBuffer));
 	gtk_text_buffer_get_iter_at_mark(textBuffer,&lineEnd,gtk_text_buffer_get_insert(textBuffer));
 	gtk_text_iter_forward_visible_line(&lineEnd);
@@ -48,14 +47,14 @@ void TextBuffer::getLineData()
 
 void TextBuffer::getCursorIter()
 {
-#if 0
+#ifndef _USEQT5_
 	gtk_text_buffer_get_iter_at_mark(textBuffer,&cursorPos,gtk_text_buffer_get_insert(textBuffer));
 #endif
 }
 
 void TextBuffer::getToLineEnd()
 {
-#if 0
+#ifndef _USEQT5_
 	this->getCursorIter();
 	lineEnd=cursorPos;
 	gtk_text_iter_forward_to_line_end(&lineEnd);
@@ -64,7 +63,7 @@ void TextBuffer::getToLineEnd()
 
 void TextBuffer::getToVisibleLineEnd()
 {
-#if 0
+#ifndef _USEQT5_
 	this->getCursorIter();
 	visibleLineEnd=cursorPos;
 	gtk_text_iter_forward_to_line_end(&visibleLineEnd);
@@ -73,7 +72,7 @@ void TextBuffer::getToVisibleLineEnd()
 
 void TextBuffer::getToLineStart()
 {
-#if 0
+#ifndef _USEQT5_
 	this->getCursorIter();
 	lineStart=cursorPos;
 	gtk_text_iter_set_line_offset(&lineStart,0);
@@ -82,7 +81,7 @@ void TextBuffer::getToLineStart()
 
 void TextBuffer::deleteFromCursor(GtkTextIter* iter)
 {
-#if 0
+#ifndef _USEQT5_
 	this->getCursorIter();
 	if(!gtk_text_iter_ends_line(&cursorPos))
 		gtk_text_buffer_delete(textBuffer,&cursorPos,iter);
@@ -91,7 +90,7 @@ void TextBuffer::deleteFromCursor(GtkTextIter* iter)
 
 void TextBuffer::deleteToCursor(GtkTextIter* iter)
 {
-#if 0
+#ifndef _USEQT5_
 	this->getCursorIter();
 	if(!gtk_text_iter_starts_line(&cursorPos))
 		this->deleteFromCursor(iter);
@@ -100,7 +99,7 @@ void TextBuffer::deleteToCursor(GtkTextIter* iter)
 
 bool TextBuffer::selectWord()
 {
-#if 0
+#ifndef _USEQT5_
 	this->getCursorIter();
 	lineStart=cursorPos;
 	if(gtk_text_iter_inside_word(&cursorPos))
@@ -115,14 +114,14 @@ bool TextBuffer::selectWord()
 
 char* TextBuffer::getSelectedText()
 {
-#if 0
+#ifndef _USEQT5_
 	return(gtk_text_buffer_get_text(textBuffer,&lineStart,&lineEnd,true));
 #endif
 }
 
 void TextBuffer::selectRange(GtkTextIter* start,GtkTextIter* end)
 {
-#if 0
+#ifndef _USEQT5_
 	gtk_text_buffer_select_range(textBuffer,start,end);
 #endif
 }
@@ -130,7 +129,7 @@ void TextBuffer::selectRange(GtkTextIter* start,GtkTextIter* end)
 
 void TextBuffer::getVisibleLine()
 {
-#if 0
+#ifndef _USEQT5_
 	this->getCursorIter();
 	lineStart=cursorPos;
 	visibleLineEnd=cursorPos;
@@ -141,14 +140,14 @@ void TextBuffer::getVisibleLine()
 
 void TextBuffer::selectVisibleLine()
 {
-#if 0
+#ifndef _USEQT5_
 	gtk_text_buffer_select_range(textBuffer,&lineStart,&visibleLineEnd);
 #endif
 }
 
 void TextBuffer::getLine()
 {
-#if 0
+#ifndef _USEQT5_
 	this->getCursorIter();
 	lineStart=cursorPos;
 	gtk_text_iter_set_line_offset(&lineStart,0);
@@ -159,14 +158,14 @@ void TextBuffer::getLine()
 
 void TextBuffer::selectLine()
 {
-#if 0
+#ifndef _USEQT5_
 	gtk_text_buffer_select_range(textBuffer,&lineStart,&lineEnd);
 #endif
 }
 
 void TextBuffer::selectToLineStart()
 {
-#if 0
+#ifndef _USEQT5_
 	this->getToLineStart();
 	gtk_text_buffer_select_range(textBuffer,&lineStart,&cursorPos);
 #endif
@@ -174,7 +173,7 @@ void TextBuffer::selectToLineStart()
 
 void TextBuffer::selectToLineEnd()
 {
-#if 0
+#ifndef _USEQT5_
 	this->getToVisibleLineEnd();
 	gtk_text_buffer_select_range(textBuffer,&cursorPos,&visibleLineEnd);
 #endif
@@ -182,7 +181,7 @@ void TextBuffer::selectToLineEnd()
 
 void TextBuffer::scroll2Line(GtkTextView* view,int linenum)
 {
-#if 0
+#ifndef _USEQT5_
 	GtkTextMark*	mark;
 	GtkTextIter		iter;
 
@@ -200,7 +199,7 @@ void TextBuffer::scroll2Line(GtkTextView* view,int linenum)
 
 void TextBuffer::scroll2LineM(pageStruct* page,int linenum)
 {
-#if 0
+#ifndef _USEQT5_
 	GtkTextIter		iter;
 
 	gtk_text_buffer_get_iter_at_line_offset(textBuffer,&iter,linenum,0);
@@ -218,7 +217,7 @@ void TextBuffer::scroll2LineM(pageStruct* page,int linenum)
 
 void TextBuffer::scroll2Mark(GtkTextView* view,GtkTextMark* mark)
 {
-#if 0
+#ifndef _USEQT5_
 	gtk_text_buffer_get_iter_at_mark(textBuffer,&cursorPos,mark);
 	gtk_text_view_scroll_to_iter(view,&cursorPos,0,true,0,0.5);
 	gtk_text_view_scroll_to_mark(view,mark,0,true,0,0.5);
@@ -227,9 +226,9 @@ void TextBuffer::scroll2Mark(GtkTextView* view,GtkTextMark* mark)
 
 void TextBuffer::scroll2Iter(GtkTextView* view,GtkTextIter iter)
 {
-#if 0
+#ifndef _USEQT5_
 	gtk_text_view_scroll_to_iter(view,&iter,0,true,0,0.5);
 #endif
 }
 
-#endif
+

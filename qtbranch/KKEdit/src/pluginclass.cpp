@@ -12,6 +12,7 @@
 
 PluginClass::PluginClass(bool loadPlugs)
 {
+#ifndef _USEQT5_
 	plugEnabledList=NULL;
 	plugins=NULL;
 	plugFolderPaths[GLOBALPLUGS]=(char*)DATADIR "/plugins";
@@ -19,19 +20,25 @@ PluginClass::PluginClass(bool loadPlugs)
 	plugCount=-1;
 	this->doLoadPlugs=loadPlugs;
 	this->loadPlugins();
+#endif
 }
 
 PluginClass::~PluginClass()
 {
+#ifndef _USEQT5_
 	debugFree(plugFolderPaths[LOCALPLUGS],"~PluginClass plugFolderPaths");
+#endif
 }
 
 void PluginClass::setPlugFolder(void)
 {
+#ifndef _USEQT5_
+#endif
 }
 
 char* PluginClass::getNameFromPath(char* path)
 {
+#ifndef _USEQT5_
 	char*			name;
 	StringSlice*	slice=new StringSlice;
 	char*			base;
@@ -43,10 +50,12 @@ char* PluginClass::getNameFromPath(char* path)
 	delete slice;
 	debugFree(base,"PluginClass::getNameFromPath base");
 	return(name);
+#endif
 }
 
 char* PluginClass::getNameFromModule(GModule* module)
 {
+#ifndef _USEQT5_
 	char*		name;
 	StringSlice*	slice=new StringSlice;
 
@@ -54,10 +63,12 @@ char* PluginClass::getNameFromModule(GModule* module)
 	name=slice->sliceBetween((char*)g_module_name(module),(char*)"lib",(char*)".so");
 	delete slice;
 	return(name);
+#endif
 }
 
 bool PluginClass::checkForEnabled(char* plugname)
 {
+#ifndef _USEQT5_
 	FILE*	fd=NULL;
 	char*	filename;
 	char	buffer[1024];
@@ -88,20 +99,24 @@ bool PluginClass::checkForEnabled(char* plugname)
 		}
 	debugFree(filename,"PluginClass::checkForEnabled filename");
 	return(true);
+#endif
 }
 
 gint compareName(gpointer data,gpointer user_data)
 {
+#ifndef _USEQT5_
 	moduleData* pd=(moduleData*)data;
 
 	if(strcmp(pd->name,(char*)user_data)==0)
 		return(0);
 
 	return(1);
+#endif
 }
 
 moduleData* PluginClass::getPluginByName(char* name)
 {
+#ifndef _USEQT5_
 	GList*		pl=NULL;
 	moduleData*	pd=NULL;
 
@@ -110,28 +125,35 @@ moduleData* PluginClass::getPluginByName(char* name)
 		pd=(moduleData*)pl->data;
 
 	return(pd);
+#endif
 }
 
 void PluginClass::deleteBlackList()
 {
+#ifndef _USEQT5_
 	char*	command;
 
 	asprintf(&command,"rm %s/.KKEdit/pluglist 2>/dev/null",getenv("HOME"));
 	system(command);
 	debugFree(command," PluginClass::deleteBlackList command");
+#endif
 }
 
 void PluginClass::appendToBlackList(char* name)
 {
+#ifndef _USEQT5_
 	char*	command;
 
 	asprintf(&command,"echo %s >> %s/.KKEdit/pluglist",name,getenv("HOME"));
 	system(command);
 	debugFree(command," PluginClass::appendToBlackList command");
+
+#endif
 }
 
 void PluginClass::loadPlugins(void)
 {
+#ifndef _USEQT5_
 	FILE*		pf;
 	char		buffer[4096];
 	GModule*	module=NULL;
@@ -195,14 +217,18 @@ void PluginClass::loadPlugins(void)
 					debugFree(command,"PluginClass::loadPlugins command");
 				}
 		}
+#endif
 }
 
 void PluginClass::getEnabledList(void)
 {
+#ifndef _USEQT5_
+#endif
 }
 
 int PluginClass::runPlugFunction(moduleData* pdata,const char* func)
 {
+#ifndef _USEQT5_
 	int retval=-1;
 
 	int	(*module_plug_function)(gpointer globaldata);
@@ -213,10 +239,12 @@ int PluginClass::runPlugFunction(moduleData* pdata,const char* func)
 				retval=module_plug_function((void*)this->globalPlugData);
 		}
 	return(retval);
+#endif
 }
 
 bool PluginClass::enablePlugin(char* name,bool wanttounload)
-{
+{	
+#ifndef _USEQT5_
 	moduleData*	pd=NULL;
 	pd=getPluginByName(name);
 	if(pd!=NULL)
@@ -225,10 +253,12 @@ bool PluginClass::enablePlugin(char* name,bool wanttounload)
 			return((bool)this->runPlugFunction(pd,"enablePlug"));
 		}
 	return(false);
+#endif
 }
 
 char* PluginClass::getPluginPathByName(char* name)
 {
+#ifndef _USEQT5_
 	FILE*		pf;
 	char		buffer[4096];
 	char*		command;
@@ -257,10 +287,12 @@ char* PluginClass::getPluginPathByName(char* name)
 				}
 		}
 	return(NULL);
+#endif
 }
 
 bool PluginClass::checkForFunction(char* name,const char* func)
 {
+#ifndef _USEQT5_
 	moduleData* mod=NULL;
 	gpointer	symbol;
 
@@ -269,5 +301,6 @@ bool PluginClass::checkForFunction(char* name,const char* func)
 		return(g_module_symbol(mod->module,func,&symbol));
 
 	return(false);
+#endif
 }
 

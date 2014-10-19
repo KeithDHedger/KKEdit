@@ -11,6 +11,7 @@ bool	loadPluginsFlag=true;
 
 void readConfig(void)
 {
+#ifndef _USEQT5_
 	char*	filename;
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
@@ -19,7 +20,6 @@ void readConfig(void)
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_window_rc);
-
 	if(windowAllocData!=NULL)
 		sscanf(windowAllocData,"%i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
 
@@ -27,10 +27,12 @@ void readConfig(void)
 		sscanf(docWindowAllocData,"%i %i %i %i",(int*)&docWindowWidth,(int*)&docWindowHeight,(int*)&docWindowX,(int*)&docWindowY);
 
 	debugFree(filename,"readConfig filename");
+#endif
 }
 
 void init(void)
 {
+#ifndef _USEQT5_
 	char*		filename;
 	int			exitstatus;
 	char		tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
@@ -102,7 +104,6 @@ void init(void)
 	g_mkdir_with_parents(filename,493);
 	debugFree(filename,"init filename");
 
-#if 0
 	schemeManager=gtk_source_style_scheme_manager_get_default();
 	asprintf(&filename,"%s/.gnome2/gedit/styles",getenv("HOME"));
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
@@ -110,7 +111,6 @@ void init(void)
 	asprintf(&filename,"%s/styles",DATADIR);
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
 	debugFree(filename,"init filename");
-#endif
 
 //toolbar layout
 	toolBarLayout=strdup("NOSsXCPsURsFGsE9ADL");
@@ -118,7 +118,7 @@ void init(void)
 	readConfig();
 	loadKeybindings();
 
-//	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
+	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
 	tmpIndent=indent;
 	tmpLineNumbers=lineNumbers;
@@ -195,11 +195,9 @@ void init(void)
 		}
 
 	localeLang=getenv("LANG");
-#if 0
+
 	history=new HistoryClass;
-#endif
 	globalSlice->setReturnDupString(true);
-#if 0
 
 	funcProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
 	funcProv->priority=1;
@@ -225,8 +223,8 @@ void init(void)
 
 void doNagScreen(void)
 {
-#if 0
-	Widget* dialog;
+#ifndef _USEQT5_
+	GtkWidget* dialog;
 
 	dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",gettext("Please donate"));
 	gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s\n<b>%s</b>\n%s\n\n%s",gettext("If you have a PayPal account you can donate any amount you like by logging into yor account and click the 'Send Money' tab, enter my email address"),MYEMAIL,gettext("and then send it."),gettext("Thank you for helping to support Free software."));
@@ -238,7 +236,7 @@ void doNagScreen(void)
 
 void doNagStuff(void)
 {
-#if 0
+#ifndef _USEQT5_
 	char*			command=NULL;
 	char*			control=NULL;
 	int				gotcurl=-1;
@@ -301,7 +299,7 @@ void doNagStuff(void)
 					thisupdate=atol(t1);
 					if((thisupdate>lastUpdate) || (strcmp(VERSION,vers)!=0))
 						{
-							Widget* dialog;
+							GtkWidget* dialog;
 
 							if(strcmp(VERSION,vers)!=0)
 								{
@@ -340,12 +338,12 @@ void doNagStuff(void)
 
 int main(int argc,char **argv)
 {
-
-//	UniqueApp*			app;
-//	UniqueMessageData*	message=NULL;
-//	UniqueCommand 		command;
-//	UniqueResponse 		response;
-//	UniqueBackend*		back;
+#ifndef _USEQT5_
+	UniqueApp*			app;
+	UniqueMessageData*	message=NULL;
+	UniqueCommand 		command;
+	UniqueResponse 		response;
+	UniqueBackend*		back;
 	char*				dbusname;
 	int					w,h;
 
@@ -354,15 +352,14 @@ int main(int argc,char **argv)
 	textdomain("kkedit");
 	bind_textdomain_codeset("kkedit","UTF-8");
 
-#ifndef _USEQT5_
 	gtk_init(&argc,&argv);
-
 	back=unique_backend_create();
 	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace(back));
 	app=unique_app_new(dbusname,NULL);
 	message=unique_message_data_new();
-#endif
-//	readConfig();
+
+	readConfig();
+
 	if((argc>1) && (strcmp(argv[1],"-m")==0))
 		singleOverRide=true;
 
@@ -371,61 +368,53 @@ int main(int argc,char **argv)
 			singleOverRide=true;
 			loadPluginsFlag=false;
 		}
-//#if 1
-//	if((unique_app_is_running(app)==true) && (singleUse==true) && (singleOverRide==false))
-//		{
-//			if(argc==1)
-//				{
-//					command=UNIQUE_ACTIVATE;
-//					response=unique_app_send_message(app,command,NULL);
-//				}
-//			else
-//				{
-//					command=UNIQUE_OPEN;
-//					unique_message_data_set_uris(message,argv);
-//					response=unique_app_send_message(app,command,message);
-//				}
-//
-//			g_object_unref(app);
-//			unique_message_data_free(message);
-//
-//			if(response==UNIQUE_RESPONSE_OK)
-//				return 0;
-//			else
-//				printf("FAIL\n");
-//			//handle_fail_or_user_cancel();
-//		}
-//	else
-//		{
+
+	if((unique_app_is_running(app)==true) && (singleUse==true) && (singleOverRide==false))
+		{
+			if(argc==1)
+				{
+					command=UNIQUE_ACTIVATE;
+					response=unique_app_send_message(app,command,NULL);
+				}
+			else
+				{
+					command=UNIQUE_OPEN;
+					unique_message_data_set_uris(message,argv);
+					response=unique_app_send_message(app,command,message);
+				}
+
+			g_object_unref(app);
+			unique_message_data_free(message);
+
+			if(response==UNIQUE_RESPONSE_OK)
+				return 0;
+			else
+				printf("FAIL\n");
+			//handle_fail_or_user_cancel();
+		}
+	else
+		{
 			init();
-#ifndef _USEQT5_
 			buildMainGui();
-#else
-		QApplication	app(argc, argv);
 
-		buildMainGuiQT();
-#endif
+			if(onExitSaveSession==true)
+				restoreSession(NULL,(void*)restoreBookmarks);
 
-//			if(onExitSaveSession==true)
-//				restoreSession(NULL,(void*)restoreBookmarks);
+			for(int j=1; j<argc; j++)
+				{
+					if((strncasecmp(argv[j],"-m",2)!=0) && (strncasecmp(argv[j],"-s",2)!=0))
+						openFile(argv[j],0,true);
+				}
+			refreshMainWindow();
 
-//			for(int j=1; j<argc; j++)
-//				{
-//					if((strncasecmp(argv[j],"-m",2)!=0) && (strncasecmp(argv[j],"-s",2)!=0))
-//						openFile(argv[j],0,true);
-//				}
-//			refreshMainWindow();
-
-	//		buildFindReplace();
-
+			buildFindReplace();
 
 #ifdef _BUILDDOCVIEWER_
 			buildGtkDocViewer();
 #endif
-//			unique_app_watch_window(app,(GtkWindow*)window);
-//			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
+			unique_app_watch_window(app,(GtkWindow*)window);
+			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
 
-#if 0
 			gtk_window_get_size((GtkWindow*)window,&w,&h);
 			gtk_paned_set_position((GtkPaned*)mainVPane,toolOutHeight);
 
@@ -443,19 +432,15 @@ int main(int argc,char **argv)
 					gtk_window_set_default_icon_name(PACKAGE "Root");
 					gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
 				}
-#endif
-//			setSensitive();
+			setSensitive();
 
 			if((timeToNag==true) && (autoCheck==true))
 				doNagStuff();
 
-#ifndef _USEQT5_
 			gtk_main();
-#else
-	app.exec();
-#endif
-//			delete history;
+
+			delete history;
 			delete globalSlice;
-//		}
-//#endif
+		}
+#endif
 }

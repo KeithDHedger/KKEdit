@@ -7,15 +7,14 @@
 */
 
 #include "kkedit-includes.h"
-#ifndef _USEQT5_
-#include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
-#include <gtksourceview/gtksourceview.h>
-#include <gtksourceview/gtksourcecompletion.h>
-#include <gtksourceview/gtksourcecompletioninfo.h>
-#include <gtksourceview/gtksourcecompletionitem.h>
-#include <gtksourceview/gtksourcelanguagemanager.h>
+//#include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
+//#include <gtksourceview/gtksourceview.h>
+//#include <gtksourceview/gtksourcecompletion.h>
+//#include <gtksourceview/gtksourcecompletioninfo.h>
+//#include <gtksourceview/gtksourcecompletionitem.h>
+//#include <gtksourceview/gtksourcelanguagemanager.h>
 
-Widget*	vbox;
+GtkWidget*	vbox;
 char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
 bool		dropTextFile=false;
@@ -52,10 +51,10 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 		}
 #endif
 }
-#endif
 
 VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 {
+#ifndef _USEQT5_
 	FILE*	fd=NULL;
 	char	buffer[2048];
 	int		cnt;
@@ -101,20 +100,17 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 				}
 			fclose(fd);
 		}
+#endif
 }
 
-
-Widget* makeNewTab(char* name,char* tooltip,pageStruct* page)
+GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
-#ifdef _USEQT5_
-	page->tabName=NULL;
-	return(NULL);
-#else
-	Widget*	evbox=gtk_event_box_new();
-	Widget*	hbox=gtk_hbox_new(false,0);
-	Widget*	label=gtk_label_new(name);
-	Widget*	close=gtk_image_new_from_stock(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
-	Widget*	button=gtk_button_new();
+#ifndef _USEQT5_
+	GtkWidget*	evbox=gtk_event_box_new();
+	GtkWidget*	hbox=gtk_hbox_new(false,0);
+	GtkWidget*	label=gtk_label_new(name);
+	GtkWidget*	close=gtk_image_new_from_stock(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
+	GtkWidget*	button=gtk_button_new();
 	GtkRcStyle*	style=gtk_rc_style_new();
 
 	gtk_button_set_relief((GtkButton*)button,GTK_RELIEF_NONE);
@@ -143,7 +139,7 @@ Widget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	return(evbox);
 #endif
 }
-#ifndef _USEQT5_
+
 void setFilePrefs(pageStruct* page)
 {
 #ifndef _USEQT5_
@@ -166,7 +162,7 @@ void setFilePrefs(pageStruct* page)
 	gtk_source_view_set_tab_width(page->view,tabWidth);
 
 	font_desc=pango_font_description_from_string(fontAndSize);
-	gtk_widget_modify_font((Widget*)page->view,font_desc);
+	gtk_widget_modify_font((GtkWidget*)page->view,font_desc);
 	pango_font_description_free(font_desc);
 
 	attr=gtk_text_view_get_default_attributes((GtkTextView*)page->view);
@@ -261,7 +257,7 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 bool getSaveFile(void)
 {
 #ifndef _USEQT5_
-	Widget*	dialog;
+	GtkWidget*	dialog;
 	bool		retval=false;
 
 	dialog=gtk_file_chooser_dialog_new(gettext("Save File"),(GtkWindow*)window, GTK_FILE_CHOOSER_ACTION_SAVE,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_SAVE,GTK_RESPONSE_ACCEPT,NULL);
@@ -289,14 +285,14 @@ bool getSaveFile(void)
 #endif
 }
 
-VISIBLE bool saveFile(Widget* widget,gpointer data)
+VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start,end;
 	gchar*		text;
 	FILE*		fd=NULL;
-	Widget*	dialog;
+	GtkWidget*	dialog;
 
 	page->itsMe=true;
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
@@ -377,7 +373,7 @@ VISIBLE bool saveFile(Widget* widget,gpointer data)
 VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 {
 #ifndef _USEQT5_
-	Widget*		dialog;
+	GtkWidget*		dialog;
 	char*			filepath;
 	char*			filename;
 	int				pagenum;
@@ -430,7 +426,7 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 #endif
 }
 
-VISIBLE void reloadFile(Widget* widget,gpointer data)
+VISIBLE void reloadFile(GtkWidget* widget,gpointer data)
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
@@ -452,7 +448,7 @@ VISIBLE void reloadFile(Widget* widget,gpointer data)
 #endif
 }
 
-VISIBLE void saveSession(Widget* widget,gpointer data)
+VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 {
 #ifndef _USEQT5_
 	pageStruct*		page;
@@ -499,7 +495,7 @@ VISIBLE void saveSession(Widget* widget,gpointer data)
 #endif
 }
 
-VISIBLE void restoreSession(Widget* widget,gpointer data)
+VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 {
 #ifndef _USEQT5_
 	FILE*		fd=NULL;
@@ -560,7 +556,7 @@ VISIBLE void restoreSession(Widget* widget,gpointer data)
 int showFileChanged(char* filename)
 {
 #ifndef _USEQT5_
-	Widget*	dialog;
+	GtkWidget*	dialog;
 	gint		result;
 	char*		message;
 
@@ -634,7 +630,7 @@ void add_source_mark_pixbufs (GtkSourceView *view)
 #endif
 }
 
-gboolean clickInView(Widget* widget,gpointer data)
+gboolean clickInView(GtkWidget* widget,gpointer data)
 {
 #ifndef _USEQT5_
 	if((statusMessage!=NULL))
@@ -646,15 +642,10 @@ gboolean clickInView(Widget* widget,gpointer data)
 	return(false);
 #endif
 }
-#endif
 
 pageStruct* makeNewPage(void)
 {
-#ifdef _USEQT5_
-	pageStruct*			page;
-	page=(pageStruct*)malloc(sizeof(pageStruct));
-	return(page);
-#else
+#ifndef _USEQT5_
 	pageStruct*			page;
 	GtkTextIter			iter;
 	GtkTextAttributes*	attr;
@@ -691,8 +682,8 @@ pageStruct* makeNewPage(void)
 	page->highlightTag=gtk_text_buffer_create_tag((GtkTextBuffer*)page->buffer,"highlighttag","background",gdk_color_to_string((const GdkColor*)&attr->appearance.fg_color),"foreground",gdk_color_to_string((const GdkColor*)&attr->appearance.bg_color),NULL);
 	gtk_text_attributes_unref(attr);
 
-	gtk_paned_add1(GTK_PANED(page->pane),(Widget*)page->pageWindow);
-	gtk_container_add (GTK_CONTAINER(page->pageWindow),(Widget*)page->view);
+	gtk_paned_add1(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow);
+	gtk_container_add (GTK_CONTAINER(page->pageWindow),(GtkWidget*)page->view);
 	g_signal_connect(G_OBJECT(page->view),"button-release-event",G_CALLBACK(whatPane),(void*)1);
 
 	page->rebuildMenu=true;
@@ -712,15 +703,15 @@ pageStruct* makeNewPage(void)
 	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),page->backMark,&iter);
 
 //dnd
-	gtk_drag_dest_set((Widget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
-	gtk_drag_dest_add_uri_targets((Widget*)page->view);
-	gtk_drag_dest_add_text_targets((Widget*)page->view);
+	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
+	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);
+	gtk_drag_dest_add_text_targets((GtkWidget*)page->view);
 	g_signal_connect_after(G_OBJECT(page->view),"drag-data-received",G_CALLBACK(dropText),(void*)page);
 	g_signal_connect(G_OBJECT(page->view),"button-press-event",G_CALLBACK(clickInView),NULL);
 
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
-	gtk_widget_grab_focus((Widget*)page->view);
+	gtk_widget_grab_focus((GtkWidget*)page->view);
 
 	g_signal_connect(page->view, "line-mark-activated",G_CALLBACK(line_mark_activated),page);
 	add_source_mark_pixbufs(GTK_SOURCE_VIEW(page->view));
@@ -731,12 +722,11 @@ pageStruct* makeNewPage(void)
 #endif
 }
 
-#ifndef _USEQT5_
 VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
 #ifndef _USEQT5_
 	GtkTextIter				iter;
-	Widget*				label;
+	GtkWidget*				label;
 	gchar*					filename=g_path_get_basename(filepath);
 	pageStruct*				page;
 	char*					str=NULL;
@@ -750,7 +740,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	GRegex*					regex;
 	GRegexCompileFlags		compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED|G_REGEX_CASELESS);
 	GRegexMatchFlags		matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
-	Widget*				dialog;
+	GtkWidget*				dialog;
 	char*					searchtext=NULL;
 	char*					replacetext=NULL;
 	struct stat				sb;
@@ -882,7 +872,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	page->monitor=g_file_monitor(page->gFile,(GFileMonitorFlags)G_FILE_MONITOR_NONE,NULL,NULL);
 	g_signal_connect(G_OBJECT(page->monitor),"changed",G_CALLBACK(fileChangedOnDisk),(void*)page);
 
-	gtk_widget_set_sensitive((Widget*)saveAsMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
 
 	str=g_file_get_path(page->gFile);
 	recenturi=g_filename_to_uri(str,NULL,NULL);
@@ -901,13 +891,13 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_notebook_set_tab_reorderable(notebook,page->tabVbox,true);
 	gtk_notebook_set_current_page(notebook,currentPage);
 	currentPage++;
-	gtk_widget_grab_focus((Widget*)page->view);
+	gtk_widget_grab_focus((GtkWidget*)page->view);
 
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
 
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
-	gtk_widget_show_all((Widget*)notebook);
+	gtk_widget_show_all((GtkWidget*)notebook);
 
 	setToobarSensitive();
 
@@ -927,35 +917,12 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	return TRUE;
 #endif
 }
-#endif
 
-#ifndef _USEQT5_
-VISIBLE void newFile(Widget* widget,gpointer data)
-#else
-VISIBLE void newFile(void)
-#endif
+VISIBLE void newFile(GtkWidget* widget,gpointer data)
 {
-printf("triggered newfile\n");
-#ifdef _USEQT5_
-	Widget*			label;
-	pageStruct*		page;
-
-	QTextEdit*	text=new QTextEdit;
-
-	page=makeNewPage();
-	page->tabVbox=new QVBoxLayout();
-	page->filePath=NULL;
-	page->dirName=NULL;
-
-	asprintf(&page->fileName,"%s-%i",gettext("Untitled"),untitledNumber);
-	untitledNumber++;
-
-	label=makeNewTab(page->fileName,NULL,page);
-	notebook->addTab(text,page->fileName);
-	
-#else
+#ifndef _USEQT5_
 	GtkTextIter	iter;
-	Widget*	label;
+	GtkWidget*	label;
 	pageStruct*	page;
 
 	page=makeNewPage();
@@ -982,12 +949,10 @@ printf("triggered newfile\n");
 	gtk_notebook_set_current_page(notebook,currentPage);
 	setToobarSensitive();
 	currentPage++;
-	gtk_widget_show_all((Widget*)notebook);
+	gtk_widget_show_all((GtkWidget*)notebook);
 	setFilePrefs(page);
 
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"newFile");
 #endif
 }
-
-

@@ -6,12 +6,12 @@
 *     backclass.cpp
 * 
 ******************************************************/
-#if 0
+
 #include "kkedit-includes.h"
 
 HistoryClass::HistoryClass()
 {
-#if 0
+#ifndef _USEQT5_
 	buf=new TextBuffer;
 	this->savedPage=NULL;
 #endif
@@ -19,15 +19,15 @@ HistoryClass::HistoryClass()
 
 HistoryClass::~HistoryClass()
 {
-#if 0
+#ifndef _USEQT5_
 	delete buf;
 #endif
 }
 
 void HistoryClass::getThisPoint(void)
 {
-#if 0
-	Widget*	pageBox;
+#ifndef _USEQT5_
+	GtkWidget*	pageBox;
 	int			tabNum=gtk_notebook_get_current_page(notebook);
 
 	pageBox=gtk_notebook_get_nth_page(notebook,tabNum);
@@ -40,28 +40,28 @@ void HistoryClass::getThisPoint(void)
 
 pageStruct* HistoryClass::getPage(void)
 {
-#if 0
+#ifndef _USEQT5_
 	return(savedPage);
 #endif
 }
 
 void HistoryClass::setPage(pageStruct* page)
 {
-#if 0
+#ifndef _USEQT5_
 	savedPage=page;
 #endif
 }
 
 TextBuffer* HistoryClass::getTextBuffer(void)
 {
-#if 0
+#ifndef _USEQT5_
 	return(buf);
 #endif
 }
 
 void HistoryClass::savePosition(void)
 {
-#if 0
+#ifndef _USEQT5_
 	getThisPoint();
 
 	buf->textBuffer=(GtkTextBuffer*)savedPage->buffer;
@@ -72,7 +72,7 @@ void HistoryClass::savePosition(void)
 
 int HistoryClass::getTabNumForPage(void)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*	page;
 	int			numpages=gtk_notebook_get_n_pages(notebook);
 
@@ -86,4 +86,18 @@ int HistoryClass::getTabNumForPage(void)
 #endif
 }
 
-#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

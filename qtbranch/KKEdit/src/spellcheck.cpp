@@ -18,14 +18,14 @@
 ******************************************************/
 
 #include "kkedit-includes.h"
-#if 0
+
 #ifdef _ASPELL_
 
 bool	cancelCheck=false;
 
-void doCancelCheck(Widget* widget,gpointer data)
+void doCancelCheck(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	gtk_widget_destroy(spellCheckWord);
 	if(badWord!=NULL)
 		debugFree(badWord,"doCancelCheck badWord");
@@ -35,7 +35,7 @@ void doCancelCheck(Widget* widget,gpointer data)
 
 void checkTheWord(char* word,int checkDoc)
 {
-#if 0
+#ifndef _USEQT5_
 	int							correct;
 	AspellWordList*				suggestions;
 	AspellStringEnumeration*	elements;
@@ -65,9 +65,9 @@ void checkTheWord(char* word,int checkDoc)
 #endif
 }
 
-void checkWord(Widget* widget,gpointer data)
+void checkWord(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
@@ -87,9 +87,9 @@ void checkWord(Widget* widget,gpointer data)
 #endif
 }
 
-void doChangeWord(Widget* widget,gpointer data)
+void doChangeWord(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
@@ -119,9 +119,9 @@ void doChangeWord(Widget* widget,gpointer data)
 #endif
 }
 
-void doAddIgnoreWord(Widget* widget,gpointer data)
+void doAddIgnoreWord(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	if((long)data==1)
 		aspell_speller_add_to_session(spellChecker,badWord,-1);
 	else
@@ -136,9 +136,9 @@ void doAddIgnoreWord(Widget* widget,gpointer data)
 #endif
 }
 
-void doSpellCheckDoc(Widget* widget,gpointer data)
+void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 {
-#if 0
+#ifndef _USEQT5_
 	pageStruct*				page=getPageStructPtr(-1);
 	gchar*					buffer;
 	long					filelen;
@@ -265,4 +265,3 @@ void doSpellCheckDoc(Widget* widget,gpointer data)
 }
 #endif
 
-#endif

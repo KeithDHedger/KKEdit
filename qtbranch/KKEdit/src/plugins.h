@@ -9,12 +9,11 @@
 
 #ifndef _PLUGINSTUFF_
 #define _PLUGINSTUFF_
-#if 0
+
 void doPlugPrefs(void);
 void showSide(bool left);
 void hideSide(bool left);
 void showTop(bool left);
 void hideTop(bool left);
 
-#endif
 #endif
