@@ -780,7 +780,9 @@ pageStruct* makeNewPage(void)
 VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
 printf("openfile %s\n",filepath);
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+
+#else
 	GtkTextIter				iter;
 	GtkWidget*				label;
 	gchar*					filename=g_path_get_basename(filepath);

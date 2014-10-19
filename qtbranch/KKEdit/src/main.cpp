@@ -414,11 +414,11 @@ int main(int argc,char **argv)
 //		{
 			init();
 
-
-			for(int j=1; j<argc; j++)
-				{
-				printf("%i - %s\n",j,argv[j]);
-				}
+//
+//			for(int j=1; j<argc; j++)
+//				{
+//				printf("%i - %sn",j,argv[j]);
+//				}
 
 
 
@@ -426,34 +426,31 @@ int main(int argc,char **argv)
 #ifndef _USEQT5_
 			buildMainGui();
 #else
-		QApplication	app(argc, argv);
-QStringList	strs=app.arguments();
-QString str=strs.at(0);
-//QChar *data = str.data();
-//while (!data->isNull()) {
- //   qDebug() << data->unicode();
-//    ++data;
-//    }
-//printf("%s\n",data->unicode());
-char* s;
-			QByteArray byteArray=str.toUtf8();
-			s=(char*)byteArray.constData();
-printf("%i %s\n",strs.count(),s);
+			QApplication	app(argc,argv);
 
-		buildMainGuiQT();
+			buildMainGuiQT();
 #endif
 			if(onExitSaveSession==true)
 #ifndef _USEQT5_
 				restoreSession(NULL,(void*)restoreBookmarks);
 #else
 //TODO//
+				restoreSession();	
 #endif
+
+#ifndef _USEQT5_
 			for(int j=1; j<argc; j++)
 				{
-				printf("%i - %s\n",j,argv[j]);
 					if((strncasecmp(argv[j],"-m",2)!=0) && (strncasecmp(argv[j],"-s",2)!=0))
 						openFile(argv[j],0,true);
 				}
+#else
+			for (int j=1;j<app.arguments().count();j++)
+				{
+					if((strncasecmp(app.arguments().at(j).toUtf8().constData(),"-m",2)!=0) && (strncasecmp(app.arguments().at(j).toUtf8().constData(),"-s",2)!=0))
+						openFile(app.arguments().at(j).toUtf8().constData(),0,true);
+				}
+#endif
 			refreshMainWindow();
 
 			buildFindReplace();
@@ -494,7 +491,7 @@ printf("%i %s\n",strs.count(),s);
 #ifndef _USEQT5_
 			gtk_main();
 #else
-//			QApplication	app(argc, argv);
+//window->show();
 			app.exec();
 #endif
 			delete history;
