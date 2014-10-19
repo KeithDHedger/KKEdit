@@ -8,6 +8,7 @@
 
 #include "kkedit-includes.h"
 
+#ifndef _USEQT5_
 GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;
 GtkNotebook*	notebook=NULL;
@@ -23,17 +24,28 @@ GtkWidget*		menuItemOpen=NULL;
 GtkWidget*		menuView=NULL;
 GtkWidget*		menuToolOut=NULL;
 GtkWidget*		menuStatusBar=NULL;
+#else
+//TODO//
+QWidget*				window=NULL;
+QTabWidget*				notebook=NULL;
+#endif
 
 VISIBLE GList*	newBookMarksList=NULL;
+#ifndef _USEQT5_
 GtkWidget*		menuBookMark;
 GtkWidget*		menuBookMarkSubMenu;
+GtkWidget*		bmHighlightBox;
+#else
+//TODO//
+#endif
 char*			highlightColour;
 char*			tmpHighlightColour;
 bool			showBMBar;
-GtkWidget*		bmHighlightBox;
 int				bmMarkNumber=0;
 
 char*			toolBarLayout=NULL;
+
+#ifndef _USEQT5_
 GtkToolbar*		toolBar;
 GtkWidget*		toolBarBox;
 
@@ -59,6 +71,9 @@ GtkWidget*		findApiWidget;
 GtkWidget*		findQtApiWidget;
 GtkWidget*		findDefWidget;
 GtkWidget*		liveSearchWidget;
+#else
+//TODO//
+#endif
 
 int				currentPage=0;
 //nag
@@ -78,7 +93,12 @@ int				docWindowX=-1;
 int				docWindowY=-1;
 
 //prefs
+#ifndef _USEQT5_
 GtkWidget*		prefswin;
+#else
+//TODO//
+#endif
+
 bool			indent;
 bool			lineNumbers;
 bool			lineWrap;
@@ -106,14 +126,22 @@ bool			tmpAutoCheck;
 uint			autoShowMinChars;
 int				tmpAutoShowMinChars;
 
+#ifndef _USEQT5_
 GtkWidget*		fontButton;
 GtkWidget*		terminalBox;
 GtkWidget*		rootCommandBox;
 GtkWidget*		defaultBrowserBox;
+#else
+//TODO//
+#endif
 char*			browserCommand=strdup("firefox");
 
 //key short cuts
+#ifndef _USEQT5_
 GtkWidget*		keysWindow=NULL;
+#else
+//TODO//
+#endif
 
 bool			tmpIndent;
 bool			tmpLineNumbers;
@@ -127,6 +155,7 @@ bool			tmpSaveSessionOnExit;
 bool			tmpRestoreBookmarks;
 char*			tmpStyleName=NULL;
 
+#ifndef _USEQT5_
 GtkWidget*		toolNameWidget;
 GtkWidget*		commandLineWidget;
 GtkWidget*		keyWidget;
@@ -144,21 +173,33 @@ GtkWidget*		toolSelect;
 GtkWidget*		clearViewWidget;
 GtkWidget*		runAsRootWidget;
 GtkWidget*		useBarWidget;
+#else
+//TODO//
+#endif
 
 toolStruct*		selectedToolFromDrop=NULL;
 
 //view tool output
+#ifndef _USEQT5_
 GtkWidget*		mainVPane=NULL;
-bool			showToolOutWin=false;
 GtkWidget*		toolOutputView=NULL;
 GtkTextBuffer*	toolOutputBuffer=NULL;
 GtkWidget*		toolOutVBox=NULL;
-bool			showStatus;
 GtkWidget*		statusWidget=NULL;
+#else
+//TODO//
+#endif
+
+bool			showToolOutWin=false;
+bool			showStatus;
 
 GList*			toolsList=NULL;
 
+#ifndef _USEQT5_
 GtkWidget*		restoreBMs;
+#else
+//TODO//
+#endif
 
 //main window
 int				windowWidth;
@@ -175,8 +216,8 @@ int				toolOutHeight=200;
 int				bottomVPaneHite=200;
 int				topVPaneHite=200;
 
+#ifndef _USEQT5_
 GtkWidget*		mainWindowScrollbox=NULL;
-
 GtkWidget*		mainWindowVBox=NULL;
 GtkWidget*		mainTopUserVBox=NULL;
 GtkWidget*		mainWindowHBox=NULL;
@@ -190,10 +231,14 @@ GtkWidget*		secondWindowVPane=NULL;
 
 GtkWidget*		mainWindowHPane=NULL;
 GtkWidget*		secondWindowHPane=NULL;
+#else
+//TODO//
+#endif
 
 int				currentTabNumber;
 int 			untitledNumber=1;
 
+#ifndef _USEQT5_
 GtkToolItem*	newButton=NULL;
 GtkToolItem*	openButton=NULL;
 GtkToolItem*	saveButton=NULL;
@@ -217,16 +262,28 @@ GtkWidget*		findBox;
 GtkWidget*		replaceBox;
 GtkWidget*		findDropBox=NULL;
 GtkWidget*		replaceDropBox;
+#else
+//TODO//
+#endif
+
 GSList*			findList=NULL;
 GSList*			replaceList=NULL;
 
 //custom toolbar
+#ifndef _USEQT5_
 GtkWidget*		fromHBox;
 GtkWidget*		iconViewBox;
+#else
+//TODO//
+#endif
 bool			showToolBar=true;
 
 int				listFunction=0;
+#ifndef _USEQT5_
 GtkWidget*		funcListDrop=NULL;
+#else
+//TODO//
+#endif
 
 char*			functionSearchText=NULL;
 char*			thePage=NULL;
@@ -238,19 +295,32 @@ char*			tmpFolderName=NULL;
 int				gotManEditor;
 int				gotDoxygen;
 
+#ifndef _USEQT5_
 GtkSourceStyleSchemeManager*	schemeManager;
 GtkSourceStyleScheme*			styleScheme;
+#else
+//TODO//
+#endif
 
 #ifdef _BUILDDOCVIEWER_
+#ifndef _USEQT5_
 GtkWidget*		docView;
 WebKitWebView*	webView;
-bool			showHideDocviewer;
 GtkWidget*		showDocViewWidget;
+#else
+//TODO//
+#endif
+bool			showHideDocviewer;
 #endif
 
 //spellcheck
+#ifndef _USEQT5_
 GtkWidget*		spellCheckWord;
 GtkWidget*		wordListDropbox;
+#else
+//TODO//
+#endif
+
 char*			badWord=NULL;
 char*			goodWord=NULL;
 #ifdef _ASPELL_
@@ -317,8 +387,12 @@ args			keybindings_rc[]=
 //39 11 ^' Move Selection Up
 //64 12 ^@ Move Selection Down
 
+#ifndef _USEQT5_
 GtkWidget*		progressWindow;
 GtkWidget*		progressBar;
+#else
+//TODO//
+#endif
 
 PluginClass*	globalPlugins=NULL;
 

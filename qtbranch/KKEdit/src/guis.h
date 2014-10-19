@@ -8,6 +8,7 @@
 #define _GUIS_
 
 void buildMainGui(void);
+void buildMainGuiQT(void);
 void buildTools(void);
 void buildFindReplace(void);
 void buildWordCheck(int documentCheck);

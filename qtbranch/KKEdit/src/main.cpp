@@ -199,6 +199,7 @@ void init(void)
 	history=new HistoryClass;
 	globalSlice->setReturnDupString(true);
 
+
 	funcProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
 	funcProv->priority=1;
 	funcProv->name=gettext("Functions");
@@ -344,6 +345,7 @@ int main(int argc,char **argv)
 	UniqueCommand 		command;
 	UniqueResponse 		response;
 	UniqueBackend*		back;
+#endif
 	char*				dbusname;
 	int					w,h;
 
@@ -352,12 +354,13 @@ int main(int argc,char **argv)
 	textdomain("kkedit");
 	bind_textdomain_codeset("kkedit","UTF-8");
 
+#ifndef _USEQT5_
 	gtk_init(&argc,&argv);
 	back=unique_backend_create();
 	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace(back));
 	app=unique_app_new(dbusname,NULL);
 	message=unique_message_data_new();
-
+#endif
 	readConfig();
 
 	if((argc>1) && (strcmp(argv[1],"-m")==0))
@@ -369,6 +372,7 @@ int main(int argc,char **argv)
 			loadPluginsFlag=false;
 		}
 
+#ifndef _USEQT5_
 	if((unique_app_is_running(app)==true) && (singleUse==true) && (singleOverRide==false))
 		{
 			if(argc==1)
@@ -390,16 +394,24 @@ int main(int argc,char **argv)
 				return 0;
 			else
 				printf("FAIL\n");
+				return(1);
 			//handle_fail_or_user_cancel();
 		}
-	else
-		{
+#endif
+//	else
+//		{
 			init();
+#ifndef _USEQT5_
 			buildMainGui();
-
+#else
+			buildMainGuiQT();
+#endif
 			if(onExitSaveSession==true)
+#ifndef _USEQT5_
 				restoreSession(NULL,(void*)restoreBookmarks);
-
+#else
+//TODO//
+#endif
 			for(int j=1; j<argc; j++)
 				{
 					if((strncasecmp(argv[j],"-m",2)!=0) && (strncasecmp(argv[j],"-s",2)!=0))
@@ -412,6 +424,8 @@ int main(int argc,char **argv)
 #ifdef _BUILDDOCVIEWER_
 			buildGtkDocViewer();
 #endif
+
+#ifndef _USEQT5_
 			unique_app_watch_window(app,(GtkWindow*)window);
 			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
 
@@ -432,15 +446,20 @@ int main(int argc,char **argv)
 					gtk_window_set_default_icon_name(PACKAGE "Root");
 					gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
 				}
+#else
+//TODO//
+#endif
 			setSensitive();
 
 			if((timeToNag==true) && (autoCheck==true))
 				doNagStuff();
 
+#ifndef _USEQT5_
 			gtk_main();
-
+#else
+//TODO//
+#endif
 			delete history;
 			delete globalSlice;
-		}
-#endif
+//		}
 }

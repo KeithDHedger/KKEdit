@@ -7,6 +7,8 @@
 * 
 ******************************************************/
 
+#include "config.h"
+
 #ifndef _USEQT5_
 #include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
 #endif
@@ -37,6 +39,7 @@ void function_provider_iface_init(GtkSourceCompletionProviderIface* iface);
 //TODO//
 void function_provider_iface_init(void);
 #endif
+
 #ifndef _USEQT5_
 GType function_provider_get_type(void);
 #else

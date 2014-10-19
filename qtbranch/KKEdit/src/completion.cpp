@@ -29,15 +29,22 @@ struct _FunctionProviderClass
 #endif
 };
 
-
-//G_DEFINE_TYPE_WITH_CODE(FunctionProvider,function_provider,G_TYPE_OBJECT,G_IMPLEMENT_INTERFACE (GTK_TYPE_SOURCE_COMPLETION_PROVIDER,function_provider_iface_init))
+#ifndef _USEQT5_
+G_DEFINE_TYPE_WITH_CODE(FunctionProvider,function_provider,G_TYPE_OBJECT,G_IMPLEMENT_INTERFACE (GTK_TYPE_SOURCE_COMPLETION_PROVIDER,function_provider_iface_init))
+#else
+//TODO//
+#endif
 
 FunctionProvider*			funcProv;
 FunctionProvider*			varsProv;
 FunctionProvider*			customProv;
 
 bool						forcePopup=false;
+#ifndef _USEQT5_
 GtkSourceCompletionWords*	docWordsProv;
+#else
+//TODO//
+#endif
 
 #ifndef _USEQT5_
 gchar* function_provider_get_name(GtkSourceCompletionProvider* provider)

@@ -6,12 +6,15 @@
 
 #include "kkedit-includes.h"
 
+#ifndef _USEQT5_
 GtkWidget*		recent;
 GtkToolItem*	tool[18]={NULL,};
 GtkIconView*	iconView=NULL;
 GtkListStore*	listStore=NULL;
-
 GtkWidget*		entries[NUMSHORTCUTS];
+#else
+//TODO//
+#endif
 
 const char* 	shortcuttext[NUMSHORTCUTS]={gettext("Delete Current Line"),gettext("Delete To End Of Line"),gettext("Delete To Beginning Of Line"),gettext("Select Word Under Cursor"),gettext("Delete Word Under Cursor"),gettext("Duplicate Current Line"),gettext("Select Current Line"),gettext("Move Current Line Up"),gettext("Move Current Line Down"),gettext("Select From Cursor To End Of Line"),gettext("Select From Beginning Of Line To Cursor"),gettext("Move Selection Up"),gettext("Move Selection Down"),gettext("Show Completion")};
 
@@ -1379,6 +1382,10 @@ void addRecentToMenu(void)
 				}
 		}
 #endif
+}
+
+void buildMainGuiQT(void)
+{
 }
 
 void buildMainGui(void)

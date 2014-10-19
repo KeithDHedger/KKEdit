@@ -13,10 +13,14 @@
 #define COLUMN_PLUGIN 1
 #define NUM_COLUMNS 2
 
+#ifndef _USEQT5_
 GtkWidget*	plugAboutButton;
 GtkWidget*	plugPrefsButton;
 GtkWidget*	plugwindow;
 GtkWidget*	treeview;
+#else
+//TODO//
+#endif
 
 #ifndef _USEQT5_
 void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)

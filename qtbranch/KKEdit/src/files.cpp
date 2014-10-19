@@ -7,14 +7,14 @@
 */
 
 #include "kkedit-includes.h"
-//#include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
-//#include <gtksourceview/gtksourceview.h>
-//#include <gtksourceview/gtksourcecompletion.h>
-//#include <gtksourceview/gtksourcecompletioninfo.h>
-//#include <gtksourceview/gtksourcecompletionitem.h>
-//#include <gtksourceview/gtksourcelanguagemanager.h>
 
+
+#ifndef _USEQT5_
 GtkWidget*	vbox;
+#else
+//TODO//
+#endif
+
 char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
 bool		dropTextFile=false;
@@ -103,7 +103,12 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 #endif
 }
 
+#ifndef _USEQT5_
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
+#else
+//TODO//
+void makeNewTab(char* name,char* tooltip,pageStruct* page)
+#endif
 {
 #ifndef _USEQT5_
 	GtkWidget*	evbox=gtk_event_box_new();

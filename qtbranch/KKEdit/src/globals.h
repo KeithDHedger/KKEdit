@@ -153,8 +153,8 @@ extern GtkWidget*		menuBookMark;
 extern GtkWidget*		menuBookMarkSubMenu;
 #else
 //TODO//
-QWidget*				window;
-QTabWidget*				notebook;
+extern QWidget*			window;
+extern QTabWidget*		notebook;
 #endif
 
 extern GList*			newBookMarksList;
