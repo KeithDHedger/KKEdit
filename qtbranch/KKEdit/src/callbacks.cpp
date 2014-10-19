@@ -189,8 +189,12 @@ void destroyBMData(gpointer data)
 	debugFree(((bookMarksNew*)data)->markName,"destroyBMData markName");
 #endif
 }
-
+#ifndef _USEQT5_
 VISIBLE void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer)
+#else
+//TODO//
+VISIBLE void removeAllBookmarks(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=NULL;
@@ -213,7 +217,12 @@ VISIBLE void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
+#else
+//TODO//
+VISIBLE void toggleBookmark(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*		page=getPageStructPtr(-1);
@@ -354,7 +363,12 @@ int yesNo(char* question,char* file)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void doOpenFile(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void doOpenFile(void)
+#endif
 {
 #ifndef _USEQT5_
 	GtkWidget*	dialog;
@@ -403,8 +417,12 @@ int show_question(char* filename)
 #endif
 }
 
-
+#ifndef _USEQT5_
 void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data)
+#else
+//TODO//
+void updateStatuBar(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct* page=(pageStruct*)data;
@@ -523,7 +541,12 @@ void setSensitive(void)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void closeTab(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void closeTab(void)
+#endif
 {
 #ifndef _USEQT5_
 	long		thispage;
@@ -614,7 +637,12 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
+//TODO//
+#else
+VISIBLE void closeAllTabs(void)
+#endif
 {
 #ifndef _USEQT5_
 	int	numtabs=gtk_notebook_get_n_pages(notebook);
@@ -631,7 +659,12 @@ VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
+#else
+//TODO//
+void switchPage(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page;
@@ -757,7 +790,12 @@ createCompletion(page);
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void copyToClip(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void copyToClip(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
@@ -765,7 +803,12 @@ VISIBLE void copyToClip(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void cutToClip(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void cutToClip(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
@@ -774,7 +817,12 @@ VISIBLE void cutToClip(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void pasteFromClip(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void pasteFromClip(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*		page=getPageStructPtr(-1);
@@ -794,7 +842,12 @@ VISIBLE void pasteFromClip(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void undo(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void undo(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
@@ -808,7 +861,12 @@ VISIBLE void undo(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void unRedoAll(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
@@ -831,7 +889,12 @@ VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void redo(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void redo(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
@@ -845,7 +908,12 @@ VISIBLE void redo(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
+#else
+//TODO
+VISIBLE void dropUri(void)
+#endif
 {
 #ifndef _USEQT5_
 	gchar**	array=gtk_selection_data_get_uris(selection_data);
@@ -862,7 +930,12 @@ VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,Gtk
 #endif
 }
 
+#ifndef _USEQT5_
 void externalTool(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void externalTool(void)
+#endif
 {
 #ifndef _USEQT5_
 	toolStruct*		tool=(toolStruct*)data;
@@ -992,7 +1065,12 @@ void externalTool(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void openHelp(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void openHelp(void)
+#endif
 {
 #ifndef _USEQT5_
 	const char* lang;
@@ -1014,7 +1092,12 @@ VISIBLE void openHelp(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void copyToClipboard(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void copyToClipboard(void)
+#endif
 {
 #ifndef _USEQT5_
 	GtkClipboard*	clipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
@@ -1022,7 +1105,12 @@ void copyToClipboard(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void addtoCustomWordList(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void addtoCustomWordList(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*		page=(pageStruct*)data;
@@ -1048,7 +1136,12 @@ VISIBLE void addtoCustomWordList(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
+#else
+//TODO//
+void populatePopupMenu(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*		page=getPageStructPtr(-1);
@@ -1175,7 +1268,12 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 #endif
 }
 
+#ifndef _USEQT5_
 void doTabMenu(GtkWidget *widget,gpointer user_data)
+#else
+//TODO//
+void doTabMenu(void)
+#endif
 {
 #ifndef _USEQT5_
 	GtkClipboard*	clipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
@@ -1185,7 +1283,12 @@ void doTabMenu(GtkWidget *widget,gpointer user_data)
 #endif
 }
 
+#ifndef _USEQT5_
 gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
+#else
+//TODO//
+gboolean whatPane(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct* page=(pageStruct*)getPageStructPtr(-1);
@@ -1199,7 +1302,12 @@ gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void doSplitView(GtkWidget *widget,gpointer user_data)
+#else
+//TODO//
+void doSplitView(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct* page=(pageStruct*)user_data;
@@ -1230,7 +1338,12 @@ void doSplitView(GtkWidget *widget,gpointer user_data)
 #endif
 }
 
+#ifndef _USEQT5_
 void changeSourceStyle(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void changeSourceStyle(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*					page=getPageStructPtr(-1);
@@ -1244,7 +1357,12 @@ void changeSourceStyle(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void openFromTab(GtkMenuItem* widget,pageStruct* page)
+#else
+//TODO//
+void openFromTab(void)
+#endif
 {
 #ifndef _USEQT5_
 	char*		filepath=NULL;
@@ -1255,7 +1373,12 @@ void openFromTab(GtkMenuItem* widget,pageStruct* page)
 #endif
 }
 
+#ifndef _USEQT5_
 bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
+#else
+//TODO//
+bool tabPopUp(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*					page;
@@ -1527,7 +1650,12 @@ void writeConfig(void)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE bool doSaveAll(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE bool doSaveAll(void)
+#endif
 {
 #ifndef _USEQT5_
 	int			numpages=gtk_notebook_get_n_pages(notebook);
@@ -1567,7 +1695,12 @@ VISIBLE bool doSaveAll(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void doShutdown(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void doShutdown(void)
+#endif
 {
 #ifndef _USEQT5_
 	char*	command;
@@ -1594,7 +1727,12 @@ VISIBLE void doShutdown(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void setPrefs(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void setPrefs(void)
+#endif
 {
 #ifndef _USEQT5_
 	pageStruct*			tpage=getPageStructPtr(-1);
@@ -1739,7 +1877,12 @@ void setPrefs(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void setToolOptions(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+void setToolOptions(void)
+#endif
 {
 #ifndef _USEQT5_
 	char*		dirname;
@@ -1831,7 +1974,12 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void doAbout(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void doAbout(void)
+#endif
 {
 #ifndef _USEQT5_
 	const char*	authors[]= {"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,gettext("\nMore by the same author\n"),"Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
@@ -1877,8 +2025,12 @@ void doCombineBuffers(void)
 #endif
 }
 
-
+#ifndef _USEQT5_
 void drawPage(GtkPrintOperation *operation,GtkPrintContext *context,gint page_nr,gpointer user_data)
+#else
+//TODO//
+void drawPage(void)
+#endif
 {
 #ifndef _USEQT5_
 	GtkSourcePrintCompositor *compositor;
@@ -1888,7 +2040,12 @@ void drawPage(GtkPrintOperation *operation,GtkPrintContext *context,gint page_nr
 #endif
 }
 
+#ifndef _USEQT5_
 void beginPrint(GtkPrintOperation *operation,GtkPrintContext *context,gpointer user_data)
+#else
+//TODO//
+void beginPrint(void)
+#endif
 {
 #ifndef _USEQT5_
 	GtkSourcePrintCompositor*	compositor;
@@ -1903,7 +2060,12 @@ void beginPrint(GtkPrintOperation *operation,GtkPrintContext *context,gpointer u
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void printFile(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void printFile(void)
+#endif
 {
 #ifndef _USEQT5_
 	doCombineBuffers();
@@ -1928,7 +2090,12 @@ VISIBLE void printFile(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
+#else
+//TODO//
+void recentFileMenu(void)
+#endif
 {
 #ifndef _USEQT5_
 	gchar*	uri=NULL;
@@ -1951,7 +2118,12 @@ void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void newEditor(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void newEditor(void)
+#endif
 {
 #ifndef _USEQT5_
 	char*	command=NULL;
@@ -1977,7 +2149,12 @@ VISIBLE void newEditor(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButton* ev,pageStruct* page)
+#else
+//TODO//
+void line_mark_activated(void)
+#endif
 {
 #ifndef _USEQT5_
 	if(ev->button!=1)
@@ -2015,7 +2192,12 @@ VISIBLE void hideToolOutput(bool immediate)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void toggleToolOutput(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void toggleToolOutput(void)
+#endif
 {
 #ifndef _USEQT5_
 	showToolOutWin=!showToolOutWin;
@@ -2032,7 +2214,12 @@ VISIBLE void toggleToolOutput(GtkWidget* widget,gpointer data)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE void toggleBookMarkBar(GtkWidget* widget,gpointer data)
+#else
+//TODO//
+VISIBLE void toggleBookMarkBar(void)
+#endif
 {
 #ifndef _USEQT5_
 	showBMBar=!showBMBar;
