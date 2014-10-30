@@ -319,7 +319,7 @@ args			keybindings_rc[]=
 
 GtkWidget*		progressWindow;
 GtkWidget*		progressBar;
-GtkWidget*		xxprogressWindow;
+
 PluginClass*	globalPlugins=NULL;
 
 //save and load var lists
@@ -654,26 +654,24 @@ functionData* getFunctionByName(char* name,bool recurse)
 	int				thislen;
 	int				loophold=-1;
 	bool			getfromfile;
+	int				loop;
+	int				maxpage=numpages;
+	bool			whileflag=true;
+	int				startpage;
+	bool			checkthispage;
+	functionData*	fdata;
 
-	functionData* fdata;
 	page=getPageStructPtr(-1);
 	if(page==NULL)
 		return(NULL);
 
 	getfromfile=false;
 
-	int		loop;
-	int		maxpage=numpages;
-	bool	whileflag=true;
-	int		startpage;
-	bool	checkthispage;
-
 	loop=gtk_notebook_get_current_page(notebook);
 	startpage=loop;
 	checkthispage=true;
 
 	while(whileflag==true)
-//	for(int loop=0; loop<numpages; loop++)
 		{
 			page=getPageStructPtr(loop);
 			if(page->filePath!=NULL)
@@ -710,6 +708,7 @@ functionData* getFunctionByName(char* name,bool recurse)
 								lineptr++;
 						}
 				}
+
 			if(checkthispage==true)
 				{
 					loop=-1;
@@ -1059,15 +1058,19 @@ VISIBLE void goBack(GtkWidget* widget,gpointer data)
 		}
 	else
 		{
-			hist->savePosition();
-
-			gtk_notebook_set_current_page(notebook,history->getTabNumForPage());
-			gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
-			gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-			scrollToIterInPane(page,&iter);
-
-			delete history;
-			history=hist;
+			if(hist->savePosition()==true)
+				{
+					gtk_notebook_set_current_page(notebook,history->getTabNumForPage());
+					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
+					gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+					scrollToIterInPane(page,&iter);
+					delete history;
+					history=hist;
+				}
+			else
+				{
+					delete hist;
+				}
 		}
 }
 

@@ -47,13 +47,18 @@ TextBuffer* HistoryClass::getTextBuffer(void)
 	return(buf);
 }
 
-void HistoryClass::savePosition(void)
+bool HistoryClass::savePosition(void)
 {
 	getThisPoint();
 
-	buf->textBuffer=(GtkTextBuffer*)savedPage->buffer;
-	buf->getLineData();
-	gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)savedPage->buffer,"back-mark",&buf->cursorPos);
+	if(this->savedPage!=NULL)
+		{
+			buf->textBuffer=(GtkTextBuffer*)savedPage->buffer;
+			buf->getLineData();
+			gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)savedPage->buffer,"back-mark",&buf->cursorPos);
+			return(true);
+		}
+	return(false);
 }
 
 int HistoryClass::getTabNumForPage(void)

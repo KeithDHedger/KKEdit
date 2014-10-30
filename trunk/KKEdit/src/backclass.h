@@ -19,7 +19,7 @@ class HistoryClass
 		void		getThisPoint(void);
 		pageStruct*	getPage(void);
 		TextBuffer*	getTextBuffer(void);
-		void		savePosition(void);
+		bool		savePosition(void);
 		void		setPage(pageStruct* page);
 		int			getTabNumForPage(void);
 	private:
