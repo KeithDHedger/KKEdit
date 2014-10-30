@@ -319,7 +319,7 @@ args			keybindings_rc[]=
 
 GtkWidget*		progressWindow;
 GtkWidget*		progressBar;
-
+GtkWidget*		xxprogressWindow;
 PluginClass*	globalPlugins=NULL;
 
 //save and load var lists
@@ -661,7 +661,19 @@ functionData* getFunctionByName(char* name,bool recurse)
 		return(NULL);
 
 	getfromfile=false;
-	for(int loop=0; loop<numpages; loop++)
+
+	int		loop;
+	int		maxpage=numpages;
+	bool	whileflag=true;
+	int		startpage;
+	bool	checkthispage;
+
+	loop=gtk_notebook_get_current_page(notebook);
+	startpage=loop;
+	checkthispage=true;
+
+	while(whileflag==true)
+//	for(int loop=0; loop<numpages; loop++)
 		{
 			page=getPageStructPtr(loop);
 			if(page->filePath!=NULL)
@@ -698,6 +710,17 @@ functionData* getFunctionByName(char* name,bool recurse)
 								lineptr++;
 						}
 				}
+			if(checkthispage==true)
+				{
+					loop=-1;
+					checkthispage=false;
+				}
+
+			loop++;
+			if(loop==startpage)
+				loop++;
+			if(loop==maxpage)
+				whileflag=false;
 		}
 
 	if(recurse==true)
