@@ -1,6 +1,7 @@
 0.2.4
+Dimmed 'Go Back' button and menu item if can't go back.
 Fixed 'Go Back' bug
-Go to definition now searches current file first.
+Go to definition now searches current file first then from the leftmost tab.
 Added 'Add to Custom Word List" to popup when text is selected.
 Added 'Check For Updates' option to prefs.
 Added support for custom word completions.
