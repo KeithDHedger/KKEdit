@@ -89,8 +89,10 @@ int HistoryClass::getTabNumForPage(void)
 					return(loop);
 				}
 		}
-//	this->goBack=false;
-	return(0);
+
+	this->savedPage=NULL;
+	this->goBack=false;
+	return(-1);
 }
 
 

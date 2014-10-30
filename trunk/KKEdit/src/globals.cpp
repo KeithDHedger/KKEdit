@@ -1059,7 +1059,13 @@ VISIBLE void goBack(GtkWidget* widget,gpointer data)
 		}
 	else
 		{
-			if(hist->savePosition()==true)
+			if(history->canGoBack()==false)
+				{
+					delete hist;
+					setSensitive();
+					return;
+				}
+		if(hist->savePosition()==true)
 				{
 					gtk_notebook_set_current_page(notebook,history->getTabNumForPage());
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
