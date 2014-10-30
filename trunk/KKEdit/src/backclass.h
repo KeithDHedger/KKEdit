@@ -22,9 +22,11 @@ class HistoryClass
 		bool		savePosition(void);
 		void		setPage(pageStruct* page);
 		int			getTabNumForPage(void);
+		bool		canGoBack(void);
 	private:
 		pageStruct*		savedPage;
 		TextBuffer*		buf;
+		bool			goBack;
 };
 
 #endif

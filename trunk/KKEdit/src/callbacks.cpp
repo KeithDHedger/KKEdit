@@ -122,7 +122,7 @@ void setToobarSensitive(void)
 //go back
 					if(backButton!=NULL)
 						{
-							if(page!=NULL)
+							if((page!=NULL) && (history->canGoBack()==true))
 								gtk_widget_set_sensitive((GtkWidget*)backButton,true);
 							else
 								gtk_widget_set_sensitive((GtkWidget*)backButton,false);
@@ -454,10 +454,12 @@ void setSensitive(void)
 			gtk_widget_set_sensitive((GtkWidget*)menucloseall,false);
 			gtk_widget_set_sensitive((GtkWidget*)menusaveall,false);
 			gtk_widget_set_sensitive((GtkWidget*)menurevert,false);
+			gtk_widget_set_sensitive((GtkWidget*)goBackMenu,false);
 			gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,0);
 		}
 	else
 		{
+			gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
 			text=gtk_label_get_text((GtkLabel*)page->tabName);
 //menu
 			gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));

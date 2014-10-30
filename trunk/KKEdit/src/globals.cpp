@@ -50,6 +50,7 @@ GtkWidget*		undoAllMenu;
 GtkWidget*		cutMenu;
 GtkWidget*		copyMenu;
 GtkWidget*		pasteMenu;
+GtkWidget*		goBackMenu;
 
 GtkWidget*		saveMenu;
 GtkWidget*		saveAsMenu;
@@ -1072,6 +1073,7 @@ VISIBLE void goBack(GtkWidget* widget,gpointer data)
 					delete hist;
 				}
 		}
+	setSensitive();
 }
 
 gboolean idleScroll(gpointer data)

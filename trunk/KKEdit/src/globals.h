@@ -183,6 +183,7 @@ extern GtkWidget*		undoAllMenu;
 extern GtkWidget*		cutMenu;
 extern GtkWidget*		copyMenu;
 extern GtkWidget*		pasteMenu;
+extern GtkWidget*		goBackMenu;
 
 extern GtkWidget*		saveMenu;
 extern GtkWidget*		saveAsMenu;

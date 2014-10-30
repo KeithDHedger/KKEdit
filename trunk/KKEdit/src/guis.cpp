@@ -1720,10 +1720,10 @@ void buildMainGui(void)
 			gtk_widget_set_name(menuitem,SEARCHDOXYMENUNAME);
 		}
 //go back
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_GO_BACK,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goBack),NULL);
-	gtk_widget_set_name(menuitem,GOBACKMENUNAME);
+	goBackMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_GO_BACK,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),goBackMenu);
+	gtk_signal_connect(GTK_OBJECT(goBackMenu),"activate",G_CALLBACK(goBack),NULL);
+	gtk_widget_set_name(goBackMenu,GOBACKMENUNAME);
 
 //function menu
 	menufunc=gtk_menu_item_new_with_label(gettext("Fun_ctions"));
