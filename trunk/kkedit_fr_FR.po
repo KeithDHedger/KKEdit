@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kkedit 1.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-10-15 13:50+0100\n"
-"PO-Revision-Date: 2014-10-28 16:08+0100\n"
+"PO-Revision-Date: 2014-10-31 16:13+0100\n"
 "Last-Translator: Thanh Tung Nguyen <thngtong@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
@@ -704,7 +704,7 @@ msgstr "Casse insensible"
 
 #: KKEdit/src/guis.cpp:1917
 msgid "Use Regex"
-msgstr "Utiliser une expression régulière"
+msgstr "Expression régulière"
 
 #: KKEdit/src/guis.cpp:1923
 msgid "Wrap"
