@@ -1,4 +1,5 @@
 0.2.4
+Re-done Find/Replace layout.
 Dimmed 'Go Back' button and menu item if can't go back.
 Fixed 'Go Back' bug
 Go to definition now searches current file first then from the leftmost tab.
