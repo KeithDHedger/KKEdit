@@ -428,6 +428,7 @@ int main(int argc,char **argv)
 			if((timeToNag==true) && (autoCheck==true))
 				doNagStuff();
 
+			gtk_widget_set_size_request(window,100,100);
 			gtk_main();
 
 			delete history;

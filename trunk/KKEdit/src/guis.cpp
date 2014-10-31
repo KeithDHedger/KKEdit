@@ -1914,7 +1914,7 @@ void buildFindReplace(void)
 	gtk_entry_set_text((GtkEntry*)replaceBox,"");
 	gtk_entry_set_activates_default((GtkEntry*)replaceBox,true);
 	gtk_container_add(GTK_CONTAINER(content_area),replaceBox);
-
+//line 1
 	item=gtk_check_button_new_with_label(gettext("Case insensitive"));
 	gtk_toggle_button_set_active((GtkToggleButton*)item,insensitiveSearch);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
@@ -1927,12 +1927,16 @@ void buildFindReplace(void)
 	gtk_widget_show(item);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)5);
 
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+	gtk_widget_show_all(vbox);
+//line2
+	hbox=gtk_hbox_new(false,0);
+
 	item=gtk_check_button_new_with_label(gettext("Wrap"));
 	gtk_toggle_button_set_active((GtkToggleButton*)item,wrapSearch);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	gtk_widget_show(item);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)2);
-
 
 	item=gtk_check_button_new_with_label(gettext("All Files"));
 	gtk_toggle_button_set_active((GtkToggleButton*)item,findInAllFiles);

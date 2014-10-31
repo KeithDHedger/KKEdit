@@ -319,6 +319,7 @@ void refreshMainWindow(void)
 		gtk_widget_show((GtkWidget*)toolBarBox);
 	else
 		gtk_widget_hide((GtkWidget*)toolBarBox);
+
 }
 
 int yesNo(char* question,char* file)
