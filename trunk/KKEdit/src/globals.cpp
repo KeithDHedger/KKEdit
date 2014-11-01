@@ -1132,5 +1132,29 @@ VISIBLE void debugFree(gpointer ptr,const char* message)
 	free(ptr);
 }
 
+GSList* loadList(char* filepath,GtkComboBoxText* dropbox)
+{
+	FILE*	fd=NULL;
+	char	buffer[2048];
+	GSList*	list=NULL;
+
+	fd=fopen(filepath,"r");
+	if(fd!=NULL)
+		{
+			while(feof(fd)==0)
+				{
+					buffer[0]=0;
+					fgets(buffer,2048,fd);
+					buffer[strlen(buffer)-1]=0;
+					if(strlen(buffer)>1)
+						{
+							list=g_slist_append(findList,strdup(buffer));
+							gtk_combo_box_text_append_text(dropbox,(const char*)buffer);
+						}
+				}
+			fclose(fd);
+		}
+	return(list);
+}
 
 

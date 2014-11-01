@@ -337,6 +337,7 @@ int main(int argc,char **argv)
 	UniqueBackend*		back;
 	char*				dbusname;
 	int					w,h;
+	char*				historypath;
 
 	setlocale(LC_ALL,"");
 	bindtextdomain("kkedit",LOCALEDIR);
@@ -399,6 +400,13 @@ int main(int argc,char **argv)
 			refreshMainWindow();
 
 			buildFindReplace();
+			asprintf(&historypath,"%s/.KKEdit/find.history",getenv("HOME"));
+			findList=loadList(historypath,(GtkComboBoxText*)findDropBox);
+			free(historypath);
+
+			asprintf(&historypath,"%s/.KKEdit/replace.history",getenv("HOME"));
+			replaceList=loadList(historypath,(GtkComboBoxText*)replaceDropBox);
+			free(historypath);
 
 #ifdef _BUILDDOCVIEWER_
 			buildGtkDocViewer();

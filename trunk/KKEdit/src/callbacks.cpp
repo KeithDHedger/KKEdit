@@ -1409,6 +1409,20 @@ UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessag
 	return(res);
 }
 
+args			findhistory[]=
+{
+	//lists
+	{"findlist",TYPELIST,&findList},
+	{NULL,0,NULL}
+};
+
+args			replacehistory[]=
+{
+	//lists
+	{"findlist",TYPELIST,&replaceList},
+	{NULL,0,NULL}
+};
+
 void writeExitData(void)
 {
 	GtkAllocation	alloc;
@@ -1446,6 +1460,14 @@ void writeExitData(void)
 	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
 
 	saveVarsToFile(filename,kkedit_window_rc);
+
+	asprintf(&filename,"%s/.KKEdit/find.history",getenv("HOME"));
+	saveVarsToFile(filename,findhistory);
+	debugFree(filename,"writeExitData filename");
+
+	asprintf(&filename,"%s/.KKEdit/replace.history",getenv("HOME"));
+	saveVarsToFile(filename,replacehistory);
+
 	debugFree(filename,"writeExitData filename");
 	debugFree(windowAllocData,"writeExitData windowAllocData");
 }

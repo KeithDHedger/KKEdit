@@ -1,4 +1,5 @@
 0.2.5
+Fixed segfault when trying to open file with non ascii characters in the name with a kkedit instance already running.
 Changed Find/Replace Entry/Dropdowns to Combo box with entry.
 
 0.2.4
