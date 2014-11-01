@@ -1148,7 +1148,7 @@ GSList* loadList(char* filepath,GtkComboBoxText* dropbox)
 					buffer[strlen(buffer)-1]=0;
 					if(strlen(buffer)>1)
 						{
-							list=g_slist_append(findList,strdup(buffer));
+							list=g_slist_append(list,strdup(buffer));
 							gtk_combo_box_text_append_text(dropbox,(const char*)buffer);
 						}
 				}

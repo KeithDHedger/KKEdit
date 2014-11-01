@@ -407,7 +407,9 @@ int main(int argc,char **argv)
 			asprintf(&historypath,"%s/.KKEdit/replace.history",getenv("HOME"));
 			replaceList=loadList(historypath,(GtkComboBoxText*)replaceDropBox);
 			free(historypath);
-
+//for(int j=0;j<g_slist_length(replaceList);j++)
+//	printf("%i - %sn",j,(char*)g_slist_nth_data(replaceList,j));
+							
 #ifdef _BUILDDOCVIEWER_
 			buildGtkDocViewer();
 #endif

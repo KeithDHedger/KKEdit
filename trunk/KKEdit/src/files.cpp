@@ -23,7 +23,7 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 {
 	FILE*	fd=NULL;
 	int		cnt=0;
-	GList*	list=NULL;
+	GSList*	list=NULL;
 
 	fd=fopen(filepath,"w");
 	if(fd!=NULL)
@@ -46,6 +46,8 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 								break;
 							case TYPELIST:
 								list=*(GSList**)((dataptr[cnt].data));
+								if(g_slist_length(list)>10)
+									list=g_slist_nth(list,g_slist_length(list)-10);
 								while(list!=NULL)
 									{
 										fprintf(fd,"%s\n",(char*)list->data);
