@@ -703,7 +703,8 @@ void basicFind(int dowhat)
 	GtkTextIter				start_match,end_match;
 	int						offset;
 
-	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
+//	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
+	if(gtk_combo_box_text_get_active_text((GtkComboBoxText*)findEntryDrop)==NULL)
 		return;
 
 	if(findInAllFiles==false)
@@ -726,7 +727,13 @@ void basicFind(int dowhat)
 	if(insensitiveSearch==true)
 		flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
 
-	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)findBox));
+//	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)findBox));
+
+
+	searchtext=g_strcompress(gtk_combo_box_text_get_active_text((GtkComboBoxText*)findEntryDrop));
+
+printf("search text=%s\n",searchtext);
+
 	replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
 
 	if(!gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
@@ -918,7 +925,8 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 	if(response_id!=REPLACE)
 		{
-			drop=findDropBox;
+//			drop=findDropBox;
+			drop=findEntryDrop;
 			entry=findBox;
 			list=findList;
 		}
@@ -931,13 +939,16 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 	itemsReplaced=-1;
 
-	edata=gtk_entry_get_text((GtkEntry*)entry);
-
+//	edata=gtk_entry_get_text((GtkEntry*)entry);
+	edata=gtk_combo_box_text_get_active_text((GtkComboBoxText*)drop);
+printf("%s\n",edata);
 	if(list==NULL)
 		{
 			list=g_slist_append(list,strdup(edata));
 			gtk_combo_box_text_append_text((GtkComboBoxText*)drop,(const char*)list->data);
 			gtk_combo_box_set_active((GtkComboBox*)drop,0);
+
+			//gtk_combo_box_text_append_text((GtkComboBoxText*)drop,edata);
 		}
 	else
 		{

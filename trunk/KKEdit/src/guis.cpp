@@ -1891,15 +1891,24 @@ void buildFindReplace(void)
 	gtk_container_add(GTK_CONTAINER(content_area),label);
 	gtk_widget_show(label);
 
-	findBox=gtk_entry_new();
-	findDropBox=gtk_combo_box_text_new();
-	g_signal_connect_after(G_OBJECT(findDropBox),"changed",G_CALLBACK(pasteFRClip),findBox);
-	gtk_container_add(GTK_CONTAINER(content_area),findDropBox);
-	gtk_widget_show(findDropBox);
+//	findBox=gtk_entry_new();
+//	findDropBox=gtk_combo_box_text_new();
 
-	gtk_entry_set_text((GtkEntry*)findBox,"");
-	gtk_entry_set_activates_default((GtkEntry*)findBox,true);
-	gtk_container_add(GTK_CONTAINER(content_area),findBox);
+	findEntryDrop=gtk_combo_box_text_new_with_entry();
+
+//	g_signal_connect_after(G_OBJECT(findDropBox),"changed",G_CALLBACK(pasteFRClip),findBox);
+//	gtk_container_add(GTK_CONTAINER(content_area),findDropBox);
+//	gtk_widget_show(findDropBox);
+
+	gtk_container_add(GTK_CONTAINER(content_area),findEntryDrop);
+	gtk_widget_show(findEntryDrop);
+
+
+
+
+//	gtk_entry_set_text((GtkEntry*)findBox,"");
+//	gtk_entry_set_activates_default((GtkEntry*)findBox,true);
+//	gtk_container_add(GTK_CONTAINER(content_area),findBox);
 
 	label=gtk_label_new(gettext("Replace With"));
 	gtk_container_add(GTK_CONTAINER(content_area),label);
