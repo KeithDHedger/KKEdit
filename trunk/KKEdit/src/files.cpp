@@ -722,13 +722,11 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 			r=readlink(filepathcopy,linkname,sb.st_size+1);
 			linkname[r]=0;
 		}
-
 	if((readLinkFirst==true) && (S_ISLNK(sb.st_mode)))
 		{
 			debugFree(filepathcopy,"openFile filepathcopy");
 			filepathcopy=strdup(linkname);
 		}
-
 
 	for(int j=0; j<gtk_notebook_get_n_pages(notebook); j++)
 		{

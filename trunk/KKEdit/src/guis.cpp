@@ -1881,7 +1881,6 @@ void buildFindReplace(void)
 
 	findReplaceDialog=gtk_dialog_new_with_buttons(gettext("Find/Replace"),(GtkWindow*)window, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_GO_FORWARD,FINDNEXT,GTK_STOCK_GO_BACK,FINDPREV,gettext("Replace"),REPLACE,NULL);
 
-//	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,GTK_RESPONSE_OK);
 	g_signal_connect(G_OBJECT(findReplaceDialog),"response",G_CALLBACK(doFindReplace),NULL);
 	content_area=gtk_dialog_get_content_area(GTK_DIALOG(findReplaceDialog));
 	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,FINDNEXT);
@@ -1897,7 +1896,6 @@ void buildFindReplace(void)
 	findDropBox=gtk_combo_box_text_new_with_entry();
 	findBox=gtk_bin_get_child((GtkBin*)findDropBox);
 	gtk_entry_set_activates_default((GtkEntry*)findBox,true);
-//	g_signal_connect_after(G_OBJECT(findDropBox),"changed",G_CALLBACK(pasteFRClip),findBox);
 
 	gtk_container_add(GTK_CONTAINER(content_area),findDropBox);
 	gtk_widget_show(findDropBox);
@@ -1906,8 +1904,6 @@ void buildFindReplace(void)
 	gtk_container_add(GTK_CONTAINER(content_area),label);
 	gtk_widget_show(label);
 
-//	replaceBox=gtk_entry_new();
-//	replaceDropBox=gtk_combo_box_text_new();
 	replaceDropBox=gtk_combo_box_text_new_with_entry();
 	replaceBox=gtk_bin_get_child((GtkBin*)replaceDropBox);
 
@@ -1915,9 +1911,6 @@ void buildFindReplace(void)
 	gtk_container_add(GTK_CONTAINER(content_area),replaceDropBox);
 	gtk_widget_show(replaceDropBox);
 
-	gtk_entry_set_text((GtkEntry*)replaceBox,"");
-	gtk_entry_set_activates_default((GtkEntry*)replaceBox,true);
-	gtk_container_add(GTK_CONTAINER(content_area),replaceBox);
 //line 1
 	item=gtk_check_button_new_with_label(gettext("Case insensitive"));
 	gtk_toggle_button_set_active((GtkToggleButton*)item,insensitiveSearch);

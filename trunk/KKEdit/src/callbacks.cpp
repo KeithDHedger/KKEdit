@@ -1369,7 +1369,8 @@ void messageOpen(UniqueMessageData *message)
 {
 	int argc;
 
-	gchar** uris=unique_message_data_get_uris(message);
+	gchar** uris=NULL;
+	uris=unique_message_data_get_uris(message);
 	argc=g_strv_length(uris);
 
 	for (int loop=1; loop<argc; loop++)
@@ -1379,6 +1380,12 @@ void messageOpen(UniqueMessageData *message)
 UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessageData *message,guint time,gpointer user_data)
 {
 	UniqueResponse	res;
+	const guchar * data;
+	gsize length;
+
+	data=unique_message_data_get(message,&length);
+	if(length==0)
+		return(UNIQUE_RESPONSE_OK);
 
 	switch(command)
 		{
