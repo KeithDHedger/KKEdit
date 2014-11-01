@@ -1880,9 +1880,11 @@ void buildFindReplace(void)
 	GtkWidget*	item;
 
 	findReplaceDialog=gtk_dialog_new_with_buttons(gettext("Find/Replace"),(GtkWindow*)window, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_GO_FORWARD,FINDNEXT,GTK_STOCK_GO_BACK,FINDPREV,gettext("Replace"),REPLACE,NULL);
-	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,GTK_RESPONSE_OK);
+
+//	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,GTK_RESPONSE_OK);
 	g_signal_connect(G_OBJECT(findReplaceDialog),"response",G_CALLBACK(doFindReplace),NULL);
 	content_area=gtk_dialog_get_content_area(GTK_DIALOG(findReplaceDialog));
+	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,FINDNEXT);
 
 	vbox=gtk_vbox_new(true,0);
 	hbox=gtk_hbox_new(false,0);
@@ -1891,31 +1893,24 @@ void buildFindReplace(void)
 	gtk_container_add(GTK_CONTAINER(content_area),label);
 	gtk_widget_show(label);
 
-//	findBox=gtk_entry_new();
-//	findDropBox=gtk_combo_box_text_new();
 
-	findEntryDrop=gtk_combo_box_text_new_with_entry();
-	findBox=gtk_bin_get_child((GtkBin*)findEntryDrop);
+	findDropBox=gtk_combo_box_text_new_with_entry();
+	findBox=gtk_bin_get_child((GtkBin*)findDropBox);
+	gtk_entry_set_activates_default((GtkEntry*)findBox,true);
 //	g_signal_connect_after(G_OBJECT(findDropBox),"changed",G_CALLBACK(pasteFRClip),findBox);
-//	gtk_container_add(GTK_CONTAINER(content_area),findDropBox);
-//	gtk_widget_show(findDropBox);
 
-	gtk_container_add(GTK_CONTAINER(content_area),findEntryDrop);
-	gtk_widget_show(findEntryDrop);
-
-
-
-
-//	gtk_entry_set_text((GtkEntry*)findBox,"");
-//	gtk_entry_set_activates_default((GtkEntry*)findBox,true);
-//	gtk_container_add(GTK_CONTAINER(content_area),findBox);
+	gtk_container_add(GTK_CONTAINER(content_area),findDropBox);
+	gtk_widget_show(findDropBox);
 
 	label=gtk_label_new(gettext("Replace With"));
 	gtk_container_add(GTK_CONTAINER(content_area),label);
 	gtk_widget_show(label);
 
-	replaceBox=gtk_entry_new();
-	replaceDropBox=gtk_combo_box_text_new();
+//	replaceBox=gtk_entry_new();
+//	replaceDropBox=gtk_combo_box_text_new();
+	replaceDropBox=gtk_combo_box_text_new_with_entry();
+	replaceBox=gtk_bin_get_child((GtkBin*)replaceDropBox);
+
 	g_signal_connect_after(G_OBJECT(replaceDropBox),"changed",G_CALLBACK(pasteFRClip),replaceBox);
 	gtk_container_add(GTK_CONTAINER(content_area),replaceDropBox);
 	gtk_widget_show(replaceDropBox);

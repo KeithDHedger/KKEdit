@@ -221,9 +221,6 @@ GtkWidget*		findDropBox=NULL;
 GtkWidget*		replaceDropBox;
 GSList*			findList=NULL;
 GSList*			replaceList=NULL;
-GtkWidget*		findEntryDrop=NULL;
-
-
 
 //custom toolbar
 GtkWidget*		fromHBox;

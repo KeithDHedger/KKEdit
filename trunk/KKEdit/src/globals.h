@@ -355,7 +355,6 @@ extern GtkWidget*		findDropBox;
 extern GtkWidget*		replaceDropBox;
 extern GSList*			findList;
 extern GSList*			replaceList;
-extern GtkWidget*		findEntryDrop;
 
 //custom toolbar
 extern GtkWidget*		fromHBox;
