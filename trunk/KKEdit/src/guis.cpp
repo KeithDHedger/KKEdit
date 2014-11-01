@@ -1895,7 +1895,7 @@ void buildFindReplace(void)
 //	findDropBox=gtk_combo_box_text_new();
 
 	findEntryDrop=gtk_combo_box_text_new_with_entry();
-
+	findBox=gtk_bin_get_child((GtkBin*)findEntryDrop);
 //	g_signal_connect_after(G_OBJECT(findDropBox),"changed",G_CALLBACK(pasteFRClip),findBox);
 //	gtk_container_add(GTK_CONTAINER(content_area),findDropBox);
 //	gtk_widget_show(findDropBox);
