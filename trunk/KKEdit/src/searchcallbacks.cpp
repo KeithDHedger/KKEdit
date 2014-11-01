@@ -703,8 +703,8 @@ void basicFind(int dowhat)
 	GtkTextIter				start_match,end_match;
 	int						offset;
 
-//	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
-	if(gtk_combo_box_text_get_active_text((GtkComboBoxText*)findEntryDrop)==NULL)
+	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
+//	if(gtk_combo_box_text_get_active_text((GtkComboBoxText*)findEntryDrop)==NULL)
 		return;
 
 	if(findInAllFiles==false)
