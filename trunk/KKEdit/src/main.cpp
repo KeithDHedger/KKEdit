@@ -401,14 +401,13 @@ int main(int argc,char **argv)
 
 			buildFindReplace();
 			asprintf(&historypath,"%s/.KKEdit/find.history",getenv("HOME"));
+			findList=NULL;
 			findList=loadList(historypath,(GtkComboBoxText*)findDropBox);
 			free(historypath);
 
 			asprintf(&historypath,"%s/.KKEdit/replace.history",getenv("HOME"));
 			replaceList=loadList(historypath,(GtkComboBoxText*)replaceDropBox);
 			free(historypath);
-//for(int j=0;j<g_slist_length(replaceList);j++)
-//	printf("%i - %sn",j,(char*)g_slist_nth_data(replaceList,j));
 							
 #ifdef _BUILDDOCVIEWER_
 			buildGtkDocViewer();

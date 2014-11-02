@@ -50,8 +50,10 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 									list=g_slist_nth(list,g_slist_length(list)-10);
 								while(list!=NULL)
 									{
-										fprintf(fd,"%s\n",(char*)list->data);
+										fprintf(fd,"%s",(char*)list->data);
 										list=list->next;
+										if(list!=NULL)
+											fprintf(fd,"\n");
 									}
 								break;
 						}
