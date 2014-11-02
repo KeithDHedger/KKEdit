@@ -937,7 +937,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 		{
 			list=g_slist_append(list,strdup(edata));
 			gtk_combo_box_text_append_text((GtkComboBoxText*)drop,(const char*)edata);
-			//gtk_combo_box_set_active((GtkComboBox*)drop,0);
 		}
 	else
 		{
@@ -955,7 +954,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 				{
 					list=g_slist_append(list,strdup(edata));
 					gtk_combo_box_text_append_text((GtkComboBoxText*)drop,(const char*)edata);
-					//gtk_combo_box_set_active((GtkComboBox*)drop,g_slist_length(list)-1);
 				}
 		}
 

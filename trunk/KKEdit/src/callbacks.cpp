@@ -1429,7 +1429,7 @@ void writeExitData(void)
 	char*			filename;
 	int				winx;
 	int				winy;
-
+	
 	gtk_widget_get_allocation(window,&alloc);
 	gtk_window_get_position((GtkWindow*)window,&winx,&winy);
 	asprintf(&windowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);

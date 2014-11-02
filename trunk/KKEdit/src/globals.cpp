@@ -349,6 +349,8 @@ args			kkedit_window_rc[]=
 	{"nagtime",TYPEINT,&lastNagTime},
 	{"lastupdate",TYPEINT,&lastUpdate},
 	{"lastplugupdate",TYPEINT,&lastPlugUpdate},
+	//lists
+	{"findlist",TYPELIST,&findList},
 	{NULL,0,NULL}
 };
 
