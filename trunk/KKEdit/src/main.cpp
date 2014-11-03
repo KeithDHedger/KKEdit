@@ -4,8 +4,10 @@
  *
 */
 
-#include "kkedit-includes.h"
+#include <X11/Xatom.h>
+#include <gdk/gdkx.h>
 
+#include "kkedit-includes.h"
 bool	singleOverRide=false;
 bool	loadPluginsFlag=true;
 
@@ -412,15 +414,8 @@ void appStart(GApplication  *application,gpointer data)
 
 	gtk_widget_set_size_request(window,100,100);
 }
-#include <X11/Intrinsic.h>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/xpm.h>
-#include <Imlib2.h>
-#include <X11/extensions/shape.h>
-#include <X11/Xatom.h>
-#include <gdk/gdkx.h>
-guint unique_backend_get_workspace (void)
+
+int unique_backend_get_workspace (void)
 {
   GdkDisplay *display;
   GdkWindow *root_win;
@@ -430,7 +425,7 @@ guint unique_backend_get_workspace (void)
   unsigned long n_items, bytes_after;
   unsigned char *data_return = 0;
 //#endif
-
+int	retnum;
  // g_return_val_if_fail (UNIQUE_IS_BACKEND (backend), 0);
 
 //  if (backend->workspace != -1)
@@ -454,18 +449,19 @@ guint unique_backend_get_workspace (void)
   if (type == XA_CARDINAL && format == 32 && n_items > 0)
     {
 //      backend->workspace = (guint) data_return[0];
+retnum=(int)data_return[0];
       XFree (data_return);
     }
 //#endif
 
-  return (guint) data_return[0];
+  return retnum;
 }
 int main (int argc, char **argv)
 {
 	int		status;
 	char*	filename;
 	char*				dbusname;
-	UniqueBackend*		back;
+//	UniqueBackend*		back;
 
 	if((argc>1) && (strcmp(argv[1],"-m")==0))
 		singleOverRide=true;
@@ -476,7 +472,7 @@ int main (int argc, char **argv)
 	loadVarsFromFile(filename,kkedit_startup_vars);
 	free(filename);
 
-	back=unique_backend_create();
+//	back=unique_backend_create();
 //	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace(back));
 //printf("%s\n",dbusname);	
 	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace());

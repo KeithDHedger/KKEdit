@@ -1367,6 +1367,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 		return(false);
 }
 
+#if 0
 void messageOpen(UniqueMessageData *message)
 {
 	int argc;
@@ -1410,7 +1411,7 @@ UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessag
 		}
 	return(res);
 }
-
+#endif
 void writeExitData(void)
 {
 	GtkAllocation	alloc;
