@@ -328,119 +328,176 @@ void doNagStuff(void)
 	debugFree(control,"control from do nag stuff");
 }
 
-int main(int argc,char **argv)
+void activate(GApplication* application)
 {
-	UniqueApp*			app;
-	UniqueMessageData*	message=NULL;
-	UniqueCommand 		command;
-	UniqueResponse 		response;
-	UniqueBackend*		back;
-	char*				dbusname;
-	int					w,h;
+}
+
+void open(GApplication* application,GFile** files,gint n_files,const gchar* hint)
+{
+	int		startpos=0;
+	char*	filepath=NULL;
+
+	g_application_hold(application);
+
+	if(singleOverRide==true)
+		startpos=1;
+
+	for(int i=startpos; i<n_files; i++)
+		{
+			filepath=g_file_get_path(files[i]);
+			if(filepath!=NULL)
+				{
+					openFile(filepath,0,true);
+					free(filepath);
+				}
+		}
+
+	if(window!=NULL)
+		gtk_window_present((GtkWindow*)window);
+
+	g_application_release(application);
+}
+
+void appStart(GApplication  *application,gpointer data)
+{
+	int	w,h;
+
+	g_application_hold(application);
 
 	setlocale(LC_ALL,"");
 	bindtextdomain("kkedit",LOCALEDIR);
 	textdomain("kkedit");
 	bind_textdomain_codeset("kkedit","UTF-8");
 
-	gtk_init(&argc,&argv);
-	back=unique_backend_create();
-	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace(back));
-	app=unique_app_new(dbusname,NULL);
-	message=unique_message_data_new();
+	init();
+	buildMainGui();
 
-	readConfig();
-	g_slist_free_full(findList,free);
-	findList=NULL;
-	g_slist_free_full(replaceList,free);
-	replaceList=NULL;
+	if(onExitSaveSession==true)
+		restoreSession(NULL,(void*)restoreBookmarks);
+
+	refreshMainWindow();
+
+	buildFindReplace();
+	for(unsigned int j=0; j<g_slist_length(findList); j++)
+		gtk_combo_box_text_append_text((GtkComboBoxText*)findDropBox,(const char*)g_slist_nth_data(findList,j));
+
+	for(unsigned int j=0; j<g_slist_length(replaceList); j++)
+		gtk_combo_box_text_append_text((GtkComboBoxText*)replaceDropBox,(const char*)g_slist_nth_data(replaceList,j));
+
+#ifdef _BUILDDOCVIEWER_
+	buildGtkDocViewer();
+#endif
+
+	gtk_window_get_size((GtkWindow*)window,&w,&h);
+	gtk_paned_set_position((GtkPaned*)mainVPane,toolOutHeight);
+
+	gtk_paned_set_position((GtkPaned*)secondWindowVPane,topVPaneHite);
+	gtk_paned_set_position((GtkPaned*)mainWindowVPane,bottomVPaneHite);
+
+	gtk_widget_hide(toolOutVBox);
+	if(getuid()!=0)
+		{
+			gtk_window_set_default_icon_name(PACKAGE);
+			gtk_window_set_icon_name((GtkWindow*)window,PACKAGE);
+		}
+	else
+		{
+			gtk_window_set_default_icon_name(PACKAGE "Root");
+			gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
+		}
+	setSensitive();
+
+	if((timeToNag==true) && (autoCheck==true))
+		doNagStuff();
+
+	gtk_widget_set_size_request(window,100,100);
+}
+#include <X11/Intrinsic.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/xpm.h>
+#include <Imlib2.h>
+#include <X11/extensions/shape.h>
+#include <X11/Xatom.h>
+#include <gdk/gdkx.h>
+guint unique_backend_get_workspace (void)
+{
+  GdkDisplay *display;
+  GdkWindow *root_win;
+//#ifdef GDK_WINDOWING_X11
+  Atom _net_current_desktop, type;
+  int format;
+  unsigned long n_items, bytes_after;
+  unsigned char *data_return = 0;
+//#endif
+
+ // g_return_val_if_fail (UNIQUE_IS_BACKEND (backend), 0);
+
+//  if (backend->workspace != -1)
+ //   return backend->workspace;
+
+  display = gdk_screen_get_display ( gdk_screen_get_default());
+  root_win = gdk_screen_get_root_window (gdk_screen_get_default());
+
+//#ifdef GDK_WINDOWING_X11
+  _net_current_desktop =
+    gdk_x11_get_xatom_by_name_for_display (display, "_NET_CURRENT_DESKTOP");
+
+  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
+                      GDK_WINDOW_XID (root_win),
+                      _net_current_desktop,
+                      0, G_MAXLONG,
+                      False, XA_CARDINAL,
+                      &type, &format, &n_items, &bytes_after,
+                      &data_return);
+
+  if (type == XA_CARDINAL && format == 32 && n_items > 0)
+    {
+//      backend->workspace = (guint) data_return[0];
+      XFree (data_return);
+    }
+//#endif
+
+  return (guint) data_return[0];
+}
+int main (int argc, char **argv)
+{
+	int		status;
+	char*	filename;
+	char*				dbusname;
+	UniqueBackend*		back;
 
 	if((argc>1) && (strcmp(argv[1],"-m")==0))
 		singleOverRide=true;
 
-	if((argc>1) && (strcmp(argv[1],"-s")==0))
-		{
-			singleOverRide=true;
-			loadPluginsFlag=false;
-		}
+	gtk_init(&argc,&argv);
 
-	if((unique_app_is_running(app)==true) && (singleUse==true) && (singleOverRide==false))
-		{
-			if(argc==1)
-				{
-					command=UNIQUE_ACTIVATE;
-					response=unique_app_send_message(app,command,NULL);
-				}
-			else
-				{
-					command=UNIQUE_OPEN;
-					unique_message_data_set_uris(message,argv);
-					response=unique_app_send_message(app,command,message);
-				}
+	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
+	loadVarsFromFile(filename,kkedit_startup_vars);
+	free(filename);
 
-			g_object_unref(app);
-			unique_message_data_free(message);
-
-			if(response==UNIQUE_RESPONSE_OK)
-				return 0;
-			else
-				printf("FAIL\n");
-			//handle_fail_or_user_cancel();
-		}
+	back=unique_backend_create();
+//	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace(back));
+//printf("%s\n",dbusname);	
+	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace());
+printf("%s\n",dbusname);	
+	if((singleOverRide==true) || (singleUse==false))
+		mainApp=g_application_new(DBUSNAME,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN));
 	else
-		{
-			init();
-			buildMainGui();
+		mainApp=g_application_new(DBUSNAME,G_APPLICATION_HANDLES_OPEN);
 
-			if(onExitSaveSession==true)
-				restoreSession(NULL,(void*)restoreBookmarks);
+	g_signal_connect(mainApp,"activate",G_CALLBACK(activate),NULL);
+	g_signal_connect(mainApp,"startup",G_CALLBACK (appStart),NULL);
+	g_signal_connect(mainApp,"open",G_CALLBACK (open),NULL);
 
-			for(int j=1; j<argc; j++)
-				{
-					if((strncasecmp(argv[j],"-m",2)!=0) && (strncasecmp(argv[j],"-s",2)!=0))
-						openFile(argv[j],0,true);
-				}
-			refreshMainWindow();
 
-			buildFindReplace();
-			for(unsigned int j=0;j<g_slist_length(findList);j++)
-				gtk_combo_box_text_append_text((GtkComboBoxText*)findDropBox,(const char*)g_slist_nth_data(findList,j));
 
-			for(unsigned int j=0;j<g_slist_length(replaceList);j++)
-				gtk_combo_box_text_append_text((GtkComboBoxText*)replaceDropBox,(const char*)g_slist_nth_data(replaceList,j));
-							
-#ifdef _BUILDDOCVIEWER_
-			buildGtkDocViewer();
-#endif
-			unique_app_watch_window(app,(GtkWindow*)window);
-			g_signal_connect(app,"message-received",G_CALLBACK(messageReceived),NULL);
+	status=g_application_run(mainApp,argc,argv);
 
-			gtk_window_get_size((GtkWindow*)window,&w,&h);
-			gtk_paned_set_position((GtkPaned*)mainVPane,toolOutHeight);
+	g_object_unref(mainApp);
+	delete history;
+	delete globalSlice;
 
-			gtk_paned_set_position((GtkPaned*)secondWindowVPane,topVPaneHite);
-			gtk_paned_set_position((GtkPaned*)mainWindowVPane,bottomVPaneHite);
-
-			gtk_widget_hide(toolOutVBox);
-			if(getuid()!=0)
-				{
-					gtk_window_set_default_icon_name(PACKAGE);
-					gtk_window_set_icon_name((GtkWindow*)window,PACKAGE);
-				}
-			else
-				{
-					gtk_window_set_default_icon_name(PACKAGE "Root");
-					gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
-				}
-			setSensitive();
-
-			if((timeToNag==true) && (autoCheck==true))
-				doNagStuff();
-
-			gtk_widget_set_size_request(window,100,100);
-			gtk_main();
-
-			delete history;
-			delete globalSlice;
-		}
+	return status;
 }
+

@@ -50,10 +50,11 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 									list=g_slist_nth(list,g_slist_length(list)-10);
 								while(list!=NULL)
 									{
-										fprintf(fd,"%s	%s",dataptr[cnt].name,(char*)list->data);
+										if(strlen((char*)list->data)>0)
+											{
+												fprintf(fd,"%s\t%s\n",dataptr[cnt].name,(char*)list->data);
+											}
 										list=list->next;
-										if(list!=NULL)
-											fprintf(fd,"\n");
 									}
 								break;
 						}
@@ -99,7 +100,7 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 												*(bool*)dataptr[cnt].data=(bool)atoi(strarg);
 												break;
 											case TYPELIST:
-												sscanf(buffer,"%*s %a[^\n]s",&liststr);
+												sscanf(buffer,"%*s\t%a[^\n]s",&liststr);
 												*(GSList**)dataptr[cnt].data=g_slist_append(*(GSList**)dataptr[cnt].data,liststr);
 												break;
 										}
@@ -639,6 +640,7 @@ pageStruct* makeNewPage(void)
 	page->buffer=NULL;
 	page->userDataList=NULL;
 	page->filePath=NULL;
+	page->realFilePath=NULL;
 
 	page->pane=gtk_vpaned_new();
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
@@ -733,6 +735,10 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	filepathcopy=strdup(filepath);
 
+printf("in open copy%s\n",filepathcopy);
+printf("in open %s\n",filepath);
+
+
 	lstat(filepath,&sb);
 	if(S_ISLNK(sb.st_mode))
 		{
@@ -751,7 +757,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 			page=getPageStructPtr(j);
 			if(noDuplicates==true)
 				{
-					if((page->realFilePath!=NULL) && ((strcmp(page->realFilePath,filepathcopy)==0) ||(strcmp(page->filePath,filepathcopy)==0)))
+					if((page->realFilePath!=NULL) && ((strcmp(page->realFilePath,filepathcopy)==0) || ((page->filePath!=NULL) && (strcmp(page->filePath,filepathcopy)==0))) )
 						{
 							gtk_notebook_set_current_page(notebook,j);
 							return(true);
@@ -759,6 +765,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 				}
 		}
 
+//printf("in open copy2%s\n",filepathcopy);
+//printf("in open2 %s\n",filepath);
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		{
 			if(warn==true)
@@ -767,7 +775,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
-			return(false);
+			//return(false);
 		}
 
 	if(access(filepathcopy,R_OK)!=0)

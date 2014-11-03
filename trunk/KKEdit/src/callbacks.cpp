@@ -815,6 +815,8 @@ VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,Gtk
 	for(int j=0; j<cnt; j++)
 		{
 			filename=g_filename_from_uri(array[j],NULL,NULL);
+			printf("filename droped %s\n",filename);
+			printf("uri dropped %s\n",array[j]);
 			openFile(filename,0,true);
 		}
 
@@ -1447,13 +1449,6 @@ void writeExitData(void)
 
 	saveVarsToFile(filename,kkedit_window_rc);
 
-//	asprintf(&filename,"%s/.KKEdit/find.history",getenv("HOME"));
-//	saveVarsToFile(filename,findhistory);
-//	debugFree(filename,"writeExitData filename");
-//
-//	asprintf(&filename,"%s/.KKEdit/replace.history",getenv("HOME"));
-//	saveVarsToFile(filename,replacehistory);
-
 	debugFree(filename,"writeExitData filename");
 	debugFree(windowAllocData,"writeExitData windowAllocData");
 }
@@ -1531,7 +1526,8 @@ VISIBLE void doShutdown(GtkWidget* widget,gpointer data)
 	system(command);
 	debugFree(command,"doShutdown command");
 	system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
-	gtk_main_quit();
+
+	g_application_release(mainApp);
 }
 
 void setPrefs(GtkWidget* widget,gpointer data)

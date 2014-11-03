@@ -21,6 +21,7 @@
 #define MYWEBSITE "https://sites.google.com/site/kkeditlinuxtexteditor/home"
 #define PLUGINSLINK "https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins#getplugs"
 #define NAGTIMELINK "https://dl.dropboxusercontent.com/s/xcvp8af3qp7ffxg/NAGTIME"
+#define DBUSNAME "org.keithhedge.kkedit"
 
 #define TOOL_ASYNC 8
 #define TOOL_IGNORE_OP 0
@@ -137,6 +138,8 @@ struct bookMarksNew
 	char*				markName;
 	int					line;
 };
+
+extern GApplication*	mainApp;
 
 extern HistoryClass*	history;
 
@@ -422,6 +425,7 @@ extern char*			docWindowAllocData;
 extern args				kkedit_window_rc[];
 extern args				kkedit_rc[];
 extern args				tool_vars[];
+extern args				kkedit_startup_vars[];
 extern args				keybindings_rc[];
 
 //status bar message

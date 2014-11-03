@@ -8,6 +8,8 @@
 
 #include "kkedit-includes.h"
 
+GApplication*	mainApp;
+
 GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;
 GtkNotebook*	notebook=NULL;
@@ -327,6 +329,13 @@ PluginClass*	globalPlugins=NULL;
 //save and load var lists
 char*			windowAllocData=NULL;
 char*			docWindowAllocData=NULL;
+
+args			kkedit_startup_vars[]=
+{
+	{"singleuse",TYPEBOOL,&singleUse},
+	{NULL,0,NULL}
+};
+
 args			kkedit_window_rc[]=
 {
 	//bools

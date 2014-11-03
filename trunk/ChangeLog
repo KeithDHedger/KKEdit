@@ -1,4 +1,6 @@
 0.2.5
+Switched to gapplication from deprecated libunique.
+Now saves last 10 find/replace terms and reloads at startup.
 Fixed segfault when trying to open file with non ascii characters in the name with a kkedit instance already running.
 Changed Find/Replace Entry/Dropdowns to Combo box with entry.
 
