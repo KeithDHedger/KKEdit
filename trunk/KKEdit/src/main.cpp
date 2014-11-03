@@ -337,7 +337,6 @@ int main(int argc,char **argv)
 	UniqueBackend*		back;
 	char*				dbusname;
 	int					w,h;
-	char*				historypath;
 
 	setlocale(LC_ALL,"");
 	bindtextdomain("kkedit",LOCALEDIR);
@@ -353,6 +352,8 @@ int main(int argc,char **argv)
 	readConfig();
 	g_slist_free_full(findList,free);
 	findList=NULL;
+	g_slist_free_full(replaceList,free);
+	replaceList=NULL;
 
 	if((argc>1) && (strcmp(argv[1],"-m")==0))
 		singleOverRide=true;
@@ -402,21 +403,11 @@ int main(int argc,char **argv)
 			refreshMainWindow();
 
 			buildFindReplace();
-			for(int j=0;j<g_slist_length(findList);j++)
-				{
-					printf("%i -%s\n",j,g_slist_nth_data(findList,j));
-					gtk_combo_box_text_append_text((GtkComboBoxText*)findDropBox,(const char*)g_slist_nth_data(findList,j));
-				}
-//printf("%i\n",);
+			for(unsigned int j=0;j<g_slist_length(findList);j++)
+				gtk_combo_box_text_append_text((GtkComboBoxText*)findDropBox,(const char*)g_slist_nth_data(findList,j));
 
-//			asprintf(&historypath,"%s/.KKEdit/find.history",getenv("HOME"));
-//			findList=NULL;
-//			findList=loadList(historypath,(GtkComboBoxText*)findDropBox);
-//			free(historypath);
-
-//			asprintf(&historypath,"%s/.KKEdit/replace.history",getenv("HOME"));
-//			replaceList=loadList(historypath,(GtkComboBoxText*)replaceDropBox);
-//			free(historypath);
+			for(unsigned int j=0;j<g_slist_length(replaceList);j++)
+				gtk_combo_box_text_append_text((GtkComboBoxText*)replaceDropBox,(const char*)g_slist_nth_data(replaceList,j));
 							
 #ifdef _BUILDDOCVIEWER_
 			buildGtkDocViewer();

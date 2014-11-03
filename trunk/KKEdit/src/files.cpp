@@ -50,7 +50,7 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 									list=g_slist_nth(list,g_slist_length(list)-10);
 								while(list!=NULL)
 									{
-										fprintf(fd,"findlist	%s",(char*)list->data);
+										fprintf(fd,"%s	%s",dataptr[cnt].name,(char*)list->data);
 										list=list->next;
 										if(list!=NULL)
 											fprintf(fd,"\n");
@@ -70,6 +70,7 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 	int		cnt;
 	char*	argname=NULL;
 	char*	strarg=NULL;
+	char*	liststr=NULL;
 
 	fd=fopen(filepath,"r");
 	if(fd!=NULL)
@@ -98,10 +99,8 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 												*(bool*)dataptr[cnt].data=(bool)atoi(strarg);
 												break;
 											case TYPELIST:
-												//list=g_slist_append(list,strdup(edata));
-												//list=*(GSList**)((dataptr[cnt].data));
-												//*(bool*)dataptr[cnt].data
-												*(GSList**)dataptr[cnt].data=g_slist_append(*(GSList**)dataptr[cnt].data,strdup(strarg));
+												sscanf(buffer,"%*s %a[^\n]s",&liststr);
+												*(GSList**)dataptr[cnt].data=g_slist_append(*(GSList**)dataptr[cnt].data,liststr);
 												break;
 										}
 								}

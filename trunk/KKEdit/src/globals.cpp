@@ -351,6 +351,7 @@ args			kkedit_window_rc[]=
 	{"lastplugupdate",TYPEINT,&lastPlugUpdate},
 	//lists
 	{"findlist",TYPELIST,&findList},
+	{"replacelist",TYPELIST,&replaceList},
 	{NULL,0,NULL}
 };
 
