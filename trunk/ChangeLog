@@ -3,6 +3,7 @@ Fixed ubuntu/gnome bugs AGAIN! I wish they would stop breaking stuff for no good
 Added help option to command line.
 Added long command line options.
 Fixed opening files with non-ascii characters in name.
+Added linking to Xlib.
 Switched to gapplication from deprecated libunique.
 Now saves last 10 find/replace terms and reloads at startup.
 Fixed segfault when trying to open file with non ascii characters in the name with a kkedit instance already running.
