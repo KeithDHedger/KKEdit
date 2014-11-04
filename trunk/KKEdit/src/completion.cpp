@@ -198,7 +198,6 @@ void addProp(pageStruct* page)
 	getRecursiveTagList(page->filePath,&functions);
 	lineptr=functions;
 
-
 	while (lineptr!=NULL)
 		{
 			tmpstr[0]=0;
@@ -255,7 +254,7 @@ void doCompletionPopUp(pageStruct* page)
 {
 	GtkSourceCompletionContext*	context;
 	GList*						list;
-
+printf("XXXXXXXXXXX\n");
 	context=gtk_source_completion_create_context(page->completion,NULL);
 	list=gtk_source_completion_get_providers(page->completion);
 	gtk_source_completion_show(page->completion,list,context);

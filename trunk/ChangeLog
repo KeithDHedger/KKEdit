@@ -1,4 +1,5 @@
 0.2.5
+Fixed segfault on docviewer when a very large number of possible matches are found.
 Added colour button to prefs for setting bookmark highlight colour.
 Added max find/replace history terms saved to prefs.
 Fixed ubuntu/gnome bugs AGAIN! I wish they would stop breaking stuff for no good reason!
@@ -469,6 +470,8 @@ Checked build with lower version of gtksourceview (2.9.9) but 2.11.1 recommended
 Added GUI to build external tools.
 
 0.0.8
+Turned off various updates/callbacks while doing some stuff to improve speed.
+Speeded up replace all.
 Can now use escapes in search/replace \n, \t etc.
 Added monitor for file changed on disk.
 Code clean.

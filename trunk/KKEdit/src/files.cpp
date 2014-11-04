@@ -190,7 +190,8 @@ void setFilePrefs(pageStruct* page)
 		gtk_source_completion_unblock_interactive(page->completion);
 	else
 		gtk_source_completion_block_interactive(page->completion);
-createCompletion(page);
+
+	createCompletion(page);
 }
 
 void resetAllFilePrefs(void)
@@ -733,6 +734,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	ssize_t					r;
 	char*					filepathcopy=NULL;
 
+	busyFlag=true;
+
 	filepathcopy=strdup(filepath);
 
 	lstat(filepath,&sb);
@@ -756,6 +759,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					if((page->realFilePath!=NULL) && ((strcmp(page->realFilePath,filepathcopy)==0) || ((page->filePath!=NULL) && (strcmp(page->filePath,filepathcopy)==0))) )
 						{
 							gtk_notebook_set_current_page(notebook,j);
+							busyFlag=false;
 							return(true);
 						}
 				}
@@ -769,6 +773,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
+			busyFlag=false;
 			return(false);
 		}
 
@@ -780,6 +785,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
+			busyFlag=false;
 			return(false);
 		}
 
@@ -811,6 +817,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
+			busyFlag=false;
 			return(false);
 		}
 
@@ -897,6 +904,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"openFile");
 
+	busyFlag=false;
 	return TRUE;
 }
 

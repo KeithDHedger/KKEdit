@@ -140,6 +140,7 @@ struct bookMarksNew
 };
 
 extern GApplication*	mainApp;
+extern bool				busyFlag;
 
 extern HistoryClass*	history;
 
@@ -451,7 +452,7 @@ void showBarberPole(const char* title);
 void killBarberPole(void);
 void debugFree(gpointer ptr,const char* message);
 char* truncateWithElipses(char* str,unsigned int maxlen);
-GSList* loadList(char* filepath,GtkComboBoxText* dropbox);
+void doBusy(bool busy,pageStruct* page);
 
 #endif
 

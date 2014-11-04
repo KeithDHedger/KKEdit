@@ -392,7 +392,7 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 	const char*	path;
 	const char*	lang;
 
-	if((statusMessage!=NULL))
+	if((statusMessage!=NULL) || (busyFlag==true))
 		return;
 
 	pageStruct* pagecheck=getPageStructPtr(currentTabNumber);
@@ -765,6 +765,7 @@ VISIBLE void undo(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 
+	
 	if(gtk_source_buffer_can_undo(page->buffer));
 	{
 		gtk_source_buffer_undo(page->buffer);

@@ -704,7 +704,6 @@ void basicFind(int dowhat)
 	int						offset;
 
 	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
-//	if(gtk_combo_box_text_get_active_text((GtkComboBoxText*)findEntryDrop)==NULL)
 		return;
 
 	if(findInAllFiles==false)
@@ -722,7 +721,9 @@ void basicFind(int dowhat)
 
 	page=getPageStructPtr(currentFindPage);
 
-	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+//	gtk_source_completion_words_unregister(docWordsProv,(GtkTextBuffer*)page->buffer);
+//	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+	doBusy(true,page);
 
 	if(insensitiveSearch==true)
 		flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
@@ -840,51 +841,28 @@ void basicFind(int dowhat)
 
 		if((dowhat==REPLACE) && (replaceAll==true))
 			{
-				if(replaceAll==true)
+				gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
+				replaceAllFlag=true;
+				while(replaceAllFlag==true)
 					{
-						replaceAllFlag=true;
-						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
-						gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&page->iter);
 						if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
 							{
-								gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-								page->iter=page->match_end;
+								itemsReplaced++;
+								gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+								gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,replacetext,-1);
+								page->iter=page->match_start;
 							}
 						else
 							replaceAllFlag=false;
 					}
-				else
-					replaceAllFlag=false;
-				do
-					{
-						if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
-							{
-								selectedtext=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end,false);
-								if((insensitiveSearch==true && strcasecmp(selectedtext,searchtext)==0) ||(insensitiveSearch==false && strcmp(selectedtext,searchtext)==0))
-									{
-										itemsReplaced++;
-										gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-										gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,replacetext,-1);
-										gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-										if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
-											{
-												gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-												page->iter=page->match_end;
-											}
-										else
-											{
-												replaceAllFlag=false;
-											}
-									}
-								if(selectedtext!=NULL)
-									debugFree(selectedtext,"basicFind selectedtext");
-							}
-					}
-				while(replaceAllFlag==true);
-
 			}
 
-	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+//	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+//
+//	if(autoShowComps==true)
+//		gtk_source_completion_words_register(docWordsProv,(GtkTextBuffer*)page->buffer);
+	doBusy(false,page);
+
 	debugFree(searchtext,"basicFind searchtext");
 	debugFree(replacetext,"basicFind replacetext");
 }
@@ -957,6 +935,8 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 				}
 		}
 
+	busyFlag=true;
+
 	if(response_id!=REPLACE)
 		findList=list;
 	else
@@ -966,6 +946,8 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 		basicFind(response_id);
 	else
 		regexFind(response_id);
+
+	busyFlag=false;
 
 	if(itemsReplaced>-1)
 		showOnStatus(gtk_entry_get_text((GtkEntry*)findBox),gtk_entry_get_text((GtkEntry*)replaceBox));

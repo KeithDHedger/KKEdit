@@ -9,6 +9,7 @@
 #include "kkedit-includes.h"
 
 GApplication*	mainApp;
+bool			busyFlag=false;
 
 GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;
@@ -1147,29 +1148,27 @@ VISIBLE void debugFree(gpointer ptr,const char* message)
 	free(ptr);
 }
 
-GSList* loadList(char* filepath,GtkComboBoxText* dropbox)
+void doBusy(bool busy,pageStruct* page)
 {
-	FILE*	fd=NULL;
-	char	buffer[2048];
-	GSList*	list=NULL;
+	if(page==NULL)
+		return;
 
-	fd=fopen(filepath,"r");
-	if(fd!=NULL)
+	if(busy==true)
 		{
-			while(feof(fd)==0)
-				{
-					buffer[0]=0;
-					fgets(buffer,2048,fd);
-					buffer[strlen(buffer)-1]=0;
-					if(strlen(buffer)>1)
-						{
-							list=g_slist_append(list,strdup(buffer));
-							gtk_combo_box_text_append_text(dropbox,(const char*)buffer);
-						}
-				}
-			fclose(fd);
+			gtk_source_completion_words_unregister(docWordsProv,(GtkTextBuffer*)page->buffer);
+			gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+			busyFlag=true;
 		}
-	return(list);
+	else
+		{
+			gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+			if(autoShowComps==true)
+				gtk_source_completion_words_register(docWordsProv,(GtkTextBuffer*)page->buffer);
+			busyFlag=false;
+		}
 }
+
+
+
 
 
