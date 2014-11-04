@@ -344,7 +344,7 @@ void open(GApplication* application,GFile** files,gint n_files,const gchar* hint
 
 	if(singleOverRide==true)
 		startpos=1;
-
+startpos=0;
 	for(int i=startpos; i<n_files; i++)
 		{
 			filepath=g_file_get_path(files[i]);
@@ -450,12 +450,97 @@ retnum=(int)data_return[0];
 
   return retnum;
 }
+
+int commandLine(GApplication* application,GApplicationCommandLine* cmdline)
+{
+  gchar **argv;
+  gint argc;
+  gint i;
+
+  argv = g_application_command_line_get_arguments (cmdline, &argc);
+
+  for (i = 0; i < argc; i++)
+    g_print ("handling argument %s remotely\n", argv[i]);
+
+  g_strfreev (argv);
+
+  return 0;
+
+}
+//#include <gio/gio.h>
+//#include <stdlib.h>
+//#include <string.h>
+static gboolean
+test_local_cmdline (GApplication   *application,
+                    gchar        ***arguments,
+                    gint           *exit_status)
+{
+  gint i, j;
+  gchar **argv;
+
+  argv = *arguments;
+
+  i = 1;
+  while (argv[i])
+    {
+      if (g_str_has_prefix (argv[i], "--local-"))
+        {
+          g_print ("handling argument %s locally\n", argv[i]);
+          g_free (argv[i]);
+          for (j = i; argv[j]; j++)
+            argv[j] = argv[j + 1];
+        }
+      else
+        {
+          g_print ("not handling argument %s locally\n", argv[i]);
+          i++;
+        }
+    }
+
+  *exit_status = 0;
+
+  return FALSE;
+}
+
+typedef GApplication TestApplication;
+typedef GApplicationClass TestApplicationClass;
+
+GType test_application_get_type (void);
+G_DEFINE_TYPE (TestApplication, test_application, G_TYPE_APPLICATION)
+
+void test_application_finalize (GObject *object)
+{
+  G_OBJECT_CLASS (test_application_parent_class)->finalize (object);
+}
+
+void test_application_init (TestApplication *app)
+{
+}
+
+void test_application_class_init (TestApplicationClass* myclass)
+{
+  G_OBJECT_CLASS (myclass)->finalize = test_application_finalize;
+  G_APPLICATION_CLASS (myclass)->local_command_line = test_local_cmdline;
+}
+
+static GApplication *
+test_application_new (const gchar       *application_id,
+                      GApplicationFlags  flags)
+{
+  g_return_val_if_fail (g_application_id_is_valid (application_id), NULL);
+
+  return ( GApplication *)g_object_new (test_application_get_type (),
+                       "application-id", application_id,
+                       "flags", flags,
+                       NULL);
+}
+
+
 int main (int argc, char **argv)
 {
 	int		status;
 	char*	filename;
 	char*				dbusname;
-//	UniqueBackend*		back;
 
 	if((argc>1) && (strcmp(argv[1],"-m")==0))
 		singleOverRide=true;
@@ -466,22 +551,53 @@ int main (int argc, char **argv)
 	loadVarsFromFile(filename,kkedit_startup_vars);
 	free(filename);
 
-//	back=unique_backend_create();
-//	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace(back));
-//printf("%s\n",dbusname);	
 	asprintf(&dbusname,"org.keithhedger%i.KKEdit",getWorkspaceNumber());
-printf("%s\n",dbusname);	
 	if((singleOverRide==true) || (singleUse==false))
 		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN));
 	else
-		mainApp=g_application_new(dbusname,G_APPLICATION_HANDLES_OPEN);
+		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_HANDLES_OPEN));
+
+
+//	if((singleOverRide==true) || (singleUse==false))
+//		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE));
+//	else
+//		mainApp=g_application_new(dbusname,(GApplicationFlags)0);
+
+
 
 	g_signal_connect(mainApp,"activate",G_CALLBACK(activate),NULL);
+	//g_signal_connect(mainApp,"command-line",G_CALLBACK(commandLine),NULL);
 	g_signal_connect(mainApp,"startup",G_CALLBACK (appStart),NULL);
 	g_signal_connect(mainApp,"open",G_CALLBACK (open),NULL);
 
+ gint arg1;
+  gboolean arg2;
+  gboolean help;
+  GOptionContext *context;
 
+GOptionEntry entries[] = {
+    { "m", 'm', 0, G_OPTION_ARG_NONE, &arg2, NULL, NULL },
+    { NULL }
+  };
+  
+   context = g_option_context_new (NULL);
+//   g_option_context_set_help_enabled (context, FALSE);
+   g_option_context_add_main_entries (context, entries, NULL);
+ arg1 = 0;
+  arg2 = FALSE;
+  help = FALSE;  
+  
+g_option_context_parse(context, &argc, &argv,NULL);
 
+printf("%i\n",(int)arg2);
+printf("%i\n",argc);
+printf("%s\n",argv[1]);
+//for(int j=1;j<argc;j++)
+//	{
+//	printf("%sn",argv[j]);
+//	openFile(strdup(argv[j]),0,true);
+//	}
+	
 	status=g_application_run(mainApp,argc,argv);
 
 	g_object_unref(mainApp);
