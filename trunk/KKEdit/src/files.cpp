@@ -735,10 +735,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	filepathcopy=strdup(filepath);
 
-printf("in open copy%s\n",filepathcopy);
-printf("in open %s\n",filepath);
-
-
 	lstat(filepath,&sb);
 	if(S_ISLNK(sb.st_mode))
 		{
@@ -765,8 +761,6 @@ printf("in open %s\n",filepath);
 				}
 		}
 
-//printf("in open copy2%s\n",filepathcopy);
-//printf("in open2 %s\n",filepath);
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		{
 			if(warn==true)
@@ -775,7 +769,7 @@ printf("in open %s\n",filepath);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
-			//return(false);
+			return(false);
 		}
 
 	if(access(filepathcopy,R_OK)!=0)
