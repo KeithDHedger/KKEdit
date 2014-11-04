@@ -1562,6 +1562,9 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			autoShowComps=tmpAutoShowComps;
 			autoShowMinChars=tmpAutoShowMinChars;
 			autoCheck=tmpAutoCheck;
+
+			maxFRHistory=gtk_adjustment_get_value((GtkAdjustment*)frHistoryAdj);
+
 			if(styleName!=NULL)
 				{
 					debugFree(styleName,"setPrefs tmpStyleName");
@@ -1576,8 +1579,11 @@ void setPrefs(GtkWidget* widget,gpointer data)
 
 			if(highlightColour!=NULL)
 				{
+					GdkColor	colour;
 					debugFree(highlightColour,"setPrefs highlightColour");
-					highlightColour=strdup(gtk_entry_get_text((GtkEntry*)bmHighlightBox));
+					//highlightColour=strdup(gtk_entry_get_text((GtkEntry*)bmHighlightBox));
+					gtk_color_button_get_color((GtkColorButton*)bmHighlightBox,&colour);
+					highlightColour=gdk_color_to_string(&colour);
 				}
 
 			if(terminalCommand!=NULL)

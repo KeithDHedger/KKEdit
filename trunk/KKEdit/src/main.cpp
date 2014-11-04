@@ -437,7 +437,6 @@ int getWorkspaceNumber(void)
 	return retnum;
 }
 
-
 int main (int argc, char **argv)
 {
 	int				status;

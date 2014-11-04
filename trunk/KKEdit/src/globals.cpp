@@ -223,6 +223,8 @@ GtkWidget*		findDropBox=NULL;
 GtkWidget*		replaceDropBox;
 GSList*			findList=NULL;
 GSList*			replaceList=NULL;
+int				maxFRHistory=5;
+GtkObject*		frHistoryAdj=NULL;
 
 //custom toolbar
 GtkWidget*		fromHBox;
@@ -394,6 +396,7 @@ args			kkedit_rc[]=
 	{"depth",TYPEINT,&depth},
 	{"funcsort",TYPEINT,&listFunction},
 	{"minautochars",TYPEINT,&autoShowMinChars},
+	{"maxfrhistory",TYPEINT,&maxFRHistory},
 	{NULL,0,NULL}
 };
 

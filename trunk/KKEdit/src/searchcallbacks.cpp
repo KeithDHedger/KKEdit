@@ -128,7 +128,7 @@ VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
 					if(ptr!=NULL)
 						{
 							funcname=globalSlice->sliceBetween(line,(char*)"name=\"",(char*)"\" link=");
-							if(funcname!=NULL)
+							if(globalSlice->getResult()==0)
 								{
 									if(strstr(funcname,selection)!=NULL)
 										{
@@ -152,6 +152,7 @@ VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
 												}
 										}
 									debugFree(funcname,"seachGtkDocs funcname");
+									funcname=NULL;
 								}
 						}
 				}
@@ -380,7 +381,6 @@ void defSearchFromBar(GtkWidget* widget,gpointer data)
 void docSearchFromBar(GtkWidget* widget,gpointer data)
 {
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
-
 	if(text!=NULL && strlen(text)>0)
 		searchGtkDocs(NULL,(void*)text);
 }

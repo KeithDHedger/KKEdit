@@ -1,4 +1,6 @@
 0.2.5
+Added colour button to prefs for setting bookmark highlight colour.
+Added max find/replace history terms saved to prefs.
 Fixed ubuntu/gnome bugs AGAIN! I wish they would stop breaking stuff for no good reason!
 Added help option to command line.
 Added long command line options.

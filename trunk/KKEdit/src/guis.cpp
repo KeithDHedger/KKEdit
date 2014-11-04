@@ -1125,11 +1125,13 @@ VISIBLE void doPrefs(void)
 
 //bm highlight colour
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("BM Highlight Colour:")));
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Bookmark Highlight Colour:")));
 	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,3,4);
 
-	bmHighlightBox=gtk_entry_new();
-	gtk_entry_set_text((GtkEntry*)bmHighlightBox,highlightColour);
+	GdkColor color;
+	gdk_color_parse ((const gchar *)highlightColour,&color);
+	bmHighlightBox=gtk_color_button_new_with_color(&color);
+
 	gtk_table_attach_defaults(table,bmHighlightBox,1,2,3,4);
 
 //autoshow completion
@@ -1174,7 +1176,7 @@ VISIBLE void doPrefs(void)
 //page 3
 	pagevbox=gtk_vbox_new(false,0);
 //admin
-	table=(GtkTable*)gtk_table_new(7,TABLECOLS,true);
+	table=(GtkTable*)gtk_table_new(8,TABLECOLS,true);
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 
 //function search depth
@@ -1223,6 +1225,16 @@ VISIBLE void doPrefs(void)
 	gtk_toggle_button_set_active((GtkToggleButton*)item,autoCheck);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 	gtk_table_attach_defaults(table,item,0,1,4,5);
+
+//find replace history max
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Max Find/Replace History:")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,5,6);
+
+	frHistoryAdj=gtk_adjustment_new(maxFRHistory,0,30,1,1,0);
+	item=gtk_spin_button_new((GtkAdjustment*)frHistoryAdj,1,0);
+	gtk_widget_set_name(item,"maxfrhistory");
+	gtk_table_attach_defaults(table,item,1,2,5,6);
 
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
 	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("Administration")));

@@ -358,6 +358,8 @@ extern GtkWidget*		findDropBox;
 extern GtkWidget*		replaceDropBox;
 extern GSList*			findList;
 extern GSList*			replaceList;
+extern int				maxFRHistory;
+extern GtkObject*		frHistoryAdj;
 
 //custom toolbar
 extern GtkWidget*		fromHBox;

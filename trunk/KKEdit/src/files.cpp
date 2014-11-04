@@ -46,8 +46,8 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 								break;
 							case TYPELIST:
 								list=*(GSList**)((dataptr[cnt].data));
-								if(g_slist_length(list)>10)
-									list=g_slist_nth(list,g_slist_length(list)-10);
+								if(g_slist_length(list)>maxFRHistory)
+									list=g_slist_nth(list,g_slist_length(list)-maxFRHistory);
 								while(list!=NULL)
 									{
 										if(strlen((char*)list->data)>0)
