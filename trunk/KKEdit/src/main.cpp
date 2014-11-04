@@ -469,7 +469,7 @@ int main (int argc, char **argv)
 //	back=unique_backend_create();
 //	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace(back));
 //printf("%s\n",dbusname);	
-	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace());
+	asprintf(&dbusname,"org.keithhedger%i.KKEdit",getWorkspaceNumber());
 printf("%s\n",dbusname);	
 	if((singleOverRide==true) || (singleUse==false))
 		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN));
