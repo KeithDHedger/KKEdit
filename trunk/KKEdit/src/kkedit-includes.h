@@ -31,8 +31,6 @@
 #include <libintl.h>
 #include <locale.h>
 
-//#include <unique/unique.h>
-
 #include "config.h"
 #include "sliceclass.h"
 #include "kkedit-plugins.h"

@@ -8,6 +8,7 @@
 #include <gdk/gdkx.h>
 
 #include "kkedit-includes.h"
+
 bool	singleOverRide=false;
 bool	loadPluginsFlag=true;
 
@@ -415,28 +416,21 @@ void appStart(GApplication  *application,gpointer data)
 	gtk_widget_set_size_request(window,100,100);
 }
 
-int unique_backend_get_workspace (void)
+int getWorkspaceNumber(void)
 {
-  GdkDisplay *display;
-  GdkWindow *root_win;
-//#ifdef GDK_WINDOWING_X11
-  Atom _net_current_desktop, type;
-  int format;
-  unsigned long n_items, bytes_after;
-  unsigned char *data_return = 0;
-//#endif
-int	retnum;
- // g_return_val_if_fail (UNIQUE_IS_BACKEND (backend), 0);
+	GdkDisplay*		display;
+	GdkWindow*		root_win;
 
-//  if (backend->workspace != -1)
- //   return backend->workspace;
+	Atom			_net_current_desktop,type;
+	int				format;
+	unsigned long	n_items, bytes_after;
+	unsigned char*	data_return = 0;
+	int				retnum;
 
-  display = gdk_screen_get_display ( gdk_screen_get_default());
-  root_win = gdk_screen_get_root_window (gdk_screen_get_default());
+	display=gdk_screen_get_display(gdk_screen_get_default());
+	root_win=gdk_screen_get_root_window(gdk_screen_get_default());
 
-//#ifdef GDK_WINDOWING_X11
-  _net_current_desktop =
-    gdk_x11_get_xatom_by_name_for_display (display, "_NET_CURRENT_DESKTOP");
+	_net_current_desktop=gdk_x11_get_xatom_by_name_for_display (display, "_NET_CURRENT_DESKTOP");
 
   XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
                       GDK_WINDOW_XID (root_win),
@@ -478,9 +472,9 @@ int main (int argc, char **argv)
 	asprintf(&dbusname,"org.keithhedger%i.KKEdit",unique_backend_get_workspace());
 printf("%s\n",dbusname);	
 	if((singleOverRide==true) || (singleUse==false))
-		mainApp=g_application_new(DBUSNAME,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN));
+		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN));
 	else
-		mainApp=g_application_new(DBUSNAME,G_APPLICATION_HANDLES_OPEN);
+		mainApp=g_application_new(dbusname,G_APPLICATION_HANDLES_OPEN);
 
 	g_signal_connect(mainApp,"activate",G_CALLBACK(activate),NULL);
 	g_signal_connect(mainApp,"startup",G_CALLBACK (appStart),NULL);

@@ -1367,51 +1367,6 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 		return(false);
 }
 
-#if 0
-void messageOpen(UniqueMessageData *message)
-{
-	int argc;
-
-	gchar** uris=NULL;
-	uris=unique_message_data_get_uris(message);
-	argc=g_strv_length(uris);
-
-	for (int loop=1; loop<argc; loop++)
-		openFile(uris[loop],1,true);
-}
-
-UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessageData *message,guint time,gpointer user_data)
-{
-	UniqueResponse	res;
-	const guchar * data;
-	gsize length;
-
-	data=unique_message_data_get(message,&length);
-	if(length==0)
-		return(UNIQUE_RESPONSE_OK);
-
-	switch(command)
-		{
-		case UNIQUE_ACTIVATE:
-			gtk_window_set_screen(GTK_WINDOW(window),unique_message_data_get_screen(message));
-			gtk_window_present_with_time(GTK_WINDOW(window),time);
-			res=UNIQUE_RESPONSE_OK;
-			break;
-
-		case UNIQUE_OPEN:
-			messageOpen(message);
-			gtk_window_set_screen(GTK_WINDOW(window),unique_message_data_get_screen(message));
-			gtk_window_present_with_time(GTK_WINDOW(window),time);
-			res=UNIQUE_RESPONSE_OK;
-			break;
-
-		default:
-			res=UNIQUE_RESPONSE_OK;
-			break;
-		}
-	return(res);
-}
-#endif
 void writeExitData(void)
 {
 	GtkAllocation	alloc;
