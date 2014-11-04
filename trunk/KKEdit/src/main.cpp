@@ -447,7 +447,7 @@ int main (int argc, char **argv)
 	GOptionContext*	context;
 	GOptionEntry	entries[]=
 {
-    {"single",'m',0,G_OPTION_ARG_NONE,&singleOverRide,"Multiple instance mode",NULL},
+    {"multiple",'m',0,G_OPTION_ARG_NONE,&singleOverRide,"Multiple instance mode",NULL},
     { "safe",'s',0,G_OPTION_ARG_NONE,&safeflag,"Safe mode ( disable all plugins and use new instance )",NULL},
     { NULL }
 };
