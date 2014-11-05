@@ -257,7 +257,7 @@ VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 				{
 					menuitem=gtk_image_menu_item_new_with_label(((bookMarksNew*)ptr->data)->label);
 					gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
-					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)ptr->data);
+					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)ptr->data);
 					ptr=g_list_next(ptr);
 				}
 			gtk_widget_show_all(menuBookMark);
@@ -289,7 +289,7 @@ VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 			bookmarkdata->line=line;
 			menuitem=gtk_menu_item_new_with_label(bookmarkdata->label);
 			gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
-			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)bookmarkdata);
+			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)bookmarkdata);
 			gtk_widget_show_all(menuBookMark);
 		}
 }
@@ -571,7 +571,7 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 		{
 			menuitem=gtk_menu_item_new_with_label(((bookMarksNew*)ptr->data)->label);
 			gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
-			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)ptr->data);
+			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)ptr->data);
 			ptr=g_list_next(ptr);
 		}
 	gtk_widget_show_all(menuBookMark);
@@ -696,7 +696,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 									onefunc=true;
 									menuitem=gtk_image_menu_item_new_with_label(tmpstr);
 									gtk_menu_shell_append(GTK_MENU_SHELL(whattypemenu),menuitem);
-									gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
+									g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
 								}
 						}
 					else
@@ -704,7 +704,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 							onefunc=true;
 							menuitem=gtk_image_menu_item_new_with_label(tmpstr);
 							gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
-							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
+							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
 						}
 				}
 			lineptr=strchr(lineptr,'\n');
@@ -1041,14 +1041,14 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 							free(temptext);
 							sprintf((char*)&defineText,"%s",fdata->define);
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)defineText);
+							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)defineText);
 							destroyData(fdata);
 
 							image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
 							menuitem=gtk_image_menu_item_new_with_label(gettext("Go To Definition"));
 							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
+							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
 						}
 
 					if(gotDoxygen==0)
@@ -1057,25 +1057,25 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 							image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
 							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doxyDocs),NULL);
+							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doxyDocs),NULL);
 						}
 					menuitem=gtk_image_menu_item_new_with_label(gettext("Search In Qt5 Docs"));
 					image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
 					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(searchQT5Docs),NULL);
+					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(searchQT5Docs),NULL);
 
 					menuitem=gtk_image_menu_item_new_with_label(gettext("Search In Gtk Docs"));
 					image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
 					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(searchGtkDocs),NULL);
+					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(searchGtkDocs),NULL);
 
 					menuitem=gtk_image_menu_item_new_with_label(gettext("Add To Custom Word List"));
 					image=gtk_image_new_from_stock(GTK_STOCK_EDIT,GTK_ICON_SIZE_MENU);
 					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(addtoCustomWordList),(void*)page);
+					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(addtoCustomWordList),(void*)page);
 
 #ifdef _ASPELL_
 //spell check
@@ -1085,7 +1085,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 							image=gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK,GTK_ICON_SIZE_MENU);
 							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
-							gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(checkWord),NULL);
+							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(checkWord),NULL);
 						}
 #endif
 					menuitem=gtk_separator_menu_item_new();
@@ -1101,7 +1101,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 										gtk_widget_set_tooltip_text((GtkWidget*)menuitem,((toolStruct*)ptr->data)->comment);
 
 									gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-									gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
+									g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
 								}
 							ptr=g_list_next(ptr);
 						}
@@ -1120,7 +1120,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 					if(((toolStruct*)ptr->data)->comment!=NULL)
 						gtk_widget_set_tooltip_text((GtkWidget*)menuitem,((toolStruct*)ptr->data)->comment);
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
+					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
 				}
 			ptr=g_list_next(ptr);
 		}
@@ -1129,7 +1129,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	menuitem=gtk_menu_item_new_with_label(gettext("Toggle Bookmark"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);
+	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);
 
 	globalPlugins->globalPlugData->contextPopUpMenu=(GtkWidget*)menu;
 
@@ -1241,19 +1241,19 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 			menuitem=gtk_image_menu_item_new_with_label(gettext("Copy Folder Path"));
 			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
-			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doTabMenu),(void*)page->dirName);
+			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doTabMenu),(void*)page->dirName);
 //copy filepath
 			image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
 			menuitem=gtk_image_menu_item_new_with_label(gettext("Copy Filepath"));
 			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
-			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doTabMenu),(void*)page->filePath);
+			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doTabMenu),(void*)page->filePath);
 //copy filename
 			image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
 			menuitem=gtk_image_menu_item_new_with_label(gettext("Copy FileName"));
 			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
-			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doTabMenu),(void*)page->fileName);
+			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doTabMenu),(void*)page->fileName);
 
 #ifdef _ASPELL_
 //check document
@@ -1263,7 +1263,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 					menuitem=gtk_image_menu_item_new_with_label(gettext("Spell Check Document"));
 					gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 					gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
-					gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doSpellCheckDoc),(void*)page->filePath);
+					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doSpellCheckDoc),(void*)page->filePath);
 				}
 #endif
 
@@ -1276,7 +1276,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 
 			gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
-			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doSplitView),(void*)page);
+			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doSplitView),(void*)page);
 
 //source highlighting
 			lm=gtk_source_language_manager_get_default();
@@ -1336,7 +1336,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 									menuids=gtk_menu_item_new_with_label(langname);
 								}
 
-							gtk_signal_connect(GTK_OBJECT(menuids),"activate",G_CALLBACK(changeSourceStyle),(void*)(long)idnum[j]);
+							g_signal_connect(G_OBJECT(menuids),"activate",G_CALLBACK(changeSourceStyle),(void*)(long)idnum[j]);
 							gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuids);
 						}
 				}
@@ -1357,7 +1357,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 							name=basename(line);
 							menuids=gtk_image_menu_item_new_with_label(strdup(name));
 							gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuids);
-							gtk_signal_connect(GTK_OBJECT(menuids),"activate",G_CALLBACK(openFromTab),(void*)page);
+							g_signal_connect(G_OBJECT(menuids),"activate",G_CALLBACK(openFromTab),(void*)page);
 						}
 					fclose(fp);
 				}

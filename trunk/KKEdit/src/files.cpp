@@ -136,8 +136,8 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
 	gtk_container_add(GTK_CONTAINER(evbox),hbox);
-	gtk_signal_connect(GTK_OBJECT(button),"clicked",G_CALLBACK(closeTab),(void*)page->tabVbox);
-	gtk_signal_connect(GTK_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),(void*)page);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(closeTab),(void*)page->tabVbox);
+	g_signal_connect(G_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),(void*)page);
 
 	page->tabName=label;
 
