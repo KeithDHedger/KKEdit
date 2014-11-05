@@ -120,21 +120,9 @@ void init(void)
 
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
-	tmpIndent=indent;
-	tmpLineNumbers=lineNumbers;
-	tmpLineWrap=lineWrap;
-	tmpNoSyntax=noSyntax;
-	tmpHighLight=highLight;
-	tmpSingleUse=singleUse;
 	tmpTabWidth=tabWidth;
 	tmpDepth=depth;
-	tmpSaveSessionOnExit=onExitSaveSession;
-	tmpRestoreBookmarks=restoreBookmarks;
 	tmpStyleName=strdup(styleName);
-	tmpNoDuplicates=noDuplicates;
-	tmpNoWarnings=noWarnings;
-	tmpReadLinkFirst=readLinkFirst;
-	tmpAutoShowComps=autoShowComps;
 	tmpAutoShowMinChars=autoShowMinChars;
 	tmpAutoCheck=autoCheck;
 	tmpNagScreen=nagScreen;

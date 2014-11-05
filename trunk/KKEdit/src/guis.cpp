@@ -6,14 +6,17 @@
 
 #include "kkedit-includes.h"
 
+#define TABLECOLS 2
+
 GtkWidget*		recent;
 GtkToolItem*	tool[18]={NULL,};
 GtkIconView*	iconView=NULL;
 GtkListStore*	listStore=NULL;
 
 GtkWidget*		entries[NUMSHORTCUTS];
-
 const char* 	shortcuttext[NUMSHORTCUTS]={gettext("Delete Current Line"),gettext("Delete To End Of Line"),gettext("Delete To Beginning Of Line"),gettext("Select Word Under Cursor"),gettext("Delete Word Under Cursor"),gettext("Duplicate Current Line"),gettext("Select Current Line"),gettext("Move Current Line Up"),gettext("Move Current Line Down"),gettext("Select From Cursor To End Of Line"),gettext("Select From Beginning Of Line To Cursor"),gettext("Move Selection Up"),gettext("Move Selection Down"),gettext("Show Completion")};
+
+GtkWidget*	prefsWidgets[MAXPREFSWIDGETS];
 
 void findTool(toolStruct* data,char* toolname)
 {
@@ -950,13 +953,12 @@ void buildKeys()
 	gtk_widget_show_all(keysWindow);
 }
 
-#define TABLECOLS 2
 VISIBLE void doPrefs(void)
 {
 	GtkWidget*		vbox;
 	GtkWidget*		hbox;
 	GtkWidget*		pagevbox;
-	GtkWidget*		item;
+//	GtkWidget*		item;
 	GtkWidget*		label;
 	GtkObject*		adj;
 	GtkNotebook*	notebook;
@@ -994,86 +996,79 @@ VISIBLE void doPrefs(void)
 	table=(GtkTable*)gtk_table_new(11,TABLECOLS,true);
 
 //indent
-	item=gtk_check_button_new_with_label(gettext("Auto Indent Lines"));
-	gtk_widget_set_name(item,"indent");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,indent);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-	gtk_table_attach_defaults(table,item,0,1,0,1);
+	prefsWidgets[AUTOINDENT]=gtk_check_button_new_with_label(gettext("Auto Indent Lines"));
+	gtk_widget_set_name(prefsWidgets[AUTOINDENT],"indent");
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[AUTOINDENT],indent);
+	gtk_table_attach_defaults(table,prefsWidgets[AUTOINDENT],0,1,0,1);
+
 //linenumbers
-	item=gtk_check_button_new_with_label(gettext("Show Line Numbers"));
-	gtk_widget_set_name(item,"show");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,lineNumbers);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-	gtk_table_attach_defaults(table,item,0,1,1,2);
+	prefsWidgets[SHOWNUMS]=gtk_check_button_new_with_label(gettext("Show Line Numbers"));
+	gtk_widget_set_name(prefsWidgets[SHOWNUMS],"show");
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[SHOWNUMS],lineNumbers);
+	gtk_table_attach_defaults(table,prefsWidgets[SHOWNUMS],0,1,1,2);
 //wraplines
-	item=gtk_check_button_new_with_label(gettext("Wrap Lines"));
-	gtk_widget_set_name(item,"wrap");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,lineWrap);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-	gtk_table_attach_defaults(table,item,0,1,2,3);
+	prefsWidgets[WRAP]=gtk_check_button_new_with_label(gettext("Wrap Lines"));
+	gtk_widget_set_name(prefsWidgets[WRAP],"wrap");
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[WRAP],lineWrap);
+	gtk_table_attach_defaults(table,prefsWidgets[WRAP],0,1,2,3);
 //highlite
-	item=gtk_check_button_new_with_label(gettext("Highlight Current Line"));
-	gtk_widget_set_name(item,"high");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,highLight);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-	gtk_table_attach_defaults(table,item,0,1,3,4);
+	prefsWidgets[HIGHLIGHT]=gtk_check_button_new_with_label(gettext("Highlight Current Line"));
+	gtk_widget_set_name(prefsWidgets[HIGHLIGHT],"high");
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[HIGHLIGHT],highLight);
+	gtk_table_attach_defaults(table,prefsWidgets[HIGHLIGHT],0,1,3,4);
 //no highlight
-	item=gtk_check_button_new_with_label(gettext("No Syntax Highlighting"));
-	gtk_widget_set_name(item,"nosyntax");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,noSyntax);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-	gtk_table_attach_defaults(table,item,0,1,4,5);
+	prefsWidgets[NOSYNTAX]=gtk_check_button_new_with_label(gettext("No Syntax Highlighting"));
+	gtk_widget_set_name(prefsWidgets[NOSYNTAX],"nosyntax");
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[NOSYNTAX],noSyntax);
+	gtk_table_attach_defaults(table,prefsWidgets[NOSYNTAX],0,1,4,5);
+
 //single instance
-	item=gtk_check_button_new_with_label(gettext("Use Single Instance"));
-	gtk_widget_set_name(item,"single");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,singleUse);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-	gtk_table_attach_defaults(table,item,0,1,5,6);
+	prefsWidgets[USESINGLE]=gtk_check_button_new_with_label(gettext("Use Single Instance"));
+	gtk_widget_set_name(prefsWidgets[USESINGLE],"single");
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[USESINGLE],singleUse);
+	gtk_table_attach_defaults(table,prefsWidgets[USESINGLE],0,1,5,6);
 
 //auto save session
-	item=gtk_check_button_new_with_label(gettext("Auto Save/Restore Session"));
-	gtk_widget_set_name(item,"save");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,onExitSaveSession);
-	gtk_table_attach_defaults(table,item,0,1,6,7);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
+	prefsWidgets[AUTOSAVE]=gtk_check_button_new_with_label(gettext("Auto Save/Restore Session"));
+	gtk_widget_set_name(prefsWidgets[AUTOSAVE],"save");
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[AUTOSAVE],onExitSaveSession);
+	gtk_table_attach_defaults(table,prefsWidgets[AUTOSAVE],0,1,6,7);
+	g_signal_connect(G_OBJECT(prefsWidgets[AUTOSAVE]),"toggled",G_CALLBACK(setPrefs),(void*)prefsWidgets[AUTOSAVE]);
 //auto restore bookmarks
-	restoreBMs=gtk_check_button_new_with_label(gettext("Restore Session Bookmarks"));
-	gtk_widget_set_name(restoreBMs,"marks");
-	gtk_toggle_button_set_active((GtkToggleButton*)restoreBMs,restoreBookmarks);
-	g_signal_connect(G_OBJECT(restoreBMs),"toggled",G_CALLBACK(setPrefs),(void*)restoreBMs);
-	gtk_widget_set_sensitive(restoreBMs,onExitSaveSession);
-	gtk_table_attach_defaults(table,restoreBMs,1,2,6,7);
+	prefsWidgets[AUTOBM]=gtk_check_button_new_with_label(gettext("Restore Session Bookmarks"));
+	gtk_widget_set_name(prefsWidgets[AUTOBM],"marks");
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[AUTOBM],restoreBookmarks);
+	gtk_widget_set_sensitive(prefsWidgets[AUTOBM],onExitSaveSession);
+	gtk_table_attach_defaults(table,prefsWidgets[AUTOBM],1,2,6,7);
 
 //no duplicates
-	item=gtk_check_button_new_with_label(gettext("Don't Open Duplicate File"));
-	gtk_widget_set_name(item,"duplicates");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,noDuplicates);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-	gtk_table_attach_defaults(table,item,0,1,7,8);
+	prefsWidgets[NODUPLICATE]=gtk_check_button_new_with_label(gettext("Don't Open Duplicate File"));
+	gtk_widget_set_name(prefsWidgets[NODUPLICATE],"duplicates");
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[NODUPLICATE],noDuplicates);
+	gtk_table_attach_defaults(table,prefsWidgets[NODUPLICATE],0,1,7,8);
 //turn off warnings
-	item=gtk_check_button_new_with_label(gettext("Don't Warn On File Change"));
-	gtk_widget_set_name(item,"warning");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,noWarnings);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-	gtk_table_attach_defaults(table,item,0,1,8,9);
+	prefsWidgets[NOWARN]=gtk_check_button_new_with_label(gettext("Don't Warn On File Change"));
+	gtk_widget_set_name(prefsWidgets[NOWARN],"warning");
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[NOWARN],noWarnings);
+	gtk_table_attach_defaults(table,prefsWidgets[NOWARN],0,1,8,9);
 //do readlink
-	item=gtk_check_button_new_with_label(gettext("Read Link Before Opening File"));
-	gtk_widget_set_name(item,"readlink");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,readLinkFirst);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-	gtk_table_attach_defaults(table,item,0,1,9,10);
+	prefsWidgets[READLINK]=gtk_check_button_new_with_label(gettext("Read Link Before Opening File"));
+	gtk_widget_set_name(prefsWidgets[READLINK],"readlink");
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[READLINK],readLinkFirst);
+	gtk_table_attach_defaults(table,prefsWidgets[READLINK],0,1,9,10);
 
 //autoshow completion
-	item=gtk_check_button_new_with_label(gettext("Auto show Completions"));
-	gtk_widget_set_name(item,"autocomp");
-	gtk_toggle_button_set_active((GtkToggleButton*)item,autoShowComps);
-	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
-	gtk_table_attach_defaults(table,item,0,1,10,11);
+	prefsWidgets[AUTOSHOW]=gtk_check_button_new_with_label(gettext("Auto show Completions"));
+	gtk_widget_set_name(prefsWidgets[AUTOSHOW],"autocomp");
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[AUTOSHOW],autoShowComps);
+	gtk_table_attach_defaults(table,prefsWidgets[AUTOSHOW],0,1,10,11);
 
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
 	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("General Appearance")));
 
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)notebook,true,true,0);
+
+	GtkWidget*		item;
 
 //page2
 	pagevbox=gtk_vbox_new(false,0);

@@ -98,13 +98,9 @@ bool			onExitSaveSession;
 bool			restoreBookmarks;
 char*			styleName=NULL;
 bool			noDuplicates;
-bool			tmpNoDuplicates;
 bool			noWarnings;
-bool			tmpNoWarnings;
 bool			readLinkFirst;
-bool			tmpReadLinkFirst;
 bool			autoShowComps;
-bool			tmpAutoShowComps;
 bool			autoCheck;
 bool			tmpAutoCheck;
 uint			autoShowMinChars;
@@ -119,16 +115,8 @@ char*			browserCommand=strdup("firefox");
 //key short cuts
 GtkWidget*		keysWindow=NULL;
 
-bool			tmpIndent;
-bool			tmpLineNumbers;
-bool			tmpLineWrap;
-bool			tmpHighLight;
-bool			tmpNoSyntax;
-bool			tmpSingleUse;
 int				tmpTabWidth;
 int				tmpDepth;
-bool			tmpSaveSessionOnExit;
-bool			tmpRestoreBookmarks;
 char*			tmpStyleName=NULL;
 
 GtkWidget*		toolNameWidget;

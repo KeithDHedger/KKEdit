@@ -232,13 +232,9 @@ extern bool				onExitSaveSession;
 extern bool				restoreBookmarks;
 extern char*			styleName;
 extern bool				noDuplicates;
-extern bool				tmpNoDuplicates;
 extern bool				noWarnings;
-extern bool				tmpNoWarnings;
 extern bool				readLinkFirst;
-extern bool				tmpReadLinkFirst;
 extern bool				autoShowComps;
-extern bool				tmpAutoShowComps;
 extern bool				autoCheck;
 extern bool				tmpAutoCheck;
 
@@ -254,16 +250,8 @@ extern char*			browserCommand;
 //key short cuts
 extern GtkWidget*		keysWindow;
 
-extern bool				tmpIndent;
-extern bool				tmpLineNumbers;
-extern bool				tmpLineWrap;
-extern bool				tmpHighLight;
-extern bool				tmpNoSyntax;
-extern bool				tmpSingleUse;
 extern int				tmpTabWidth;
 extern int				tmpDepth;
-extern bool				tmpSaveSessionOnExit;
-extern bool				tmpRestoreBookmarks;
 extern char*			tmpStyleName;
 
 extern GtkWidget*		toolNameWidget;

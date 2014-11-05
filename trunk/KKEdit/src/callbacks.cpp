@@ -765,13 +765,17 @@ VISIBLE void undo(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 
-	
-	if(gtk_source_buffer_can_undo(page->buffer));
-	{
-		gtk_source_buffer_undo(page->buffer);
-		page->isFirst=true;
-		setSensitive();
-	}
+	if(page!=NULL)
+		{
+			doBusy(true,page);
+			if(gtk_source_buffer_can_undo(page->buffer));
+				{
+					gtk_source_buffer_undo(page->buffer);
+					page->isFirst=true;
+					setSensitive();
+				}
+			doBusy(false,page);
+		}
 }
 
 VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
@@ -780,6 +784,7 @@ VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
 
 	if(page!=NULL)
 		{
+		 	doBusy(true,page);
 			if((long)data==0)
 				{
 					while(gtk_source_buffer_can_undo(page->buffer))
@@ -792,6 +797,7 @@ VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
 				}
 			page->isFirst=true;
 			setSensitive();
+		 	doBusy(false,page);
 		}
 }
 
@@ -799,12 +805,17 @@ VISIBLE void redo(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	page=getPageStructPtr(-1);
 
-	if(gtk_source_buffer_can_redo(page->buffer));
-	{
-		gtk_source_buffer_redo(page->buffer);
-		page->isFirst=true;
-		setSensitive();
-	}
+	if(page!=NULL)
+		{
+		 	doBusy(true,page);
+			if(gtk_source_buffer_can_redo(page->buffer));
+				{
+					gtk_source_buffer_redo(page->buffer);
+					page->isFirst=true;
+					setSensitive();
+				}
+		 	doBusy(false,page);
+		}
 }
 
 VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
@@ -1491,34 +1502,8 @@ void setPrefs(GtkWidget* widget,gpointer data)
 {
 	pageStruct*			tpage=getPageStructPtr(-1);
 
-	if(strcmp(gtk_widget_get_name(widget),"indent")==0)
-		tmpIndent=gtk_toggle_button_get_active((GtkToggleButton*)data);
-	if(strcmp(gtk_widget_get_name(widget),"show")==0)
-		tmpLineNumbers=gtk_toggle_button_get_active((GtkToggleButton*)data);
-	if(strcmp(gtk_widget_get_name(widget),"wrap")==0)
-		tmpLineWrap=gtk_toggle_button_get_active((GtkToggleButton*)data);
-	if(strcmp(gtk_widget_get_name(widget),"nosyntax")==0)
-		tmpNoSyntax=gtk_toggle_button_get_active((GtkToggleButton*)data);
-	if(strcmp(gtk_widget_get_name(widget),"high")==0)
-		tmpHighLight=gtk_toggle_button_get_active((GtkToggleButton*)data);
-	if(strcmp(gtk_widget_get_name(widget),"single")==0)
-		tmpSingleUse=gtk_toggle_button_get_active((GtkToggleButton*)data);
-	if(strcmp(gtk_widget_get_name(widget),"save")==0)
-		tmpSaveSessionOnExit=gtk_toggle_button_get_active((GtkToggleButton*)data);
-	if(strcmp(gtk_widget_get_name(widget),"marks")==0)
-		tmpRestoreBookmarks=gtk_toggle_button_get_active((GtkToggleButton*)data);
-
-	if(strcmp(gtk_widget_get_name(widget),"duplicates")==0)
-		tmpNoDuplicates=gtk_toggle_button_get_active((GtkToggleButton*)data);
-	if(strcmp(gtk_widget_get_name(widget),"warning")==0)
-		tmpNoWarnings=gtk_toggle_button_get_active((GtkToggleButton*)data);
-	if(strcmp(gtk_widget_get_name(widget),"autocomp")==0)
-		tmpAutoShowComps=gtk_toggle_button_get_active((GtkToggleButton*)data);
 	if(strcmp(gtk_widget_get_name(widget),"updatecheck")==0)
 		tmpAutoCheck=gtk_toggle_button_get_active((GtkToggleButton*)data);
-
-	if(strcmp(gtk_widget_get_name(widget),"readlink")==0)
-		tmpReadLinkFirst=gtk_toggle_button_get_active((GtkToggleButton*)data);
 
 	if(strcmp(gtk_widget_get_name(widget),"ihavedonated")==0)
 		tmpNagScreen=gtk_toggle_button_get_active((GtkToggleButton*)data);
@@ -1532,7 +1517,11 @@ void setPrefs(GtkWidget* widget,gpointer data)
 				gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)tpage->buffer,gtk_source_style_scheme_manager_get_scheme(schemeManager,tmpStyleName));
 		}
 
-	gtk_widget_set_sensitive(restoreBMs,tmpSaveSessionOnExit);
+	if(strcmp(gtk_widget_get_name(widget),"save")==0)
+		{
+			gtk_widget_set_sensitive(prefsWidgets[AUTOBM],gtk_toggle_button_get_active((GtkToggleButton*)prefsWidgets[AUTOSAVE]));
+			return;
+		}
 
 	if(strcmp(gtk_widget_get_name(widget),"tabs")==0)
 		tmpTabWidth=gtk_spin_button_get_value_as_int((GtkSpinButton*)data);
@@ -1550,17 +1539,12 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			gtk_widget_destroy(prefswin);
 		}
 
+	bool*	bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&restoreBookmarks,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps};
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{
-			indent=tmpIndent;
-			lineNumbers=tmpLineNumbers;
-			lineWrap=tmpLineWrap;
-			noSyntax=tmpNoSyntax;
-			highLight=tmpHighLight;
-			noDuplicates=tmpNoDuplicates;
-			noWarnings=tmpNoWarnings;
-			readLinkFirst=tmpReadLinkFirst;
-			autoShowComps=tmpAutoShowComps;
+		for(int j=0;j<MAXPREFSWIDGETS;j++)
+			*bools[j]=gtk_toggle_button_get_active((GtkToggleButton*)prefsWidgets[j]);
+
 			autoShowMinChars=tmpAutoShowMinChars;
 			autoCheck=tmpAutoCheck;
 
@@ -1572,17 +1556,12 @@ void setPrefs(GtkWidget* widget,gpointer data)
 					styleName=strdup(tmpStyleName);
 				}
 
-			singleUse=tmpSingleUse;
-			onExitSaveSession=tmpSaveSessionOnExit;
-			restoreBookmarks=tmpRestoreBookmarks;
-
 			nagScreen=tmpNagScreen;
 
 			if(highlightColour!=NULL)
 				{
 					GdkColor	colour;
 					debugFree(highlightColour,"setPrefs highlightColour");
-					//highlightColour=strdup(gtk_entry_get_text((GtkEntry*)bmHighlightBox));
 					gtk_color_button_get_color((GtkColorButton*)bmHighlightBox,&colour);
 					highlightColour=gdk_color_to_string(&colour);
 				}

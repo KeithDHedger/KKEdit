@@ -695,7 +695,7 @@ void basicFind(int dowhat)
 	pageStruct*				page=NULL;
 	char*					searchtext=NULL;
 	char*					replacetext;
-	gchar*					selectedtext=NULL;
+//	gchar*					selectedtext=NULL;
 	GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
 	bool					replaceAllFlag;
 	bool					found=false;
@@ -721,8 +721,6 @@ void basicFind(int dowhat)
 
 	page=getPageStructPtr(currentFindPage);
 
-//	gtk_source_completion_words_unregister(docWordsProv,(GtkTextBuffer*)page->buffer);
-//	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 	doBusy(true,page);
 
 	if(insensitiveSearch==true)
@@ -857,10 +855,6 @@ void basicFind(int dowhat)
 					}
 			}
 
-//	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
-//
-//	if(autoShowComps==true)
-//		gtk_source_completion_words_register(docWordsProv,(GtkTextBuffer*)page->buffer);
 	doBusy(false,page);
 
 	debugFree(searchtext,"basicFind searchtext");
