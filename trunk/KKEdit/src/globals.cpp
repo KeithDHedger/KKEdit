@@ -21,6 +21,7 @@ GtkWidget*		menufunc;
 GtkWidget*		menunav;
 GtkWidget*		menutools;
 GtkWidget*		menuhelp;
+GtkWidget*		globalPlugMenu=NULL;
 
 GtkWidget*		menuItemOpen=NULL;
 GtkWidget*		menuView=NULL;

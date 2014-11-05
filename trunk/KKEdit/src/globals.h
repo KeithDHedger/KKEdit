@@ -168,6 +168,7 @@ extern GtkWidget*		menufunc;
 extern GtkWidget*		menunav;
 extern GtkWidget*		menutools;
 extern GtkWidget*		menuView;
+extern GtkWidget*		globalPlugMenu;
 
 extern GtkWidget*		menuhelp;
 extern GtkWidget*		menuprint;

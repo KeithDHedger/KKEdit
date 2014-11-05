@@ -1772,6 +1772,12 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_widget_set_name(menuitem,GETPLUGSMENUNAME);
 
+//global plug menu
+	globalPlugMenu=gtk_menu_item_new_with_label(gettext("Plu_gins"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)globalPlugMenu,true);
+	menu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(globalPlugMenu),menu);
+
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufile);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuedit);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuView);
@@ -1780,6 +1786,7 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuBookMark);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menutools);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),globalPlugMenu);
 
 //tooloutputwindow
 	mainVPane=gtk_vpaned_new();
