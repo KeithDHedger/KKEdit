@@ -1218,7 +1218,6 @@ VISIBLE void doPrefs(void)
 	prefsWidgets[UPDATECHECK]=gtk_check_button_new_with_label(gettext("Check For Updates"));
 	gtk_widget_set_name(prefsWidgets[UPDATECHECK],"updatecheck");
 	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[UPDATECHECK],autoCheck);
-	//g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 	gtk_table_attach_defaults(table,prefsWidgets[UPDATECHECK],0,1,4,5);
 
 //find replace history max
@@ -1252,7 +1251,6 @@ VISIBLE void doPrefs(void)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_label_new(gettext("I have really donated some some money to the author.\nMy conscience is clear and my Karma is squeaky clean :)")),false,false,0);
-	//g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(setPrefs),(void*)item);
 
 //buttons
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
@@ -1858,6 +1856,8 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->mlist.menuHelp=menuhelp;
 	globalPlugins->globalPlugData->mlist.menuBookMark=menuBookMark;
 	globalPlugins->globalPlugData->mlist.menuView=menuView;
+//	globalPlugins->globalPlugData->mlist.menuPlugins=menu;
+	globalPlugins->globalPlugData->mlist.menuBar=menu;
 
 	globalPlugins->globalPlugData->topUserBox=mainTopUserVBox;
 	globalPlugins->globalPlugData->leftUserBox=mainLeftUserVBox;

@@ -1,4 +1,5 @@
 0.2.5
+Can now group all plugins under one menu.
 Fixed occasional endless loop in replace all.
 Improved speed of 'Replace All'.
 Cleaned prefs code.
