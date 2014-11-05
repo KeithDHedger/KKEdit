@@ -751,6 +751,15 @@ void basicFind(int dowhat)
 
 	if(dowhat==FINDNEXT)
 		{
+			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSeleced==false))
+				{
+					gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+					page->match_end=page->match_start;
+					autoSeleced=true;
+				}
+			else
+				autoSeleced=true;
+
 			if(gtk_source_iter_forward_search(&page->match_end,searchtext,flags,&page->match_start,&page->match_end,NULL))
 				{
 					found=true;
@@ -837,21 +846,48 @@ void basicFind(int dowhat)
 						findInAllFiles=true;
 			}
 
+GtkTextIter maxlastiter;
+
 		if((dowhat==REPLACE) && (replaceAll==true))
 			{
-				gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
+
+			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSeleced==false))
+				{
+					gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
+					page->iter=page->match_start;
+					maxlastiter=page->match_end;
+				}
+			else
+				{
+					gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
+					maxlastiter=end_find;
+				}
+
 				replaceAllFlag=true;
 				while(replaceAllFlag==true)
 					{
 						if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
 							{
+								if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSeleced==false))
+									{
+										gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,NULL,&maxlastiter);
+										if(gtk_text_iter_compare(&maxlastiter,&page->match_start)<=0)
+											{
+												replaceAllFlag=false;
+												continue;
+											}
+									}
 								itemsReplaced++;
 								gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 								gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,replacetext,-1);
 								page->iter=page->match_start;
+
 							}
 						else
+							{
+								autoSeleced=false;
 							replaceAllFlag=false;
+							}
 					}
 			}
 

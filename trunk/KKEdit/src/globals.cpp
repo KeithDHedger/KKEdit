@@ -10,6 +10,7 @@
 
 GApplication*	mainApp;
 bool			busyFlag=false;
+bool			autoSeleced=false;
 
 GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;
@@ -104,6 +105,7 @@ bool			autoShowComps;
 bool			autoCheck;
 uint			autoShowMinChars;
 int				tmpAutoShowMinChars;
+bool			useGlobalPlugMenu;
 
 GtkWidget*		fontButton;
 GtkWidget*		terminalBox;
@@ -371,6 +373,7 @@ args			kkedit_rc[]=
 	{"readlink",TYPEBOOL,&readLinkFirst},
 	{"autocomp",TYPEBOOL,&autoShowComps},
 	{"updatecheck",TYPEBOOL,&autoCheck},
+	{"useplugmenu",TYPEBOOL,&useGlobalPlugMenu},
 	//strings
 	{"stylename",TYPESTRING,&styleName},
 	{"higlightcolour",TYPESTRING,&highlightColour},
@@ -906,7 +909,6 @@ void getRecursiveTagList(char* filepath,void* ptr)
 	while(fgets(line,2048,fp))
 		{
 			newstr=globalSlice->deleteSlice(line,filepath);
-			printf("error=%i\n",globalSlice->getResult());
 			if(globalSlice->getResult()==NOERROR)
 				{
 					g_string_append_printf(str,"%s",newstr);

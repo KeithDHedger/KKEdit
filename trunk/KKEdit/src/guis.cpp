@@ -1214,24 +1214,31 @@ VISIBLE void doPrefs(void)
 		gtk_entry_set_text((GtkEntry*)defaultBrowserBox,browserCommand);
 	gtk_table_attach_defaults(table,defaultBrowserBox,1,2,3,4);
 
-//check for update
-	prefsWidgets[UPDATECHECK]=gtk_check_button_new_with_label(gettext("Check For Updates"));
-	gtk_widget_set_name(prefsWidgets[UPDATECHECK],"updatecheck");
-	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[UPDATECHECK],autoCheck);
-	gtk_table_attach_defaults(table,prefsWidgets[UPDATECHECK],0,1,4,5);
-
 //find replace history max
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Max Find/Replace History:")));
-	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,5,6);
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,4,5);
 
 	frHistoryAdj=gtk_adjustment_new(maxFRHistory,0,30,1,1,0);
 	item=gtk_spin_button_new((GtkAdjustment*)frHistoryAdj,1,0);
 	gtk_widget_set_name(item,"maxfrhistory");
-	gtk_table_attach_defaults(table,item,1,2,5,6);
+	gtk_table_attach_defaults(table,item,1,2,4,5);
+
+//check for update
+	prefsWidgets[UPDATECHECK]=gtk_check_button_new_with_label(gettext("Check For Updates"));
+	gtk_widget_set_name(prefsWidgets[UPDATECHECK],"updatecheck");
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[UPDATECHECK],autoCheck);
+	gtk_table_attach_defaults(table,prefsWidgets[UPDATECHECK],0,1,5,6);
+
+//use global plug menu
+	prefsWidgets[GLOBALPLUGMENU]=gtk_check_button_new_with_label(gettext("Use Global Plugins Menu ( Requires Restart )"));
+	gtk_widget_set_name(prefsWidgets[GLOBALPLUGMENU],"useplugmenu");
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[GLOBALPLUGMENU],useGlobalPlugMenu);
+	gtk_table_attach_defaults(table,prefsWidgets[GLOBALPLUGMENU],0,1,6,7);
 
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
 	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("Administration")));
+
 //end admin
 
 //nag
@@ -1310,6 +1317,7 @@ void buildMainGui(void)
 	GtkWidget*		menu;
 	GtkWidget*		image;
 	GtkWidget*		menurecent;
+	GtkWidget*		plugsubmenu;
 
 	mainWindowVBox=gtk_vbox_new(false,0);
 	mainTopUserVBox=gtk_vbox_new(false,0);
@@ -1770,12 +1778,6 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_widget_set_name(menuitem,GETPLUGSMENUNAME);
 
-//global plug menu
-	globalPlugMenu=gtk_menu_item_new_with_label(gettext("Plu_gins"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)globalPlugMenu,true);
-	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(globalPlugMenu),menu);
-
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufile);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuedit);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuView);
@@ -1783,8 +1785,20 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufunc);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuBookMark);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menutools);
+
+//global plug menu
+	if(useGlobalPlugMenu==true)
+		{
+			globalPlugMenu=gtk_menu_item_new_with_label(gettext("Plu_gins"));
+			gtk_menu_item_set_use_underline((GtkMenuItem*)globalPlugMenu,true);
+			plugsubmenu=gtk_menu_new();
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(globalPlugMenu),plugsubmenu);
+			gtk_menu_shell_append(GTK_MENU_SHELL(menubar),globalPlugMenu);
+		}
+	else
+		globalPlugMenu=NULL;
+
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),globalPlugMenu);
 
 //tooloutputwindow
 	mainVPane=gtk_vpaned_new();
@@ -1847,7 +1861,7 @@ void buildMainGui(void)
 
 	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 
-	globalPlugins->globalPlugData->mlist.menuBar=menubar;
+	
 	globalPlugins->globalPlugData->mlist.menuFile=menufile;
 	globalPlugins->globalPlugData->mlist.menuEdit=menuedit;
 	globalPlugins->globalPlugData->mlist.menuFunc=menufunc;
@@ -1856,8 +1870,10 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->mlist.menuHelp=menuhelp;
 	globalPlugins->globalPlugData->mlist.menuBookMark=menuBookMark;
 	globalPlugins->globalPlugData->mlist.menuView=menuView;
-//	globalPlugins->globalPlugData->mlist.menuPlugins=menu;
-	globalPlugins->globalPlugData->mlist.menuBar=menu;
+	if(useGlobalPlugMenu==true)
+		globalPlugins->globalPlugData->mlist.menuBar=plugsubmenu;
+	else
+		globalPlugins->globalPlugData->mlist.menuBar=menubar;
 
 	globalPlugins->globalPlugData->topUserBox=mainTopUserVBox;
 	globalPlugins->globalPlugData->leftUserBox=mainLeftUserVBox;

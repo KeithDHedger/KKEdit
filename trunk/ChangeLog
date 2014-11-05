@@ -1,4 +1,5 @@
 0.2.5
+Fixed bug with opening large html files with odd characters in the name.
 Can now group all plugins under one menu.
 Fixed occasional endless loop in replace all.
 Improved speed of 'Replace All'.

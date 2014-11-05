@@ -141,6 +141,7 @@ struct bookMarksNew
 
 extern GApplication*	mainApp;
 extern bool				busyFlag;
+extern bool				autoSeleced;
 
 extern HistoryClass*	history;
 
@@ -236,6 +237,7 @@ extern bool				noWarnings;
 extern bool				readLinkFirst;
 extern bool				autoShowComps;
 extern bool				autoCheck;
+extern bool				useGlobalPlugMenu;
 
 extern uint				autoShowMinChars;
 extern int				tmpAutoShowMinChars;

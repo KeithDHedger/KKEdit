@@ -62,6 +62,7 @@ void init(void)
 	autoShowMinChars=4;
 	autoShowComps=false;
 	autoCheck=true;
+	useGlobalPlugMenu=true;
 
 	windowWidth=800;
 	windowHeight=600;

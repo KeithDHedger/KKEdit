@@ -1155,6 +1155,7 @@ gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
 	else
 		page->inTop=false;
 
+	autoSeleced=false;
 	return(false);
 }
 
@@ -1501,7 +1502,7 @@ VISIBLE void doShutdown(GtkWidget* widget,gpointer data)
 void setPrefs(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	tpage=getPageStructPtr(-1);
-	bool*		bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&restoreBookmarks,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen};
+	bool*		bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&restoreBookmarks,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen,&useGlobalPlugMenu};
 
 	if(strcmp(gtk_widget_get_name(widget),"style")==0)
 		{
@@ -1702,7 +1703,7 @@ VISIBLE void doAbout(GtkWidget* widget,gpointer data)
 	const char*	aboutboxstring=gettext("KKEdit Code Text Editor");
 	char*		licence;
 	char*		translators;
-	
+
 	asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",gettext("French Translation"));
 	g_file_get_contents(DATADIR"/docs/gpl-3.0.txt",&licence,NULL,NULL);
 
