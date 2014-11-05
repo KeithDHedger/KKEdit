@@ -1,4 +1,7 @@
 0.2.5
+Fixed occasional endless loop in replace all.
+Improved speed of 'Replace All'.
+Cleaned prefs code.
 Fixed segfault on docviewer when a very large number of possible matches are found.
 Added colour button to prefs for setting bookmark highlight colour.
 Added max find/replace history terms saved to prefs.

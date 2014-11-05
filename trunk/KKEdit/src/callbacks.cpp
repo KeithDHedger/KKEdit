@@ -1500,13 +1500,8 @@ VISIBLE void doShutdown(GtkWidget* widget,gpointer data)
 
 void setPrefs(GtkWidget* widget,gpointer data)
 {
-	pageStruct*			tpage=getPageStructPtr(-1);
-
-//	if(strcmp(gtk_widget_get_name(widget),"updatecheck")==0)
-//		tmpAutoCheck=gtk_toggle_button_get_active((GtkToggleButton*)data);
-//
-//	if(strcmp(gtk_widget_get_name(widget),"ihavedonated")==0)
-//		tmpNagScreen=gtk_toggle_button_get_active((GtkToggleButton*)data);
+	pageStruct*	tpage=getPageStructPtr(-1);
+	bool*		bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&restoreBookmarks,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen};
 
 	if(strcmp(gtk_widget_get_name(widget),"style")==0)
 		{
@@ -1538,8 +1533,6 @@ void setPrefs(GtkWidget* widget,gpointer data)
 				gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)tpage->buffer,styleScheme);
 			gtk_widget_destroy(prefswin);
 		}
-
-	bool*	bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&restoreBookmarks,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen};
 
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{
