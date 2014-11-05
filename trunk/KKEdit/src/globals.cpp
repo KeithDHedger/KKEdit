@@ -906,8 +906,12 @@ void getRecursiveTagList(char* filepath,void* ptr)
 	while(fgets(line,2048,fp))
 		{
 			newstr=globalSlice->deleteSlice(line,filepath);
-			g_string_append_printf(str,"%s",newstr);
-			debugFree(newstr,"getRecursiveTagList newstr");
+			printf("error=%i\n",globalSlice->getResult());
+			if(globalSlice->getResult()==NOERROR)
+				{
+					g_string_append_printf(str,"%s",newstr);
+					debugFree(newstr,"getRecursiveTagList newstr");
+				}
 		}
 	pclose(fp);
 

@@ -794,7 +794,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	page=makeNewPage();
 	page->tabVbox=gtk_vbox_new(true,4);
-
 	page->filePath=strdup(filepathcopy);
 	page->fileName=strdup(filename);
 	page->dirName=g_path_get_dirname(filepathcopy);
