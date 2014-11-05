@@ -67,7 +67,6 @@ GtkWidget*		liveSearchWidget;
 int				currentPage=0;
 //nag
 bool			nagScreen;
-bool			tmpNagScreen;
 unsigned int	nagTime;
 unsigned int	lastNagTime=0;
 bool			timeToNag=true;
@@ -102,7 +101,6 @@ bool			noWarnings;
 bool			readLinkFirst;
 bool			autoShowComps;
 bool			autoCheck;
-bool			tmpAutoCheck;
 uint			autoShowMinChars;
 int				tmpAutoShowMinChars;
 
@@ -212,7 +210,7 @@ GtkWidget*		findDropBox=NULL;
 GtkWidget*		replaceDropBox;
 GSList*			findList=NULL;
 GSList*			replaceList=NULL;
-int				maxFRHistory=5;
+unsigned int	maxFRHistory=5;
 GtkObject*		frHistoryAdj=NULL;
 
 //custom toolbar

@@ -201,7 +201,6 @@ extern GtkWidget*		liveSearchWidget;
 extern int				currentPage;
 //nag
 extern bool				nagScreen;
-extern bool				tmpNagScreen;
 extern unsigned int		nagTime;
 extern unsigned int		lastNagTime;
 extern bool				timeToNag;
@@ -236,7 +235,6 @@ extern bool				noWarnings;
 extern bool				readLinkFirst;
 extern bool				autoShowComps;
 extern bool				autoCheck;
-extern bool				tmpAutoCheck;
 
 extern uint				autoShowMinChars;
 extern int				tmpAutoShowMinChars;
@@ -347,7 +345,7 @@ extern GtkWidget*		findDropBox;
 extern GtkWidget*		replaceDropBox;
 extern GSList*			findList;
 extern GSList*			replaceList;
-extern int				maxFRHistory;
+extern unsigned int		maxFRHistory;
 extern GtkObject*		frHistoryAdj;
 
 //custom toolbar

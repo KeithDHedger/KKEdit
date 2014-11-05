@@ -124,8 +124,6 @@ void init(void)
 	tmpDepth=depth;
 	tmpStyleName=strdup(styleName);
 	tmpAutoShowMinChars=autoShowMinChars;
-	tmpAutoCheck=autoCheck;
-	tmpNagScreen=nagScreen;
 	tmpHighlightColour=highlightColour;
 
 	asprintf(&htmlFile,"%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
