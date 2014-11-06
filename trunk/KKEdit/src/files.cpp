@@ -122,10 +122,15 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
 	GtkWidget*	evbox=gtk_event_box_new();
 	GtkWidget*	hbox=gtk_hbox_new(false,0);
-	GtkWidget*	label=gtk_label_new(name);
+	GtkWidget*	label;
 	GtkWidget*	close=gtk_image_new_from_stock(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
 	GtkWidget*	button=gtk_button_new();
 	GtkRcStyle*	style=gtk_rc_style_new();
+	char*		correctedname;
+
+	correctedname=truncateWithElipses(name,maxTabChars);
+	label=gtk_label_new(correctedname);
+	free(correctedname);
 
 	gtk_button_set_relief((GtkButton*)button,GTK_RELIEF_NONE);
 	gtk_widget_set_tooltip_text(label,tooltip);

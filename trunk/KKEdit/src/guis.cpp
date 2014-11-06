@@ -18,6 +18,7 @@ GtkWidget*		entries[NUMSHORTCUTS];
 const char* 	shortcuttext[NUMSHORTCUTS]={gettext("Delete Current Line"),gettext("Delete To End Of Line"),gettext("Delete To Beginning Of Line"),gettext("Select Word Under Cursor"),gettext("Delete Word Under Cursor"),gettext("Duplicate Current Line"),gettext("Select Current Line"),gettext("Move Current Line Up"),gettext("Move Current Line Down"),gettext("Select From Cursor To End Of Line"),gettext("Select From Beginning Of Line To Cursor"),gettext("Move Selection Up"),gettext("Move Selection Down"),gettext("Show Completion")};
 
 GtkWidget*	prefsWidgets[MAXPREFSWIDGETS];
+GtkObject*	prefsIntWidgets[MAXPREFSINTWIDGETS];
 
 void findTool(toolStruct* data,char* toolname)
 {
@@ -1024,15 +1025,33 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 	return(widg);
 
 }
-
 /*
-//indent
-	prefsWidgets[AUTOINDENT]=gtk_check_button_new_with_label(gettext("Auto Indent Lines"));
-	gtk_widget_set_name(prefsWidgets[AUTOINDENT],"indent");
-	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[AUTOINDENT],indent);
-	gtk_table_attach_defaults(table,prefsWidgets[AUTOINDENT],0,1,0,1);
+//find replace history max
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Max Find/Replace History:")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,4,5);
+
+	frHistoryAdj=gtk_adjustment_new(maxFRHistory,0,30,1,1,0);
+	item=gtk_spin_button_new((GtkAdjustment*)frHistoryAdj,1,0);
+	gtk_widget_set_name(item,"maxfrhistory");
+	gtk_table_attach_defaults(table,item,1,2,4,5);
 
 */
+void makePrefsDial(int widgnum,const char* label,const char* name,int value,int minvalue,int maxvalue,int posy)
+{
+	GtkAlignment*	align;
+	GtkWidget*		item;
+
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(label));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,posy,posy+1);
+
+	prefsIntWidgets[widgnum]=gtk_adjustment_new(value,minvalue,maxvalue,1,1,0);
+	item=gtk_spin_button_new((GtkAdjustment*)prefsIntWidgets[widgnum],1,0);
+	gtk_widget_set_name(item,name);
+	gtk_table_attach_defaults(table,item,1,2,posy,posy+1);
+}
+
 void makePrefsCheck(int widgnum,const char* label,const char* name,bool onoff,int posx,int posy)
 {
 	prefsWidgets[widgnum]=gtk_check_button_new_with_label(label);
@@ -1090,8 +1109,8 @@ VISIBLE void doPrefs(void)
 	makePrefsCheck(WRAP,gettext("Wrap Lines"),"wrap",lineWrap,0,2);
 //highlite
 	makePrefsCheck(HIGHLIGHT,gettext("Highlight Current Line"),"high",highLight,0,3);
-//no highlight
-	makePrefsCheck(NOSYNTAX,gettext("No Syntax Highlighting"),"nosyntax",highLight,0,4);
+//no syntax colour
+	makePrefsCheck(NOSYNTAX,gettext("No Syntax Highlighting"),"nosyntax",noSyntax,0,4);
 //single instance
 	makePrefsCheck(USESINGLE,gettext("Use Single Instance"),"single",singleUse,0,5);
 
@@ -1176,17 +1195,19 @@ VISIBLE void doPrefs(void)
 	gtk_table_attach_defaults(table,bmHighlightBox,1,2,3,4);
 
 //autoshow completion
-	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Completion Minimum Word Size:")));
-	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,4,5);
+	makePrefsDial(COMPLETIONSIZE,gettext("Completion Minimum Word Size:"),"minautochars",autoShowMinChars,2,20,4);
 
-//completeion min chars
-	adj=gtk_adjustment_new(tmpAutoShowMinChars,2,64,1,1,0);
-	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
-	gtk_widget_set_name(item,"minautochars");
-	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
-	gtk_table_attach_defaults(table,item,1,2,4,5);
-
+//	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+//	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Completion Minimum Word Size:")));
+//	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,4,5);
+//
+////completeion min chars
+//	adj=gtk_adjustment_new(tmpAutoShowMinChars,2,64,1,1,0);
+//	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
+//	gtk_widget_set_name(item,"minautochars");
+//	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
+//	gtk_table_attach_defaults(table,item,1,2,4,5);
+//
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
 
 //sort functions
@@ -1217,18 +1238,11 @@ VISIBLE void doPrefs(void)
 //page 3
 	pagevbox=gtk_vbox_new(false,0);
 //admin
-	table=(GtkTable*)gtk_table_new(8,TABLECOLS,true);
+	table=(GtkTable*)gtk_table_new(10,TABLECOLS,true);
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-
+//void makePrefsDial(int widgnum,const char* label,const char* name,int value,int minvalue,int maxvalue,int posy)
 //function search depth
-	GtkObject*	adjdepth=gtk_adjustment_new(tmpDepth,1,64,1,1,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Tag File Search Depth:")));
-	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,0,1);
-
-	item=gtk_spin_button_new((GtkAdjustment*)adjdepth,1,0);
-	gtk_widget_set_name(item,"depth");
-	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
-	gtk_table_attach_defaults(table,item,1,2,0,1);
+	makePrefsDial(MAXFUNCDEPTH,gettext("Tag File Search Depth:"),"depth",depth,0,20,0);
 
 //terminalcommand
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
@@ -1261,19 +1275,14 @@ VISIBLE void doPrefs(void)
 	gtk_table_attach_defaults(table,defaultBrowserBox,1,2,3,4);
 
 //find replace history max
-	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Max Find/Replace History:")));
-	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,4,5);
-
-	frHistoryAdj=gtk_adjustment_new(maxFRHistory,0,30,1,1,0);
-	item=gtk_spin_button_new((GtkAdjustment*)frHistoryAdj,1,0);
-	gtk_widget_set_name(item,"maxfrhistory");
-	gtk_table_attach_defaults(table,item,1,2,4,5);
+	makePrefsDial(MAXHISTORY,gettext("Max Find/Replace History:"),"maxfrhistory",maxFRHistory,0,MAXTEXTWIDTH,4);
+//max tab label width
+	makePrefsDial(MAXTABCHARS,gettext("Max Characters In Tab:"),"maxtabchars",maxTabChars,1,MAXTEXTWIDTH,5);
 
 //check for update
-	makePrefsCheck(UPDATECHECK,gettext("Check For Updates"),"updatecheck",autoCheck,0,5);
+	makePrefsCheck(UPDATECHECK,gettext("Check For Updates"),"updatecheck",autoCheck,0,6);
 //use global plug menu
-	makePrefsCheck(GLOBALPLUGMENU,gettext("Use Global Plugins Menu ( Requires Restart )"),"useplugmenu",useGlobalPlugMenu,0,6);
+	makePrefsCheck(GLOBALPLUGMENU,gettext("Use Global Plugins Menu ( Requires Restart )"),"useplugmenu",useGlobalPlugMenu,0,7);
 
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
 	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("Administration")));

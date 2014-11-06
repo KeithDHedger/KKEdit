@@ -20,7 +20,6 @@ struct _FunctionProviderClass
 	GObjectClass			parent_class;
 };
 
-
 G_DEFINE_TYPE_WITH_CODE(FunctionProvider,function_provider,G_TYPE_OBJECT,G_IMPLEMENT_INTERFACE (GTK_TYPE_SOURCE_COMPLETION_PROVIDER,function_provider_iface_init))
 
 FunctionProvider*			funcProv;
@@ -254,7 +253,7 @@ void doCompletionPopUp(pageStruct* page)
 {
 	GtkSourceCompletionContext*	context;
 	GList*						list;
-printf("XXXXXXXXXXX\n");
+
 	context=gtk_source_completion_create_context(page->completion,NULL);
 	list=gtk_source_completion_get_providers(page->completion);
 	gtk_source_completion_show(page->completion,list,context);

@@ -63,6 +63,7 @@ void init(void)
 	autoShowComps=false;
 	autoCheck=true;
 	useGlobalPlugMenu=true;
+	maxTabChars=20;
 
 	windowWidth=800;
 	windowHeight=600;
@@ -122,9 +123,7 @@ void init(void)
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
 	tmpTabWidth=tabWidth;
-	tmpDepth=depth;
 	tmpStyleName=strdup(styleName);
-	tmpAutoShowMinChars=autoShowMinChars;
 	tmpHighlightColour=highlightColour;
 
 	asprintf(&htmlFile,"%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));

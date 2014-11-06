@@ -37,6 +37,7 @@
 #define BOOKMAXMARKMENULEN 40
 #define MAXRECENT 10
 #define MAXMENUFUNCLEN 100
+#define MAXTEXTWIDTH 100
 
 #define MARK_TYPE_1		"one"
 #define MARK_TYPE_2		"two"
@@ -176,7 +177,7 @@ extern int				tabWidth;
 extern char*			fontAndSize;
 extern char*			terminalCommand;
 extern char*			rootCommand;
-extern int				depth;
+extern unsigned int		depth;
 extern bool				onExitSaveSession;
 extern bool				restoreBookmarks;
 extern char*			styleName;
@@ -186,9 +187,8 @@ extern bool				readLinkFirst;
 extern bool				autoShowComps;
 extern bool				autoCheck;
 extern bool				useGlobalPlugMenu;
-
-extern uint				autoShowMinChars;
-extern int				tmpAutoShowMinChars;
+extern unsigned int		maxTabChars;
+extern unsigned int		autoShowMinChars;
 
 extern GtkWidget*		fontButton;
 extern GtkWidget*		terminalBox;
@@ -200,7 +200,6 @@ extern char*			browserCommand;
 extern GtkWidget*		keysWindow;
 
 extern int				tmpTabWidth;
-extern int				tmpDepth;
 extern char*			tmpStyleName;
 
 extern GtkWidget*		toolNameWidget;
@@ -297,7 +296,6 @@ extern GtkWidget*		replaceDropBox;
 extern GSList*			findList;
 extern GSList*			replaceList;
 extern unsigned int		maxFRHistory;
-extern GtkObject*		frHistoryAdj;
 
 //custom toolbar
 extern GtkWidget*		fromHBox;

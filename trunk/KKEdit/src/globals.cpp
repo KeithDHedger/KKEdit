@@ -94,7 +94,7 @@ int				tabWidth;
 char*			fontAndSize;
 char*			terminalCommand;
 char*			rootCommand;
-int				depth;
+unsigned int	depth;
 bool			onExitSaveSession;
 bool			restoreBookmarks;
 char*			styleName=NULL;
@@ -103,9 +103,9 @@ bool			noWarnings;
 bool			readLinkFirst;
 bool			autoShowComps;
 bool			autoCheck;
-uint			autoShowMinChars;
-int				tmpAutoShowMinChars;
+unsigned int	autoShowMinChars;
 bool			useGlobalPlugMenu;
+unsigned int	maxTabChars=20;
 
 GtkWidget*		fontButton;
 GtkWidget*		terminalBox;
@@ -117,7 +117,6 @@ char*			browserCommand=strdup("firefox");
 GtkWidget*		keysWindow=NULL;
 
 int				tmpTabWidth;
-int				tmpDepth;
 char*			tmpStyleName=NULL;
 
 GtkWidget*		toolNameWidget;
@@ -214,7 +213,6 @@ GtkWidget*		replaceDropBox;
 GSList*			findList=NULL;
 GSList*			replaceList=NULL;
 unsigned int	maxFRHistory=5;
-GtkObject*		frHistoryAdj=NULL;
 
 //custom toolbar
 GtkWidget*		fromHBox;
@@ -388,6 +386,7 @@ args			kkedit_rc[]=
 	{"funcsort",TYPEINT,&listFunction},
 	{"minautochars",TYPEINT,&autoShowMinChars},
 	{"maxfrhistory",TYPEINT,&maxFRHistory},
+	{"maxtabchars",TYPEINT,&maxTabChars},
 	{NULL,0,NULL}
 };
 
