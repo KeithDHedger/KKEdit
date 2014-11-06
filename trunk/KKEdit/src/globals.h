@@ -173,7 +173,7 @@ extern bool				lineWrap;
 extern bool				highLight;
 extern bool				noSyntax;
 extern bool				singleUse;
-extern int				tabWidth;
+extern unsigned int		tabWidth;
 extern char*			fontAndSize;
 extern char*			terminalCommand;
 extern char*			rootCommand;
@@ -199,7 +199,6 @@ extern char*			browserCommand;
 //key short cuts
 extern GtkWidget*		keysWindow;
 
-extern int				tmpTabWidth;
 extern char*			tmpStyleName;
 
 extern GtkWidget*		toolNameWidget;

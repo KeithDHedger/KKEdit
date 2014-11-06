@@ -1025,18 +1025,7 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 	return(widg);
 
 }
-/*
-//find replace history max
-	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Max Find/Replace History:")));
-	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,4,5);
 
-	frHistoryAdj=gtk_adjustment_new(maxFRHistory,0,30,1,1,0);
-	item=gtk_spin_button_new((GtkAdjustment*)frHistoryAdj,1,0);
-	gtk_widget_set_name(item,"maxfrhistory");
-	gtk_table_attach_defaults(table,item,1,2,4,5);
-
-*/
 void makePrefsDial(int widgnum,const char* label,const char* name,int value,int minvalue,int maxvalue,int posy)
 {
 	GtkAlignment*	align;
@@ -1068,7 +1057,6 @@ VISIBLE void doPrefs(void)
 	GtkWidget*		pagevbox;
 	GtkWidget*		item;
 	GtkWidget*		label;
-	GtkObject*		adj;
 	GtkNotebook*	notebook;
 	GtkAlignment*	align;
 
@@ -1142,14 +1130,7 @@ VISIBLE void doPrefs(void)
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 
 //tabwidth
-	adj=gtk_adjustment_new(tmpTabWidth,1,64,1,1,0);
-	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
-	gtk_widget_set_name(item,"tabs");
-	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
-
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Tab width:")));
-	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,0,1);
-	gtk_table_attach_defaults(table,item,1,2,0,1);
+	makePrefsDial(TABWIDTH,gettext("Tab width:"),"tabs",tabWidth,2,64,0);
 
 //style
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
@@ -1197,17 +1178,6 @@ VISIBLE void doPrefs(void)
 //autoshow completion
 	makePrefsDial(COMPLETIONSIZE,gettext("Completion Minimum Word Size:"),"minautochars",autoShowMinChars,2,20,4);
 
-//	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-//	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Completion Minimum Word Size:")));
-//	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,4,5);
-//
-////completeion min chars
-//	adj=gtk_adjustment_new(tmpAutoShowMinChars,2,64,1,1,0);
-//	item=gtk_spin_button_new((GtkAdjustment*)adj,1,0);
-//	gtk_widget_set_name(item,"minautochars");
-//	g_signal_connect(G_OBJECT(item),"value-changed",G_CALLBACK(setPrefs),(void*)item);
-//	gtk_table_attach_defaults(table,item,1,2,4,5);
-//
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
 
 //sort functions
@@ -1240,7 +1210,7 @@ VISIBLE void doPrefs(void)
 //admin
 	table=(GtkTable*)gtk_table_new(10,TABLECOLS,true);
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-//void makePrefsDial(int widgnum,const char* label,const char* name,int value,int minvalue,int maxvalue,int posy)
+
 //function search depth
 	makePrefsDial(MAXFUNCDEPTH,gettext("Tag File Search Depth:"),"depth",depth,0,20,0);
 

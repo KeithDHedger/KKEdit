@@ -90,7 +90,7 @@ bool			lineWrap;
 bool			highLight;
 bool			noSyntax;
 bool			singleUse;
-int				tabWidth;
+unsigned int	tabWidth;
 char*			fontAndSize;
 char*			terminalCommand;
 char*			rootCommand;
@@ -116,7 +116,6 @@ char*			browserCommand=strdup("firefox");
 //key short cuts
 GtkWidget*		keysWindow=NULL;
 
-int				tmpTabWidth;
 char*			tmpStyleName=NULL;
 
 GtkWidget*		toolNameWidget;

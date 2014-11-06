@@ -122,7 +122,6 @@ void init(void)
 
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
-	tmpTabWidth=tabWidth;
 	tmpStyleName=strdup(styleName);
 	tmpHighlightColour=highlightColour;
 

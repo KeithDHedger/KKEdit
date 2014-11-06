@@ -1503,7 +1503,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	tpage=getPageStructPtr(-1);
 	bool*		bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&restoreBookmarks,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen,&useGlobalPlugMenu};
-	unsigned int*		ints[MAXPREFSINTWIDGETS]={&maxTabChars,&maxFRHistory,&depth,&autoShowMinChars};
+	unsigned int*		ints[MAXPREFSINTWIDGETS]={&maxTabChars,&maxFRHistory,&depth,&autoShowMinChars,&tabWidth};
 
 	if(strcmp(gtk_widget_get_name(widget),"style")==0)
 		{
@@ -1520,15 +1520,6 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			return;
 		}
 
-	if(strcmp(gtk_widget_get_name(widget),"tabs")==0)
-		tmpTabWidth=gtk_spin_button_get_value_as_int((GtkSpinButton*)data);
-
-//	if(strcmp(gtk_widget_get_name(widget),"minautochars")==0)
-//		tmpAutoShowMinChars=gtk_spin_button_get_value_as_int((GtkSpinButton*)data);
-
-	//if(strcmp(gtk_widget_get_name(widget),"depth")==0)
-	//	tmpDepth=(int)gtk_spin_button_get_value((GtkSpinButton*)data);
-
 	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
 		{
 			if(tpage!=NULL)
@@ -1543,8 +1534,6 @@ void setPrefs(GtkWidget* widget,gpointer data)
 
 			for(int j=0;j<MAXPREFSINTWIDGETS;j++)
 				*ints[j]=gtk_adjustment_get_value((GtkAdjustment*)prefsIntWidgets[j]);
-
-			//autoShowMinChars=tmpAutoShowMinChars;
 
 			if(styleName!=NULL)
 				{
@@ -1594,8 +1583,6 @@ void setPrefs(GtkWidget* widget,gpointer data)
 					setUpToolBar();
 				}
 
-			tabWidth=tmpTabWidth;
-			//depth=tmpDepth;
 			listFunction=gtk_combo_box_get_active((GtkComboBox*)funcListDrop);
 
 			if(tpage!=NULL)
