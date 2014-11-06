@@ -1010,21 +1010,6 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 				gtk_menu_item_new_with_label(stocklabel);
 				
 		}
-//	if(setimage==0)
-//		{
-//			widg=gtk_image_menu_item_new_from_stock(stocklabel,NULL);
-//		}
-//	else
-//		{
-//			widg=gtk_image_menu_item_new_with_label(menulabel);
-//			if(setimage==1)
-//				image=gtk_image_new_from_stock(stocklabel,GTK_ICON_SIZE_MENU);
-//
-//			if(setimage==2)
-//				image=gtk_image_new_from_file(stocklabel);
-//
-//			gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
-//		}
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(parent),widg);
 	g_signal_connect(G_OBJECT(widg),"activate",G_CALLBACK(function),userdata);
@@ -1539,11 +1524,14 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //save
+	menuitem=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveFile,'S',SAVEMENUNAME,STOCKMENU,NULL,NULL);
+/*
 	saveMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),saveMenu);
 	g_signal_connect(G_OBJECT(saveMenu),"activate",G_CALLBACK(saveFile),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)saveMenu,"activate",accgroup,'S',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 	gtk_widget_set_name(saveMenu,SAVEMENUNAME);
+*/
 //savas
 	saveAsMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE_AS,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),saveAsMenu);
