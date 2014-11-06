@@ -85,6 +85,8 @@ void init(void)
 	noWarnings=false;
 	readLinkFirst=false;
 	hightlightAll=true;
+	maxFuncDefs=MAXTEXTWIDTH;
+	maxBMChars=MAXTEXTWIDTH;
 
 //runtime deps
 	exitstatus=system("which manpageeditor 2>&1 >/dev/null");

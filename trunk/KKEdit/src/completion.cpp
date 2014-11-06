@@ -203,7 +203,7 @@ void addProp(pageStruct* page)
 			sscanf (lineptr,"%s",tmpstr);
 			sscanf (lineptr,"%*s %*s %*i %[^\n]s",infostr);
 			holdstr=strdup(tmpstr);
-			correctedstr=truncateWithElipses(tmpstr,MAXMENUFUNCLEN);
+			correctedstr=truncateWithElipses(tmpstr,maxFuncDefs);
 			sprintf(tmpstr,"%s",correctedstr);
 			if(strlen(tmpstr)>0)
 				{

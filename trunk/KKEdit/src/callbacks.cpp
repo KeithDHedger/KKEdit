@@ -281,7 +281,7 @@ VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 			g_strchug(previewtext);
 			g_strchomp(previewtext);
 
-			correctedpreview=truncateWithElipses(previewtext,BOOKMAXMARKMENULEN);
+			correctedpreview=truncateWithElipses(previewtext,maxBMChars);
 			debugFree(previewtext,"toggleBookmark previewtext");
 			previewtext=correctedpreview;
 
@@ -651,7 +651,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 			tmpstr[0]=0;
 			sscanf (lineptr,"%*s %*s %i %[^\n]s",&linenum,tmpstr);
 
-			correctedstr=truncateWithElipses(tmpstr,MAXMENUFUNCLEN);
+			correctedstr=truncateWithElipses(tmpstr,maxFuncDefs);
 			sprintf(tmpstr,"%s",correctedstr);
 			free(correctedstr);
 
@@ -1036,7 +1036,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 					fdata=getFunctionByName(selection,false);
 					if(fdata!=NULL)
 						{
-							temptext=truncateWithElipses(fdata->define,MAXMENUFUNCLEN);
+							temptext=truncateWithElipses(fdata->define,maxFuncDefs);
 							menuitem=gtk_menu_item_new_with_label(temptext);
 							free(temptext);
 							sprintf((char*)&defineText,"%s",fdata->define);
@@ -1503,7 +1503,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 {
 	pageStruct*	tpage=getPageStructPtr(-1);
 	bool*		bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&restoreBookmarks,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen,&useGlobalPlugMenu};
-	unsigned int*		ints[MAXPREFSINTWIDGETS]={&maxTabChars,&maxFRHistory,&depth,&autoShowMinChars,&tabWidth};
+	unsigned int*		ints[MAXPREFSINTWIDGETS]={&maxTabChars,&maxFRHistory,&depth,&autoShowMinChars,&tabWidth,&maxFuncDefs,&maxBMChars};
 
 	if(strcmp(gtk_widget_get_name(widget),"style")==0)
 		{

@@ -1,4 +1,8 @@
 0.2.5
+Set prefs option for setting max characters displayed in bookmarks menu.
+Set prefs option for setting max characters displayed in menus/context menu.
+Set prefs option for setting max characters displayed in tabs.
+Cleaned prefs code.
 Fixed single instance bug in ubuntu.
 If there is a text selection 'Replace All' now only affects the selected text instead of the whole document.
 If there is a text selection 'Find' now starts from the start of the selection instead of the end.

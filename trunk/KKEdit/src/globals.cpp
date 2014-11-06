@@ -106,6 +106,8 @@ bool			autoCheck;
 unsigned int	autoShowMinChars;
 bool			useGlobalPlugMenu;
 unsigned int	maxTabChars=20;
+unsigned int	maxBMChars;
+unsigned int	maxFuncDefs;
 
 GtkWidget*		fontButton;
 GtkWidget*		terminalBox;
@@ -386,6 +388,8 @@ args			kkedit_rc[]=
 	{"minautochars",TYPEINT,&autoShowMinChars},
 	{"maxfrhistory",TYPEINT,&maxFRHistory},
 	{"maxtabchars",TYPEINT,&maxTabChars},
+	{"maxmenuchars",TYPEINT,&maxFuncDefs},
+	{"maxbmchars",TYPEINT,&maxBMChars},
 	{NULL,0,NULL}
 };
 

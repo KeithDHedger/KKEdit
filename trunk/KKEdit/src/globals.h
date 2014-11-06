@@ -34,10 +34,10 @@
 #define VALIDFILENAMECHARS "[A-Za-z0-9_-./ <>]"
 #define VALIDFUNCTIONCHARS "[A-Za-z0-9_*:/@ ()-,.#;[\"]"
 
-#define BOOKMAXMARKMENULEN 40
+//#define BOOKMAXMARKMENULEN 40
 #define MAXRECENT 10
-#define MAXMENUFUNCLEN 100
-#define MAXTEXTWIDTH 100
+//#define MAXMENUFUNCLEN 100
+#define MAXTEXTWIDTH 500
 
 #define MARK_TYPE_1		"one"
 #define MARK_TYPE_2		"two"
@@ -189,6 +189,8 @@ extern bool				autoCheck;
 extern bool				useGlobalPlugMenu;
 extern unsigned int		maxTabChars;
 extern unsigned int		autoShowMinChars;
+extern unsigned int		maxBMChars;
+extern unsigned int		maxFuncDefs;
 
 extern GtkWidget*		fontButton;
 extern GtkWidget*		terminalBox;
