@@ -1622,11 +1622,13 @@ void buildMainGui(void)
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //reload file
+	menurevert=makeMenuItem(GTK_STOCK_REVERT_TO_SAVED,menu,(void*)reloadFile,0,REVERTMENUNAME,STOCKMENU,NULL,NULL);
+/*
 	menurevert=gtk_image_menu_item_new_from_stock(GTK_STOCK_REVERT_TO_SAVED,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menurevert);
 	g_signal_connect(G_OBJECT(menurevert),"activate",G_CALLBACK(reloadFile),NULL);
 	gtk_widget_set_name(menurevert,REVERTMENUNAME);
-
+*/
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
