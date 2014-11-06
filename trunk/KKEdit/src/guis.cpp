@@ -988,21 +988,43 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 	GtkWidget*	widg;
 	GtkWidget*	image;
 
-	if(setimage==0)
+	switch(setimage)
 		{
-			widg=gtk_image_menu_item_new_from_stock(stocklabel,NULL);
-		}
-	else
-		{
-			widg=gtk_image_menu_item_new_with_label(menulabel);
-			if(setimage==1)
+			case STOCKMENU:
+				widg=gtk_image_menu_item_new_from_stock(stocklabel,NULL);
+				break;
+
+			case IMAGEMENU:
+				widg=gtk_image_menu_item_new_with_label(menulabel);
 				image=gtk_image_new_from_stock(stocklabel,GTK_ICON_SIZE_MENU);
+				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
+				break;
 
-			if(setimage==2)
+			case PIXMAPMENU:
 				image=gtk_image_new_from_file(stocklabel);
+				image=gtk_image_new_from_stock(stocklabel,GTK_ICON_SIZE_MENU);
+				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
+				break;
 
-			gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
+			default:
+				gtk_menu_item_new_with_label(stocklabel);
+				
 		}
+//	if(setimage==0)
+//		{
+//			widg=gtk_image_menu_item_new_from_stock(stocklabel,NULL);
+//		}
+//	else
+//		{
+//			widg=gtk_image_menu_item_new_with_label(menulabel);
+//			if(setimage==1)
+//				image=gtk_image_new_from_stock(stocklabel,GTK_ICON_SIZE_MENU);
+//
+//			if(setimage==2)
+//				image=gtk_image_new_from_file(stocklabel);
+//
+//			gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
+//		}
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(parent),widg);
 	g_signal_connect(G_OBJECT(widg),"activate",G_CALLBACK(function),userdata);
