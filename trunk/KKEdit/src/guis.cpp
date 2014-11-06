@@ -1001,8 +1001,8 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 				break;
 
 			case PIXMAPMENU:
+				widg=gtk_image_menu_item_new_with_label(menulabel);
 				image=gtk_image_new_from_file(stocklabel);
-				image=gtk_image_new_from_stock(stocklabel,GTK_ICON_SIZE_MENU);
 				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
 				break;
 
