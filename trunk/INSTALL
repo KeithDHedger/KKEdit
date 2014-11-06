@@ -30,7 +30,6 @@ sudo apt-get update
 sudo apt-get install build-essential 
 sudo apt-get install libglib2.0-dev libgtk2.0-dev
 sudo apt-get install libgtksourceview2.0-dev
-sudo apt-get install libunique-dev
 sudo apt-get install exuberant-ctags
 
 Optional installs:
@@ -58,7 +57,7 @@ sudo make install
 Fedora Install
 sudo yum update kernel*
 sudo yum install gcc-c++ glib2-devel gtk2-devel gcc
-sudo yum install gtksourceview2-devel unique-devel ctags webkitgtk-devel aspell-devel
+sudo yum install gtksourceview2-devel ctags webkitgtk-devel aspell-devel
 
 ******************
 
