@@ -50,58 +50,6 @@
 #define NUMSHORTCUTS	14
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
-#if 0
-#ifndef _PAGESTRUCT_
-#define _PAGESTRUCT_
-
-struct args
-{
-	const char*	name;
-	int			type;
-	void*		data;
-};
-
-enum {TYPEINT=1,TYPESTRING,TYPEBOOL};
-
-
-struct pageStruct
-{
-	GtkWidget*			pane;
-	GtkScrolledWindow*	pageWindow;
-	GtkScrolledWindow*	pageWindow2;
-	GtkSourceBuffer*	buffer;
-	GtkSourceView*		view;
-	GtkSourceView*		view2;
-	char*				filePath;
-	char*				realFilePath;
-	char*				dirName;
-	GtkMenuItem*		navSubMenu;
-	bool				rebuildMenu;
-	GtkWidget*			tabName;
-	GtkTextIter			iter;
-	GtkTextIter			match_start;
-	GtkTextIter			match_end;
-	bool				isFirst;
-	char*				fileName;
-	GFile*				gFile; 
-	GFileMonitor*		monitor;
-	bool				itsMe;
-	GList*				markList;
-	bool				inTop;
-	bool				isSplit;
-	const char*			lang;
-	GtkWidget*			tabVbox;
-	bool				showingChanged;
-	GtkTextMark*		backMark;
-	GtkTextTag*			highlightTag;
-	GList*				userDataList;
-	GtkSourceCompletion* completion;
-	gpointer			reserved2;
-	gpointer			reserved3;
-	gpointer			reserved4;
-};
-#endif
-#endif
 
 struct toolStruct
 {
