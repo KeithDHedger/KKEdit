@@ -429,8 +429,12 @@ int main (int argc, char **argv)
 	int				status;
 	char*			filename;
 	char*			dbusname;
-	bool			safeflag;
+	bool			safeflag=false;
 	GOptionContext*	context;
+
+	singleOverRide=false;
+	loadPluginsFlag=true;
+
 	GOptionEntry	entries[]=
 {
     {"multiple",'m',0,G_OPTION_ARG_NONE,&singleOverRide,"Multiple instance mode",NULL},
@@ -438,7 +442,6 @@ int main (int argc, char **argv)
     { NULL }
 };
 
-	gtk_init(&argc,&argv);
 
 	context=g_option_context_new(NULL);
 	g_option_context_add_main_entries(context,entries,NULL);
@@ -454,6 +457,8 @@ int main (int argc, char **argv)
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_startup_vars);
 	free(filename);
+
+	gtk_init(&argc,&argv);
 
 	asprintf(&dbusname,"org.keithhedger%i.KKEdit",getWorkspaceNumber());
 	if((singleOverRide==true) || (singleUse==false))
