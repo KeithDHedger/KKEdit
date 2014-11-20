@@ -718,7 +718,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
 	GtkTextIter				iter;
 	GtkWidget*				label;
-	gchar*					filename=g_path_get_basename(filepath);
+	gchar*					filename;
 	pageStruct*				page;
 	char*					str=NULL;
 	char*					recenturi;
@@ -734,39 +734,32 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	GtkWidget*				dialog;
 	char*					searchtext=NULL;
 	char*					replacetext=NULL;
-	struct stat				sb;
-	char*					linkname=NULL;
-	ssize_t					r;
 	char*					filepathcopy=NULL;
+	char*					tpath;
 
 	busyFlag=true;
 
-	filepathcopy=strdup(filepath);
+	if(readLinkFirst==true)
+		filepathcopy=realpath(filepath,NULL);
+	else
+		filepathcopy=strdup(filepath);
 
-	lstat(filepath,&sb);
-	if(S_ISLNK(sb.st_mode))
-		{
-			linkname=(char*)malloc(sb.st_size + 1);
-			r=readlink(filepathcopy,linkname,sb.st_size+1);
-			linkname[r]=0;
-		}
-	if((readLinkFirst==true) && (S_ISLNK(sb.st_mode)))
-		{
-			debugFree(filepathcopy,"openFile filepathcopy");
-			filepathcopy=strdup(linkname);
-		}
+	filename=g_path_get_basename(filepathcopy);
 
 	for(int j=0; j<gtk_notebook_get_n_pages(notebook); j++)
 		{
 			page=getPageStructPtr(j);
 			if(noDuplicates==true)
 				{
-					if((page->realFilePath!=NULL) && ((strcmp(page->realFilePath,filepathcopy)==0) || ((page->filePath!=NULL) && (strcmp(page->filePath,filepathcopy)==0))) )
+					tpath=realpath(filepath,NULL);
+					if((page->realFilePath!=NULL) && (strcmp(page->realFilePath,tpath)==0))
 						{
 							gtk_notebook_set_current_page(notebook,j);
 							busyFlag=false;
+							free(tpath);
 							return(true);
 						}
+					free(tpath);
 				}
 		}
 
@@ -803,10 +796,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	page->fileName=strdup(filename);
 	page->dirName=g_path_get_dirname(filepathcopy);
 
-	if(S_ISLNK(sb.st_mode))
-		page->realFilePath=strdup(linkname);
-	else
-		page->realFilePath=(char*)strdup(filepath);
+	page->realFilePath=realpath(filepath,NULL);
 
 	label=makeNewTab(page->fileName,page->filePath,page);
 	setLanguage(page);
@@ -875,7 +865,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	debugFree(recenturi,"openFile recenturi");
 	debugFree(str,"openFile str");
 	debugFree(filepathcopy,"openFile filepathcopy");
-	debugFree(linkname,"openFile linkname");
 
 //connect to ntebook
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
