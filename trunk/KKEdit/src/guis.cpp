@@ -729,7 +729,7 @@ void populateStore(void)
 						break;
 
 				}
-			debugFree(type,"populateStore type");
+			debugFree(&type,"populateStore type");
 		}
 }
 
@@ -742,7 +742,7 @@ void addToToolBar(GtkWidget* widget,gpointer ptr)
 	toolBarLayout=type;
 	populateStore();
 	toolBarLayout=holddata;
-	debugFree(type,"addToToolBar type");
+	debugFree(&type,"addToToolBar type");
 }
 
 void addIcon(const char* icon,const char* data,int toolnumber,const char* tooltip)
@@ -1886,7 +1886,7 @@ int showFunctionEntry(void)
 	gtk_widget_show_all(content_area);
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 	if(functionSearchText!=NULL)
-		debugFree(functionSearchText,"showFunctionEntry functionSearchText");
+		debugFree(&functionSearchText,"showFunctionEntry functionSearchText");
 	functionSearchText=strdup(gtk_entry_get_text((GtkEntry*)entrybox));
 	gtk_widget_destroy(dialog);
 

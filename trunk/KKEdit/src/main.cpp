@@ -18,7 +18,7 @@ void readConfig(void)
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_rc);
-	debugFree(filename,"readConfig filename");
+	debugFree(&filename,"readConfig filename");
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_window_rc);
@@ -28,7 +28,7 @@ void readConfig(void)
 	if(docWindowAllocData!=NULL)
 		sscanf(docWindowAllocData,"%i %i %i %i",(int*)&docWindowWidth,(int*)&docWindowHeight,(int*)&docWindowX,(int*)&docWindowY);
 
-	debugFree(filename,"readConfig filename");
+	debugFree(&filename,"readConfig filename");
 }
 
 void init(void)
@@ -106,15 +106,15 @@ void init(void)
 
 	asprintf(&filename,"%s/.KKEdit/tools",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
-	debugFree(filename,"init filename");
+	debugFree(&filename,"init filename");
 
 	schemeManager=gtk_source_style_scheme_manager_get_default();
 	asprintf(&filename,"%s/.gnome2/gedit/styles",getenv("HOME"));
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
-	debugFree(filename,"init filename");
+	debugFree(&filename,"init filename");
 	asprintf(&filename,"%s/styles",DATADIR);
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
-	debugFree(filename,"init filename");
+	debugFree(&filename,"init filename");
 
 //toolbar layout
 	toolBarLayout=strdup("NOSsXCPsURsFGsE9ADL");
@@ -238,11 +238,11 @@ void doNagStuff(void)
 	while(gtk_events_pending())
 		gtk_main_iteration();
 
-	debugFree(command,"command pulse from donagstuff");
+	debugFree(&command,"command pulse from donagstuff");
 
 	asprintf(&control,"echo \"pulse\" > \"%s/updatecontrol\"",tmpFolderName);
 	system(control);
-	debugFree(control,"control from donagstuff");
+	debugFree(&control,"control from donagstuff");
 
 	exitstatus=system("which curl 2>&1 >/dev/null");
 	gotcurl=WEXITSTATUS(exitstatus);
@@ -276,7 +276,7 @@ void doNagStuff(void)
 
 			asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
 			system(control);
-			debugFree(control,"control from do nag stuff");
+			debugFree(&control,"control from do nag stuff");
 			if(strlen(t1)>1)
 				{
 					thisupdate=atol(t1);
@@ -307,7 +307,7 @@ void doNagStuff(void)
 							lastUpdate=thisupdate;
 						}
 				}
-			debugFree(command,"command from donagstuff");
+			debugFree(&command,"command from donagstuff");
 		}
 
 	if((nagScreen==false))
@@ -315,7 +315,7 @@ void doNagStuff(void)
 
 	asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
 	system(control);
-	debugFree(control,"control from do nag stuff");
+	debugFree(&control,"control from do nag stuff");
 }
 
 void activate(GApplication* application)
@@ -424,8 +424,38 @@ int getWorkspaceNumber(void)
 	return retnum;
 }
 
+//void freeAndNull(void** ptr)
+//{
+//	if(*ptr!=NULL)
+//		free(*ptr);
+//	*ptr=NULL;
+//}
+//
+//void freeAndNull(char** ptr)
+//{
+//	if(*ptr!=NULL)
+//		free(*ptr);
+//	*ptr=NULL;
+//}
+
+//typedef char myptr;
+//
+//void freeAndNull(char** ptr)
+//{
+//	if(*ptr!=NULL)
+//		free(*ptr);
+//	*ptr=NULL;
+//}
+//
 int main (int argc, char **argv)
 {
+
+//char* p=(char*)malloc(1000);
+//printf("%in",(long)p);
+//freeAndNull(&p);
+//printf("%in",(long)p);
+//exit(0);
+
 	int				status;
 	char*			filename;
 	char*			dbusname;

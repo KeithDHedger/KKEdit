@@ -221,7 +221,7 @@ void addProp(pageStruct* page)
 				lineptr++;
 		}
 	if(functions!=NULL)
-		debugFree(functions,"switchPage functions");
+		debugFree(&functions,"switchPage functions");
 }
 
 void removeProps(void)
