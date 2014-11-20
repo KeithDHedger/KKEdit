@@ -80,7 +80,7 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 				{
 					buffer[0]=0;
 					fgets(buffer,2048,fd);
-					sscanf(buffer,"%as %as",&argname,&strarg);
+					sscanf(buffer,"%ms %ms",&argname,&strarg);
 					cnt=0;
 					while(dataptr[cnt].name!=NULL)
 						{
@@ -93,26 +93,22 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 												break;
 											case TYPESTRING:
 												if(*(char**)(dataptr[cnt].data)!=NULL)
-													free(*(char**)(dataptr[cnt].data));
-												sscanf(buffer,"%*s %a[^\n]s",(char**)dataptr[cnt].data);
+													debugFree(&*(char**)(dataptr[cnt].data),"loadVarsFromFile dataptr[cnt].data");
+												sscanf(buffer,"%*s %m[^\n]s",(char**)dataptr[cnt].data);
 												break;
 											case TYPEBOOL:
 												*(bool*)dataptr[cnt].data=(bool)atoi(strarg);
 												break;
 											case TYPELIST:
-												sscanf(buffer,"%*s\t%a[^\n]s",&liststr);
+												sscanf(buffer,"%*s\t%m[^\n]s",&liststr);
 												*(GSList**)dataptr[cnt].data=g_slist_append(*(GSList**)dataptr[cnt].data,liststr);
 												break;
 										}
 								}
 							cnt++;
 						}
-					if(argname!=NULL)
-						free(argname);
-					if(strarg!=NULL)
-						free(strarg);
-					argname=NULL;
-					strarg=NULL;
+					debugFree(&argname,"loadVarsFromFile argname");
+					debugFree(&strarg,"loadVarsFromFile strarg");
 				}
 			fclose(fd);
 		}
@@ -130,7 +126,7 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 
 	correctedname=truncateWithElipses(name,maxTabChars);
 	label=gtk_label_new(correctedname);
-	free(correctedname);
+	debugFree(&correctedname,"makeNewTab correctedname");
 
 	gtk_button_set_relief((GtkButton*)button,GTK_RELIEF_NONE);
 	gtk_widget_set_tooltip_text(label,tooltip);
@@ -629,7 +625,7 @@ gboolean clickInView(GtkWidget* widget,gpointer data)
 {
 	if((statusMessage!=NULL))
 		{
-			free(statusMessage);
+			debugFree(&statusMessage,"clickInView statusMessage");
 			statusMessage=NULL;
 			
 		}
@@ -756,10 +752,10 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 						{
 							gtk_notebook_set_current_page(notebook,j);
 							busyFlag=false;
-							free(tpath);
+							debugFree(&tpath,"openFile tpath");
 							return(true);
 						}
-					free(tpath);
+					debugFree(&tpath,"openFile ");
 				}
 		}
 

@@ -105,9 +105,9 @@ VISIBLE void findFile(GtkWidget* widget,gpointer data)
 								}
 							pclose(fp);
 						}
-					free(command);
+					debugFree(&command,"findFile command");
 				}
-			free(filepath);
+			debugFree(&filepath,"findFile filepath");
 		}
 	delete buf;
 	delete slice;

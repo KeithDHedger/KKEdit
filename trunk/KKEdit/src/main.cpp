@@ -286,13 +286,13 @@ void doNagStuff(void)
 
 							if(strcmp(VERSION,vers)!=0)
 								{
-									free(kkeditupdatemessage);
+									debugFree(&kkeditupdatemessage,"doNagStuff kkeditupdatemessage");
 									asprintf(&kkeditupdatemessage,"%s <b>%s</b> %s <b>%s</b>\n%s:\n<b>%s</b>\n",gettext("KKEdit update available to"),vers,gettext("from"),VERSION,gettext("From here"),MYWEBSITE);
 								}
 
 							if(lastPlugUpdate<atol(plugt))
 								{
-									free(plugupdatemessage);
+									debugFree(&plugupdatemessage,"doNagStuff plugupdatemessage");
 									asprintf(&plugupdatemessage,"\n%s:\n<b>https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins</b>",gettext("Plugin updates are available from here"));
 									lastPlugUpdate=thisupdate;
 								}
@@ -302,8 +302,8 @@ void doNagStuff(void)
 
 							gtk_dialog_run(GTK_DIALOG (dialog));
 							gtk_widget_destroy(dialog);
-							free(kkeditupdatemessage);
-							free(plugupdatemessage);
+							debugFree(&kkeditupdatemessage,"doNagStuff kkeditupdatemessage");
+							debugFree(&plugupdatemessage,"doNagStuff plugupdatemessage");
 							lastUpdate=thisupdate;
 						}
 				}
@@ -334,7 +334,7 @@ void open(GApplication* application,GFile** files,gint n_files,const gchar* hint
 			if(filepath!=NULL)
 				{
 					openFile(filepath,0,true);
-					free(filepath);
+					debugFree(&filepath,"open filepath");
 				}
 		}
 
@@ -424,38 +424,8 @@ int getWorkspaceNumber(void)
 	return retnum;
 }
 
-//void freeAndNull(void** ptr)
-//{
-//	if(*ptr!=NULL)
-//		free(*ptr);
-//	*ptr=NULL;
-//}
-//
-//void freeAndNull(char** ptr)
-//{
-//	if(*ptr!=NULL)
-//		free(*ptr);
-//	*ptr=NULL;
-//}
-
-//typedef char myptr;
-//
-//void freeAndNull(char** ptr)
-//{
-//	if(*ptr!=NULL)
-//		free(*ptr);
-//	*ptr=NULL;
-//}
-//
 int main (int argc, char **argv)
 {
-
-//char* p=(char*)malloc(1000);
-//printf("%in",(long)p);
-//freeAndNull(&p);
-//printf("%in",(long)p);
-//exit(0);
-
 	int				status;
 	char*			filename;
 	char*			dbusname;
@@ -486,7 +456,7 @@ int main (int argc, char **argv)
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_startup_vars);
-	free(filename);
+	debugFree(&filename,"main filename");
 
 	gtk_init(&argc,&argv);
 

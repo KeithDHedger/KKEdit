@@ -556,9 +556,9 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 				{
 					if(((bookMarksNew*)ptr->data)->page==page)
 						{
-							free(((bookMarksNew*)ptr->data)->markName);
-							free(((bookMarksNew*)ptr->data)->label);
-							free(ptr->data);
+							debugFree(&((bookMarksNew*)ptr->data)->markName,"closeTab ((bookMarksNew*)ptr->data)->markName");
+							debugFree(&((bookMarksNew*)ptr->data)->label,"closeTab ((bookMarksNew*)ptr->data)->label");
+							debugFree((char**)&ptr->data,"closeTab ptr->data");
 							changed=false;
 							newBookMarksList=g_list_remove_link(newBookMarksList,ptr);
 						}
@@ -653,7 +653,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 
 			correctedstr=truncateWithElipses(tmpstr,maxFuncDefs);
 			sprintf(tmpstr,"%s",correctedstr);
-			free(correctedstr);
+			debugFree(&correctedstr,"switchPage correctedstr");
 
 			if(strlen(tmpstr)>0)
 				{
@@ -1008,8 +1008,8 @@ VISIBLE void addtoCustomWordList(GtkWidget* widget,gpointer data)
 
 	asprintf(&command,"echo '%s'|cat - %s/%s|sort -u -o %s/%s.tmp;mv %s/%s.tmp %s/%s",selection,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE);
 	system(command);
-	free(command);
-	free(selection);
+	debugFree(&command,"addtoCustomWordList command");
+	debugFree(&selection,"addtoCustomWordList selection");
 	createCompletion(page);
 }
 
@@ -1038,7 +1038,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 						{
 							temptext=truncateWithElipses(fdata->define,maxFuncDefs);
 							menuitem=gtk_menu_item_new_with_label(temptext);
-							free(temptext);
+							debugFree(&temptext,"populatePopupMenu temptext");
 							sprintf((char*)&defineText,"%s",fdata->define);
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)defineText);
@@ -2107,6 +2107,6 @@ VISIBLE void getPlugins(GtkWidget* widget,gpointer data)
 
 	asprintf(&command,"%s \"%s\" &",browserCommand,PLUGINSLINK);
 	system(command);
-	free(command);
+	debugFree(&command,"getPlugins command");
 }
 

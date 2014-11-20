@@ -1140,9 +1140,12 @@ VISIBLE void debugFree(char** ptr,const char* message)
 #ifdef _DEBUG_FREE_
 	fprintf(stderr,"free :%s\n",message);
 #endif
-	if(*ptr!=NULL)
+
+	if (*ptr!=NULL)
 		free(*ptr);
+
 	*ptr=NULL;
+
 }
 
 void doBusy(bool busy,pageStruct* page)

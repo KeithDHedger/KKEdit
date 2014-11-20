@@ -338,7 +338,7 @@ void doMakeTool(void)
 	infolabel=gtk_label_new(placeholderinfo);
 	gtk_label_set_selectable((GtkLabel*)infolabel,true);
 	gtk_box_pack_start(GTK_BOX(vbox),infolabel,false,false,0);
-	free(placeholderinfo);
+	debugFree(&placeholderinfo,"doMakeTool placeholderinfo");
 //in terminal
 	inTermWidget=gtk_check_button_new_with_label(gettext("Run Tool In Terminal"));
 	gtk_widget_set_name(inTermWidget,"interm");
@@ -802,7 +802,7 @@ char* makeToolBarList(void)
 			g_string_append_c(str,str_data[0]);
 			row_count++;
 			valid=gtk_tree_model_iter_next((GtkTreeModel *)listStore,&iter);
-			free(str_data);
+			debugFree(&str_data,"makeToolBarList str_data");
 		}
 	return(g_string_free(str,false));
 }
@@ -870,7 +870,7 @@ void setKeyCuts(GtkWidget* widget,gpointer data)
 					shortCuts[j][0]=gdk_keyval_from_name(text);
 					shortCuts[j][1]=j;
 					if(shortCutStrings[j]!=NULL)
-						free(shortCutStrings[j]);
+						debugFree(&shortCutStrings[j],"setKeyCuts shortCutStrings");
 					asprintf(&shortCutStrings[j],"%i %i - ^%c %s",shortCuts[j][0],shortCuts[j][1],shortCuts[j][0],shortcuttext[j]);
 				}
 			asprintf(&filename,"%s/.KKEdit/keybindings.rc",getenv("HOME"));
@@ -913,7 +913,7 @@ void buildKeys()
 			gtk_label_set_justify((GtkLabel*)item,GTK_JUSTIFY_CENTER);
 			gtk_label_set_line_wrap((GtkLabel*)item,true);
 			gtk_box_pack_start(GTK_BOX(vbox),item,false,false,0);
-			free(keycutsinfo);
+			debugFree(&keycutsinfo,"buildKeys keycutsinfo");
 //functions
 			for(loop=0;loop<NUMSHORTCUTS;loop++)
 				{

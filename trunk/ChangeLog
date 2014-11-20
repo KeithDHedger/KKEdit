@@ -1,4 +1,5 @@
 0.2.6
+Fixed some free() bugs.
 Improved 'ReadLink Before Opening File' option, now handles relative links better, and uses the 'real' filename for the tab name if set, if not uses the link filename ( which may be different ).
 
 0.2.5
