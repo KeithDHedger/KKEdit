@@ -246,6 +246,7 @@ GtkWidget*		showDocViewWidget;
 //spellcheck
 GtkWidget*		spellCheckWord;
 GtkWidget*		wordListDropbox;
+GtkWidget*		wordListEntrybox;
 char*			badWord=NULL;
 char*			goodWord=NULL;
 #ifdef _ASPELL_

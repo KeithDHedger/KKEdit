@@ -748,7 +748,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 			if(noDuplicates==true)
 				{
 					tpath=realpath(filepath,NULL);
-					if((page->realFilePath!=NULL) && (strcmp(page->realFilePath,tpath)==0))
+					if((tpath!=NULL) && (page->realFilePath!=NULL) && (strcmp(page->realFilePath,tpath)==0))
 						{
 							gtk_notebook_set_current_page(notebook,j);
 							busyFlag=false;
@@ -758,7 +758,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					debugFree(&tpath,"openFile ");
 				}
 		}
-
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		{
 			if(warn==true)
@@ -862,7 +861,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	debugFree(&str,"openFile str");
 	debugFree(&filepathcopy,"openFile filepathcopy");
 
-//connect to ntebook
+//connect to notebook
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
 	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
 

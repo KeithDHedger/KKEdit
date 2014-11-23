@@ -12,6 +12,7 @@
 #define _GLOBALS_
 
 #undef _DEBUG_FREE_
+//#define _DEBUG_FREE_
 
 #define REPLACE			100
 #define FINDNEXT		200
@@ -328,6 +329,7 @@ extern GtkWidget*		showDocViewWidget;
 
 extern GtkWidget*		spellCheckWord;
 extern GtkWidget*		wordListDropbox;
+extern GtkWidget*		wordListEntrybox;
 extern char*			badWord;
 extern char*			goodWord;
 #ifdef _ASPELL_

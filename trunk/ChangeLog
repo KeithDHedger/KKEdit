@@ -1,4 +1,8 @@
 0.2.6
+Removed debug flags from makefile.am.
+Spell check document now sets the dirty flag correctly.
+Changed dropbox to dropboxentry in spellcheck word dialog.
+Fixed bug in spell check word.
 Fixed some free() bugs.
 Improved 'ReadLink Before Opening File' option, now handles relative links better, and uses the 'real' filename for the tab name if set, if not uses the link filename ( which may be different ).
 

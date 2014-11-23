@@ -407,7 +407,7 @@ int getWorkspaceNumber(void)
 	int				format;
 	unsigned long	n_items, bytes_after;
 	unsigned char*	data_return=0;
-	int				retnum;
+	int				retnum=0;
 
 	display=gdk_screen_get_display(gdk_screen_get_default());
 	root_win=gdk_screen_get_root_window(gdk_screen_get_default());
