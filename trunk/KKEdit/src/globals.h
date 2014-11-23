@@ -12,7 +12,7 @@
 #define _GLOBALS_
 
 #undef _DEBUG_FREE_
-//#define _DEBUG_FREE_
+#define _DEBUG_FREE_
 
 #define REPLACE			100
 #define FINDNEXT		200
@@ -336,8 +336,6 @@ extern char*			goodWord;
 extern AspellConfig*	aspellConfig;
 extern AspellSpeller*	spellChecker;
 #endif
-
-extern GtkSpellChecker* gtkspell;
 
 extern StringSlice*		globalSlice;
 

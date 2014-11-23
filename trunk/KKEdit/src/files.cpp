@@ -707,12 +707,6 @@ pageStruct* makeNewPage(void)
 //status bar
 	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(updateStatuBar),(void*)page);
 
-//	gtkspell=gtk_spell_checker_new();
-//	g_object_ref_sink (gtkspell);
-//	gtk_spell_checker_set_language (gtkspell,NULL, NULL);
-//
-//	gtk_spell_checker_attach(gtkspell,(GtkTextView*)page->view);
-
 	return(page);
 }
 
