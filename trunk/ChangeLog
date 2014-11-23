@@ -1,4 +1,6 @@
 0.2.6
+Can now only spell check whole document if document is 'clean'.
+Removed unneeded reference to libunique from build files.
 Removed debug flags from makefile.am.
 Spell check document now sets the dirty flag correctly.
 Changed dropbox to dropboxentry in spellcheck word dialog.

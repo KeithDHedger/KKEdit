@@ -254,6 +254,8 @@ AspellConfig*	aspellConfig;
 AspellSpeller*	spellChecker=0;
 #endif
 
+GtkSpellChecker* gtkspell=NULL;
+
 const char*		localeLang;
 
 HistoryClass*	history;

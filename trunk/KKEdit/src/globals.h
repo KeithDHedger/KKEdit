@@ -336,6 +336,9 @@ extern char*			goodWord;
 extern AspellConfig*	aspellConfig;
 extern AspellSpeller*	spellChecker;
 #endif
+
+extern GtkSpellChecker* gtkspell;
+
 extern StringSlice*		globalSlice;
 
 extern unsigned int		shortCuts[NUMSHORTCUTS][2];

@@ -42,6 +42,8 @@
 #include <aspell.h>
 #endif
 
+#include <gtkspell-3.0/gtkspell/gtkspell.h>
+
 #ifdef _BUILDDOCVIEWER_
 #include <webkit/webkit.h>
 #endif

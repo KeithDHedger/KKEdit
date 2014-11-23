@@ -142,6 +142,11 @@ void init(void)
 		spellChecker=to_aspell_speller(possible_err);
 #endif
 
+//	gtkspell=gtk_spell_checker_new();
+//	g_object_ref_sink (gtkspell);
+//	gtk_spell_checker_set_language (gtkspell,NULL, NULL);
+
+
 //do plugins
 	globalPlugins=new PluginClass(loadPluginsFlag);
 //set up plugin data

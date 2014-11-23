@@ -4,7 +4,8 @@ AM_CPPFLAGS =	-I$(top_srcdir) \
 			$(GTKSRC_CFLAGS) \
 			$(UNIQ_CFLAGS) \
 			$(WEBKIT_CFLAGS) \
-			$(GLIBMODULES_CFLAGS) \
+			$(GLIB_CFLAGS) \
+			$(GTKSPELL_CFLAGS) \
 			-DPREFIX=\""${prefix}\"" \
 			-DLOCALEDIR=\""${localedir}"\" \
 			-DDATADIR=\""${pkgdatadir}"\" \
@@ -16,8 +17,8 @@ AM_CPPFLAGS =	-I$(top_srcdir) \
 LIBS =	$(GTK_LIBS) \
 	$(X11_LIBS) \
 	$(GTKSRC_LIBS) \
-	$(UNIQ_LIBS) \
 	$(WEBKIT_LIBS) \
-	$(GLIBMODULES_LIBS) \
+	$(GTKSPELL_LIBS) \
+	$(GLIB_LIBS) \
 	$(ASPELL_LIBS)
 

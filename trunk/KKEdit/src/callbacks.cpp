@@ -1257,7 +1257,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 
 #ifdef _ASPELL_
 //check document
-			if((spellChecker!=NULL) && (aspellConfig!=NULL))
+			if((spellChecker!=NULL) && (aspellConfig!=NULL) && (gtk_text_buffer_get_modified((GtkTextBuffer*)page->buffer)==false))
 				{
 					image=gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK,GTK_ICON_SIZE_MENU);
 					menuitem=gtk_image_menu_item_new_with_label(gettext("Spell Check Document"));

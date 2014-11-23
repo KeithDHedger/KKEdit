@@ -1336,7 +1336,7 @@ void buildMainGui(void)
 	GtkWidget*		menuitem;
 	GtkWidget*		menu;
 	GtkWidget*		menurecent;
-	GtkWidget*		plugsubmenu;
+	GtkWidget*		plugsubmenu=NULL;
 
 	mainWindowVBox=gtk_vbox_new(false,0);
 	mainTopUserVBox=gtk_vbox_new(false,0);
