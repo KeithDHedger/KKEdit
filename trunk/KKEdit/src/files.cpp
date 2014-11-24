@@ -7,12 +7,6 @@
 */
 
 #include "kkedit-includes.h"
-//#include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
-//#include <gtksourceview/gtksourceview.h>
-//#include <gtksourceview/gtksourcecompletion.h>
-//#include <gtksourceview/gtksourcecompletioninfo.h>
-//#include <gtksourceview/gtksourcecompletionitem.h>
-//#include <gtksourceview/gtksourcelanguagemanager.h>
 
 GtkWidget*	vbox;
 char*		saveFileName=NULL;

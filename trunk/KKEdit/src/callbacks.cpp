@@ -406,7 +406,6 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 
 	page->regexList=NULL;
 	page->regexMatchNumber=-1;
-//	gtk_widget_set_sensitive(findReplaceWidget,false);
 
 	if(pagecheck!=page)
 		return;
@@ -515,6 +514,7 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 	bool		changed=false;
 	GtkWidget*	menuitem;
 
+	gtk_widget_show((GtkWidget*)notebook);
 	if(closingAll==true)
 		thispage=0;
 	else
@@ -524,6 +524,9 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 			else
 				thispage=gtk_notebook_page_num(notebook,(GtkWidget *)data);
 		}
+
+	if((thispage<0) || (thispage>gtk_notebook_get_n_pages(notebook)))
+		return;
 
 	closingAll=false;
 	page=getPageStructPtr(thispage);
@@ -588,11 +591,12 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 		g_object_unref(page->gFile);
 	if(page->monitor!=NULL)
 		g_object_unref(page->monitor);
-	if(page!=NULL)
-		debugFree((char**)&page,"closeTab page");
+
 	currentPage--;
 	gtk_notebook_remove_page(notebook,thispage);
 	setSensitive();
+
+	debugFree((char**)&page,"closeTab page");
 }
 
 VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
@@ -724,9 +728,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	gtk_widget_set_sensitive((GtkWidget*)menufunc,onefunc);
 	setSensitive();
 
-//	removeProps();
-//	addProp(page);
-createCompletion(page);
+	createCompletion(page);
 //plug switch tab
 	globalPlugins->globalPlugData->page=page;
 	globalPlugins->globalPlugData->currentTab=currentTabNumber;

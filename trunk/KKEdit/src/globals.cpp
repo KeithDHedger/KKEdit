@@ -167,7 +167,6 @@ bool			hightlightAll;
 int				toolOutHeight=200;
 int				bottomVPaneHite=200;
 int				topVPaneHite=200;
-//GtkWidget*		findReplaceWidget=NULL;
 
 GtkWidget*		mainWindowScrollbox=NULL;
 

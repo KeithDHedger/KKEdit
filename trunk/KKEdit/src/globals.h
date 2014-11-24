@@ -12,7 +12,7 @@
 #define _GLOBALS_
 
 #undef _DEBUG_FREE_
-#define _DEBUG_FREE_
+//#define _DEBUG_FREE_
 
 #define REPLACE			100
 #define FINDNEXT		200
@@ -35,9 +35,7 @@
 #define VALIDFILENAMECHARS "[A-Za-z0-9_-./ <>]"
 #define VALIDFUNCTIONCHARS "[A-Za-z0-9_*:/@ ()-,.#;[\"]"
 
-//#define BOOKMAXMARKMENULEN 40
 #define MAXRECENT 10
-//#define MAXMENUFUNCLEN 100
 #define MAXTEXTWIDTH 500
 
 #define MARK_TYPE_1		"one"
@@ -252,7 +250,6 @@ extern bool				hightlightAll;
 extern int				toolOutHeight;
 extern int				bottomVPaneHite;
 extern int				topVPaneHite;
-//extern GtkWidget*		findReplaceWidget;
 
 extern GtkWidget*		mainWindowScrollbox;
 

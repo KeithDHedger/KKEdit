@@ -955,36 +955,6 @@ void buildKeys()
 	gtk_widget_show_all(keysWindow);
 }
 
-/*
-//file menu
-	menufile=gtk_menu_item_new_with_label(gettext("_File"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menufile,true);
-	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufile),menu);
-
-//new
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(newFile),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'N',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(menuitem,NEWMENUNAME);
-
-//indent
-	prefsWidgets[AUTOINDENT]=gtk_check_button_new_with_label(gettext("Auto Indent Lines"));
-	gtk_widget_set_name(prefsWidgets[AUTOINDENT],"indent");
-	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[AUTOINDENT],indent);
-	gtk_table_attach_defaults(table,prefsWidgets[AUTOINDENT],0,1,0,1);
-
-//	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)newFile,'N',NEWMENUNAME);
-	menuitem=gtk_image_menu_item_new_with_label(gettext("Open As Hexdump"));
-	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(openAsHexDump),NULL);
-	gtk_widget_set_name(menuitem,HEXDUMPMENUNAME);
-
-*/
-
 GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,char hotkey,const char* name,int setimage,const char* menulabel,void* userdata)
 {
 	GtkWidget*	widg;
@@ -1706,7 +1676,6 @@ void buildFindReplace(void)
 {
 	GtkWidget*	content_area;
 	GtkWidget*	replace;
-	GtkWidget*	goback;
 	GtkWidget*	image;
 	GtkWidget*	label;
 	GtkWidget*	vbox;
@@ -1793,9 +1762,6 @@ void buildFindReplace(void)
 	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACE);
 	image=gtk_image_new_from_stock(GTK_STOCK_FIND_AND_REPLACE,GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image((GtkButton*)replace,image);
-
-	goback=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,FINDPREV);
-//	gtk_widget_set_sensitive(goback,!useRegex);
 	
 	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACE);
 	if(replaceAll==true)
