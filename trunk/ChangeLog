@@ -1,4 +1,5 @@
 0.2.6
+Fixed regex find/lockup 
 Can now do backward regex search.
 Redoing regex find/replace.
 Can now only spell check whole document if document is 'clean'.
