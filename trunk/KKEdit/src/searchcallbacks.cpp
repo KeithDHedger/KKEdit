@@ -646,14 +646,14 @@ void regexFind(int dowhat)
 							}
 						else if(wrapSearch==true)
 							{
-								testformatch=findNextRegex(page,textbuffer->charPos,page->regexMatchNumber);
+								testformatch=findNextRegex(page,0,0);
 								if(testformatch!=-1)
 								//if(foundmatch==true)
 									dofindnext=true;
-								page->regexMatchNumber=-1;
+								//page->regexMatchNumber=-1;
 								gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
 								gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&startiter);
-								scrollToIterInPane(page,&startiter);
+								//scrollToIterInPane(page,&startiter);
 							}
 					}
 
