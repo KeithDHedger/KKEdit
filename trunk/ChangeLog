@@ -1,4 +1,6 @@
 0.2.6
+Can now do backward regex search.
+Redoing regex find/replace.
 Can now only spell check whole document if document is 'clean'.
 Removed unneeded reference to libunique from build files.
 Removed debug flags from makefile.am.

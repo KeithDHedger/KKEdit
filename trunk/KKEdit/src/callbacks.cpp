@@ -406,6 +406,7 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 
 	page->regexList=NULL;
 	page->regexMatchNumber=-1;
+//	gtk_widget_set_sensitive(findReplaceWidget,false);
 
 	if(pagecheck!=page)
 		return;

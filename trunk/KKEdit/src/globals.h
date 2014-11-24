@@ -252,6 +252,7 @@ extern bool				hightlightAll;
 extern int				toolOutHeight;
 extern int				bottomVPaneHite;
 extern int				topVPaneHite;
+//extern GtkWidget*		findReplaceWidget;
 
 extern GtkWidget*		mainWindowScrollbox;
 
