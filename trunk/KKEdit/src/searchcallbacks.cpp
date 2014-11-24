@@ -542,6 +542,7 @@ void regexFind(int dowhat)
 	bool					dofindnext=false;
 	bool					dofindprev=false;
 	bool					foundmatch=false;
+	int						testformatch;
 
 	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
 		return;
@@ -604,7 +605,7 @@ void regexFind(int dowhat)
 		{
 //forward search
 			case FINDNEXT:
-				foundmatch=false;
+				//foundmatch=false;
 				page->regexMatchNumber=findNextRegex(page,textbuffer->charPos,page->regexMatchNumber);
 				if(page->regexMatchNumber!=-1)
 					{
@@ -618,7 +619,7 @@ void regexFind(int dowhat)
 								gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&startiter,&enditer);
 								scrollToIterInPane(page,&startiter);
 								page->regexMatchNumber++;
-								foundmatch=true;
+								//foundmatch=true;
 							}
 					}
 				else
@@ -645,7 +646,9 @@ void regexFind(int dowhat)
 							}
 						else if(wrapSearch==true)
 							{
-								if(foundmatch==true)
+								testformatch=findNextRegex(page,textbuffer->charPos,page->regexMatchNumber);
+								if(testformatch!=-1)
+								//if(foundmatch==true)
 									dofindnext=true;
 								page->regexMatchNumber=-1;
 								gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
