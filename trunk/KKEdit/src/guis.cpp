@@ -1795,7 +1795,7 @@ void buildFindReplace(void)
 	gtk_button_set_image((GtkButton*)replace,image);
 
 	goback=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,FINDPREV);
-	gtk_widget_set_sensitive(goback,!useRegex);
+//	gtk_widget_set_sensitive(goback,!useRegex);
 	
 	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACE);
 	if(replaceAll==true)

@@ -404,6 +404,9 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 			return;
 		}
 
+	page->regexList=NULL;
+	page->regexMatchNumber=-1;
+
 	if(pagecheck!=page)
 		return;
 

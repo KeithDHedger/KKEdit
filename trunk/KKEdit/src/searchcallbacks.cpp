@@ -464,7 +464,125 @@ void doAllFiles(int dowhat,bool found)
 		regexFind(dowhat);
 }
 
+struct regexData
+{
+	int start;
+	int	end;
+};
+
+char*					searchtext=NULL;
+char*					replacetext=NULL;
+
 void regexFind(int dowhat)
+{
+	GRegex*					regex;
+	GMatchInfo*				match_info=NULL;
+	GRegexCompileFlags		compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED);
+	GRegexMatchFlags		matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
+	pageStruct*				page=NULL;
+	regexData*				xdata;
+	GtkTextIter				startiter,enditer;
+	int						charstartpos;
+	int						charendpos;
+	int						startpos,endpos;
+	char*					text=NULL;
+
+	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
+		return;
+
+	page=getPageStructPtr(currentFindPage);
+
+	if(searchtext!=NULL)
+		{
+			if(strcmp(searchtext,gtk_entry_get_text((GtkEntry*)findBox))!=0)
+				{
+					page->regexMatchNumber=-1;
+					if(page->regexList!=NULL)
+						g_slist_free_full(page->regexList,free);
+					page->regexList=NULL;
+				}
+			debugFree(&searchtext,"regexFind searchtext");
+		}
+
+	if(replacetext!=NULL)
+		{
+			if(strcmp(replacetext,gtk_entry_get_text((GtkEntry*)replaceBox))!=0)
+				{
+					page->regexMatchNumber=-1;
+					if(page->regexList!=NULL)
+						g_slist_free_full(page->regexList,free);
+					page->regexList=NULL;
+				}
+			debugFree(&replacetext,"regexFind replacetext");
+		}
+
+
+	searchtext=strdup((char*)gtk_entry_get_text((GtkEntry*)findBox));
+	replacetext=strdup((char*)gtk_entry_get_text((GtkEntry*)replaceBox));
+
+	if(insensitiveSearch==true)
+		compileflags=(GRegexCompileFlags)(compileflags|G_REGEX_CASELESS);
+
+	regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,matchflags,NULL);
+	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+
+	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
+	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
+	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&startiter,&enditer,false);
+
+	if(page->regexMatchNumber==-1)
+		{
+			g_regex_match_full(regex,text,-1,0,matchflags,&match_info,NULL);
+			while (g_match_info_matches(match_info))
+				{
+					g_match_info_fetch_pos(match_info,0,&startpos,&endpos);
+					charstartpos=g_utf8_pointer_to_offset(text,&text[startpos]);
+					charendpos=g_utf8_pointer_to_offset(text,&text[endpos]);
+					xdata=(regexData*)malloc(sizeof(regexData));
+					xdata->start=charstartpos;
+					xdata->end=charendpos;
+					page->regexList=g_slist_append(page->regexList,xdata);
+					g_match_info_next(match_info,NULL);
+				}
+			page->regexMatchNumber=0;
+		}
+
+	switch (dowhat)
+		{
+//forward search
+			case FINDNEXT:
+						page->regexMatchNumber++;
+				xdata=(regexData*)g_slist_nth_data(page->regexList,page->regexMatchNumber);
+				if(xdata!=NULL)
+					{
+						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
+						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&enditer);
+						gtk_text_iter_set_offset(&startiter,xdata->start);
+						gtk_text_iter_set_offset(&enditer,xdata->end);
+						gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&startiter,&enditer);
+						scrollToIterInPane(page,&startiter);
+					}
+				break;
+
+			case FINDPREV:
+				page->regexMatchNumber--;
+				xdata=(regexData*)g_slist_nth_data(page->regexList,page->regexMatchNumber);
+				if(xdata!=NULL)
+					{
+						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
+						gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&enditer);
+						gtk_text_iter_set_offset(&startiter,xdata->start);
+						gtk_text_iter_set_offset(&enditer,xdata->end);
+						gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&startiter,&enditer);
+						scrollToIterInPane(page,&startiter);
+					}
+				
+				break;
+		}
+	debugFree(&text,"findregex text");
+}
+
+void regexFindX(int dowhat)
 {
 	char*					searchtext=NULL;
 	char*					replacetext=NULL;
@@ -529,8 +647,8 @@ void regexFind(int dowhat)
 				}
 			else
 				{
-				gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
-				gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
+					gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
+					gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
 					autoSeleced=true;
 				}
 
@@ -1044,8 +1162,8 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 				break;
 			case 5:
 				useRegex=gtk_toggle_button_get_active((GtkToggleButton*)widget);
-				button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,FINDPREV);
-				gtk_widget_set_sensitive(button,!useRegex);
+				//button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,FINDPREV);
+				//gtk_widget_set_sensitive(button,!useRegex);
 				break;
 			case 6:
 				hightlightAll=gtk_toggle_button_get_active((GtkToggleButton*)widget);
