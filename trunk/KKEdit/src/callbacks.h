@@ -49,7 +49,7 @@ void unRedoAll(GtkWidget* widget,gpointer data);
 gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data);
 void loadKeybindings(void);
 void toggleStatusBar(GtkWidget* widget,gpointer data);
-void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data);
+void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data);
 void toggleDocviewer(GtkWidget* widget,gpointer data);
 void closeDocViewer(GtkWidget *widget,GdkEvent *event,gpointer data);
 void getPlugins(GtkWidget* widget,gpointer data);

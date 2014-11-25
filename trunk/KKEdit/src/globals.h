@@ -90,6 +90,7 @@ struct bookMarksNew
 extern GApplication*	mainApp;
 extern bool				busyFlag;
 extern bool				autoSeleced;
+extern bool	fromRegexFind;
 
 extern HistoryClass*	history;
 

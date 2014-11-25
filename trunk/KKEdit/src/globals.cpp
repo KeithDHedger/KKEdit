@@ -11,6 +11,7 @@
 GApplication*	mainApp;
 bool			busyFlag=false;
 bool			autoSeleced=false;
+bool	fromRegexFind=false;
 
 GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;

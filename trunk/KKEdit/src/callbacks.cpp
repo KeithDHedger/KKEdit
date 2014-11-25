@@ -384,13 +384,15 @@ int show_question(char* filename)
 }
 
 
-void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data)
+void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data)
 {
 	pageStruct* page=(pageStruct*)data;
 	TextBuffer*	buf;
 	char*		message=NULL;
 	const char*	path;
 	const char*	lang;
+
+	fromRegexFind=false;
 
 	if((statusMessage!=NULL) || (busyFlag==true))
 		return;
@@ -424,7 +426,7 @@ void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark*
 	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
 	asprintf(&message,gettext("Line %i Column %i \t\tSyntax Highlighting %s\t\tFilePath %s"),buf->lineNum,buf->column,lang,path);
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
-	debugFree(&message,"updateStatuBar message");
+	debugFree(&message,"updateStatusBar message");
 	delete buf;
 }
 
@@ -495,7 +497,7 @@ void setSensitive(void)
 			gtk_widget_set_sensitive((GtkWidget*)menusaveall,true);
 			gtk_widget_set_sensitive((GtkWidget*)menurevert,true);
 			gtk_widget_show_all(page->tabName);
-			updateStatuBar((GtkTextBuffer*)page->buffer,NULL,NULL,page);
+			updateStatusBar((GtkTextBuffer*)page->buffer,NULL,NULL,page);
 			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start_find);
 			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end_find);
 			gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);
