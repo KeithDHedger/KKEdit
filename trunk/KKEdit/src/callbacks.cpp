@@ -1478,12 +1478,14 @@ VISIBLE bool doSaveAll(GtkWidget* widget,gpointer data)
 								case GTK_RESPONSE_YES:
 									gtk_notebook_set_current_page(notebook,loop);
 									saveFile(NULL,NULL);
-
 									break;
 								case GTK_RESPONSE_NO:
 									break;
+								case GTK_RESPONSE_CANCEL:
+									return(true);
+									break;
+
 								default:
-									return(false);;
 									break;
 								}
 						}
