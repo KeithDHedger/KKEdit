@@ -542,11 +542,17 @@ void regexFind(int dowhat)
 	bool					dofindnext=false;
 	bool					dofindprev=false;
 	int						testformatch;
+	GtkTextIter				hastart,haend;
 
+	page=getPageStructPtr(currentFindPage);
 	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
 		return;
 
-	page=getPageStructPtr(currentFindPage);
+	if(!gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&startiter,&enditer))
+		{
+			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
+			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
+		}
 
 	textbuffer=new TextBuffer((GtkTextBuffer*)page->buffer);
 
@@ -573,8 +579,6 @@ void regexFind(int dowhat)
 	regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,matchflags,NULL);
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 
-	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
-	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
 	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&startiter,&enditer,false);
 
 	if(page->regexMatchNumber==-1)
@@ -585,6 +589,7 @@ void regexFind(int dowhat)
 					page->regexList=NULL;
 				}
 
+			gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&startiter,&enditer);
 			g_regex_match_full(regex,text,-1,0,matchflags,&match_info,NULL);
 			while (g_match_info_matches(match_info))
 				{
@@ -595,6 +600,14 @@ void regexFind(int dowhat)
 					xdata->start=charstartpos;
 					xdata->end=charendpos;
 					page->regexList=g_slist_append(page->regexList,xdata);
+					if(hightlightAll==true)
+						{	
+							gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&hastart);
+							gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&haend);
+							gtk_text_iter_set_offset(&hastart,charstartpos);
+							gtk_text_iter_set_offset(&haend,charendpos);
+							gtk_text_buffer_apply_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&hastart,&haend);
+						}
 					g_match_info_next(match_info,NULL);
 				}
 			page->regexMatchNumber=0;
@@ -717,8 +730,11 @@ void regexFind(int dowhat)
 						for(int j=startloop;j<endloop;j++)
 							{
 								page=getPageStructPtr(j);
-								gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
-								gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
+								if(findInAllFiles==true)
+									{
+										gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
+										gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
+									}
 								text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&startiter,&enditer,false);
 								regex=g_regex_new(searchtext,(GRegexCompileFlags)(G_REGEX_CASELESS|G_REGEX_EXTENDED),(GRegexMatchFlags)0,NULL);
 								g_regex_match_full(regex,text,-1,0,matchflags,&match_info,NULL);

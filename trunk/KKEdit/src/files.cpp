@@ -720,12 +720,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	GError*					err=NULL;
 	const gchar*			charset;
 	gsize					br;
-	GRegex*					regex;
-	GRegexCompileFlags		compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED|G_REGEX_CASELESS);
-	GRegexMatchFlags		matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
 	GtkWidget*				dialog;
-	char*					searchtext=NULL;
-	char*					replacetext=NULL;
 	char*					filepathcopy=NULL;
 	char*					tpath;
 
@@ -831,20 +826,13 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	debugFree(&contents,"openFile contents");
 
-	searchtext=(char*)"\\00";
-	replacetext=(char*)"";
-
-	regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,matchflags,NULL);
-	str=g_regex_replace(regex,str,br,0,replacetext,matchflags,NULL);
-
 	gtk_source_buffer_begin_not_undoable_action(page->buffer);
 	gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
 	gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str,strlen(str));
-	debugFree(&str,"openFile str");
 	gtk_source_buffer_end_not_undoable_action(page->buffer);
 
 	page->gFile=g_file_new_for_path(page->filePath);
-	page->monitor=g_file_monitor(page->gFile,(GFileMonitorFlags)G_FILE_MONITOR_NONE,NULL,NULL);
+	page->monitor=g_file_monitor_file(page->gFile,(GFileMonitorFlags)G_FILE_MONITOR_NONE,NULL,NULL);
 	g_signal_connect(G_OBJECT(page->monitor),"changed",G_CALLBACK(fileChangedOnDisk),(void*)page);
 
 	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);

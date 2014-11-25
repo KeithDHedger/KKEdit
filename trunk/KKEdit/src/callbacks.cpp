@@ -514,7 +514,7 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 	bool		changed=false;
 	GtkWidget*	menuitem;
 
-	
+	busyFlag=true;	
 	if(closingAll==true)
 		thispage=0;
 	else
@@ -550,7 +550,6 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 				}
 		}
 
-
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"closeFile");
 
@@ -584,19 +583,36 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 	gtk_widget_show_all(menuBookMark);
 
 	if(page->filePath!=NULL)
-		debugFree(&page->filePath,"closeTab filePath");
+		debugFree(&(page->filePath),"closeTab filePath");
 	if(page->fileName!=NULL)
-		debugFree(&page->fileName,"closeTab fileName");
-	if(page->gFile!=NULL)
-		g_object_unref(page->gFile);
+		debugFree(&(page->fileName),"closeTab fileName");
+
+	debugFree(&(page->dirName),"closeTab dirName");
+	debugFree(&(page->realFilePath),"closeTab realFilePath");
+	if(page->markList!=NULL)
+		g_list_free_full(page->markList,free);
+	page->markList=NULL;
+
+	if(page->userDataList!=NULL)
+		g_list_free_full(page->userDataList,free);
+	page->userDataList=NULL;
+
+	if(page->regexList!=NULL)
+		g_slist_free_full(page->regexList,free);
+	page->regexList=NULL;
+
 	if(page->monitor!=NULL)
-		g_object_unref(page->monitor);
+		g_clear_object(&(page->monitor));
+	if(page->gFile!=NULL)
+		g_clear_object(&(page->gFile));
 
 	currentPage--;
-	gtk_notebook_remove_page(notebook,thispage);
-	//setSensitive();
+	setSensitive();
 
-	debugFree((char**)&page,"closeTab page");
+	gtk_notebook_remove_page(notebook,thispage);
+//TODO//
+//	debugFree((char**)&page,"closeTab page");
+	busyFlag=false;
 }
 
 VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
