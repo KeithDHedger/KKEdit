@@ -514,7 +514,7 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 	bool		changed=false;
 	GtkWidget*	menuitem;
 
-	gtk_widget_show((GtkWidget*)notebook);
+	
 	if(closingAll==true)
 		thispage=0;
 	else
@@ -594,7 +594,7 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 
 	currentPage--;
 	gtk_notebook_remove_page(notebook,thispage);
-	setSensitive();
+	//setSensitive();
 
 	debugFree((char**)&page,"closeTab page");
 }
