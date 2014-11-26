@@ -1668,6 +1668,8 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->contextPopUpMenu=NULL;
 //gettext
 	globalPlugins->globalPlugData->locale=LOCALEDIR;
+////events
+//	globalPlugins->globalPlugData->noticeEvents=sessionBusy;
 
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
 }

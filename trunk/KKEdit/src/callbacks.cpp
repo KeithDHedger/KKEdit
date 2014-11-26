@@ -392,11 +392,14 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 	const char*	path;
 	const char*	lang;
 
-	fromRegexFind=false;
+	if(sessionBusy==true)
+		return;
 
 	if((statusMessage!=NULL) || (busyFlag==true))
 		return;
 
+	if(busyFlag==true)
+		return;
 	pageStruct* pagecheck=getPageStructPtr(currentTabNumber);
 
 	if((page==NULL) || (showStatus==false))
@@ -437,6 +440,9 @@ void setSensitive(void)
 	char*			newlabel;
 	int				offset=0;
 	GtkTextIter	start_find,end_find;
+
+	if(sessionBusy==true)
+		return;
 
 	setToobarSensitive();
 
@@ -515,6 +521,9 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 	GList*		ptr;
 	bool		changed=false;
 	GtkWidget*	menuitem;
+
+	if(sessionBusy==true)
+		return;
 
 	busyFlag=true;	
 	if(closingAll==true)
@@ -1049,6 +1058,9 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	functionData*	fdata;
 	char*			temptext=NULL;
 
+	if(sessionBusy==true)
+		return;
+
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 
@@ -1174,6 +1186,9 @@ gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
 {
 	pageStruct* page=(pageStruct*)getPageStructPtr(-1);
 
+	if(sessionBusy==true)
+		return(true);
+
 	if((long)data==1)
 		page->inTop=true;
 	else
@@ -1254,6 +1269,9 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 	char*						command;
 	char						line[2048];
 	char*						name;
+
+	if(sessionBusy==true)
+		return(false);
 
 	if(event->button==3 && event->type==GDK_BUTTON_PRESS)
 		{
@@ -1846,6 +1864,9 @@ VISIBLE void newEditor(GtkWidget* widget,gpointer data)
 
 void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButton* ev,pageStruct* page)
 {
+	if(sessionBusy==true)
+		return;
+
 	if(ev->button!=1)
 		return;
 

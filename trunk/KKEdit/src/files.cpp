@@ -500,6 +500,13 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	int			currentline;
 	TextBuffer*	buf=new TextBuffer;
 
+	closeAllTabs(NULL,NULL);
+	while(gtk_events_pending())
+		gtk_main_iteration_do(false);
+
+	sessionBusy=true;
+	gtk_widget_freeze_child_notify((GtkWidget*)notebook);
+
 	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
 	fd=fopen(filename,"r");
 	if (fd!=NULL)
@@ -510,6 +517,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 					sscanf(buffer,"%i %[^\n]s",(int*)&currentline,(char*)&strarg);
 					if(openFile(strarg,currentline,true)==false)
 						{
+							sessionBusy=true;
 							intarg=999;
 							while(intarg!=-1)
 								{
@@ -541,6 +549,11 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 			fclose(fd);
 			debugFree(&filename,"restoreSession filename");
 		}
+
+	gtk_widget_thaw_child_notify((GtkWidget*)notebook);
+	sessionBusy=false;
+	while(gtk_events_pending())
+		gtk_main_iteration_do(false);
 	delete buf;
 }
 
@@ -617,6 +630,9 @@ void add_source_mark_pixbufs (GtkSourceView *view)
 
 gboolean clickInView(GtkWidget* widget,gpointer data)
 {
+	if(sessionBusy==true)
+		return(false);
+
 	if((statusMessage!=NULL))
 		{
 			debugFree(&statusMessage,"clickInView statusMessage");
@@ -645,8 +661,9 @@ pageStruct* makeNewPage(void)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 
 	page->buffer=gtk_source_buffer_new(NULL);
-	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
-	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
+//TODO//
+//	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
+//	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
 //completion
@@ -725,6 +742,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	char*					tpath;
 
 	busyFlag=true;
+	sessionBusy=true;
 
 	if(readLinkFirst==true)
 		filepathcopy=realpath(filepath,NULL);
@@ -743,12 +761,14 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 						{
 							gtk_notebook_set_current_page(notebook,j);
 							busyFlag=false;
+							sessionBusy=false;
 							debugFree(&tpath,"openFile tpath");
 							return(true);
 						}
 					debugFree(&tpath,"openFile ");
 				}
 		}
+
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		{
 			if(warn==true)
@@ -758,6 +778,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_widget_destroy(dialog);
 				}
 			busyFlag=false;
+			sessionBusy=false;
 			return(false);
 		}
 
@@ -770,6 +791,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_widget_destroy(dialog);
 				}
 			busyFlag=false;
+			sessionBusy=false;
 			return(false);
 		}
 
@@ -798,6 +820,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_widget_destroy(dialog);
 				}
 			busyFlag=false;
+			sessionBusy=false;
 			return(false);
 		}
 
@@ -859,24 +882,28 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
-	gtk_widget_show_all((GtkWidget*)notebook);
+//	gtk_widget_show_all((GtkWidget*)notebook);
 
-	setToobarSensitive();
+//	setToobarSensitive();
 
 	setFilePrefs(page);
-
-	/* move cursor to the linenumber */
-	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,linenum,0);
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
-	gtk_text_iter_set_line(&iter,linenum);
-	gtk_text_buffer_move_mark((GtkTextBuffer*)page->buffer,page->backMark,&iter);
-	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
 
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"openFile");
 
+//	while(gtk_events_pending())
+//		gtk_main_iteration_do(false);
+
+	/* move cursor to the linenumber */
+	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,linenum,0);
+	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+//	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
+	gtk_text_iter_set_line(&iter,linenum);
+	gtk_text_buffer_move_mark((GtkTextBuffer*)page->buffer,page->backMark,&iter);
+	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
+
 	busyFlag=false;
+	sessionBusy=false;
 	return TRUE;
 }
 
