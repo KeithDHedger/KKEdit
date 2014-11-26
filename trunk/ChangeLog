@@ -1,4 +1,6 @@
 0.2.6
+Speeded up load session.
+Code clean.
 Fixed bug where closing too many tabs too fast caused a segfault.
 Fixed regex find lockup .
 Can now do backward regex search.
