@@ -386,13 +386,11 @@ VISIBLE bool saveFile(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
-#else
+VISIBLE void openAsHexDump(Widget *widget,uPtr user_data)
 //TODO//
-VISIBLE void openAsHexDump(void)
-#endif
 {
+printf("triggered openAsHexDump %i\n",(int)user_data);
+
 #ifndef _USEQT5_
 	GtkWidget*		dialog;
 	char*			filepath;
@@ -976,14 +974,14 @@ printf("openfile %s\n",filepath);
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void newFile(GtkWidget* widget,gpointer data)
-#else
+//#ifndef _USEQT5_
+//VISIBLE void newFile(GtkWidget* widget,gpointer data)
+//#else
 //TODO//
-VISIBLE void newFile(void)
-#endif
+VISIBLE void newFile(Widget* widget,uPtr data)
+//#endif
 {
-printf("triggered newfile\n");
+printf("triggered newfile id %i\n",data);
 #ifdef _USEQT5_
 	QWidget*		label;
 	pageStruct*		page;

@@ -9,12 +9,8 @@
 #ifndef _CALLBACKS_
 #define _CALLBACKS_
 
-#ifndef _USEQT5_
-void doOpenFile(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void doOpenFile(void);
-#endif
+void doOpenFile(Widget* widget,uPtr data);
+
 #ifndef _USEQT5_
 void closeTab(GtkWidget* widget,gpointer data);
 #else
@@ -149,12 +145,9 @@ gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data);
 //TODO//
 gboolean whatPane(void);
 #endif
-#ifndef _USEQT5_
-void newEditor(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void newEditor(void);
-#endif
+
+void newEditor(Widget* widget,uPtr data);
+
 #ifndef _USEQT5_
 void changeSourceStyle(GtkWidget* widget,gpointer data);
 #else

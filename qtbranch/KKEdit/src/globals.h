@@ -49,6 +49,17 @@
 #define NUMSHORTCUTS	14
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
+
+#ifndef _USEQT5_
+	#include <gtk/gtk.h>
+	typedef GtkWidget	Widget;
+	typedef gpointer	uPtr;
+#else
+	#include <QtWidgets>
+	typedef long		uPtr;
+	typedef QWidget 	Widget;
+#endif
+
 #if 0
 #ifndef _PAGESTRUCT_
 #define _PAGESTRUCT_

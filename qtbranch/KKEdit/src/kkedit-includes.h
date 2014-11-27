@@ -33,6 +33,7 @@
 #include <unique/unique.h>
 #else
 	#include <QtWidgets>
+	#include <QAction>
 #endif
 
 #include <libgen.h>
@@ -65,6 +66,10 @@
 #include "files.h"
 #include "encoding.h"
 #include "completion.h"
+
+#ifdef _USEQT5_
+#include "QT_menuitem.h"
+#endif
 
 #define VISIBLE __attribute__((visibility("default")))
 #define PROTECTED __attribute__((visibility("protected")))

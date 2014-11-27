@@ -2,7 +2,14 @@
 AUTOMAKE_OPTIONS = subdir-objects
 
 include ../flagsandlibs
+#include ../sources
+
+if USEQT5
 include ../sources
+else
+include ../sourcesgtk
+endif
+
 
 kkedit_SOURCES = $(COMMONSRC)
 #KKEditProgressBar_SOURCES = ../pole/main.cpp

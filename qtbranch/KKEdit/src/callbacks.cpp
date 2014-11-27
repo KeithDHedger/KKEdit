@@ -363,13 +363,10 @@ int yesNo(char* question,char* file)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void doOpenFile(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void doOpenFile(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void doOpenFile(void)
-#endif
 {
+printf("triggered doOpenFile %i\n",(int)data);
 #ifndef _USEQT5_
 	GtkWidget*	dialog;
 	char*		filename;
@@ -2120,13 +2117,10 @@ void recentFileMenu(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void newEditor(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void newEditor(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void newEditor(void)
-#endif
 {
+printf("new editor%i\n",(int)(long)data);
 #ifndef _USEQT5_
 	char*	command=NULL;
 

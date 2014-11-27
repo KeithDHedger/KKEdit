@@ -36,7 +36,7 @@ QMenu*			menunav;
 QMenu*			menutools;
 QMenu*			menuhelp;
 
-QAction*			menuItemOpen=NULL;
+QAction*		menuItemOpen=NULL;
 
 
 

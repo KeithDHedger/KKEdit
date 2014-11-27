@@ -5,6 +5,9 @@
  * files.h
  *
 */
+
+#include "kkedit-includes.h"
+
 #ifndef _FILES_
 #define _FILES_
 
@@ -17,19 +20,13 @@ bool saveFile(GtkWidget* widget,gpointer data);
 //TODO//
 bool saveFile(void);
 #endif
-#ifndef _USEQT5_
-void newFile(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void newFile(void);
-#endif
+
+void newFile(Widget* widget,uPtr data);
+
 void resetAllFilePrefs(void);
-#ifndef _USEQT5_
-void openAsHexDump(GtkWidget *widget,gpointer user_data);
-#else
-//TODO//
-void openAsHexDump(void);
-#endif
+
+void openAsHexDump(Widget *widget,uPtr user_data);
+
 #ifndef _USEQT5_
 void reloadFile(GtkWidget* widget,gpointer data);
 #else
