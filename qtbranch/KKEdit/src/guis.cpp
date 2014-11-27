@@ -1384,6 +1384,65 @@ void addRecentToMenu(void)
 #endif
 }
 
+#ifndef _USEQT5_
+GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,char hotkey,const char* name,int setimage,const char* menulabel,void* userdata)
+{
+	GtkWidget*	widg;
+	GtkWidget*	image;
+
+	switch(setimage)
+		{
+			case STOCKMENU:
+				widg=gtk_image_menu_item_new_from_stock(stocklabel,NULL);
+				break;
+
+			case IMAGEMENU:
+				widg=gtk_image_menu_item_new_with_label(menulabel);
+				image=gtk_image_new_from_stock(stocklabel,GTK_ICON_SIZE_MENU);
+				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
+				break;
+
+			case PIXMAPMENU:
+				widg=gtk_image_menu_item_new_with_label(menulabel);
+				image=gtk_image_new_from_file(stocklabel);
+				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
+				break;
+
+			default:
+				widg=gtk_menu_item_new_with_label(stocklabel);
+		}
+
+	gtk_menu_shell_append(GTK_MENU_SHELL(parent),widg);
+	g_signal_connect(G_OBJECT(widg),"activate",G_CALLBACK(function),userdata);
+	
+	if(hotkey>0)
+		gtk_widget_add_accelerator((GtkWidget *)widg,"activate",accgroup,hotkey,GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+
+	if(hotkey<0)
+		gtk_widget_add_accelerator((GtkWidget *)widg,"activate",accgroup,hotkey*-1,(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
+
+	gtk_widget_set_name(widg,name);
+	return(widg);
+
+}
+#endif
+
+
+#ifdef _USEQT5_
+template<typename Functor>
+QAction* makeMenuItem(const char* name,const QKeySequence key,const char* iconname,const char* widgetname,Functor ptr)
+{
+	QAction* menuitem;
+	menuitem=menufile->addAction(name);
+	menuitem->setShortcut(key);
+	menuitem->setIcon(QIcon::fromTheme(iconname));
+	menuitem->setObjectName(widgetname);
+	menuitem->connect(menuitem,&QAction::triggered,ptr);
+	return(menuitem);
+}
+#endif
+
+
 #ifdef _USEQT5_
 void buildMainGuiQT(void)
 {
@@ -1412,18 +1471,21 @@ void buildMainGuiQT(void)
 	menubar->addMenu(menufile);
 
 //new
-	menuitem=menufile->addAction("New");
-	menuitem->setShortcuts(QKeySequence::New);
-	menuitem->setIcon(QIcon::fromTheme("document-new"));
-	menuitem->setObjectName(NEWMENUNAME);
-	menuitem->connect(menuitem,&QAction::triggered,newFile);
+//	menuitem=menufile->addAction("New");
+//	menuitem->setShortcuts(QKeySequence::New);
+//	menuitem->setIcon(QIcon::fromTheme("document-new"));
+//	menuitem->setObjectName(NEWMENUNAME);
+//	menuitem->connect(menuitem,&QAction::triggered,newFile);
+
+//new
+	menuitem=makeMenuItem("New",QKeySequence::New,"document-new",NEWMENUNAME,newFile);
 
 //open
-	menuItemOpen=menufile->addAction("Open");
-	menuitem->setShortcuts(QKeySequence::Open);
-	menuitem->setIcon(QIcon::fromTheme("document-open"));
-	menuitem->setObjectName(OPENMENUNAME);
-	menuitem->connect(menuitem,&QAction::triggered,doOpenFile);
+//	menuItemOpen=menufile->addAction("Open");
+//	menuitem->setShortcuts(QKeySequence::Open);
+//	menuitem->setIcon(QIcon::fromTheme("document-open"));
+//	menuitem->setObjectName(OPENMENUNAME);
+//	menuitem->connect(menuitem,&QAction::triggered,doOpenFile);
 
 	mainWindowVBox->addWidget(menubar);
 	mainWindowVBox->addWidget(notebook);
