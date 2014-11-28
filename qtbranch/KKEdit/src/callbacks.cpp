@@ -366,7 +366,7 @@ int yesNo(char* question,char* file)
 VISIBLE void doOpenFile(Widget* widget,uPtr data)
 //TODO//
 {
-printf("triggered doOpenFile %i\n",(int)data);
+printf("triggered doOpenFile %i\n",(int)(long)data);
 #ifndef _USEQT5_
 	GtkWidget*	dialog;
 	char*		filename;

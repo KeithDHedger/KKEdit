@@ -105,12 +105,9 @@ void pasteFRClip(GtkWidget* widget,gpointer data);
 //TODO//
 void pasteFRClip(void);
 #endif
-#ifndef _USEQT5_
-void doDoxy(GtkWidget* widget,long data);
-#else
-//TODO//
-void doDoxy(void);
-#endif
+
+void doDoxy(Widget* widget,uPtr data);
+
 #ifndef _USEQT5_
 void doxyDocs(GtkWidget* widget,gpointer data);
 #else

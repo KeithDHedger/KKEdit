@@ -389,7 +389,7 @@ VISIBLE bool saveFile(void)
 VISIBLE void openAsHexDump(Widget *widget,uPtr user_data)
 //TODO//
 {
-printf("triggered openAsHexDump %i\n",(int)user_data);
+printf("triggered openAsHexDump %i\n",(int)(long)user_data);
 
 #ifndef _USEQT5_
 	GtkWidget*		dialog;

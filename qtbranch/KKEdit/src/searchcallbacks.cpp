@@ -224,13 +224,10 @@ VISIBLE void searchGtkDocs(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void doDoxy(GtkWidget* widget,long data)
-#else
+VISIBLE void doDoxy(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void doDoxy(void)
-#endif
 {
+printf("dodoxy %i\n",(int)(long)data);
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	struct stat	sb;
@@ -238,7 +235,7 @@ VISIBLE void doDoxy(void)
 	FILE*		fp;
 	char		line[1024];
 
-	if(data==1)
+	if((long)data==1)
 		dorebuild=true;
 	else
 		dorebuild=false;

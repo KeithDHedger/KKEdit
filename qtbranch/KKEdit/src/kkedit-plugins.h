@@ -11,8 +11,10 @@
 
 #ifndef _USEQT5_
 #include <gtksourceview/gtksourceview.h>
-#include <gmodule.h>
 #endif
+
+#include <gmodule.h>
+//#include <gio/gio.h>
 
 #define GLOBALPLUGS			1
 #define LOCALPLUGS			0
@@ -77,6 +79,16 @@
 #ifndef _PAGESTRUCT_
 #define _PAGESTRUCT_
 
+#ifndef _USEQT5_
+	#include <gtk/gtk.h>
+	typedef GtkWidget	Widget;
+	typedef gpointer	uPtr;
+#else
+	#include <QtWidgets>
+	typedef long		uPtr;
+	typedef QWidget 	Widget;
+#endif
+
 struct args
 {
 	const char*	name;
@@ -86,7 +98,84 @@ struct args
 
 enum {TYPEINT=1,TYPESTRING,TYPEBOOL};
 
+#ifndef _USEQT5_
 struct pageStruct
+{
+	GtkWidget*			pane;
+	GtkScrolledWindow*	pageWindow;
+	GtkScrolledWindow*	pageWindow2;
+	GtkSourceBuffer*	buffer;
+	GtkSourceView*		view;
+	GtkSourceView*		view2;
+	char*				filePath;
+	char*				realFilePath;
+	char*				dirName;
+	GtkMenuItem*		navSubMenu;
+	bool				rebuildMenu;
+	GtkWidget*			tabName;
+	GtkTextIter			iter;
+	GtkTextIter			match_start;
+	GtkTextIter			match_end;
+	bool				isFirst;
+	char*				fileName;
+	GFile*				gFile; 
+	GFileMonitor*		monitor;
+	bool				itsMe;
+	GList*				markList;
+	bool				inTop;
+	bool				isSplit;
+	const char*			lang;
+	GtkWidget*			tabVbox;
+	bool				showingChanged;
+	GtkTextMark*		backMark;
+	GtkTextTag*			highlightTag;
+	GList*				userDataList;
+	GtkSourceCompletion* completion;
+	GSList*				regexList;
+	int					regexMatchNumber;
+	gpointer			reserved4;
+};
+#else
+struct pageStruct
+{
+	Widget*				pane;
+	Widget*				pageWindow;
+	Widget*				pageWindow2;
+	Widget*				buffer;
+	Widget*				view;
+	Widget*				view2;
+	char*				filePath;
+	char*				realFilePath;
+	char*				dirName;
+	Widget*				navSubMenu;
+	bool				rebuildMenu;
+	Widget*				tabName;
+	Widget				iter;
+	Widget				match_start;
+	Widget				match_end;
+	bool				isFirst;
+	char*				fileName;
+//TODO//
+	uPtr				gFile; 
+	uPtr				monitor;
+	bool				itsMe;
+	GList*				markList;
+	bool				inTop;
+	bool				isSplit;
+	const char*			lang;
+	QVBoxLayout*		tabVbox;
+	bool				showingChanged;
+	Widget*				backMark;
+	Widget*				highlightTag;
+	GList*				userDataList;
+	Widget* 			completion;
+	GSList*				regexList;
+	int					regexMatchNumber;
+	uPtr				reserved4;
+};
+#endif
+
+struct pageStructX
 {
 #ifndef _USEQT5_
 	GtkWidget*			pane;

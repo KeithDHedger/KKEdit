@@ -1434,11 +1434,11 @@ QAction* makeMenuItem(QMenu* menu,const char* name,const QKeySequence key,const 
 {
 	MenuItemClass* menuitem=new MenuItemClass(name);
 
-	menuitem->setShortcut(key);
-	 QIcon undoicon = QIcon::fromTheme("edit-ussndo", QIcon("/media/LinuxData/Development/Projects/KKEditQT/KKEdit/resources/pixmaps/MenuKKEdit.png"));
+	QIcon icon=QIcon::fromTheme(iconname,QIcon(iconname));
 	 
+	menuitem->setShortcut(key);
 	//menuitem->setIcon(QIcon::fromTheme(iconname),QIcon("/media/LinuxData/Development/Projects/KKEditQT/KKEdit/resources/pixmaps/MenuKKEdit.png"));
-	menuitem->setIcon(undoicon);
+	menuitem->setIcon(icon);
 	menuitem->setObjectName(widgetname);
 	menuitem->setCallBack(ptr);
 	menuitem->setMenuID(data);
@@ -1477,26 +1477,23 @@ void buildMainGuiQT(void)
 	menubar->addMenu(menufile);
 
 //new
-	menuitem=makeMenuItem(menufile,"New",QKeySequence::New,"document-new",NEWMENUNAME,&newFile,0);
+	menuitem=makeMenuItem(menufile,gettext("New"),QKeySequence::New,"document-new",NEWMENUNAME,&newFile,0);
 //open
-	menuitem=makeMenuItem(menufile,"Open",QKeySequence::Open,"document-open",OPENMENUNAME,&doOpenFile,1);
+	menuitem=makeMenuItem(menufile,gettext("Open"),QKeySequence::Open,"document-open",OPENMENUNAME,&doOpenFile,1);
 //open as hexdump
-	menuitem=makeMenuItem(menufile,"Open As HeXdump",NULL,"document-open",HEXDUMPMENUNAME,&openAsHexDump,2);
+	menuitem=makeMenuItem(menufile,gettext("Open As HeXdump"),NULL,"document-open",HEXDUMPMENUNAME,&openAsHexDump,2);
 
 	menuitem=menufile->addSeparator();
 
 //extras
-	menuitem=makeMenuItem(menufile,"New Admin Editor",NULL,"xxx",NEWADMINMENUNAME,&newEditor,1);
+	menuitem=makeMenuItem(menufile,gettext("New Admin Editor"),NULL,DATADIR"/pixmaps/ROOTKKEdit.png",NEWADMINMENUNAME,&newEditor,1);
+	menuitem=makeMenuItem(menufile,gettext("New Editor"),NULL,DATADIR"/pixmaps/MenuKKEdit.png",NEWEDITORMENUNAME,&newEditor,2);
 	
-//	DATADIR"/pixmaps/ROOTKKEdit.png",menu,(void*)newEditor,0,NEWADMINMENUNAME,PIXMAPMENU,gettext("New Admin Editor"),(void*)1);
-//	menuitem=makeMenuItem(DATADIR"/pixmaps/MenuKKEdit.png",menu,(void*)newEditor,0,NEWEDITORMENUNAME,PIXMAPMENU,gettext("New Editor"),(void*)2);
-//
-//	if(gotManEditor==0)
-//		menuitem=makeMenuItem(DATADIR"/pixmaps/ManPageEditor.png",menu,(void*)newEditor,0,MANEDITORMENUNAME,PIXMAPMENU,gettext("Manpage Editor"),(void*)3);
-//
+	if(gotManEditor==0)
+		menuitem=makeMenuItem(menufile,gettext("Manpage Editor"),NULL,DATADIR"/pixmaps/ManPageEditor.png",MANEDITORMENUNAME,&newEditor,3);
 
-
-
+	if(gotDoxygen==0)
+		menuitem=makeMenuItem(menufile,gettext("Build Documentation"),NULL,"edit-copy",DOXYBUILDMENUNAME,&doDoxy,1);
 //edit menu
 	menuedit=new QMenu("&Edit");
 	menubar->addMenu(menuedit);
