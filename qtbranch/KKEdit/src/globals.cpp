@@ -61,9 +61,6 @@ GtkWidget*		toolBarBox;
 
 GtkWidget*		menuprint;
 
-GtkWidget*		cutMenu;
-GtkWidget*		copyMenu;
-GtkWidget*		pasteMenu;
 
 
 GtkWidget*		lineNumberWidget;
@@ -90,6 +87,9 @@ Widget*			undoMenu;
 Widget*			redoMenu;
 Widget*			undoAllMenu;
 Widget*			redoAllMenu;
+Widget*			cutMenu;
+Widget*			copyMenu;
+Widget*			pasteMenu;
 
 int				currentPage=0;
 //nag

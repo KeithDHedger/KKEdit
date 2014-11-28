@@ -1551,6 +1551,14 @@ void buildMainGuiQT(void)
 	redoAllMenu=(Widget*)makeMenuItem(editMenu,gettext("Redo All"),0,"edit-redo",REDOALLMENUNAME,&unRedoAll,NULL,1);
 	((QMenu*)editMenu)->addSeparator();
 
+//cut
+	cutMenu=(Widget*)makeMenuItem(editMenu,gettext("Cut"),QKeySequence::Cut,"edit-cut",CUTMENUNAME,&cutToClip,NULL,0);
+//copy
+	copyMenu=(Widget*)makeMenuItem(editMenu,gettext("Copy"),QKeySequence::Copy,"edit-copy",COPYMENUNAME,&copyToClip,NULL,0);
+//paste
+	pasteMenu=(Widget*)makeMenuItem(editMenu,gettext("Paste"),QKeySequence::Paste,"edit-paste",PASTEMENUNAME,&pasteFromClip,NULL,0);
+	((QMenu*)editMenu)->addSeparator();
+
 //////////////////////////////////////////
 
 	mainWindowVBox->addWidget(menubar);

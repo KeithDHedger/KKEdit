@@ -19,24 +19,10 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint arg2,gpointer user_dat
 void switchPage(void);
 #endif
 void setSensitive(void);
-#ifndef _USEQT5_
-void copyToClip(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void copyToClip(void);
-#endif
-#ifndef _USEQT5_
-void cutToClip(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void cutToClip(void);
-#endif
-#ifndef _USEQT5_
-void pasteFromClip(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void pasteFromClip(void);
-#endif
+
+void copyToClip(Widget* widget,uPtr data);
+void cutToClip(Widget* widget,uPtr data);
+void pasteFromClip(Widget* widget,uPtr data);
 
 void undo(Widget* widget,uPtr data);
 void redo(Widget* widget,uPtr data);

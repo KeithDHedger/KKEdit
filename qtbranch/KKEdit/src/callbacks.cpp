@@ -783,26 +783,21 @@ createCompletion(page);
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void copyToClip(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void copyToClip(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void copyToClip(void)
-#endif
 {
+printf("copyToClip %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	gtk_text_buffer_copy_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD));
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void cutToClip(GtkWidget* widget,gpointer data)
-#else
-//TODO//
-VISIBLE void cutToClip(void)
-#endif
+VISIBLE void cutToClip(Widget* widget,uPtr data)
 {
+printf("cutToClip %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	gtk_text_buffer_cut_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),true);
@@ -810,13 +805,11 @@ VISIBLE void cutToClip(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void pasteFromClip(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void pasteFromClip(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void pasteFromClip(void)
-#endif
 {
+printf("pasteFromClip %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	pageStruct*		page=getPageStructPtr(-1);
 	char*			clipdata=NULL;

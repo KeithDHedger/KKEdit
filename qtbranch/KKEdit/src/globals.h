@@ -197,9 +197,6 @@ extern GtkWidget*		menuItemOpen;
 extern GtkWidget*		menuToolOut;
 extern GtkWidget*		menuStatusBar;
 
-extern GtkWidget*		cutMenu;
-extern GtkWidget*		copyMenu;
-extern GtkWidget*		pasteMenu;
 
 
 extern GtkWidget*		lineNumberWidget;
@@ -235,6 +232,9 @@ extern Widget*			undoMenu;
 extern Widget*			redoMenu;
 extern Widget*			undoAllMenu;
 extern Widget*			redoAllMenu;
+extern Widget*			cutMenu;
+extern Widget*			copyMenu;
+extern Widget*			pasteMenu;
 
 extern int				currentPage;
 //nag
