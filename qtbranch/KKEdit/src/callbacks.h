@@ -72,12 +72,9 @@ void openHelp(GtkWidget* widget,gpointer data);
 //TODO//
 void openHelp(void);
 #endif
-#ifndef _USEQT5_
-void printFile(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void printFile(void);
-#endif
+
+void printFile(Widget* widget,uPtr data);
+
 #ifndef _USEQT5_
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data);
 #else
@@ -120,12 +117,9 @@ void doAbout(GtkWidget* widget,gpointer data);
 void doAbout(void);
 #endif
 void writeExitData(void);
-#ifndef _USEQT5_
-bool doSaveAll(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-bool doSaveAll(void);
-#endif
+
+bool doSaveAll(Widget* widget,uPtr data);
+
 #ifndef _USEQT5_
 void closeAllTabs(GtkWidget* widget,gpointer data);
 #else

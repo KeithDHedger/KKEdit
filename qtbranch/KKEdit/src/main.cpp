@@ -435,7 +435,7 @@ int main(int argc,char **argv)
 				restoreSession(NULL,(void*)restoreBookmarks);
 #else
 //TODO//
-				restoreSession();	
+				restoreSession(NULL,(long)restoreBookmarks);	
 #endif
 
 #ifndef _USEQT5_

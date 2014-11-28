@@ -28,18 +28,10 @@ void reloadFile(GtkWidget* widget,gpointer data);
 //TODO//
 void reloadFile(void);
 #endif
-#ifndef _USEQT5_
-void saveSession(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void saveSession(void);
-#endif
-#ifndef _USEQT5_
-void restoreSession(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void restoreSession(void);
-#endif
+
+void saveSession(Widget* widget,uPtr data);
+void restoreSession(Widget* widget,uPtr data);
+
 #ifndef _USEQT5_
 void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data);
 #else

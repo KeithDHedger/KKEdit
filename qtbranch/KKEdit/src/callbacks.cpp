@@ -1645,13 +1645,10 @@ void writeConfig(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE bool doSaveAll(GtkWidget* widget,gpointer data)
-#else
+VISIBLE bool doSaveAll(Widget* widget,uPtr data)
 //TODO//
-VISIBLE bool doSaveAll(void)
-#endif
 {
+printf("doSaveAll %i\n",(int)(long)data);
 #ifndef _USEQT5_
 	int			numpages=gtk_notebook_get_n_pages(notebook);
 	int			result;
@@ -2059,13 +2056,11 @@ void beginPrint(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void printFile(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void printFile(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void printFile(void)
-#endif
 {
+printf("printFile %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	doCombineBuffers();
 	GtkSourcePrintCompositor*	printview=gtk_source_print_compositor_new_from_view(printView);

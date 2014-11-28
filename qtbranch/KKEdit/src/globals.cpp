@@ -64,7 +64,6 @@ GtkWidget*		toolBarBox;
 GtkWidget*		menuprint;
 GtkWidget*		menuclose;
 GtkWidget*		menucloseall;
-GtkWidget*		menusaveall;
 GtkWidget*		menurevert;
 
 GtkWidget*		redoMenu;
@@ -75,7 +74,6 @@ GtkWidget*		cutMenu;
 GtkWidget*		copyMenu;
 GtkWidget*		pasteMenu;
 
-GtkWidget*		saveAsMenu;
 
 GtkWidget*		lineNumberWidget;
 GtkWidget*		findApiWidget;
@@ -87,6 +85,8 @@ GtkWidget*		liveSearchWidget;
 #endif
 
 Widget*			saveMenu;
+Widget*			saveAsMenu;
+Widget*			saveAllMenu;
 
 int				currentPage=0;
 //nag

@@ -1506,8 +1506,22 @@ void buildMainGuiQT(void)
 	menuitem=menufile->addSeparator();
 
 //save
-	saveMenu=(Widget*)makeMenuItem(menufile,gettext("Save"),QKeySequence::Save,NULL,SAVEMENUNAME,NULL,&saveFile,1000);
+	saveMenu=(Widget*)makeMenuItem(menufile,gettext("Save"),QKeySequence::Save,"document-save",SAVEMENUNAME,NULL,&saveFile,0);
+//savas
+	saveAsMenu=(Widget*)makeMenuItem(menufile,gettext("Save As"),QKeySequence::SaveAs,"document-save-as",SAVEASMENUNAME,NULL,&saveFile,1);
+//save all
+	saveAllMenu=(Widget*)makeMenuItem(menufile,gettext("Save All"),NULL,"document-save",SAVEALLMENUNAME,NULL,&doSaveAll,0);
+	menuitem=menufile->addSeparator();
 
+//save session
+	menuitem=makeMenuItem(menufile,gettext("Save Session"),NULL,"document-save",SAVESESSIONMENUNAME,&saveSession,NULL,0);
+//restore session
+	menuitem=makeMenuItem(menufile,gettext("Restore Session"),NULL,"document-open",RESTORESESSIONMENUNAME,&restoreSession,NULL,1);
+//restore session and bookmarks
+	menuitem=makeMenuItem(menufile,gettext("Restore Session With Bookmark"),NULL,"document-open",RESTORESESSIONBMMENUNAME,&restoreSession,NULL,0);
+//printfile
+	menuitem=makeMenuItem(menufile,gettext("Print"),QKeySequence::Print,"document-print",PRINTMENUNAME,&printFile,NULL,0);
+	menuitem=menufile->addSeparator();
 
 
 //edit menu

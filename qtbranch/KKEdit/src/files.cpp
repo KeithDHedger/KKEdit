@@ -469,13 +469,10 @@ VISIBLE void reloadFile(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void saveSession(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void saveSession(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void saveSession(void)
-#endif
 {
+printf("saveSession %i\n",(int)(long)data);
 #ifndef _USEQT5_
 	pageStruct*		page;
 	FILE*			fd=NULL;
@@ -521,13 +518,10 @@ VISIBLE void saveSession(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void restoreSession(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void restoreSession(void)
-#endif
 {
+printf("restoreSession %i\n",(int)(long)data);
 #ifndef _USEQT5_
 	FILE*		fd=NULL;
 	char*		filename;
