@@ -75,7 +75,6 @@ GtkWidget*		cutMenu;
 GtkWidget*		copyMenu;
 GtkWidget*		pasteMenu;
 
-GtkWidget*		saveMenu;
 GtkWidget*		saveAsMenu;
 
 GtkWidget*		lineNumberWidget;
@@ -86,6 +85,8 @@ GtkWidget*		liveSearchWidget;
 #else
 //TODO//
 #endif
+
+Widget*			saveMenu;
 
 int				currentPage=0;
 //nag

@@ -1430,17 +1430,19 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 typedef void (*func_ptr)(int data);
 
 #ifdef _USEQT5_
-QAction* makeMenuItem(QMenu* menu,const char* name,const QKeySequence key,const char* iconname,const char* widgetname,menuCallback ptr,int data)
+QAction* makeMenuItem(QMenu* menu,const char* name,const QKeySequence key,const char* iconname,const char* widgetname,menuCallbackVoid ptrvoid,menuCallbackBool ptrbool,int data)
 {
 	MenuItemClass* menuitem=new MenuItemClass(name);
 
 	QIcon icon=QIcon::fromTheme(iconname,QIcon(iconname));
 	 
 	menuitem->setShortcut(key);
-	//menuitem->setIcon(QIcon::fromTheme(iconname),QIcon("/media/LinuxData/Development/Projects/KKEditQT/KKEdit/resources/pixmaps/MenuKKEdit.png"));
 	menuitem->setIcon(icon);
 	menuitem->setObjectName(widgetname);
-	menuitem->setCallBack(ptr);
+	if(ptrvoid!=NULL)
+		menuitem->setCallBackVoid(ptrvoid);
+	else
+		menuitem->setCallBackBool(ptrbool);
 	menuitem->setMenuID(data);
 	menu->addAction(menuitem);
 	
@@ -1477,28 +1479,42 @@ void buildMainGuiQT(void)
 	menubar->addMenu(menufile);
 
 //new
-	menuitem=makeMenuItem(menufile,gettext("New"),QKeySequence::New,"document-new",NEWMENUNAME,&newFile,0);
+	menuitem=makeMenuItem(menufile,gettext("New"),QKeySequence::New,"document-new",NEWMENUNAME,&newFile,NULL,0);
 //open
-	menuitem=makeMenuItem(menufile,gettext("Open"),QKeySequence::Open,"document-open",OPENMENUNAME,&doOpenFile,1);
+	menuitem=makeMenuItem(menufile,gettext("Open"),QKeySequence::Open,"document-open",OPENMENUNAME,&doOpenFile,NULL,1);
 //open as hexdump
-	menuitem=makeMenuItem(menufile,gettext("Open As HeXdump"),NULL,"document-open",HEXDUMPMENUNAME,&openAsHexDump,2);
+	menuitem=makeMenuItem(menufile,gettext("Open As HeXdump"),NULL,"document-open",HEXDUMPMENUNAME,&openAsHexDump,NULL,2);
 
 	menuitem=menufile->addSeparator();
 
 //extras
-	menuitem=makeMenuItem(menufile,gettext("New Admin Editor"),NULL,DATADIR"/pixmaps/ROOTKKEdit.png",NEWADMINMENUNAME,&newEditor,1);
-	menuitem=makeMenuItem(menufile,gettext("New Editor"),NULL,DATADIR"/pixmaps/MenuKKEdit.png",NEWEDITORMENUNAME,&newEditor,2);
+	menuitem=makeMenuItem(menufile,gettext("New Admin Editor"),NULL,DATADIR"/pixmaps/ROOTKKEdit.png",NEWADMINMENUNAME,&newEditor,NULL,1);
+	menuitem=makeMenuItem(menufile,gettext("New Editor"),NULL,DATADIR"/pixmaps/MenuKKEdit.png",NEWEDITORMENUNAME,&newEditor,NULL,2);
 	
 	if(gotManEditor==0)
-		menuitem=makeMenuItem(menufile,gettext("Manpage Editor"),NULL,DATADIR"/pixmaps/ManPageEditor.png",MANEDITORMENUNAME,&newEditor,3);
+		menuitem=makeMenuItem(menufile,gettext("Manpage Editor"),NULL,DATADIR"/pixmaps/ManPageEditor.png",MANEDITORMENUNAME,&newEditor,NULL,3);
 
+//doxy
 	if(gotDoxygen==0)
-		menuitem=makeMenuItem(menufile,gettext("Build Documentation"),NULL,"edit-copy",DOXYBUILDMENUNAME,&doDoxy,1);
+		menuitem=makeMenuItem(menufile,gettext("Build Documentation"),NULL,"edit-copy",DOXYBUILDMENUNAME,&doDoxy,NULL,1);
+
+	menuitem=menufile->addSeparator();
+
+//recent menu
+//TODO//
+	menuitem=makeMenuItem(menufile,gettext("Recent Files"),NULL,NULL,RECENTMENUNAME,&newFile,NULL,1000);
+	menuitem=menufile->addSeparator();
+
+//save
+	saveMenu=(Widget*)makeMenuItem(menufile,gettext("Save"),QKeySequence::Save,NULL,SAVEMENUNAME,NULL,&saveFile,1000);
+
+
+
 //edit menu
 	menuedit=new QMenu("&Edit");
 	menubar->addMenu(menuedit);
 //new
-	menuitem=makeMenuItem(menuedit,"New",QKeySequence::New,"document-new",NEWMENUNAME,&newFile,4);
+	menuitem=makeMenuItem(menuedit,"New",QKeySequence::New,"document-new",NEWMENUNAME,&newFile,NULL,4);
 
 	mainWindowVBox->addWidget(menubar);
 	mainWindowVBox->addWidget(notebook);

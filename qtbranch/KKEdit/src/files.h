@@ -14,13 +14,8 @@
 void saveVarsToFile(char* filepath,args* dataptr);
 void loadVarsFromFile(char* filepath,args* dataptr);
 bool openFile(const gchar *filepath,int linenumber,bool warn);
-#ifndef _USEQT5_
-bool saveFile(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-bool saveFile(void);
-#endif
 
+bool saveFile(Widget* widget,uPtr data);
 void newFile(Widget* widget,uPtr data);
 
 void resetAllFilePrefs(void);

@@ -296,13 +296,10 @@ bool getSaveFile(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
-#else
+VISIBLE bool saveFile(Widget* widget,uPtr data)
 //TODO//
-VISIBLE bool saveFile(void)
-#endif
 {
+printf("save %i\n",(int)(long)data);
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start,end;

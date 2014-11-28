@@ -211,7 +211,6 @@ extern GtkWidget*		cutMenu;
 extern GtkWidget*		copyMenu;
 extern GtkWidget*		pasteMenu;
 
-extern GtkWidget*		saveMenu;
 extern GtkWidget*		saveAsMenu;
 
 extern GtkWidget*		lineNumberWidget;
@@ -232,6 +231,8 @@ extern QMenu*			menuhelp;
 extern QAction*			menuItemOpen;
 
 #endif
+
+extern Widget*			saveMenu;
 
 extern int				currentPage;
 //nag
