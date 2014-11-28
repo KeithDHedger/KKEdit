@@ -1020,7 +1020,7 @@ void makePrefsCheck(int widgnum,const char* label,const char* name,bool onoff,in
 		gtk_table_attach_defaults(table,prefsWidgets[widgnum],posx,posx+1,posy,posy+1);
 }
 
-VISIBLE void doPrefs(void)
+VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 {
 	GtkWidget*		vbox;
 	GtkWidget*		hbox;

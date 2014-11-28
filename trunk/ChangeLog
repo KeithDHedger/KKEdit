@@ -1,4 +1,5 @@
 0.2.6
+Fixed minor callback bug in prefs/plugin prefs.
 Speeded up load session.
 Code clean.
 Fixed bug where closing too many tabs too fast caused a segfault.
