@@ -10,13 +10,8 @@
 #define _CALLBACKS_
 
 void doOpenFile(Widget* widget,uPtr data);
+void closeTab(Widget* widget,uPtr data);
 
-#ifndef _USEQT5_
-void closeTab(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void closeTab(void);
-#endif
 #ifndef _USEQT5_
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint arg2,gpointer user_data);
 #else
@@ -42,18 +37,10 @@ void pasteFromClip(GtkWidget* widget,gpointer data);
 //TODO//
 void pasteFromClip(void);
 #endif
-#ifndef _USEQT5_
-void undo(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void undo(void);
-#endif
-#ifndef _USEQT5_
-void redo(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void redo(void);
-#endif
+
+void undo(Widget* widget,uPtr data);
+void redo(Widget* widget,uPtr data);
+
 #ifndef _USEQT5_
 void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data);
 #else
@@ -92,12 +79,9 @@ UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessag
 #else
 //TODO//
 #endif
-#ifndef _USEQT5_
-void doShutdown(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void doShutdown(void);
-#endif
+
+void doShutdown(Widget* widget,uPtr data);
+
 #ifndef _USEQT5_
 void setPrefs(GtkWidget* widget,gpointer data);
 #else
@@ -119,13 +103,8 @@ void doAbout(void);
 void writeExitData(void);
 
 bool doSaveAll(Widget* widget,uPtr data);
+void closeAllTabs(Widget* widget,uPtr data);
 
-#ifndef _USEQT5_
-void closeAllTabs(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void closeAllTabs(void);
-#endif
 #ifndef _USEQT5_
 void recentFileMenu(GtkRecentChooser* chooser,gpointer* data);
 #else
@@ -187,12 +166,9 @@ void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer);
 //TODO//
 void removeAllBookmarks(void);
 #endif
-#ifndef _USEQT5_
-void unRedoAll(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void unRedoAll(void);
-#endif
+
+void unRedoAll(Widget* widget,uPtr data);
+
 #ifndef _USEQT5_
 gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data);
 #else

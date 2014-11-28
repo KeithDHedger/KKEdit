@@ -13,8 +13,6 @@ GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;
 GtkNotebook*	notebook=NULL;
 GtkWidget*		menubar=NULL;
-GtkWidget*		menufile;
-GtkWidget*		menuedit;
 GtkWidget*		menufunc;
 GtkWidget*		menunav;
 GtkWidget*		menutools;
@@ -62,14 +60,7 @@ GtkToolbar*		toolBar;
 GtkWidget*		toolBarBox;
 
 GtkWidget*		menuprint;
-GtkWidget*		menuclose;
-GtkWidget*		menucloseall;
-GtkWidget*		menurevert;
 
-GtkWidget*		redoMenu;
-GtkWidget*		undoMenu;
-GtkWidget*		redoAllMenu;
-GtkWidget*		undoAllMenu;
 GtkWidget*		cutMenu;
 GtkWidget*		copyMenu;
 GtkWidget*		pasteMenu;
@@ -84,9 +75,21 @@ GtkWidget*		liveSearchWidget;
 //TODO//
 #endif
 
+
+//file menu
+Widget*			fileMenu;
 Widget*			saveMenu;
 Widget*			saveAsMenu;
 Widget*			saveAllMenu;
+Widget*			closeMenu;
+Widget*			closeAllMenu;
+Widget*			revertMenu;
+//edit menu
+Widget*			editMenu;
+Widget*			undoMenu;
+Widget*			redoMenu;
+Widget*			undoAllMenu;
+Widget*			redoAllMenu;
 
 int				currentPage=0;
 //nag

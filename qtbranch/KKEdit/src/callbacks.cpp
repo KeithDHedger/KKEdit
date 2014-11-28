@@ -538,13 +538,11 @@ void setSensitive(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void closeTab(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void closeTab(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void closeTab(void)
-#endif
 {
+printf("closeTab %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	long		thispage;
 	int			result;
@@ -634,13 +632,11 @@ VISIBLE void closeTab(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
+VISIBLE void closeAllTabs(Widget* widget,uPtr data)
 //TODO//
-#else
-VISIBLE void closeAllTabs(void)
-#endif
 {
+printf("closeAllTabs %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	int	numtabs=gtk_notebook_get_n_pages(notebook);
 
@@ -839,13 +835,11 @@ VISIBLE void pasteFromClip(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void undo(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void undo(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void undo(void)
-#endif
 {
+printf("undo %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 
@@ -858,13 +852,11 @@ VISIBLE void undo(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void unRedoAll(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void unRedoAll(void)
-#endif
 {
+printf("unRedoAll %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 
@@ -886,13 +878,11 @@ VISIBLE void unRedoAll(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void redo(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void redo(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void redo(void)
-#endif
 {
+printf("redo %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 
@@ -1687,13 +1677,11 @@ printf("doSaveAll %i\n",(int)(long)data);
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void doShutdown(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void doShutdown(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void doShutdown(void)
-#endif
 {
+printf("doShutdown %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	char*	command;
 
@@ -1716,6 +1704,8 @@ VISIBLE void doShutdown(void)
 	debugFree(command,"doShutdown command");
 	system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
 	gtk_main_quit();
+#else
+	QApplication::quit();
 #endif
 }
 

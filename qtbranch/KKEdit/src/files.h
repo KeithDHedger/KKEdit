@@ -21,13 +21,7 @@ void newFile(Widget* widget,uPtr data);
 void resetAllFilePrefs(void);
 
 void openAsHexDump(Widget *widget,uPtr user_data);
-
-#ifndef _USEQT5_
-void reloadFile(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void reloadFile(void);
-#endif
+void reloadFile(Widget* widget,uPtr data);
 
 void saveSession(Widget* widget,uPtr data);
 void restoreSession(Widget* widget,uPtr data);

@@ -1430,7 +1430,7 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 typedef void (*func_ptr)(int data);
 
 #ifdef _USEQT5_
-QAction* makeMenuItem(QMenu* menu,const char* name,const QKeySequence key,const char* iconname,const char* widgetname,menuCallbackVoid ptrvoid,menuCallbackBool ptrbool,int data)
+QAction* makeMenuItem(Widget* menu,const char* name,const QKeySequence key,const char* iconname,const char* widgetname,menuCallbackVoid ptrvoid,menuCallbackBool ptrbool,int data)
 {
 	MenuItemClass* menuitem=new MenuItemClass(name);
 
@@ -1444,7 +1444,7 @@ QAction* makeMenuItem(QMenu* menu,const char* name,const QKeySequence key,const 
 	else
 		menuitem->setCallBackBool(ptrbool);
 	menuitem->setMenuID(data);
-	menu->addAction(menuitem);
+	((QMenu*)menu)->addAction(menuitem);
 	
 	return(menuitem);
 }
@@ -1454,7 +1454,7 @@ QAction* makeMenuItem(QMenu* menu,const char* name,const QKeySequence key,const 
 #ifdef _USEQT5_
 void buildMainGuiQT(void)
 {
-	QAction*	menuitem;
+//	QAction*	menuitem;
 
 	window=new QWidget;
 
@@ -1475,60 +1475,83 @@ void buildMainGuiQT(void)
 
 	menubar=new QMenuBar;
 //file menu
-	menufile=new QMenu("&File");
-	menubar->addMenu(menufile);
+	fileMenu=new QMenu("&File");
+	menubar->addMenu((QMenu*)fileMenu);
 
 //new
-	menuitem=makeMenuItem(menufile,gettext("New"),QKeySequence::New,"document-new",NEWMENUNAME,&newFile,NULL,0);
+	makeMenuItem(fileMenu,gettext("New"),QKeySequence::New,"document-new",NEWMENUNAME,&newFile,NULL,0);
 //open
-	menuitem=makeMenuItem(menufile,gettext("Open"),QKeySequence::Open,"document-open",OPENMENUNAME,&doOpenFile,NULL,1);
+	makeMenuItem(fileMenu,gettext("Open"),QKeySequence::Open,"document-open",OPENMENUNAME,&doOpenFile,NULL,1);
 //open as hexdump
-	menuitem=makeMenuItem(menufile,gettext("Open As HeXdump"),NULL,"document-open",HEXDUMPMENUNAME,&openAsHexDump,NULL,2);
+	makeMenuItem(fileMenu,gettext("Open As HeXdump"),0,"document-open",HEXDUMPMENUNAME,&openAsHexDump,NULL,2);
 
-	menuitem=menufile->addSeparator();
+	((QMenu*)fileMenu)->addSeparator();
 
 //extras
-	menuitem=makeMenuItem(menufile,gettext("New Admin Editor"),NULL,DATADIR"/pixmaps/ROOTKKEdit.png",NEWADMINMENUNAME,&newEditor,NULL,1);
-	menuitem=makeMenuItem(menufile,gettext("New Editor"),NULL,DATADIR"/pixmaps/MenuKKEdit.png",NEWEDITORMENUNAME,&newEditor,NULL,2);
+	makeMenuItem(fileMenu,gettext("New Admin Editor"),0,DATADIR"/pixmaps/ROOTKKEdit.png",NEWADMINMENUNAME,&newEditor,NULL,1);
+	makeMenuItem(fileMenu,gettext("New Editor"),0,DATADIR"/pixmaps/MenuKKEdit.png",NEWEDITORMENUNAME,&newEditor,NULL,2);
 	
 	if(gotManEditor==0)
-		menuitem=makeMenuItem(menufile,gettext("Manpage Editor"),NULL,DATADIR"/pixmaps/ManPageEditor.png",MANEDITORMENUNAME,&newEditor,NULL,3);
+		makeMenuItem(fileMenu,gettext("Manpage Editor"),0,DATADIR"/pixmaps/ManPageEditor.png",MANEDITORMENUNAME,&newEditor,NULL,3);
 
 //doxy
 	if(gotDoxygen==0)
-		menuitem=makeMenuItem(menufile,gettext("Build Documentation"),NULL,"edit-copy",DOXYBUILDMENUNAME,&doDoxy,NULL,1);
+		makeMenuItem(fileMenu,gettext("Build Documentation"),0,"edit-copy",DOXYBUILDMENUNAME,&doDoxy,NULL,1);
 
-	menuitem=menufile->addSeparator();
+	((QMenu*)fileMenu)->addSeparator();
 
 //recent menu
 //TODO//
-	menuitem=makeMenuItem(menufile,gettext("Recent Files"),NULL,NULL,RECENTMENUNAME,&newFile,NULL,1000);
-	menuitem=menufile->addSeparator();
+	makeMenuItem(fileMenu,gettext("Recent Files"),0,NULL,RECENTMENUNAME,&newFile,NULL,1000);
+	((QMenu*)fileMenu)->addSeparator();
 
 //save
-	saveMenu=(Widget*)makeMenuItem(menufile,gettext("Save"),QKeySequence::Save,"document-save",SAVEMENUNAME,NULL,&saveFile,0);
+	saveMenu=(Widget*)makeMenuItem(fileMenu,gettext("Save"),QKeySequence::Save,"document-save",SAVEMENUNAME,NULL,&saveFile,0);
 //savas
-	saveAsMenu=(Widget*)makeMenuItem(menufile,gettext("Save As"),QKeySequence::SaveAs,"document-save-as",SAVEASMENUNAME,NULL,&saveFile,1);
+	saveAsMenu=(Widget*)makeMenuItem(fileMenu,gettext("Save As"),QKeySequence::SaveAs,"document-save-as",SAVEASMENUNAME,NULL,&saveFile,1);
 //save all
-	saveAllMenu=(Widget*)makeMenuItem(menufile,gettext("Save All"),NULL,"document-save",SAVEALLMENUNAME,NULL,&doSaveAll,0);
-	menuitem=menufile->addSeparator();
+	saveAllMenu=(Widget*)makeMenuItem(fileMenu,gettext("Save All"),0,"document-save",SAVEALLMENUNAME,NULL,&doSaveAll,0);
+	((QMenu*)fileMenu)->addSeparator();
 
 //save session
-	menuitem=makeMenuItem(menufile,gettext("Save Session"),NULL,"document-save",SAVESESSIONMENUNAME,&saveSession,NULL,0);
+	makeMenuItem(fileMenu,gettext("Save Session"),0,"document-save",SAVESESSIONMENUNAME,&saveSession,NULL,0);
 //restore session
-	menuitem=makeMenuItem(menufile,gettext("Restore Session"),NULL,"document-open",RESTORESESSIONMENUNAME,&restoreSession,NULL,1);
+	makeMenuItem(fileMenu,gettext("Restore Session"),0,"document-open",RESTORESESSIONMENUNAME,&restoreSession,NULL,1);
 //restore session and bookmarks
-	menuitem=makeMenuItem(menufile,gettext("Restore Session With Bookmark"),NULL,"document-open",RESTORESESSIONBMMENUNAME,&restoreSession,NULL,0);
+	makeMenuItem(fileMenu,gettext("Restore Session With Bookmark"),0,"document-open",RESTORESESSIONBMMENUNAME,&restoreSession,NULL,0);
 //printfile
-	menuitem=makeMenuItem(menufile,gettext("Print"),QKeySequence::Print,"document-print",PRINTMENUNAME,&printFile,NULL,0);
-	menuitem=menufile->addSeparator();
+	makeMenuItem(fileMenu,gettext("Print"),QKeySequence::Print,"document-print",PRINTMENUNAME,&printFile,NULL,0);
+	((QMenu*)fileMenu)->addSeparator();
 
+//close
+	closeMenu=(Widget*)makeMenuItem(fileMenu,gettext("Close"),QKeySequence::Close,"window-close",CLOSEMENUNAME,&closeTab,NULL,0);
+//close-all
+	closeAllMenu=(Widget*)makeMenuItem(fileMenu,gettext("Close All Tabs"),0,"window-close",CLOSEALLMENUNAME,&closeAllTabs,NULL,0);
+	((QMenu*)fileMenu)->addSeparator();
 
+//reload file
+	revertMenu=(Widget*)makeMenuItem(fileMenu,gettext("Revert"),0,NULL,REVERTMENUNAME,&reloadFile,NULL,0);
+	((QMenu*)fileMenu)->addSeparator();
+
+//quit
+	makeMenuItem(fileMenu,gettext("Quit"),QKeySequence::Quit,"application-exit",QUITMENUNAME,&doShutdown,NULL,0);
+//////////////////////////////////////////
+	
 //edit menu
-	menuedit=new QMenu("&Edit");
-	menubar->addMenu(menuedit);
-//new
-	menuitem=makeMenuItem(menuedit,"New",QKeySequence::New,"document-new",NEWMENUNAME,&newFile,NULL,4);
+	editMenu=new QMenu("&Edit");
+	menubar->addMenu((QMenu*)editMenu);
+
+//undo
+	undoMenu=(Widget*)makeMenuItem(editMenu,gettext("Undo"),QKeySequence::Undo,"edit-undo",UNDOMENUNAME,&undo,NULL,0);
+//redo
+	redoMenu=(Widget*)makeMenuItem(editMenu,gettext("Redo"),QKeySequence::Redo,"edit-redo",REDOMENUNAME,&redo,NULL,0);
+//undoall
+	undoAllMenu=(Widget*)makeMenuItem(editMenu,gettext("Undo All"),0,"edit-undo",UNDOALLMENUNAME,&unRedoAll,NULL,0);
+//redoall
+	redoAllMenu=(Widget*)makeMenuItem(editMenu,gettext("Redo All"),0,"edit-redo",REDOALLMENUNAME,&unRedoAll,NULL,1);
+	((QMenu*)editMenu)->addSeparator();
+
+//////////////////////////////////////////
 
 	mainWindowVBox->addWidget(menubar);
 	mainWindowVBox->addWidget(notebook);
@@ -1586,10 +1609,10 @@ void buildMainGui(void)
 
 //menus
 //file menu
-	menufile=gtk_menu_item_new_with_label(gettext("_File"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menufile,true);
+	fileMenu=gtk_menu_item_new_with_label(gettext("_File"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)fileMenu,true);
 	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufile),menu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMenu),menu);
 //new
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -1752,10 +1775,10 @@ void buildMainGui(void)
 	gtk_widget_set_name(menurevert,QUITMENUNAME);
 
 //edit menu
-	menuedit=gtk_menu_item_new_with_label(gettext("_Edit"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menuedit,true);
+	editMenu=gtk_menu_item_new_with_label(gettext("_Edit"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)editMenu,true);
 	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuedit),menu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(editMenu),menu);
 //undo
 	undoMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_UNDO,NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),undoMenu);
@@ -2004,8 +2027,8 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_widget_set_name(menuitem,GETPLUGSMENUNAME);
 
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufile);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuedit);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),fileMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),editMenu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuView);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menunav);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufunc);
@@ -2075,8 +2098,8 @@ void buildMainGui(void)
 	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 
 	globalPlugins->globalPlugData->mlist.menuBar=menubar;
-	globalPlugins->globalPlugData->mlist.menuFile=menufile;
-	globalPlugins->globalPlugData->mlist.menuEdit=menuedit;
+	globalPlugins->globalPlugData->mlist.menuFile=fileMenu;
+	globalPlugins->globalPlugData->mlist.menuEdit=editMenu;
 	globalPlugins->globalPlugData->mlist.menuFunc=menufunc;
 	globalPlugins->globalPlugData->mlist.menuNav=menunav;
 	globalPlugins->globalPlugData->mlist.menuTools=menutools;

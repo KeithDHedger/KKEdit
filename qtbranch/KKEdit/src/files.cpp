@@ -442,13 +442,11 @@ printf("triggered openAsHexDump %i\n",(int)(long)user_data);
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void reloadFile(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void reloadFile(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void reloadFile(void)
-#endif
 {
+printf("reloadFile %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	gchar*		buffer;

@@ -185,8 +185,6 @@ extern GtkToolbar*		toolBar;
 extern GtkWidget*		toolBarBox;
 
 extern GtkWidget*		menubar;
-extern GtkWidget*		menufile;
-extern GtkWidget*		menuedit;
 extern GtkWidget*		menufunc;
 extern GtkWidget*		menunav;
 extern GtkWidget*		menutools;
@@ -194,18 +192,11 @@ extern GtkWidget*		menuView;
 
 extern GtkWidget*		menuhelp;
 extern GtkWidget*		menuprint;
-extern GtkWidget*		menuclose;
-extern GtkWidget*		menucloseall;
-extern GtkWidget*		menurevert;
 
 extern GtkWidget*		menuItemOpen;
 extern GtkWidget*		menuToolOut;
 extern GtkWidget*		menuStatusBar;
 
-extern GtkWidget*		redoMenu;
-extern GtkWidget*		undoMenu;
-extern GtkWidget*		redoAllMenu;
-extern GtkWidget*		undoAllMenu;
 extern GtkWidget*		cutMenu;
 extern GtkWidget*		copyMenu;
 extern GtkWidget*		pasteMenu;
@@ -230,9 +221,20 @@ extern QAction*			menuItemOpen;
 
 #endif
 
+//file menu
+extern Widget*			fileMenu;
 extern Widget*			saveMenu;
 extern Widget*			saveAsMenu;
 extern Widget*			saveAllMenu;
+extern Widget*			closeMenu;
+extern Widget*			closeAllMenu;
+extern Widget*			revertMenu;
+//edit menu
+extern Widget*			editMenu;
+extern Widget*			undoMenu;
+extern Widget*			redoMenu;
+extern Widget*			undoAllMenu;
+extern Widget*			redoAllMenu;
 
 extern int				currentPage;
 //nag
