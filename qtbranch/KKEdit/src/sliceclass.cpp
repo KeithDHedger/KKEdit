@@ -283,7 +283,7 @@ StringSlice::StringSlice()
 StringSlice::~StringSlice()
 {
 #ifndef _USEQT5_
-	debugFree(buffer,"~StringSlice buffer");
+	debugFree(&buffer,"~StringSlice buffer");
 #endif
 }
 
@@ -346,7 +346,7 @@ char* StringSlice::sliceBetween(char* src,char* startstr,char* endstr)
 	this->checkBufferLen((long)endptr-(long)startptr+1);
 	strncpy(buffer,startptr,(long)endptr-(long)startptr);
 	buffer[(long)endptr-(long)startptr]=0;
-	debugFree(copyofstr," StringSlice::sliceBetween copyofstr");
+	debugFree(&copyofstr," StringSlice::sliceBetween copyofstr");
 	return(this->returnData(this->buffer));
 #endif
 }
@@ -413,7 +413,7 @@ char* StringSlice::sliceInclude(char* src,char* startstr,char* endstr)
 	this->checkBufferLen(copyofstr);
 	strncpy(buffer,startptr,(long)endptr+strlenend-(long)startptr);
 	buffer[(long)endptr+strlenend-(long)startptr]=0;
-	debugFree(copyofstr,"StringSlice::sliceInclude copyofstr");
+	debugFree(&copyofstr,"StringSlice::sliceInclude copyofstr");
 	return(this->returnData(this->buffer));
 #endif
 }
@@ -448,7 +448,7 @@ char* StringSlice::sliceLen(char* src,int start,int len)
 	this->checkBufferLen(start+len+1);
 	strncpy(buffer,&copyofstr[start],len);
 	buffer[len]=0;
-	debugFree(copyofstr,"StringSlice::sliceLen copyofstr");
+	debugFree(&copyofstr,"StringSlice::sliceLen copyofstr");
 	return(this->returnData(this->buffer));
 #endif
 }
@@ -480,7 +480,7 @@ char* StringSlice::slice(char* src,int start,int end)
 	this->checkBufferLen(end-start+1);
 	strncpy(buffer,&copyofstr[start],end-start+1);
 	buffer[end-start+1]=0;
-	debugFree(copyofstr,"StringSlice::slice copyofstr");
+	debugFree(&copyofstr,"StringSlice::slice copyofstr");
 	return(this->returnData(this->buffer));
 #endif
 }
@@ -523,7 +523,7 @@ char* StringSlice::sliceStrLen(char* src,char* startstr,int len)
 	checkBufferLen(len);
 	strncpy(buffer,ptr,len);
 	buffer[len]=0;
-	debugFree(copyofstr,"StringSlice::sliceStrLen copyofstr");
+	debugFree(&copyofstr,"StringSlice::sliceStrLen copyofstr");
 	return(this->returnData(this->buffer));
 #endif
 }
@@ -572,7 +572,7 @@ char* StringSlice::deleteSlice(char* src,char* delstr)
 		{
 			this->error=NOMATCH;
 			this->copyToBuffer((const char*)copyofstr);
-			debugFree(copyofstr,"StringSlice::deleteSlice copyofstr");
+			debugFree(&copyofstr,"StringSlice::deleteSlice copyofstr");
 			return(this->buffer);
 		}
 
@@ -618,7 +618,7 @@ char* StringSlice::replaceSlice(char* src,char* findstr,char* replacestr)
 		{
 			this->error=NOMATCH;
 			this->copyToBuffer((const char*)copyofstr);
-			debugFree(copyofstr,"StringSlice::replaceSlice copyofstr");
+			debugFree(&copyofstr,"StringSlice::replaceSlice copyofstr");
 			return(this->buffer);
 		}
 
@@ -631,7 +631,7 @@ char* StringSlice::replaceSlice(char* src,char* findstr,char* replacestr)
 	buffer[startreplace]=0;
 	strncat(buffer,replacestr,strlen(replacestr));
 	strncat(&buffer[strlen(buffer)],(char*)(long)ptr+strlen(findstr),finalseglen);
-	debugFree(copyofstr,"StringSlice::replaceSlice copyofstr");
+	debugFree(&copyofstr,"StringSlice::replaceSlice copyofstr");
 	return(this->returnData(this->buffer));
 #endif
 }
@@ -803,7 +803,7 @@ char* StringSlice::decodeHtml(char* src)
 			breakout:;
 		}
 	this->copyToBuffer(buf);
-	debugFree(buf,"StringSlice::decodeHtml buf");
+	debugFree(&buf,"StringSlice::decodeHtml buf");
 	return(this->returnData(this->buffer));
 #endif
 }

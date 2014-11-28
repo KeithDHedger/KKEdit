@@ -211,7 +211,69 @@ struct plugMenuList
 
 struct plugData
 {
+//menus
+	plugMenuList	mlist;
+	moduleData*		modData;
+//	GList*			plugins;
+//install location of KKEdit data
+	const char*		dataDir;
+//global plugin folder defaults to DATADIR/plugins
+	char*			gPlugFolder;
+//local plugin folder defaults to ~/.KKEdit/plugins
+	char*			lPlugFolder;
+//kkedit version string
+	const char*		kkeditVersion;
+//unused
+	char*			htmlFile;
+//location of variable that holds the uri to be disp[layed by showDoc
+	char**			thePage;
+//main notebook
+	Widget*			notebook;
+//current page MAYBE NULL!!
+	pageStruct*		page;
+//cuurent tab
+	int				currentTab;
+//KKEdits temp folder
+	char*			tmpFolder;
+//kkedits main window user box's
+//top
+	Widget*			topUserBox;
+	Widget*			mainWindowVPane;
+//left
+	Widget*			leftUserBox;
+	Widget*			mainWindowHPane;
+//right
+	Widget*			rightUserBox;
+	Widget*			secondWindowHPane;
+//bottom
+	Widget*			bottomUserBox;
+	Widget*			secondWindowVPane;
+//kkedit main window
+	Widget*			mainWindow;
+//tool output window buffer;
 #ifndef _USEQT5_
+	GtkTextBuffer*	toolOutBuffer;
+#else
+	Widget*			toolOutBuffer;
+#endif
+//tool output window
+	Widget*		toolOutWindow;
+//tab popup menu
+	Widget*		tabPopUpMenu;
+//right click popup menu
+	Widget*		contextPopUpMenu;
+
+//leftright user box visiblity ref
+	int				leftShow;
+	int				rightShow;
+//topbottom user box visiblity ref
+	int				topShow;
+	int				bottomShow;
+//locale dir for gettext
+	const char*		locale;
+
+#if 0
+//#ifndef _USEQT5_
 //menus
 	plugMenuList	mlist;
 	moduleData*		modData;
@@ -268,7 +330,7 @@ struct plugData
 	int				bottomShow;
 //locale dir for gettext
 	const char*		locale;
-#else
+//#else
 #endif
 };
 
@@ -283,7 +345,7 @@ void		hideSide(bool left);
 void		showTop(bool top);
 void		hideTop(bool top);
 void		runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title);
-void		debugFree(gpointer ptr,const char* message);
+void		debugFree(char** ptr,const char* message);
 bool		openFile(const gchar *filepath,int linenumber,bool warn);
 #ifndef _USEQT5_
 bool		saveFile(GtkWidget* widget,gpointer data);

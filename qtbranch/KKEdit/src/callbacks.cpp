@@ -186,7 +186,7 @@ void setToobarSensitive(void)
 void destroyBMData(gpointer data)
 {
 #ifndef _USEQT5_
-	debugFree(((bookMarksNew*)data)->markName,"destroyBMData markName");
+	debugFree(&((bookMarksNew*)data)->markName,"destroyBMData markName");
 #endif
 }
 #ifndef _USEQT5_
@@ -261,7 +261,7 @@ VISIBLE void toggleBookmark(void)
 				{
 					if((gpointer)((bookMarksNew*)ptr->data)->mark==(gpointer)GTK_TEXT_MARK(mark_list->data))
 						{
-							debugFree(((bookMarksNew*)ptr->data)->markName,"toggleBookmark markName");
+							debugFree(&((bookMarksNew*)ptr->data)->markName,"toggleBookmark markName");
 							newBookMarksList=g_list_remove(newBookMarksList,ptr->data);
 							gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),GTK_TEXT_MARK(mark_list->data));
 							break;
@@ -303,7 +303,7 @@ VISIBLE void toggleBookmark(void)
 			g_strchomp(previewtext);
 
 			correctedpreview=truncateWithElipses(previewtext,BOOKMAXMARKMENULEN);
-			debugFree(previewtext,"toggleBookmark previewtext");
+			debugFree(&previewtext,"toggleBookmark previewtext");
 			previewtext=correctedpreview;
 
 			bookmarkdata->label=previewtext;
@@ -409,7 +409,7 @@ int show_question(char* filename)
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 
 	gtk_widget_destroy(dialog);
-	debugFree(message,"show_question message");
+	debugFree(&message,"show_question message");
 	return(result);
 #endif
 }
@@ -457,7 +457,7 @@ void updateStatuBar(void)
 	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
 	asprintf(&message,gettext("Line %i Column %i \t\tSyntax Highlighting %s\t\tFilePath %s"),buf->lineNum,buf->column,lang,path);
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
-	debugFree(message,"updateStatuBar message");
+	debugFree(&message,"updateStatuBar message");
 	delete buf;
 #endif
 }
@@ -514,7 +514,7 @@ void setSensitive(void)
 				newlabel=strdup(&text[offset]);
 
 			gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)newlabel);
-			debugFree(newlabel,"setSensitive newlabel");
+			debugFree(&newlabel,"setSensitive newlabel");
 			gtk_widget_set_sensitive((GtkWidget*)cutMenu,true);
 			gtk_widget_set_sensitive((GtkWidget*)copyMenu,true);
 			gtk_widget_set_sensitive((GtkWidget*)pasteMenu,true);
@@ -617,15 +617,15 @@ printf("closeTab %i\n",(int)(long)data);
 	gtk_widget_show_all(bookMarkMenu);
 
 	if(page->filePath!=NULL)
-		debugFree(page->filePath,"closeTab filePath");
+		debugFree(&page->filePath,"closeTab filePath");
 	if(page->fileName!=NULL)
-		debugFree(page->fileName,"closeTab fileName");
+		debugFree(&page->fileName,"closeTab fileName");
 	if(page->gFile!=NULL)
 		g_object_unref(page->gFile);
 	if(page->monitor!=NULL)
 		g_object_unref(page->monitor);
 	if(page!=NULL)
-		debugFree(page,"closeTab page");
+		debugFree((char**)&page,"closeTab page");
 	currentPage--;
 	gtk_notebook_remove_page(notebook,thispage);
 	setSensitive();
@@ -703,6 +703,135 @@ void switchPage(void)
 			tmpstr[0]=0;
 			sscanf (lineptr,"%*s %*s %i %[^\n]s",&linenum,tmpstr);
 
+			correctedstr=truncateWithElipses(tmpstr,maxFuncDefs);
+			sprintf(tmpstr,"%s",correctedstr);
+			debugFree(&correctedstr,"switchPage correctedstr");
+
+			if(strlen(tmpstr)>0)
+				{
+					if(listFunction==4)
+						{
+							newstr=NULL;
+							newstr=globalSlice->sliceBetween(lineptr,(char*)" ",(char*)" ");
+							if(newstr!=NULL)
+								{
+									flag=false;
+									for(int j=0; j<numtypes; j++)
+										{
+											if (strcmp(newstr,typenames[j])==0)
+												{
+													whattypemenu=typesubmenus[j];
+													flag=true;
+													break;
+												}
+										}
+
+									if(flag==false)
+										{
+											typenames[numtypes]=strdup(newstr);
+											debugFree(&newstr,"switchPage newstr");
+											if(typenames[numtypes][strlen(typenames[numtypes])-1]=='s')
+												asprintf(&newstr,"%s's",typenames[numtypes]);
+											else
+												asprintf(&newstr,"%ss",typenames[numtypes]);
+											newstr[0]=toupper(newstr[0]);
+											submenu=gtk_image_menu_item_new_with_label(newstr);
+											typesubmenus[numtypes]=gtk_menu_new();
+											gtk_menu_item_set_submenu(GTK_MENU_ITEM(submenu),typesubmenus[numtypes]);
+											gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),submenu);
+											whattypemenu=typesubmenus[numtypes];
+											numtypes++;
+										}
+
+									debugFree(&newstr,"switchPage newstr");
+
+									onefunc=true;
+									menuitem=gtk_image_menu_item_new_with_label(tmpstr);
+									gtk_menu_shell_append(GTK_MENU_SHELL(whattypemenu),menuitem);
+									g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
+								}
+						}
+					else
+						{
+							onefunc=true;
+							menuitem=gtk_image_menu_item_new_with_label(tmpstr);
+							gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
+							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
+						}
+				}
+			lineptr=strchr(lineptr,'\n');
+			if (lineptr!=NULL)
+				lineptr++;
+		}
+
+	gtk_window_set_title((GtkWindow*)window,page->fileName);
+	refreshMainWindow();
+	if(functions!=NULL)
+		debugFree(&functions,"switchPage functions");
+
+	gtk_widget_set_sensitive((GtkWidget*)funcMenu,onefunc);
+	setSensitive();
+
+	createCompletion(page);
+//plug switch tab
+	globalPlugins->globalPlugData->page=page;
+	globalPlugins->globalPlugData->currentTab=currentTabNumber;
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"switchTab");
+#endif
+}
+
+#if 0
+#ifndef _USEQT5_
+void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
+#else
+//TODO//
+void switchPage(void)
+#endif
+{
+#ifndef _USEQT5_
+	pageStruct*	page;
+	char*		functions=NULL;
+	GtkWidget*	menuitem;
+	int			linenum;
+	char		tmpstr[1024];
+	char*		lineptr;
+	bool		onefunc=false;
+	int			numtypes=0;
+	char*		typenames[50]= {NULL,};
+	bool		flag;
+	char*		newstr=NULL;
+	GtkWidget*	whattypemenu;
+	GtkWidget*	typesubmenus[50]= {NULL,};
+	GtkWidget*	submenu;
+	char*		correctedstr;
+
+	if(arg1==NULL)
+		return;
+
+	page=(pageStruct*)g_object_get_data((GObject*)arg1,"pagedata");
+	if(page==NULL)
+		return;
+
+	submenu=gtk_menu_item_get_submenu((GtkMenuItem*)funcMenu);
+	if (submenu!=NULL)
+		gtk_menu_item_set_submenu((GtkMenuItem*)funcMenu,NULL);
+
+	currentTabNumber=thispage;
+
+	page->rebuildMenu=false;
+
+	getRecursiveTagList(page->filePath,&functions);
+	lineptr=functions;
+
+	page->isFirst=true;
+	page->navSubMenu=(GtkMenuItem*)gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(funcMenu),(GtkWidget*)page->navSubMenu);
+
+	while (lineptr!=NULL)
+		{
+			tmpstr[0]=0;
+			sscanf (lineptr,"%*s %*s %i %[^\n]s",&linenum,tmpstr);
+
 			correctedstr=truncateWithElipses(tmpstr,MAXMENUFUNCLEN);
 			sprintf(tmpstr,"%s",correctedstr);
 			free(correctedstr);
@@ -729,7 +858,7 @@ void switchPage(void)
 									if(flag==false)
 										{
 											typenames[numtypes]=strdup(newstr);
-											debugFree(newstr,"switchPage newstr");
+											debugFree(&newstr,"switchPage newstr");
 											if(typenames[numtypes][strlen(typenames[numtypes])-1]=='s')
 												asprintf(&newstr,"%s's",typenames[numtypes]);
 											else
@@ -743,7 +872,7 @@ void switchPage(void)
 											numtypes++;
 										}
 
-									debugFree(newstr,"switchPage newstr");
+									debugFree(&newstr,"switchPage newstr");
 
 									onefunc=true;
 									menuitem=gtk_image_menu_item_new_with_label(tmpstr);
@@ -767,7 +896,7 @@ void switchPage(void)
 	gtk_window_set_title((GtkWindow*)window,page->fileName);
 	refreshMainWindow();
 	if(functions!=NULL)
-		debugFree(functions,"switchPage functions");
+		debugFree(&functions,"switchPage functions");
 
 	gtk_widget_set_sensitive((GtkWidget*)funcMenu,onefunc);
 	setSensitive();
@@ -782,6 +911,7 @@ createCompletion(page);
 
 #endif
 }
+#endif
 
 VISIBLE void copyToClip(Widget* widget,uPtr data)
 //TODO//
@@ -1002,7 +1132,7 @@ void externalTool(void)
 		}
 
 	runCommand(tempCommand->str,&text,tool->inTerminal,tool->flags,tool->runAsRoot,tool->menuName);
-	debugFree(selection,"externalTool selection");
+	debugFree(&selection,"externalTool selection");
 
 	if(text!=NULL)
 		{
@@ -1030,17 +1160,17 @@ void externalTool(void)
 	unsetenv("KKEDIT_HTMLFILE");
 	unsetenv("KKEDIT_BAR_CONTROL");
 
-	debugFree(text,"externalTool text");
-	debugFree(docdirname,"externalTool docdirname");
-	debugFree(tooldirname,"externalTool tooldirname");
+	debugFree(&text,"externalTool text");
+	debugFree(&docdirname,"externalTool docdirname");
+	debugFree(&tooldirname,"externalTool tooldirname");
 	if(barcommand!=NULL)
 		{
-			debugFree(barcommand,"externalTool barcommand");
+			debugFree(&barcommand,"externalTool barcommand");
 			asprintf(&barcommand,"echo quit>%s",barcontrol);
 			system(barcommand);
-			debugFree(barcommand,"externalTool barcommand");
+			debugFree(&barcommand,"externalTool barcommand");
 		}
-	debugFree(barcontrol,"externalTool barcontrol");
+	debugFree(&barcontrol,"externalTool barcontrol");
 	delete slice;
 #endif
 }
@@ -1064,7 +1194,7 @@ printf("openHelp %i\n",(int)(long)data);
 #else
 	asprintf(&thePage,"%s %s/help/help.%s.shtml",browserCommand,DATADIR,lang);
 	runCommand(thePage,NULL,false,8,0,(char*)gettext("KKEdit Help"));
-	debugFree(thePage,"openHelp thePage");
+	debugFree(&thePage,"openHelp thePage");
 	thePage=NULL;
 #endif
 #endif
@@ -1114,6 +1244,142 @@ VISIBLE void addtoCustomWordList(void)
 #endif
 }
 
+#ifndef _USEQT5_
+void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
+#else
+//TODO//
+void populatePopupMenu(void)
+#endif
+{
+#ifndef _USEQT5_
+	pageStruct*		page=getPageStructPtr(-1);
+	GtkTextIter		start;
+	GtkTextIter		end;
+	char*			selection=NULL;
+	GtkWidget*		menuitem;
+	GtkWidget*		image;
+	GList*			ptr;
+	functionData*	fdata;
+	char*			temptext=NULL;
+
+	if(sessionBusy==true)
+		return;
+
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+
+	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+		{
+			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+			if(selection!=NULL)
+				{
+					fdata=getFunctionByName(selection,false);
+					if(fdata!=NULL)
+						{
+							temptext=truncateWithElipses(fdata->define,maxFuncDefs);
+							menuitem=gtk_menu_item_new_with_label(temptext);
+							debugFree(&temptext,"populatePopupMenu temptext");
+							sprintf((char*)&defineText,"%s",fdata->define);
+							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)defineText);
+							destroyData(fdata);
+
+							image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
+							menuitem=gtk_image_menu_item_new_with_label(gettext("Go To Definition"));
+							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
+						}
+
+					if(gotDoxygen==0)
+						{
+							menuitem=gtk_image_menu_item_new_with_label(gettext("Find In Documentation"));
+							image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
+							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doxyDocs),NULL);
+						}
+					menuitem=gtk_image_menu_item_new_with_label(gettext("Search In Qt5 Docs"));
+					image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
+					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(searchQT5Docs),NULL);
+
+					menuitem=gtk_image_menu_item_new_with_label(gettext("Search In Gtk Docs"));
+					image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
+					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(searchGtkDocs),NULL);
+
+					menuitem=gtk_image_menu_item_new_with_label(gettext("Add To Custom Word List"));
+					image=gtk_image_new_from_stock(GTK_STOCK_EDIT,GTK_ICON_SIZE_MENU);
+					gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(addtoCustomWordList),(void*)page);
+
+#ifdef _ASPELL_
+//spell check
+					if((spellChecker!=NULL) && (aspellConfig!=NULL))
+						{
+							menuitem=gtk_image_menu_item_new_with_label(gettext("Check Spellling"));
+							image=gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK,GTK_ICON_SIZE_MENU);
+							gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(checkWord),NULL);
+						}
+#endif
+					menuitem=gtk_separator_menu_item_new();
+					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+					ptr=toolsList;
+					while(ptr!=NULL)
+						{
+							if((((toolStruct*)ptr->data)->inPopUp==true) && (((toolStruct*)ptr->data)->alwaysPopup==false))
+								{
+									menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
+									if(((toolStruct*)ptr->data)->comment!=NULL)
+										gtk_widget_set_tooltip_text((GtkWidget*)menuitem,((toolStruct*)ptr->data)->comment);
+
+									gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+									g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
+								}
+							ptr=g_list_next(ptr);
+						}
+				}
+		}
+
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+	ptr=toolsList;
+	while(ptr!=NULL)
+		{
+			if((((toolStruct*)ptr->data)->alwaysPopup==true))
+				{
+					menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
+					if(((toolStruct*)ptr->data)->comment!=NULL)
+						gtk_widget_set_tooltip_text((GtkWidget*)menuitem,((toolStruct*)ptr->data)->comment);
+					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
+				}
+			ptr=g_list_next(ptr);
+		}
+
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	menuitem=gtk_menu_item_new_with_label(gettext("Toggle Bookmark"));
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);
+
+	globalPlugins->globalPlugData->contextPopUpMenu=(GtkWidget*)menu;
+
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToContext");
+
+	gtk_widget_show_all((GtkWidget*)menu);
+#endif
+}
+
+#if 0
 #ifndef _USEQT5_
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 #else
@@ -1245,7 +1511,7 @@ void populatePopupMenu(void)
 	gtk_widget_show_all((GtkWidget*)menu);
 #endif
 }
-
+#endif
 #ifndef _USEQT5_
 void doTabMenu(GtkWidget *widget,gpointer user_data)
 #else
@@ -1347,7 +1613,7 @@ void openFromTab(void)
 
 	asprintf(&filepath,"%s/%s",page->dirName,gtk_menu_item_get_label(widget));
 	openFile(filepath,0,true);
-	debugFree(filepath,"openFromTab filepath");
+	debugFree(&filepath,"openFromTab filepath");
 #endif
 }
 
@@ -1509,7 +1775,7 @@ bool tabPopUp(void)
 						}
 					fclose(fp);
 				}
-			debugFree(command,"tabpopup command");
+			debugFree(&command,"tabpopup command");
 
 			gtk_widget_show_all(menuitem);
 
@@ -1602,12 +1868,12 @@ void writeExitData(void)
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
-	debugFree(filename,"writeExitData filename");
+	debugFree(&filename,"writeExitData filename");
 	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
 
 	saveVarsToFile(filename,kkedit_window_rc);
-	debugFree(filename,"writeExitData filename");
-	debugFree(windowAllocData,"writeExitData windowAllocData");
+	debugFree(&filename,"writeExitData filename");
+	debugFree(&windowAllocData,"writeExitData windowAllocData");
 #endif
 }
 
@@ -1618,11 +1884,11 @@ void writeConfig(void)
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
-	debugFree(filename,"writeConfig filename");
+	debugFree(&filename,"writeConfig filename");
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	saveVarsToFile(filename,kkedit_rc);
-	debugFree(filename,"writeConfig filename");
+	debugFree(&filename,"writeConfig filename");
 #endif
 }
 
@@ -1692,7 +1958,7 @@ printf("doShutdown %i\n",(int)(long)data);
 
 	asprintf(&command,"rm -rf %s",tmpFolderName);
 	system(command);
-	debugFree(command,"doShutdown command");
+	debugFree(&command,"doShutdown command");
 	system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
 	gtk_main_quit();
 #else
@@ -1745,7 +2011,7 @@ void setPrefs(void)
 	if(strcmp(gtk_widget_get_name(widget),"style")==0)
 		{
 			if(tmpStyleName!=NULL)
-				debugFree(tmpStyleName,"setPrefs tmpStyleName");
+				debugFree(&tmpStyleName,"setPrefs tmpStyleName");
 			tmpStyleName=gtk_combo_box_text_get_active_text((GtkComboBoxText*)data);
 			if(tpage!=NULL)
 				gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)tpage->buffer,gtk_source_style_scheme_manager_get_scheme(schemeManager,tmpStyleName));
@@ -1784,7 +2050,7 @@ void setPrefs(void)
 			autoCheck=tmpAutoCheck;
 			if(styleName!=NULL)
 				{
-					debugFree(styleName,"setPrefs tmpStyleName");
+					debugFree(&styleName,"setPrefs tmpStyleName");
 					styleName=strdup(tmpStyleName);
 				}
 
@@ -1796,37 +2062,37 @@ void setPrefs(void)
 
 			if(highlightColour!=NULL)
 				{
-					debugFree(highlightColour,"setPrefs highlightColour");
+					debugFree(&highlightColour,"setPrefs highlightColour");
 					highlightColour=strdup(gtk_entry_get_text((GtkEntry*)bmHighlightBox));
 				}
 
 			if(terminalCommand!=NULL)
 				{
-					debugFree(terminalCommand,"setPrefs terminalCommand");
+					debugFree(&terminalCommand,"setPrefs terminalCommand");
 					terminalCommand=strdup(gtk_entry_get_text((GtkEntry*)terminalBox));
 				}
 
 			if(rootCommand!=NULL)
 				{
-					debugFree(rootCommand,"setPrefs rootCommand");
+					debugFree(&rootCommand,"setPrefs rootCommand");
 					rootCommand=strdup(gtk_entry_get_text((GtkEntry*)rootCommandBox));
 				}
 
 			if(fontAndSize!=NULL)
 				{
-					debugFree(fontAndSize,"setPrefs fontAndSize");
+					debugFree(&fontAndSize,"setPrefs fontAndSize");
 					fontAndSize=strdup(gtk_font_button_get_font_name((GtkFontButton*)fontButton));
 				}
 
 			if(browserCommand!=NULL)
 				{
-					debugFree(browserCommand,"setPrefs browserCommand");
+					debugFree(&browserCommand,"setPrefs browserCommand");
 					browserCommand=strdup(gtk_entry_get_text((GtkEntry*)defaultBrowserBox));
 				}
 
 			if(toolBarLayout!=NULL)
 				{
-					debugFree(toolBarLayout,"setPrefs toolBarLayout");
+					debugFree(&toolBarLayout,"setPrefs toolBarLayout");
 					toolBarLayout=makeToolBarList();
 					gtk_widget_destroy((GtkWidget*)toolBar);
 					toolBar=(GtkToolbar*)gtk_toolbar_new();
@@ -1941,9 +2207,9 @@ void setToolOptions(void)
 				}
 		}
 
-	debugFree(toolpath,"setToolOptions toolpath");
-	debugFree(text,"setToolOptions text");
-	debugFree(dirname,"setToolOptions dirname");
+	debugFree(&toolpath,"setToolOptions toolpath");
+	debugFree(&text,"setToolOptions text");
+	debugFree(&dirname,"setToolOptions dirname");
 #endif
 }
 
@@ -1964,8 +2230,8 @@ printf("doAbout %i\n",(int)(long)data);
 
 	gtk_show_about_dialog(NULL,"authors",authors,"translator-credits",translators,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",MYWEBSITE,"program-name","KKEdit","logo-icon-name","KKEdit","license",licence,NULL);
 
-	debugFree(licence,"doAbout licence");
-	debugFree(translators,"doAbout licence");
+	debugFree(&licence,"doAbout licence");
+	debugFree(&translators,"doAbout licence");
 #endif
 }
 
@@ -2086,7 +2352,7 @@ void recentFileMenu(void)
 			filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
 			openFile(filename,0,true);
 			g_free (uri);
-			debugFree(filename,"recentFileMenu filename");
+			debugFree(&filename,"recentFileMenu filename");
 		}
 #endif
 }
@@ -2106,7 +2372,7 @@ printf("new editor%i\n",(int)(long)data);
 			else
 				asprintf(&command,"%s sudo kkedit -m 2>&1 >/dev/null &",terminalCommand);
 			system(command);
-			debugFree(command,"newEditor command");
+			debugFree(&command,"newEditor command");
 			break;
 		case 2:
 			system("kkedit -m 2>&1 >/dev/null &");
@@ -2310,7 +2576,7 @@ void doKeyShortCut(int what)
 			gtk_text_iter_backward_lines(&buf->cursorPos,-1);
 			gtk_text_buffer_begin_user_action(buf->textBuffer);
 			gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
-			debugFree(text,"doKeyShortCut text");
+			debugFree(&text,"doKeyShortCut text");
 			gtk_text_buffer_end_user_action(buf->textBuffer);
 			break;
 //select line ^l
@@ -2421,7 +2687,7 @@ void loadKeybindings(void)
 			if(shortCutStrings[j]!=NULL)
 				sscanf(shortCutStrings[j],"%i %i",(int*)&shortCuts[j][0],(int*)&shortCuts[j][1]);
 		}
-	debugFree(filename,"readConfig filename");
+	debugFree(&filename,"readConfig filename");
 #endif
 }
 

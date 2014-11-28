@@ -26,7 +26,7 @@ PluginClass::PluginClass(bool loadPlugs)
 PluginClass::~PluginClass()
 {
 #ifndef _USEQT5_
-	debugFree(plugFolderPaths[LOCALPLUGS],"~PluginClass plugFolderPaths");
+	debugFree(&plugFolderPaths[LOCALPLUGS],"~PluginClass plugFolderPaths");
 #endif
 }
 
@@ -48,7 +48,7 @@ char* PluginClass::getNameFromPath(char* path)
 	name=basename(base);
 	name=slice->sliceBetween(name,(char*)"lib",(char*)".so");
 	delete slice;
-	debugFree(base,"PluginClass::getNameFromPath base");
+	debugFree(&base,"PluginClass::getNameFromPath base");
 	return(name);
 #endif
 }
@@ -91,13 +91,13 @@ bool PluginClass::checkForEnabled(char* plugname)
 					if((strlen(name)>0) && (strcasecmp(name,plugname)==0))
 						{
 							fclose(fd);
-							debugFree(filename,"PluginClass::checkForEnabled filename");
+							debugFree(&filename,"PluginClass::checkForEnabled filename");
 							return(false);
 						}
 				}
 			fclose(fd);
 		}
-	debugFree(filename,"PluginClass::checkForEnabled filename");
+	debugFree(&filename,"PluginClass::checkForEnabled filename");
 	return(true);
 #endif
 }
@@ -135,7 +135,7 @@ void PluginClass::deleteBlackList()
 
 	asprintf(&command,"rm %s/.KKEdit/pluglist 2>/dev/null",getenv("HOME"));
 	system(command);
-	debugFree(command," PluginClass::deleteBlackList command");
+	debugFree(&command," PluginClass::deleteBlackList command");
 #endif
 }
 
@@ -146,7 +146,7 @@ void PluginClass::appendToBlackList(char* name)
 
 	asprintf(&command,"echo %s >> %s/.KKEdit/pluglist",name,getenv("HOME"));
 	system(command);
-	debugFree(command," PluginClass::appendToBlackList command");
+	debugFree(&command," PluginClass::appendToBlackList command");
 
 #endif
 }
@@ -214,7 +214,7 @@ void PluginClass::loadPlugins(void)
 								}
 							pclose(pf);
 						}
-					debugFree(command,"PluginClass::loadPlugins command");
+					debugFree(&command,"PluginClass::loadPlugins command");
 				}
 		}
 #endif
@@ -277,11 +277,11 @@ char* PluginClass::getPluginPathByName(char* name)
 							if(strcasecmp(name,testname)==0)
 								{
 									pclose(pf);
-									debugFree(testname,"PluginClass::getPluginPathByName testname");
+									debugFree(&testname,"PluginClass::getPluginPathByName testname");
 									return(strdup(buffer));
 								}
 							else
-								debugFree(testname,"PluginClass::getPluginPathByName testname");
+								debugFree(&testname,"PluginClass::getPluginPathByName testname");
 						}
 					pclose(pf);
 				}

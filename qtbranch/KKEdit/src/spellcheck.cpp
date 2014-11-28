@@ -33,7 +33,7 @@ void doCancelCheck(void)
 #ifndef _USEQT5_
 	gtk_widget_destroy(spellCheckWord);
 	if(badWord!=NULL)
-		debugFree(badWord,"doCancelCheck badWord");
+		debugFree(&badWord,"doCancelCheck badWord");
 	cancelCheck=true;
 #endif
 }
@@ -121,7 +121,7 @@ void doChangeWord(void)
 			goodWord=gtk_combo_box_text_get_active_text((GtkComboBoxText*)wordListDropbox);
 			gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
 			gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,goodWord,-1);
-			debugFree(goodWord,"doChangeWord goodWord");
+			debugFree(&goodWord,"doChangeWord goodWord");
 		}
 	else
 		goodWord=gtk_combo_box_text_get_active_text((GtkComboBoxText*)wordListDropbox);
@@ -130,7 +130,7 @@ void doChangeWord(void)
 
 	gtk_widget_destroy(spellCheckWord);
 	if(badWord!=NULL)
-		debugFree(badWord,"doChangeWord badWord");
+		debugFree(&badWord,"doChangeWord badWord");
 #endif
 }
 
@@ -152,7 +152,7 @@ void doAddIgnoreWord(void)
 
 	gtk_widget_destroy(spellCheckWord);
 	if(badWord!=NULL)
-		debugFree(badWord,"doAddIgnoreWord badWord");
+		debugFree(&badWord,"doAddIgnoreWord badWord");
 #endif
 }
 
@@ -233,7 +233,7 @@ void doSpellCheckDoc(void)
 							fclose(out);
 							fclose(doc);
 							remove(tempfile);
-							debugFree(tempfile,"doSpellCheckDoc tempfile");
+							debugFree(&tempfile,"doSpellCheckDoc tempfile");
 							gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 							return;
 						}
@@ -265,8 +265,8 @@ void doSpellCheckDoc(void)
 	gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
 
 	remove(tempfile);
-	debugFree(buffer,"doSpellCheckDoc buffer");
-	debugFree(tempfile,"doSpellCheckDoc tempfile");
+	debugFree(&buffer,"doSpellCheckDoc buffer");
+	debugFree(&tempfile,"doSpellCheckDoc tempfile");
 	delete slice;
 
 	if(page->filePath!=NULL)

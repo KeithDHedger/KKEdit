@@ -4,6 +4,9 @@
  *
 */
 
+#include <X11/Xatom.h>
+//#include <gdk/gdkx.h>
+
 #include "kkedit-includes.h"
 
 bool	singleOverRide=false;
@@ -15,7 +18,7 @@ void readConfig(void)
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_rc);
-	debugFree(filename,"readConfig filename");
+	debugFree(&filename,"readConfig filename");
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_window_rc);
@@ -25,10 +28,196 @@ void readConfig(void)
 	if(docWindowAllocData!=NULL)
 		sscanf(docWindowAllocData,"%i %i %i %i",(int*)&docWindowWidth,(int*)&docWindowHeight,(int*)&docWindowX,(int*)&docWindowY);
 
-	debugFree(filename,"readConfig filename");
+	debugFree(&filename,"readConfig filename");
 }
 
 void init(void)
+{
+	char*		filename;
+	int			exitstatus;
+	char		tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
+
+//nag times
+	lastNagTime=-1;
+	nagTime=(long)time(NULL);
+
+#ifdef _ASPELL_
+	AspellCanHaveError*	possible_err;
+#endif
+	globalSlice=new StringSlice;
+
+	tmpFolderName=strdup(mkdtemp(tmpfoldertemplate));
+
+	indent=true;
+	lineNumbers=true;
+	lineWrap=true;
+	highLight=true;
+	noSyntax=false;
+	tabWidth=4;
+	depth=1;
+	singleUse=true;
+	fontAndSize=strdup("mono 10");
+	terminalCommand=strdup("xterm -e");
+	rootCommand=strdup(GTKSUPATH);
+	autoShowMinChars=4;
+	autoShowComps=false;
+	autoCheck=true;
+	useGlobalPlugMenu=true;
+	maxTabChars=20;
+
+	windowWidth=800;
+	windowHeight=600;
+	windowX=-1;
+	windowY=-1;
+	docWindowWidth=800;
+	docWindowHeight=600;
+	docWindowX=-1;
+	docWindowY=-1;
+
+	wrapSearch=true;
+	insensitiveSearch=true;
+	useRegex=false;
+	replaceAll=false;
+	onExitSaveSession=false;
+	onExitSaveSession=false;
+	restoreBookmarks=false;
+	noDuplicates=false;
+	noWarnings=false;
+	readLinkFirst=false;
+	hightlightAll=true;
+	maxFuncDefs=MAXTEXTWIDTH;
+	maxBMChars=MAXTEXTWIDTH;
+
+//runtime deps
+	exitstatus=system("which manpageeditor 2>&1 >/dev/null");
+	gotManEditor=WEXITSTATUS(exitstatus);
+	exitstatus=system("which doxygen 2>&1 >/dev/null");
+	gotDoxygen=WEXITSTATUS(exitstatus);
+
+	if(getuid()!=0)
+		styleName=strdup("classic");
+	else
+		styleName=strdup("Root Source");
+	nagScreen=false;
+	highlightColour=strdup("#A3ACFF");
+	showBMBar=false;
+	listFunction=0;
+	showStatus=true;
+
+	asprintf(&filename,"%s/.KKEdit/tools",getenv("HOME"));
+	g_mkdir_with_parents(filename,493);
+	debugFree(&filename,"init filename");
+
+//TODO//
+#ifndef _USEQT5_
+	schemeManager=gtk_source_style_scheme_manager_get_default();
+	asprintf(&filename,"%s/.gnome2/gedit/styles",getenv("HOME"));
+	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
+	debugFree(&filename,"init filename");
+	asprintf(&filename,"%s/styles",DATADIR);
+	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
+	debugFree(&filename,"init filename");
+#endif
+
+//toolbar layout
+	toolBarLayout=strdup("NOSsXCPsURsFGsE9ADL");
+
+	readConfig();
+	loadKeybindings();
+
+#ifndef _USEQT5_
+	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
+#endif
+
+	tmpStyleName=strdup(styleName);
+	tmpHighlightColour=highlightColour;
+
+	asprintf(&htmlFile,"%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
+	asprintf(&htmlURI,"file://%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
+
+#ifdef _ASPELL_
+	spellChecker=NULL;
+	aspellConfig=NULL;
+	aspellConfig=new_aspell_config();
+	possible_err=new_aspell_speller(aspellConfig);
+
+	if(aspell_error_number(possible_err)!= 0)
+		puts(aspell_error_message(possible_err));
+	else
+		spellChecker=to_aspell_speller(possible_err);
+#endif
+
+//do plugins
+	globalPlugins=new PluginClass(loadPluginsFlag);
+//set up plugin data
+	globalPlugins->globalPlugData=(plugData*)malloc(sizeof(plugData));
+	globalPlugins->globalPlugData->dataDir=DATADIR;
+	globalPlugins->globalPlugData->gPlugFolder=globalPlugins->plugFolderPaths[GLOBALPLUGS];
+	globalPlugins->globalPlugData->lPlugFolder=globalPlugins->plugFolderPaths[LOCALPLUGS];
+	globalPlugins->globalPlugData->htmlFile=htmlFile;
+	globalPlugins->globalPlugData->thePage=&thePage;
+	globalPlugins->globalPlugData->currentTab=-1;
+	globalPlugins->globalPlugData->tmpFolder=tmpFolderName;
+	globalPlugins->globalPlugData->kkeditVersion=VERSION;
+
+	/*
+		for(int j=0;j<globalPlugins->plugCount;j++)
+			{
+				struct pluginData
+	{
+		char*		name;
+		bool		enabled;
+		GModule*	module;
+		bool		loaded;
+		char*       path;
+	};
+				pluginData* pd=(pluginData*)g_list_nth_data(globalPlugins->plugins,j);
+				printf("num %i name=%s\n",j,pd->name);
+				printf("num %i enabled=%i\n",j,(int)pd->enabled);
+				printf("num %i path=%s\n",j,pd->path);
+			}
+	*/
+//time to nag?
+
+	timeToNag=false;
+	if((lastNagTime==0) || (nagTime-lastNagTime>updateWait))
+		{
+			timeToNag=true;
+			lastNagTime=nagTime;
+		}
+
+	localeLang=getenv("LANG");
+
+	history=new HistoryClass;
+	globalSlice->setReturnDupString(true);
+
+//TODO//
+#ifndef _USEQT5_
+
+	funcProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
+	funcProv->priority=1;
+	funcProv->name=gettext("Functions");
+	funcProv->proposals=NULL;
+
+	varsProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
+	varsProv->priority=2;
+	varsProv->name=gettext("Variables");
+	varsProv->proposals=NULL;
+
+	customProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
+	customProv->priority=11;
+	customProv->name=gettext("Custom Words");
+	customProv->proposals=NULL;
+
+	docWordsProv=gtk_source_completion_words_new(NULL,NULL);
+	g_object_set(docWordsProv,"priority",10,NULL);
+	g_object_set(docWordsProv,"minimum-word-size",autoShowMinChars,NULL);
+	g_object_set(docWordsProv,"interactive-delay",50,NULL);
+#endif
+}
+
+#if 0
+void initX(void)
 {
 	char*		filename;
 	int			exitstatus;
@@ -99,16 +288,16 @@ void init(void)
 
 	asprintf(&filename,"%s/.KKEdit/tools",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
-	debugFree(filename,"init filename");
+	debugFree(&filename,"init filename");
 
 #ifndef _USEQT5_
 	schemeManager=gtk_source_style_scheme_manager_get_default();
 	asprintf(&filename,"%s/.gnome2/gedit/styles",getenv("HOME"));
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
-	debugFree(filename,"init filename");
+	debugFree(&filename,"init filename");
 	asprintf(&filename,"%s/styles",DATADIR);
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
-	debugFree(filename,"init filename");
+	debugFree(&filename,"init filename");
 #else
 //TODO//
 #endif
@@ -233,7 +422,7 @@ void init(void)
 //TODO//
 #endif
 }
-
+#endif
 void doNagScreen(void)
 {
 #ifndef _USEQT5_
@@ -268,11 +457,11 @@ void doNagStuff(void)
 	while(gtk_events_pending())
 		gtk_main_iteration();
 
-	debugFree(command,"command pulse from donagstuff");
+	debugFree(&command,"command pulse from donagstuff");
 
 	asprintf(&control,"echo \"pulse\" > \"%s/updatecontrol\"",tmpFolderName);
 	system(control);
-	debugFree(control,"control from donagstuff");
+	debugFree(&control,"control from donagstuff");
 
 	exitstatus=system("which curl 2>&1 >/dev/null");
 	gotcurl=WEXITSTATUS(exitstatus);
@@ -306,7 +495,7 @@ void doNagStuff(void)
 
 			asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
 			system(control);
-			debugFree(control,"control from do nag stuff");
+			debugFree(&control,"control from do nag stuff");
 			if(strlen(t1)>1)
 				{
 					thisupdate=atol(t1);
@@ -316,13 +505,13 @@ void doNagStuff(void)
 
 							if(strcmp(VERSION,vers)!=0)
 								{
-									free(kkeditupdatemessage);
+									debugFree(&kkeditupdatemessage,"doNagStuff kkeditupdatemessage");
 									asprintf(&kkeditupdatemessage,"%s <b>%s</b> %s <b>%s</b>\n%s:\n<b>%s</b>\n",gettext("KKEdit update available to"),vers,gettext("from"),VERSION,gettext("From here"),MYWEBSITE);
 								}
 
 							if(lastPlugUpdate<atol(plugt))
 								{
-									free(plugupdatemessage);
+									debugFree(&plugupdatemessage,"doNagStuff plugupdatemessage");
 									asprintf(&plugupdatemessage,"\n%s:\n<b>https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins</b>",gettext("Plugin updates are available from here"));
 									lastPlugUpdate=thisupdate;
 								}
@@ -332,12 +521,12 @@ void doNagStuff(void)
 
 							gtk_dialog_run(GTK_DIALOG (dialog));
 							gtk_widget_destroy(dialog);
-							free(kkeditupdatemessage);
-							free(plugupdatemessage);
+							debugFree(&kkeditupdatemessage,"doNagStuff kkeditupdatemessage");
+							debugFree(&plugupdatemessage,"doNagStuff plugupdatemessage");
 							lastUpdate=thisupdate;
 						}
 				}
-			debugFree(command,"command from donagstuff");
+			debugFree(&command,"command from donagstuff");
 		}
 
 	if((nagScreen==false))
@@ -345,10 +534,182 @@ void doNagStuff(void)
 
 	asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
 	system(control);
-	debugFree(control,"control from do nag stuff");
+	debugFree(&control,"control from do nag stuff");
 #endif
 }
 
+#ifndef _USEQT5_
+
+void activate(GApplication* application)
+{
+}
+
+void open(GApplication* application,GFile** files,gint n_files,const gchar* hint)
+{
+	char*	filepath=NULL;
+
+	g_application_hold(application);
+
+	for(int i=0; i<n_files; i++)
+		{
+			filepath=g_file_get_path(files[i]);
+			if(filepath!=NULL)
+				{
+					openFile(filepath,0,true);
+					debugFree(&filepath,"open filepath");
+				}
+		}
+
+	if(window!=NULL)
+		gtk_window_present((GtkWindow*)window);
+
+	g_application_release(application);
+}
+
+void appStart(GApplication  *application,gpointer data)
+{
+	int	w,h;
+
+	g_application_hold(application);
+
+	setlocale(LC_ALL,"");
+	bindtextdomain("kkedit",LOCALEDIR);
+	textdomain("kkedit");
+	bind_textdomain_codeset("kkedit","UTF-8");
+
+	init();
+	buildMainGui();
+
+	if(onExitSaveSession==true)
+		restoreSession(NULL,(void*)restoreBookmarks);
+
+	refreshMainWindow();
+
+	buildFindReplace();
+	for(unsigned int j=0; j<g_slist_length(findList); j++)
+		gtk_combo_box_text_append_text((GtkComboBoxText*)findDropBox,(const char*)g_slist_nth_data(findList,j));
+
+	for(unsigned int j=0; j<g_slist_length(replaceList); j++)
+		gtk_combo_box_text_append_text((GtkComboBoxText*)replaceDropBox,(const char*)g_slist_nth_data(replaceList,j));
+
+#ifdef _BUILDDOCVIEWER_
+	buildGtkDocViewer();
+#endif
+
+	gtk_window_get_size((GtkWindow*)window,&w,&h);
+	gtk_paned_set_position((GtkPaned*)mainVPane,toolOutHeight);
+
+	gtk_paned_set_position((GtkPaned*)secondWindowVPane,topVPaneHite);
+	gtk_paned_set_position((GtkPaned*)mainWindowVPane,bottomVPaneHite);
+
+	gtk_widget_hide(toolOutVBox);
+	if(getuid()!=0)
+		{
+			gtk_window_set_default_icon_name(PACKAGE);
+			gtk_window_set_icon_name((GtkWindow*)window,PACKAGE);
+		}
+	else
+		{
+			gtk_window_set_default_icon_name(PACKAGE "Root");
+			gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
+		}
+	setSensitive();
+
+	if((timeToNag==true) && (autoCheck==true))
+		doNagStuff();
+
+	gtk_widget_set_size_request(window,100,100);
+}
+
+int getWorkspaceNumber(void)
+{
+	int				retnum=666;
+//	GdkDisplay*		display;
+//	GdkWindow*		root_win;
+//	Atom			_net_current_desktop,type;
+//	int				format;
+//	unsigned long	n_items, bytes_after;
+//	unsigned char*	data_return=0;
+//
+//	display=gdk_screen_get_display(gdk_screen_get_default());
+//	root_win=gdk_screen_get_root_window(gdk_screen_get_default());
+//
+//	_net_current_desktop=gdk_x11_get_xatom_by_name_for_display(display,"_NET_CURRENT_DESKTOP");
+//
+//	XGetWindowProperty(GDK_DISPLAY_XDISPLAY(display),GDK_WINDOW_XID (root_win),_net_current_desktop,0,G_MAXLONG,False,XA_CARDINAL,&type,&format,&n_items,&bytes_after,&data_return);
+//
+//	if(type==XA_CARDINAL && format==32 && n_items>0)
+//		{
+//			retnum=(int)data_return[0];
+//			XFree(data_return);
+//		}
+	return retnum;
+}
+#endif
+
+int main (int argc, char **argv)
+{
+	int				status;
+	char*			filename;
+	char*			dbusname;
+	bool			safeflag=false;
+	GOptionContext*	context;
+
+	singleOverRide=false;
+	loadPluginsFlag=true;
+
+	GOptionEntry	entries[]=
+{
+    {"multiple",'m',0,G_OPTION_ARG_NONE,&singleOverRide,"Multiple instance mode",NULL},
+    { "safe",'s',0,G_OPTION_ARG_NONE,&safeflag,"Safe mode ( disable all plugins and use new instance )",NULL},
+    { NULL }
+};
+
+
+	context=g_option_context_new(NULL);
+	g_option_context_add_main_entries(context,entries,NULL);
+	g_option_context_set_help_enabled(context,true); 
+	g_option_context_parse(context,&argc,&argv,NULL);
+
+	if(safeflag==true)
+		{
+			singleOverRide=true;
+			loadPluginsFlag=false; 
+		}
+
+	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
+	loadVarsFromFile(filename,kkedit_startup_vars);
+	debugFree(&filename,"main filename");
+#ifndef _USEQT5_
+
+	gtk_init(&argc,&argv);
+
+	asprintf(&dbusname,"org.keithhedger%i.KKEdit",getWorkspaceNumber());
+	if((singleOverRide==true) || (singleUse==false))
+		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN));
+	else
+		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_HANDLES_OPEN));
+
+	g_signal_connect(mainApp,"activate",G_CALLBACK(activate),NULL);
+	g_signal_connect(mainApp,"startup",G_CALLBACK (appStart),NULL);
+	g_signal_connect(mainApp,"open",G_CALLBACK (open),NULL);
+
+	status=g_application_run(mainApp,argc,argv);
+
+	g_object_unref(mainApp);
+#else
+	QApplication	app(argc,argv);
+
+	buildMainGuiQT();
+	app.exec();
+#endif
+	delete history;
+	delete globalSlice;
+
+	return status;
+}
+
+#if 0
 int main(int argc,char **argv)
 {
 #ifndef _USEQT5_
@@ -498,3 +859,4 @@ int main(int argc,char **argv)
 			delete globalSlice;
 //		}
 }
+#endif

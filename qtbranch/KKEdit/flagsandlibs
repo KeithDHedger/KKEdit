@@ -7,7 +7,7 @@ AM_CPPFLAGS =	-I$(top_srcdir) \
 			$(QTWIDGETS_CFLAGS) \
 			$(UNIQ_CFLAGS) \
 			$(WEBKIT_CFLAGS) \
-			$(GLIBMODULES_CFLAGS) \
+			$(GMODULE_CFLAGS) \
 			-DPREFIX=\""${prefix}\"" \
 			-DLOCALEDIR=\""${localedir}"\" \
 			-DDATADIR=\""${pkgdatadir}"\" \
@@ -23,6 +23,6 @@ LIBS =	$(GTK_LIBS) \
 		$(GTKSRC_LIBS) \
 		$(UNIQ_LIBS) \
 		$(WEBKIT_LIBS) \
-		$(GLIBMODULES_LIBS) \
+		$(GMODULE_LIBS) \
 		$(ASPELL_LIBS)
 

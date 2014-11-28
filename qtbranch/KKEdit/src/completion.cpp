@@ -230,8 +230,77 @@ void function_provider_init(FunctionProvider* self)
 #endif
 }
 
-//completion
 void addProp(pageStruct* page)
+{
+#ifndef _USEQT5_
+	char*		functions=NULL;
+	char		tmpstr[1024];
+	char*		lineptr;
+	char*		correctedstr;
+	char		functype[63];
+	char		infostr[1024];
+	char*		holdstr;
+	FILE*		fd=NULL;
+	char		buffer[2048];
+	char*		customfile;
+
+	if(page->filePath==NULL)
+		return;
+
+//custom
+	asprintf(&customfile,"%s/%s",getenv("HOME"),CUSTOMWORDFILE);
+	fd=fopen(customfile,"r");
+	if(fd!=NULL)
+		{
+			while(feof(fd)==0)
+				{
+					buffer[0]=0;
+					fgets(buffer,2048,fd);
+					if(strlen(buffer)>2)
+						{
+							buffer[strlen(buffer)-1]=0;
+							customProv->proposals=g_list_append(customProv->proposals,gtk_source_completion_item_new(buffer,buffer,NULL,NULL));
+						}
+				}
+			fclose(fd);
+		}
+
+//function and variable compitions
+	getRecursiveTagList(page->filePath,&functions);
+	lineptr=functions;
+
+	while (lineptr!=NULL)
+		{
+			tmpstr[0]=0;
+			sscanf (lineptr,"%s",tmpstr);
+			sscanf (lineptr,"%*s %*s %*i %[^\n]s",infostr);
+			holdstr=strdup(tmpstr);
+			correctedstr=truncateWithElipses(tmpstr,maxFuncDefs);
+			sprintf(tmpstr,"%s",correctedstr);
+			if(strlen(tmpstr)>0)
+				{
+					sscanf (lineptr,"%*s %s",functype);	
+					if(strcasecmp(functype,"function")==0)
+						funcProv->proposals=g_list_append(funcProv->proposals,gtk_source_completion_item_new(tmpstr,holdstr,NULL,infostr));
+					if(strcasecmp(functype,"variable")==0)
+						varsProv->proposals=g_list_append(varsProv->proposals,gtk_source_completion_item_new(tmpstr,holdstr,NULL,infostr));
+				}
+			debugFree(&correctedstr,"addProp correctedstr");
+			debugFree(&holdstr,"addProp holdstr");
+
+			lineptr=strchr(lineptr,'\n');
+			if (lineptr!=NULL)
+				lineptr++;
+		}
+	if(functions!=NULL)
+		debugFree(&functions,"switchPage functions");
+#endif
+}
+
+//TODO//
+#if 0
+//completion
+void addPropXXX(pageStruct* page)
 {
 #ifndef _USEQT5_
 	char*		functions=NULL;
@@ -295,10 +364,10 @@ void addProp(pageStruct* page)
 				lineptr++;
 		}
 	if(functions!=NULL)
-		debugFree(functions,"switchPage functions");
+		debugFree(&functions,"switchPage functions");
 #endif
 }
-
+#endif
 void removeProps(void)
 {
 #ifndef _USEQT5_

@@ -389,7 +389,7 @@ bool readFile(char *name)
 	unsigned long	fileLen;
 
 	if(filebuffer!=NULL)
-		debugFree(filebuffer,"readFile filebuffer");
+		debugFree(&filebuffer,"readFile filebuffer");
 	//Open file
 	file=fopen(name,"rb");
 	if (!file)
@@ -599,12 +599,12 @@ docFileData* getDoxyFileData(char* uri)
 		}
 	else
 		{
-			debugFree(doxydata,"getDoxyFileData doxydata");
+			debugFree(&doxydata,"getDoxyFileData doxydata");
 			doxydata=NULL;
 		}
-	debugFree(unhashedline,"getDoxyFileData unhashedline");
-	debugFree(linetag,"getDoxyFileData linetag");
-	debugFree(filepath,"getDoxyFileData filepath");
+	debugFree(&unhashedline,"getDoxyFileData unhashedline");
+	debugFree(&linetag,"getDoxyFileData linetag");
+	debugFree(&filepath,"getDoxyFileData filepath");
 	return(doxydata);
 #endif
 }
@@ -637,13 +637,13 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 							buf->textBuffer=(GtkTextBuffer*)page->buffer;
 							buf->scroll2LineM(page,doxydata->lineNum-1);
 							delete buf;
-							debugFree(doxydata,"docLinkTrap doxydata");
+							debugFree(&doxydata,"docLinkTrap doxydata");
 							return(false);
 						}
 				}
 //try to open file f not in tabs
 			openFile(doxydata->sourceFile,doxydata->lineNum,false);
-			debugFree(doxydata,"docLinkTrap doxydata");
+			debugFree(&doxydata,"docLinkTrap doxydata");
 		}
 	return(false);
 #endif

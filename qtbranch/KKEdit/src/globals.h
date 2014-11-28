@@ -35,7 +35,7 @@
 
 #define BOOKMAXMARKMENULEN 40
 #define MAXRECENT 10
-#define MAXMENUFUNCLEN 100
+#define MAXTEXTWIDTH 500
 
 #define MARK_TYPE_1		"one"
 #define MARK_TYPE_2		"two"
@@ -154,6 +154,11 @@ struct bookMarksNew
 };
 
 extern HistoryClass*	history;
+extern bool				sessionBusy;
+
+#ifndef _USEQT5_
+extern GApplication*	mainApp;
+#endif
 
 #ifndef _USEQT5_
 extern GtkWidget*		window;
@@ -296,6 +301,10 @@ extern bool				tmpAutoCheck;
 
 extern uint				autoShowMinChars;
 extern int				tmpAutoShowMinChars;
+extern bool				useGlobalPlugMenu;
+extern unsigned int		maxTabChars;
+extern unsigned int		maxBMChars;
+extern unsigned int		maxFuncDefs;
 
 #ifndef _USEQT5_
 extern GtkWidget*		fontButton;
@@ -542,6 +551,7 @@ extern args				kkedit_window_rc[];
 extern args				kkedit_rc[];
 extern args				tool_vars[];
 extern args				keybindings_rc[];
+extern args				kkedit_startup_vars[];
 
 //status bar message
 extern char*			statusMessage;
@@ -568,7 +578,7 @@ void scrollToIterInPane(void);
 void goBack(Widget* widget,uPtr data);
 void showBarberPole(const char* title);
 void killBarberPole(void);
-void debugFree(gpointer ptr,const char* message);
+void debugFree(char** ptr,const char* message);
 char* truncateWithElipses(char* str,unsigned int maxlen);
 
 #endif
