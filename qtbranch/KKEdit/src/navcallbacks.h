@@ -10,24 +10,11 @@
 #define _NAVCALLBACKS_
 
 void goToDefine(functionData* fdata);
-#ifndef _USEQT5_
-void goToDefinition(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void goToDefinition(void);
-#endif
-#ifndef _USEQT5_
-void findFile(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void findFile(void);
-#endif
-#ifndef _USEQT5_
-void jumpToLine(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void jumpToLine(void);
-#endif
+
+void goToDefinition(Widget* widget,uPtr data);
+void findFile(Widget* widget,uPtr data);
+void jumpToLine(Widget* widget,uPtr data);
+
 #ifndef _USEQT5_
 void gotoLine(GtkWidget* widget,gpointer data);
 #else
@@ -40,12 +27,9 @@ void jumpToLineFromBar(GtkWidget* widget,gpointer data);
 //TODO//
 void jumpToLineFromBar(void);
 #endif
-#ifndef _USEQT5_
-void functionSearch(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void functionSearch(void);
-#endif
+
+void functionSearch(Widget* widget,uPtr data);
+
 #ifndef _USEQT5_
 void gotoLine(GtkWidget* widget,gpointer data);
 #else

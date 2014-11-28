@@ -39,13 +39,8 @@ void externalTool(GtkWidget* widget,gpointer data);
 //TODO//
 void externalTool(void);
 #endif
-#ifndef _USEQT5_
-void openHelp(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void openHelp(void);
-#endif
 
+void openHelp(Widget* widget,uPtr data);
 void printFile(Widget* widget,uPtr data);
 
 #ifndef _USEQT5_
@@ -80,12 +75,9 @@ void setToolOptions(GtkWidget* widget,gpointer data);
 //TODO//
 void setToolOptions(void);
 #endif
-#ifndef _USEQT5_
-void doAbout(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void doAbout(void);
-#endif
+
+void doAbout(Widget* widget,uPtr data);
+
 void writeExitData(void);
 
 bool doSaveAll(Widget* widget,uPtr data);
@@ -127,25 +119,15 @@ void toggleBookmark(GtkWidget*,GtkTextIter* titer);
 //TODO//
 void toggleBookmark(void);
 #endif
-#ifndef _USEQT5_
-void toggleBookMarkBar(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void toggleBookMarkBar(void);
-#endif
+
+//view callbacks
+void toggleBookMarkBar(Widget* widget,uPtr data);
 void setToobarSensitive(void);
-#ifndef _USEQT5_
-void toggleToolBar(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void toggleToolBar(void);
-#endif
-#ifndef _USEQT5_
-void toggleToolOutput(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void toggleToolOutput(void);
-#endif
+void toggleToolBar(Widget* widget,uPtr data);
+void toggleToolOutput(Widget* widget,uPtr data);
+void toggleStatusBar(Widget* widget,uPtr data);
+void toggleDocviewer(Widget* widget,uPtr data);
+
 #ifndef _USEQT5_
 void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer);
 #else
@@ -162,36 +144,25 @@ gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data);
 gboolean keyShortCut(void);
 #endif
 void loadKeybindings(void);
-#ifndef _USEQT5_
-void toggleStatusBar(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void toggleStatusBar(void);
-#endif
+
+
 #ifndef _USEQT5_
 void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data);
 #else
 //TODO//
 void updateStatuBar(void);
 #endif
-#ifndef _USEQT5_
-void toggleDocviewer(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void toggleDocviewer(void);
-#endif
+
+
 #ifndef _USEQT5_
 void closeDocViewer(GtkWidget *widget,GdkEvent *event,gpointer data);
 #else
 //TODO//
 void closeDocViewer(void);
 #endif
-#ifndef _USEQT5_
-void getPlugins(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void getPlugins(void);
-#endif
+
+void getPlugins(Widget* widget,uPtr data);
+
 void showToolOutput(bool immediate);
 void hideToolOutput(bool immediate);
 

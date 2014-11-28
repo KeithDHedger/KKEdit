@@ -12,27 +12,20 @@
 GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;
 GtkNotebook*	notebook=NULL;
-GtkWidget*		menubar=NULL;
-GtkWidget*		menufunc;
-GtkWidget*		menunav;
-GtkWidget*		menutools;
-GtkWidget*		menuhelp;
+
+
 
 GtkWidget*		menuItemOpen=NULL;
-GtkWidget*		menuView=NULL;
-GtkWidget*		menuToolOut=NULL;
-GtkWidget*		menuStatusBar=NULL;
 #else
 //TODO//
 QWidget*		window=NULL;
 QTabWidget*		notebook=NULL;
-QMenuBar*		menubar=NULL;
-QMenu*			menufile;
-QMenu*			menuedit;
-QMenu*			menufunc;
-QMenu*			menunav;
-QMenu*			menutools;
-QMenu*			menuhelp;
+//QMenuBar*		menubar=NULL;
+//QMenu*			menufile;
+//QMenu*			menuedit;
+//QMenu*			menufunc;
+//QMenu*			menutools;
+//QMenu*			menuhelp;
 
 QAction*		menuItemOpen=NULL;
 
@@ -42,8 +35,6 @@ QAction*		menuItemOpen=NULL;
 
 VISIBLE GList*	newBookMarksList=NULL;
 #ifndef _USEQT5_
-GtkWidget*		menuBookMark;
-GtkWidget*		menuBookMarkSubMenu;
 GtkWidget*		bmHighlightBox;
 #else
 //TODO//
@@ -59,7 +50,7 @@ char*			toolBarLayout=NULL;
 GtkToolbar*		toolBar;
 GtkWidget*		toolBarBox;
 
-GtkWidget*		menuprint;
+//GtkWidget*		menuprint;
 
 
 
@@ -72,12 +63,14 @@ GtkWidget*		liveSearchWidget;
 //TODO//
 #endif
 
-
+//menubar
+Widget*			menuBar;
 //file menu
 Widget*			fileMenu;
 Widget*			saveMenu;
 Widget*			saveAsMenu;
 Widget*			saveAllMenu;
+Widget*			printMenu;
 Widget*			closeMenu;
 Widget*			closeAllMenu;
 Widget*			revertMenu;
@@ -90,6 +83,22 @@ Widget*			redoAllMenu;
 Widget*			cutMenu;
 Widget*			copyMenu;
 Widget*			pasteMenu;
+//view menu
+Widget*			viewMenu;
+Widget*			toolOutMenu;
+Widget*			statusBarMenu;
+//nav menu
+Widget*			navMenu;
+Widget*			goBackMenu;
+//function menu
+Widget*			funcMenu;
+//bm menu
+Widget*			bookMarkMenu;
+Widget*			bookMarkMenuSubMenu;
+//tools menu
+Widget*			toolsMenu;
+//help
+Widget*			helpMenu;
 
 int				currentPage=0;
 //nag
@@ -330,7 +339,7 @@ GtkSourceStyleScheme*			styleScheme;
 #ifndef _USEQT5_
 GtkWidget*		docView;
 WebKitWebView*	webView;
-GtkWidget*		showDocViewWidget;
+Widget*			showDocViewMenu;
 #else
 //TODO//
 #endif
@@ -722,7 +731,7 @@ VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int u
 						{
 							showToolOutWin=true;
 							gtk_widget_show(toolOutVBox);
-							gtk_menu_item_set_label((GtkMenuItem*)menuToolOut,gettext("Hide Tool Output"));
+							gtk_menu_item_set_label((GtkMenuItem*)toolOutMenu,gettext("Hide Tool Output"));
 							while(fgets(line,1024,fp))
 								{
 									gtk_text_buffer_insert_at_cursor(toolOutputBuffer,line,strlen(line));
@@ -1121,37 +1130,36 @@ void buildToolsList(void)
 
 void rebuildBookMarkMenu(void)
 {
+printf("rebuildBookMarkMenu\n");
+
 #ifndef _USEQT5_
 	GtkWidget*	menuitem;
 	GtkWidget*	submenu;
 
-	submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menuBookMark);
+	submenu=gtk_menu_item_get_submenu((GtkMenuItem*)bookMarkMenu);
 	if(submenu!=NULL)
-		gtk_menu_item_set_submenu((GtkMenuItem*)menuBookMark,NULL);
+		gtk_menu_item_set_submenu((GtkMenuItem*)bookMarkMenu,NULL);
 
-	menuBookMarkSubMenu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuBookMark),menuBookMarkSubMenu);
+	bookMarkMenuSubMenu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(bookMarkMenu),bookMarkMenuSubMenu);
 
 	menuitem=gtk_menu_item_new_with_label(gettext("Remove All Bookmarks"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkMenuSubMenu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(removeAllBookmarks),NULL);
 
 	menuitem=gtk_menu_item_new_with_label(gettext("Toggle Bookmark"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkMenuSubMenu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkMenuSubMenu),menuitem);
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void goBack(GtkWidget* widget,gpointer data)
-#else
-//TODO//
-VISIBLE void goBack(void)
-#endif
+VISIBLE void goBack(Widget* widget,uPtr data)
 {
+printf("goBack %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	HistoryClass*	hist=new HistoryClass;
 

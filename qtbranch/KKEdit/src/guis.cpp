@@ -461,6 +461,7 @@ void doMakeTool(void)
 
 void buildTools(void)
 {
+printf("buildTools\n");
 #ifndef _USEQT5_
 	GtkWidget*		menuitem;
 	GtkWidget*		menu;
@@ -471,12 +472,12 @@ void buildTools(void)
 
 	buildToolsList();
 
-	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menutools);
+	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)toolsMenu);
 	if(submenu!=NULL)
-		gtk_menu_item_set_submenu((GtkMenuItem*)menutools,NULL);
+		gtk_menu_item_set_submenu((GtkMenuItem*)toolsMenu,NULL);
 
 	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutools),menu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(toolsMenu),menu);
 
 //addtool
 	menuitem=gtk_image_menu_item_new_with_label(gettext("Manage External Tools"));
@@ -1027,8 +1028,10 @@ void buildKeys()
 }
 
 #define TABLECOLS 2
-VISIBLE void doPrefs(void)
+VISIBLE void doPrefs(Widget* widget,uPtr data)
 {
+printf("doPrefs %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	GtkWidget*		vbox;
 	GtkWidget*		hbox;
@@ -1454,8 +1457,6 @@ QAction* makeMenuItem(Widget* menu,const char* name,const QKeySequence key,const
 #ifdef _USEQT5_
 void buildMainGuiQT(void)
 {
-//	QAction*	menuitem;
-
 	window=new QWidget;
 
 	mainWindowVBox=new QVBoxLayout();
@@ -1473,10 +1474,10 @@ void buildMainGuiQT(void)
 	notebook->setDocumentMode(true);
 	notebook->setTabsClosable(true);
 
-	menubar=new QMenuBar;
+	menuBar=new QMenuBar;
 //file menu
 	fileMenu=new QMenu("&File");
-	menubar->addMenu((QMenu*)fileMenu);
+	((QMenuBar*)menuBar)->addMenu((QMenu*)fileMenu);
 
 //new
 	makeMenuItem(fileMenu,gettext("New"),QKeySequence::New,"document-new",NEWMENUNAME,&newFile,NULL,0);
@@ -1520,7 +1521,7 @@ void buildMainGuiQT(void)
 //restore session and bookmarks
 	makeMenuItem(fileMenu,gettext("Restore Session With Bookmark"),0,"document-open",RESTORESESSIONBMMENUNAME,&restoreSession,NULL,0);
 //printfile
-	makeMenuItem(fileMenu,gettext("Print"),QKeySequence::Print,"document-print",PRINTMENUNAME,&printFile,NULL,0);
+	printMenu=(Widget*)makeMenuItem(fileMenu,gettext("Print"),QKeySequence::Print,"document-print",PRINTMENUNAME,&printFile,NULL,0);
 	((QMenu*)fileMenu)->addSeparator();
 
 //close
@@ -1539,7 +1540,7 @@ void buildMainGuiQT(void)
 	
 //edit menu
 	editMenu=new QMenu("&Edit");
-	menubar->addMenu((QMenu*)editMenu);
+	((QMenuBar*)menuBar)->addMenu((QMenu*)editMenu);
 
 //undo
 	undoMenu=(Widget*)makeMenuItem(editMenu,gettext("Undo"),QKeySequence::Undo,"edit-undo",UNDOMENUNAME,&undo,NULL,0);
@@ -1559,9 +1560,112 @@ void buildMainGuiQT(void)
 	pasteMenu=(Widget*)makeMenuItem(editMenu,gettext("Paste"),QKeySequence::Paste,"edit-paste",PASTEMENUNAME,&pasteFromClip,NULL,0);
 	((QMenu*)editMenu)->addSeparator();
 
+//find
+	makeMenuItem(editMenu,gettext("Find"),QKeySequence::Find,"edit-find",FINDMENUNAME,&find,NULL,0);
+	((QMenu*)editMenu)->addSeparator();
+
+//prefs
+	makeMenuItem(editMenu,gettext("Preferences"),QKeySequence::Preferences,"preferences-desktop",PREFSMENUNAME,&doPrefs,NULL,0);
+//plugs
+	makeMenuItem(editMenu,gettext("Plugin Prefs"),0,"preferences-system",PLUGPREFSMENUNAME,&doPlugPrefs,NULL,0);
 //////////////////////////////////////////
 
-	mainWindowVBox->addWidget(menubar);
+//view menu
+	viewMenu=new QMenu("&View");
+	((QMenuBar*)menuBar)->addMenu((QMenu*)viewMenu);
+
+//show docs
+	makeMenuItem(viewMenu,gettext("Show Documentaion"),0,NULL,SHOWDOCSMENUNAME,&doDoxy,NULL,2);
+
+//toggle bookmark bar
+	if(showBMBar)
+		makeMenuItem(viewMenu,gettext("Hide Bookmarks Bar"),0,NULL,SHOWBMBARMENUNAME,&toggleBookMarkBar,NULL,0);
+	else
+		makeMenuItem(viewMenu,gettext("Show Bookmarks Bar"),0,NULL,SHOWBMBARMENUNAME,&toggleBookMarkBar,NULL,0);
+//toggle toolbar bar
+	if(showToolBar)
+		makeMenuItem(viewMenu,gettext("Hide Tool Bar"),0,NULL,SHOWTOOLBARMENUNAME,&toggleToolBar,NULL,0);
+	else
+		makeMenuItem(viewMenu,gettext("Show Tool Bar"),0,NULL,SHOWTOOLBARMENUNAME,&toggleToolBar,NULL,0);
+//tooloutput
+	if(showToolOutWin)
+			toolOutMenu=(Widget*)makeMenuItem(viewMenu,gettext("Hide Tool Output"),0,NULL,SHOWTOOLOUTMENUNAME,&toggleToolOutput,NULL,0);
+	else
+			toolOutMenu=(Widget*)makeMenuItem(viewMenu,gettext("Show Tool Output"),0,NULL,SHOWTOOLOUTMENUNAME,&toggleToolOutput,NULL,0);
+//toggle statusbar
+	if(showStatus)
+		statusBarMenu=(Widget*)makeMenuItem(viewMenu,gettext("Hide Status Bar"),0,NULL,SHOWSTATUSMENUNAME,&toggleStatusBar,NULL,0);
+	else
+		statusBarMenu=(Widget*)makeMenuItem(viewMenu,gettext("Show Status Bar"),0,NULL,SHOWSTATUSMENUNAME,&toggleStatusBar,NULL,0);
+
+#ifdef _BUILDDOCVIEWER_
+//toggle docviewer
+	showDocViewMenu=(Widget*)makeMenuItem(viewMenu,gettext("Show Docviewer"),0,NULL,SHOWDOCVIEWERMENUNAME,&toggleDocviewer,NULL,0);
+#endif
+//////////////////////////////////////////
+
+//navigation menu
+	navMenu=new QMenu("&Navigation");
+	((QMenuBar*)menuBar)->addMenu((QMenu*)navMenu);
+
+//goto define
+	makeMenuItem(navMenu,gettext("Go To Definition"),QKeySequence::fromString("Ctrl+D"),"dialog-question",GOTODEFMENUNAME,&goToDefinition,NULL,0);
+
+//open include
+	makeMenuItem(navMenu,gettext("Open Include File"),QKeySequence::fromString("Ctrl+I"),"document-open",OPENINCLUDEMENUNAME,&findFile,NULL,0);
+//goto line number
+	makeMenuItem(navMenu,gettext("Go To Line"),0,"go-down",GOTOLINEMENUNAME,&jumpToLine,NULL,0);
+//find define
+	makeMenuItem(navMenu,gettext("Search For Define"),0,"edit-find",SEARCHFORDEFMENUNAME,&functionSearch,NULL,0);
+//find gtkdoc
+	makeMenuItem(navMenu,gettext("Search In Gtk Docs"),0,"edit-find",SEARCHGTKMENUNAME,&searchGtkDocs,NULL,0);
+//find qt5
+	makeMenuItem(navMenu,gettext("Search In Qt5 Docs"),0,"edit-find",SEARCHQT5MENUNAME,&searchQT5Docs,NULL,0);
+//goto doxy docs
+	if(gotDoxygen==0)
+		makeMenuItem(navMenu,gettext("Find In Documentation"),0,"edit-find",SEARCHDOXYMENUNAME,&doxyDocs,NULL,0);
+////go back
+		goBackMenu=(Widget*)makeMenuItem(navMenu,gettext("Back"),0,"go-previous",GOBACKMENUNAME,&goBack,NULL,0);
+	((QMenu*)navMenu)->addSeparator();
+//////////////////////////////////////////
+
+//function menu
+	funcMenu=new QMenu("Fun&ctions");
+	((QMenuBar*)menuBar)->addMenu((QMenu*)funcMenu);
+
+///////////////////////////////////////////
+
+//newbookmarks
+	bookMarkMenu=new QMenu("&Bookmarks");
+	((QMenuBar*)menuBar)->addMenu((QMenu*)bookMarkMenu);
+	rebuildBookMarkMenu();
+
+///////////////////////////////////////////
+
+//external tools	
+	toolsMenu=new QMenu("&Tools");
+	((QMenuBar*)menuBar)->addMenu((QMenu*)toolsMenu);
+	buildTools();
+
+///////////////////////////////////////////
+
+//help
+	helpMenu=new QMenu("&Help");
+	((QMenuBar*)menuBar)->addMenu((QMenu*)helpMenu);
+
+//about
+	makeMenuItem(helpMenu,gettext("&About"),0,"help-about",ABOUTMENUNAME,&doAbout,NULL,0);
+//help
+	makeMenuItem(helpMenu,gettext("&Help"),0,"help-contents",HELPMENUNAME,&openHelp,NULL,0);
+
+//	menuitem=makeMenuItem(GTK_STOCK_HELP,menu,(void*)openHelp,0,HELPMENUNAME,STOCKMENU,NULL,NULL);
+//get plugins
+	makeMenuItem(helpMenu,gettext("&Get Plugins"),0,DATADIR"/pixmaps/KKEditPlugMenu.png",GETPLUGSMENUNAME,&getPlugins,NULL,0);
+//	menuitem=makeMenuItem(DATADIR"/pixmaps/KKEditPlugMenu.png",menu,(void*)getPlugins,0,GETPLUGSMENUNAME,PIXMAPMENU,gettext("Get Plugins"),NULL);
+
+///////////////////////////////////////////
+
+	mainWindowVBox->addWidget(menuBar);
 	mainWindowVBox->addWidget(notebook);
 
  	window->show();
@@ -1603,7 +1707,7 @@ void buildMainGui(void)
 	gtk_signal_connect(GTK_OBJECT(notebook),"switch-page",G_CALLBACK(switchPage),NULL);
 	gtk_signal_connect(GTK_OBJECT(notebook),"page-reordered",G_CALLBACK(switchPage),NULL);
 
-	menubar=gtk_menu_bar_new();
+	menuBar=gtk_menu_bar_new();
 	toolBarBox=gtk_hbox_new(true,0);
 	toolBar=(GtkToolbar*)gtk_toolbar_new();
 
@@ -1710,12 +1814,12 @@ void buildMainGui(void)
 	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
 	gtk_widget_set_name(saveAsMenu,SAVEASMENUNAME);
 //save all
-	menusaveall=gtk_image_menu_item_new_with_label(gettext("Save All"));
+	saveAllMenu=gtk_image_menu_item_new_with_label(gettext("Save All"));
 	image=gtk_image_new_from_stock(GTK_STOCK_SAVE,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menusaveall,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menusaveall);
-	gtk_signal_connect(GTK_OBJECT(menusaveall),"activate",G_CALLBACK(doSaveAll),NULL);
-	gtk_widget_set_name(menusaveall,SAVEALLMENUNAME);
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)saveAllMenu,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),saveAllMenu);
+	gtk_signal_connect(GTK_OBJECT(saveAllMenu),"activate",G_CALLBACK(doSaveAll),NULL);
+	gtk_widget_set_name(saveAllMenu,SAVEALLMENUNAME);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -1743,34 +1847,34 @@ void buildMainGui(void)
 	gtk_widget_set_name(menuitem,RESTORESESSIONBMMENUNAME);
 
 //printfile
-	menuprint=gtk_image_menu_item_new_from_stock(GTK_STOCK_PRINT,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuprint);
-	gtk_signal_connect(GTK_OBJECT(menuprint),"activate",G_CALLBACK(printFile),NULL);
-	gtk_widget_set_name(menuprint,PRINTMENUNAME);
+	printMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_PRINT,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),printMenu);
+	gtk_signal_connect(GTK_OBJECT(printMenu),"activate",G_CALLBACK(printFile),NULL);
+	gtk_widget_set_name(printMenu,PRINTMENUNAME);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //close
-	menuclose=gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuclose);
-	gtk_signal_connect(GTK_OBJECT(menuclose),"activate",G_CALLBACK(closeTab),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)menuclose,"activate",accgroup,'W',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(menuclose,CLOSEMENUNAME);
+	closeMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),closeMenu);
+	gtk_signal_connect(GTK_OBJECT(closeMenu),"activate",G_CALLBACK(closeTab),NULL);
+	gtk_widget_add_accelerator((GtkWidget *)closeMenu,"activate",accgroup,'W',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+	gtk_widget_set_name(closeMenu,CLOSEMENUNAME);
 //close-all
 	image=gtk_image_new_from_stock(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
-	menucloseall=gtk_image_menu_item_new_with_label(gettext("Close All Tabs"));
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menucloseall,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menucloseall);
-	gtk_signal_connect(GTK_OBJECT(menucloseall),"activate",G_CALLBACK(closeAllTabs),NULL);
-	gtk_widget_set_name(menucloseall,CLOSEALLMENUNAME);
+	closeAllMenu=gtk_image_menu_item_new_with_label(gettext("Close All Tabs"));
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)closeAllMenu,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),closeAllMenu);
+	gtk_signal_connect(GTK_OBJECT(closeAllMenu),"activate",G_CALLBACK(closeAllTabs),NULL);
+	gtk_widget_set_name(closeAllMenu,CLOSEALLMENUNAME);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //reload file
-	menurevert=gtk_image_menu_item_new_from_stock(GTK_STOCK_REVERT_TO_SAVED,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menurevert);
-	gtk_signal_connect(GTK_OBJECT(menurevert),"activate",G_CALLBACK(reloadFile),NULL);
-	gtk_widget_set_name(menurevert,REVERTMENUNAME);
+	revertMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_REVERT_TO_SAVED,NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),revertMenu);
+	gtk_signal_connect(GTK_OBJECT(revertMenu),"activate",G_CALLBACK(reloadFile),NULL);
+	gtk_widget_set_name(revertMenu,REVERTMENUNAME);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -1780,7 +1884,7 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doShutdown),NULL);
 	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'Q',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(menurevert,QUITMENUNAME);
+	gtk_widget_set_name(revertMenu,QUITMENUNAME);
 
 //edit menu
 	editMenu=gtk_menu_item_new_with_label(gettext("_Edit"));
@@ -1868,10 +1972,10 @@ void buildMainGui(void)
 	gtk_widget_set_name(menuitem,PLUGPREFSMENUNAME);
 
 //view menu
-	menuView=gtk_menu_item_new_with_label(gettext("_View"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menuView,true);
+	viewMenu=gtk_menu_item_new_with_label(gettext("_View"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)viewMenu,true);
 	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuView),menu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(viewMenu),menu);
 
 //show docs
 	menuitem=gtk_menu_item_new_with_label(gettext("Show Documentaion"));
@@ -1899,21 +2003,21 @@ void buildMainGui(void)
 
 //tooloutput
 	if(showToolOutWin)
-		menuToolOut=gtk_menu_item_new_with_label(gettext("Hide Tool Output"));
+		toolOutMenu=gtk_menu_item_new_with_label(gettext("Hide Tool Output"));
 	else
-		menuToolOut=gtk_menu_item_new_with_label(gettext("Show Tool Output"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuToolOut);
-	gtk_signal_connect(GTK_OBJECT(menuToolOut),"activate",G_CALLBACK(toggleToolOutput),NULL);
-	gtk_widget_set_name(menuToolOut,SHOWTOOLOUTMENUNAME);
+		toolOutMenu=gtk_menu_item_new_with_label(gettext("Show Tool Output"));
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),toolOutMenu);
+	gtk_signal_connect(GTK_OBJECT(toolOutMenu),"activate",G_CALLBACK(toggleToolOutput),NULL);
+	gtk_widget_set_name(toolOutMenu,SHOWTOOLOUTMENUNAME);
 
 //toggle statusbar
 	if(showStatus)
-		menuStatusBar=gtk_menu_item_new_with_label(gettext("Hide Status Bar"));
+		statusBarMenu=gtk_menu_item_new_with_label(gettext("Hide Status Bar"));
 	else
-		menuStatusBar=gtk_menu_item_new_with_label(gettext("Show Status Bar"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuStatusBar);
-	gtk_signal_connect(GTK_OBJECT(menuStatusBar),"activate",G_CALLBACK(toggleStatusBar),NULL);
-	gtk_widget_set_name(menuStatusBar,SHOWSTATUSMENUNAME);
+		statusBarMenu=gtk_menu_item_new_with_label(gettext("Show Status Bar"));
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),statusBarMenu);
+	gtk_signal_connect(GTK_OBJECT(statusBarMenu),"activate",G_CALLBACK(toggleStatusBar),NULL);
+	gtk_widget_set_name(statusBarMenu,SHOWSTATUSMENUNAME);
 
 #ifdef _BUILDDOCVIEWER_
 //toggle docviewer
@@ -1924,10 +2028,10 @@ void buildMainGui(void)
 #endif
 
 //navigation menu
-	menunav=gtk_menu_item_new_with_label(gettext("_Navigation"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menunav,true);
+	navMenu=gtk_menu_item_new_with_label(gettext("_Navigation"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)navMenu,true);
 	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),menu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(navMenu),menu);
 
 //goto define
 	image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
@@ -1996,24 +2100,24 @@ void buildMainGui(void)
 	gtk_widget_set_name(menuitem,GOBACKMENUNAME);
 
 //function menu
-	menufunc=gtk_menu_item_new_with_label(gettext("Fun_ctions"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menufunc,true);
+	funcMenu=gtk_menu_item_new_with_label(gettext("Fun_ctions"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)funcMenu,true);
 
 //newbookmarks
-	menuBookMark=gtk_menu_item_new_with_label(gettext("_Bookmarks"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menuBookMark,true);
+	bookMarkMenu=gtk_menu_item_new_with_label(gettext("_Bookmarks"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)bookMarkMenu,true);
 	rebuildBookMarkMenu();
 
 //external tools
-	menutools=gtk_menu_item_new_with_label(gettext("_Tools"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menutools,true);
+	toolsMenu=gtk_menu_item_new_with_label(gettext("_Tools"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)toolsMenu,true);
 	buildTools();
 
 //help
-	menuhelp=gtk_menu_item_new_with_label(gettext("_Help"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menuhelp,true);
+	helpMenu=gtk_menu_item_new_with_label(gettext("_Help"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)helpMenu,true);
 	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuhelp),menu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(helpMenu),menu);
 
 //about
 	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_ABOUT,NULL);
@@ -2035,14 +2139,14 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_widget_set_name(menuitem,GETPLUGSMENUNAME);
 
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),fileMenu);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),editMenu);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuView);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menunav);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufunc);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuBookMark);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menutools);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),fileMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),editMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),viewMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),navMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),funcMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),bookMarkMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),toolsMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),helpMenu);
 
 //tooloutputwindow
 	mainVPane=gtk_vpaned_new();
@@ -2060,8 +2164,8 @@ void buildMainGui(void)
 
 //add main vbox to window
 	gtk_container_add((GtkContainer*)window,mainWindowVBox);
-//addmenubar
-	gtk_box_pack_start((GtkBox*)mainWindowVBox,menubar,false,false,0);
+//addmenuBar
+	gtk_box_pack_start((GtkBox*)mainWindowVBox,menuBar,false,false,0);
 //add toolbar
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,toolBarBox,false,false,0);
 
@@ -2105,15 +2209,15 @@ void buildMainGui(void)
 
 	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 
-	globalPlugins->globalPlugData->mlist.menuBar=menubar;
+	globalPlugins->globalPlugData->mlist.menuBar=menuBar;
 	globalPlugins->globalPlugData->mlist.menuFile=fileMenu;
 	globalPlugins->globalPlugData->mlist.menuEdit=editMenu;
-	globalPlugins->globalPlugData->mlist.menuFunc=menufunc;
-	globalPlugins->globalPlugData->mlist.menuNav=menunav;
-	globalPlugins->globalPlugData->mlist.menuTools=menutools;
-	globalPlugins->globalPlugData->mlist.menuHelp=menuhelp;
-	globalPlugins->globalPlugData->mlist.menuBookMark=menuBookMark;
-	globalPlugins->globalPlugData->mlist.menuView=menuView;
+	globalPlugins->globalPlugData->mlist.menuFunc=funcMenu;
+	globalPlugins->globalPlugData->mlist.menuNav=navMenu;
+	globalPlugins->globalPlugData->mlist.menuTools=toolsMenu;
+	globalPlugins->globalPlugData->mlist.menuHelp=helpMenu;
+	globalPlugins->globalPlugData->mlist.menuBookMark=bookMarkMenu;
+	globalPlugins->globalPlugData->mlist.menuView=viewMenu;
 
 	globalPlugins->globalPlugData->topUserBox=mainTopUserVBox;
 	globalPlugins->globalPlugData->leftUserBox=mainLeftUserVBox;

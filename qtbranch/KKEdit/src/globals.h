@@ -160,8 +160,6 @@ extern GtkWidget*		window;
 extern GtkAccelGroup*	accgroup;
 extern GtkNotebook*		notebook;
 
-extern GtkWidget*		menuBookMark;
-extern GtkWidget*		menuBookMarkSubMenu;
 #else
 //TODO//
 extern QWidget*			window;
@@ -184,18 +182,11 @@ extern char*			toolBarLayout;
 extern GtkToolbar*		toolBar;
 extern GtkWidget*		toolBarBox;
 
-extern GtkWidget*		menubar;
-extern GtkWidget*		menufunc;
-extern GtkWidget*		menunav;
-extern GtkWidget*		menutools;
-extern GtkWidget*		menuView;
-
-extern GtkWidget*		menuhelp;
-extern GtkWidget*		menuprint;
+//extern GtkWidget*		menunav;
+//
+//extern GtkWidget*		menuprint;
 
 extern GtkWidget*		menuItemOpen;
-extern GtkWidget*		menuToolOut;
-extern GtkWidget*		menuStatusBar;
 
 
 
@@ -206,23 +197,25 @@ extern GtkWidget*		findDefWidget;
 extern GtkWidget*		liveSearchWidget;
 #else
 //TODO//
-extern QMenuBar*		menubar;
-extern QMenu*			menufile;
-extern QMenu*			menuedit;
-extern QMenu*			menufunc;
-extern QMenu*			menunav;
-extern QMenu*			menutools;
-extern QMenu*			menuhelp;
+//extern QMenuBar*		menubar;
+//extern QMenu*			menufile;
+//extern QMenu*			menuedit;
+//extern QMenu*			menufunc;
+//extern QMenu*			menutools;
+//extern QMenu*			menuhelp;
 
 extern QAction*			menuItemOpen;
 
 #endif
 
+//menubar
+extern Widget*			menuBar;
 //file menu
 extern Widget*			fileMenu;
 extern Widget*			saveMenu;
 extern Widget*			saveAsMenu;
 extern Widget*			saveAllMenu;
+extern Widget*			printMenu;
 extern Widget*			closeMenu;
 extern Widget*			closeAllMenu;
 extern Widget*			revertMenu;
@@ -235,6 +228,22 @@ extern Widget*			redoAllMenu;
 extern Widget*			cutMenu;
 extern Widget*			copyMenu;
 extern Widget*			pasteMenu;
+//view menu
+extern Widget*			viewMenu;
+extern Widget*			toolOutMenu;
+extern Widget*			statusBarMenu;
+//nav menu
+extern Widget*			navMenu;
+extern Widget*			goBackMenu;
+//function menu
+extern Widget*			funcMenu;
+//bm menu
+extern Widget*			bookMarkMenu;
+extern Widget*			bookMarkMenuSubMenu;
+//tools menu
+extern Widget*			toolsMenu;
+//help
+extern Widget*			helpMenu;
 
 extern int				currentPage;
 //nag
@@ -478,11 +487,11 @@ extern GtkSourceStyleScheme*		styleScheme;
 #ifndef _USEQT5_
 extern GtkWidget*		docView;
 extern WebKitWebView*	webView;
-extern GtkWidget*		showDocViewWidget;
-extern bool				showHideDocviewer;
+extern GtkWidget*		showDocViewMenu;
 #else
 //TODO//
 #endif
+extern bool				showHideDocviewer;
 #endif
 
 #ifdef _BUILDDOCVIEWER_
@@ -555,12 +564,8 @@ void scrollToIterInPane(pageStruct* page,GtkTextIter* iter);
 //TODO//
 void scrollToIterInPane(void);
 #endif
-#ifndef _USEQT5_
-void goBack(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void goBack(void);
-#endif
+
+void goBack(Widget* widget,uPtr data);
 void showBarberPole(const char* title);
 void killBarberPole(void);
 void debugFree(gpointer ptr,const char* message);

@@ -174,48 +174,6 @@ struct pageStruct
 	uPtr				reserved4;
 };
 #endif
-
-struct pageStructX
-{
-#ifndef _USEQT5_
-	GtkWidget*			pane;
-	GtkScrolledWindow*	pageWindow;
-	GtkScrolledWindow*	pageWindow2;
-	GtkSourceBuffer*	buffer;
-	GtkSourceView*		view;
-	GtkSourceView*		view2;
-	GtkMenuItem*		navSubMenu;
-	GtkWidget*			tabName;
-	GtkTextIter			iter;
-	GtkTextIter			match_start;
-	GtkTextIter			match_end;
-	GFile*				gFile; 
-	GFileMonitor*		monitor;
-	GtkWidget*			tabVbox;
-	GtkTextMark*		backMark;
-	GtkTextTag*			highlightTag;
-	GtkSourceCompletion* completion;
-#else
-	QVBoxLayout*		tabVbox;
-	QWidget*			tabName;
-#endif
-	char*				filePath;
-	char*				realFilePath;
-	char*				dirName;
-	bool				rebuildMenu;
-	bool				isFirst;
-	char*				fileName;
-	bool				itsMe;
-	GList*				markList;
-	bool				inTop;
-	bool				isSplit;
-	const char*			lang;
-	bool				showingChanged;
-	GList*				userDataList;
-	gpointer			reserved2;
-	gpointer			reserved3;
-	gpointer			reserved4;
-};
 #endif
 
 #ifndef _PLUGINDATA_

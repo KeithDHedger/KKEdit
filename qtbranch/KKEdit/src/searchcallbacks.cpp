@@ -109,13 +109,11 @@ PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void searchGtkDocs(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void searchGtkDocs(void)
-#endif
 {
+printf("searchGtkDocs %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -274,13 +272,11 @@ printf("dodoxy %i\n",(int)(long)data);
 }
 
 //find in doxy docs
-#ifndef _USEQT5_
-VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void doxyDocs(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void doxyDocs(void)
-#endif
 {
+printf("doxyDocs %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -337,13 +333,11 @@ VISIBLE void doxyDocs(void)
 }
 
 //showDocViewWidget
-#ifndef _USEQT5_
-VISIBLE void searchQT5Docs(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void searchQT5Docs(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void searchQT5Docs(void)
-#endif
 {
+printf("searchQT5Docs %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -1078,13 +1072,11 @@ void doFindReplace(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void find(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void find(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void find(void)
-#endif
 {
+printf("find %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	gtk_widget_show(findReplaceDialog);
 	gtk_dialog_run((GtkDialog *)findReplaceDialog);

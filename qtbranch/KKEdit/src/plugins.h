@@ -10,7 +10,7 @@
 #ifndef _PLUGINSTUFF_
 #define _PLUGINSTUFF_
 
-void doPlugPrefs(void);
+void doPlugPrefs(Widget* widget,uPtr data);
 void showSide(bool left);
 void hideSide(bool left);
 void showTop(bool left);

@@ -214,8 +214,10 @@ void onRowSelected(void)
 #endif
 }
 
-VISIBLE void doPlugPrefs(void)
+VISIBLE void doPlugPrefs(Widget* widget,uPtr data)
 {
+printf("doPlugPrefs %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	GtkWidget*		vbox;
 	GtkListStore*	store;

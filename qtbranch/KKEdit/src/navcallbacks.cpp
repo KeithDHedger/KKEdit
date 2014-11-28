@@ -37,13 +37,11 @@ void goToDefine(functionData* fdata)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void goToDefinition(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void goToDefinition(void)
-#endif
 {
+printf("goToDefinition %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	pageStruct*		page=getPageStructPtr(-1);
 	GtkTextIter		start;
@@ -71,13 +69,11 @@ VISIBLE void goToDefinition(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void findFile(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void findFile(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void findFile(void)
-#endif
 {
+printf("findFile %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	char*			command;
 	char			buffer[2048];
@@ -198,26 +194,22 @@ int showLineEntry(void)
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void jumpToLine(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void jumpToLine(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void jumpToLine(void)
-#endif
 {
+printf("jumpToLine %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	if(showLineEntry()==GTK_RESPONSE_YES)
 		gotoLine(NULL,(gpointer)(long)theLineNum);
 #endif
 }
 
-#ifndef _USEQT5_
-VISIBLE void functionSearch(GtkWidget* widget,gpointer data)
-#else
+VISIBLE void functionSearch(Widget* widget,uPtr data)
 //TODO//
-VISIBLE void functionSearch(void)
-#endif
 {
+printf("functionSearch %i\n",(int)(long)data);
+
 #ifndef _USEQT5_
 	functionData* fdata;
 

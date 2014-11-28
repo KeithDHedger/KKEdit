@@ -48,12 +48,9 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data);
 //TODO//
 void doFindReplace(void);
 #endif
-#ifndef _USEQT5_
-void find(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void find(void);
-#endif
+
+void find(Widget* widget,uPtr data);
+
 #ifndef _USEQT5_
 void doSearchPrefs(GtkWidget* widget,gpointer data);
 #else
@@ -80,24 +77,18 @@ void doLiveSearch(void);
 #endif
 void basicFind(int dowhat);
 void regexFind(int dowhat);
-#ifndef _USEQT5_
-void searchQT5Docs(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void searchQT5Docs(void);
-#endif
+
+void searchQT5Docs(Widget* widget,uPtr data);
+
 #ifndef _USEQT5_
 void qt5DocSearchFromBar(GtkWidget* widget,gpointer data);
 #else
 //TODO//
 void qt5DocSearchFromBar(void);
 #endif
-#ifndef _USEQT5_
-void searchGtkDocs(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void searchGtkDocs(void);
-#endif
+
+void searchGtkDocs(Widget* widget,uPtr data);
+
 void showDocView(int howtodisplay,char* text,const char* title);
 #ifndef _USEQT5_
 void pasteFRClip(GtkWidget* widget,gpointer data);
@@ -107,12 +98,6 @@ void pasteFRClip(void);
 #endif
 
 void doDoxy(Widget* widget,uPtr data);
-
-#ifndef _USEQT5_
-void doxyDocs(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void doxyDocs(void);
-#endif
+void doxyDocs(Widget* widget,uPtr data);
 
 #endif
