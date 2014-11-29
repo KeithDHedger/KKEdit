@@ -1836,9 +1836,9 @@ UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessag
 
 void writeExitData(void)
 {
+	char*			filename;
 #ifndef _USEQT5_
 	GtkAllocation	alloc;
-	char*			filename;
 	int				winx;
 	int				winy;
 
@@ -1859,12 +1859,15 @@ void writeExitData(void)
 			winx=docWindowX;
 			winy=docWindowY;
 		}
-#endif
 	asprintf(&docWindowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
+#endif
 
 	toolOutHeight=gtk_paned_get_position((GtkPaned*)mainVPane);
 	bottomVPaneHite=gtk_paned_get_position((GtkPaned*)mainWindowVPane);
 	topVPaneHite=gtk_paned_get_position((GtkPaned*)secondWindowVPane);
+#else
+		asprintf(&windowAllocData,"%i %i %i %i",mainWindow->width(),mainWindow->height(),mainWindow->x(),mainWindow->y());
+#endif
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
@@ -1874,7 +1877,6 @@ void writeExitData(void)
 	saveVarsToFile(filename,kkedit_window_rc);
 	debugFree(&filename,"writeExitData filename");
 	debugFree(&windowAllocData,"writeExitData windowAllocData");
-#endif
 }
 
 void writeConfig(void)
@@ -1930,8 +1932,8 @@ printf("doSaveAll %i\n",(int)(long)data);
 						}
 				}
 		}
-	return(true);
 #endif
+	return(true);
 }
 
 VISIBLE void doShutdown(Widget* widget,uPtr data)
@@ -1939,10 +1941,9 @@ VISIBLE void doShutdown(Widget* widget,uPtr data)
 {
 printf("doShutdown %i\n",(int)(long)data);
 
-#ifndef _USEQT5_
 	char*	command;
 
-	if(doSaveAll(widget,(void*)true)==false)
+	if(doSaveAll(widget,(uPtr)true)==false)
 		return;
 
 	if(onExitSaveSession)
@@ -1953,13 +1954,16 @@ printf("doShutdown %i\n",(int)(long)data);
 	delete_aspell_config(aspellConfig);
 	delete_aspell_speller(spellChecker);
 #endif
-
-	g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
+//TODO//
+//	g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
 
 	asprintf(&command,"rm -rf %s",tmpFolderName);
 	system(command);
 	debugFree(&command,"doShutdown command");
 	system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
+printf("XXXXXXXXXX\n");
+
+#ifndef _USEQT5_
 	gtk_main_quit();
 #else
 	QApplication::quit();

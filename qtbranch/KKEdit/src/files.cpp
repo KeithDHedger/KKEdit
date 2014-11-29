@@ -21,7 +21,6 @@ bool		dropTextFile=false;
 
 VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 {
-#ifndef _USEQT5_
 	FILE*	fd=NULL;
 	int		cnt=0;
 
@@ -49,7 +48,6 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 				}
 			fclose(fd);
 		}
-#endif
 }
 
 VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
