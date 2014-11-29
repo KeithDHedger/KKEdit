@@ -107,7 +107,13 @@ QWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 #endif
 {
 #ifdef _USEQT5_
-	page->tabName=NULL;
+//	char*	correctedname;
+//
+//	printf(">%s<\n",name);
+//
+//	correctedname=strdup(truncateWithElipses(name,maxTabChars));
+	page->tabName=truncateWithElipses(name,maxTabChars);
+//	printf(">%s<\n",correctedname);
 	return(NULL);
 #else
 	GtkWidget*	evbox=gtk_event_box_new();
@@ -806,7 +812,8 @@ printf("openfile %s\n",filepath);
 	QTextStream in(&file);
 	doc->setPlainText(in.readAll());
 	doc->setFilename(strdup(filepath));
-	((QTabWidget*)mainNotebook)->addTab(doc,doc->getFilename());
+	makeNewTab((char*)filepath,(char*)filepath,doc->getPage());
+	((QTabWidget*)mainNotebook)->addTab(doc,doc->getPage()->tabName);
 
 	
 #else

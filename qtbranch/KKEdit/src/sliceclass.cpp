@@ -272,19 +272,15 @@ const char* NAMED_ENTITIES[][2] = {
 
 StringSlice::StringSlice()
 {
-#ifndef _USEQT5_
 	bufferlen=5;
 	buffer=(char*)calloc(bufferlen,1);
 	caseless=false;
 	duplicate=false;
-#endif
 }
 
 StringSlice::~StringSlice()
 {
-#ifndef _USEQT5_
 	debugFree(&buffer,"~StringSlice buffer");
-#endif
 }
 
 /*! Return text between 'startstr' and 'endstr' EXCLUSIVE.
@@ -296,7 +292,6 @@ StringSlice::~StringSlice()
 */
 char* StringSlice::sliceBetween(char* src,char* startstr,char* endstr)
 {
-#ifndef _USEQT5_
 	char*	startptr;
 	char*	endptr;
 	char*	copyofstr;
@@ -348,7 +343,6 @@ char* StringSlice::sliceBetween(char* src,char* startstr,char* endstr)
 	buffer[(long)endptr-(long)startptr]=0;
 	debugFree(&copyofstr," StringSlice::sliceBetween copyofstr");
 	return(this->returnData(this->buffer));
-#endif
 }
 
 /*! Return text between 'startstr' and 'endstr' INCLUSIVE.
@@ -360,7 +354,6 @@ char* StringSlice::sliceBetween(char* src,char* startstr,char* endstr)
 */
 char* StringSlice::sliceInclude(char* src,char* startstr,char* endstr)
 {
-#ifndef _USEQT5_
 	char*	startptr;
 	char*	endptr;
 	char*	copyofstr;
@@ -415,7 +408,6 @@ char* StringSlice::sliceInclude(char* src,char* startstr,char* endstr)
 	buffer[(long)endptr+strlenend-(long)startptr]=0;
 	debugFree(&copyofstr,"StringSlice::sliceInclude copyofstr");
 	return(this->returnData(this->buffer));
-#endif
 }
 
 /*! Return 'len' bytes from 'start'.
@@ -427,7 +419,6 @@ char* StringSlice::sliceInclude(char* src,char* startstr,char* endstr)
 */
 char* StringSlice::sliceLen(char* src,int start,int len)
 {
-#ifndef _USEQT5_
 	char*	copyofstr;
 
 	this->error=NOERROR;
@@ -450,7 +441,6 @@ char* StringSlice::sliceLen(char* src,int start,int len)
 	buffer[len]=0;
 	debugFree(&copyofstr,"StringSlice::sliceLen copyofstr");
 	return(this->returnData(this->buffer));
-#endif
 }
 
 /*! Return string from 'start' to 'end' inclusive.
@@ -462,7 +452,6 @@ char* StringSlice::sliceLen(char* src,int start,int len)
 */  
 char* StringSlice::slice(char* src,int start,int end)
 {
-#ifndef _USEQT5_
 	char*	copyofstr;
 
 	this->error=NOERROR;
@@ -482,7 +471,6 @@ char* StringSlice::slice(char* src,int start,int end)
 	buffer[end-start+1]=0;
 	debugFree(&copyofstr,"StringSlice::slice copyofstr");
 	return(this->returnData(this->buffer));
-#endif
 }
 
 /*! Return 'len' bytes from the END of 'Needle' 
@@ -494,7 +482,6 @@ char* StringSlice::slice(char* src,int start,int end)
 */  
 char* StringSlice::sliceStrLen(char* src,char* startstr,int len)
 {
-#ifndef _USEQT5_
 	char*	ptr;
 	char*	copyofstr;
 
@@ -525,7 +512,6 @@ char* StringSlice::sliceStrLen(char* src,char* startstr,int len)
 	buffer[len]=0;
 	debugFree(&copyofstr,"StringSlice::sliceStrLen copyofstr");
 	return(this->returnData(this->buffer));
-#endif
 }
 
 /*! Return bool
@@ -534,9 +520,7 @@ char* StringSlice::sliceStrLen(char* src,char* startstr,int len)
 */  
 bool StringSlice::getDuplicate(void)
 {
-#ifndef _USEQT5_
 	return(this->duplicate);
-#endif
 }
 
 /*! Return 'Haystack' - 'Needle'
@@ -546,7 +530,6 @@ bool StringSlice::getDuplicate(void)
 */  
 char* StringSlice::deleteSlice(char* src,char* delstr)
 {
-#ifndef _USEQT5_
 	char*	ptr;
 	int		delstrlen;
 	int		srcstrlen;
@@ -581,7 +564,6 @@ char* StringSlice::deleteSlice(char* src,char* delstr)
 	strncpy(&buffer[(long)ptr-(long)copyofstr],(char*)((long)ptr+delstrlen),(long)copyofstr+srcstrlen-((long)ptr+delstrlen));
 	buffer[(long)ptr-(long)copyofstr+(long)copyofstr+srcstrlen-((long)ptr+delstrlen)]=0;
 	return(this->returnData(this->buffer));
-#endif
 }
 
 /*! Replace first occurence of 'Needle' in 'Haystack'.
@@ -592,7 +574,6 @@ char* StringSlice::deleteSlice(char* src,char* delstr)
 */  
 char* StringSlice::replaceSlice(char* src,char* findstr,char* replacestr)
 {
-#ifndef _USEQT5_
 	char*	ptr;
 	int		startreplace;
 	int		finalseglen;
@@ -633,7 +614,6 @@ char* StringSlice::replaceSlice(char* src,char* findstr,char* replacestr)
 	strncat(&buffer[strlen(buffer)],(char*)(long)ptr+strlen(findstr),finalseglen);
 	debugFree(&copyofstr,"StringSlice::replaceSlice copyofstr");
 	return(this->returnData(this->buffer));
-#endif
 }
 
 /*! Replace all occurences of 'Needle' in 'Haystack'.
@@ -644,8 +624,6 @@ char* StringSlice::replaceSlice(char* src,char* findstr,char* replacestr)
 */  
 char* StringSlice::replaceAllSlice(char* src,char* findstr,char* replacestr)
 {
-#ifndef _USEQT5_
-
 	const char*	result=NULL;
 	int			numresults=0;
 
@@ -664,7 +642,6 @@ char* StringSlice::replaceAllSlice(char* src,char* findstr,char* replacestr)
 		error=numresults;
 
 	return(this->returnData(this->buffer));
-#endif
 }
 
 /*! Whether ALL folowing operations are caseless or not.
@@ -674,9 +651,7 @@ char* StringSlice::replaceAllSlice(char* src,char* findstr,char* replacestr)
 */  
 void StringSlice::setCaseless(bool caseval)
 {
-#ifndef _USEQT5_
 	caseless=caseval;
-#endif
 }
 
 /*! Resize internal buffer if needed based on string length.
@@ -685,13 +660,11 @@ void StringSlice::setCaseless(bool caseval)
 */  
 void StringSlice::checkBufferLen(char* str)
 {
-#ifndef _USEQT5_
 	if(bufferlen<=strlen(str))
 		{
 			bufferlen=strlen(str)+1024;
 			buffer=(char*)realloc(buffer,bufferlen);
 		}
-#endif
 }
 
 /*! Resize internal buffer if needed based on value of size.
@@ -700,13 +673,11 @@ void StringSlice::checkBufferLen(char* str)
 */  
 void StringSlice::checkBufferLen(int size)
 {
-#ifndef _USEQT5_
 	if(bufferlen<=(unsigned)size)
 		{
 			bufferlen=size+1024;
 			buffer=(char*)realloc(buffer,bufferlen);
 		}
-#endif
 }
 
 /*! Copy str to internal buffer resizing as needed.
@@ -715,10 +686,8 @@ void StringSlice::checkBufferLen(int size)
 */  
 void StringSlice::copyToBuffer(const char* str)
 {
-#ifndef _USEQT5_
 	this->checkBufferLen((char*)str);
 	strcpy(buffer,str);
-#endif
 }
 
 /*! Get error code of last op.
@@ -726,9 +695,7 @@ void StringSlice::copyToBuffer(const char* str)
 */  
 int StringSlice::getResult(void)
 {
-#ifndef _USEQT5_
 	return(this->error);
-#endif
 }
 
 /*! Whether ALL folowing operations return a duplicated string or not.
@@ -737,9 +704,7 @@ int StringSlice::getResult(void)
 */  
 void StringSlice::setReturnDupString(bool want)
 {
-#ifndef _USEQT5_
 	duplicate=want;
-#endif
 }
 
 //returnData(char* str);
@@ -749,12 +714,10 @@ void StringSlice::setReturnDupString(bool want)
 */  
 char* StringSlice::returnData(char* str)
 {
-#ifndef _USEQT5_
 	if(duplicate==true)
 		return(strdup(buffer));
 	else
 		return(buffer);
-#endif
 }
 
 /*! Returns decoded HTML.
@@ -763,7 +726,6 @@ char* StringSlice::returnData(char* str)
 */  
 char* StringSlice::decodeHtml(char* src)
 {
-#ifndef _USEQT5_
 	char*	buf=(char*)calloc(strlen(src),1);
 	int		bufchar=0;
 	int		srcchar=0;
@@ -805,7 +767,6 @@ char* StringSlice::decodeHtml(char* src)
 	this->copyToBuffer(buf);
 	debugFree(&buf,"StringSlice::decodeHtml buf");
 	return(this->returnData(this->buffer));
-#endif
 }
 
 /*! Returns random name 'len' chars long.
@@ -814,7 +775,6 @@ char* StringSlice::decodeHtml(char* src)
 */  
 char* StringSlice::randomName(int len)
 {
-#ifndef _USEQT5_
 	this->checkBufferLen(len);
 	srand(time(0));
 
@@ -824,7 +784,6 @@ char* StringSlice::randomName(int len)
 
     this->buffer[len]=0;
     return(this->returnData(this->buffer));
-#endif
 }
 
 

@@ -375,7 +375,7 @@ AspellSpeller*	spellChecker=0;
 const char*		localeLang;
 
 HistoryClass*	history;
-StringSlice*	globalSlice;
+StringSlice*	globalSlice=NULL;
 
 unsigned int	shortCuts[NUMSHORTCUTS][2]=
 {
@@ -544,7 +544,6 @@ char*			statusMessage=NULL;
 //truncate string with elipses
 char* truncateWithElipses(char* str,unsigned int maxlen)
 {
-#ifndef _USEQT5_
 	char*	retstr;
 	char*	starttext;
 	char*	endtext;
@@ -569,7 +568,6 @@ char* truncateWithElipses(char* str,unsigned int maxlen)
 		}
 
 	return(retstr);
-#endif
 }
 
 void plugRunFunction(gpointer data,gpointer funcname)

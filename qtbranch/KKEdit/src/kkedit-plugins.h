@@ -142,7 +142,8 @@ struct pageStruct
 	char*				filePath;
 	char*				realFilePath;
 	char*				dirName;
-
+	char*				fileName;
+	char*				tabName;
 //	Widget*				pane;
 //	Widget*				pageWindow;
 //	Widget*				pageWindow2;
