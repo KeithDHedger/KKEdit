@@ -390,6 +390,19 @@ printf("triggered doOpenFile %i\n",(int)(long)data);
 		}
 	gtk_widget_destroy (dialog);
 	refreshMainWindow();
+#else
+
+	QStringList fileNames;
+
+	fileNames=QFileDialog::getOpenFileNames(mainWindow,gettext("Open File"),"","",0);
+	if (fileNames.count())
+		{
+			for (int j=0;j<fileNames.size();++j)
+				{
+					printf("%s\n",fileNames.at(j).toLocal8Bit().constData());
+					openFile(fileNames.at(j).toLocal8Bit().constData(),0,true);
+				}
+		}
 #endif
 }
 
@@ -1955,14 +1968,12 @@ printf("doShutdown %i\n",(int)(long)data);
 	delete_aspell_speller(spellChecker);
 #endif
 //TODO//
-//	g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
+	g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
 
 	asprintf(&command,"rm -rf %s",tmpFolderName);
 	system(command);
 	debugFree(&command,"doShutdown command");
 	system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
-printf("XXXXXXXXXX\n");
-
 #ifndef _USEQT5_
 	gtk_main_quit();
 #else

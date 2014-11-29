@@ -624,25 +624,26 @@ void appStart(GApplication  *application,gpointer data)
 int getWorkspaceNumber(void)
 {
 	int				retnum=666;
-//	GdkDisplay*		display;
-//	GdkWindow*		root_win;
-//	Atom			_net_current_desktop,type;
-//	int				format;
-//	unsigned long	n_items, bytes_after;
-//	unsigned char*	data_return=0;
-//
-//	display=gdk_screen_get_display(gdk_screen_get_default());
-//	root_win=gdk_screen_get_root_window(gdk_screen_get_default());
-//
-//	_net_current_desktop=gdk_x11_get_xatom_by_name_for_display(display,"_NET_CURRENT_DESKTOP");
-//
-//	XGetWindowProperty(GDK_DISPLAY_XDISPLAY(display),GDK_WINDOW_XID (root_win),_net_current_desktop,0,G_MAXLONG,False,XA_CARDINAL,&type,&format,&n_items,&bytes_after,&data_return);
-//
-//	if(type==XA_CARDINAL && format==32 && n_items>0)
-//		{
-//			retnum=(int)data_return[0];
-//			XFree(data_return);
-//		}
+	
+	GdkDisplay*		display;
+	GdkWindow*		root_win;
+	Atom			_net_current_desktop,type;
+	int				format;
+	unsigned long	n_items, bytes_after;
+	unsigned char*	data_return=0;
+
+	display=gdk_screen_get_display(gdk_screen_get_default());
+	root_win=gdk_screen_get_root_window(gdk_screen_get_default());
+
+	_net_current_desktop=gdk_x11_get_xatom_by_name_for_display(display,"_NET_CURRENT_DESKTOP");
+
+	XGetWindowProperty(GDK_DISPLAY_XDISPLAY(display),GDK_WINDOW_XID (root_win),_net_current_desktop,0,G_MAXLONG,False,XA_CARDINAL,&type,&format,&n_items,&bytes_after,&data_return);
+
+	if(type==XA_CARDINAL && format==32 && n_items>0)
+		{
+			retnum=(int)data_return[0];
+			XFree(data_return);
+		}
 	return retnum;
 }
 #endif
@@ -651,8 +652,6 @@ void qtAppStart(int argc, char **argv)
 {
 	int	w,h;
 
-//	g_application_hold(application);
-
 	setlocale(LC_ALL,"");
 	bindtextdomain("kkedit",LOCALEDIR);
 	textdomain("kkedit");
@@ -660,7 +659,6 @@ void qtAppStart(int argc, char **argv)
 
 	init();
 	
-//	buildMainGui();
 	buildMainGuiQT();
 
 //TODO//
@@ -690,17 +688,6 @@ void qtAppStart(int argc, char **argv)
 //	gtk_paned_set_position((GtkPaned*)secondWindowVPane,topVPaneHite);
 //	gtk_paned_set_position((GtkPaned*)mainWindowVPane,bottomVPaneHite);
 //
-//	gtk_widget_hide(toolOutVBox);
-//	if(getuid()!=0)
-//		{
-//			gtk_window_set_default_icon_name(PACKAGE);
-//			gtk_window_set_icon_name((GtkWindow*)window,PACKAGE);
-//		}
-//	else
-//		{
-//			gtk_window_set_default_icon_name(PACKAGE "Root");
-//			gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
-//		}
 
 //TODO//
 	setSensitive();
@@ -709,7 +696,6 @@ void qtAppStart(int argc, char **argv)
 //	if((timeToNag==true) && (autoCheck==true))
 //		doNagStuff();
 //
-//	gtk_widget_set_size_request(window,100,100);
 }
 
 int main (int argc, char **argv)
@@ -739,7 +725,7 @@ int main (int argc, char **argv)
 	if(safeflag==true)
 		{
 			singleOverRide=true;
-			loadPluginsFlag=false; 
+			loadPluginsFlag=false;
 		}
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
