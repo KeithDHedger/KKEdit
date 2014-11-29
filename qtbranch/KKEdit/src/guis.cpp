@@ -1457,7 +1457,7 @@ QAction* makeMenuItem(Widget* menu,const char* name,const QKeySequence key,const
 #ifdef _USEQT5_
 void buildMainGuiQT(void)
 {
-	window=new QWidget;
+	mainWindow=new QWidget;
 
 	mainWindowVBox=new QVBoxLayout();
 	mainTopUserVBox=new QVBoxLayout;
@@ -1467,9 +1467,9 @@ void buildMainGuiQT(void)
 	mainBottomUserVBox=new QVBoxLayout;
 	mainWindowHBox=new QHBoxLayout;
 
-	window->setGeometry(windowX,windowY,windowWidth,windowHeight);
+	mainWindow->setGeometry(windowX,windowY,windowWidth,windowHeight);
 
-	window->setLayout(mainWindowVBox);
+	mainWindow->setLayout(mainWindowVBox);
 	notebook=new QTabWidget;
 	notebook->setDocumentMode(true);
 	notebook->setTabsClosable(true);
@@ -1668,7 +1668,7 @@ void buildMainGuiQT(void)
 	mainWindowVBox->addWidget(menuBar);
 	mainWindowVBox->addWidget(notebook);
 
- 	window->show();
+ 	mainWindow->show();
 }
 #endif
 
@@ -1691,16 +1691,16 @@ void buildMainGui(void)
 	mainWindowHPane=gtk_hpaned_new();
 	secondWindowHPane=gtk_hpaned_new();
 
-	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_default_size((GtkWindow*)window,windowWidth,windowHeight);
+	mainWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_default_size((GtkWindow*)mainWindow,windowWidth,windowHeight);
 	if(windowX!=-1 && windowY!=-1)
-		gtk_window_move((GtkWindow *)window,windowX,windowY);
+		gtk_window_move((GtkWindow *)mainWindow,windowX,windowY);
 
-	g_signal_connect(G_OBJECT(window),"delete-event",G_CALLBACK(doShutdown),NULL);
-	g_signal_connect(G_OBJECT(window),"key-press-event",G_CALLBACK(keyShortCut),NULL);
+	g_signal_connect(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(doShutdown),NULL);
+	g_signal_connect(G_OBJECT(mainWindow),"key-press-event",G_CALLBACK(keyShortCut),NULL);
 
 	accgroup=gtk_accel_group_new();
-	gtk_window_add_accel_group((GtkWindow*)window,accgroup);
+	gtk_window_add_accel_group((GtkWindow*)mainWindow,accgroup);
 
 	notebook=(GtkNotebook*)gtk_notebook_new();
 	gtk_notebook_set_scrollable(notebook,true);
@@ -2163,7 +2163,7 @@ void buildMainGui(void)
 	gtk_container_add(GTK_CONTAINER(toolOutVBox),(GtkWidget*)mainWindowScrollbox);
 
 //add main vbox to window
-	gtk_container_add((GtkContainer*)window,mainWindowVBox);
+	gtk_container_add((GtkContainer*)mainWindow,mainWindowVBox);
 //addmenuBar
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,menuBar,false,false,0);
 //add toolbar
@@ -2223,7 +2223,7 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->leftUserBox=mainLeftUserVBox;
 	globalPlugins->globalPlugData->rightUserBox=mainRightUserVBox;
 	globalPlugins->globalPlugData->bottomUserBox=mainBottomUserVBox;
-	globalPlugins->globalPlugData->mainWindow=window;
+	globalPlugins->globalPlugData->mainWindow=mainWindow;
 	globalPlugins->globalPlugData->notebook=notebook;
 	globalPlugins->globalPlugData->mainWindowHPane=mainWindowHPane;
 
@@ -2255,7 +2255,7 @@ void buildFindReplace(void)
 	GtkWidget*	hbox;
 	GtkWidget*	item;
 
-	findReplaceDialog=gtk_dialog_new_with_buttons(gettext("Find/Replace"),(GtkWindow*)window, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_GO_FORWARD,FINDNEXT,GTK_STOCK_GO_BACK,FINDPREV,gettext("Replace"),REPLACE,NULL);
+	findReplaceDialog=gtk_dialog_new_with_buttons(gettext("Find/Replace"),(GtkWindow*)mainWindow, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_GO_FORWARD,FINDNEXT,GTK_STOCK_GO_BACK,FINDPREV,gettext("Replace"),REPLACE,NULL);
 	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,GTK_RESPONSE_OK);
 	g_signal_connect(G_OBJECT(findReplaceDialog),"response",G_CALLBACK(doFindReplace),NULL);
 	content_area=gtk_dialog_get_content_area(GTK_DIALOG(findReplaceDialog));
@@ -2418,7 +2418,7 @@ int showFunctionEntry(void)
 	GtkWidget*	content_area;
 	GtkWidget*	entrybox;
 
-	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,gettext("Enter Function Name"));
+	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,gettext("Enter Function Name"));
 
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OK,GTK_RESPONSE_YES,NULL);
 	gtk_window_set_title(GTK_WINDOW(dialog),gettext("Find Function"));

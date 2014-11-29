@@ -11,7 +11,7 @@
 VISIBLE bool	sessionBusy=false;
 
 #ifndef _USEQT5_
-GtkWidget*		window=NULL;
+//GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;
 GtkNotebook*	notebook=NULL;
 GApplication*	mainApp;
@@ -21,7 +21,7 @@ GApplication*	mainApp;
 GtkWidget*		menuItemOpen=NULL;
 #else
 //TODO//
-QWidget*		window=NULL;
+//QWidget*		window=NULL;
 QTabWidget*		notebook=NULL;
 //QMenuBar*		menubar=NULL;
 //QMenu*			menufile;
@@ -66,6 +66,8 @@ GtkWidget*		liveSearchWidget;
 //TODO//
 #endif
 
+//main window
+Widget*			mainWindow;
 //menubar
 Widget*			menuBar;
 //file menu

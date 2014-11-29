@@ -161,13 +161,13 @@ extern GApplication*	mainApp;
 #endif
 
 #ifndef _USEQT5_
-extern GtkWidget*		window;
+//extern GtkWidget*		window;
 extern GtkAccelGroup*	accgroup;
 extern GtkNotebook*		notebook;
 
 #else
 //TODO//
-extern QWidget*			window;
+//extern QWidget*			window;
 extern QTabWidget*		notebook;
 #endif
 
@@ -213,6 +213,8 @@ extern QAction*			menuItemOpen;
 
 #endif
 
+//main window
+extern Widget*			mainWindow;
 //menubar
 extern Widget*			menuBar;
 //file menu

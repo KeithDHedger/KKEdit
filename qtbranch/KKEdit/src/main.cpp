@@ -647,6 +647,71 @@ int getWorkspaceNumber(void)
 }
 #endif
 
+void qtAppStart(int argc, char **argv)
+{
+	int	w,h;
+
+//	g_application_hold(application);
+
+	setlocale(LC_ALL,"");
+	bindtextdomain("kkedit",LOCALEDIR);
+	textdomain("kkedit");
+	bind_textdomain_codeset("kkedit","UTF-8");
+
+	init();
+	
+//	buildMainGui();
+	buildMainGuiQT();
+
+//TODO//
+//	if(onExitSaveSession==true)
+//		restoreSession(NULL,(void*)restoreBookmarks);
+
+//	refreshMainWindow();
+
+//TODO//
+//	buildFindReplace();
+//TODO//
+//	for(unsigned int j=0; j<g_slist_length(findList); j++)
+//		gtk_combo_box_text_append_text((GtkComboBoxText*)findDropBox,(const char*)g_slist_nth_data(findList,j));
+
+//TODO//
+//	for(unsigned int j=0; j<g_slist_length(replaceList); j++)
+//		gtk_combo_box_text_append_text((GtkComboBoxText*)replaceDropBox,(const char*)g_slist_nth_data(replaceList,j));
+
+//TODO//
+//#ifdef _BUILDDOCVIEWER_
+//	buildGtkDocViewer();
+//#endif
+
+//	gtk_window_get_size((GtkWindow*)window,&w,&h);
+//	gtk_paned_set_position((GtkPaned*)mainVPane,toolOutHeight);
+//
+//	gtk_paned_set_position((GtkPaned*)secondWindowVPane,topVPaneHite);
+//	gtk_paned_set_position((GtkPaned*)mainWindowVPane,bottomVPaneHite);
+//
+//	gtk_widget_hide(toolOutVBox);
+//	if(getuid()!=0)
+//		{
+//			gtk_window_set_default_icon_name(PACKAGE);
+//			gtk_window_set_icon_name((GtkWindow*)window,PACKAGE);
+//		}
+//	else
+//		{
+//			gtk_window_set_default_icon_name(PACKAGE "Root");
+//			gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
+//		}
+
+//TODO//
+	setSensitive();
+//
+//
+//	if((timeToNag==true) && (autoCheck==true))
+//		doNagStuff();
+//
+//	gtk_widget_set_size_request(window,100,100);
+}
+
 int main (int argc, char **argv)
 {
 	int				status;
@@ -698,10 +763,16 @@ int main (int argc, char **argv)
 
 	g_object_unref(mainApp);
 #else
-	QApplication	app(argc,argv);
+	QApplication app(argc,argv);
 
-	buildMainGuiQT();
-	app.exec();
+	qtAppStart(argc,argv);
+
+	if(getuid()!=0)
+		app.setWindowIcon(QIcon::fromTheme(PACKAGE,QIcon(DATADIR"/pixmaps/KKEdit.png")));
+	else
+		app.setWindowIcon(QIcon::fromTheme(PACKAGE "Root",QIcon(DATADIR"/pixmaps/KKEditRoot.png")));
+
+	status=app.exec();
 #endif
 	delete history;
 	delete globalSlice;
