@@ -19,6 +19,10 @@ void goToDefine(functionData* fdata)
 	if(fdata->intab==-1)
 		{
 			openFile(fdata->file,fdata->line-1,true);
+			page=getPageStructPtr(gtk_notebook_get_n_pages(notebook)-1);
+			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+			buf->scroll2Line((GtkTextView*)page->view,fdata->line-2);
+			delete buf;
 		}
 	else
 		{
