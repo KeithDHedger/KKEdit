@@ -1,11 +1,11 @@
 
 AM_CPPFLAGS =	-I$(top_srcdir) \
 			$(GTK_CFLAGS) \
+			$(X11_CFLAGS) \
 			$(GTKSRC_CFLAGS) \
 			$(GLIB_CFLAGS) \
 			$(QT_CFLAGS) \
 			$(QTWIDGETS_CFLAGS) \
-			$(UNIQ_CFLAGS) \
 			$(WEBKIT_CFLAGS) \
 			$(GMODULE_CFLAGS) \
 			-DPREFIX=\""${prefix}\"" \
@@ -18,10 +18,10 @@ AM_CPPFLAGS =	-I$(top_srcdir) \
 			-fPIC
 
 LIBS =	$(GTK_LIBS) \
+		$(X11_LIBS) \
 		$(QTWIDGETS_LIBS) \
 		$(GLIB_LIBS) \
 		$(GTKSRC_LIBS) \
-		$(UNIQ_LIBS) \
 		$(WEBKIT_LIBS) \
 		$(GMODULE_LIBS) \
 		$(ASPELL_LIBS)

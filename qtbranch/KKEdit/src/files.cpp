@@ -193,7 +193,7 @@ void resetAllFilePrefs(void)
 
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
-	for(int loop=0; loop<gtk_notebook_get_n_pages(notebook); loop++)
+	for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 		{
 			page=getPageStructPtr(loop);
 			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
@@ -269,7 +269,7 @@ bool getSaveFile(void)
 	GtkWidget*	dialog;
 	bool		retval=false;
 
-	dialog=gtk_file_chooser_dialog_new(gettext("Save File"),(GtkWindow*)window, GTK_FILE_CHOOSER_ACTION_SAVE,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_SAVE,GTK_RESPONSE_ACCEPT,NULL);
+	dialog=gtk_file_chooser_dialog_new(gettext("Save File"),(GtkWindow*)mainWindow, GTK_FILE_CHOOSER_ACTION_SAVE,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_SAVE,GTK_RESPONSE_ACCEPT,NULL);
 
 	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER (dialog),TRUE);
 	if(saveFileName!=NULL)
@@ -320,7 +320,7 @@ printf("save %i\n",(int)(long)data);
 				}
 			else
 				{
-					dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Can't save file '%s' :("),page->filePath);
+					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Can't save file '%s' :("),page->filePath);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 					return(false);
@@ -360,7 +360,7 @@ printf("save %i\n",(int)(long)data);
 				}
 			else
 				{
-					dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Can't save file '%s' :("),page->filePath);
+					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Can't save file '%s' :("),page->filePath);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 					return(false);
@@ -371,7 +371,7 @@ printf("save %i\n",(int)(long)data);
 		}
 	if(page->lang==NULL)
 		setLanguage(page);
-	switchPage(notebook,page->tabVbox,currentTabNumber,NULL);
+	switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
 	setSensitive();
 
 	globalPlugins->globalPlugData->page=page;
@@ -486,7 +486,7 @@ printf("saveSession %i\n",(int)(long)data);
 	fd=fopen(filename,"w");
 	if (fd!=NULL)
 		{
-			for(int loop=0; loop<gtk_notebook_get_n_pages(notebook); loop++)
+			for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 				{
 					page=getPageStructPtr(loop);
 					mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
@@ -551,7 +551,7 @@ printf("restoreSession %i\n",(int)(long)data);
 							fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 							page=getPageStructPtr(currentPage-1);
-							gtk_notebook_set_current_page(notebook,currentPage-1);
+							gtk_notebook_set_current_page(mainNotebook,currentPage-1);
 							while(intarg!=-1)
 								{
 									if((bool)data==true)
@@ -582,7 +582,7 @@ int showFileChanged(char* filename)
 	char*		message;
 
 	asprintf(&message,gettext("File %s Has Changed on disk\nDo you want to reload it?"),filename);
-	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
+	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
 
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_REFRESH,GTK_RESPONSE_YES,NULL);
 	gtk_window_set_title(GTK_WINDOW(dialog),gettext("Warning file changed!"));
@@ -762,11 +762,53 @@ pageStruct* makeNewPage(void)
 #endif
 }
 
+/*
+void MainWindow::loadFile(const QString &fileName)
+//! [42] //! [43]
+{
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        QMessageBox::warning(this, tr("Application"),
+                             tr("Cannot read file %1:\n%2.")
+                             .arg(fileName)
+                             .arg(file.errorString()));
+        return;
+    }
+
+    QTextStream in(&file);
+#ifndef QT_NO_CURSOR
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+#endif
+    textEdit->setPlainText(in.readAll());
+#ifndef QT_NO_CURSOR
+    QApplication::restoreOverrideCursor();
+#endif
+
+    setCurrentFile(fileName);
+    statusBar()->showMessage(tr("File loaded"), 2000);
+}
+
+*/
 VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
 printf("openfile %s\n",filepath);
 #ifdef _USEQT5_
+	DocumentClass* doc;
+	QFile file(filepath);
 
+	if (!file.open(QFile::ReadOnly | QFile::Text))
+		{
+			QMessageBox::warning(mainWindow,"Open File",QString("Cannot read file %1").arg(filepath));
+			return(false);
+		}
+
+	doc=new DocumentClass();
+	QTextStream in(&file);
+	doc->setPlainText(in.readAll());
+	doc->setFilename(strdup(filepath));
+	((QTabWidget*)mainNotebook)->addTab(doc,doc->getFilename());
+
+	
 #else
 	GtkTextIter				iter;
 	GtkWidget*				label;
@@ -808,14 +850,14 @@ printf("openfile %s\n",filepath);
 		}
 
 
-	for(int j=0; j<gtk_notebook_get_n_pages(notebook); j++)
+	for(int j=0; j<gtk_notebook_get_n_pages(mainNotebook); j++)
 		{
 			page=getPageStructPtr(j);
 			if(noDuplicates==true)
 				{
 					if((page->realFilePath!=NULL) && ((strcmp(page->realFilePath,filepathcopy)==0) ||(strcmp(page->filePath,filepathcopy)==0)))
 						{
-							gtk_notebook_set_current_page(notebook,j);
+							gtk_notebook_set_current_page(mainNotebook,j);
 							return(true);
 						}
 				}
@@ -825,7 +867,7 @@ printf("openfile %s\n",filepath);
 		{
 			if(warn==true)
 				{
-					dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("File '%s' doesn't exist :("),filepathcopy);
+					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("File '%s' doesn't exist :("),filepathcopy);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
@@ -836,7 +878,7 @@ printf("openfile %s\n",filepath);
 		{
 			if(warn==true)
 				{
-					dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Can't open file '%s' :("),filepath);
+					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Can't open file '%s' :("),filepath);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
@@ -867,7 +909,7 @@ printf("openfile %s\n",filepath);
 		{
 			if(warn==true)
 				{
-					dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Can't open file '%s' :("),filepath);
+					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Can't open file '%s' :("),filepath);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
@@ -930,9 +972,9 @@ printf("openfile %s\n",filepath);
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
 	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
 
-	gtk_notebook_append_page(notebook,page->tabVbox,label);
-	gtk_notebook_set_tab_reorderable(notebook,page->tabVbox,true);
-	gtk_notebook_set_current_page(notebook,currentPage);
+	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
+	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
+	gtk_notebook_set_current_page(mainNotebook,currentPage);
 	currentPage++;
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 
@@ -940,7 +982,7 @@ printf("openfile %s\n",filepath);
 
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
-	gtk_widget_show_all((GtkWidget*)notebook);
+	gtk_widget_show_all((GtkWidget*)mainNotebook);
 
 	setToobarSensitive();
 
@@ -961,30 +1003,20 @@ printf("openfile %s\n",filepath);
 #endif
 }
 
-//#ifndef _USEQT5_
-//VISIBLE void newFile(GtkWidget* widget,gpointer data)
-//#else
 //TODO//
 VISIBLE void newFile(Widget* widget,uPtr data)
-//#endif
 {
 printf("triggered newfile id %i\n",data);
 #ifdef _USEQT5_
-	QWidget*		label;
-	pageStruct*		page;
 
-	QTextEdit*	text=new QTextEdit;
+	DocumentClass*	doc;
+	char*			filename;
 
-	page=makeNewPage();
-	page->tabVbox=new QVBoxLayout();
-	page->filePath=NULL;
-	page->dirName=NULL;
-
-	asprintf(&page->fileName,"%s-%i",gettext("Untitled"),untitledNumber);
+	doc=new DocumentClass();
+	asprintf(&filename,"%s-%i",gettext("Untitled"),untitledNumber);
 	untitledNumber++;
-
-	label=makeNewTab(page->fileName,NULL,page);
-	notebook->addTab(text,page->fileName);
+	doc->setFilename(filename);
+	((QTabWidget*)mainNotebook)->addTab(doc,doc->getFilename());
 	
 #else
 	GtkTextIter	iter;
@@ -1010,12 +1042,12 @@ printf("triggered newfile id %i\n",data);
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
 	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
 
-	gtk_notebook_append_page(notebook,page->tabVbox,label);
-	gtk_notebook_set_tab_reorderable(notebook,page->tabVbox,true);
-	gtk_notebook_set_current_page(notebook,currentPage);
+	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
+	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
+	gtk_notebook_set_current_page(mainNotebook,currentPage);
 	setToobarSensitive();
 	currentPage++;
-	gtk_widget_show_all((GtkWidget*)notebook);
+	gtk_widget_show_all((GtkWidget*)mainNotebook);
 	setFilePrefs(page);
 
 	globalPlugins->globalPlugData->page=page;

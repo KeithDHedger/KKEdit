@@ -22,7 +22,7 @@ GtkWidget*		menuItemOpen=NULL;
 #else
 //TODO//
 //QWidget*		window=NULL;
-QTabWidget*		notebook=NULL;
+//QTabWidget*		notebook=NULL;
 //QMenuBar*		menubar=NULL;
 //QMenu*			menufile;
 //QMenu*			menuedit;
@@ -68,6 +68,8 @@ GtkWidget*		liveSearchWidget;
 
 //main window
 Widget*			mainWindow;
+Widget*			globalPlugMenu;
+Widget*			mainNotebook;
 //menubar
 Widget*			menuBar;
 //file menu

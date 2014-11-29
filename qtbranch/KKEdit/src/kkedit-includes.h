@@ -6,6 +6,7 @@
  *
 */
 
+
 #ifndef _KKEDIT_INCLUDES_
 #define _KKEDIT_INCLUDES_
 
@@ -13,7 +14,6 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <glib.h>
-#include <ctype.h>
 #include <unistd.h>
 #include <sys/types.h>
 
@@ -29,11 +29,8 @@
 
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <gtksourceview/gtksourceprintcompositor.h>
+#include <ctype.h>
 #include <gdk/gdkkeysyms.h>
-#include <unique/unique.h>
-#else
-	#include <QtWidgets>
-	#include <QAction>
 #endif
 
 #include <libgen.h>
@@ -67,14 +64,12 @@
 #include "encoding.h"
 #include "completion.h"
 
-#ifdef _USEQT5_
-#include "QT_menuitem.h"
-#endif
-
 #define VISIBLE __attribute__((visibility("default")))
 #define PROTECTED __attribute__((visibility("protected")))
 
+#ifdef _USEQT5_
+#include "QT_menuitem.h"
+#include "QT_document.h"
 #endif
 
-
-
+#endif

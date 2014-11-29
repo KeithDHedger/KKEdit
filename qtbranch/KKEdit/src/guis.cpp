@@ -1387,50 +1387,50 @@ void addRecentToMenu(void)
 #endif
 }
 
-#ifndef _USEQT5_
-GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,char hotkey,const char* name,int setimage,const char* menulabel,void* userdata)
-{
-	GtkWidget*	widg;
-	GtkWidget*	image;
+//#ifndef _USEQT5_
+//GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,char hotkey,const char* name,int setimage,const char* menulabel,void* userdata)
+//{
+//	GtkWidget*	widg;
+//	GtkWidget*	image;
+//
+//	switch(setimage)
+//		{
+//			case STOCKMENU:
+//				widg=gtk_image_menu_item_new_from_stock(stocklabel,NULL);
+//				break;
+//
+//			case IMAGEMENU:
+//				widg=gtk_image_menu_item_new_with_label(menulabel);
+//				image=gtk_image_new_from_stock(stocklabel,GTK_ICON_SIZE_MENU);
+//				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
+//				break;
+//
+//			case PIXMAPMENU:
+//				widg=gtk_image_menu_item_new_with_label(menulabel);
+//				image=gtk_image_new_from_file(stocklabel);
+//				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
+//				break;
+//
+//			default:
+//				widg=gtk_menu_item_new_with_label(stocklabel);
+//		}
+//
+//	gtk_menu_shell_append(GTK_MENU_SHELL(parent),widg);
+//	g_signal_connect(G_OBJECT(widg),"activate",G_CALLBACK(function),userdata);
+//	
+//	if(hotkey>0)
+//		gtk_widget_add_accelerator((GtkWidget *)widg,"activate",accgroup,hotkey,GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+//
+//	if(hotkey<0)
+//		gtk_widget_add_accelerator((GtkWidget *)widg,"activate",accgroup,hotkey*-1,(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
+//
+//	gtk_widget_set_name(widg,name);
+//	return(widg);
+//
+//}
+//#endif
 
-	switch(setimage)
-		{
-			case STOCKMENU:
-				widg=gtk_image_menu_item_new_from_stock(stocklabel,NULL);
-				break;
-
-			case IMAGEMENU:
-				widg=gtk_image_menu_item_new_with_label(menulabel);
-				image=gtk_image_new_from_stock(stocklabel,GTK_ICON_SIZE_MENU);
-				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
-				break;
-
-			case PIXMAPMENU:
-				widg=gtk_image_menu_item_new_with_label(menulabel);
-				image=gtk_image_new_from_file(stocklabel);
-				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
-				break;
-
-			default:
-				widg=gtk_menu_item_new_with_label(stocklabel);
-		}
-
-	gtk_menu_shell_append(GTK_MENU_SHELL(parent),widg);
-	g_signal_connect(G_OBJECT(widg),"activate",G_CALLBACK(function),userdata);
-	
-	if(hotkey>0)
-		gtk_widget_add_accelerator((GtkWidget *)widg,"activate",accgroup,hotkey,GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-
-	if(hotkey<0)
-		gtk_widget_add_accelerator((GtkWidget *)widg,"activate",accgroup,hotkey*-1,(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
-
-	gtk_widget_set_name(widg,name);
-	return(widg);
-
-}
-#endif
-
-typedef void (*func_ptr)(int data);
+//typedef void (*func_ptr)(int data);
 
 #ifdef _USEQT5_
 QAction* makeMenuItem(Widget* menu,const char* name,const QKeySequence key,const char* iconname,const char* widgetname,menuCallbackVoid ptrvoid,menuCallbackBool ptrbool,int data)
@@ -1451,10 +1451,7 @@ QAction* makeMenuItem(Widget* menu,const char* name,const QKeySequence key,const
 	
 	return(menuitem);
 }
-#endif
 
-
-#ifdef _USEQT5_
 void buildMainGuiQT(void)
 {
 	mainWindow=new QWidget;
@@ -1470,9 +1467,10 @@ void buildMainGuiQT(void)
 	mainWindow->setGeometry(windowX,windowY,windowWidth,windowHeight);
 
 	mainWindow->setLayout(mainWindowVBox);
-	notebook=new QTabWidget;
-	notebook->setDocumentMode(true);
-	notebook->setTabsClosable(true);
+
+	mainNotebook=new QTabWidget;
+	((QTabWidget*)mainNotebook)->setDocumentMode(true);
+	((QTabWidget*)mainNotebook)->setTabsClosable(true);
 
 	menuBar=new QMenuBar;
 //file menu
@@ -1666,19 +1664,60 @@ void buildMainGuiQT(void)
 ///////////////////////////////////////////
 
 	mainWindowVBox->addWidget(menuBar);
-	mainWindowVBox->addWidget(notebook);
+	mainWindowVBox->addWidget(mainNotebook);
 
  	mainWindow->show();
 }
 #endif
 
 #ifndef _USEQT5_
+GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,char hotkey,const char* name,int setimage,const char* menulabel,void* userdata)
+{
+	GtkWidget*	widg;
+	GtkWidget*	image;
+
+	switch(setimage)
+		{
+			case STOCKMENU:
+				widg=gtk_image_menu_item_new_from_stock(stocklabel,NULL);
+				break;
+
+			case IMAGEMENU:
+				widg=gtk_image_menu_item_new_with_label(menulabel);
+				image=gtk_image_new_from_stock(stocklabel,GTK_ICON_SIZE_MENU);
+				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
+				break;
+
+			case PIXMAPMENU:
+				widg=gtk_image_menu_item_new_with_label(menulabel);
+				image=gtk_image_new_from_file(stocklabel);
+				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
+				break;
+
+			default:
+				widg=gtk_menu_item_new_with_label(stocklabel);
+		}
+
+	gtk_menu_shell_append(GTK_MENU_SHELL(parent),widg);
+	g_signal_connect(G_OBJECT(widg),"activate",G_CALLBACK(function),userdata);
+	
+	if(hotkey>0)
+		gtk_widget_add_accelerator((GtkWidget *)widg,"activate",accgroup,hotkey,GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+
+	if(hotkey<0)
+		gtk_widget_add_accelerator((GtkWidget *)widg,"activate",accgroup,hotkey*-1,(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
+
+	gtk_widget_set_name(widg,name);
+	return(widg);
+
+}
+
 void buildMainGui(void)
 {
 	GtkWidget*		menuitem;
 	GtkWidget*		menu;
-	GtkWidget*		image;
 	GtkWidget*		menurecent;
+	GtkWidget*		plugsubmenu=NULL;
 
 	mainWindowVBox=gtk_vbox_new(false,0);
 	mainTopUserVBox=gtk_vbox_new(false,0);
@@ -1702,10 +1741,10 @@ void buildMainGui(void)
 	accgroup=gtk_accel_group_new();
 	gtk_window_add_accel_group((GtkWindow*)mainWindow,accgroup);
 
-	notebook=(GtkNotebook*)gtk_notebook_new();
-	gtk_notebook_set_scrollable(notebook,true);
-	gtk_signal_connect(GTK_OBJECT(notebook),"switch-page",G_CALLBACK(switchPage),NULL);
-	gtk_signal_connect(GTK_OBJECT(notebook),"page-reordered",G_CALLBACK(switchPage),NULL);
+	mainNotebook=(GtkNotebook*)gtk_notebook_new();
+	gtk_notebook_set_scrollable(mainNotebook,true);
+	g_signal_connect(G_OBJECT(mainNotebook),"switch-page",G_CALLBACK(switchPage),NULL);
+	g_signal_connect(G_OBJECT(mainNotebook),"page-reordered",G_CALLBACK(switchPage),NULL);
 
 	menuBar=gtk_menu_bar_new();
 	toolBarBox=gtk_hbox_new(true,0);
@@ -1725,66 +1764,27 @@ void buildMainGui(void)
 	gtk_menu_item_set_use_underline((GtkMenuItem*)fileMenu,true);
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMenu),menu);
+
 //new
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newFile),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'N',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(menuitem,NEWMENUNAME);
-
+	menuitem=makeMenuItem(GTK_STOCK_NEW,menu,(void*)newFile,'N',NEWMENUNAME,STOCKMENU,NULL,NULL);
 //open
-	menuItemOpen=gtk_image_menu_item_new_from_stock(GTK_STOCK_OPEN,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuItemOpen);
-	gtk_signal_connect(GTK_OBJECT(menuItemOpen),"activate",G_CALLBACK(doOpenFile),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)menuItemOpen,"activate",accgroup,'O',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(menuitem,OPENMENUNAME);
-
+	menuItemOpen=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)doOpenFile,'O',OPENMENUNAME,STOCKMENU,NULL,NULL);
 //open as hexdump
-	menuitem=gtk_image_menu_item_new_with_label(gettext("Open As Hexdump"));
-	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(openAsHexDump),NULL);
-	gtk_widget_set_name(menuitem,HEXDUMPMENUNAME);
+	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)openAsHexDump,0,HEXDUMPMENUNAME,IMAGEMENU,gettext("Open As Hexdump"),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //extras
-	menuitem=gtk_image_menu_item_new_with_label(gettext("New Admin Editor"));
-	image=gtk_image_new_from_file(DATADIR"/pixmaps/ROOTKKEdit.png");
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newEditor),(void*)1);
-	gtk_widget_set_name(menuitem,NEWADMINMENUNAME);
-
-	menuitem=gtk_image_menu_item_new_with_label(gettext("New Editor"));
-	image=gtk_image_new_from_file(DATADIR"/pixmaps/MenuKKEdit.png");
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newEditor),(void*)2);
-	gtk_widget_set_name(menuitem,NEWEDITORMENUNAME);
+	menuitem=makeMenuItem(DATADIR"/pixmaps/ROOTKKEdit.png",menu,(void*)newEditor,0,NEWADMINMENUNAME,PIXMAPMENU,gettext("New Admin Editor"),(void*)1);
+	menuitem=makeMenuItem(DATADIR"/pixmaps/MenuKKEdit.png",menu,(void*)newEditor,0,NEWEDITORMENUNAME,PIXMAPMENU,gettext("New Editor"),(void*)2);
 
 	if(gotManEditor==0)
-		{
-			image=gtk_image_new_from_file(DATADIR"/pixmaps/ManPageEditor.png");
-			menuitem=gtk_image_menu_item_new_with_label(gettext("Manpage Editor"));
-			gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newEditor),(void*)3);
-			gtk_widget_set_name(menuitem,MANEDITORMENUNAME);
-		}
+		menuitem=makeMenuItem(DATADIR"/pixmaps/ManPageEditor.png",menu,(void*)newEditor,0,MANEDITORMENUNAME,PIXMAPMENU,gettext("Manpage Editor"),(void*)3);
 
 //doxy
 	if(gotDoxygen==0)
-		{
-			menuitem=gtk_image_menu_item_new_with_label(gettext("Build Documentation"));
-			image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
-			gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doDoxy),(void*)1);
-			gtk_widget_set_name(menuitem,DOXYBUILDMENUNAME);
-		}
+		menuitem=makeMenuItem(GTK_STOCK_COPY,menu,(void*)doDoxy,0,DOXYBUILDMENUNAME,IMAGEMENU,gettext("Build Documentation"),(void*)1);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -1801,90 +1801,42 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //save
-	saveMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),saveMenu);
-	gtk_signal_connect(GTK_OBJECT(saveMenu),"activate",G_CALLBACK(saveFile),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)saveMenu,"activate",accgroup,'S',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(saveMenu,SAVEMENUNAME);
+	saveMenu=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveFile,'S',SAVEMENUNAME,STOCKMENU,NULL,NULL);
 //savas
-	saveAsMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE_AS,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),saveAsMenu);
-	gtk_signal_connect(GTK_OBJECT(saveAsMenu),"activate",G_CALLBACK(saveFile),(void*)1);
-	gtk_widget_add_accelerator((GtkWidget *)saveAsMenu,"activate",accgroup,'S',(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
-	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
-	gtk_widget_set_name(saveAsMenu,SAVEASMENUNAME);
+	saveAsMenu=makeMenuItem(GTK_STOCK_SAVE_AS,menu,(void*)saveFile,-'S',SAVEASMENUNAME,STOCKMENU,NULL,(void*)1);
 //save all
-	saveAllMenu=gtk_image_menu_item_new_with_label(gettext("Save All"));
-	image=gtk_image_new_from_stock(GTK_STOCK_SAVE,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)saveAllMenu,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),saveAllMenu);
-	gtk_signal_connect(GTK_OBJECT(saveAllMenu),"activate",G_CALLBACK(doSaveAll),NULL);
-	gtk_widget_set_name(saveAllMenu,SAVEALLMENUNAME);
+	saveAllMenu=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)doSaveAll,0,SAVEALLMENUNAME,IMAGEMENU,gettext("Save All"),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //save session
-	image=gtk_image_new_from_stock(GTK_STOCK_SAVE,GTK_ICON_SIZE_MENU);
-	menuitem=gtk_image_menu_item_new_with_label(gettext("Save Session"));
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(saveSession),(void*)false);
-	gtk_widget_set_name(menuitem,SAVESESSIONMENUNAME);
+	menuitem=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveSession,0,SAVESESSIONMENUNAME,IMAGEMENU,gettext("Save Session"),(void*)false);
 //restore session
-	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
-	menuitem=gtk_image_menu_item_new_with_label(gettext("Restore Session"));
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(restoreSession),(void*)false);
-	gtk_widget_set_name(menuitem,RESTORESESSIONMENUNAME);
+	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONMENUNAME,IMAGEMENU,gettext("Restore Session"),(void*)false);
 //restore session and bookmarks
-	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
-	menuitem=gtk_image_menu_item_new_with_label(gettext("Restore Session With Bookmarks"));
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(restoreSession),(void*)true);
-	gtk_widget_set_name(menuitem,RESTORESESSIONBMMENUNAME);
-
+	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONBMMENUNAME,IMAGEMENU,gettext("Restore Session With Bookmarks"),(void*)true);
 //printfile
-	printMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_PRINT,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),printMenu);
-	gtk_signal_connect(GTK_OBJECT(printMenu),"activate",G_CALLBACK(printFile),NULL);
-	gtk_widget_set_name(printMenu,PRINTMENUNAME);
+	printMenu=makeMenuItem(GTK_STOCK_PRINT,menu,(void*)printFile,0,PRINTMENUNAME,STOCKMENU,NULL,NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
 //close
-	closeMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),closeMenu);
-	gtk_signal_connect(GTK_OBJECT(closeMenu),"activate",G_CALLBACK(closeTab),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)closeMenu,"activate",accgroup,'W',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(closeMenu,CLOSEMENUNAME);
+	closeMenu=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeTab,'W',CLOSEMENUNAME,STOCKMENU,NULL,NULL);
 //close-all
-	image=gtk_image_new_from_stock(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
-	closeAllMenu=gtk_image_menu_item_new_with_label(gettext("Close All Tabs"));
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)closeAllMenu,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),closeAllMenu);
-	gtk_signal_connect(GTK_OBJECT(closeAllMenu),"activate",G_CALLBACK(closeAllTabs),NULL);
-	gtk_widget_set_name(closeAllMenu,CLOSEALLMENUNAME);
+	closeAllMenu=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeAllTabs,0,CLOSEALLMENUNAME,IMAGEMENU,gettext("Close All Tabs"),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //reload file
-	revertMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_REVERT_TO_SAVED,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),revertMenu);
-	gtk_signal_connect(GTK_OBJECT(revertMenu),"activate",G_CALLBACK(reloadFile),NULL);
-	gtk_widget_set_name(revertMenu,REVERTMENUNAME);
+	revertMenu=makeMenuItem(GTK_STOCK_REVERT_TO_SAVED,menu,(void*)reloadFile,0,REVERTMENUNAME,STOCKMENU,NULL,NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //quit
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_QUIT,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doShutdown),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'Q',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(revertMenu,QUITMENUNAME);
+	menuitem=makeMenuItem(GTK_STOCK_QUIT,menu,(void*)doShutdown,'Q',QUITMENUNAME,STOCKMENU,NULL,NULL);
 
 //edit menu
 	editMenu=gtk_menu_item_new_with_label(gettext("_Edit"));
@@ -1892,84 +1844,37 @@ void buildMainGui(void)
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(editMenu),menu);
 //undo
-	undoMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_UNDO,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),undoMenu);
-	gtk_signal_connect(GTK_OBJECT(undoMenu),"activate",G_CALLBACK(undo),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)undoMenu,"activate",accgroup,'Z',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(undoMenu,UNDOMENUNAME);
-
+	undoMenu=makeMenuItem(GTK_STOCK_UNDO,menu,(void*)undo,'Z',UNDOMENUNAME,STOCKMENU,NULL,NULL);
 //redo
-	redoMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_REDO,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),redoMenu);
-	gtk_signal_connect(GTK_OBJECT(redoMenu),"activate",G_CALLBACK(redo),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)redoMenu,"activate",accgroup,'Z',(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(redoMenu,REDOMENUNAME);
-
+	redoMenu=makeMenuItem(GTK_STOCK_REDO,menu,(void*)redo,-'Z',REDOMENUNAME,STOCKMENU,NULL,NULL);
 //undoall
-	image=gtk_image_new_from_stock(GTK_STOCK_UNDO,GTK_ICON_SIZE_MENU);
-	undoAllMenu=gtk_image_menu_item_new_with_label(gettext("Undo All"));
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)undoAllMenu,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),undoAllMenu);
-	gtk_signal_connect(GTK_OBJECT(undoAllMenu),"activate",G_CALLBACK(unRedoAll),(void*)0);
-	gtk_widget_set_name(undoAllMenu,UNDOALLMENUNAME);
-
+	undoAllMenu=makeMenuItem(GTK_STOCK_UNDO,menu,(void*)unRedoAll,0,UNDOALLMENUNAME,IMAGEMENU,gettext("Undo All"),(void*)0);
 //redoall
-	image=gtk_image_new_from_stock(GTK_STOCK_REDO,GTK_ICON_SIZE_MENU);
-	redoAllMenu=gtk_image_menu_item_new_with_label(gettext("Redo All"));
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)redoAllMenu,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),redoAllMenu);
-	gtk_signal_connect(GTK_OBJECT(redoAllMenu),"activate",G_CALLBACK(unRedoAll),(void*)1);
-	gtk_widget_set_name(redoAllMenu,REDOALLMENUNAME);
+	redoAllMenu=makeMenuItem(GTK_STOCK_REDO,menu,(void*)unRedoAll,0,REDOALLMENUNAME,IMAGEMENU,gettext("Redo All"),(void*)1);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //cut
-	cutMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_CUT,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),cutMenu);
-	gtk_signal_connect(GTK_OBJECT(cutMenu),"activate",G_CALLBACK(cutToClip),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)cutMenu,"activate",accgroup,'X',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(cutMenu,CUTMENUNAME);
-
+	cutMenu=makeMenuItem(GTK_STOCK_CUT,menu,(void*)cutToClip,'X',CUTMENUNAME,STOCKMENU,NULL,NULL);
 //copy
-	copyMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_COPY,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),copyMenu);
-	gtk_signal_connect(GTK_OBJECT(copyMenu),"activate",G_CALLBACK(copyToClip),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)copyMenu,"activate",accgroup,'C',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(copyMenu,COPYMENUNAME);
-
+	copyMenu=makeMenuItem(GTK_STOCK_COPY,menu,(void*)copyToClip,'C',COPYMENUNAME,STOCKMENU,NULL,NULL);
 //paste
-	pasteMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_PASTE,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),pasteMenu);
-	gtk_signal_connect(GTK_OBJECT(pasteMenu),"activate",G_CALLBACK(pasteFromClip),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)pasteMenu,"activate",accgroup,'V',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(pasteMenu,PASTEMENUNAME);
+	pasteMenu=makeMenuItem(GTK_STOCK_PASTE,menu,(void*)pasteFromClip,'V',PASTEMENUNAME,STOCKMENU,NULL,NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //find
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_FIND,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(find),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'F',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(menuitem,FINDMENUNAME);
+	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)find,'F',FINDMENUNAME,STOCKMENU,NULL,NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //prefs
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doPrefs),NULL);
-	gtk_widget_set_name(menuitem,PREFSMENUNAME);
-
+	menuitem=makeMenuItem(GTK_STOCK_PREFERENCES,menu,(void*)doPrefs,0,PREFSMENUNAME,STOCKMENU,NULL,NULL);
 //plugs
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES,NULL);
-	gtk_menu_item_set_label((GtkMenuItem*)menuitem,gettext("Plugin Prefs"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doPlugPrefs),NULL);
-	gtk_widget_set_name(menuitem,PLUGPREFSMENUNAME);
+	menuitem=makeMenuItem(GTK_STOCK_PREFERENCES,menu,(void*)doPlugPrefs,0,PLUGPREFSMENUNAME,IMAGEMENU,gettext("Plugin Prefs"),NULL);
 
 //view menu
 	viewMenu=gtk_menu_item_new_with_label(gettext("_View"));
@@ -1978,53 +1883,31 @@ void buildMainGui(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(viewMenu),menu);
 
 //show docs
-	menuitem=gtk_menu_item_new_with_label(gettext("Show Documentaion"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doDoxy),(void*)2);
-	gtk_widget_set_name(menuitem,SHOWDOCSMENUNAME);
-
+	menuitem=makeMenuItem(gettext("Show Documentaion"),menu,(void*)doDoxy,0,SHOWDOCSMENUNAME,NORMALMENU,NULL,(void*)2);
 //toggle bookmark bar
 	if(showBMBar)
-		menuitem=gtk_menu_item_new_with_label(gettext("Hide Bookmarks Bar"));
+		menuitem=makeMenuItem(gettext("Hide Bookmarks Bar"),menu,(void*)toggleBookMarkBar,0,SHOWBMBARMENUNAME,NORMALMENU,NULL,NULL);
 	else
-		menuitem=gtk_menu_item_new_with_label(gettext("Show Bookmarks Bar"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookMarkBar),NULL);
-	gtk_widget_set_name(menuitem,SHOWBMBARMENUNAME);
-
+		menuitem=makeMenuItem(gettext("Show Bookmarks Bar"),menu,(void*)toggleBookMarkBar,0,SHOWBMBARMENUNAME,NORMALMENU,NULL,NULL);
 //toggle toolbar bar
 	if(showToolBar)
-		menuitem=gtk_menu_item_new_with_label(gettext("Hide Tool Bar"));
+		menuitem=makeMenuItem(gettext("Hide Tool Bar"),menu,(void*)toggleToolBar,0,SHOWTOOLBARMENUNAME,NORMALMENU,NULL,NULL);
 	else
-		menuitem=gtk_menu_item_new_with_label(gettext("Show Tool Bar"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleToolBar),NULL);
-	gtk_widget_set_name(menuitem,SHOWTOOLBARMENUNAME);
-
+		menuitem=makeMenuItem(gettext("Show Tool Bar"),menu,(void*)toggleToolBar,0,SHOWTOOLBARMENUNAME,NORMALMENU,NULL,NULL);
 //tooloutput
 	if(showToolOutWin)
-		toolOutMenu=gtk_menu_item_new_with_label(gettext("Hide Tool Output"));
+		toolOutMenu=makeMenuItem(gettext("Hide Tool Output"),menu,(void*)toggleToolOutput,0,SHOWTOOLOUTMENUNAME,NORMALMENU,NULL,NULL);
 	else
-		toolOutMenu=gtk_menu_item_new_with_label(gettext("Show Tool Output"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),toolOutMenu);
-	gtk_signal_connect(GTK_OBJECT(toolOutMenu),"activate",G_CALLBACK(toggleToolOutput),NULL);
-	gtk_widget_set_name(toolOutMenu,SHOWTOOLOUTMENUNAME);
-
+		toolOutMenu=makeMenuItem(gettext("Show Tool Output"),menu,(void*)toggleToolOutput,0,SHOWTOOLOUTMENUNAME,NORMALMENU,NULL,NULL);
 //toggle statusbar
 	if(showStatus)
-		statusBarMenu=gtk_menu_item_new_with_label(gettext("Hide Status Bar"));
+		statusBarMenu=makeMenuItem(gettext("Hide Status Bar"),menu,(void*)toggleStatusBar,0,SHOWSTATUSMENUNAME,NORMALMENU,NULL,NULL);
 	else
-		statusBarMenu=gtk_menu_item_new_with_label(gettext("Show Status Bar"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),statusBarMenu);
-	gtk_signal_connect(GTK_OBJECT(statusBarMenu),"activate",G_CALLBACK(toggleStatusBar),NULL);
-	gtk_widget_set_name(statusBarMenu,SHOWSTATUSMENUNAME);
+		statusBarMenu=makeMenuItem(gettext("Show Status Bar"),menu,(void*)toggleStatusBar,0,SHOWSTATUSMENUNAME,NORMALMENU,NULL,NULL);
 
 #ifdef _BUILDDOCVIEWER_
 //toggle docviewer
-	showDocViewWidget=gtk_menu_item_new_with_label(gettext("Show Docviewer"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),showDocViewWidget);
-	gtk_signal_connect(GTK_OBJECT(showDocViewWidget),"activate",G_CALLBACK(toggleDocviewer),NULL);
-	gtk_widget_set_name(showDocViewWidget,SHOWDOCVIEWERMENUNAME);
+	showDocViewWidget=makeMenuItem(gettext("Show Docviewer"),menu,(void*)toggleDocviewer,0,SHOWDOCVIEWERMENUNAME,NORMALMENU,NULL,NULL);
 #endif
 
 //navigation menu
@@ -2034,70 +1917,24 @@ void buildMainGui(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(navMenu),menu);
 
 //goto define
-	image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
-	menuitem=gtk_image_menu_item_new_with_label(gettext("Go To Definition"));
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'D',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(menuitem,GOTODEFMENUNAME);
-
+	menuitem=makeMenuItem(GTK_STOCK_DIALOG_QUESTION,menu,(void*)goToDefinition,'D',GOTODEFMENUNAME,IMAGEMENU,gettext("Go To Definition"),NULL);
 //open include
-	menuitem=gtk_image_menu_item_new_with_label(gettext("Open Include File"));
-	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(findFile),NULL);
-	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'I',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-	gtk_widget_set_name(menuitem,OPENINCLUDEMENUNAME);
-
+	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)findFile,'I',OPENINCLUDEMENUNAME,IMAGEMENU,gettext("Open Include File"),NULL);
 //goto line number
-	menuitem=gtk_image_menu_item_new_with_label(gettext("Go To Line"));
-	image=gtk_image_new_from_stock(GTK_STOCK_GO_DOWN,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToLine),NULL);
-	gtk_widget_set_name(menuitem,GOTOLINEMENUNAME);
-
+	menuitem=makeMenuItem(GTK_STOCK_GO_DOWN,menu,(void*)jumpToLine,0,GOTOLINEMENUNAME,IMAGEMENU,gettext("Go To Line"),NULL);
 //find define
-	menuitem=gtk_image_menu_item_new_with_label(gettext("Search For Define"));
-	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(functionSearch),NULL);
-	gtk_widget_set_name(menuitem,SEARCHFORDEFMENUNAME);
-
+	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)functionSearch,0,SEARCHFORDEFMENUNAME,IMAGEMENU,gettext("Search For Define"),NULL);
 //find gtkdoc
-	menuitem=gtk_image_menu_item_new_with_label(gettext("Search In Gtk Docs"));
-	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(searchGtkDocs),NULL);
-	gtk_widget_set_name(menuitem,SEARCHGTKMENUNAME);
-
+	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)searchGtkDocs,0,SEARCHGTKMENUNAME,IMAGEMENU,gettext("Search In Gtk Docs"),NULL);
 //find qt5
-	menuitem=gtk_image_menu_item_new_with_label(gettext("Search In Qt5 Docs"));
-	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(searchQT5Docs),NULL);
-	gtk_widget_set_name(menuitem,SEARCHQT5MENUNAME);
+	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)searchQT5Docs,0,SEARCHQT5MENUNAME,IMAGEMENU,gettext("Search In Qt5 Docs"),NULL);
 
 //goto doxy docs
 	if(gotDoxygen==0)
-		{
-			menuitem=gtk_image_menu_item_new_with_label(gettext("Find In Documentation"));
-			image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
-			gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doxyDocs),NULL);
-			gtk_widget_set_name(menuitem,SEARCHDOXYMENUNAME);
-		}
+		menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)doxyDocs,0,SEARCHDOXYMENUNAME,IMAGEMENU,gettext("Find In Documentation"),NULL);
+
 //go back
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_GO_BACK,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goBack),NULL);
-	gtk_widget_set_name(menuitem,GOBACKMENUNAME);
+	goBackMenu=makeMenuItem(GTK_STOCK_GO_BACK,menu,(void*)goBack,0,GOBACKMENUNAME,STOCKMENU,NULL,NULL);
 
 //function menu
 	funcMenu=gtk_menu_item_new_with_label(gettext("Fun_ctions"));
@@ -2120,24 +1957,11 @@ void buildMainGui(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(helpMenu),menu);
 
 //about
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_ABOUT,NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doAbout),NULL);
-	gtk_widget_set_name(menuitem,ABOUTMENUNAME);
-
+	menuitem=makeMenuItem(GTK_STOCK_ABOUT,menu,(void*)doAbout,0,ABOUTMENUNAME,STOCKMENU,NULL,NULL);
 //help
-	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_HELP,NULL);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(openHelp),NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_widget_set_name(menuitem,HELPMENUNAME);
-
+	menuitem=makeMenuItem(GTK_STOCK_HELP,menu,(void*)openHelp,0,HELPMENUNAME,STOCKMENU,NULL,NULL);
 //get plugins
-	menuitem=gtk_image_menu_item_new_with_label(gettext("Get Plugins"));
-	image=gtk_image_new_from_file(DATADIR"/pixmaps/KKEditPlugMenu.png");
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(getPlugins),NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_widget_set_name(menuitem,GETPLUGSMENUNAME);
+	menuitem=makeMenuItem(DATADIR"/pixmaps/KKEditPlugMenu.png",menu,(void*)getPlugins,0,GETPLUGSMENUNAME,PIXMAPMENU,gettext("Get Plugins"),NULL);
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),fileMenu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),editMenu);
@@ -2146,6 +1970,19 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),funcMenu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),bookMarkMenu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),toolsMenu);
+
+//global plug menu
+	if(useGlobalPlugMenu==true)
+		{
+			globalPlugMenu=gtk_menu_item_new_with_label(gettext("Plu_gins"));
+			gtk_menu_item_set_use_underline((GtkMenuItem*)globalPlugMenu,true);
+			plugsubmenu=gtk_menu_new();
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(globalPlugMenu),plugsubmenu);
+			gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),globalPlugMenu);
+		}
+	else
+		globalPlugMenu=NULL;
+
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),helpMenu);
 
 //tooloutputwindow
@@ -2164,7 +2001,7 @@ void buildMainGui(void)
 
 //add main vbox to window
 	gtk_container_add((GtkContainer*)mainWindow,mainWindowVBox);
-//addmenuBar
+//addmenubar
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,menuBar,false,false,0);
 //add toolbar
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,toolBarBox,false,false,0);
@@ -2174,7 +2011,7 @@ void buildMainGui(void)
 	gtk_paned_pack2((GtkPaned*)mainWindowHPane,secondWindowHPane,true,false);
 
 //add notebook
-	gtk_box_pack_start((GtkBox*)mainNotebookVBox,(GtkWidget*)notebook,true,true,0);
+	gtk_box_pack_start((GtkBox*)mainNotebookVBox,(GtkWidget*)mainNotebook,true,true,0);
 	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainVPane,true,true,0);
 	gtk_paned_pack1((GtkPaned*)secondWindowHPane,mainWindowHBox,true,false);
                                                          
@@ -2209,7 +2046,7 @@ void buildMainGui(void)
 
 	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 
-	globalPlugins->globalPlugData->mlist.menuBar=menuBar;
+	
 	globalPlugins->globalPlugData->mlist.menuFile=fileMenu;
 	globalPlugins->globalPlugData->mlist.menuEdit=editMenu;
 	globalPlugins->globalPlugData->mlist.menuFunc=funcMenu;
@@ -2218,13 +2055,17 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->mlist.menuHelp=helpMenu;
 	globalPlugins->globalPlugData->mlist.menuBookMark=bookMarkMenu;
 	globalPlugins->globalPlugData->mlist.menuView=viewMenu;
+	if(useGlobalPlugMenu==true)
+		globalPlugins->globalPlugData->mlist.menuBar=plugsubmenu;
+	else
+		globalPlugins->globalPlugData->mlist.menuBar=menuBar;
 
 	globalPlugins->globalPlugData->topUserBox=mainTopUserVBox;
 	globalPlugins->globalPlugData->leftUserBox=mainLeftUserVBox;
 	globalPlugins->globalPlugData->rightUserBox=mainRightUserVBox;
 	globalPlugins->globalPlugData->bottomUserBox=mainBottomUserVBox;
 	globalPlugins->globalPlugData->mainWindow=mainWindow;
-	globalPlugins->globalPlugData->notebook=notebook;
+	globalPlugins->globalPlugData->notebook=(Widget*)mainNotebook;
 	globalPlugins->globalPlugData->mainWindowHPane=mainWindowHPane;
 
 	globalPlugins->globalPlugData->leftShow=0;
@@ -2241,6 +2082,575 @@ void buildMainGui(void)
 
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
 }
+
+//void buildMainGuiXX(void)
+//{
+//	GtkWidget*		menuitem;
+//	GtkWidget*		menu;
+//	GtkWidget*		image;
+//	GtkWidget*		menurecent;
+//
+//	mainWindowVBox=gtk_vbox_new(false,0);
+//	mainTopUserVBox=gtk_vbox_new(false,0);
+//	mainLeftUserVBox=gtk_vbox_new(false,0);
+//	mainNotebookVBox=gtk_vbox_new(false,0);
+//	mainRightUserVBox=gtk_vbox_new(false,0);
+//	mainBottomUserVBox=gtk_vbox_new(false,0);
+//
+//	mainWindowHBox=gtk_hbox_new(false,0);
+//	mainWindowHPane=gtk_hpaned_new();
+//	secondWindowHPane=gtk_hpaned_new();
+//
+//	mainWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+//	gtk_window_set_default_size((GtkWindow*)mainWindow,windowWidth,windowHeight);
+//	if(windowX!=-1 && windowY!=-1)
+//		gtk_window_move((GtkWindow *)mainWindow,windowX,windowY);
+//
+//	g_signal_connect(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(doShutdown),NULL);
+//	g_signal_connect(G_OBJECT(mainWindow),"key-press-event",G_CALLBACK(keyShortCut),NULL);
+//
+//	accgroup=gtk_accel_group_new();
+//	gtk_window_add_accel_group((GtkWindow*)mainWindow,accgroup);
+//
+//	notebook=(GtkNotebook*)gtk_notebook_new();
+//	gtk_notebook_set_scrollable(notebook,true);
+//	gtk_signal_connect(GTK_OBJECT(notebook),"switch-page",G_CALLBACK(switchPage),NULL);
+//	gtk_signal_connect(GTK_OBJECT(notebook),"page-reordered",G_CALLBACK(switchPage),NULL);
+//
+//	menuBar=gtk_menu_bar_new();
+//	toolBarBox=gtk_hbox_new(true,0);
+//	toolBar=(GtkToolbar*)gtk_toolbar_new();
+//
+////dnd
+//	gtk_drag_dest_set(mainWindowVBox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
+//	gtk_drag_dest_add_uri_targets(mainWindowVBox);
+//	g_signal_connect(G_OBJECT(mainWindowVBox),"drag_data_received",G_CALLBACK(dropUri),NULL);
+//
+//	setUpToolBar();
+//	gtk_box_pack_start(GTK_BOX(toolBarBox),(GtkWidget*)toolBar,true,true,0);
+//
+////menus
+////file menu
+//	fileMenu=gtk_menu_item_new_with_label(gettext("_File"));
+//	gtk_menu_item_set_use_underline((GtkMenuItem*)fileMenu,true);
+//	menu=gtk_menu_new();
+//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMenu),menu);
+////new
+//	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newFile),NULL);
+//	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'N',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+//	gtk_widget_set_name(menuitem,NEWMENUNAME);
+//
+////open
+//	menuItemOpen=gtk_image_menu_item_new_from_stock(GTK_STOCK_OPEN,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuItemOpen);
+//	gtk_signal_connect(GTK_OBJECT(menuItemOpen),"activate",G_CALLBACK(doOpenFile),NULL);
+//	gtk_widget_add_accelerator((GtkWidget *)menuItemOpen,"activate",accgroup,'O',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+//	gtk_widget_set_name(menuitem,OPENMENUNAME);
+//
+////open as hexdump
+//	menuitem=gtk_image_menu_item_new_with_label(gettext("Open As Hexdump"));
+//	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(openAsHexDump),NULL);
+//	gtk_widget_set_name(menuitem,HEXDUMPMENUNAME);
+//
+//	menuitem=gtk_separator_menu_item_new();
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//
+////extras
+//	menuitem=gtk_image_menu_item_new_with_label(gettext("New Admin Editor"));
+//	image=gtk_image_new_from_file(DATADIR"/pixmaps/ROOTKKEdit.png");
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newEditor),(void*)1);
+//	gtk_widget_set_name(menuitem,NEWADMINMENUNAME);
+//
+//	menuitem=gtk_image_menu_item_new_with_label(gettext("New Editor"));
+//	image=gtk_image_new_from_file(DATADIR"/pixmaps/MenuKKEdit.png");
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newEditor),(void*)2);
+//	gtk_widget_set_name(menuitem,NEWEDITORMENUNAME);
+//
+//	if(gotManEditor==0)
+//		{
+//			image=gtk_image_new_from_file(DATADIR"/pixmaps/ManPageEditor.png");
+//			menuitem=gtk_image_menu_item_new_with_label(gettext("Manpage Editor"));
+//			gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(newEditor),(void*)3);
+//			gtk_widget_set_name(menuitem,MANEDITORMENUNAME);
+//		}
+//
+////doxy
+//	if(gotDoxygen==0)
+//		{
+//			menuitem=gtk_image_menu_item_new_with_label(gettext("Build Documentation"));
+//			image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
+//			gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doDoxy),(void*)1);
+//			gtk_widget_set_name(menuitem,DOXYBUILDMENUNAME);
+//		}
+//
+//	menuitem=gtk_separator_menu_item_new();
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//
+////recent menu
+//	menuitem=gtk_image_menu_item_new_with_label(gettext("Recent Files"));
+//	menurecent=gtk_menu_new();
+//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
+//	addRecentToMenu((GtkRecentChooser*)recent,menurecent);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_widget_set_name(menuitem,RECENTMENUNAME);
+//
+//	menuitem=gtk_separator_menu_item_new();
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//
+////save
+//	saveMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),saveMenu);
+//	gtk_signal_connect(GTK_OBJECT(saveMenu),"activate",G_CALLBACK(saveFile),NULL);
+//	gtk_widget_add_accelerator((GtkWidget *)saveMenu,"activate",accgroup,'S',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+//	gtk_widget_set_name(saveMenu,SAVEMENUNAME);
+////savas
+//	saveAsMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE_AS,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),saveAsMenu);
+//	gtk_signal_connect(GTK_OBJECT(saveAsMenu),"activate",G_CALLBACK(saveFile),(void*)1);
+//	gtk_widget_add_accelerator((GtkWidget *)saveAsMenu,"activate",accgroup,'S',(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
+//	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
+//	gtk_widget_set_name(saveAsMenu,SAVEASMENUNAME);
+////save all
+//	saveAllMenu=gtk_image_menu_item_new_with_label(gettext("Save All"));
+//	image=gtk_image_new_from_stock(GTK_STOCK_SAVE,GTK_ICON_SIZE_MENU);
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)saveAllMenu,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),saveAllMenu);
+//	gtk_signal_connect(GTK_OBJECT(saveAllMenu),"activate",G_CALLBACK(doSaveAll),NULL);
+//	gtk_widget_set_name(saveAllMenu,SAVEALLMENUNAME);
+//
+//	menuitem=gtk_separator_menu_item_new();
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//
+////save session
+//	image=gtk_image_new_from_stock(GTK_STOCK_SAVE,GTK_ICON_SIZE_MENU);
+//	menuitem=gtk_image_menu_item_new_with_label(gettext("Save Session"));
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(saveSession),(void*)false);
+//	gtk_widget_set_name(menuitem,SAVESESSIONMENUNAME);
+////restore session
+//	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
+//	menuitem=gtk_image_menu_item_new_with_label(gettext("Restore Session"));
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(restoreSession),(void*)false);
+//	gtk_widget_set_name(menuitem,RESTORESESSIONMENUNAME);
+////restore session and bookmarks
+//	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
+//	menuitem=gtk_image_menu_item_new_with_label(gettext("Restore Session With Bookmarks"));
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(restoreSession),(void*)true);
+//	gtk_widget_set_name(menuitem,RESTORESESSIONBMMENUNAME);
+//
+////printfile
+//	printMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_PRINT,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),printMenu);
+//	gtk_signal_connect(GTK_OBJECT(printMenu),"activate",G_CALLBACK(printFile),NULL);
+//	gtk_widget_set_name(printMenu,PRINTMENUNAME);
+//
+//	menuitem=gtk_separator_menu_item_new();
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+////close
+//	closeMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),closeMenu);
+//	gtk_signal_connect(GTK_OBJECT(closeMenu),"activate",G_CALLBACK(closeTab),NULL);
+//	gtk_widget_add_accelerator((GtkWidget *)closeMenu,"activate",accgroup,'W',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+//	gtk_widget_set_name(closeMenu,CLOSEMENUNAME);
+////close-all
+//	image=gtk_image_new_from_stock(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
+//	closeAllMenu=gtk_image_menu_item_new_with_label(gettext("Close All Tabs"));
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)closeAllMenu,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),closeAllMenu);
+//	gtk_signal_connect(GTK_OBJECT(closeAllMenu),"activate",G_CALLBACK(closeAllTabs),NULL);
+//	gtk_widget_set_name(closeAllMenu,CLOSEALLMENUNAME);
+//
+//	menuitem=gtk_separator_menu_item_new();
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+////reload file
+//	revertMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_REVERT_TO_SAVED,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),revertMenu);
+//	gtk_signal_connect(GTK_OBJECT(revertMenu),"activate",G_CALLBACK(reloadFile),NULL);
+//	gtk_widget_set_name(revertMenu,REVERTMENUNAME);
+//
+//	menuitem=gtk_separator_menu_item_new();
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//
+////quit
+//	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_QUIT,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doShutdown),NULL);
+//	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'Q',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+//	gtk_widget_set_name(revertMenu,QUITMENUNAME);
+//
+////edit menu
+//	editMenu=gtk_menu_item_new_with_label(gettext("_Edit"));
+//	gtk_menu_item_set_use_underline((GtkMenuItem*)editMenu,true);
+//	menu=gtk_menu_new();
+//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(editMenu),menu);
+////undo
+//	undoMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_UNDO,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),undoMenu);
+//	gtk_signal_connect(GTK_OBJECT(undoMenu),"activate",G_CALLBACK(undo),NULL);
+//	gtk_widget_add_accelerator((GtkWidget *)undoMenu,"activate",accgroup,'Z',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+//	gtk_widget_set_name(undoMenu,UNDOMENUNAME);
+//
+////redo
+//	redoMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_REDO,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),redoMenu);
+//	gtk_signal_connect(GTK_OBJECT(redoMenu),"activate",G_CALLBACK(redo),NULL);
+//	gtk_widget_add_accelerator((GtkWidget *)redoMenu,"activate",accgroup,'Z',(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
+//	gtk_widget_set_name(redoMenu,REDOMENUNAME);
+//
+////undoall
+//	image=gtk_image_new_from_stock(GTK_STOCK_UNDO,GTK_ICON_SIZE_MENU);
+//	undoAllMenu=gtk_image_menu_item_new_with_label(gettext("Undo All"));
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)undoAllMenu,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),undoAllMenu);
+//	gtk_signal_connect(GTK_OBJECT(undoAllMenu),"activate",G_CALLBACK(unRedoAll),(void*)0);
+//	gtk_widget_set_name(undoAllMenu,UNDOALLMENUNAME);
+//
+////redoall
+//	image=gtk_image_new_from_stock(GTK_STOCK_REDO,GTK_ICON_SIZE_MENU);
+//	redoAllMenu=gtk_image_menu_item_new_with_label(gettext("Redo All"));
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)redoAllMenu,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),redoAllMenu);
+//	gtk_signal_connect(GTK_OBJECT(redoAllMenu),"activate",G_CALLBACK(unRedoAll),(void*)1);
+//	gtk_widget_set_name(redoAllMenu,REDOALLMENUNAME);
+//
+//	menuitem=gtk_separator_menu_item_new();
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//
+////cut
+//	cutMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_CUT,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),cutMenu);
+//	gtk_signal_connect(GTK_OBJECT(cutMenu),"activate",G_CALLBACK(cutToClip),NULL);
+//	gtk_widget_add_accelerator((GtkWidget *)cutMenu,"activate",accgroup,'X',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+//	gtk_widget_set_name(cutMenu,CUTMENUNAME);
+//
+////copy
+//	copyMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_COPY,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),copyMenu);
+//	gtk_signal_connect(GTK_OBJECT(copyMenu),"activate",G_CALLBACK(copyToClip),NULL);
+//	gtk_widget_add_accelerator((GtkWidget *)copyMenu,"activate",accgroup,'C',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+//	gtk_widget_set_name(copyMenu,COPYMENUNAME);
+//
+////paste
+//	pasteMenu=gtk_image_menu_item_new_from_stock(GTK_STOCK_PASTE,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),pasteMenu);
+//	gtk_signal_connect(GTK_OBJECT(pasteMenu),"activate",G_CALLBACK(pasteFromClip),NULL);
+//	gtk_widget_add_accelerator((GtkWidget *)pasteMenu,"activate",accgroup,'V',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+//	gtk_widget_set_name(pasteMenu,PASTEMENUNAME);
+//
+//	menuitem=gtk_separator_menu_item_new();
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//
+////find
+//	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_FIND,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(find),NULL);
+//	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'F',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+//	gtk_widget_set_name(menuitem,FINDMENUNAME);
+//
+//	menuitem=gtk_separator_menu_item_new();
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//
+////prefs
+//	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doPrefs),NULL);
+//	gtk_widget_set_name(menuitem,PREFSMENUNAME);
+//
+////plugs
+//	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES,NULL);
+//	gtk_menu_item_set_label((GtkMenuItem*)menuitem,gettext("Plugin Prefs"));
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doPlugPrefs),NULL);
+//	gtk_widget_set_name(menuitem,PLUGPREFSMENUNAME);
+//
+////view menu
+//	viewMenu=gtk_menu_item_new_with_label(gettext("_View"));
+//	gtk_menu_item_set_use_underline((GtkMenuItem*)viewMenu,true);
+//	menu=gtk_menu_new();
+//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(viewMenu),menu);
+//
+////show docs
+//	menuitem=gtk_menu_item_new_with_label(gettext("Show Documentaion"));
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doDoxy),(void*)2);
+//	gtk_widget_set_name(menuitem,SHOWDOCSMENUNAME);
+//
+////toggle bookmark bar
+//	if(showBMBar)
+//		menuitem=gtk_menu_item_new_with_label(gettext("Hide Bookmarks Bar"));
+//	else
+//		menuitem=gtk_menu_item_new_with_label(gettext("Show Bookmarks Bar"));
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookMarkBar),NULL);
+//	gtk_widget_set_name(menuitem,SHOWBMBARMENUNAME);
+//
+////toggle toolbar bar
+//	if(showToolBar)
+//		menuitem=gtk_menu_item_new_with_label(gettext("Hide Tool Bar"));
+//	else
+//		menuitem=gtk_menu_item_new_with_label(gettext("Show Tool Bar"));
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleToolBar),NULL);
+//	gtk_widget_set_name(menuitem,SHOWTOOLBARMENUNAME);
+//
+////tooloutput
+//	if(showToolOutWin)
+//		toolOutMenu=gtk_menu_item_new_with_label(gettext("Hide Tool Output"));
+//	else
+//		toolOutMenu=gtk_menu_item_new_with_label(gettext("Show Tool Output"));
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),toolOutMenu);
+//	gtk_signal_connect(GTK_OBJECT(toolOutMenu),"activate",G_CALLBACK(toggleToolOutput),NULL);
+//	gtk_widget_set_name(toolOutMenu,SHOWTOOLOUTMENUNAME);
+//
+////toggle statusbar
+//	if(showStatus)
+//		statusBarMenu=gtk_menu_item_new_with_label(gettext("Hide Status Bar"));
+//	else
+//		statusBarMenu=gtk_menu_item_new_with_label(gettext("Show Status Bar"));
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),statusBarMenu);
+//	gtk_signal_connect(GTK_OBJECT(statusBarMenu),"activate",G_CALLBACK(toggleStatusBar),NULL);
+//	gtk_widget_set_name(statusBarMenu,SHOWSTATUSMENUNAME);
+//
+//#ifdef _BUILDDOCVIEWER_
+////toggle docviewer
+//	showDocViewWidget=gtk_menu_item_new_with_label(gettext("Show Docviewer"));
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),showDocViewWidget);
+//	gtk_signal_connect(GTK_OBJECT(showDocViewWidget),"activate",G_CALLBACK(toggleDocviewer),NULL);
+//	gtk_widget_set_name(showDocViewWidget,SHOWDOCVIEWERMENUNAME);
+//#endif
+//
+////navigation menu
+//	navMenu=gtk_menu_item_new_with_label(gettext("_Navigation"));
+//	gtk_menu_item_set_use_underline((GtkMenuItem*)navMenu,true);
+//	menu=gtk_menu_new();
+//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(navMenu),menu);
+//
+////goto define
+//	image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
+//	menuitem=gtk_image_menu_item_new_with_label(gettext("Go To Definition"));
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
+//	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'D',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+//	gtk_widget_set_name(menuitem,GOTODEFMENUNAME);
+//
+////open include
+//	menuitem=gtk_image_menu_item_new_with_label(gettext("Open Include File"));
+//	image=gtk_image_new_from_stock(GTK_STOCK_OPEN,GTK_ICON_SIZE_MENU);
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(findFile),NULL);
+//	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'I',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
+//	gtk_widget_set_name(menuitem,OPENINCLUDEMENUNAME);
+//
+////goto line number
+//	menuitem=gtk_image_menu_item_new_with_label(gettext("Go To Line"));
+//	image=gtk_image_new_from_stock(GTK_STOCK_GO_DOWN,GTK_ICON_SIZE_MENU);
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(jumpToLine),NULL);
+//	gtk_widget_set_name(menuitem,GOTOLINEMENUNAME);
+//
+////find define
+//	menuitem=gtk_image_menu_item_new_with_label(gettext("Search For Define"));
+//	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(functionSearch),NULL);
+//	gtk_widget_set_name(menuitem,SEARCHFORDEFMENUNAME);
+//
+////find gtkdoc
+//	menuitem=gtk_image_menu_item_new_with_label(gettext("Search In Gtk Docs"));
+//	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(searchGtkDocs),NULL);
+//	gtk_widget_set_name(menuitem,SEARCHGTKMENUNAME);
+//
+////find qt5
+//	menuitem=gtk_image_menu_item_new_with_label(gettext("Search In Qt5 Docs"));
+//	image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(searchQT5Docs),NULL);
+//	gtk_widget_set_name(menuitem,SEARCHQT5MENUNAME);
+//
+////goto doxy docs
+//	if(gotDoxygen==0)
+//		{
+//			menuitem=gtk_image_menu_item_new_with_label(gettext("Find In Documentation"));
+//			image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
+//			gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//			gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doxyDocs),NULL);
+//			gtk_widget_set_name(menuitem,SEARCHDOXYMENUNAME);
+//		}
+////go back
+//	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_GO_BACK,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(goBack),NULL);
+//	gtk_widget_set_name(menuitem,GOBACKMENUNAME);
+//
+////function menu
+//	funcMenu=gtk_menu_item_new_with_label(gettext("Fun_ctions"));
+//	gtk_menu_item_set_use_underline((GtkMenuItem*)funcMenu,true);
+//
+////newbookmarks
+//	bookMarkMenu=gtk_menu_item_new_with_label(gettext("_Bookmarks"));
+//	gtk_menu_item_set_use_underline((GtkMenuItem*)bookMarkMenu,true);
+//	rebuildBookMarkMenu();
+//
+////external tools
+//	toolsMenu=gtk_menu_item_new_with_label(gettext("_Tools"));
+//	gtk_menu_item_set_use_underline((GtkMenuItem*)toolsMenu,true);
+//	buildTools();
+//
+////help
+//	helpMenu=gtk_menu_item_new_with_label(gettext("_Help"));
+//	gtk_menu_item_set_use_underline((GtkMenuItem*)helpMenu,true);
+//	menu=gtk_menu_new();
+//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(helpMenu),menu);
+//
+////about
+//	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_ABOUT,NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(doAbout),NULL);
+//	gtk_widget_set_name(menuitem,ABOUTMENUNAME);
+//
+////help
+//	menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_HELP,NULL);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(openHelp),NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_widget_set_name(menuitem,HELPMENUNAME);
+//
+////get plugins
+//	menuitem=gtk_image_menu_item_new_with_label(gettext("Get Plugins"));
+//	image=gtk_image_new_from_file(DATADIR"/pixmaps/KKEditPlugMenu.png");
+//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+//	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(getPlugins),NULL);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_widget_set_name(menuitem,GETPLUGSMENUNAME);
+//
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),fileMenu);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),editMenu);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),viewMenu);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),navMenu);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),funcMenu);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),bookMarkMenu);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),toolsMenu);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),helpMenu);
+//
+////tooloutputwindow
+//	mainVPane=gtk_vpaned_new();
+//	gtk_container_set_border_width(GTK_CONTAINER(mainVPane),0);
+//	gtk_paned_add1(GTK_PANED(mainVPane),mainNotebookVBox);
+//
+//	toolOutVBox=gtk_vbox_new(false,0);
+//	gtk_paned_add2(GTK_PANED(mainVPane),toolOutVBox);
+//	mainWindowScrollbox=gtk_scrolled_window_new(NULL,NULL);
+//	gtk_scrolled_window_set_policy((GtkScrolledWindow*)mainWindowScrollbox,GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+//	toolOutputBuffer=gtk_text_buffer_new(NULL);
+//	toolOutputView=gtk_text_view_new_with_buffer(toolOutputBuffer);
+//	gtk_container_add(GTK_CONTAINER(mainWindowScrollbox),(GtkWidget*)toolOutputView);
+//	gtk_container_add(GTK_CONTAINER(toolOutVBox),(GtkWidget*)mainWindowScrollbox);
+//
+////add main vbox to window
+//	gtk_container_add((GtkContainer*)mainWindow,mainWindowVBox);
+////addmenuBar
+//	gtk_box_pack_start((GtkBox*)mainWindowVBox,menuBar,false,false,0);
+////add toolbar
+//	gtk_box_pack_start((GtkBox*)mainWindowVBox,toolBarBox,false,false,0);
+//
+////add left user
+//	gtk_paned_pack1((GtkPaned*)mainWindowHPane,mainLeftUserVBox,false,true);
+//	gtk_paned_pack2((GtkPaned*)mainWindowHPane,secondWindowHPane,true,false);
+//
+////add notebook
+//	gtk_box_pack_start((GtkBox*)mainNotebookVBox,(GtkWidget*)notebook,true,true,0);
+//	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainVPane,true,true,0);
+//	gtk_paned_pack1((GtkPaned*)secondWindowHPane,mainWindowHBox,true,false);
+//                                                         
+////addright user
+//	gtk_paned_pack2((GtkPaned*)secondWindowHPane,mainRightUserVBox,false,true);
+//
+////vpanes top and bottom
+//	mainWindowVPane=gtk_vpaned_new();
+//	secondWindowVPane=gtk_vpaned_new();
+//
+//	gtk_paned_pack1((GtkPaned *)mainWindowVPane,mainWindowHPane,false,false);
+//	gtk_paned_pack2((GtkPaned *)mainWindowVPane,mainBottomUserVBox,false,false);
+//
+//	gtk_paned_pack1((GtkPaned *)secondWindowVPane,mainTopUserVBox,false,false);
+//	gtk_paned_pack2((GtkPaned *)secondWindowVPane,mainWindowVPane,false,false);
+//
+////add this to vpane and below
+////add botom user
+//	gtk_widget_show_all(secondWindowVPane);
+//	gtk_box_pack_start((GtkBox*)mainWindowVBox,secondWindowVPane,true,true,0);
+//
+////add status bar
+//	statusWidget=gtk_statusbar_new();
+//	gtk_box_pack_end((GtkBox*)mainWindowVBox,statusWidget,false,true,0);
+//
+////hide top/bottom user boxes
+//	gtk_widget_hide(mainTopUserVBox);
+//	gtk_widget_hide(mainBottomUserVBox);
+////hide left/right user boxes
+//	gtk_widget_hide(mainLeftUserVBox);
+//	gtk_widget_hide(mainRightUserVBox);
+//
+//	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
+//
+//	globalPlugins->globalPlugData->mlist.menuBar=menuBar;
+//	globalPlugins->globalPlugData->mlist.menuFile=fileMenu;
+//	globalPlugins->globalPlugData->mlist.menuEdit=editMenu;
+//	globalPlugins->globalPlugData->mlist.menuFunc=funcMenu;
+//	globalPlugins->globalPlugData->mlist.menuNav=navMenu;
+//	globalPlugins->globalPlugData->mlist.menuTools=toolsMenu;
+//	globalPlugins->globalPlugData->mlist.menuHelp=helpMenu;
+//	globalPlugins->globalPlugData->mlist.menuBookMark=bookMarkMenu;
+//	globalPlugins->globalPlugData->mlist.menuView=viewMenu;
+//
+//	globalPlugins->globalPlugData->topUserBox=mainTopUserVBox;
+//	globalPlugins->globalPlugData->leftUserBox=mainLeftUserVBox;
+//	globalPlugins->globalPlugData->rightUserBox=mainRightUserVBox;
+//	globalPlugins->globalPlugData->bottomUserBox=mainBottomUserVBox;
+//	globalPlugins->globalPlugData->mainWindow=mainWindow;
+//	globalPlugins->globalPlugData->notebook=(Widget*)notebook;
+//	globalPlugins->globalPlugData->mainWindowHPane=mainWindowHPane;
+//
+//	globalPlugins->globalPlugData->leftShow=0;
+//	globalPlugins->globalPlugData->rightShow=0;
+//	globalPlugins->globalPlugData->topShow=0;
+//	globalPlugins->globalPlugData->bottomShow=0;
+//
+//	globalPlugins->globalPlugData->toolOutBuffer=toolOutputBuffer;
+//	globalPlugins->globalPlugData->toolOutWindow=toolOutputView;
+//	globalPlugins->globalPlugData->tabPopUpMenu=NULL;
+//	globalPlugins->globalPlugData->contextPopUpMenu=NULL;
+////gettext
+//	globalPlugins->globalPlugData->locale=LOCALEDIR;
+//
+//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
+//}
 #endif
 
 void buildFindReplace(void)

@@ -55,11 +55,6 @@ bool tabPopUp(GtkWidget *my_widget, GdkEventButton *event,gpointer user_data);
 //TODO//
 bool tabPopUp(void);
 #endif
-#ifndef _USEQT5_
-UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessageData *message,guint time,gpointer user_data);
-#else
-//TODO//
-#endif
 
 void doShutdown(Widget* widget,uPtr data);
 

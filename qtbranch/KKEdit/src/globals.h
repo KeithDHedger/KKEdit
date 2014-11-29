@@ -168,7 +168,7 @@ extern GtkNotebook*		notebook;
 #else
 //TODO//
 //extern QWidget*			window;
-extern QTabWidget*		notebook;
+//extern QTabWidget*		notebook;
 #endif
 
 extern GList*			newBookMarksList;
@@ -215,6 +215,9 @@ extern QAction*			menuItemOpen;
 
 //main window
 extern Widget*			mainWindow;
+extern Widget*			globalPlugMenu;
+extern Widget*			mainNotebook;
+
 //menubar
 extern Widget*			menuBar;
 //file menu

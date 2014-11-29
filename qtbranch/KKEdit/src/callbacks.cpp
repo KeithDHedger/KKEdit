@@ -319,7 +319,7 @@ VISIBLE void toggleBookmark(void)
 void refreshMainWindow(void)
 {
 #ifndef _USEQT5_
-	gtk_widget_show(window);
+	gtk_widget_show(mainWindow);
 	gtk_widget_show(mainWindowVBox);
 	gtk_widget_show(mainVPane);
 	gtk_widget_show(mainWindowHPane);
@@ -351,7 +351,7 @@ int yesNo(char* question,char* file)
 	GtkWidget*	dialog;
 	int			result;
 
-	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,"%s %s",question,file);
+	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,"%s %s",question,file);
 
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_YES,GTK_RESPONSE_YES,GTK_STOCK_NO,GTK_RESPONSE_CANCEL,NULL);
 	gtk_window_set_title(GTK_WINDOW(dialog),gettext("What Do You Want To Do?"));
@@ -391,7 +391,6 @@ printf("triggered doOpenFile %i\n",(int)(long)data);
 	gtk_widget_destroy (dialog);
 	refreshMainWindow();
 #else
-
 	QStringList fileNames;
 
 	fileNames=QFileDialog::getOpenFileNames(mainWindow,gettext("Open File"),"","",0);
@@ -414,7 +413,7 @@ int show_question(char* filename)
 	char*		message;
 
 	asprintf(&message,gettext("Save file %s before closing?"),filename);
-	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
+	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
 
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_SAVE,GTK_RESPONSE_YES,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_NO,GTK_RESPONSE_NO,NULL);
 	gtk_window_set_title(GTK_WINDOW(dialog),gettext("Warning unsaved data!"));
@@ -777,7 +776,7 @@ void switchPage(void)
 				lineptr++;
 		}
 
-	gtk_window_set_title((GtkWindow*)window,page->fileName);
+	gtk_window_set_title((GtkWindow*)mainWindow,page->fileName);
 	refreshMainWindow();
 	if(functions!=NULL)
 		debugFree(&functions,"switchPage functions");
@@ -906,7 +905,7 @@ void switchPage(void)
 				lineptr++;
 		}
 
-	gtk_window_set_title((GtkWindow*)window,page->fileName);
+	gtk_window_set_title((GtkWindow*)mainWindow,page->fileName);
 	refreshMainWindow();
 	if(functions!=NULL)
 		debugFree(&functions,"switchPage functions");
@@ -1808,44 +1807,44 @@ bool tabPopUp(void)
 #endif
 }
 
-#ifndef _USEQT5_
-void messageOpen(UniqueMessageData *message)
-{
-	int argc;
-
-	gchar** uris=unique_message_data_get_uris(message);
-	argc=g_strv_length(uris);
-
-	for (int loop=1; loop<argc; loop++)
-		openFile(uris[loop],1,true);
-}
-
-UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessageData *message,guint time,gpointer user_data)
-{
-	UniqueResponse	res;
-
-	switch(command)
-		{
-		case UNIQUE_ACTIVATE:
-			gtk_window_set_screen(GTK_WINDOW(window),unique_message_data_get_screen(message));
-			gtk_window_present_with_time(GTK_WINDOW(window),time);
-			res=UNIQUE_RESPONSE_OK;
-			break;
-
-		case UNIQUE_OPEN:
-			messageOpen(message);
-			gtk_window_set_screen(GTK_WINDOW(window),unique_message_data_get_screen(message));
-			gtk_window_present_with_time(GTK_WINDOW(window),time);
-			res=UNIQUE_RESPONSE_OK;
-			break;
-
-		default:
-			res=UNIQUE_RESPONSE_OK;
-			break;
-		}
-	return(res);
-}
-#endif
+//#ifndef _USEQT5_
+//void messageOpen(UniqueMessageData *message)
+//{
+//	int argc;
+//
+//	gchar** uris=unique_message_data_get_uris(message);
+//	argc=g_strv_length(uris);
+//
+//	for (int loop=1; loop<argc; loop++)
+//		openFile(uris[loop],1,true);
+//}
+//
+//UniqueResponse messageReceived(UniqueApp *app,UniqueCommand command,UniqueMessageData *message,guint time,gpointer user_data)
+//{
+//	UniqueResponse	res;
+//
+//	switch(command)
+//		{
+//		case UNIQUE_ACTIVATE:
+//			gtk_window_set_screen(GTK_WINDOW(window),unique_message_data_get_screen(message));
+//			gtk_window_present_with_time(GTK_WINDOW(window),time);
+//			res=UNIQUE_RESPONSE_OK;
+//			break;
+//
+//		case UNIQUE_OPEN:
+//			messageOpen(message);
+//			gtk_window_set_screen(GTK_WINDOW(window),unique_message_data_get_screen(message));
+//			gtk_window_present_with_time(GTK_WINDOW(window),time);
+//			res=UNIQUE_RESPONSE_OK;
+//			break;
+//
+//		default:
+//			res=UNIQUE_RESPONSE_OK;
+//			break;
+//		}
+//	return(res);
+//}
+//#endif
 
 void writeExitData(void)
 {
@@ -1855,8 +1854,8 @@ void writeExitData(void)
 	int				winx;
 	int				winy;
 
-	gtk_widget_get_allocation(window,&alloc);
-	gtk_window_get_position((GtkWindow*)window,&winx,&winy);
+	gtk_widget_get_allocation(mainWindow,&alloc);
+	gtk_window_get_position((GtkWindow*)mainWindow,&winx,&winy);
 	asprintf(&windowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
 
 #ifdef _BUILDDOCVIEWER_
@@ -1953,7 +1952,6 @@ VISIBLE void doShutdown(Widget* widget,uPtr data)
 //TODO//
 {
 printf("doShutdown %i\n",(int)(long)data);
-
 	char*	command;
 
 	if(doSaveAll(widget,(uPtr)true)==false)
@@ -1967,7 +1965,7 @@ printf("doShutdown %i\n",(int)(long)data);
 	delete_aspell_config(aspellConfig);
 	delete_aspell_speller(spellChecker);
 #endif
-//TODO//
+
 	g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
 
 	asprintf(&command,"rm -rf %s",tmpFolderName);
@@ -1975,7 +1973,7 @@ printf("doShutdown %i\n",(int)(long)data);
 	debugFree(&command,"doShutdown command");
 	system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
 #ifndef _USEQT5_
-	gtk_main_quit();
+		g_application_release(mainApp);
 #else
 	QApplication::quit();
 #endif
@@ -2332,7 +2330,7 @@ printf("printFile %i\n",(int)(long)data);
 		gtk_print_operation_set_print_settings(print,settings);
 	g_signal_connect(print,"begin-print",G_CALLBACK(beginPrint),(void*)printview);
 	g_signal_connect(print,"draw-page",G_CALLBACK (drawPage),(void*)printview);
-	result=gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(window),NULL);
+	result=gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(mainWindow),NULL);
 	if (result==GTK_PRINT_OPERATION_RESULT_APPLY)
 		{
 			if (settings != NULL)

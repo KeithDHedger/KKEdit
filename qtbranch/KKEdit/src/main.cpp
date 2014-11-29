@@ -4,10 +4,14 @@
  *
 */
 
-#include <X11/Xatom.h>
-//#include <gdk/gdkx.h>
 
 #include "kkedit-includes.h"
+
+#ifndef _USEQT5_
+#include <X11/Xatom.h>
+#include <gdk/gdkx.h>
+#endif
+
 
 bool	singleOverRide=false;
 bool	loadPluginsFlag=true;
@@ -428,7 +432,7 @@ void doNagScreen(void)
 #ifndef _USEQT5_
 	GtkWidget* dialog;
 
-	dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",gettext("Please donate"));
+	dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",gettext("Please donate"));
 	gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s\n<b>%s</b>\n%s\n\n%s",gettext("If you have a PayPal account you can donate any amount you like by logging into yor account and click the 'Send Money' tab, enter my email address"),MYEMAIL,gettext("and then send it."),gettext("Thank you for helping to support Free software."));
 
 	gtk_dialog_run(GTK_DIALOG (dialog));
@@ -516,7 +520,7 @@ void doNagStuff(void)
 									lastPlugUpdate=thisupdate;
 								}
 
-							dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",gettext("Updates Available"));
+							dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",gettext("Updates Available"));
 							gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s%s",kkeditupdatemessage,plugupdatemessage);
 
 							gtk_dialog_run(GTK_DIALOG (dialog));
@@ -560,8 +564,8 @@ void open(GApplication* application,GFile** files,gint n_files,const gchar* hint
 				}
 		}
 
-	if(window!=NULL)
-		gtk_window_present((GtkWindow*)window);
+	if(mainWindow!=NULL)
+		gtk_window_present((GtkWindow*)mainWindow);
 
 	g_application_release(application);
 }
@@ -596,7 +600,7 @@ void appStart(GApplication  *application,gpointer data)
 	buildGtkDocViewer();
 #endif
 
-	gtk_window_get_size((GtkWindow*)window,&w,&h);
+	gtk_window_get_size((GtkWindow*)mainWindow,&w,&h);
 	gtk_paned_set_position((GtkPaned*)mainVPane,toolOutHeight);
 
 	gtk_paned_set_position((GtkPaned*)secondWindowVPane,topVPaneHite);
@@ -606,19 +610,19 @@ void appStart(GApplication  *application,gpointer data)
 	if(getuid()!=0)
 		{
 			gtk_window_set_default_icon_name(PACKAGE);
-			gtk_window_set_icon_name((GtkWindow*)window,PACKAGE);
+			gtk_window_set_icon_name((GtkWindow*)mainWindow,PACKAGE);
 		}
 	else
 		{
 			gtk_window_set_default_icon_name(PACKAGE "Root");
-			gtk_window_set_icon_name((GtkWindow*)window,PACKAGE "Root");
+			gtk_window_set_icon_name((GtkWindow*)mainWindow,PACKAGE "Root");
 		}
 	setSensitive();
 
 	if((timeToNag==true) && (autoCheck==true))
 		doNagStuff();
 
-	gtk_widget_set_size_request(window,100,100);
+	gtk_widget_set_size_request(mainWindow,100,100);
 }
 
 int getWorkspaceNumber(void)
@@ -648,6 +652,7 @@ int getWorkspaceNumber(void)
 }
 #endif
 
+#ifdef _USEQT5_
 void qtAppStart(int argc, char **argv)
 {
 	int	w,h;
@@ -697,6 +702,7 @@ void qtAppStart(int argc, char **argv)
 //		doNagStuff();
 //
 }
+#endif
 
 int main (int argc, char **argv)
 {

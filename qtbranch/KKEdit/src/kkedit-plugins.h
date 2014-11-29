@@ -138,40 +138,42 @@ struct pageStruct
 #else
 struct pageStruct
 {
-	Widget*				pane;
-	Widget*				pageWindow;
-	Widget*				pageWindow2;
-	Widget*				buffer;
-	Widget*				view;
-	Widget*				view2;
+//qt page structure
 	char*				filePath;
 	char*				realFilePath;
 	char*				dirName;
-	Widget*				navSubMenu;
-	bool				rebuildMenu;
-	Widget*				tabName;
-	Widget				iter;
-	Widget				match_start;
-	Widget				match_end;
-	bool				isFirst;
-	char*				fileName;
-//TODO//
-	uPtr				gFile; 
-	uPtr				monitor;
-	bool				itsMe;
-	GList*				markList;
-	bool				inTop;
-	bool				isSplit;
-	const char*			lang;
-	QVBoxLayout*		tabVbox;
-	bool				showingChanged;
-	Widget*				backMark;
-	Widget*				highlightTag;
-	GList*				userDataList;
-	Widget* 			completion;
-	GSList*				regexList;
-	int					regexMatchNumber;
-	uPtr				reserved4;
+
+//	Widget*				pane;
+//	Widget*				pageWindow;
+//	Widget*				pageWindow2;
+//	Widget*				buffer;
+//	Widget*				view;
+//	Widget*				view2;
+//	Widget*				navSubMenu;
+//	bool				rebuildMenu;
+//	Widget*				tabName;
+//	Widget				iter;
+//	Widget				match_start;
+//	Widget				match_end;
+//	bool				isFirst;
+//	char*				fileName;
+////TODO//
+//	uPtr				gFile; 
+//	uPtr				monitor;
+//	bool				itsMe;
+//	GList*				markList;
+//	bool				inTop;
+//	bool				isSplit;
+//	const char*			lang;
+//	QVBoxLayout*		tabVbox;
+//	bool				showingChanged;
+//	Widget*				backMark;
+//	Widget*				highlightTag;
+//	GList*				userDataList;
+//	Widget* 			completion;
+//	GSList*				regexList;
+//	int					regexMatchNumber;
+//	uPtr				reserved4;
 };
 #endif
 #endif

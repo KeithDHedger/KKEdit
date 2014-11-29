@@ -95,7 +95,7 @@ gboolean doSetPlugData(void)
 					}
 				else
 					{
-						dialog=gtk_message_dialog_new((GtkWindow*)window,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Plugin '%s' cannot be unloaded yet.\nRestart KKEdit to unload."),name);
+						dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Plugin '%s' cannot be unloaded yet.\nRestart KKEdit to unload."),name);
 						gtk_dialog_run(GTK_DIALOG(dialog));
 						gtk_widget_destroy(dialog);
 						pd->enabled=false;
