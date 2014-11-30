@@ -154,7 +154,6 @@ struct bookMarksNew
 };
 
 extern HistoryClass*	history;
-extern bool				sessionBusy;
 
 #ifndef _USEQT5_
 extern GApplication*	mainApp;
@@ -212,6 +211,10 @@ extern GtkWidget*		liveSearchWidget;
 extern QAction*			menuItemOpen;
 
 #endif
+
+//app stuff
+extern bool				busyFlag;
+extern bool				sessionBusy;
 
 //main window
 extern Widget*			mainWindow;

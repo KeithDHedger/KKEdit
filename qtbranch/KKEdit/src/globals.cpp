@@ -8,7 +8,6 @@
 
 #include "kkedit-includes.h"
 
-VISIBLE bool	sessionBusy=false;
 
 #ifndef _USEQT5_
 //GtkWidget*		window=NULL;
@@ -65,6 +64,10 @@ GtkWidget*		liveSearchWidget;
 #else
 //TODO//
 #endif
+
+//app stuff
+bool			busyFlag=false;
+VISIBLE bool	sessionBusy=false;
 
 //main window
 Widget*			mainWindow;

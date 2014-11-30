@@ -331,18 +331,15 @@ static gboolean detect_noniso(const gchar *text)
 
 const gchar *get_default_charset(void)
 {
-#ifndef _USEQT5_
 	const gchar *charset;
 	
 	g_get_charset(&charset);
 	
 	return charset;
-#endif
 }
 
 const gchar *detect_charset(const gchar *text)
 {
-#ifndef _USEQT5_
 	guint8		c=*text;
 	const char*	charset=NULL;
 	
@@ -430,5 +427,4 @@ const gchar *detect_charset(const gchar *text)
 		}
 	
 	return charset;
-#endif
 }

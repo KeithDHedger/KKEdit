@@ -795,6 +795,110 @@ void MainWindow::loadFile(const QString &fileName)
 }
 
 */
+
+void fileErrorMessages(char *message,const gchar *filepath)
+{
+#ifdef _USEQT5_
+	QMessageBox::warning(mainWindow,"File I/O Error",QString("%1 %2").arg(message).arg(filepath));
+#endif
+}
+
+char* getFileContents(const gchar *filepath,bool warn)
+{
+	struct stat	sb;
+	char*		linkname=NULL;
+	ssize_t		r;
+	char		*filepathcopy=NULL;
+	char		*str=NULL;
+	gchar		*contents=NULL;
+	gsize		length;
+	GError		*err=NULL;
+	const gchar	*charset;
+	gsize		br;
+	bool		ret=false;
+
+//const char* filepath="/tmp/çÇğĞıİöÖşŞüÜ-copy2";
+//char* contents="XXX";
+//const gchar	*charset;
+
+//charset=detect_charset(filepath);
+//printf("charset >%s<n",charset);
+//g_file_get_contents(filepath,&contents,NULL,NULL);
+//printf("%sn",contents);
+
+//
+//	charset=detect_charset(filepath);
+//printf("charset >%s<\n",charset);
+//
+//char* nf=g_convert(filepath,-1,"UTF-8",charset,NULL,&br,&err);
+//printf(">>%s<<\n",nf);
+//printf("<<>>%s<<>>\n",g_filename_from_uri(filepath, NULL, NULL));
+//printf("<<>>%s<<>>\n",g_filename_from_uri(nf, NULL, NULL));
+//	ret=g_file_get_contents(g_filename_from_uri(filepath, NULL, NULL),&contents,&length,&err);
+//	
+//printf(">%s<\n",contents);
+//return(NULL);
+	if(readLinkFirst==true)
+		filepathcopy=realpath(filepath,NULL);
+	else
+		filepathcopy=strdup(filepath);
+
+	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
+		{
+			if(warn==true)
+				fileErrorMessages("File doesn't exist",filepath);
+
+			busyFlag=false;
+			sessionBusy=false;
+			return(NULL);
+		}
+
+	if(access(filepathcopy,R_OK)!=0)
+		{
+			if(warn==true)
+				fileErrorMessages("Can't acsess file",filepath);
+			busyFlag=false;
+			sessionBusy=false;
+			return(NULL);
+		}
+
+	ret=g_file_get_contents(filepathcopy,&contents,&length,&err);
+		
+	if(ret==false)
+		{
+			if(warn==true)
+				fileErrorMessages("Can't open file",filepath);
+			busyFlag=false;
+			sessionBusy=false;
+			return(NULL);
+		}
+
+	charset=detect_charset(contents);
+	if (charset==NULL)
+		charset=get_default_charset();
+
+	br=length;
+	if(length)
+		do
+			{
+				if(err)
+					{
+						charset="ISO-8859-1";
+						g_error_free(err);
+						err=NULL;
+					}
+				str=g_convert(contents,br,"UTF-8",charset,NULL,&br,&err);
+			}
+		while(err);
+	else
+		{
+			str=NULL;
+		}
+
+	debugFree(&contents,"openFile contents");
+	return(str);
+}
+
 VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
 printf("openfile %s\n",filepath);
@@ -804,31 +908,59 @@ printf("openfile %s\n",filepath);
 	char			*tstr;
 	char			*realfilepath;
 	int				tabnum;
+	char*			filedata=NULL;
 
-	realfilepath=realpath(filepath,NULL);
-	file.setFileName(realfilepath);
-	if (!file.open(QFile::ReadOnly | QFile::Text))
-		{
-			QMessageBox::warning(mainWindow,"Open File",QString("Cannot read file %1").arg(filepath));
-			return(false);
-		}
-
+//	realfilepath=realpath(filepath,NULL);
+//	//tstr=QString(QFile::decodeName(realfilepath)).toLocal8Bit();
+//	//QString str1 = QString(QFile::decodeName(realfilepath));
+//	printf(">>%s<<n",filepath);
+//	printf(">>%s<<n",realfilepath);
+//	QString str1(QFile::decodeName(filepath));
+//	qDebug() << "abc" << str1 << "def";
+//      QByteArray ba = str1.toLocal8Bit();
+//      const char *c_str2 = ba.data();
+//      printf("str2: %sn", c_str2);
+////	printf(">%s<n",(char*)());
+//
+//
+//	file.setFileName(c_str2);
+//	if (!file.open(QFile::ReadOnly | QIODevice::Text))
+//		{
+//			QMessageBox::warning(mainWindow,"Open File",QString("Cannot read file %1").arg(filepath));
+//			return(false);
+//		}
+//
 	doc=new DocumentClass();
-	QTextStream in(&file);
-	doc->setPlainText(in.readAll());
-	doc->setRealpath(realfilepath);
+//	QTextStream in(&file);
+//	in.setAutoDetectUnicode(false);
+//	in.setCodec("UTF-8");
+//
+//	doc->setPlainText(in.readAll());
 
-	tstr=strdup(filepath);
-	doc->setDirname(strdup(dirname(tstr)));
-	debugFree(&tstr,"openFile tstr");
-	tstr=strdup(filepath);
-	doc->setPathname(strdup(filepath));
-	doc->setFilename(strdup(basename(tstr)));
-	doc->setTabname(truncateWithElipses((char*)doc->getFilename(),maxTabChars));
-	tabnum=((QTabWidget*)mainNotebook)->addTab(doc,doc->getTabname());
-	((QTabWidget*)mainNotebook)->setTabToolTip(tabnum,doc->getPathname());
-	((QTabWidget*)mainNotebook)->setCurrentIndex(tabnum);
-	debugFree(&tstr,"openFile tstr 2");
+	filedata=getFileContents(filepath,true);
+	if(filedata!=NULL)
+		{
+			doc->setPlainText(filedata);
+			realfilepath=realpath(filepath,NULL);
+			doc->setRealpath(realfilepath);
+			tstr=strdup(filepath);
+			doc->setDirname(strdup(dirname(tstr)));
+			debugFree(&tstr,"openFile tstr");
+			tstr=strdup(filepath);
+			doc->setPathname(strdup(filepath));
+			doc->setFilename(strdup(basename(tstr)));
+			
+const gchar *charset=detect_charset(filepath);
+printf("%s\n",charset);
+const char* cn=g_convert(filepath,-1,"UTF-8",charset,NULL,NULL,NULL);
+printf(">%s<\n",cn);
+			doc->setTabname(truncateWithElipses((char*)QString(filepath).toUtf8().constData(),maxTabChars));
+
+			tabnum=((QTabWidget*)mainNotebook)->addTab(doc,doc->getTabname());
+			((QTabWidget*)mainNotebook)->setTabToolTip(tabnum,doc->getPathname());
+			((QTabWidget*)mainNotebook)->setCurrentIndex(tabnum);
+			debugFree(&tstr,"openFile tstr 2");
+		}
 #else
 	GtkTextIter				iter;
 	GtkWidget*				label;
