@@ -23,6 +23,14 @@ class DocumentClass : public QTextEdit
 
 		void		setFilename(char* filename);
 		const char* getFilename(void);
+		void		setPathname(char* filename);
+		const char* getPathname(void);
+		void		setDirname(char* filename);
+		const char* getDirname(void);
+		void		setRealpath(char* filename);
+		const char* getRealpath(void);
+		void		setTabname(char* filename);
+		const char* getTabname(void);
 		pageStruct*	getPage(void);
 
 	private:

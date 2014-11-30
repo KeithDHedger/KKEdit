@@ -112,7 +112,7 @@ QWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 //	printf(">%s<\n",name);
 //
 //	correctedname=strdup(truncateWithElipses(name,maxTabChars));
-	page->tabName=truncateWithElipses(name,maxTabChars);
+//	page->tabName=truncateWithElipses(name,maxTabChars);
 //	printf(">%s<\n",correctedname);
 	return(NULL);
 #else
@@ -799,9 +799,14 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
 printf("openfile %s\n",filepath);
 #ifdef _USEQT5_
-	DocumentClass* doc;
-	QFile file(filepath);
+	DocumentClass	*doc;
+	QFile 			file;
+	char			*tstr;
+	char			*realfilepath;
+	int				tabnum;
 
+	realfilepath=realpath(filepath,NULL);
+	file.setFileName(realfilepath);
 	if (!file.open(QFile::ReadOnly | QFile::Text))
 		{
 			QMessageBox::warning(mainWindow,"Open File",QString("Cannot read file %1").arg(filepath));
@@ -811,11 +816,19 @@ printf("openfile %s\n",filepath);
 	doc=new DocumentClass();
 	QTextStream in(&file);
 	doc->setPlainText(in.readAll());
-	doc->setFilename(strdup(filepath));
-	makeNewTab((char*)filepath,(char*)filepath,doc->getPage());
-	((QTabWidget*)mainNotebook)->addTab(doc,doc->getPage()->tabName);
+	doc->setRealpath(realfilepath);
 
-	
+	tstr=strdup(filepath);
+	doc->setDirname(strdup(dirname(tstr)));
+	debugFree(&tstr,"openFile tstr");
+	tstr=strdup(filepath);
+	doc->setPathname(strdup(filepath));
+	doc->setFilename(strdup(basename(tstr)));
+	doc->setTabname(truncateWithElipses((char*)doc->getFilename(),maxTabChars));
+	tabnum=((QTabWidget*)mainNotebook)->addTab(doc,doc->getTabname());
+	((QTabWidget*)mainNotebook)->setTabToolTip(tabnum,doc->getPathname());
+	((QTabWidget*)mainNotebook)->setCurrentIndex(tabnum);
+	debugFree(&tstr,"openFile tstr 2");
 #else
 	GtkTextIter				iter;
 	GtkWidget*				label;

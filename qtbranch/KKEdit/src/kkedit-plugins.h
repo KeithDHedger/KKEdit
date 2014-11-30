@@ -139,10 +139,10 @@ struct pageStruct
 struct pageStruct
 {
 //qt page structure
-	char*				filePath;
-	char*				realFilePath;
-	char*				dirName;
 	char*				fileName;
+	char*				filePath;
+	char*				dirName;
+	char*				realFilePath;
 	char*				tabName;
 //	Widget*				pane;
 //	Widget*				pageWindow;
