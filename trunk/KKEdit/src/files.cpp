@@ -876,36 +876,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 		}
 	debugFree(&convertedData,"openFile convertedData");
 
-#if 0
-	charset=detect_charset(contents);
-	if (charset==NULL)
-		charset=get_default_charset();
-
-	br=length;
-
-	if(length)
-		do
-			{
-				if(err)
-					{
-						charset="ISO-8859-1";
-						g_error_free(err);
-						err=NULL;
-					}
-				str=g_convert(contents,br,"UTF-8",charset,NULL,&br,&err);
-			}
-		while(err);
-	else
-		{
-			str=g_strdup("");
-		}
-#endif
-	//debugFree(&contents,"openFile contents");
-//	gtk_source_buffer_begin_not_undoable_action(page->buffer);
-//	gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
-//	gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str,strlen(str));
-//	gtk_source_buffer_end_not_undoable_action(page->buffer);
-
 	page->gFile=g_file_new_for_path(page->filePath);
 	page->monitor=g_file_monitor_file(page->gFile,(GFileMonitorFlags)G_FILE_MONITOR_NONE,NULL,NULL);
 	g_signal_connect(G_OBJECT(page->monitor),"changed",G_CALLBACK(fileChangedOnDisk),(void*)page);

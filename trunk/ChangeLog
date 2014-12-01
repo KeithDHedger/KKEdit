@@ -1,4 +1,6 @@
 0.2.6
+Fixed some minor encoding to UTF8 bugs.
+Fixed bug when loading certain html files.
 Fixed minor callback bug in prefs/plugin prefs.
 Speeded up load session.
 Code clean.
