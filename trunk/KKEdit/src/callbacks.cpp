@@ -199,7 +199,7 @@ VISIBLE void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer)
 	g_list_free_full(newBookMarksList,destroyBMData);
 	newBookMarksList=NULL;
 	rebuildBookMarkMenu();
-	gtk_widget_show_all(menuBookMark);
+	gtk_widget_show_all(bookMarkMenu);
 }
 
 VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
@@ -260,7 +260,7 @@ VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)ptr->data);
 					ptr=g_list_next(ptr);
 				}
-			gtk_widget_show_all(menuBookMark);
+			gtk_widget_show_all(bookMarkMenu);
 			g_slist_free(mark_list);
 		}
 	else
@@ -290,18 +290,18 @@ VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 			menuitem=gtk_menu_item_new_with_label(bookmarkdata->label);
 			gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
 			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)bookmarkdata);
-			gtk_widget_show_all(menuBookMark);
+			gtk_widget_show_all(bookMarkMenu);
 		}
 }
 
 void refreshMainWindow(void)
 {
-	gtk_widget_show(window);
+	gtk_widget_show(mainWindow);
 	gtk_widget_show(mainWindowVBox);
 	gtk_widget_show(mainVPane);
 	gtk_widget_show(mainWindowHPane);
 	gtk_widget_show(secondWindowHPane);
-	gtk_widget_show_all(menubar);
+	gtk_widget_show_all(menuBar);
 	gtk_widget_show_all(toolBarBox);
 	gtk_widget_show_all(mainWindowHBox);
 
@@ -327,7 +327,7 @@ int yesNo(char* question,char* file)
 	GtkWidget*	dialog;
 	int			result;
 
-	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,"%s %s",question,file);
+	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,"%s %s",question,file);
 
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_YES,GTK_RESPONSE_YES,GTK_STOCK_NO,GTK_RESPONSE_CANCEL,NULL);
 	gtk_window_set_title(GTK_WINDOW(dialog),gettext("What Do You Want To Do?"));
@@ -371,7 +371,7 @@ int show_question(char* filename)
 	char*		message;
 
 	asprintf(&message,gettext("Save file %s before closing?"),filename);
-	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
+	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
 
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_SAVE,GTK_RESPONSE_YES,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_NO,GTK_RESPONSE_NO,NULL);
 	gtk_window_set_title(GTK_WINDOW(dialog),gettext("Warning unsaved data!"));
@@ -458,10 +458,10 @@ void setSensitive(void)
 			gtk_widget_set_sensitive((GtkWidget*)pasteMenu,false);
 			gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 			gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)menuBookMark,false);
-			gtk_widget_set_sensitive((GtkWidget*)menufunc,false);
-			gtk_widget_set_sensitive((GtkWidget*)menunav,false);
-			gtk_widget_set_sensitive((GtkWidget*)menuprint,false);
+			gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)funcMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)navMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)printMenu,false);
 			gtk_widget_set_sensitive((GtkWidget*)menuclose,false);
 			gtk_widget_set_sensitive((GtkWidget*)menucloseall,false);
 			gtk_widget_set_sensitive((GtkWidget*)menusaveall,false);
@@ -494,10 +494,10 @@ void setSensitive(void)
 			gtk_widget_set_sensitive((GtkWidget*)cutMenu,true);
 			gtk_widget_set_sensitive((GtkWidget*)copyMenu,true);
 			gtk_widget_set_sensitive((GtkWidget*)pasteMenu,true);
-			gtk_widget_set_sensitive((GtkWidget*)menuBookMark,true);
-			gtk_widget_set_sensitive((GtkWidget*)menunav,true);
+			gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,true);
+			gtk_widget_set_sensitive((GtkWidget*)navMenu,true);
 			gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
-			gtk_widget_set_sensitive((GtkWidget*)menuprint,true);
+			gtk_widget_set_sensitive((GtkWidget*)printMenu,true);
 			gtk_widget_set_sensitive((GtkWidget*)menuclose,true);
 			gtk_widget_set_sensitive((GtkWidget*)menucloseall,true);
 			gtk_widget_set_sensitive((GtkWidget*)menusaveall,true);
@@ -591,7 +591,7 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)ptr->data);
 			ptr=g_list_next(ptr);
 		}
-	gtk_widget_show_all(menuBookMark);
+	gtk_widget_show_all(bookMarkMenu);
 
 	if(page->filePath!=NULL)
 		debugFree(&(page->filePath),"closeTab filePath");
@@ -638,7 +638,29 @@ VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
 
 //rebuild bookmark menu
 	rebuildBookMarkMenu();
-	gtk_widget_show_all(menuBookMark);
+	gtk_widget_show_all(bookMarkMenu);
+}
+
+void sortTabs(GtkWidget* widget,gpointer data)
+{
+	bool		flag=true;
+	pageStruct	*page1=NULL;
+	pageStruct	*page2=NULL;
+
+	while(flag==true)
+		{
+			flag=false;
+			for (int j=0;j<gtk_notebook_get_n_pages(notebook)-1;j++)
+				{
+					page1=getPageStructPtr(j);
+					page2=getPageStructPtr(j+1);
+					if(strcmp(page2->fileName,page1->fileName)<0)
+						{
+							flag=true;
+							gtk_notebook_reorder_child((GtkNotebook*)notebook,page2->tabVbox,j);
+						}
+				}
+		}
 }
 
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
@@ -668,9 +690,9 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	if(page==NULL)
 		return;
 
-	submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menufunc);
+	submenu=gtk_menu_item_get_submenu((GtkMenuItem*)funcMenu);
 	if (submenu!=NULL)
-		gtk_menu_item_set_submenu((GtkMenuItem*)menufunc,NULL);
+		gtk_menu_item_set_submenu((GtkMenuItem*)funcMenu,NULL);
 
 	currentTabNumber=thispage;
 
@@ -681,7 +703,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 
 	page->isFirst=true;
 	page->navSubMenu=(GtkMenuItem*)gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufunc),(GtkWidget*)page->navSubMenu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(funcMenu),(GtkWidget*)page->navSubMenu);
 
 	while ((lineptr!=NULL) && (strlen(lineptr)>0))
 		{
@@ -748,12 +770,12 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 			debugFree(&ts,"switchPage ts");
 		}
 
-	gtk_window_set_title((GtkWindow*)window,page->fileName);
+	gtk_window_set_title((GtkWindow*)mainWindow,page->fileName);
 	refreshMainWindow();
 	if(functions!=NULL)
 		debugFree(&functions,"switchPage functions");
 
-	gtk_widget_set_sensitive((GtkWidget*)menufunc,onefunc);
+	gtk_widget_set_sensitive((GtkWidget*)funcMenu,onefunc);
 	setSensitive();
 
 	createCompletion(page);
@@ -1430,8 +1452,8 @@ void writeExitData(void)
 	int				winx;
 	int				winy;
 	
-	gtk_widget_get_allocation(window,&alloc);
-	gtk_window_get_position((GtkWindow*)window,&winx,&winy);
+	gtk_widget_get_allocation(mainWindow,&alloc);
+	gtk_window_get_position((GtkWindow*)mainWindow,&winx,&winy);
 	asprintf(&windowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
 
 #ifdef _BUILDDOCVIEWER_
@@ -1704,7 +1726,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 			gtk_widget_hide((GtkWidget*)data);
 			gtk_widget_destroy((GtkWidget*)data);
 			buildTools();
-			gtk_widget_show_all(menutools);
+			gtk_widget_show_all(toolsMenu);
 		}
 
 	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)
@@ -1722,7 +1744,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 					gtk_widget_hide((GtkWidget*)data);
 					gtk_widget_destroy((GtkWidget*)data);
 					buildTools();
-					gtk_widget_show_all(menutools);
+					gtk_widget_show_all(toolsMenu);
 				}
 		}
 
@@ -1807,7 +1829,7 @@ VISIBLE void printFile(GtkWidget* widget,gpointer data)
 		gtk_print_operation_set_print_settings(print,settings);
 	g_signal_connect(print,"begin-print",G_CALLBACK(beginPrint),(void*)printview);
 	g_signal_connect(print,"draw-page",G_CALLBACK (drawPage),(void*)printview);
-	result=gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(window),NULL);
+	result=gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(mainWindow),NULL);
 	if (result==GTK_PRINT_OPERATION_RESULT_APPLY)
 		{
 			if (settings != NULL)

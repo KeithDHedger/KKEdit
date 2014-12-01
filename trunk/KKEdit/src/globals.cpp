@@ -13,25 +13,40 @@ bool			busyFlag=false;
 bool			autoSeleced=false;
 VISIBLE bool	sessionBusy=false;
 
-GtkWidget*		window=NULL;
+//app
+//main window
+GtkWidget*		mainWindow=NULL;
+GtkWidget*		menuBar=NULL;
+
+//file menu
+GtkWidget*		fileMenu;
+GtkWidget*		printMenu;
+GtkWidget		*sortTabsMenu=NULL;
+//edit menu
+GtkWidget*		editMenu;
+//view menu
+GtkWidget*		viewMenu=NULL;
+//nav menu
+GtkWidget*		navMenu;
+//func menu
+GtkWidget*		funcMenu;
+//bookmark menu
+GtkWidget*		bookMarkMenu;
+//tools menu
+GtkWidget*		toolsMenu;
+//help menu
+GtkWidget*		helpMenu;
+
 GtkAccelGroup*	accgroup=NULL;
 GtkNotebook*	notebook=NULL;
-GtkWidget*		menubar=NULL;
-GtkWidget*		menufile;
-GtkWidget*		menuedit;
-GtkWidget*		menufunc;
-GtkWidget*		menunav;
-GtkWidget*		menutools;
-GtkWidget*		menuhelp;
+
 GtkWidget*		globalPlugMenu=NULL;
 
 GtkWidget*		menuItemOpen=NULL;
-GtkWidget*		menuView=NULL;
 GtkWidget*		menuToolOut=NULL;
 GtkWidget*		menuStatusBar=NULL;
 
 VISIBLE GList*	newBookMarksList=NULL;
-GtkWidget*		menuBookMark;
 GtkWidget*		menuBookMarkSubMenu;
 char*			highlightColour;
 char*			tmpHighlightColour;
@@ -43,7 +58,6 @@ char*			toolBarLayout=NULL;
 GtkToolbar*		toolBar;
 GtkWidget*		toolBarBox;
 
-GtkWidget*		menuprint;
 GtkWidget*		menuclose;
 GtkWidget*		menucloseall;
 GtkWidget*		menusaveall;
@@ -1030,12 +1044,12 @@ void rebuildBookMarkMenu(void)
 	GtkWidget*	menuitem;
 	GtkWidget*	submenu;
 
-	submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menuBookMark);
+	submenu=gtk_menu_item_get_submenu((GtkMenuItem*)bookMarkMenu);
 	if(submenu!=NULL)
-		gtk_menu_item_set_submenu((GtkMenuItem*)menuBookMark,NULL);
+		gtk_menu_item_set_submenu((GtkMenuItem*)bookMarkMenu,NULL);
 
 	menuBookMarkSubMenu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuBookMark),menuBookMarkSubMenu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(bookMarkMenu),menuBookMarkSubMenu);
 
 	menuitem=gtk_menu_item_new_with_label(gettext("Remove All Bookmarks"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);

@@ -443,12 +443,12 @@ void buildTools(void)
 
 	buildToolsList();
 
-	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)menutools);
+	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)toolsMenu);
 	if(submenu!=NULL)
-		gtk_menu_item_set_submenu((GtkMenuItem*)menutools,NULL);
+		gtk_menu_item_set_submenu((GtkMenuItem*)toolsMenu,NULL);
 
 	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menutools),menu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(toolsMenu),menu);
 
 //addtool
 	menuitem=gtk_image_menu_item_new_with_label(gettext("Manage External Tools"));
@@ -1319,23 +1319,23 @@ void buildMainGui(void)
 	mainWindowHPane=gtk_hpaned_new();
 	secondWindowHPane=gtk_hpaned_new();
 
-	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_default_size((GtkWindow*)window,windowWidth,windowHeight);
+	mainWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_default_size((GtkWindow*)mainWindow,windowWidth,windowHeight);
 	if(windowX!=-1 && windowY!=-1)
-		gtk_window_move((GtkWindow *)window,windowX,windowY);
+		gtk_window_move((GtkWindow *)mainWindow,windowX,windowY);
 
-	g_signal_connect(G_OBJECT(window),"delete-event",G_CALLBACK(doShutdown),NULL);
-	g_signal_connect(G_OBJECT(window),"key-press-event",G_CALLBACK(keyShortCut),NULL);
+	g_signal_connect(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(doShutdown),NULL);
+	g_signal_connect(G_OBJECT(mainWindow),"key-press-event",G_CALLBACK(keyShortCut),NULL);
 
 	accgroup=gtk_accel_group_new();
-	gtk_window_add_accel_group((GtkWindow*)window,accgroup);
+	gtk_window_add_accel_group((GtkWindow*)mainWindow,accgroup);
 
 	notebook=(GtkNotebook*)gtk_notebook_new();
 	gtk_notebook_set_scrollable(notebook,true);
 	g_signal_connect(G_OBJECT(notebook),"switch-page",G_CALLBACK(switchPage),NULL);
 	g_signal_connect(G_OBJECT(notebook),"page-reordered",G_CALLBACK(switchPage),NULL);
 
-	menubar=gtk_menu_bar_new();
+	menuBar=gtk_menu_bar_new();
 	toolBarBox=gtk_hbox_new(true,0);
 	toolBar=(GtkToolbar*)gtk_toolbar_new();
 
@@ -1349,10 +1349,10 @@ void buildMainGui(void)
 
 //menus
 //file menu
-	menufile=gtk_menu_item_new_with_label(gettext("_File"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menufile,true);
+	fileMenu=gtk_menu_item_new_with_label(gettext("_File"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)fileMenu,true);
 	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufile),menu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMenu),menu);
 
 //new
 	menuitem=makeMenuItem(GTK_STOCK_NEW,menu,(void*)newFile,'N',NEWMENUNAME,STOCKMENU,NULL,NULL);
@@ -1406,7 +1406,7 @@ void buildMainGui(void)
 //restore session and bookmarks
 	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONBMMENUNAME,IMAGEMENU,gettext("Restore Session With Bookmarks"),(void*)true);
 //printfile
-	menuprint=makeMenuItem(GTK_STOCK_PRINT,menu,(void*)printFile,0,PRINTMENUNAME,STOCKMENU,NULL,NULL);
+	printMenu=makeMenuItem(GTK_STOCK_PRINT,menu,(void*)printFile,0,PRINTMENUNAME,STOCKMENU,NULL,NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -1415,6 +1415,8 @@ void buildMainGui(void)
 	menuclose=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeTab,'W',CLOSEMENUNAME,STOCKMENU,NULL,NULL);
 //close-all
 	menucloseall=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeAllTabs,0,CLOSEALLMENUNAME,IMAGEMENU,gettext("Close All Tabs"),NULL);
+//sort
+	sortTabsMenu=makeMenuItem(GTK_STOCK_SORT_ASCENDING,menu,(void*)sortTabs,0,SORTTABSMENUNAME,IMAGEMENU,gettext("Sort Tabs"),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -1428,10 +1430,10 @@ void buildMainGui(void)
 	menuitem=makeMenuItem(GTK_STOCK_QUIT,menu,(void*)doShutdown,'Q',QUITMENUNAME,STOCKMENU,NULL,NULL);
 
 //edit menu
-	menuedit=gtk_menu_item_new_with_label(gettext("_Edit"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menuedit,true);
+	editMenu=gtk_menu_item_new_with_label(gettext("_Edit"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)editMenu,true);
 	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuedit),menu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(editMenu),menu);
 //undo
 	undoMenu=makeMenuItem(GTK_STOCK_UNDO,menu,(void*)undo,'Z',UNDOMENUNAME,STOCKMENU,NULL,NULL);
 //redo
@@ -1466,10 +1468,10 @@ void buildMainGui(void)
 	menuitem=makeMenuItem(GTK_STOCK_PREFERENCES,menu,(void*)doPlugPrefs,0,PLUGPREFSMENUNAME,IMAGEMENU,gettext("Plugin Prefs"),NULL);
 
 //view menu
-	menuView=gtk_menu_item_new_with_label(gettext("_View"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menuView,true);
+	viewMenu=gtk_menu_item_new_with_label(gettext("_View"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)viewMenu,true);
 	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuView),menu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(viewMenu),menu);
 
 //show docs
 	menuitem=makeMenuItem(gettext("Show Documentaion"),menu,(void*)doDoxy,0,SHOWDOCSMENUNAME,NORMALMENU,NULL,(void*)2);
@@ -1500,10 +1502,10 @@ void buildMainGui(void)
 #endif
 
 //navigation menu
-	menunav=gtk_menu_item_new_with_label(gettext("_Navigation"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menunav,true);
+	navMenu=gtk_menu_item_new_with_label(gettext("_Navigation"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)navMenu,true);
 	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menunav),menu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(navMenu),menu);
 
 //goto define
 	menuitem=makeMenuItem(GTK_STOCK_DIALOG_QUESTION,menu,(void*)goToDefinition,'D',GOTODEFMENUNAME,IMAGEMENU,gettext("Go To Definition"),NULL);
@@ -1526,24 +1528,24 @@ void buildMainGui(void)
 	goBackMenu=makeMenuItem(GTK_STOCK_GO_BACK,menu,(void*)goBack,0,GOBACKMENUNAME,STOCKMENU,NULL,NULL);
 
 //function menu
-	menufunc=gtk_menu_item_new_with_label(gettext("Fun_ctions"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menufunc,true);
+	funcMenu=gtk_menu_item_new_with_label(gettext("Fun_ctions"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)funcMenu,true);
 
 //newbookmarks
-	menuBookMark=gtk_menu_item_new_with_label(gettext("_Bookmarks"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menuBookMark,true);
+	bookMarkMenu=gtk_menu_item_new_with_label(gettext("_Bookmarks"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)bookMarkMenu,true);
 	rebuildBookMarkMenu();
 
 //external tools
-	menutools=gtk_menu_item_new_with_label(gettext("_Tools"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menutools,true);
+	toolsMenu=gtk_menu_item_new_with_label(gettext("_Tools"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)toolsMenu,true);
 	buildTools();
 
 //help
-	menuhelp=gtk_menu_item_new_with_label(gettext("_Help"));
-	gtk_menu_item_set_use_underline((GtkMenuItem*)menuhelp,true);
+	helpMenu=gtk_menu_item_new_with_label(gettext("_Help"));
+	gtk_menu_item_set_use_underline((GtkMenuItem*)helpMenu,true);
 	menu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuhelp),menu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(helpMenu),menu);
 
 //about
 	menuitem=makeMenuItem(GTK_STOCK_ABOUT,menu,(void*)doAbout,0,ABOUTMENUNAME,STOCKMENU,NULL,NULL);
@@ -1552,13 +1554,13 @@ void buildMainGui(void)
 //get plugins
 	menuitem=makeMenuItem(DATADIR"/pixmaps/KKEditPlugMenu.png",menu,(void*)getPlugins,0,GETPLUGSMENUNAME,PIXMAPMENU,gettext("Get Plugins"),NULL);
 
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufile);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuedit);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuView);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menunav);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menufunc);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuBookMark);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menutools);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),fileMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),editMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),viewMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),navMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),funcMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),bookMarkMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),toolsMenu);
 
 //global plug menu
 	if(useGlobalPlugMenu==true)
@@ -1567,12 +1569,12 @@ void buildMainGui(void)
 			gtk_menu_item_set_use_underline((GtkMenuItem*)globalPlugMenu,true);
 			plugsubmenu=gtk_menu_new();
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(globalPlugMenu),plugsubmenu);
-			gtk_menu_shell_append(GTK_MENU_SHELL(menubar),globalPlugMenu);
+			gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),globalPlugMenu);
 		}
 	else
 		globalPlugMenu=NULL;
 
-	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),menuhelp);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),helpMenu);
 
 //tooloutputwindow
 	mainVPane=gtk_vpaned_new();
@@ -1589,9 +1591,9 @@ void buildMainGui(void)
 	gtk_container_add(GTK_CONTAINER(toolOutVBox),(GtkWidget*)mainWindowScrollbox);
 
 //add main vbox to window
-	gtk_container_add((GtkContainer*)window,mainWindowVBox);
+	gtk_container_add((GtkContainer*)mainWindow,mainWindowVBox);
 //addmenubar
-	gtk_box_pack_start((GtkBox*)mainWindowVBox,menubar,false,false,0);
+	gtk_box_pack_start((GtkBox*)mainWindowVBox,menuBar,false,false,0);
 //add toolbar
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,toolBarBox,false,false,0);
 
@@ -1636,24 +1638,24 @@ void buildMainGui(void)
 	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 
 	
-	globalPlugins->globalPlugData->mlist.menuFile=menufile;
-	globalPlugins->globalPlugData->mlist.menuEdit=menuedit;
-	globalPlugins->globalPlugData->mlist.menuFunc=menufunc;
-	globalPlugins->globalPlugData->mlist.menuNav=menunav;
-	globalPlugins->globalPlugData->mlist.menuTools=menutools;
-	globalPlugins->globalPlugData->mlist.menuHelp=menuhelp;
-	globalPlugins->globalPlugData->mlist.menuBookMark=menuBookMark;
-	globalPlugins->globalPlugData->mlist.menuView=menuView;
+	globalPlugins->globalPlugData->mlist.menuFile=fileMenu;
+	globalPlugins->globalPlugData->mlist.menuEdit=editMenu;
+	globalPlugins->globalPlugData->mlist.menuFunc=funcMenu;
+	globalPlugins->globalPlugData->mlist.menuNav=navMenu;
+	globalPlugins->globalPlugData->mlist.menuTools=toolsMenu;
+	globalPlugins->globalPlugData->mlist.menuHelp=helpMenu;
+	globalPlugins->globalPlugData->mlist.menuBookMark=bookMarkMenu;
+	globalPlugins->globalPlugData->mlist.menuView=viewMenu;
 	if(useGlobalPlugMenu==true)
 		globalPlugins->globalPlugData->mlist.menuBar=plugsubmenu;
 	else
-		globalPlugins->globalPlugData->mlist.menuBar=menubar;
+		globalPlugins->globalPlugData->mlist.menuBar=menuBar;
 
 	globalPlugins->globalPlugData->topUserBox=mainTopUserVBox;
 	globalPlugins->globalPlugData->leftUserBox=mainLeftUserVBox;
 	globalPlugins->globalPlugData->rightUserBox=mainRightUserVBox;
 	globalPlugins->globalPlugData->bottomUserBox=mainBottomUserVBox;
-	globalPlugins->globalPlugData->mainWindow=window;
+	globalPlugins->globalPlugData->mainWindow=mainWindow;
 	globalPlugins->globalPlugData->notebook=notebook;
 	globalPlugins->globalPlugData->mainWindowHPane=mainWindowHPane;
 
@@ -1682,7 +1684,7 @@ void buildFindReplace(void)
 	GtkWidget*	hbox;
 	GtkWidget*	item;
 
-	findReplaceDialog=gtk_dialog_new_with_buttons(gettext("Find/Replace"),(GtkWindow*)window, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_GO_FORWARD,FINDNEXT,GTK_STOCK_GO_BACK,FINDPREV,gettext("Replace"),REPLACE,NULL);
+	findReplaceDialog=gtk_dialog_new_with_buttons(gettext("Find/Replace"),(GtkWindow*)mainWindow, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_GO_FORWARD,FINDNEXT,GTK_STOCK_GO_BACK,FINDPREV,gettext("Replace"),REPLACE,NULL);
 
 	g_signal_connect(G_OBJECT(findReplaceDialog),"response",G_CALLBACK(doFindReplace),NULL);
 	content_area=gtk_dialog_get_content_area(GTK_DIALOG(findReplaceDialog));
@@ -1840,7 +1842,7 @@ int showFunctionEntry(void)
 	GtkWidget*	content_area;
 	GtkWidget*	entrybox;
 
-	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,gettext("Enter Function Name"));
+	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,gettext("Enter Function Name"));
 
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OK,GTK_RESPONSE_YES,NULL);
 	gtk_window_set_title(GTK_WINDOW(dialog),gettext("Find Function"));

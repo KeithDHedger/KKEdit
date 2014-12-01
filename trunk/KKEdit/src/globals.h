@@ -87,19 +87,42 @@ struct bookMarksNew
 	int					line;
 };
 
+
 extern GApplication*	mainApp;
 extern bool				busyFlag;
 extern bool				autoSeleced;
 extern bool				sessionBusy;
 
+//app
+//main window
+extern GtkWidget*		mainWindow;
+extern GtkWidget*		menuBar;
+
+//file menu
+extern GtkWidget*		fileMenu;
+extern GtkWidget*		printMenu;
+extern GtkWidget		*sortTabsMenu;
+//edit menu
+extern GtkWidget*		editMenu;
+//nav menu
+extern GtkWidget*		navMenu;
+//view menu
+extern GtkWidget*		viewMenu;
+//func menu
+extern GtkWidget*		funcMenu;
+//bookmark menu
+extern GtkWidget*		bookMarkMenu;
+//tools menu
+extern GtkWidget*		toolsMenu;
+//help menu
+extern GtkWidget*		helpMenu;
+
 extern HistoryClass*	history;
 
-extern GtkWidget*		window;
 extern GtkAccelGroup*	accgroup;
 extern GtkNotebook*		notebook;
 
 extern GList*			newBookMarksList;
-extern GtkWidget*		menuBookMark;
 extern GtkWidget*		menuBookMarkSubMenu;
 extern char*			highlightColour;
 extern char*			tmpHighlightColour;
@@ -111,17 +134,8 @@ extern char*			toolBarLayout;
 extern GtkToolbar*		toolBar;
 extern GtkWidget*		toolBarBox;
 
-extern GtkWidget*		menubar;
-extern GtkWidget*		menufile;
-extern GtkWidget*		menuedit;
-extern GtkWidget*		menufunc;
-extern GtkWidget*		menunav;
-extern GtkWidget*		menutools;
-extern GtkWidget*		menuView;
 extern GtkWidget*		globalPlugMenu;
 
-extern GtkWidget*		menuhelp;
-extern GtkWidget*		menuprint;
 extern GtkWidget*		menuclose;
 extern GtkWidget*		menucloseall;
 extern GtkWidget*		menusaveall;
