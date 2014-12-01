@@ -1027,7 +1027,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	GtkWidget*		pagevbox;
 	GtkWidget*		item;
 	GtkWidget*		label;
-	GtkNotebook*	notebook;
+	GtkNotebook*	prefsnotebook;
 	GtkAlignment*	align;
 
 	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -1052,7 +1052,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 //end customize
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 
-	notebook=(GtkNotebook*)gtk_notebook_new();
+	prefsnotebook=(GtkNotebook*)gtk_notebook_new();
 
 //pages
 //page1
@@ -1089,9 +1089,9 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	makePrefsCheck(AUTOSHOW,gettext("Auto show Completions"),"autocomp",autoShowComps,0,10);
 
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
-	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("General Appearance")));
+	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("General Appearance")));
 
-	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)notebook,true,true,0);
+	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)prefsnotebook,true,true,0);
 
 //page2
 	pagevbox=gtk_vbox_new(false,0);
@@ -1164,7 +1164,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	gtk_container_add(GTK_CONTAINER(align),(GtkWidget*)funcListDrop);
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,16);
 
-	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("Text Style")));
+	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("Text Style")));
 
 //show keybindings dialog
 	align=(GtkAlignment*)gtk_alignment_new(0.5,1,0,0);
@@ -1229,7 +1229,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	makePrefsCheck(GLOBALPLUGMENU,gettext("Use Global Plugins Menu ( Requires Restart )"),"useplugmenu",useGlobalPlugMenu,0,9);
 
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
-	gtk_notebook_append_page(notebook,pagevbox,gtk_label_new(gettext("Administration")));
+	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("Administration")));
 
 //end admin
 
@@ -1330,10 +1330,10 @@ void buildMainGui(void)
 	accgroup=gtk_accel_group_new();
 	gtk_window_add_accel_group((GtkWindow*)mainWindow,accgroup);
 
-	notebook=(GtkNotebook*)gtk_notebook_new();
-	gtk_notebook_set_scrollable(notebook,true);
-	g_signal_connect(G_OBJECT(notebook),"switch-page",G_CALLBACK(switchPage),NULL);
-	g_signal_connect(G_OBJECT(notebook),"page-reordered",G_CALLBACK(switchPage),NULL);
+	mainNotebook=(GtkNotebook*)gtk_notebook_new();
+	gtk_notebook_set_scrollable(mainNotebook,true);
+	g_signal_connect(G_OBJECT(mainNotebook),"switch-page",G_CALLBACK(switchPage),NULL);
+	g_signal_connect(G_OBJECT(mainNotebook),"page-reordered",G_CALLBACK(switchPage),NULL);
 
 	menuBar=gtk_menu_bar_new();
 	toolBarBox=gtk_hbox_new(true,0);
@@ -1394,7 +1394,7 @@ void buildMainGui(void)
 //savas
 	saveAsMenu=makeMenuItem(GTK_STOCK_SAVE_AS,menu,(void*)saveFile,-'S',SAVEASMENUNAME,STOCKMENU,NULL,(void*)1);
 //save all
-	menusaveall=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)doSaveAll,0,SAVEALLMENUNAME,IMAGEMENU,gettext("Save All"),NULL);
+	saveAllMenu=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)doSaveAll,0,SAVEALLMENUNAME,IMAGEMENU,gettext("Save All"),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -1412,16 +1412,16 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //close
-	menuclose=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeTab,'W',CLOSEMENUNAME,STOCKMENU,NULL,NULL);
+	closeMenu=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeTab,'W',CLOSEMENUNAME,STOCKMENU,NULL,NULL);
 //close-all
-	menucloseall=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeAllTabs,0,CLOSEALLMENUNAME,IMAGEMENU,gettext("Close All Tabs"),NULL);
+	closeAllMenu=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeAllTabs,0,CLOSEALLMENUNAME,IMAGEMENU,gettext("Close All Tabs"),NULL);
 //sort
 	sortTabsMenu=makeMenuItem(GTK_STOCK_SORT_ASCENDING,menu,(void*)sortTabs,0,SORTTABSMENUNAME,IMAGEMENU,gettext("Sort Tabs"),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //reload file
-	menurevert=makeMenuItem(GTK_STOCK_REVERT_TO_SAVED,menu,(void*)reloadFile,0,REVERTMENUNAME,STOCKMENU,NULL,NULL);
+	revertMenu=makeMenuItem(GTK_STOCK_REVERT_TO_SAVED,menu,(void*)reloadFile,0,REVERTMENUNAME,STOCKMENU,NULL,NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -1487,14 +1487,14 @@ void buildMainGui(void)
 		menuitem=makeMenuItem(gettext("Show Tool Bar"),menu,(void*)toggleToolBar,0,SHOWTOOLBARMENUNAME,NORMALMENU,NULL,NULL);
 //tooloutput
 	if(showToolOutWin)
-		menuToolOut=makeMenuItem(gettext("Hide Tool Output"),menu,(void*)toggleToolOutput,0,SHOWTOOLOUTMENUNAME,NORMALMENU,NULL,NULL);
+		toolOutMenu=makeMenuItem(gettext("Hide Tool Output"),menu,(void*)toggleToolOutput,0,SHOWTOOLOUTMENUNAME,NORMALMENU,NULL,NULL);
 	else
-		menuToolOut=makeMenuItem(gettext("Show Tool Output"),menu,(void*)toggleToolOutput,0,SHOWTOOLOUTMENUNAME,NORMALMENU,NULL,NULL);
+		toolOutMenu=makeMenuItem(gettext("Show Tool Output"),menu,(void*)toggleToolOutput,0,SHOWTOOLOUTMENUNAME,NORMALMENU,NULL,NULL);
 //toggle statusbar
 	if(showStatus)
-		menuStatusBar=makeMenuItem(gettext("Hide Status Bar"),menu,(void*)toggleStatusBar,0,SHOWSTATUSMENUNAME,NORMALMENU,NULL,NULL);
+		statusBarMenu=makeMenuItem(gettext("Hide Status Bar"),menu,(void*)toggleStatusBar,0,SHOWSTATUSMENUNAME,NORMALMENU,NULL,NULL);
 	else
-		menuStatusBar=makeMenuItem(gettext("Show Status Bar"),menu,(void*)toggleStatusBar,0,SHOWSTATUSMENUNAME,NORMALMENU,NULL,NULL);
+		statusBarMenu=makeMenuItem(gettext("Show Status Bar"),menu,(void*)toggleStatusBar,0,SHOWSTATUSMENUNAME,NORMALMENU,NULL,NULL);
 
 #ifdef _BUILDDOCVIEWER_
 //toggle docviewer
@@ -1590,7 +1590,7 @@ void buildMainGui(void)
 	gtk_container_add(GTK_CONTAINER(mainWindowScrollbox),(GtkWidget*)toolOutputView);
 	gtk_container_add(GTK_CONTAINER(toolOutVBox),(GtkWidget*)mainWindowScrollbox);
 
-//add main vbox to window
+//add main vbox to mainWindow
 	gtk_container_add((GtkContainer*)mainWindow,mainWindowVBox);
 //addmenubar
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,menuBar,false,false,0);
@@ -1601,8 +1601,8 @@ void buildMainGui(void)
 	gtk_paned_pack1((GtkPaned*)mainWindowHPane,mainLeftUserVBox,false,true);
 	gtk_paned_pack2((GtkPaned*)mainWindowHPane,secondWindowHPane,true,false);
 
-//add notebook
-	gtk_box_pack_start((GtkBox*)mainNotebookVBox,(GtkWidget*)notebook,true,true,0);
+//add mainNotebook
+	gtk_box_pack_start((GtkBox*)mainNotebookVBox,(GtkWidget*)mainNotebook,true,true,0);
 	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainVPane,true,true,0);
 	gtk_paned_pack1((GtkPaned*)secondWindowHPane,mainWindowHBox,true,false);
                                                          
@@ -1656,7 +1656,7 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->rightUserBox=mainRightUserVBox;
 	globalPlugins->globalPlugData->bottomUserBox=mainBottomUserVBox;
 	globalPlugins->globalPlugData->mainWindow=mainWindow;
-	globalPlugins->globalPlugData->notebook=notebook;
+	globalPlugins->globalPlugData->notebook=mainNotebook;
 	globalPlugins->globalPlugData->mainWindowHPane=mainWindowHPane;
 
 	globalPlugins->globalPlugData->leftShow=0;

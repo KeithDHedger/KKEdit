@@ -23,10 +23,10 @@ HistoryClass::~HistoryClass()
 void HistoryClass::getThisPoint(void)
 {
 	GtkWidget*	pageBox;
-	int			tabNum=gtk_notebook_get_current_page(notebook);
+	int			tabNum=gtk_notebook_get_current_page(mainNotebook);
 
 	this->goBack=true;
-	pageBox=gtk_notebook_get_nth_page(notebook,tabNum);
+	pageBox=gtk_notebook_get_nth_page(mainNotebook,tabNum);
 	if(pageBox==NULL)
 		savedPage=NULL;
 	else
@@ -78,7 +78,7 @@ bool HistoryClass::savePosition(void)
 int HistoryClass::getTabNumForPage(void)
 {
 	pageStruct*	page;
-	int			numpages=gtk_notebook_get_n_pages(notebook);
+	int			numpages=gtk_notebook_get_n_pages(mainNotebook);
 
 	for(int loop=0;loop<numpages;loop++)
 		{

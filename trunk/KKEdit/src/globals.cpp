@@ -14,55 +14,25 @@ bool			autoSeleced=false;
 VISIBLE bool	sessionBusy=false;
 
 //app
-//main window
+//main mainWindow
 GtkWidget*		mainWindow=NULL;
 GtkWidget*		menuBar=NULL;
+GtkToolbar*		toolBar;
+GtkWidget*		statusBarMenu=NULL;
+GtkNotebook*	mainNotebook=NULL;
 
 //file menu
 GtkWidget*		fileMenu;
+GtkWidget*		saveMenu;
+GtkWidget*		saveAsMenu;
+GtkWidget*		saveAllMenu;
+GtkWidget*		closeMenu;
+GtkWidget*		closeAllMenu;
+GtkWidget*		revertMenu;
 GtkWidget*		printMenu;
 GtkWidget		*sortTabsMenu=NULL;
 //edit menu
 GtkWidget*		editMenu;
-//view menu
-GtkWidget*		viewMenu=NULL;
-//nav menu
-GtkWidget*		navMenu;
-//func menu
-GtkWidget*		funcMenu;
-//bookmark menu
-GtkWidget*		bookMarkMenu;
-//tools menu
-GtkWidget*		toolsMenu;
-//help menu
-GtkWidget*		helpMenu;
-
-GtkAccelGroup*	accgroup=NULL;
-GtkNotebook*	notebook=NULL;
-
-GtkWidget*		globalPlugMenu=NULL;
-
-GtkWidget*		menuItemOpen=NULL;
-GtkWidget*		menuToolOut=NULL;
-GtkWidget*		menuStatusBar=NULL;
-
-VISIBLE GList*	newBookMarksList=NULL;
-GtkWidget*		menuBookMarkSubMenu;
-char*			highlightColour;
-char*			tmpHighlightColour;
-bool			showBMBar;
-GtkWidget*		bmHighlightBox;
-int				bmMarkNumber=0;
-
-char*			toolBarLayout=NULL;
-GtkToolbar*		toolBar;
-GtkWidget*		toolBarBox;
-
-GtkWidget*		menuclose;
-GtkWidget*		menucloseall;
-GtkWidget*		menusaveall;
-GtkWidget*		menurevert;
-
 GtkWidget*		redoMenu;
 GtkWidget*		undoMenu;
 GtkWidget*		redoAllMenu;
@@ -70,10 +40,42 @@ GtkWidget*		undoAllMenu;
 GtkWidget*		cutMenu;
 GtkWidget*		copyMenu;
 GtkWidget*		pasteMenu;
+//view menu
+GtkWidget*		viewMenu=NULL;
+//nav menu
+GtkWidget*		navMenu;
 GtkWidget*		goBackMenu;
+//func menu
+GtkWidget*		funcMenu;
+//bookmark menu
+GtkWidget*		bookMarkMenu;
+GtkWidget*		bookMarkSubMenu;
+//tools menu
+GtkWidget*		toolsMenu;
+GtkWidget*		toolOutMenu=NULL;
+//plug menu
+GtkWidget*		globalPlugMenu=NULL;
+//help menu
+GtkWidget*		helpMenu;
 
-GtkWidget*		saveMenu;
-GtkWidget*		saveAsMenu;
+GtkAccelGroup*	accgroup=NULL;
+
+
+GtkWidget*		menuItemOpen=NULL;
+
+
+VISIBLE GList*	newBookMarksList=NULL;
+char*			highlightColour;
+char*			tmpHighlightColour;
+bool			showBMBar;
+GtkWidget*		bmHighlightBox;
+int				bmMarkNumber=0;
+
+char*			toolBarLayout=NULL;
+GtkWidget*		toolBarBox;
+
+
+
 
 GtkWidget*		lineNumberWidget;
 GtkWidget*		findApiWidget;
@@ -168,7 +170,7 @@ GList*			toolsList=NULL;
 
 GtkWidget*		restoreBMs;
 
-//main window
+//main mainWindow
 int				windowWidth;
 int				windowHeight;
 int				windowX=-1;
@@ -490,11 +492,11 @@ VISIBLE pageStruct* getPageStructPtr(int pagenum)
 	GtkWidget*	pageBox;
 
 	if(pagenum==-1)
-		thispage=gtk_notebook_get_current_page(notebook);
+		thispage=gtk_notebook_get_current_page(mainNotebook);
 	else
 		thispage=pagenum;
 
-	pageBox=gtk_notebook_get_nth_page(notebook,thispage);
+	pageBox=gtk_notebook_get_nth_page(mainNotebook,thispage);
 	if(pageBox==NULL)
 		return(NULL);
 	else
@@ -632,7 +634,7 @@ VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int u
 						{
 							showToolOutWin=true;
 							gtk_widget_show(toolOutVBox);
-							gtk_menu_item_set_label((GtkMenuItem*)menuToolOut,gettext("Hide Tool Output"));
+							gtk_menu_item_set_label((GtkMenuItem*)toolOutMenu,gettext("Hide Tool Output"));
 							while(fgets(line,1024,fp))
 								{
 									gtk_text_buffer_insert_at_cursor(toolOutputBuffer,line,strlen(line));
@@ -665,7 +667,7 @@ VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int u
 functionData* getFunctionByName(char* name,bool recurse)
 {
 	pageStruct*		page;
-	int				numpages=gtk_notebook_get_n_pages(notebook);
+	int				numpages=gtk_notebook_get_n_pages(mainNotebook);
 	char*			lineptr;
 	char*			functions=NULL;
 	char*			dirname;
@@ -693,7 +695,7 @@ functionData* getFunctionByName(char* name,bool recurse)
 
 	getfromfile=false;
 
-	loop=gtk_notebook_get_current_page(notebook);
+	loop=gtk_notebook_get_current_page(mainNotebook);
 	startpage=loop;
 	checkthispage=true;
 
@@ -1048,19 +1050,19 @@ void rebuildBookMarkMenu(void)
 	if(submenu!=NULL)
 		gtk_menu_item_set_submenu((GtkMenuItem*)bookMarkMenu,NULL);
 
-	menuBookMarkSubMenu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(bookMarkMenu),menuBookMarkSubMenu);
+	bookMarkSubMenu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(bookMarkMenu),bookMarkSubMenu);
 
 	menuitem=gtk_menu_item_new_with_label(gettext("Remove All Bookmarks"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(removeAllBookmarks),NULL);
 
 	menuitem=gtk_menu_item_new_with_label(gettext("Toggle Bookmark"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menuBookMarkSubMenu),menuitem);
+	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
 }
 
 VISIBLE void goBack(GtkWidget* widget,gpointer data)
@@ -1076,7 +1078,7 @@ VISIBLE void goBack(GtkWidget* widget,gpointer data)
 
 	buf=history->getTextBuffer();
 
-	if(gtk_notebook_get_current_page(notebook)==history->getTabNumForPage())
+	if(gtk_notebook_get_current_page(mainNotebook)==history->getTabNumForPage())
 		{
 			buf->textBuffer=(GtkTextBuffer*)page->buffer;
 			buf->getLineData();
@@ -1095,7 +1097,7 @@ VISIBLE void goBack(GtkWidget* widget,gpointer data)
 				}
 		if(hist->savePosition()==true)
 				{
-					gtk_notebook_set_current_page(notebook,history->getTabNumForPage());
+					gtk_notebook_set_current_page(mainNotebook,history->getTabNumForPage());
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
 					gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 					scrollToIterInPane(page,&iter);

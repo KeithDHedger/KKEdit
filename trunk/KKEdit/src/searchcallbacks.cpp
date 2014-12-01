@@ -419,28 +419,28 @@ void doAllFiles(int dowhat,bool found)
 		{
 			if(dowhat==FINDNEXT)
 				{
-					currentFindPage=gtk_notebook_get_current_page(notebook)+1;
-					if(currentFindPage==gtk_notebook_get_n_pages(notebook))
+					currentFindPage=gtk_notebook_get_current_page(mainNotebook)+1;
+					if(currentFindPage==gtk_notebook_get_n_pages(mainNotebook))
 						currentFindPage=0;
 				}
 			else
 				{
-					currentFindPage=gtk_notebook_get_current_page(notebook)-1;
+					currentFindPage=gtk_notebook_get_current_page(mainNotebook)-1;
 					if(currentFindPage==-1)
-						currentFindPage=gtk_notebook_get_n_pages(notebook)-1;
+						currentFindPage=gtk_notebook_get_n_pages(mainNotebook)-1;
 				}
 
 			pagesChecked++;
-			if(pagesChecked>gtk_notebook_get_n_pages(notebook))
+			if(pagesChecked>gtk_notebook_get_n_pages(mainNotebook))
 				{
 					currentFindPage=-1;
-					gtk_notebook_set_current_page(notebook,firstPage);
+					gtk_notebook_set_current_page(mainNotebook,firstPage);
 					pagesChecked=0;
 					return;
 				}
 		}
 
-	gtk_notebook_set_current_page(notebook,currentFindPage);
+	gtk_notebook_set_current_page(mainNotebook,currentFindPage);
 	page=getPageStructPtr(currentFindPage);
 
 	if(dowhat==FINDNEXT)
@@ -659,16 +659,16 @@ void regexFind(int dowhat)
 								page->regexMatchNumber=-1;
 								currentFindPage++;
 								pagesChecked++;
-								if(currentFindPage>=gtk_notebook_get_n_pages(notebook))
+								if(currentFindPage>=gtk_notebook_get_n_pages(mainNotebook))
 									currentFindPage=0;
-								gtk_notebook_set_current_page(notebook,currentFindPage);
+								gtk_notebook_set_current_page(mainNotebook,currentFindPage);
 								page=getPageStructPtr(currentFindPage);
 								page->regexMatchNumber=-1;
 								dofindnext=true;
 								gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
 								gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&startiter);
 
-								if(pagesChecked>gtk_notebook_get_n_pages(notebook))
+								if(pagesChecked>gtk_notebook_get_n_pages(mainNotebook))
 									{
 										dofindnext=false;
 										pagesChecked=0;
@@ -711,8 +711,8 @@ void regexFind(int dowhat)
 								page->regexMatchNumber=-1;
 								currentFindPage--;
 								if(currentFindPage<0)
-									currentFindPage=gtk_notebook_get_n_pages(notebook)-1;
-								gtk_notebook_set_current_page(notebook,currentFindPage);
+									currentFindPage=gtk_notebook_get_n_pages(mainNotebook)-1;
+								gtk_notebook_set_current_page(mainNotebook,currentFindPage);
 								page=getPageStructPtr(currentFindPage);
 								page->regexMatchNumber=-1;
 								dofindprev=true;
@@ -744,12 +744,12 @@ fromregexsinglereplace=false;
 								if(yesNo((char*)gettext("Do you want to replace in ALL open files?"),(char*)"")==GTK_RESPONSE_CANCEL)
 									return;
 								startloop=0;
-								endloop=gtk_notebook_get_n_pages(notebook);
+								endloop=gtk_notebook_get_n_pages(mainNotebook);
 							}
 						else
 							{
-								startloop=gtk_notebook_get_current_page(notebook);
-								endloop=gtk_notebook_get_current_page(notebook)+1;
+								startloop=gtk_notebook_get_current_page(mainNotebook);
+								endloop=gtk_notebook_get_current_page(mainNotebook)+1;
 							}
 
 						for(int j=startloop;j<endloop;j++)
@@ -839,7 +839,7 @@ void basicFind(int dowhat)
 		{
 			if(currentFindPage!=-1)
 				{
-					currentFindPage=gtk_notebook_get_current_page(notebook);
+					currentFindPage=gtk_notebook_get_current_page(mainNotebook);
 					firstPage=currentFindPage;
 				}
 			else
@@ -965,9 +965,9 @@ void basicFind(int dowhat)
 				if(yesNo((char*)gettext("Do you want to replace in ALL open files?"),(char*)"")==GTK_RESPONSE_CANCEL)
 					return;
 						findInAllFiles=false;
-						for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
+						for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
 							{
-								gtk_notebook_set_current_page(notebook,j);
+								gtk_notebook_set_current_page(mainNotebook,j);
 								basicFind(REPLACE);
 							}
 						findInAllFiles=true;
@@ -1092,7 +1092,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 	busyFlag=true;
 
-	currentFindPage=gtk_notebook_get_current_page(notebook);
+	currentFindPage=gtk_notebook_get_current_page(mainNotebook);
 	pagesChecked=0;
 
 	if(response_id!=REPLACE)

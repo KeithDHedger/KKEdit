@@ -97,54 +97,22 @@ extern bool				sessionBusy;
 //main window
 extern GtkWidget*		mainWindow;
 extern GtkWidget*		menuBar;
+extern GtkToolbar*		toolBar;
+extern GtkWidget*		statusBarMenu;
+extern GtkNotebook*		mainNotebook;
 
 //file menu
 extern GtkWidget*		fileMenu;
+extern GtkWidget*		saveMenu;
+extern GtkWidget*		saveAsMenu;
+extern GtkWidget*		saveAllMenu;
+extern GtkWidget*		closeMenu;
+extern GtkWidget*		closeAllMenu;
+extern GtkWidget*		revertMenu;
 extern GtkWidget*		printMenu;
 extern GtkWidget		*sortTabsMenu;
 //edit menu
 extern GtkWidget*		editMenu;
-//nav menu
-extern GtkWidget*		navMenu;
-//view menu
-extern GtkWidget*		viewMenu;
-//func menu
-extern GtkWidget*		funcMenu;
-//bookmark menu
-extern GtkWidget*		bookMarkMenu;
-//tools menu
-extern GtkWidget*		toolsMenu;
-//help menu
-extern GtkWidget*		helpMenu;
-
-extern HistoryClass*	history;
-
-extern GtkAccelGroup*	accgroup;
-extern GtkNotebook*		notebook;
-
-extern GList*			newBookMarksList;
-extern GtkWidget*		menuBookMarkSubMenu;
-extern char*			highlightColour;
-extern char*			tmpHighlightColour;
-extern bool				showBMBar;
-extern GtkWidget*		bmHighlightBox;
-extern int				bmMarkNumber;
-
-extern char*			toolBarLayout;
-extern GtkToolbar*		toolBar;
-extern GtkWidget*		toolBarBox;
-
-extern GtkWidget*		globalPlugMenu;
-
-extern GtkWidget*		menuclose;
-extern GtkWidget*		menucloseall;
-extern GtkWidget*		menusaveall;
-extern GtkWidget*		menurevert;
-
-extern GtkWidget*		menuItemOpen;
-extern GtkWidget*		menuToolOut;
-extern GtkWidget*		menuStatusBar;
-
 extern GtkWidget*		redoMenu;
 extern GtkWidget*		undoMenu;
 extern GtkWidget*		redoAllMenu;
@@ -152,10 +120,43 @@ extern GtkWidget*		undoAllMenu;
 extern GtkWidget*		cutMenu;
 extern GtkWidget*		copyMenu;
 extern GtkWidget*		pasteMenu;
+//nav menu
+extern GtkWidget*		navMenu;
+//view menu
 extern GtkWidget*		goBackMenu;
+extern GtkWidget*		viewMenu;
+//func menu
+extern GtkWidget*		funcMenu;
+//bookmark menu
+extern GtkWidget*		bookMarkMenu;
+extern GtkWidget*		bookMarkSubMenu;
+//tools menu
+extern GtkWidget*		toolsMenu;
+extern GtkWidget*		toolOutMenu;
+//plug menu
+extern GtkWidget*		globalPlugMenu;
+//help menu
+extern GtkWidget*		helpMenu;
 
-extern GtkWidget*		saveMenu;
-extern GtkWidget*		saveAsMenu;
+extern HistoryClass*	history;
+
+extern GtkAccelGroup*	accgroup;
+
+extern GList*			newBookMarksList;
+extern char*			highlightColour;
+extern char*			tmpHighlightColour;
+extern bool				showBMBar;
+extern GtkWidget*		bmHighlightBox;
+extern int				bmMarkNumber;
+
+extern char*			toolBarLayout;
+extern GtkWidget*		toolBarBox;
+
+
+
+extern GtkWidget*		menuItemOpen;
+
+
 
 extern GtkWidget*		lineNumberWidget;
 extern GtkWidget*		findApiWidget;

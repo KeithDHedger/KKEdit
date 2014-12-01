@@ -19,7 +19,7 @@ void goToDefine(functionData* fdata)
 	if(fdata->intab==-1)
 		{
 			openFile(fdata->file,fdata->line-1,true);
-			page=getPageStructPtr(gtk_notebook_get_n_pages(notebook)-1);
+			page=getPageStructPtr(gtk_notebook_get_n_pages(mainNotebook)-1);
 			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 			buf->scroll2Line((GtkTextView*)page->view,fdata->line-2);
 			delete buf;
@@ -27,7 +27,7 @@ void goToDefine(functionData* fdata)
 	else
 		{
 			page=getPageStructPtr(fdata->intab);
-			gtk_notebook_set_current_page(notebook,fdata->intab);
+			gtk_notebook_set_current_page(mainNotebook,fdata->intab);
 			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 
 			if(page->inTop==true)
@@ -208,12 +208,12 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 
 	buf->scroll2Mark((GtkTextView*)page->view,mark);
 
-	for(int loop=0; loop<gtk_notebook_get_n_pages(notebook); loop++)
+	for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 		{
 			checkpage=getPageStructPtr(loop);
 			if(checkpage==page)
 				{
-					gtk_notebook_set_current_page(notebook,loop);
+					gtk_notebook_set_current_page(mainNotebook,loop);
 					return;
 				}
 		}
@@ -576,12 +576,12 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 
 //check in open tabs
 			buf=new TextBuffer;
-			for(int j=0; j<gtk_notebook_get_n_pages(notebook); j++)
+			for(int j=0; j<gtk_notebook_get_n_pages(mainNotebook); j++)
 				{
 					page=getPageStructPtr(j);
 					if((strcmp(page->realFilePath,doxydata->sourceFile)==0) || (strcmp(page->filePath,doxydata->sourceFile)==0))
 						{
-							gtk_notebook_set_current_page(notebook,j);
+							gtk_notebook_set_current_page(mainNotebook,j);
 							buf->textBuffer=(GtkTextBuffer*)page->buffer;
 							buf->scroll2LineM(page,doxydata->lineNum-1);
 							delete buf;

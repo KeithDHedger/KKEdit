@@ -198,7 +198,7 @@ void resetAllFilePrefs(void)
 
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
-	for(int loop=0; loop<gtk_notebook_get_n_pages(notebook); loop++)
+	for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 		{
 			page=getPageStructPtr(loop);
 			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
@@ -363,7 +363,7 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 		}
 	if(page->lang==NULL)
 		setLanguage(page);
-	switchPage(notebook,page->tabVbox,currentTabNumber,NULL);
+	switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
 	setSensitive();
 
 	globalPlugins->globalPlugData->page=page;
@@ -464,7 +464,7 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 	fd=fopen(filename,"w");
 	if (fd!=NULL)
 		{
-			for(int loop=0; loop<gtk_notebook_get_n_pages(notebook); loop++)
+			for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 				{
 					page=getPageStructPtr(loop);
 					mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
@@ -508,7 +508,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 		gtk_main_iteration_do(false);
 
 	sessionBusy=true;
-	gtk_widget_freeze_child_notify((GtkWidget*)notebook);
+	gtk_widget_freeze_child_notify((GtkWidget*)mainNotebook);
 
 	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
 	fd=fopen(filename,"r");
@@ -533,7 +533,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 							fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 							page=getPageStructPtr(currentPage-1);
-							gtk_notebook_set_current_page(notebook,currentPage-1);
+							gtk_notebook_set_current_page(mainNotebook,currentPage-1);
 							while(intarg!=-1)
 								{
 									if((bool)data==true)
@@ -553,7 +553,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 			debugFree(&filename,"restoreSession filename");
 		}
 
-	gtk_widget_thaw_child_notify((GtkWidget*)notebook);
+	gtk_widget_thaw_child_notify((GtkWidget*)mainNotebook);
 	sessionBusy=false;
 	while(gtk_events_pending())
 		gtk_main_iteration_do(false);
@@ -776,7 +776,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	filename=g_path_get_basename(filepathcopy);
 
-	for(int j=0; j<gtk_notebook_get_n_pages(notebook); j++)
+	for(int j=0; j<gtk_notebook_get_n_pages(mainNotebook); j++)
 		{
 			page=getPageStructPtr(j);
 			if(noDuplicates==true)
@@ -784,7 +784,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					tpath=realpath(filepath,NULL);
 					if((tpath!=NULL) && (page->realFilePath!=NULL) && (strcmp(page->realFilePath,tpath)==0))
 						{
-							gtk_notebook_set_current_page(notebook,j);
+							gtk_notebook_set_current_page(mainNotebook,j);
 							busyFlag=false;
 							sessionBusy=false;
 							debugFree(&tpath,"openFile tpath");
@@ -890,13 +890,13 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	debugFree(&str,"openFile str");
 	debugFree(&filepathcopy,"openFile filepathcopy");
 
-//connect to notebook
+//connect to mainNotebook
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
 	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
 
-	gtk_notebook_append_page(notebook,page->tabVbox,label);
-	gtk_notebook_set_tab_reorderable(notebook,page->tabVbox,true);
-	gtk_notebook_set_current_page(notebook,currentPage);
+	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
+	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
+	gtk_notebook_set_current_page(mainNotebook,currentPage);
 	currentPage++;
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 
@@ -904,7 +904,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
-	gtk_widget_show_all((GtkWidget*)notebook);
+	gtk_widget_show_all((GtkWidget*)mainNotebook);
 	setToobarSensitive();
 
 	setFilePrefs(page);
@@ -949,12 +949,12 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
 	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
 
-	gtk_notebook_append_page(notebook,page->tabVbox,label);
-	gtk_notebook_set_tab_reorderable(notebook,page->tabVbox,true);
-	gtk_notebook_set_current_page(notebook,currentPage);
+	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
+	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
+	gtk_notebook_set_current_page(mainNotebook,currentPage);
 	setToobarSensitive();
 	currentPage++;
-	gtk_widget_show_all((GtkWidget*)notebook);
+	gtk_widget_show_all((GtkWidget*)mainNotebook);
 	setFilePrefs(page);
 
 	globalPlugins->globalPlugData->page=page;
