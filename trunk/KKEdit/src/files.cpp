@@ -7,11 +7,14 @@
 */
 
 #include "kkedit-includes.h"
+#include <iconv.h>
 
 GtkWidget*	vbox;
 char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
 bool		dropTextFile=false;
+char		*convertedData=NULL;
+long		dataLen=0;
 
 VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 {
@@ -720,9 +723,36 @@ pageStruct* makeNewPage(void)
 	return(page);
 }
 
+void convertContents(char *data,int datalen)
+{
+ 	const gchar	*charset;
+	iconv_t		cd;
+    size_t		len_src;
+    size_t		len_dst;
+	char		*startptr;
+
+	charset=detect_charset(data);
+	if (charset==NULL)
+		charset=get_default_charset();
+
+	dataLen=-1;
+	len_src=datalen;
+	len_dst=len_src * 8;
+    cd=iconv_open("UTF-8",charset);
+	convertedData=(char*)malloc(datalen*8);
+	startptr=convertedData;
+
+    iconv(cd,&data,&len_src,&startptr,&len_dst);
+    iconv_close(cd);
+
+	dataLen=(long)startptr-(long)convertedData;
+}
+
 VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
 	GtkTextIter				iter;
+	GtkTextIter				startiter;
+	GtkTextIter				enditer;
 	GtkWidget*				label;
 	gchar*					filename;
 	pageStruct*				page;
@@ -732,8 +762,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gchar*					contents=NULL;
 	gsize					length;
 	GError*					err=NULL;
-	const gchar*			charset;
-	gsize					br;
 	GtkWidget*				dialog;
 	char*					filepathcopy=NULL;
 	char*					tpath;
@@ -803,7 +831,9 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	page->realFilePath=realpath(filepath,NULL);
 
+	label=NULL;
 	label=makeNewTab(page->fileName,page->filePath,page);
+
 	setLanguage(page);
 
 	g_file_get_contents(filepathcopy,&contents,&length,&err);
@@ -821,6 +851,32 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 			return(false);
 		}
 
+	convertContents((char*)contents,length);
+	debugFree(&contents,"openFile contents");
+
+	if(dataLen>0)
+		{
+			gtk_source_buffer_begin_not_undoable_action(page->buffer);
+			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
+			gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &enditer);
+			gtk_text_buffer_delete ( GTK_TEXT_BUFFER (page->buffer),&startiter, &enditer);
+			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
+			gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&startiter,convertedData,dataLen);
+			gtk_source_buffer_end_not_undoable_action(page->buffer);
+		}
+	else
+		{
+			gtk_source_buffer_begin_not_undoable_action(page->buffer);
+			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
+			gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &enditer);
+			gtk_text_buffer_delete ( GTK_TEXT_BUFFER (page->buffer),&startiter, &enditer);
+			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
+			gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&startiter,"THE CONTENTS OF THIS FILE ARE UNREADABLE!",-1);
+			gtk_source_buffer_end_not_undoable_action(page->buffer);
+		}
+	debugFree(&convertedData,"openFile convertedData");
+
+#if 0
 	charset=detect_charset(contents);
 	if (charset==NULL)
 		charset=get_default_charset();
@@ -843,13 +899,12 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 		{
 			str=g_strdup("");
 		}
-
-	debugFree(&contents,"openFile contents");
-
-	gtk_source_buffer_begin_not_undoable_action(page->buffer);
-	gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
-	gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str,strlen(str));
-	gtk_source_buffer_end_not_undoable_action(page->buffer);
+#endif
+	//debugFree(&contents,"openFile contents");
+//	gtk_source_buffer_begin_not_undoable_action(page->buffer);
+//	gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
+//	gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str,strlen(str));
+//	gtk_source_buffer_end_not_undoable_action(page->buffer);
 
 	page->gFile=g_file_new_for_path(page->filePath);
 	page->monitor=g_file_monitor_file(page->gFile,(GFileMonitorFlags)G_FILE_MONITOR_NONE,NULL,NULL);

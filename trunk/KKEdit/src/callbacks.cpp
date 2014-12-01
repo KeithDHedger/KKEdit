@@ -643,12 +643,14 @@ VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
 
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
 {
+
 	pageStruct*	page;
 	char*		functions=NULL;
 	GtkWidget*	menuitem;
 	int			linenum;
-	char		tmpstr[1024];
-	char*		lineptr;
+	char*		ts;
+
+	char*		lineptr=NULL;
 	bool		onefunc=false;
 	int			numtypes=0;
 	char*		typenames[50]= {NULL,};
@@ -657,7 +659,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	GtkWidget*	whattypemenu;
 	GtkWidget*	typesubmenus[50]= {NULL,};
 	GtkWidget*	submenu;
-	char*		correctedstr;
+	char*		correctedstr=NULL;
 
 	if(arg1==NULL)
 		return;
@@ -681,16 +683,13 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	page->navSubMenu=(GtkMenuItem*)gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menufunc),(GtkWidget*)page->navSubMenu);
 
-	while (lineptr!=NULL)
+	while ((lineptr!=NULL) && (strlen(lineptr)>0))
 		{
-			tmpstr[0]=0;
-			sscanf (lineptr,"%*s %*s %i %[^\n]s",&linenum,tmpstr);
+			sscanf (lineptr,"%*s %*s %i %a[^\n]s",&linenum,&ts);
+			if((ts!=NULL) && (strlen(ts)>0))
+				correctedstr=truncateWithElipses(ts,maxFuncDefs);
 
-			correctedstr=truncateWithElipses(tmpstr,maxFuncDefs);
-			sprintf(tmpstr,"%s",correctedstr);
-			debugFree(&correctedstr,"switchPage correctedstr");
-
-			if(strlen(tmpstr)>0)
+			if((ts!=NULL) && (strlen(ts)>0))
 				{
 					if(listFunction==4)
 						{
@@ -729,7 +728,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 									debugFree(&newstr,"switchPage newstr");
 
 									onefunc=true;
-									menuitem=gtk_image_menu_item_new_with_label(tmpstr);
+									menuitem=gtk_image_menu_item_new_with_label(correctedstr);
 									gtk_menu_shell_append(GTK_MENU_SHELL(whattypemenu),menuitem);
 									g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
 								}
@@ -737,7 +736,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 					else
 						{
 							onefunc=true;
-							menuitem=gtk_image_menu_item_new_with_label(tmpstr);
+							menuitem=gtk_image_menu_item_new_with_label(correctedstr);
 							gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
 							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
 						}
@@ -745,6 +744,8 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 			lineptr=strchr(lineptr,'\n');
 			if (lineptr!=NULL)
 				lineptr++;
+			debugFree(&correctedstr,"switchPage correctedstr");
+			debugFree(&ts,"switchPage ts");
 		}
 
 	gtk_window_set_title((GtkWindow*)window,page->fileName);
