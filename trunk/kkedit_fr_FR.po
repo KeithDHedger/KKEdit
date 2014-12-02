@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kkedit 1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-02 12:54+0000\n"
-"PO-Revision-Date: 2014-12-02 12:55-0000\n"
+"POT-Creation-Date: 2014-12-02 13:11+0000\n"
+"PO-Revision-Date: 2014-12-02 13:15-0000\n"
 "Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
@@ -768,19 +768,19 @@ msgstr "Vérifier l'orthographe du mot"
 msgid "Change <i><b>%s</b></i> to: "
 msgstr "Changer <i><b>%s</b></i> en:"
 
-#: KKEdit/src/guis.cpp:1813
+#: KKEdit/src/guis.cpp:1815
 msgid "Ignore"
 msgstr "Ignorer"
 
-#: KKEdit/src/guis.cpp:1845
+#: KKEdit/src/guis.cpp:1847
 msgid "Enter Function Name"
 msgstr "Donnez le nom d'une fonction"
 
-#: KKEdit/src/guis.cpp:1848
+#: KKEdit/src/guis.cpp:1850
 msgid "Find Function"
 msgstr "Trouver une fonction"
 
-#: KKEdit/src/guis.cpp:1878
+#: KKEdit/src/guis.cpp:1880
 msgid "Doc Viewer"
 msgstr "Visionneur de documents"
 
