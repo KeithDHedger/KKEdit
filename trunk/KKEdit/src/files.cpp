@@ -122,6 +122,9 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	char*		correctedname;
 
 	correctedname=truncateWithElipses(name,maxTabChars);
+//correctedname=(char*)malloc(6*g_utf8_strlen(name,-1));
+//correctedname=g_utf8_strncpy(correctedname,name,maxTabChars);
+
 	label=gtk_label_new(correctedname);
 	debugFree(&correctedname,"makeNewTab correctedname");
 

@@ -138,6 +138,9 @@ extern GtkWidget*		globalPlugMenu;
 //help menu
 extern GtkWidget*		helpMenu;
 
+//status bar message
+extern char*			statusMessage;
+
 extern HistoryClass*	history;
 
 extern GtkAccelGroup*	accgroup;
@@ -384,8 +387,6 @@ extern args				tool_vars[];
 extern args				kkedit_startup_vars[];
 extern args				keybindings_rc[];
 
-//status bar message
-extern char*			statusMessage;
 
 extern const char*		localeLang;
 
@@ -405,6 +406,7 @@ void showBarberPole(const char* title);
 void killBarberPole(void);
 void debugFree(char** ptr,const char* message);
 char* truncateWithElipses(char* str,unsigned int maxlen);
+char* truncateTabNameWithElipses(char* str,unsigned int maxlen);
 void doBusy(bool busy,pageStruct* page);
 
 #endif
