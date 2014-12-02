@@ -991,7 +991,6 @@ void getRecursiveTagListFileName(char* filepath,void* ptr)
 
 void getRecursiveTagList(char* filepath,void* ptr)
 {
-#ifndef _USEQT5_
 	FILE*		fp;
 	char		line[2048];
 	GString*	str=g_string_new(NULL);
@@ -1036,7 +1035,6 @@ void getRecursiveTagList(char* filepath,void* ptr)
 	g_string_free(str,false);
 	debugFree(&command,"getRecursiveTagList command");
 	debugFree(&sort,"getRecursiveTagList sort");
-#endif
 }
 
 void destroyTool(gpointer data)

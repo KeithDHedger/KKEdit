@@ -16,7 +16,7 @@ void closeTab(Widget* widget,uPtr data);
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint arg2,gpointer user_data);
 #else
 //TODO//
-void switchPage(void);
+void switchPage(int thispage);
 #endif
 void setSensitive(void);
 

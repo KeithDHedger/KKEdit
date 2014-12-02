@@ -14,13 +14,8 @@ void goToDefine(functionData* fdata);
 void goToDefinition(Widget* widget,uPtr data);
 void findFile(Widget* widget,uPtr data);
 void jumpToLine(Widget* widget,uPtr data);
+void gotoLine(Widget* widget,uPtr data);
 
-#ifndef _USEQT5_
-void gotoLine(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void gotoLine(void);
-#endif
 #ifndef _USEQT5_
 void jumpToLineFromBar(GtkWidget* widget,gpointer data);
 #else

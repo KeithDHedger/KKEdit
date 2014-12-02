@@ -665,10 +665,126 @@ printf("closeAllTabs %i\n",(int)(long)data);
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
 #else
 //TODO//
-void switchPage(void)
+void switchPage(int thispage)
 #endif
 {
-#ifndef _USEQT5_
+printf("switch page %i\n",thispage);
+#ifdef _USEQT5_
+	char*			functions=NULL;
+	char*			lineptr;
+	DocumentClass	*doc;
+	int				linenum;
+	char			tmpstr[1024];
+	char*			correctedstr;
+	char*			typenames[50]= {NULL,};
+	char*			newstr=NULL;
+	bool			flag;
+	int				numtypes=0;
+	QMenu			*whattypemenu;
+	QMenu			*typesubmenus[50]= {NULL,};
+	QMenu			*submenu;
+	bool			onefunc=false;
+	MenuItemClass	*menuitem;
+
+	doc=(DocumentClass*)((QTabWidget*)mainNotebook)->widget(thispage);
+	printf(">%s<\n",doc->getPathname());
+	((QMenu*)funcMenu)->clear();
+	
+	getRecursiveTagList((char*)doc->getPathname(),&functions);
+	lineptr=functions;
+
+	while (lineptr!=NULL)
+		{
+			tmpstr[0]=0;
+			sscanf (lineptr,"%*s %*s %i %[^\n]s",&linenum,tmpstr);
+
+			correctedstr=truncateWithElipses(tmpstr,maxFuncDefs);
+			sprintf(tmpstr,"%s",correctedstr);
+			debugFree(&correctedstr,"switchPage correctedstr");
+//			printf(">>%s<<\n",tmpstr);
+#if 1
+			if(strlen(tmpstr)>0)
+				{
+					if(listFunction==4)
+						{
+							newstr=NULL;
+							newstr=globalSlice->sliceBetween(lineptr,(char*)" ",(char*)" ");
+							if(newstr!=NULL)
+								{
+									flag=false;
+									for(int j=0; j<numtypes; j++)
+										{
+											if (strcmp(newstr,typenames[j])==0)
+												{
+													whattypemenu=typesubmenus[j];
+													flag=true;
+													break;
+												}
+										}
+
+									if(flag==false)
+										{
+											typenames[numtypes]=strdup(newstr);
+											debugFree(&newstr,"switchPage newstr");
+											if(typenames[numtypes][strlen(typenames[numtypes])-1]=='s')
+												asprintf(&newstr,"%s's",typenames[numtypes]);
+											else
+												asprintf(&newstr,"%ss",typenames[numtypes]);
+											newstr[0]=toupper(newstr[0]);
+											typesubmenus[numtypes]=new QMenu(newstr);
+											((QMenu*)funcMenu)->addMenu((QMenu*)typesubmenus[numtypes]);
+											//submenu=gtk_image_menu_item_new_with_label(newstr);
+											//typesubmenus[numtypes]=gtk_menu_new();
+											//gtk_menu_item_set_submenu(GTK_MENU_ITEM(submenu),typesubmenus[numtypes]);
+											//gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),submenu);
+											whattypemenu=typesubmenus[numtypes];
+											numtypes++;
+										}
+
+									debugFree(&newstr,"switchPage newstr");
+/*
+	MenuItemClass* menuitem=new MenuItemClass(name);
+
+	QIcon icon=QIcon::fromTheme(iconname,QIcon(iconname));
+	 
+	menuitem->setShortcut(key);
+	menuitem->setIcon(icon);
+	menuitem->setObjectName(widgetname);
+	if(ptrvoid!=NULL)
+		menuitem->setCallBackVoid(ptrvoid);
+	else
+		menuitem->setCallBackBool(ptrbool);
+	menuitem->setMenuID(data);
+	((QMenu*)menu)->addAction(menuitem);
+	
+	return(menuitem);
+
+*/
+									onefunc=true;
+									menuitem=new MenuItemClass(tmpstr);
+									menuitem->setCallBackVoid(gotoLine);
+									menuitem->setMenuID(linenum);	
+									((QMenu*)whattypemenu)->addAction(menuitem);
+									//menuitem=gtk_image_menu_item_new_with_label(tmpstr);
+									//gtk_menu_shell_append(GTK_MENU_SHELL(whattypemenu),menuitem);
+									//g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
+								}
+						}
+					else
+						{
+							onefunc=true;
+							//menuitem=gtk_image_menu_item_new_with_label(tmpstr);
+							//gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
+							//g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
+						}
+				}
+#endif
+			lineptr=strchr(lineptr,'\n');
+			if (lineptr!=NULL)
+				lineptr++;
+		}
+
+#else
 	pageStruct*	page;
 	char*		functions=NULL;
 	GtkWidget*	menuitem;

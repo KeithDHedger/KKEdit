@@ -691,6 +691,7 @@ gboolean clickInView(void)
 pageStruct* makeNewPage(void)
 {
 #ifdef _USEQT5_
+printf("makenewpage\n");
 	pageStruct*			page;
 	page=(pageStruct*)malloc(sizeof(pageStruct));
 	return(page);

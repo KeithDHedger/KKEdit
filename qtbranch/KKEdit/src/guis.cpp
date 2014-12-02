@@ -1471,6 +1471,9 @@ void buildMainGuiQT(void)
 	mainNotebook=new QTabWidget;
 	((QTabWidget*)mainNotebook)->setDocumentMode(true);
 	((QTabWidget*)mainNotebook)->setTabsClosable(true);
+	((QTabWidget*)mainNotebook)->setMovable(true);
+	
+	QObject::connect(((QTabWidget*)mainNotebook),&QTabWidget::currentChanged,switchPage);
 
 	menuBar=new QMenuBar;
 //file menu

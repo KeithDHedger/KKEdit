@@ -125,13 +125,11 @@ printf("findFile %i\n",(int)(long)data);
 #endif
 }
 
-#ifndef _USEQT5_
-void gotoLine(GtkWidget* widget,gpointer data)
-#else
+//void gotoLine(GtkWidget* widget,gpointer data)
 //TODO//
-void gotoLine(void)
-#endif
+void gotoLine(Widget* widget,uPtr data)
 {
+printf("go to line %i\n",(long)data);
 #ifndef _USEQT5_
 	int			line=(long)data;
 	pageStruct*	page=getPageStructPtr(-1);
