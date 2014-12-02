@@ -706,18 +706,6 @@ void qtAppStart(int argc, char **argv)
 
 int main (int argc, char **argv)
 {
-
-
-//const char* filepath="/tmp/çÇğĞıİöÖşŞüÜ-copy2";
-//char* contents="XXX";
-//const gchar	*charset;
-//
-//charset=detect_charset(filepath);
-//printf("charset >%s<n",charset);
-//g_file_get_contents(filepath,&contents,NULL,NULL);
-//printf("%sn",contents);
-//return(0);
-
 	int				status;
 	char*			filename;
 	char*			dbusname;

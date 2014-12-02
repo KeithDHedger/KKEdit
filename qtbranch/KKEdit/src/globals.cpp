@@ -544,31 +544,29 @@ args			tool_vars[]=
 //status bar message
 char*			statusMessage=NULL;
 
-//truncate string with elipses
+//truncate tabname with elipses
 char* truncateWithElipses(char* str,unsigned int maxlen)
 {
 	char*	retstr;
-	char*	starttext;
-	char*	endtext;
-	bool	holddup;
+	char	*front,*back;
 	int		sides;
 
-	if(strlen(str)<=maxlen)
-		retstr=strdup(str);
-	else
+	if(g_utf8_validate(str,-1,NULL)==true)
 		{
-			sides=(maxlen-5)/2;
-			holddup=globalSlice->getDuplicate();
-			globalSlice->setReturnDupString(true);
-
-			starttext=globalSlice->sliceLen(str,0,sides);
-			endtext=globalSlice->sliceLen(str,strlen(str)-sides,-1);
-			asprintf(&retstr,"%s ... %s",starttext,endtext);
-			debugFree(&starttext,"truncateWithElipses starttext");
-			debugFree(&endtext,"truncateWithElipses endtext");
-
-			globalSlice->setReturnDupString(holddup);
+			if(g_utf8_strlen(str,-1)>maxlen)
+				{
+					sides=(maxlen-5)/2;
+					front=g_utf8_substring(str,0,sides);
+					back=g_utf8_substring(str,g_utf8_strlen(str,-1)-sides,g_utf8_strlen(str,-1));
+					asprintf(&retstr,"%s ... %s",front,back);
+					debugFree(&front,"truncateWithElipses front");
+					debugFree(&back,"truncateWithElipses back");
+				}
+			else
+				retstr=strdup(str);
 		}
+	else
+		retstr=strdup(str);
 
 	return(retstr);
 }

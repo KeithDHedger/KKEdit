@@ -397,10 +397,7 @@ printf("triggered doOpenFile %i\n",(int)(long)data);
 	if (fileNames.count())
 		{
 			for (int j=0;j<fileNames.size();++j)
-				{
-					printf("%s\n",fileNames.at(j).toUtf8().constData());
-					openFile(fileNames.at(j).toUtf8().constData(),0,true);
-				}
+				openFile(fileNames.at(j).toUtf8().constData(),0,true);
 		}
 #endif
 }
