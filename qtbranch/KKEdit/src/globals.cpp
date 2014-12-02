@@ -12,7 +12,7 @@
 #ifndef _USEQT5_
 //GtkWidget*		window=NULL;
 GtkAccelGroup*	accgroup=NULL;
-GtkNotebook*	notebook=NULL;
+//GtkNotebook*	notebook=NULL;
 GApplication*	mainApp;
 
 
@@ -69,6 +69,11 @@ GtkWidget*		liveSearchWidget;
 bool			busyFlag=false;
 VISIBLE bool	sessionBusy=false;
 
+//find replaceAll
+GSList*			findList=NULL;
+GSList*			replaceList=NULL;
+unsigned int	maxFRHistory=5;
+
 //main window
 Widget*			mainWindow;
 Widget*			globalPlugMenu;
@@ -104,7 +109,7 @@ Widget*			goBackMenu;
 Widget*			funcMenu;
 //bm menu
 Widget*			bookMarkMenu;
-Widget*			bookMarkMenuSubMenu;
+Widget*			bookMarkSubMenu;
 //tools menu
 Widget*			toolsMenu;
 //help
@@ -313,9 +318,6 @@ GtkWidget*		replaceDropBox;
 //TODO//
 #endif
 
-GSList*			findList=NULL;
-GSList*			replaceList=NULL;
-
 //custom toolbar
 #ifndef _USEQT5_
 GtkWidget*		fromHBox;
@@ -350,10 +352,10 @@ GtkSourceStyleScheme*			styleScheme;
 #endif
 
 #ifdef _BUILDDOCVIEWER_
+Widget*			showDocViewWidget;
 #ifndef _USEQT5_
 GtkWidget*		docView;
 WebKitWebView*	webView;
-Widget*			showDocViewMenu;
 #else
 //TODO//
 #endif
@@ -453,6 +455,7 @@ PluginClass*	globalPlugins=NULL;
 //save and load var lists
 char*			windowAllocData=NULL;
 char*			docWindowAllocData=NULL;
+
 args			kkedit_window_rc[]=
 {
 	//bools
@@ -475,6 +478,9 @@ args			kkedit_window_rc[]=
 	{"nagtime",TYPEINT,&lastNagTime},
 	{"lastupdate",TYPEINT,&lastUpdate},
 	{"lastplugupdate",TYPEINT,&lastPlugUpdate},
+	//lists
+	{"findlist",TYPELIST,&findList},
+	{"replacelist",TYPELIST,&replaceList},
 	{NULL,0,NULL}
 };
 
@@ -495,6 +501,7 @@ args			kkedit_rc[]=
 	{"readlink",TYPEBOOL,&readLinkFirst},
 	{"autocomp",TYPEBOOL,&autoShowComps},
 	{"updatecheck",TYPEBOOL,&autoCheck},
+	{"useplugmenu",TYPEBOOL,&useGlobalPlugMenu},
 	//strings
 	{"stylename",TYPESTRING,&styleName},
 	{"higlightcolour",TYPESTRING,&highlightColour},
@@ -508,6 +515,10 @@ args			kkedit_rc[]=
 	{"depth",TYPEINT,&depth},
 	{"funcsort",TYPEINT,&listFunction},
 	{"minautochars",TYPEINT,&autoShowMinChars},
+	{"maxfrhistory",TYPEINT,&maxFRHistory},
+	{"maxtabchars",TYPEINT,&maxTabChars},
+	{"maxmenuchars",TYPEINT,&maxFuncDefs},
+	{"maxbmchars",TYPEINT,&maxBMChars},
 	{NULL,0,NULL}
 };
 
@@ -593,18 +604,18 @@ void scrollToIterInPane(void)
 #endif
 }
 
-VISIBLE pageStruct* getPageStructPtr(int pagenum)
+VISIBLE pageStruct* getDocumentData(int pagenum)
 {
 #ifndef _USEQT5_
 	int			thispage;
 	GtkWidget*	pageBox;
 
 	if(pagenum==-1)
-		thispage=gtk_notebook_get_current_page(notebook);
+		thispage=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
 	else
 		thispage=pagenum;
 
-	pageBox=gtk_notebook_get_nth_page(notebook,thispage);
+	pageBox=gtk_notebook_get_nth_page((GtkNotebook*)mainNotebook,thispage);
 	if(pageBox==NULL)
 		return(NULL);
 	else
@@ -783,7 +794,7 @@ functionData* getFunctionByName(char* name,bool recurse)
 {
 #ifndef _USEQT5_
 	pageStruct*		page;
-	int				numpages=gtk_notebook_get_n_pages(notebook);
+	int				numpages=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook);
 	char*			lineptr;
 	char*			functions=NULL;
 	char*			dirname;
@@ -800,14 +811,14 @@ functionData* getFunctionByName(char* name,bool recurse)
 	bool			getfromfile;
 
 	functionData* fdata;
-	page=getPageStructPtr(-1);
+	page=getDocumentData(-1);
 	if(page==NULL)
 		return(NULL);
 
 	getfromfile=false;
 	for(int loop=0; loop<numpages; loop++)
 		{
-			page=getPageStructPtr(loop);
+			page=getDocumentData(loop);
 			if(page->filePath!=NULL)
 				{
 					getRecursiveTagList(page->filePath,&functions);
@@ -851,7 +862,7 @@ functionData* getFunctionByName(char* name,bool recurse)
 //dont do this from popup for speed reasons
 			for(int loop=0; loop<numpages; loop++)
 				{
-					page=getPageStructPtr(loop);
+					page=getDocumentData(loop);
 					if(page->filePath!=NULL)
 						{
 							dirname=strdup(g_path_get_dirname(page->filePath));
@@ -1151,19 +1162,19 @@ printf("rebuildBookMarkMenu\n");
 	if(submenu!=NULL)
 		gtk_menu_item_set_submenu((GtkMenuItem*)bookMarkMenu,NULL);
 
-	bookMarkMenuSubMenu=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(bookMarkMenu),bookMarkMenuSubMenu);
+	bookMarkSubMenu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(bookMarkMenu),bookMarkSubMenu);
 
 	menuitem=gtk_menu_item_new_with_label(gettext("Remove All Bookmarks"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkMenuSubMenu),menuitem);
+	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(removeAllBookmarks),NULL);
 
 	menuitem=gtk_menu_item_new_with_label(gettext("Toggle Bookmark"));
-	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkMenuSubMenu),menuitem);
+	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
 	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkMenuSubMenu),menuitem);
+	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
 #endif
 }
 
@@ -1183,7 +1194,7 @@ printf("goBack %i\n",(int)(long)data);
 
 	buf=history->getTextBuffer();
 
-	if(gtk_notebook_get_current_page(notebook)==history->getTabNumForPage())
+	if(gtk_notebook_get_current_page((GtkNotebook*)mainNotebook)==history->getTabNumForPage())
 		{
 			buf->textBuffer=(GtkTextBuffer*)page->buffer;
 			buf->getLineData();
@@ -1196,7 +1207,7 @@ printf("goBack %i\n",(int)(long)data);
 		{
 			hist->savePosition();
 
-			gtk_notebook_set_current_page(notebook,history->getTabNumForPage());
+			gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,history->getTabNumForPage());
 			gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
 			gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 			scrollToIterInPane(page,&iter);
@@ -1265,6 +1276,29 @@ VISIBLE void debugFree(char** ptr,const char* message)
 
 	*ptr=NULL;
 
+}
+
+void doBusy(bool busy,pageStruct* page)
+{
+#ifndef _USEQT5_
+
+	if(page==NULL)
+		return;
+
+	if(busy==true)
+		{
+			gtk_source_completion_words_unregister(docWordsProv,(GtkTextBuffer*)page->buffer);
+			gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+			busyFlag=true;
+		}
+	else
+		{
+			gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+			if(autoShowComps==true)
+				gtk_source_completion_words_register(docWordsProv,(GtkTextBuffer*)page->buffer);
+			busyFlag=false;
+		}
+#endif
 }
 
 

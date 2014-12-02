@@ -23,8 +23,8 @@ void goToDefine(functionData* fdata)
 		}
 	else
 		{
-			page=getPageStructPtr(fdata->intab);
-			gtk_notebook_set_current_page(notebook,fdata->intab);
+			page=getDocumentData(fdata->intab);
+			gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,fdata->intab);
 			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 
 			if(page->inTop==true)
@@ -43,7 +43,7 @@ VISIBLE void goToDefinition(Widget* widget,uPtr data)
 printf("goToDefinition %i\n",(int)(long)data);
 
 #ifndef _USEQT5_
-	pageStruct*		page=getPageStructPtr(-1);
+	pageStruct*		page=getDocumentData(-1);
 	GtkTextIter		start;
 	GtkTextIter		end;
 	char*			selection=NULL;
@@ -84,7 +84,7 @@ printf("findFile %i\n",(int)(long)data);
 	char*			filepath=NULL;
 	FILE*			fp;
 	StringSlice*	slice;
-	pageStruct*		page=getPageStructPtr(-1);
+	pageStruct*		page=getDocumentData(-1);
 
 	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 	slice= new StringSlice;
@@ -125,14 +125,13 @@ printf("findFile %i\n",(int)(long)data);
 #endif
 }
 
-//void gotoLine(GtkWidget* widget,gpointer data)
 //TODO//
 void gotoLine(Widget* widget,uPtr data)
 {
 printf("go to line %i\n",(long)data);
 #ifndef _USEQT5_
 	int			line=(long)data;
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct*	page=getDocumentData(-1);
 	TextBuffer*	buf;
 
 	if(page!=NULL)
@@ -246,12 +245,12 @@ void jumpToMark(void)
 
 	buf->scroll2Mark((GtkTextView*)page->view,mark);
 
-	for(int loop=0; loop<gtk_notebook_get_n_pages(notebook); loop++)
+	for(int loop=0; loop<gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook); loop++)
 		{
-			checkpage=getPageStructPtr(loop);
+			checkpage=getDocumentData(loop);
 			if(checkpage==page)
 				{
-					gtk_notebook_set_current_page(notebook,loop);
+					gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,loop);
 					return;
 				}
 		}
@@ -597,7 +596,7 @@ docFileData* getDoxyFileData(char* uri)
 		}
 	else
 		{
-			debugFree(&doxydata,"getDoxyFileData doxydata");
+			debugFree((char**)&doxydata,"getDoxyFileData doxydata");
 			doxydata=NULL;
 		}
 	debugFree(&unhashedline,"getDoxyFileData unhashedline");
@@ -626,22 +625,22 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 
 //check in open tabs
 			buf=new TextBuffer;
-			for(int j=0; j<gtk_notebook_get_n_pages(notebook); j++)
+			for(int j=0; j<gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook); j++)
 				{
-					page=getPageStructPtr(j);
+					page=getDocumentData(j);
 					if((strcmp(page->realFilePath,doxydata->sourceFile)==0) || (strcmp(page->filePath,doxydata->sourceFile)==0))
 						{
-							gtk_notebook_set_current_page(notebook,j);
+							gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,j);
 							buf->textBuffer=(GtkTextBuffer*)page->buffer;
 							buf->scroll2LineM(page,doxydata->lineNum-1);
 							delete buf;
-							debugFree(&doxydata,"docLinkTrap doxydata");
+							debugFree((char**)&doxydata,"docLinkTrap doxydata");
 							return(false);
 						}
 				}
 //try to open file f not in tabs
 			openFile(doxydata->sourceFile,doxydata->lineNum,false);
-			debugFree(&doxydata,"docLinkTrap doxydata");
+			debugFree((char**)&doxydata,"docLinkTrap doxydata");
 		}
 	return(false);
 #endif

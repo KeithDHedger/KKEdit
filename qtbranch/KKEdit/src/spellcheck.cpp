@@ -78,7 +78,7 @@ void checkWord(void)
 #endif
 {
 #ifndef _USEQT5_
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct*	page=getDocumentData(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
@@ -105,7 +105,7 @@ void doChangeWord(void)
 #endif
 {
 #ifndef _USEQT5_
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct*	page=getDocumentData(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 
@@ -164,7 +164,7 @@ void doSpellCheckDoc(void)
 #endif
 {
 #ifndef _USEQT5_
-	pageStruct*				page=getPageStructPtr(-1);
+	pageStruct*				page=getDocumentData(-1);
 	gchar*					buffer;
 	long					filelen;
 	GtkTextIter				start;

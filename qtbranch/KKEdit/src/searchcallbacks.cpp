@@ -115,7 +115,7 @@ VISIBLE void searchGtkDocs(Widget* widget,uPtr data)
 printf("searchGtkDocs %i\n",(int)(long)data);
 
 #ifndef _USEQT5_
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct*	page=getDocumentData(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
@@ -227,7 +227,7 @@ VISIBLE void doDoxy(Widget* widget,uPtr data)
 {
 printf("dodoxy %i\n",(int)(long)data);
 #ifndef _USEQT5_
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct*	page=getDocumentData(-1);
 	struct stat	sb;
 	bool		dorebuild;
 	FILE*		fp;
@@ -278,7 +278,7 @@ VISIBLE void doxyDocs(Widget* widget,uPtr data)
 printf("doxyDocs %i\n",(int)(long)data);
 
 #ifndef _USEQT5_
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct*	page=getDocumentData(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
@@ -339,7 +339,7 @@ VISIBLE void searchQT5Docs(Widget* widget,uPtr data)
 printf("searchQT5Docs %i\n",(int)(long)data);
 
 #ifndef _USEQT5_
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct*	page=getDocumentData(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
@@ -497,29 +497,29 @@ void doAllFiles(int dowhat,bool found)
 		{
 			if(dowhat==FINDNEXT)
 				{
-					currentFindPage=gtk_notebook_get_current_page(notebook)+1;
-					if(currentFindPage==gtk_notebook_get_n_pages(notebook))
+					currentFindPage=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook)+1;
+					if(currentFindPage==gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook))
 						currentFindPage=0;
 				}
 			else
 				{
-					currentFindPage=gtk_notebook_get_current_page(notebook)-1;
+					currentFindPage=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook)-1;
 					if(currentFindPage==-1)
-						currentFindPage=gtk_notebook_get_n_pages(notebook)-1;
+						currentFindPage=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)-1;
 				}
 
 			pagesChecked++;
-			if(pagesChecked>gtk_notebook_get_n_pages(notebook))
+			if(pagesChecked>gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook))
 				{
 					currentFindPage=-1;
-					gtk_notebook_set_current_page(notebook,firstPage);
+					gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,firstPage);
 					pagesChecked=0;
 					return;
 				}
 		}
 
-	gtk_notebook_set_current_page(notebook,currentFindPage);
-	page=getPageStructPtr(currentFindPage);
+	gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,currentFindPage);
+	page=getDocumentData(currentFindPage);
 
 	if(dowhat==FINDNEXT)
 		{
@@ -575,14 +575,14 @@ void regexFind(int dowhat)
 		{
 			if(currentFindPage!=-1)
 				{
-					currentFindPage=gtk_notebook_get_current_page(notebook);
+					currentFindPage=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
 					firstPage=currentFindPage;
 				}
 			else
 				pagesChecked=0;
 		}
 
-	page=getPageStructPtr(currentFindPage);
+	page=getDocumentData(currentFindPage);
 
 	searchtext=(char*)gtk_entry_get_text((GtkEntry*)findBox);
 	replacetext=(char*)gtk_entry_get_text((GtkEntry*)replaceBox);
@@ -673,10 +673,10 @@ void regexFind(int dowhat)
 						if(yesNo((char*)gettext("Do you want to replace in ALL open files?"),(char*)"")==GTK_RESPONSE_YES)
 							{
 								matchedcnt=-1;
-								for(pageloop=0;pageloop<gtk_notebook_get_n_pages(notebook);pageloop++)
+								for(pageloop=0;pageloop<gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook);pageloop++)
 									{
-										gtk_notebook_set_current_page(notebook,currentFindPage);
-										tmppage=getPageStructPtr(pageloop);
+										gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,currentFindPage);
+										tmppage=getDocumentData(pageloop);
 										gtk_text_buffer_get_start_iter((GtkTextBuffer*)tmppage->buffer,&start);
 										gtk_text_buffer_get_end_iter((GtkTextBuffer*)tmppage->buffer,&end);
 										text=gtk_text_buffer_get_text((GtkTextBuffer*)tmppage->buffer,&start,&end,false);
@@ -794,14 +794,14 @@ void basicFind(int dowhat)
 		{
 			if(currentFindPage!=-1)
 				{
-					currentFindPage=gtk_notebook_get_current_page(notebook);
+					currentFindPage=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
 					firstPage=currentFindPage;
 				}
 			else
 				pagesChecked=0;
 		}
 
-	page=getPageStructPtr(currentFindPage);
+	page=getDocumentData(currentFindPage);
 
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 
@@ -911,9 +911,9 @@ void basicFind(int dowhat)
 				if(yesNo((char*)gettext("Do you want to replace in ALL open files?"),(char*)"")==GTK_RESPONSE_CANCEL)
 					return;
 						findInAllFiles=false;
-						for(int j=0;j<gtk_notebook_get_n_pages(notebook);j++)
+						for(int j=0;j<gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook);j++)
 							{
-								gtk_notebook_set_current_page(notebook,j);
+								gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,j);
 								basicFind(REPLACE);
 							}
 						findInAllFiles=true;
@@ -1132,7 +1132,7 @@ void doLiveSearch(void)
 #endif
 {
 #ifndef _USEQT5_
-	pageStruct* 			page=getPageStructPtr(-1);
+	pageStruct* 			page=getDocumentData(-1);
 	GtkSourceSearchFlags	flags;
 	char*					searchtext;
 	int						modkey=((GdkEventKey*)event)->state;

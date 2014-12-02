@@ -187,7 +187,7 @@ void function_provider_populate(void)
 
 	if(word!=NULL)
 		{
-			page=getPageStructPtr(-1);
+			page=getDocumentData(-1);
 			if(page!=NULL)
 				{
 					wordlist=addPropsFromWord(page,word,(FunctionProvider*)provider);

@@ -28,13 +28,17 @@ void HistoryClass::getThisPoint(void)
 {
 #ifndef _USEQT5_
 	GtkWidget*	pageBox;
-	int			tabNum=gtk_notebook_get_current_page(notebook);
+	int			tabNum=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
 
-	pageBox=gtk_notebook_get_nth_page(notebook,tabNum);
+	this->goBack=true;
+	pageBox=gtk_notebook_get_nth_page((GtkNotebook*)mainNotebook,tabNum);
 	if(pageBox==NULL)
 		savedPage=NULL;
 	else
 		savedPage=(pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata");
+
+	if(this->savedPage==NULL)
+		this->goBack=false;
 #endif
 }
 
@@ -59,14 +63,24 @@ TextBuffer* HistoryClass::getTextBuffer(void)
 #endif
 }
 
-void HistoryClass::savePosition(void)
+bool HistoryClass::savePosition(void)
 {
 #ifndef _USEQT5_
 	getThisPoint();
 
-	buf->textBuffer=(GtkTextBuffer*)savedPage->buffer;
-	buf->getLineData();
-	gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)savedPage->buffer,"back-mark",&buf->cursorPos);
+	if(this->savedPage!=NULL)
+		{
+			buf->textBuffer=(GtkTextBuffer*)savedPage->buffer;
+			buf->getLineData();
+			gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)savedPage->buffer,"back-mark",&buf->cursorPos);
+			this->goBack=true;
+			setSensitive();
+			return(true);
+		}
+
+	this->goBack=false;
+	setSensitive();
+	return(false);
 #endif
 }
 
@@ -74,15 +88,21 @@ int HistoryClass::getTabNumForPage(void)
 {
 #ifndef _USEQT5_
 	pageStruct*	page;
-	int			numpages=gtk_notebook_get_n_pages(notebook);
+	int			numpages=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook);
 
 	for(int loop=0;loop<numpages;loop++)
 		{
-			page=getPageStructPtr(loop);
+			page=getDocumentData(loop);
 			if (page==savedPage)
-				return(loop);
+				{
+					this->goBack=true;
+					return(loop);
+				}
 		}
-	return(0);
+
+	this->savedPage=NULL;
+	this->goBack=false;
+	return(-1);
 #endif
 }
 

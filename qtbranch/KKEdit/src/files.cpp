@@ -26,6 +26,7 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 {
 	FILE*	fd=NULL;
 	int		cnt=0;
+	GSList*	list=NULL;
 
 	fd=fopen(filepath,"w");
 	if(fd!=NULL)
@@ -46,6 +47,19 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 //				printf("%s\n%s\n%i\n%i\n",filepath,dataptr[cnt].name,dataptr[cnt].type,(int)*(bool*)(dataptr[cnt].data));
 								fprintf(fd,"%s	%i\n",dataptr[cnt].name,(int)*(bool*)dataptr[cnt].data);
 								break;
+							case TYPELIST:
+								list=*(GSList**)((dataptr[cnt].data));
+								if(g_slist_length(list)>maxFRHistory)
+									list=g_slist_nth(list,g_slist_length(list)-maxFRHistory);
+								while(list!=NULL)
+									{
+										if(strlen((char*)list->data)>0)
+											{
+												fprintf(fd,"%s\t%s\n",dataptr[cnt].name,(char*)list->data);
+											}
+										list=list->next;
+									}
+								break;
 						}
 					cnt++;
 				}
@@ -60,6 +74,7 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 	int		cnt;
 	char*	argname=NULL;
 	char*	strarg=NULL;
+	char*	liststr=NULL;
 
 	fd=fopen(filepath,"r");
 	if(fd!=NULL)
@@ -68,7 +83,7 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 				{
 					buffer[0]=0;
 					fgets(buffer,2048,fd);
-					sscanf(buffer,"%as %as",&argname,&strarg);
+					sscanf(buffer,"%ms %ms",&argname,&strarg);
 					cnt=0;
 					while(dataptr[cnt].name!=NULL)
 						{
@@ -81,22 +96,22 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 												break;
 											case TYPESTRING:
 												if(*(char**)(dataptr[cnt].data)!=NULL)
-													free(*(char**)(dataptr[cnt].data));
-												sscanf(buffer,"%*s %a[^\n]s",(char**)dataptr[cnt].data);
+													debugFree(&*(char**)(dataptr[cnt].data),"loadVarsFromFile dataptr[cnt].data");
+												sscanf(buffer,"%*s %m[^\n]s",(char**)dataptr[cnt].data);
 												break;
 											case TYPEBOOL:
 												*(bool*)dataptr[cnt].data=(bool)atoi(strarg);
+												break;
+											case TYPELIST:
+												sscanf(buffer,"%*s\t%m[^\n]s",&liststr);
+												*(GSList**)dataptr[cnt].data=g_slist_append(*(GSList**)dataptr[cnt].data,liststr);
 												break;
 										}
 								}
 							cnt++;
 						}
-					if(argname!=NULL)
-						free(argname);
-					if(strarg!=NULL)
-						free(strarg);
-					argname=NULL;
-					strarg=NULL;
+					debugFree(&argname,"loadVarsFromFile argname");
+					debugFree(&strarg,"loadVarsFromFile strarg");
 				}
 			fclose(fd);
 		}
@@ -202,9 +217,9 @@ void resetAllFilePrefs(void)
 
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
-	for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
+	for(int loop=0; loop<gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook);loop++)
 		{
-			page=getPageStructPtr(loop);
+			page=getDocumentData(loop);
 			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 			setFilePrefs(page);
 		}
@@ -308,7 +323,7 @@ VISIBLE bool saveFile(Widget* widget,uPtr data)
 {
 printf("save %i\n",(int)(long)data);
 #ifndef _USEQT5_
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct*	page=getDocumentData(-1);
 	GtkTextIter	start,end;
 	gchar*		text;
 	FILE*		fd=NULL;
@@ -380,7 +395,7 @@ printf("save %i\n",(int)(long)data);
 		}
 	if(page->lang==NULL)
 		setLanguage(page);
-	switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
+	switchPage((GtkNotebook*)mainNotebook,page->tabVbox,currentTabNumber,NULL);
 	setSensitive();
 
 	globalPlugins->globalPlugData->page=page;
@@ -415,7 +430,7 @@ printf("triggered openAsHexDump %i\n",(int)(long)user_data);
 			filename=g_path_get_basename(filepath);
 			newFile(NULL,NULL);
 			pagenum=currentPage-1;
-			page=getPageStructPtr(pagenum);
+			page=getDocumentData(pagenum);
 			asprintf(&command,"hexdump -C %s",filepath);
 			fp=popen(command, "r");
 			while(fgets(line,1024,fp))
@@ -455,7 +470,7 @@ VISIBLE void reloadFile(Widget* widget,uPtr data)
 printf("reloadFile %i\n",(int)(long)data);
 
 #ifndef _USEQT5_
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct*	page=getDocumentData(-1);
 	gchar*		buffer;
 	long		filelen;
 	GtkTextIter	start;
@@ -495,9 +510,9 @@ printf("saveSession %i\n",(int)(long)data);
 	fd=fopen(filename,"w");
 	if (fd!=NULL)
 		{
-			for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
+			for(int loop=0; loop<gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook); loop++)
 				{
-					page=getPageStructPtr(loop);
+					page=getDocumentData(loop);
 					mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
 					linenumber=gtk_text_iter_get_line(&iter);
@@ -559,8 +574,8 @@ printf("restoreSession %i\n",(int)(long)data);
 						{
 							fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
-							page=getPageStructPtr(currentPage-1);
-							gtk_notebook_set_current_page(mainNotebook,currentPage-1);
+							page=getDocumentData(currentPage-1);
+							gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,currentPage-1);
 							while(intarg!=-1)
 								{
 									if((bool)data==true)
@@ -942,14 +957,14 @@ printf("openfile %s\n",filepath);
 		}
 
 
-	for(int j=0; j<gtk_notebook_get_n_pages(mainNotebook); j++)
+	for(int j=0; j<gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook); j++)
 		{
-			page=getPageStructPtr(j);
+			page=getDocumentData(j);
 			if(noDuplicates==true)
 				{
 					if((page->realFilePath!=NULL) && ((strcmp(page->realFilePath,filepathcopy)==0) ||(strcmp(page->filePath,filepathcopy)==0)))
 						{
-							gtk_notebook_set_current_page(mainNotebook,j);
+							gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,j);
 							return(true);
 						}
 				}
@@ -1064,9 +1079,9 @@ printf("openfile %s\n",filepath);
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
 	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
 
-	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
-	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
-	gtk_notebook_set_current_page(mainNotebook,currentPage);
+	gtk_notebook_append_page((GtkNotebook*)mainNotebook,page->tabVbox,label);
+	gtk_notebook_set_tab_reorderable((GtkNotebook*)mainNotebook,page->tabVbox,true);
+	gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,currentPage);
 	currentPage++;
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 
@@ -1134,9 +1149,9 @@ printf("triggered newfile id %i\n",data);
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
 	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
 
-	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
-	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
-	gtk_notebook_set_current_page(mainNotebook,currentPage);
+	gtk_notebook_append_page((GtkNotebook*)mainNotebook,page->tabVbox,label);
+	gtk_notebook_set_tab_reorderable((GtkNotebook*)mainNotebook,page->tabVbox,true);
+	gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,currentPage);
 	setToobarSensitive();
 	currentPage++;
 	gtk_widget_show_all((GtkWidget*)mainNotebook);

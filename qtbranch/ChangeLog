@@ -1,3 +1,63 @@
+0.3.0
+Synched v0.2.6 to 0.3.0
+Basic function menu.
+Basic load prefs.
+Basic open file.
+Basic syntax highlighting.
+Stared port to QT5
+
+//TODO//
+0.2.6
+Updated help file and translations.
+Fixed odd characters in tab name when truncated with elipses.
+Fixed crash when ctags gets confused and produces an enormous function name.
+Added 'Sort Tabs' to file menu.
+Fixed some minor encoding to UTF8 bugs.
+Fixed bug when loading certain html files.
+Fixed minor callback bug in prefs/plugin prefs.
+Speeded up load session.
+Code clean.
+Fixed bug where closing too many tabs too fast caused a segfault.
+Fixed regex find lockup .
+Can now do backward regex search.
+Redoing regex find/replace.
+Can now only spell check whole document if document is 'clean'.
+Removed unneeded reference to libunique from build files.
+Removed debug flags from makefile.am.
+Spell check document now sets the dirty flag correctly.
+Changed dropbox to dropboxentry in spellcheck word dialog.
+Fixed bug in spell check word.
+Fixed some free() bugs.
+Improved 'ReadLink Before Opening File' option, now handles relative links better, and uses the 'real' filename for the tab name if set, if not uses the link filename ( which may be different ).
+
+0.2.5
+Set prefs option for setting max characters displayed in bookmarks menu.
+Set prefs option for setting max characters displayed in menus/context menu.
+Set prefs option for setting max characters displayed in tabs.
+Cleaned prefs code.
+Fixed single instance bug in ubuntu.
+If there is a text selection 'Replace All' now only affects the selected text instead of the whole document.
+If there is a text selection 'Find' now starts from the start of the selection instead of the end.
+Removed some deprecated function calls.
+Fixed bug with opening large html files with odd characters in the name.
+Can now group all plugins under one menu.
+Fixed occasional endless loop in replace all.
+Improved speed of 'Replace All'.
+Cleaned prefs code.
+Fixed segfault on docviewer when a very large number of possible matches are found.
+Added colour button to prefs for setting bookmark highlight colour.
+Added max find/replace history terms saved to prefs.
+Fixed ubuntu/gnome bugs AGAIN! I wish they would stop breaking stuff for no good reason!
+Added help option to command line.
+Added long command line options.
+Fixed opening files with non-ascii characters in name.
+Added linking to Xlib.
+Switched to gapplication from deprecated libunique.
+Now saves last 10 find/replace terms and reloads at startup.
+Fixed segfault when trying to open file with non ascii characters in the name with a kkedit instance already running.
+Changed Find/Replace Entry/Dropdowns to Combo box with entry.
+//TODO//
+
 0.2.4
 Added 'Add to Custom Word List" to popup when text is selected.
 Added 'Check For Updates' option to prefs.

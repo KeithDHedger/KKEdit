@@ -96,7 +96,7 @@ struct args
 	void*		data;
 };
 
-enum {TYPEINT=1,TYPESTRING,TYPEBOOL};
+enum {TYPEINT=1,TYPESTRING,TYPEBOOL,TYPELIST};
 
 #ifndef _USEQT5_
 struct pageStruct
@@ -340,7 +340,7 @@ struct plugData
 #ifndef _USEQT5_
 
 void		showDocView(int howtodisplay,char* text,const char* title);
-pageStruct*	getPageStructPtr(int pagenum);
+pageStruct*	getDocumentData(int pagenum);
 void		showToolOutput(bool immediate);
 void		hideToolOutput(bool immediate);
 void		showSide(bool left);

@@ -162,7 +162,7 @@ extern GApplication*	mainApp;
 #ifndef _USEQT5_
 //extern GtkWidget*		window;
 extern GtkAccelGroup*	accgroup;
-extern GtkNotebook*		notebook;
+//extern GtkNotebook*		notebook;
 
 #else
 //TODO//
@@ -212,6 +212,12 @@ extern QAction*			menuItemOpen;
 
 #endif
 
+//find replaceAll
+extern GSList*			findList;
+extern GSList*			replaceList;
+extern unsigned int		maxFRHistory;
+
+
 //app stuff
 extern bool				busyFlag;
 extern bool				sessionBusy;
@@ -252,7 +258,7 @@ extern Widget*			goBackMenu;
 extern Widget*			funcMenu;
 //bm menu
 extern Widget*			bookMarkMenu;
-extern Widget*			bookMarkMenuSubMenu;
+extern Widget*			bookMarkSubMenu;
 //tools menu
 extern Widget*			toolsMenu;
 //help
@@ -463,8 +469,6 @@ extern GtkWidget*		replaceDropBox;
 #else
 //TODO//
 #endif
-extern GSList*			findList;
-extern GSList*			replaceList;
 
 //custom toolbar
 #ifndef _USEQT5_
@@ -501,10 +505,10 @@ extern GtkSourceStyleScheme*		styleScheme;
 #endif
 
 #ifdef _BUILDDOCVIEWER_
+extern Widget*		showDocViewWidget;
 #ifndef _USEQT5_
 extern GtkWidget*		docView;
 extern WebKitWebView*	webView;
-extern GtkWidget*		showDocViewMenu;
 #else
 //TODO//
 #endif
@@ -567,7 +571,7 @@ extern char*			statusMessage;
 extern const char*		localeLang;
 
 void plugRunFunction(gpointer data,gpointer funcname);
-pageStruct* getPageStructPtr(int pagenum);
+pageStruct* getDocumentData(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title);
@@ -588,7 +592,7 @@ void showBarberPole(const char* title);
 void killBarberPole(void);
 void debugFree(char** ptr,const char* message);
 char* truncateWithElipses(char* str,unsigned int maxlen);
-
+void doBusy(bool busy,pageStruct* page);
 #endif
 
 
