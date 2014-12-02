@@ -1792,7 +1792,7 @@ void buildWordCheck(int documentCheck)
 	spellCheckWord=gtk_dialog_new();
 	gtk_window_set_title((GtkWindow*)spellCheckWord,gettext("Spell check word"));
 
-	vbox=gtk_vbox_new(true,0);
+	vbox=gtk_vbox_new(false,0);
 	hbox=gtk_hbox_new(true,0);
 
 	sprintf((char*)&labeltext,gettext("Change <i><b>%s</b></i> to: "),badWord);
@@ -1804,6 +1804,8 @@ void buildWordCheck(int documentCheck)
 
 	gtk_box_pack_start(GTK_BOX(hbox),wordListDropbox,true,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,8);
 
 	hbox=gtk_hbox_new(true,0);
 	button=gtk_button_new_from_stock(GTK_STOCK_APPLY);
