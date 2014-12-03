@@ -122,8 +122,6 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	char*		correctedname;
 
 	correctedname=truncateWithElipses(name,maxTabChars);
-//correctedname=(char*)malloc(6*g_utf8_strlen(name,-1));
-//correctedname=g_utf8_strncpy(correctedname,name,maxTabChars);
 
 	label=gtk_label_new(correctedname);
 	debugFree(&correctedname,"makeNewTab correctedname");
@@ -203,7 +201,7 @@ void resetAllFilePrefs(void)
 
 	for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 		{
-			page=getPageStructPtr(loop);
+			page=getDocumentData(loop);
 			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 			setFilePrefs(page);
 		}
@@ -294,7 +292,7 @@ bool getSaveFile(void)
 
 VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct*	page=getDocumentData(-1);
 	GtkTextIter	start,end;
 	gchar*		text;
 	FILE*		fd=NULL;
@@ -396,7 +394,7 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 			filename=g_path_get_basename(filepath);
 			newFile(NULL,NULL);
 			pagenum=currentPage-1;
-			page=getPageStructPtr(pagenum);
+			page=getDocumentData(pagenum);
 			asprintf(&command,"hexdump -C %s",filepath);
 			fp=popen(command, "r");
 			while(fgets(line,1024,fp))
@@ -431,7 +429,7 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 
 VISIBLE void reloadFile(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct*	page=getDocumentData(-1);
 	gchar*		buffer;
 	long		filelen;
 	GtkTextIter	start;
@@ -469,7 +467,7 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 		{
 			for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 				{
-					page=getPageStructPtr(loop);
+					page=getDocumentData(loop);
 					mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
 					linenumber=gtk_text_iter_get_line(&iter);
@@ -535,7 +533,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 						{
 							fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
-							page=getPageStructPtr(currentPage-1);
+							page=getDocumentData(currentPage-1);
 							gtk_notebook_set_current_page(mainNotebook,currentPage-1);
 							while(intarg!=-1)
 								{
@@ -781,7 +779,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	for(int j=0; j<gtk_notebook_get_n_pages(mainNotebook); j++)
 		{
-			page=getPageStructPtr(j);
+			page=getDocumentData(j);
 			if(noDuplicates==true)
 				{
 					tpath=realpath(filepath,NULL);

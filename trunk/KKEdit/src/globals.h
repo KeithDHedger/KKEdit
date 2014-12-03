@@ -391,7 +391,7 @@ extern args				keybindings_rc[];
 extern const char*		localeLang;
 
 void plugRunFunction(gpointer data,gpointer funcname);
-pageStruct* getPageStructPtr(int pagenum);
+pageStruct* getDocumentData(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title);

@@ -19,14 +19,14 @@ void goToDefine(functionData* fdata)
 	if(fdata->intab==-1)
 		{
 			openFile(fdata->file,fdata->line-1,true);
-			page=getPageStructPtr(gtk_notebook_get_n_pages(mainNotebook)-1);
+			page=getDocumentData(gtk_notebook_get_n_pages(mainNotebook)-1);
 			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 			buf->scroll2Line((GtkTextView*)page->view,fdata->line-2);
 			delete buf;
 		}
 	else
 		{
-			page=getPageStructPtr(fdata->intab);
+			page=getDocumentData(fdata->intab);
 			gtk_notebook_set_current_page(mainNotebook,fdata->intab);
 			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 
@@ -41,7 +41,7 @@ void goToDefine(functionData* fdata)
 
 VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
 {
-	pageStruct*		page=getPageStructPtr(-1);
+	pageStruct*		page=getDocumentData(-1);
 	GtkTextIter		start;
 	GtkTextIter		end;
 	char*			selection=NULL;
@@ -77,7 +77,7 @@ VISIBLE void findFile(GtkWidget* widget,gpointer data)
 	char*			filepath=NULL;
 	FILE*			fp;
 	StringSlice*	slice;
-	pageStruct*		page=getPageStructPtr(-1);
+	pageStruct*		page=getDocumentData(-1);
 
 	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 	slice= new StringSlice;
@@ -120,7 +120,7 @@ VISIBLE void findFile(GtkWidget* widget,gpointer data)
 void gotoLine(GtkWidget* widget,gpointer data)
 {
 	int			line=(long)data;
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct*	page=getDocumentData(-1);
 	TextBuffer*	buf;
 
 	if(page!=NULL)
@@ -210,7 +210,7 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 
 	for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 		{
-			checkpage=getPageStructPtr(loop);
+			checkpage=getDocumentData(loop);
 			if(checkpage==page)
 				{
 					gtk_notebook_set_current_page(mainNotebook,loop);
@@ -221,112 +221,6 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 }
 
 #ifdef _BUILDDOCVIEWER_
-
-char* unEscapeFileNAme(char* name)
-{
-	char*	buffer;
-	int		charpos;
-	unsigned int		namepos;
-
-	buffer=(char*)calloc(strlen(name),1);
-	charpos=0;
-	namepos=0;
-
-	while(namepos<strlen(name))
-		{
-			if(name[namepos]!='_')
-				{
-					buffer[charpos]=name[namepos];
-				}
-			else
-				{
-					namepos++;
-					switch(name[namepos])
-						{
-						case '_':
-							buffer[charpos]='_';
-							break;
-						case '1':
-							buffer[charpos]=':';
-							break;
-						case '2':
-							buffer[charpos]='/';
-							break;
-						case '3':
-							buffer[charpos]='<';
-							break;
-						case '4':
-							buffer[charpos]='>';
-							break;
-						case '5':
-							buffer[charpos]='*';
-							break;
-						case '6':
-							buffer[charpos]='&';
-							break;
-						case '7':
-							buffer[charpos]='|';
-							break;
-						case '8':
-							buffer[charpos]='.';
-							break;
-						case '9':
-							buffer[charpos]='!';
-							break;
-						case '0':
-							namepos++;
-							switch(name[namepos])
-								{
-								case '0':
-									buffer[charpos]=',';
-									break;
-								case '1':
-									buffer[charpos]=' ';
-									break;
-								case '2':
-									buffer[charpos]='{';
-									break;
-								case '3':
-									buffer[charpos]='}';
-									break;
-								case '4':
-									buffer[charpos]='?';
-									break;
-								case '5':
-									break;
-									buffer[charpos]='^';
-								case '6':
-									buffer[charpos]='%';
-									break;
-								case '7':
-									buffer[charpos]='(';
-									break;
-								case '8':
-									buffer[charpos]=')';
-									break;
-								case '9':
-									buffer[charpos]='+';
-									break;
-								case 'A':
-									buffer[charpos]='=';
-								case 'B':
-									buffer[charpos]='$';
-									break;
-								case 'C':
-									buffer[charpos]='\\';
-									break;
-								}
-						default:
-							buffer[charpos]=toupper(name[namepos]);
-							break;
-						}
-				}
-			namepos++;
-			charpos++;
-		}
-
-	return(buffer);
-}
 
 struct docFileData
 {
@@ -578,7 +472,7 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 			buf=new TextBuffer;
 			for(int j=0; j<gtk_notebook_get_n_pages(mainNotebook); j++)
 				{
-					page=getPageStructPtr(j);
+					page=getDocumentData(j);
 					if((strcmp(page->realFilePath,doxydata->sourceFile)==0) || (strcmp(page->filePath,doxydata->sourceFile)==0))
 						{
 							gtk_notebook_set_current_page(mainNotebook,j);

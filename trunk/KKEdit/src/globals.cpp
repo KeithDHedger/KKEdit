@@ -484,7 +484,7 @@ void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 		gtk_text_view_scroll_to_iter((GtkTextView*)page->view2,iter,0,true,0,0.5);
 }
 
-VISIBLE pageStruct* getPageStructPtr(int pagenum)
+VISIBLE pageStruct* getDocumentData(int pagenum)
 {
 	int			thispage;
 	GtkWidget*	pageBox;
@@ -687,7 +687,7 @@ functionData* getFunctionByName(char* name,bool recurse)
 	bool			checkthispage;
 	functionData*	fdata;
 
-	page=getPageStructPtr(-1);
+	page=getDocumentData(-1);
 	if(page==NULL)
 		return(NULL);
 
@@ -699,7 +699,7 @@ functionData* getFunctionByName(char* name,bool recurse)
 
 	while(whileflag==true)
 		{
-			page=getPageStructPtr(loop);
+			page=getDocumentData(loop);
 			if(page->filePath!=NULL)
 				{
 					getRecursiveTagList(page->filePath,&functions);
@@ -755,7 +755,7 @@ functionData* getFunctionByName(char* name,bool recurse)
 //dont do this from popup for speed reasons
 			for(int loop=0; loop<numpages; loop++)
 				{
-					page=getPageStructPtr(loop);
+					page=getDocumentData(loop);
 					if(page->filePath!=NULL)
 						{
 							dirname=strdup(g_path_get_dirname(page->filePath));
