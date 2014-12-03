@@ -132,39 +132,35 @@ int				docWindowHeight;
 int				docWindowX=-1;
 int				docWindowY=-1;
 
-//prefs
-#ifndef _USEQT5_
-GtkWidget*		prefswin;
-#else
+////prefs
+//#ifndef _USEQT5_
+//GtkWidget* prefswin;
+//#else
 //TODO//
-#endif
+//#endif
 
+//prefs
+GtkWidget*		prefswin;
 bool			indent;
 bool			lineNumbers;
 bool			lineWrap;
 bool			highLight;
 bool			noSyntax;
 bool			singleUse;
-int				tabWidth;
+unsigned int	tabWidth;
 char*			fontAndSize;
 char*			terminalCommand;
 char*			rootCommand;
-int				depth;
+unsigned int	depth;
 bool			onExitSaveSession;
 bool			restoreBookmarks;
 char*			styleName=NULL;
 bool			noDuplicates;
-bool			tmpNoDuplicates;
 bool			noWarnings;
-bool			tmpNoWarnings;
 bool			readLinkFirst;
-bool			tmpReadLinkFirst;
 bool			autoShowComps;
-bool			tmpAutoShowComps;
 bool			autoCheck;
-bool			tmpAutoCheck;
-uint			autoShowMinChars;
-int				tmpAutoShowMinChars;
+unsigned int	autoShowMinChars;
 bool			useGlobalPlugMenu;
 unsigned int	maxTabChars=20;
 unsigned int	maxBMChars;

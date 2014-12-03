@@ -781,7 +781,7 @@ printf("makenewpage\n");
 	g_signal_connect(page->view, "line-mark-activated",G_CALLBACK(line_mark_activated),page);
 	add_source_mark_pixbufs(GTK_SOURCE_VIEW(page->view));
 //status bar
-	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(updateStatuBar),(void*)page);
+	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(updateStatusBar),(void*)page);
 
 	return(page);
 #endif

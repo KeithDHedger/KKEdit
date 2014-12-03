@@ -49,6 +49,12 @@ pageStruct* HistoryClass::getPage(void)
 #endif
 }
 
+bool HistoryClass::canGoBack(void)
+{
+	return(this->goBack);
+}
+
+
 void HistoryClass::setPage(pageStruct* page)
 {
 #ifndef _USEQT5_

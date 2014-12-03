@@ -427,7 +427,7 @@ int show_question(char* filename)
 void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data)
 #else
 //TODO//
-void updateStatuBar(void)
+void updateStatusBar(void)
 #endif
 {
 #ifndef _USEQT5_
@@ -2353,7 +2353,6 @@ VISIBLE void toggleDocviewer(GtkWidget* widget,gpointer data)
 			gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,gettext("Show Docviewer"));
 			gtk_widget_hide(docView);
 		}
-}
 #else
 	//TODO//
 #endif

@@ -280,41 +280,36 @@ extern int				docWindowWidth;
 extern int				docWindowHeight;
 extern int				docWindowX;
 extern int				docWindowY;
+//
+////prefs
+//#ifndef _USEQT5_
+//extern GtkWidget*		prefswin;
+//#else
+////TODO//
+//#endif
 
 //prefs
-#ifndef _USEQT5_
 extern GtkWidget*		prefswin;
-#else
-//TODO//
-#endif
-
 extern bool				indent;
 extern bool				lineNumbers;
 extern bool				lineWrap;
 extern bool				highLight;
 extern bool				noSyntax;
 extern bool				singleUse;
-extern int				tabWidth;
+extern unsigned int		tabWidth;
 extern char*			fontAndSize;
 extern char*			terminalCommand;
 extern char*			rootCommand;
-extern int				depth;
+extern unsigned int		depth;
 extern bool				onExitSaveSession;
 extern bool				restoreBookmarks;
 extern char*			styleName;
 extern bool				noDuplicates;
-extern bool				tmpNoDuplicates;
 extern bool				noWarnings;
-extern bool				tmpNoWarnings;
 extern bool				readLinkFirst;
-extern bool				tmpReadLinkFirst;
 extern bool				autoShowComps;
-extern bool				tmpAutoShowComps;
 extern bool				autoCheck;
-extern bool				tmpAutoCheck;
-
-extern uint				autoShowMinChars;
-extern int				tmpAutoShowMinChars;
+extern unsigned int		autoShowMinChars;
 extern bool				useGlobalPlugMenu;
 extern unsigned int		maxTabChars;
 extern unsigned int		maxBMChars;

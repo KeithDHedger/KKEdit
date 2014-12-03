@@ -142,10 +142,10 @@ void loadKeybindings(void);
 
 
 #ifndef _USEQT5_
-void updateStatuBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data);
+void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data);
 #else
 //TODO//
-void updateStatuBar(void);
+void updateStatusBar(void);
 #endif
 
 
