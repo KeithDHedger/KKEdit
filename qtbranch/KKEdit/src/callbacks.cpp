@@ -1828,7 +1828,7 @@ printf("doShutdown %i\n",(int)(long)data);
 #endif
 
 //TODO//
-//	g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
+	g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
 
 	asprintf(&command,"rm -rf %s",tmpFolderName);
 	system(command);

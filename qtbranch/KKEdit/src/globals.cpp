@@ -603,9 +603,12 @@ void scrollToIterInPane(void)
 #endif
 }
 
+#ifndef _USEQT5_
 VISIBLE pageStruct* getDocumentData(int pagenum)
+#else
+VISIBLE DocumentClass* getDocumentData(int pagenum)
+#endif
 {
-//TODO//
 #ifndef _USEQT5_
 	int			thispage;
 	GtkWidget*	pageBox;
@@ -620,6 +623,11 @@ VISIBLE pageStruct* getDocumentData(int pagenum)
 		return(NULL);
 	else
 		return((pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata"));
+#else
+	if(pagenum==-1)
+		return((DocumentClass*)((QTabWidget*)mainNotebook)->currentWidget());
+	else
+		return((DocumentClass*)((QTabWidget*)mainNotebook)->widget(pagenum));
 #endif
 }
 

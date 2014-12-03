@@ -6,12 +6,12 @@
 *     QT_document.h
 * 
 ******************************************************/
+#include "kkedit-includes.h"
+#include "QT_highlighter.h"
 
 #ifndef _QT_DOCUMENT_
 #define _QT_DOCUMENT_
 
-#include "kkedit-includes.h"
-#include "QT_highlighter.h"
 
 class DocumentClass : public QTextEdit
 {

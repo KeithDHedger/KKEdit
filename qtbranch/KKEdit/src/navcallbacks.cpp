@@ -133,12 +133,11 @@ printf("findFile %i\n",(int)(long)data);
 #endif
 }
 
-//TODO//
 void gotoLine(Widget* widget,uPtr data)
 {
-printf("go to line %i\n",(long)data);
+	int			line=(int)(long)data;
+
 #ifndef _USEQT5_
-	int			line=(long)data;
 	pageStruct*	page=getDocumentData(-1);
 	TextBuffer*	buf;
 
@@ -152,6 +151,17 @@ printf("go to line %i\n",(long)data);
 				buf->scroll2Line((GtkTextView*)page->view2,line-1);
 			delete buf;
 		}
+#else
+	DocumentClass	*doc=NULL;
+	QTextBlock		block;
+	QTextCursor		cursor;
+
+	doc=getDocumentData(-1);
+	block=doc->document()->findBlockByLineNumber(line-1);
+	cursor=doc->textCursor();
+	cursor.setPosition(block.position());
+	doc->setFocus();
+	doc->setTextCursor(cursor);
 #endif
 }
 

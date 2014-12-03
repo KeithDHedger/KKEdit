@@ -47,6 +47,7 @@ void TextBuffer::getLineData()
 	gtk_text_buffer_get_iter_at_mark(textBuffer,&cursorPos,gtk_text_buffer_get_insert(textBuffer));
 	lineNum=gtk_text_iter_get_line(&cursorPos)+1;
 	column=gtk_text_iter_get_line_offset(&cursorPos)+1;
+	charPos=gtk_text_iter_get_offset(&cursorPos);
 #endif
 }
 

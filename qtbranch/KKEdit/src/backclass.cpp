@@ -8,6 +8,7 @@
 ******************************************************/
 
 #include "kkedit-includes.h"
+//#include "QT_document.h"
 
 HistoryClass::HistoryClass()
 {

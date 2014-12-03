@@ -52,65 +52,16 @@ enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 
 #ifndef _USEQT5_
 	#include <gtk/gtk.h>
+
+	#define PLATFORM	"gtk"
 	typedef GtkWidget	Widget;
 	typedef gpointer	uPtr;
 #else
 	#include <QtWidgets>
+
+	#define PLATFORM	"qt"
 	typedef long		uPtr;
 	typedef QWidget 	Widget;
-#endif
-
-#if 0
-#ifndef _PAGESTRUCT_
-#define _PAGESTRUCT_
-
-struct args
-{
-	const char*	name;
-	int			type;
-	void*		data;
-};
-
-enum {TYPEINT=1,TYPESTRING,TYPEBOOL};
-
-
-struct pageStruct
-{
-	GtkWidget*			pane;
-	GtkScrolledWindow*	pageWindow;
-	GtkScrolledWindow*	pageWindow2;
-	GtkSourceBuffer*	buffer;
-	GtkSourceView*		view;
-	GtkSourceView*		view2;
-	char*				filePath;
-	char*				realFilePath;
-	char*				dirName;
-	GtkMenuItem*		navSubMenu;
-	bool				rebuildMenu;
-	GtkWidget*			tabName;
-	GtkTextIter			iter;
-	GtkTextIter			match_start;
-	GtkTextIter			match_end;
-	bool				isFirst;
-	char*				fileName;
-	GFile*				gFile; 
-	GFileMonitor*		monitor;
-	bool				itsMe;
-	GList*				markList;
-	bool				inTop;
-	bool				isSplit;
-	const char*			lang;
-	GtkWidget*			tabVbox;
-	bool				showingChanged;
-	GtkTextMark*		backMark;
-	GtkTextTag*			highlightTag;
-	GList*				userDataList;
-	GtkSourceCompletion* completion;
-	gpointer			reserved2;
-	gpointer			reserved3;
-	gpointer			reserved4;
-};
-#endif
 #endif
 
 struct toolStruct
@@ -568,7 +519,12 @@ extern char*			statusMessage;
 extern const char*		localeLang;
 
 void plugRunFunction(gpointer data,gpointer funcname);
+#ifndef _USEQT5_
 pageStruct* getDocumentData(int pagenum);
+#else
+DocumentClass* getDocumentData(int pagenum);
+#endif
+
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title);

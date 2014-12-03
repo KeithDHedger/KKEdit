@@ -23,12 +23,8 @@
 
 bool	cancelCheck=false;
 
-#ifndef _USEQT5_
-void doCancelCheck(GtkWidget* widget,gpointer data)
-#else
+void doCancelCheck(Widget* widget,uPtr data)
 //TODO//
-void doCancelCheck(void)
-#endif
 {
 #ifndef _USEQT5_
 	gtk_widget_destroy(spellCheckWord);
@@ -70,12 +66,8 @@ void checkTheWord(char* word,int checkDoc)
 #endif
 }
 
-#ifndef _USEQT5_
-void checkWord(GtkWidget* widget,gpointer data)
-#else
+void checkWord(Widget* widget,uPtr data)
 //TODO//
-void checkWord(void)
-#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getDocumentData(-1);
@@ -97,12 +89,8 @@ void checkWord(void)
 #endif
 }
 
-#ifndef _USEQT5_
-void doChangeWord(GtkWidget* widget,gpointer data)
-#else
+void doChangeWord(Widget* widget,uPtr data)
 //TODO//
-void doChangeWord(void)
-#endif
 {
 #ifndef _USEQT5_
 	pageStruct*	page=getDocumentData(-1);
@@ -119,27 +107,26 @@ void doChangeWord(void)
 				}
 
 			goodWord=gtk_combo_box_text_get_active_text((GtkComboBoxText*)wordListDropbox);
+			end=start;
+			gtk_text_iter_forward_chars(&end,strlen(badWord));
 			gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
 			gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,goodWord,-1);
-			debugFree(&goodWord,"doChangeWord goodWord");
 		}
 	else
 		goodWord=gtk_combo_box_text_get_active_text((GtkComboBoxText*)wordListDropbox);
 
-	aspell_speller_store_replacement(spellChecker,badWord,-1,goodWord,-1);
+	if((goodWord!=NULL) && (badWord!=NULL))
+		aspell_speller_store_replacement(spellChecker,badWord,-1,goodWord,-1);
 
 	gtk_widget_destroy(spellCheckWord);
-	if(badWord!=NULL)
-		debugFree(&badWord,"doChangeWord badWord");
+	debugFree(&badWord,"doChangeWord badWord");
+	if((long)data==0)
+		debugFree(&goodWord,"doChangeWord goodWord");
 #endif
 }
 
-#ifndef _USEQT5_
-void doAddIgnoreWord(GtkWidget* widget,gpointer data)
-#else
+void doAddIgnoreWord(Widget* widget,uPtr data)
 //TODO//
-void doAddIgnoreWord(void)
-#endif
 {
 #ifndef _USEQT5_
 	if((long)data==1)
@@ -156,12 +143,8 @@ void doAddIgnoreWord(void)
 #endif
 }
 
-#ifndef _USEQT5_
-void doSpellCheckDoc(GtkWidget* widget,gpointer data)
-#else
+void doSpellCheckDoc(Widget* widget,uPtr data)
 //TODO//
-void doSpellCheckDoc(void)
-#endif
 {
 #ifndef _USEQT5_
 	pageStruct*				page=getDocumentData(-1);
@@ -246,6 +229,7 @@ void doSpellCheckDoc(void)
 							diff+=goodwordlen-token.len;
 							memmove(word_begin+goodwordlen,word_begin+token.len,strlen(word_begin+token.len)+1);
 							memcpy(word_begin,goodWord,goodwordlen);
+							debugFree(&goodWord,"doSpellCheckDoc goodWord");
 						}
 				}
 
@@ -283,8 +267,9 @@ void doSpellCheckDoc(void)
 					fclose(out);
 					gtk_text_buffer_set_modified((GtkTextBuffer*)page->buffer,true);
 				}
+			gtk_text_buffer_set_modified((GtkTextBuffer*)page->buffer,false);
+			setSensitive();
 		}
-
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 #endif
 }

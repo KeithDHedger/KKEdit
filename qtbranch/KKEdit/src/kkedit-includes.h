@@ -52,6 +52,11 @@
 #include <webkit/webkit.h>
 #endif
 
+#ifdef _USEQT5_
+#include "QT_menuitem.h"
+#include "QT_document.h"
+#endif
+
 #include "globals.h"
 #include "navcallbacks.h"
 
@@ -67,9 +72,9 @@
 #define VISIBLE __attribute__((visibility("default")))
 #define PROTECTED __attribute__((visibility("protected")))
 
-#ifdef _USEQT5_
-#include "QT_menuitem.h"
-#include "QT_document.h"
-#endif
-
+//#ifdef _USEQT5_
+//#include "QT_menuitem.h"
+//#include "QT_document.h"
+//#endif
+//
 #endif

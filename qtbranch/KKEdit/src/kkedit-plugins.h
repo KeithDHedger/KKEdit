@@ -173,9 +173,9 @@ struct pageStruct
 //	Widget*				highlightTag;
 //	GList*				userDataList;
 //	Widget* 			completion;
-//	GSList*				regexList;
-//	int					regexMatchNumber;
-//	uPtr				reserved4;
+	GSList*				regexList;
+	int					regexMatchNumber;
+	uPtr				reserved4;
 };
 #endif
 #endif
@@ -184,15 +184,12 @@ struct pageStruct
 #define _PLUGINDATA_
 struct moduleData
 {
-#ifndef _USEQT5_
 	char*		name;
 	bool		enabled;
 	GModule*	module;
 	bool		loaded;
 	char*		path;
 	bool		unload;
-#else
-#endif
 };
 #endif
 
