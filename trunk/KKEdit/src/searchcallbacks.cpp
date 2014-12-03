@@ -8,10 +8,20 @@
 
 #include "kkedit-includes.h"
 
-int currentFindPage=-1;
-int firstPage=-1;
-int pagesChecked=0;
-int	itemsReplaced=-1;
+int		currentFindPage=-1;
+int		firstPage=-1;
+int		pagesChecked=0;
+int		itemsReplaced=-1;
+struct	regexData
+{
+	int start;
+	int	end;
+};
+
+char	*searchtext=NULL;
+char	*replacetext=NULL;
+bool	fromregexreplace=false;
+bool	gotselection=false,fromregexsinglereplace=false;
 
 #ifdef _BUILDDOCVIEWER_
 
@@ -34,9 +44,7 @@ void webKitGoHome(GtkWidget* widget,gpointer data)
 
 PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 {
-
 #ifdef _BUILDDOCVIEWER_
-
 	gtk_window_set_title((GtkWindow*)docView,title);
 
 	if(howtodisplay==USEURI)
@@ -464,15 +472,6 @@ void doAllFiles(int dowhat,bool found)
 		regexFind(dowhat);
 }
 
-struct regexData
-{
-	int start;
-	int	end;
-};
-
-char*					searchtext=NULL;
-char*					replacetext=NULL;
-
 int findNextRegex(pageStruct* page,int charpos,int thisregxnum)
 {
 	int retval=-1;
@@ -523,9 +522,6 @@ int findThisRegex(pageStruct* page,int charpos)
 		}
 	return(retval);
 }
-
-bool fromregexreplace=false;
-bool gotselection=false,fromregexsinglereplace=false;
 
 void regexFind(int dowhat)
 {
@@ -878,14 +874,14 @@ void basicFind(int dowhat)
 
 	if(dowhat==FINDNEXT)
 		{
-			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSeleced==false))
+			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSelected==false))
 				{
 					gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 					page->match_end=page->match_start;
-					autoSeleced=true;
+					autoSelected=true;
 				}
 			else
-				autoSeleced=true;
+				autoSelected=true;
 
 			if(gtk_source_iter_forward_search(&page->match_end,searchtext,flags,&page->match_start,&page->match_end,NULL))
 				{
@@ -976,7 +972,7 @@ void basicFind(int dowhat)
 		if((dowhat==REPLACE) && (replaceAll==true))
 			{
 
-			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSeleced==false))
+			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSelected==false))
 				{
 					gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 					page->iter=page->match_start;
@@ -993,7 +989,7 @@ void basicFind(int dowhat)
 					{
 						if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
 							{
-								if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSeleced==false))
+								if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSelected==false))
 									{
 										gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,NULL,&maxlastiter);
 										if(gtk_text_iter_compare(&maxlastiter,&page->match_start)<=0)
@@ -1010,7 +1006,7 @@ void basicFind(int dowhat)
 							}
 						else
 							{
-								autoSeleced=false;
+								autoSelected=false;
 								replaceAllFlag=false;
 							}
 					}
@@ -1142,8 +1138,6 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 				break;
 			case 5:
 				useRegex=gtk_toggle_button_get_active((GtkToggleButton*)widget);
-				//button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,FINDPREV);
-				//gtk_widget_set_sensitive(button,!useRegex);
 				break;
 			case 6:
 				hightlightAll=gtk_toggle_button_get_active((GtkToggleButton*)widget);

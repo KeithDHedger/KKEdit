@@ -8,12 +8,12 @@
 
 #include "kkedit-includes.h"
 
-GApplication*	mainApp;
-bool			busyFlag=false;
-bool			autoSeleced=false;
-VISIBLE bool	sessionBusy=false;
 
 //app
+GApplication*	mainApp;
+bool			busyFlag=false;
+bool			autoSelected=false;
+VISIBLE bool	sessionBusy=false;
 //main mainWindow
 GtkWidget*		mainWindow=NULL;
 GtkWidget*		menuBar=NULL;

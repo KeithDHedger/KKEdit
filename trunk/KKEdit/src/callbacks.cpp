@@ -1216,7 +1216,7 @@ gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
 	else
 		page->inTop=false;
 
-	autoSeleced=false;
+	autoSelected=false;
 	return(false);
 }
 

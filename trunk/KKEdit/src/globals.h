@@ -48,6 +48,7 @@
 #define CUSTOMWORDFILE ".KKEdit/customcompletions"
 
 #define NUMSHORTCUTS	14
+#define PLATFORM		"gtk"
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 
@@ -88,12 +89,12 @@ struct bookMarksNew
 };
 
 
-extern GApplication*	mainApp;
-extern bool				busyFlag;
-extern bool				autoSeleced;
-extern bool				sessionBusy;
 
 //app
+extern GApplication*	mainApp;
+extern bool				busyFlag;
+extern bool				autoSelected;
+extern bool				sessionBusy;
 //main window
 extern GtkWidget*		mainWindow;
 extern GtkWidget*		menuBar;

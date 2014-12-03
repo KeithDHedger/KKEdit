@@ -8,8 +8,12 @@
 
 #include "kkedit-includes.h"
 
-int	theLineNum=0;
-int marknum=0;
+int		theLineNum=0;
+int		marknum=0;
+char	*filebuffer=NULL;
+bool	mustBeAClass=false;
+int		classLineNumber=1;
+char	*classFileName=NULL;
 
 void goToDefine(functionData* fdata)
 {
@@ -231,7 +235,6 @@ struct docFileData
 	char*	sourceFile;
 };
 
-char*	filebuffer=NULL;
 
 bool readFile(char *name)
 {
@@ -282,10 +285,6 @@ int getLineFromXML(char* xml)
 	delete slice;
 	return(retline);
 }
-
-bool	mustBeAClass=false;
-int		classLineNumber=1;
-char*	classFileName=NULL;
 
 char* getPathFromXML(char* xml)
 {
