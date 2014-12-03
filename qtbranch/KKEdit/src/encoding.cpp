@@ -62,7 +62,6 @@ const char *encoding_table[][ENCODING_MAX_ITEM_NUM] =
 
 guint get_encoding_code(void)
 {
-#ifndef _USEQT5_
 	guint 		code=END_CODE;
 	const char*	env;
 	guint		i,j=1;
@@ -92,12 +91,10 @@ guint get_encoding_code(void)
 	}
 	
 	return code;
-#endif
 }
 
 EncArray *get_encoding_items(guint code)
 {
-#ifndef _USEQT5_
 	gint		i;
 	EncArray*	array=NULL;
 	
@@ -109,12 +106,10 @@ EncArray *get_encoding_items(guint code)
 	}
 	
 	return array;
-#endif
 }
 
 char *detect_charset_cylillic(const gchar *text)
 {
-#ifndef _USEQT5_
 	guint8		c=*text;
 	gboolean	noniso=FALSE;
 	guint32		xc=0,xd=0,xef=0;
@@ -139,12 +134,10 @@ char *detect_charset_cylillic(const gchar *text)
 		charset=(char*)"CP1251";
 	
 	return charset;
-#endif
 }
 
 char *detect_charset_chinese(const gchar *text)
 {
-#ifndef _USEQT5_
 	guint8		c=*text;
 	
 	const char*	charset=get_encoding_items(get_encoding_code())->item[IANA];
@@ -188,12 +181,10 @@ char *detect_charset_chinese(const gchar *text)
 		}
 	
 	return (char*)charset;
-#endif
 }
 
 char *detect_charset_japanese(const gchar *text)
 {
-#ifndef _USEQT5_
 	guint8		c=*text;
 	const char*	charset=NULL;
 	
@@ -242,12 +233,10 @@ char *detect_charset_japanese(const gchar *text)
 		charset="EUC-JP";
 	
 	return (char*)charset;
-#endif
 }
 
 static const gchar *detect_charset_korean(const gchar *text)
 {
-#ifndef _USEQT5_
 	guint8		c=*text;
 	gboolean	noneuc=FALSE;
 	gboolean	nonjohab=FALSE;
@@ -312,12 +301,10 @@ static const gchar *detect_charset_korean(const gchar *text)
 		}
 	
 	return (char*)charset;
-#endif
 }
 
 static gboolean detect_noniso(const gchar *text)
 {
-#ifndef _USEQT5_
 	guint8 c=*text;
 	
 	while((c=*text++) != '\0')
@@ -326,7 +313,6 @@ static gboolean detect_noniso(const gchar *text)
 				return TRUE;
 		}
 	return FALSE;
-#endif
 }
 
 const gchar *get_default_charset(void)

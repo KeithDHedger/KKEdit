@@ -11,6 +11,8 @@
 #define _SLICECLASS_
 
 #define NUMHTMLENTRIES 252
+enum	errorCodes {NOERROR=0,NOMATCH,NULLSRC,MULTMATCH};
+
 /**
  *
  *
@@ -23,6 +25,7 @@
  *
  *
  */
+ 
 class StringSlice
 {
 	public:
@@ -45,7 +48,6 @@ class StringSlice
 		char*	randomName(int len);
 		bool	getDuplicate(void);
 	private:
-		enum	errorCodes {NOERROR=0,NOMATCH,NULLSRC,MULTMATCH};
 		void	checkBufferLen(char* str);
 		void	checkBufferLen(int size);
 		char*	returnData(char* str);

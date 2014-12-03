@@ -34,6 +34,7 @@ class TextBuffer
 		int				lineNum;
 		int				numChars;
 		int				column;
+		int				charPos;
 
 		void getLineData(void);
 

@@ -16,8 +16,10 @@
 #ifndef _COMPLETION_
 #define _COMPLETION_
 
+#ifndef _USEQT5_
 typedef struct _FunctionProvider FunctionProvider;
 typedef struct _FunctionProviderClass FunctionProviderClass;
+#endif
 
 struct _FunctionProvider
 {
@@ -47,15 +49,17 @@ GType function_provider_get_type(void);
 void function_provider_get_type(void);
 #endif
 
+extern bool							forcePopup;
+
+#ifndef _USEQT5_
 extern FunctionProvider*			funcProv;
 extern FunctionProvider*			varsProv;
-#ifndef _USEQT5_
 extern GtkSourceCompletionWords*	docWordsProv;
+extern FunctionProvider*			customProv;
 #else
 //TODO//
 #endif
-extern FunctionProvider*			customProv;
-extern bool							forcePopup;
+
 
 void doCompletionPopUp(pageStruct* page);
 void createCompletion(pageStruct* page);

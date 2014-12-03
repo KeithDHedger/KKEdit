@@ -136,10 +136,16 @@ QWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 #else
 	GtkWidget*	evbox=gtk_event_box_new();
 	GtkWidget*	hbox=gtk_hbox_new(false,0);
-	GtkWidget*	label=gtk_label_new(name);
+	GtkWidget*	label;
 	GtkWidget*	close=gtk_image_new_from_stock(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
 	GtkWidget*	button=gtk_button_new();
 	GtkRcStyle*	style=gtk_rc_style_new();
+	char*		correctedname;
+
+	correctedname=truncateWithElipses(name,maxTabChars);
+
+	label=gtk_label_new(correctedname);
+	debugFree(&correctedname,"makeNewTab correctedname");
 
 	gtk_button_set_relief((GtkButton*)button,GTK_RELIEF_NONE);
 	gtk_widget_set_tooltip_text(label,tooltip);
@@ -150,8 +156,8 @@ QWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
 	gtk_container_add(GTK_CONTAINER(evbox),hbox);
-	gtk_signal_connect(GTK_OBJECT(button),"clicked",G_CALLBACK(closeTab),(void*)page->tabVbox);
-	gtk_signal_connect(GTK_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),(void*)page);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(closeTab),(void*)page->tabVbox);
+	g_signal_connect(G_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),(void*)page);
 
 	page->tabName=label;
 
@@ -206,18 +212,20 @@ void setFilePrefs(pageStruct* page)
 		gtk_source_completion_unblock_interactive(page->completion);
 	else
 		gtk_source_completion_block_interactive(page->completion);
-createCompletion(page);
+
+	createCompletion(page);
 #endif
 }
 
 void resetAllFilePrefs(void)
 {
+//TODO//
 #ifndef _USEQT5_
 	pageStruct*			page;
 
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
-	for(int loop=0; loop<gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook);loop++)
+	for(int loop=0; loop<gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook); loop++)
 		{
 			page=getDocumentData(loop);
 			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
@@ -289,6 +297,7 @@ void dropText(void)
 
 bool getSaveFile(void)
 {
+//TODO//
 #ifndef _USEQT5_
 	GtkWidget*	dialog;
 	bool		retval=false;
@@ -553,6 +562,13 @@ printf("restoreSession %i\n",(int)(long)data);
 	int			currentline;
 	TextBuffer*	buf=new TextBuffer;
 
+	closeAllTabs(NULL,NULL);
+	while(gtk_events_pending())
+		gtk_main_iteration_do(false);
+
+	sessionBusy=true;
+	gtk_widget_freeze_child_notify((GtkWidget*)mainNotebook);
+
 	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
 	fd=fopen(filename,"r");
 	if (fd!=NULL)
@@ -563,6 +579,7 @@ printf("restoreSession %i\n",(int)(long)data);
 					sscanf(buffer,"%i %[^\n]s",(int*)&currentline,(char*)&strarg);
 					if(openFile(strarg,currentline,true)==false)
 						{
+							sessionBusy=true;
 							intarg=999;
 							while(intarg!=-1)
 								{
@@ -594,6 +611,11 @@ printf("restoreSession %i\n",(int)(long)data);
 			fclose(fd);
 			debugFree(&filename,"restoreSession filename");
 		}
+
+	gtk_widget_thaw_child_notify((GtkWidget*)mainNotebook);
+	sessionBusy=false;
+	while(gtk_events_pending())
+		gtk_main_iteration_do(false);
 	delete buf;
 #endif
 }
@@ -705,13 +727,12 @@ gboolean clickInView(void)
 
 pageStruct* makeNewPage(void)
 {
+	pageStruct*			page;
 #ifdef _USEQT5_
 printf("makenewpage\n");
-	pageStruct*			page;
 	page=(pageStruct*)malloc(sizeof(pageStruct));
 	return(page);
 #else
-	pageStruct*			page;
 	GtkTextIter			iter;
 	GtkTextAttributes*	attr;
 
@@ -719,6 +740,7 @@ printf("makenewpage\n");
 	page->buffer=NULL;
 	page->userDataList=NULL;
 	page->filePath=NULL;
+	page->realFilePath=NULL;
 
 	page->pane=gtk_vpaned_new();
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
@@ -727,8 +749,6 @@ printf("makenewpage\n");
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 
 	page->buffer=gtk_source_buffer_new(NULL);
-	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
-	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
 //completion
@@ -763,6 +783,8 @@ printf("makenewpage\n");
 	page->tabVbox=NULL;
 	page->showingChanged=false;
 	page->backMark=gtk_text_mark_new("back-mark",true);
+	page->regexList=NULL;
+	page->regexMatchNumber=-1;
 
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&iter);
 	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),page->backMark,&iter);
@@ -918,8 +940,10 @@ printf("openfile %s\n",filepath);
 		}
 #else
 	GtkTextIter				iter;
+	GtkTextIter				startiter;
+	GtkTextIter				enditer;
 	GtkWidget*				label;
-	gchar*					filename=g_path_get_basename(filepath);
+	gchar*					filename;
 	pageStruct*				page;
 	char*					str=NULL;
 	char*					recenturi;
@@ -927,46 +951,35 @@ printf("openfile %s\n",filepath);
 	gchar*					contents=NULL;
 	gsize					length;
 	GError*					err=NULL;
-	const gchar*			charset;
-	gsize					br;
-	GRegex*					regex;
-	GRegexCompileFlags		compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED|G_REGEX_CASELESS);
-	GRegexMatchFlags		matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
 	GtkWidget*				dialog;
-	char*					searchtext=NULL;
-	char*					replacetext=NULL;
-	struct stat				sb;
-	char*					linkname=NULL;
-	ssize_t					r;
 	char*					filepathcopy=NULL;
+	char*					tpath;
 
-	filepathcopy=strdup(filepath);
+	busyFlag=true;
+	sessionBusy=true;
 
-	lstat(filepath,&sb);
-	if(S_ISLNK(sb.st_mode))
-		{
-			linkname=(char*)malloc(sb.st_size + 1);
-			r=readlink(filepathcopy,linkname,sb.st_size+1);
-			linkname[r]=0;
-		}
+	if(readLinkFirst==true)
+		filepathcopy=realpath(filepath,NULL);
+	else
+		filepathcopy=strdup(filepath);
 
-	if((readLinkFirst==true) && (S_ISLNK(sb.st_mode)))
-		{
-			debugFree(&filepathcopy,"openFile filepathcopy");
-			filepathcopy=strdup(linkname);
-		}
-
+	filename=g_path_get_basename(filepathcopy);
 
 	for(int j=0; j<gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook); j++)
 		{
 			page=getDocumentData(j);
 			if(noDuplicates==true)
 				{
-					if((page->realFilePath!=NULL) && ((strcmp(page->realFilePath,filepathcopy)==0) ||(strcmp(page->filePath,filepathcopy)==0)))
+					tpath=realpath(filepath,NULL);
+					if((tpath!=NULL) && (page->realFilePath!=NULL) && (strcmp(page->realFilePath,tpath)==0))
 						{
 							gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,j);
+							busyFlag=false;
+							sessionBusy=false;
+							debugFree(&tpath,"openFile tpath");
 							return(true);
 						}
+					debugFree(&tpath,"openFile ");
 				}
 		}
 
@@ -978,6 +991,8 @@ printf("openfile %s\n",filepath);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
+			busyFlag=false;
+			sessionBusy=false;
 			return(false);
 		}
 
@@ -989,6 +1004,8 @@ printf("openfile %s\n",filepath);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
+			busyFlag=false;
+			sessionBusy=false;
 			return(false);
 		}
 
@@ -997,17 +1014,15 @@ printf("openfile %s\n",filepath);
 
 	page=makeNewPage();
 	page->tabVbox=gtk_vbox_new(true,4);
-
 	page->filePath=strdup(filepathcopy);
 	page->fileName=strdup(filename);
 	page->dirName=g_path_get_dirname(filepathcopy);
 
-	if(S_ISLNK(sb.st_mode))
-		page->realFilePath=strdup(linkname);
-	else
-		page->realFilePath=(char*)strdup(filepath);
+	page->realFilePath=realpath(filepath,NULL);
 
+	label=NULL;
 	label=makeNewTab(page->fileName,page->filePath,page);
+
 	setLanguage(page);
 
 	g_file_get_contents(filepathcopy,&contents,&length,&err);
@@ -1020,48 +1035,38 @@ printf("openfile %s\n",filepath);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
+			busyFlag=false;
+			sessionBusy=false;
 			return(false);
 		}
 
-	charset=detect_charset(contents);
-	if (charset==NULL)
-		charset=get_default_charset();
-
-	br=length;
-
-	if(length)
-		do
-			{
-				if(err)
-					{
-						charset="ISO-8859-1";
-						g_error_free(err);
-						err=NULL;
-					}
-				str=g_convert(contents,br,"UTF-8",charset,NULL,&br,&err);
-			}
-		while(err);
-	else
-		{
-			str=g_strdup("");
-		}
-
+	convertContents((char*)contents,length);
 	debugFree(&contents,"openFile contents");
 
-	searchtext=(char*)"\\00";
-	replacetext=(char*)"";
-
-	regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,matchflags,NULL);
-	str=g_regex_replace(regex,str,br,0,replacetext,matchflags,NULL);
-
-	gtk_source_buffer_begin_not_undoable_action(page->buffer);
-	gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &iter);
-	gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,str,strlen(str));
-	debugFree(&str,"openFile str");
-	gtk_source_buffer_end_not_undoable_action(page->buffer);
+	if(dataLen>0)
+		{
+			gtk_source_buffer_begin_not_undoable_action(page->buffer);
+			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
+			gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &enditer);
+			gtk_text_buffer_delete ( GTK_TEXT_BUFFER (page->buffer),&startiter, &enditer);
+			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
+			gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&startiter,convertedData,dataLen);
+			gtk_source_buffer_end_not_undoable_action(page->buffer);
+		}
+	else
+		{
+			gtk_source_buffer_begin_not_undoable_action(page->buffer);
+			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
+			gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &enditer);
+			gtk_text_buffer_delete ( GTK_TEXT_BUFFER (page->buffer),&startiter, &enditer);
+			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
+			gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&startiter,"THE CONTENTS OF THIS FILE ARE UNREADABLE!",-1);
+			gtk_source_buffer_end_not_undoable_action(page->buffer);
+		}
+	debugFree(&convertedData,"openFile convertedData");
 
 	page->gFile=g_file_new_for_path(page->filePath);
-	page->monitor=g_file_monitor(page->gFile,(GFileMonitorFlags)G_FILE_MONITOR_NONE,NULL,NULL);
+	page->monitor=g_file_monitor_file(page->gFile,(GFileMonitorFlags)G_FILE_MONITOR_NONE,NULL,NULL);
 	g_signal_connect(G_OBJECT(page->monitor),"changed",G_CALLBACK(fileChangedOnDisk),(void*)page);
 
 	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
@@ -1073,9 +1078,8 @@ printf("openfile %s\n",filepath);
 	debugFree(&recenturi,"openFile recenturi");
 	debugFree(&str,"openFile str");
 	debugFree(&filepathcopy,"openFile filepathcopy");
-	debugFree(&linkname,"openFile linkname");
 
-//connect to ntebook
+//connect to mainNotebook
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
 	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
 
@@ -1090,22 +1094,22 @@ printf("openfile %s\n",filepath);
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
 	gtk_widget_show_all((GtkWidget*)mainNotebook);
-
 	setToobarSensitive();
 
 	setFilePrefs(page);
 
+	globalPlugins->globalPlugData->page=page;
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"openFile");
+
 	/* move cursor to the linenumber */
 	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,linenum,0);
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
 	gtk_text_iter_set_line(&iter,linenum);
 	gtk_text_buffer_move_mark((GtkTextBuffer*)page->buffer,page->backMark,&iter);
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
 
-	globalPlugins->globalPlugData->page=page;
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"openFile");
-
+	busyFlag=false;
+	sessionBusy=false;
 	return TRUE;
 #endif
 }

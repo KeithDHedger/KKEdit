@@ -46,6 +46,7 @@
 #define PRINTMENUNAME "printmenu"
 #define CLOSEMENUNAME "closemenu"
 #define CLOSEALLMENUNAME "closeallmenu"
+#define SORTTABSMENUNAME "sorttabsmenu"
 #define REVERTMENUNAME "revertmenu"
 #define QUITMENUNAME "quitmenu"
 #define UNDOMENUNAME "undomenu"

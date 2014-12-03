@@ -1233,7 +1233,7 @@ printf("openHelp %i\n",(int)(long)data);
 #else
 	asprintf(&thePage,"%s %s/help/help.%s.shtml",browserCommand,DATADIR,lang);
 	runCommand(thePage,NULL,false,8,0,(char*)gettext("KKEdit Help"));
-	debugFree(thePage,"openHelp thePage");
+	debugFree((char**)&thePage,"openHelp thePage");
 	thePage=NULL;
 #endif
 #endif
@@ -1813,7 +1813,7 @@ VISIBLE void doShutdown(Widget* widget,uPtr data)
 //TODO//
 {
 printf("doShutdown %i\n",(int)(long)data);
-	char*	command;
+	char*	command=NULL;
 
 	if(doSaveAll(widget,(uPtr)true)==false)
 		return;
@@ -1827,7 +1827,8 @@ printf("doShutdown %i\n",(int)(long)data);
 	delete_aspell_speller(spellChecker);
 #endif
 
-	g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
+//TODO//
+//	g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
 
 	asprintf(&command,"rm -rf %s",tmpFolderName);
 	system(command);
@@ -2341,6 +2342,7 @@ VISIBLE void toggleStatusBar(Widget* widget,uPtr data)
 #ifdef _BUILDDOCVIEWER_
 VISIBLE void toggleDocviewer(GtkWidget* widget,gpointer data)
 {
+#ifndef _USEQT5_
 	showHideDocviewer=!showHideDocviewer;
 	if(showHideDocviewer)
 		{
@@ -2357,6 +2359,7 @@ VISIBLE void toggleDocviewer(GtkWidget* widget,gpointer data)
 	//TODO//
 #endif
 }
+#endif
 
 void doKeyShortCut(int what)
 {

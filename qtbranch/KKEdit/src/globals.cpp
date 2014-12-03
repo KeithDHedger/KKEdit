@@ -68,6 +68,7 @@ GtkWidget*		liveSearchWidget;
 //app stuff
 bool			busyFlag=false;
 VISIBLE bool	sessionBusy=false;
+bool			autoSelected=false;
 
 //find replaceAll
 GSList*			findList=NULL;
@@ -88,6 +89,8 @@ Widget*			saveAllMenu;
 Widget*			printMenu;
 Widget*			closeMenu;
 Widget*			closeAllMenu;
+Widget			*sortTabsMenu;
+
 Widget*			revertMenu;
 //edit menu
 Widget*			editMenu;
@@ -140,7 +143,7 @@ int				docWindowY=-1;
 //#endif
 
 //prefs
-GtkWidget*		prefswin;
+Widget*			prefswin;
 bool			indent;
 bool			lineNumbers;
 bool			lineWrap;
@@ -602,6 +605,7 @@ void scrollToIterInPane(void)
 
 VISIBLE pageStruct* getDocumentData(int pagenum)
 {
+//TODO//
 #ifndef _USEQT5_
 	int			thispage;
 	GtkWidget*	pageBox;
@@ -788,6 +792,7 @@ VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int u
 
 functionData* getFunctionByName(char* name,bool recurse)
 {
+//TODO//
 #ifndef _USEQT5_
 	pageStruct*		page;
 	int				numpages=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook);
@@ -805,14 +810,24 @@ functionData* getFunctionByName(char* name,bool recurse)
 	int				thislen;
 	int				loophold=-1;
 	bool			getfromfile;
+	int				loop;
+	int				maxpage=numpages;
+	bool			whileflag=true;
+	int				startpage;
+	bool			checkthispage;
+	functionData*	fdata;
 
-	functionData* fdata;
 	page=getDocumentData(-1);
 	if(page==NULL)
 		return(NULL);
 
 	getfromfile=false;
-	for(int loop=0; loop<numpages; loop++)
+
+	loop=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
+	startpage=loop;
+	checkthispage=true;
+
+	while(whileflag==true)
 		{
 			page=getDocumentData(loop);
 			if(page->filePath!=NULL)
@@ -849,6 +864,18 @@ functionData* getFunctionByName(char* name,bool recurse)
 								lineptr++;
 						}
 				}
+
+			if(checkthispage==true)
+				{
+					loop=-1;
+					checkthispage=false;
+				}
+
+			loop++;
+			if(loop==startpage)
+				loop++;
+			if(loop==maxpage)
+				whileflag=false;
 		}
 
 	if(recurse==true)
@@ -1033,8 +1060,11 @@ void getRecursiveTagList(char* filepath,void* ptr)
 	while(fgets(line,2048,fp))
 		{
 			newstr=globalSlice->deleteSlice(line,filepath);
-			g_string_append_printf(str,"%s",newstr);
-			debugFree(&newstr,"getRecursiveTagList newstr");
+			if(globalSlice->getResult()==NOERROR)
+				{
+					g_string_append_printf(str,"%s",newstr);
+					debugFree(&newstr,"getRecursiveTagList newstr");
+				}
 		}
 	pclose(fp);
 
@@ -1163,11 +1193,11 @@ printf("rebuildBookMarkMenu\n");
 
 	menuitem=gtk_menu_item_new_with_label(gettext("Remove All Bookmarks"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(removeAllBookmarks),NULL);
+	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(removeAllBookmarks),NULL);
 
 	menuitem=gtk_menu_item_new_with_label(gettext("Toggle Bookmark"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
-	gtk_signal_connect(GTK_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);
+	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
@@ -1177,7 +1207,7 @@ printf("rebuildBookMarkMenu\n");
 VISIBLE void goBack(Widget* widget,uPtr data)
 {
 printf("goBack %i\n",(int)(long)data);
-
+//TODO//
 #ifndef _USEQT5_
 	HistoryClass*	hist=new HistoryClass;
 
@@ -1201,16 +1231,27 @@ printf("goBack %i\n",(int)(long)data);
 		}
 	else
 		{
-			hist->savePosition();
-
-			gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,history->getTabNumForPage());
-			gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
-			gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-			scrollToIterInPane(page,&iter);
-
-			delete history;
-			history=hist;
+			if(history->canGoBack()==false)
+				{
+					delete hist;
+					setSensitive();
+					return;
+				}
+		if(hist->savePosition()==true)
+				{
+					gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,history->getTabNumForPage());
+					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
+					gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+					scrollToIterInPane(page,&iter);
+					delete history;
+					history=hist;
+				}
+			else
+				{
+					delete hist;
+				}
 		}
+	setSensitive();
 #endif
 }
 

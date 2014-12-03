@@ -221,6 +221,7 @@ extern unsigned int		maxFRHistory;
 //app stuff
 extern bool				busyFlag;
 extern bool				sessionBusy;
+extern bool				autoSelected;
 
 //main window
 extern Widget*			mainWindow;
@@ -238,6 +239,7 @@ extern Widget*			printMenu;
 extern Widget*			closeMenu;
 extern Widget*			closeAllMenu;
 extern Widget*			revertMenu;
+extern Widget			*sortTabsMenu;
 //edit menu
 extern Widget*			editMenu;
 extern Widget*			undoMenu;
@@ -289,7 +291,7 @@ extern int				docWindowY;
 //#endif
 
 //prefs
-extern GtkWidget*		prefswin;
+extern Widget*			prefswin;
 extern bool				indent;
 extern bool				lineNumbers;
 extern bool				lineWrap;

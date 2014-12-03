@@ -624,6 +624,7 @@ char* StringSlice::replaceSlice(char* src,char* findstr,char* replacestr)
 */  
 char* StringSlice::replaceAllSlice(char* src,char* findstr,char* replacestr)
 {
+
 	const char*	result=NULL;
 	int			numresults=0;
 

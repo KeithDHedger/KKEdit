@@ -10,36 +10,11 @@
 #define _FUNCCALLBACKS_
 
 #ifdef _BUILDDOCVIEWER_
-#ifndef _USEQT5_
-void webKitGoBack(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void webKitGoBack(void);
-#endif
-#ifndef _USEQT5_
-void webKitGoForward(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void webKitGoForward(void);
-#endif
-#ifndef _USEQT5_
-void webKitGoHome(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void webKitGoHome(void);
-#endif
-#ifndef _USEQT5_
-void docSearchInPageFoward(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void docSearchInPageFoward(void);
-#endif
-#ifndef _USEQT5_
-void docSearchInPageBack(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void docSearchInPageBack(void);
-#endif
+void webKitGoBack(Widget* widget,uPtr data);
+void webKitGoForward(Widget* widget,uPtr data);
+void webKitGoHome(Widget* widget,uPtr data);
+void docSearchInPageFoward(Widget* widget,uPtr data);
+void docSearchInPageBack(Widget* widget,uPtr data);
 #endif
 
 #ifndef _USEQT5_
@@ -51,24 +26,10 @@ void doFindReplace(void);
 
 void find(Widget* widget,uPtr data);
 
-#ifndef _USEQT5_
-void doSearchPrefs(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void doSearchPrefs(void);
-#endif
-#ifndef _USEQT5_
-void docSearchFromBar(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void docSearchFromBar(void);
-#endif
-#ifndef _USEQT5_
-void defSearchFromBar(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void defSearchFromBar(void);
-#endif
+void doSearchPrefs(Widget* widget,uPtr data);
+void docSearchFromBar(Widget* widget,uPtr data);
+void defSearchFromBar(Widget* widget,uPtr data);
+
 #ifndef _USEQT5_
 void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data);
 #else
@@ -79,24 +40,11 @@ void basicFind(int dowhat);
 void regexFind(int dowhat);
 
 void searchQT5Docs(Widget* widget,uPtr data);
-
-#ifndef _USEQT5_
-void qt5DocSearchFromBar(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void qt5DocSearchFromBar(void);
-#endif
-
+void qt5DocSearchFromBar(Widget* widget,uPtr data);
 void searchGtkDocs(Widget* widget,uPtr data);
 
 void showDocView(int howtodisplay,char* text,const char* title);
-#ifndef _USEQT5_
-void pasteFRClip(GtkWidget* widget,gpointer data);
-#else
-//TODO//
-void pasteFRClip(void);
-#endif
-
+void pasteFRClip(Widget* widget,uPtr data);
 void doDoxy(Widget* widget,uPtr data);
 void doxyDocs(Widget* widget,uPtr data);
 

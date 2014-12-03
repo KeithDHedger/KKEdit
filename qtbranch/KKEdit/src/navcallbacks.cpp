@@ -8,8 +8,12 @@
 
 #include "kkedit-includes.h"
 
-int	theLineNum=0;
-int marknum=0;
+int		theLineNum=0;
+int		marknum=0;
+char	*filebuffer=NULL;
+bool	mustBeAClass=false;
+int		classLineNumber=1;
+char	*classFileName=NULL;
 
 void goToDefine(functionData* fdata)
 {
@@ -20,6 +24,10 @@ void goToDefine(functionData* fdata)
 	if(fdata->intab==-1)
 		{
 			openFile(fdata->file,fdata->line-1,true);
+			page=getDocumentData(gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)-1);
+			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+			buf->scroll2Line((GtkTextView*)page->view,fdata->line-2);
+			delete buf;
 		}
 	else
 		{
@@ -116,9 +124,9 @@ printf("findFile %i\n",(int)(long)data);
 								}
 							pclose(fp);
 						}
-					free(command);
+					debugFree(&command,"findFile command");
 				}
-			free(filepath);
+			debugFree(&filepath,"findFile filepath");
 		}
 	delete buf;
 	delete slice;
@@ -260,114 +268,6 @@ void jumpToMark(void)
 
 #ifdef _BUILDDOCVIEWER_
 
-char* unEscapeFileNAme(char* name)
-{
-#ifndef _USEQT5_
-	char*	buffer;
-	int		charpos;
-	unsigned int		namepos;
-
-	buffer=(char*)calloc(strlen(name),1);
-	charpos=0;
-	namepos=0;
-
-	while(namepos<strlen(name))
-		{
-			if(name[namepos]!='_')
-				{
-					buffer[charpos]=name[namepos];
-				}
-			else
-				{
-					namepos++;
-					switch(name[namepos])
-						{
-						case '_':
-							buffer[charpos]='_';
-							break;
-						case '1':
-							buffer[charpos]=':';
-							break;
-						case '2':
-							buffer[charpos]='/';
-							break;
-						case '3':
-							buffer[charpos]='<';
-							break;
-						case '4':
-							buffer[charpos]='>';
-							break;
-						case '5':
-							buffer[charpos]='*';
-							break;
-						case '6':
-							buffer[charpos]='&';
-							break;
-						case '7':
-							buffer[charpos]='|';
-							break;
-						case '8':
-							buffer[charpos]='.';
-							break;
-						case '9':
-							buffer[charpos]='!';
-							break;
-						case '0':
-							namepos++;
-							switch(name[namepos])
-								{
-								case '0':
-									buffer[charpos]=',';
-									break;
-								case '1':
-									buffer[charpos]=' ';
-									break;
-								case '2':
-									buffer[charpos]='{';
-									break;
-								case '3':
-									buffer[charpos]='}';
-									break;
-								case '4':
-									buffer[charpos]='?';
-									break;
-								case '5':
-									break;
-									buffer[charpos]='^';
-								case '6':
-									buffer[charpos]='%';
-									break;
-								case '7':
-									buffer[charpos]='(';
-									break;
-								case '8':
-									buffer[charpos]=')';
-									break;
-								case '9':
-									buffer[charpos]='+';
-									break;
-								case 'A':
-									buffer[charpos]='=';
-								case 'B':
-									buffer[charpos]='$';
-									break;
-								case 'C':
-									buffer[charpos]='\\';
-									break;
-								}
-						default:
-							buffer[charpos]=toupper(name[namepos]);
-							break;
-						}
-				}
-			namepos++;
-			charpos++;
-		}
-
-	return(buffer);
-#endif
-}
-
 struct docFileData
 {
 	char*	fileName;
@@ -376,8 +276,6 @@ struct docFileData
 	char*	hashTag;
 	char*	sourceFile;
 };
-
-char*	filebuffer=NULL;
 
 bool readFile(char *name)
 {
@@ -432,10 +330,6 @@ int getLineFromXML(char* xml)
 	return(retline);
 #endif
 }
-
-bool	mustBeAClass=false;
-int		classLineNumber=1;
-char*	classFileName=NULL;
 
 char* getPathFromXML(char* xml)
 {

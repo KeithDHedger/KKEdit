@@ -31,13 +31,15 @@ struct _FunctionProviderClass
 
 #ifndef _USEQT5_
 G_DEFINE_TYPE_WITH_CODE(FunctionProvider,function_provider,G_TYPE_OBJECT,G_IMPLEMENT_INTERFACE (GTK_TYPE_SOURCE_COMPLETION_PROVIDER,function_provider_iface_init))
-#else
-//TODO//
-#endif
 
 FunctionProvider*			funcProv;
 FunctionProvider*			varsProv;
 FunctionProvider*			customProv;
+
+#else
+//TODO//
+#endif
+
 
 bool						forcePopup=false;
 #ifndef _USEQT5_
@@ -125,7 +127,12 @@ void function_provider_get_icon(void)
 }
 
 //completion
+#ifndef _USEQT5_
 GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
+#else
+//TODO//
+GList* addPropsFromWord(void)
+#endif
 {
 #ifndef _USEQT5_
 	char*	infostr;
@@ -217,13 +224,20 @@ void function_provider_iface_init(void)
 #endif
 }
 
-void function_provider_class_init(FunctionProviderClass* klass)
-{
 #ifndef _USEQT5_
+void function_provider_class_init(FunctionProviderClass* klass)
+#else
+//TODO//
+void function_provider_class_init(void)
 #endif
+{
 }
 
+#ifndef _USEQT5_
 void function_provider_init(FunctionProvider* self)
+#else
+void function_provider_init(void)
+#endif
 {
 #ifndef _USEQT5_
 	self->icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER(self));

@@ -762,7 +762,7 @@ int main (int argc, char **argv)
 		app.setWindowIcon(QIcon::fromTheme(PACKAGE,QIcon(DATADIR"/pixmaps/KKEdit.png")));
 	else
 		app.setWindowIcon(QIcon::fromTheme(PACKAGE "Root",QIcon(DATADIR"/pixmaps/KKEditRoot.png")));
-
+	//app.setStyleSheet("QMenu { columnCount: 1;}");
 	status=app.exec();
 #endif
 	delete history;
