@@ -567,20 +567,14 @@ VISIBLE void closeTab(Widget* widget,uPtr data)
 	DocumentClass	*doc=NULL;
 	long			thispage=(long)data;
 
-printf("%i\n",thispage);
-
 	if(closingAll==true)
 		thispage=0;
 	else
 		{
 			if(data==NULL)
-printf("AAAAAAAAA\n");
-//				thispage=((QTabWidget*)mainNotebook)->currentIndex();
-//			else
-//				thispage=((QTabWidget*)mainNotebook)->indexOf((QWidget*)data);
+				thispage=((QTabWidget*)mainNotebook)->currentIndex();
 		}
 
-printf("%i\n",thispage);
 	doc=(DocumentClass*)((QTabWidget*)mainNotebook)->widget(thispage);
 	if(doc!=0)
 		{

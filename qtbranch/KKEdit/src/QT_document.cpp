@@ -56,14 +56,7 @@ void DocumentClass::resizeEvent(QResizeEvent *e)
 	QRect cr=contentsRect();
 	lineNumberArea->setGeometry(QRect(cr.left(),cr.top(),lineNumberAreaWidth(),cr.height()));
 }
-/*
-	char*				fileName;
-	char*				filePath;
-	char*				dirName;
-	char*				realFilePath;
-	char*				tabName;
 
-*/
 DocumentClass::~DocumentClass()
 {
 	debugFree(&(this->page->fileName),"~DocumentClass this->page->fileName");
@@ -71,6 +64,8 @@ DocumentClass::~DocumentClass()
 	debugFree(&(this->page->dirName),"~DocumentClass this->page->dirName");
 	debugFree(&(this->page->realFilePath),"~DocumentClass this->page->realFilePath");
 	debugFree(&(this->page->tabName),"~DocumentClass this->page->tabName");
+	debugFree((char**)&(this->page),"~DocumentClass page");
+	
 }
 
 void DocumentClass::updateLineNumberAreaWidth(int/* newBlockCount */)
