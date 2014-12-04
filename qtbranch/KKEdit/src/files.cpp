@@ -922,7 +922,6 @@ void getFileContents(const gchar *filepath,bool warn)
 
 VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
-printf("openfile %s\n",filepath);
 #ifdef _USEQT5_
 	DocumentClass	*doc;
 	QFile 			file;
