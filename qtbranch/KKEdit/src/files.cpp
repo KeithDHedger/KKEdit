@@ -174,12 +174,28 @@ QWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 #endif
 }
 
-void setFilePrefs(pageStruct* page)
+void setFilePrefs(uPtr pagedata)
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	DocumentClass*	doc;
+	char			fontname[256];
+	int				fontsize;
+
+	doc=(DocumentClass*)pagedata;
+	if(doc==NULL)
+		return;
+
+	sscanf(fontAndSize,"%[^0-9]s",fontname);
+	fontsize=atoi(strrchr(fontAndSize,' '));
+	doc->setTabStopWidth(tabWidth*8);
+	doc->document()->setDefaultFont(QFont(fontname,fontsize,-1,false));
+#else
+	pageStruct* page
 	PangoFontDescription*	font_desc;
 	GdkColor				color;
 	GtkTextAttributes*		attr;
+
+	page=(pageStruct*)pagedata;
 
 	gtk_source_view_set_auto_indent(page->view,indent);
 	gtk_source_view_set_show_line_numbers(page->view,lineNumbers);
@@ -938,6 +954,7 @@ printf("openfile %s\n",filepath);
 			debugFree(&tstr,"openFile tstr 2");
 			debugFree(&convertedData,"openFile convertedData");
 		}
+	setFilePrefs((uPtr)doc);
 #else
 	GtkTextIter				iter;
 	GtkTextIter				startiter;

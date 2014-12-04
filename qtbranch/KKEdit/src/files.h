@@ -32,6 +32,6 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 //TODO//
 void fileChangedOnDisk(void);
 #endif
-void setFilePrefs(pageStruct* page);
+void setFilePrefs(uPtr pagedata);
 
 #endif

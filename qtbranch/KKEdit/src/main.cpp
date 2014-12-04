@@ -706,6 +706,7 @@ void qtAppStart(int argc, char **argv)
 
 int main (int argc, char **argv)
 {
+
 	int				status;
 	char*			filename;
 	char*			dbusname;

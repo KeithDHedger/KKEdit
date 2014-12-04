@@ -157,7 +157,7 @@ void gotoLine(Widget* widget,uPtr data)
 	QTextCursor		cursor;
 
 	doc=getDocumentData(-1);
-	block=doc->document()->findBlockByLineNumber(line-1);
+	block=doc->document()->findBlockByNumber(line-1);
 	cursor=doc->textCursor();
 	cursor.setPosition(block.position());
 	doc->setFocus();
