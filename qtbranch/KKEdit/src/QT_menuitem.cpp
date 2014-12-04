@@ -40,6 +40,11 @@
 
 #include "QT_menuitem.h"
 
+MenuItemClass::~MenuItemClass()
+{
+printf("XXXX\n");
+}
+
 MenuItemClass::MenuItemClass(const QString &text, QWidget *parent): QAction(parent)
 {
 	this->callbackVoid=NULL;

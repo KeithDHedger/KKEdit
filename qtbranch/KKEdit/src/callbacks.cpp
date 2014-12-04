@@ -394,7 +394,7 @@ VISIBLE void doOpenFile(Widget* widget,uPtr data)
 	fileNames=QFileDialog::getOpenFileNames(mainWindow,gettext("Open File"),"","",0);
 	if (fileNames.count())
 		{
-			for (int j=0;j<fileNames.size();++j)
+			for (int j=0;j<fileNames.size();j++)
 				openFile(fileNames.at(j).toUtf8().constData(),0,true);
 		}
 #endif
@@ -562,9 +562,32 @@ void setSensitive(void)
 VISIBLE void closeTab(Widget* widget,uPtr data)
 //TODO//
 {
-printf("closeTab %i\n",(int)(long)data);
 
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	DocumentClass	*doc=NULL;
+	long			thispage=(long)data;
+
+printf("%i\n",thispage);
+
+	if(closingAll==true)
+		thispage=0;
+	else
+		{
+			if(data==NULL)
+printf("AAAAAAAAA\n");
+//				thispage=((QTabWidget*)mainNotebook)->currentIndex();
+//			else
+//				thispage=((QTabWidget*)mainNotebook)->indexOf((QWidget*)data);
+		}
+
+printf("%i\n",thispage);
+	doc=(DocumentClass*)((QTabWidget*)mainNotebook)->widget(thispage);
+	if(doc!=0)
+		{
+			((QTabWidget*)mainNotebook)->removeTab(thispage);
+			delete doc;
+		}
+#else
 	long		thispage;
 	int			result;
 	pageStruct*	page;
@@ -684,7 +707,9 @@ printf("closeAllTabs %i\n",(int)(long)data);
 
 #ifndef _USEQT5_
 	int	numtabs=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook);
-
+#else
+	int	numtabs=((QTabWidget*)mainNotebook)->count();
+#endif
 	for(int loop=0; loop<numtabs; loop++)
 		{
 			closingAll=true;
@@ -692,10 +717,19 @@ printf("closeAllTabs %i\n",(int)(long)data);
 		}
 
 //rebuild bookmark menu
-	rebuildBookMarkMenu();
+//	rebuildBookMarkMenu();
+#ifndef _USEQT5_
 	gtk_widget_show_all(bookMarkMenu);
 #endif
 }
+
+#ifdef _USEQT5_
+void closeTabQT(int tabnum)
+{
+	closingAll=false;
+	closeTab(NULL,tabnum);
+}
+#endif
 
 void sortTabs(Widget* widget,uPtr data)
 {
@@ -745,6 +779,8 @@ void switchPage(int thispage)
 	MenuItemClass	*menuitem;
 
 	doc=(DocumentClass*)((QTabWidget*)mainNotebook)->widget(thispage);
+	if(doc==0)
+		return;
 	((QMenu*)funcMenu)->clear();
 	
 	getRecursiveTagList((char*)doc->getPathname(),&functions);

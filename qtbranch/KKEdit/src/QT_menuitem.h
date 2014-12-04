@@ -53,6 +53,7 @@ class MenuItemClass : public QAction
 
 	public:
 		explicit MenuItemClass(const QString &text, QWidget *parent = 0);
+		~MenuItemClass();
 
 		void				setMenuID(int id);
 		int					getMenuID(void);

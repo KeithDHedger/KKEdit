@@ -11,6 +11,9 @@
 
 void doOpenFile(Widget* widget,uPtr data);
 void closeTab(Widget* widget,uPtr data);
+#ifdef _USEQT5_
+void closeTabQT(int tabnum);
+#endif
 
 #ifndef _USEQT5_
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint arg2,gpointer user_data);

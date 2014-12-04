@@ -1442,6 +1442,7 @@ void buildMainGuiQT(void)
 	((QTabWidget*)mainNotebook)->setMovable(true);
 	
 	QObject::connect(((QTabWidget*)mainNotebook),&QTabWidget::currentChanged,switchPage);
+	QObject::connect(((QTabWidget*)mainNotebook),&QTabWidget::tabCloseRequested,closeTabQT);
 
 	menuBar=new QMenuBar;
 //file menu
