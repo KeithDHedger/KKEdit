@@ -1,4 +1,5 @@
 0.2.6
+Fixed minor memory leak.
 Made switchPage callback visible to plugins.
 Stoped horizontal scrollbar flashing up when wrap lines is active.
 Removed some small error messages from startup.
