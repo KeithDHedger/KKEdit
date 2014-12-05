@@ -1300,6 +1300,19 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 		}
 }
 
+enum
+{
+  TARGET_TEXT_URI_LIST,
+  TARGET_GTK_NOTEBOOK_TAB
+};
+
+static const GtkTargetEntry drop_targets[] =
+{
+  { (gchar *) "text/uri-list", 0, TARGET_TEXT_URI_LIST },
+  { (gchar *) "GTK_NOTEBOOK_TAB", GTK_TARGET_OTHER_APP, TARGET_GTK_NOTEBOOK_TAB },
+  { (gchar *) "GTK_NOTEBOOK_TAB1", GTK_TARGET_SAME_APP, TARGET_GTK_NOTEBOOK_TAB }
+};
+
 void buildMainGui(void)
 {
 	GtkWidget*		menuitem;
@@ -1342,6 +1355,9 @@ void buildMainGui(void)
 	gtk_drag_dest_set(mainWindowVBox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets(mainWindowVBox);
 	g_signal_connect(G_OBJECT(mainWindowVBox),"drag_data_received",G_CALLBACK(dropUri),NULL);
+	gtk_drag_dest_set(GTK_WIDGET (mainWindowVBox), (GtkDestDefaults)(GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP), drop_targets, G_N_ELEMENTS (drop_targets),(GdkDragAction) (GDK_ACTION_COPY | GDK_ACTION_MOVE));
+
+gtk_notebook_set_group_name(mainNotebook,"kkedit");
 
 	setUpToolBar();
 	gtk_box_pack_start(GTK_BOX(toolBarBox),(GtkWidget*)toolBar,true,true,0);

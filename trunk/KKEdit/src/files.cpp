@@ -898,6 +898,9 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
 	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
 	gtk_notebook_set_current_page(mainNotebook,currentPage);
+	gtk_notebook_set_tab_detachable(mainNotebook,page->tabVbox,true);
+	gtk_widget_set_name(page->tabVbox,"XXXXXXXXXX");
+	gtk_widget_set_name(label,"ZZZZZZZZ");
 	currentPage++;
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 
@@ -953,6 +956,8 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
 	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
 	gtk_notebook_set_current_page(mainNotebook,currentPage);
+	gtk_notebook_set_tab_detachable(mainNotebook,page->tabVbox,true);
+
 	setToobarSensitive();
 	currentPage++;
 	gtk_widget_show_all((GtkWidget*)mainNotebook);

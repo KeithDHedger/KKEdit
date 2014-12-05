@@ -522,9 +522,6 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 	bool		changed=false;
 	GtkWidget*	menuitem;
 
-	if(sessionBusy==true)
-		return;
-
 	busyFlag=true;	
 	if(closingAll==true)
 		thispage=0;
@@ -628,6 +625,9 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 
 VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
 {
+	bool shold=sessionBusy;
+	sessionBusy=true;
+
 	int	numtabs=gtk_notebook_get_n_pages(mainNotebook);
 
 	for(int loop=0; loop<numtabs; loop++)
@@ -638,6 +638,7 @@ VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
 
 //rebuild bookmark menu
 	rebuildBookMarkMenu();
+	sessionBusy=shold;
 	gtk_widget_show_all(bookMarkMenu);
 }
 
@@ -681,6 +682,9 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	GtkWidget*	typesubmenus[50]= {NULL,};
 	GtkWidget*	submenu;
 	char*		correctedstr=NULL;
+
+	if(sessionBusy==true)
+		return;
 
 	if(arg1==NULL)
 		return;
@@ -875,6 +879,24 @@ VISIBLE void redo(GtkWidget* widget,gpointer data)
 
 VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
 {
+//xxxxxxxxxxxxxxx
+printf("%i\n",info);
+const gchar *name = gtk_widget_get_name ((GtkWidget*)context);
+        g_print ("%s: drag_data_received_handl\n", name);
+if(info==1)
+	{
+		 GtkWidget  *notebook=NULL;
+		     notebook = gtk_drag_get_source_widget (context);
+if(notebook!=NULL)
+	printf("got widget\n");
+
+const guchar * data=NULL;
+data=gtk_selection_data_get_data(selection_data);
+if(data!=NULL)
+	printf("got data %s\n",data);
+		//return;
+	}
+
 	gchar**	array=gtk_selection_data_get_uris(selection_data);
 	int		cnt=g_strv_length(array);
 	char*	filename;
