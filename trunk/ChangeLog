@@ -1,6 +1,6 @@
 0.2.6
+Made switchPage callback visible to plugins.
 Stoped horizontal scrollbar flashing up when wrap lines is active.
-Sped up loading of sessions with a lot of files.
 Removed some small error messages from startup.
 Fixed minor free bug when docviewer is disabled.
 Updated help file and translations.

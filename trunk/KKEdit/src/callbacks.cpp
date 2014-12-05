@@ -604,10 +604,10 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 		g_object_unref(page->monitor);
 
 	currentPage--;
-	gtk_notebook_remove_page(mainNotebook,thispage);
 	setSensitive();
+	debugFree((char**)&page,"closeTab page");
+	gtk_notebook_remove_page(mainNotebook,thispage);
 
-//	debugFree((char**)&page,"closeTab page");
 }
 
 VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
@@ -1829,10 +1829,14 @@ void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 {
 	gchar*	uri=NULL;
 	char*	filename;
+	pageStruct*	page;
 
 	if(data!=NULL)
 		{
 			openFile((char*)data,0,true);
+			page=getDocumentData(-1);
+			switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
+			setSensitive();	
 			return;
 		}
 
@@ -1844,6 +1848,9 @@ void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 			g_free (uri);
 			debugFree(&filename,"recentFileMenu filename");
 		}
+	page=getDocumentData(-1);
+	switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
+	setSensitive();	
 }
 
 VISIBLE void newEditor(GtkWidget* widget,gpointer data)
