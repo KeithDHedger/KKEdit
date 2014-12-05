@@ -1,4 +1,6 @@
 0.2.6
+Fixed numerous minor widget sensitivity bugs.
+Plugin folder changed is now ~/.KKEdit/plugins-gtk.
 Fixed minor memory leak.
 Made switchPage callback visible to plugins.
 Stoped horizontal scrollbar flashing up when wrap lines is active.

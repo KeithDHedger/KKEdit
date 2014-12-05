@@ -343,7 +343,8 @@ void open(GApplication* application,GFile** files,gint n_files,const gchar* hint
 		gtk_window_present((GtkWindow*)mainWindow);
 
 	page=getDocumentData(-1);
-	switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
+	if(page!=NULL)
+		switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
 	setSensitive();
 
 	g_application_release(application);

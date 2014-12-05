@@ -561,7 +561,8 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 
 	sessionBusy=false;
 	page=getDocumentData(-1);
-	switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
+	if(page!=NULL)
+		switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
 	gtk_widget_thaw_child_notify((GtkWidget*)mainNotebook);
 	while(gtk_events_pending())
 		gtk_main_iteration_do(false);

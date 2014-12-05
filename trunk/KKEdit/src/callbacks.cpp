@@ -605,6 +605,7 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 
 	currentPage--;
 	setSensitive();
+//DANGER!!//
 	debugFree((char**)&page,"closeTab page");
 	gtk_notebook_remove_page(mainNotebook,thispage);
 
@@ -1251,10 +1252,16 @@ void changeSourceStyle(GtkWidget* widget,gpointer data)
 void openFromTab(GtkMenuItem* widget,pageStruct* page)
 {
 	char*		filepath=NULL;
+	pageStruct*	page1;
 
 	asprintf(&filepath,"%s/%s",page->dirName,gtk_menu_item_get_label(widget));
 	openFile(filepath,0,true);
 	debugFree(&filepath,"openFromTab filepath");
+	sessionBusy=false;
+	page1=getDocumentData(-1);
+	if(page1!=NULL)
+		switchPage(mainNotebook,page1->tabVbox,currentTabNumber,NULL);
+
 }
 
 bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
