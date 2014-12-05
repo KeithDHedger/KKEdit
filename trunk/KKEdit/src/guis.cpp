@@ -1360,6 +1360,17 @@ void buildMainGui(void)
 //open as hexdump
 	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)openAsHexDump,0,HEXDUMPMENUNAME,IMAGEMENU,gettext("Open As Hexdump"),NULL);
 
+//recent menu
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+	menuitem=gtk_image_menu_item_new_with_label(gettext("Recent Files"));
+	menurecent=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
+	addRecentToMenu((GtkRecentChooser*)recent,menurecent);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_widget_set_name(menuitem,RECENTMENUNAME);
+
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
@@ -1373,17 +1384,6 @@ void buildMainGui(void)
 //doxy
 	if(gotDoxygen==0)
 		menuitem=makeMenuItem(GTK_STOCK_COPY,menu,(void*)doDoxy,0,DOXYBUILDMENUNAME,IMAGEMENU,gettext("Build Documentation"),(void*)1);
-
-	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
-//recent menu
-	menuitem=gtk_image_menu_item_new_with_label(gettext("Recent Files"));
-	menurecent=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
-	addRecentToMenu((GtkRecentChooser*)recent,menurecent);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_widget_set_name(menuitem,RECENTMENUNAME);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);

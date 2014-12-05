@@ -513,8 +513,10 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	while(gtk_events_pending())
 		gtk_main_iteration_do(false);
 
-	sessionBusy=true;
-	gtk_widget_freeze_child_notify((GtkWidget*)mainNotebook);
+	doUpdateWidgets=false;
+
+//	sessionBusy=true;
+//	gtk_widget_freeze_child_notify((GtkWidget*)mainNotebook);
 
 	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
 	fd=fopen(filename,"r");
@@ -525,7 +527,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 					sscanf(buffer,"%i %[^\n]s",(int*)&currentline,(char*)&strarg);
 					if(openFile(strarg,currentline,true)==false)
 						{
-							sessionBusy=true;
+							//sessionBusy=true;
 							intarg=999;
 							while(intarg!=-1)
 								{
@@ -535,7 +537,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 						}
 					else
 						{
-							sessionBusy=true;
+							//sessionBusy=true;
 							fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 							page=getDocumentData(currentPage-1);
@@ -559,16 +561,17 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 			debugFree(&filename,"restoreSession filename");
 		}
 
-	sessionBusy=false;
-	page=getDocumentData(-1);
-	if(page!=NULL)
-		switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
-	gtk_widget_thaw_child_notify((GtkWidget*)mainNotebook);
-	while(gtk_events_pending())
-		gtk_main_iteration_do(false);
+//	sessionBusy=false;
+//	page=getDocumentData(-1);
+//	if(page!=NULL)
+//		switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
+//	gtk_widget_thaw_child_notify((GtkWidget*)mainNotebook);
+//	while(gtk_events_pending())
+//		gtk_main_iteration_do(false);
 	delete buf;
-	sessionBusy=false;
-	setSensitive();
+//	sessionBusy=false;
+//	setSensitive();
+	setWidgets();
 }
 
 int showFileChanged(char* filename)
@@ -777,8 +780,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	char*					filepathcopy=NULL;
 	char*					tpath;
 
-	busyFlag=true;
-	sessionBusy=true;
+	//busyFlag=true;
+	//sessionBusy=true;
 
 	if(readLinkFirst==true)
 		filepathcopy=realpath(filepath,NULL);
@@ -796,8 +799,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					if((tpath!=NULL) && (page->realFilePath!=NULL) && (strcmp(page->realFilePath,tpath)==0))
 						{
 							gtk_notebook_set_current_page(mainNotebook,j);
-							busyFlag=false;
-							sessionBusy=false;
+							//busyFlag=false;
+							//sessionBusy=false;
 							debugFree(&tpath,"openFile tpath");
 							return(true);
 						}
@@ -813,8 +816,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
-			busyFlag=false;
-			sessionBusy=false;
+			//busyFlag=false;
+			//sessionBusy=false;
 			return(false);
 		}
 
@@ -826,8 +829,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
-			busyFlag=false;
-			sessionBusy=false;
+			//busyFlag=false;
+			//sessionBusy=false;
 			return(false);
 		}
 
@@ -857,8 +860,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
-			busyFlag=false;
-			sessionBusy=false;
+			//busyFlag=false;
+			//sessionBusy=false;
 			return(false);
 		}
 
@@ -916,9 +919,9 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
 	gtk_widget_show_all((GtkWidget*)mainNotebook);
-	setToobarSensitive();
+//	setToobarSensitive();
 
-	setFilePrefs(page);
+	//setFilePrefs(page);
 
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"openFile");
@@ -930,8 +933,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_text_buffer_move_mark((GtkTextBuffer*)page->buffer,page->backMark,&iter);
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
 
-	busyFlag=false;
-	sessionBusy=false;
+//	busyFlag=false;
+	//sessionBusy=false;
 	return TRUE;
 }
 

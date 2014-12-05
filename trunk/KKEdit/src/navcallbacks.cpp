@@ -23,6 +23,7 @@ void goToDefine(functionData* fdata)
 	if(fdata->intab==-1)
 		{
 			openFile(fdata->file,fdata->line-1,true);
+			setWidgets();
 			page=getDocumentData(gtk_notebook_get_n_pages(mainNotebook)-1);
 			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 			buf->scroll2Line((GtkTextView*)page->view,fdata->line-2);

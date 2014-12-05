@@ -342,11 +342,11 @@ void open(GApplication* application,GFile** files,gint n_files,const gchar* hint
 	if(mainWindow!=NULL)
 		gtk_window_present((GtkWindow*)mainWindow);
 
-	page=getDocumentData(-1);
-	if(page!=NULL)
-		switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
-	setSensitive();
-
+//	page=getDocumentData(-1);
+//	if(page!=NULL)
+//		switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
+//	setSensitive();
+	setWidgets();
 	g_application_release(application);
 }
 

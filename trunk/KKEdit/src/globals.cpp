@@ -1198,7 +1198,27 @@ void doBusy(bool busy,pageStruct* page)
 		}
 }
 
+bool doUpdateWidgets=false;
 
+
+VISIBLE void setWidgets(void)
+{
+	pageStruct* page;
+//	sessionBusy=false;
+	doUpdateWidgets=true;
+	page=getDocumentData(-1);
+	if(page!=NULL)
+		switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
+//	gtk_widget_thaw_child_notify((GtkWidget*)mainNotebook);
+//	while(gtk_events_pending())
+//		gtk_main_iteration_do(false);
+//	sessionBusy=false;
+
+	setSensitive();
+	refreshMainWindow();
+	resetAllFilePrefs();
+//	globalUpdate=false;
+}
 
 
 
