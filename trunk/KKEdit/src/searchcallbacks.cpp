@@ -8,20 +8,10 @@
 
 #include "kkedit-includes.h"
 
-int		currentFindPage=-1;
-int		firstPage=-1;
-int		pagesChecked=0;
-int		itemsReplaced=-1;
-struct	regexData
-{
-	int start;
-	int	end;
-};
-
-char	*searchtext=NULL;
-char	*replacetext=NULL;
-bool	fromregexreplace=false;
-bool	gotselection=false,fromregexsinglereplace=false;
+int currentFindPage=-1;
+int firstPage=-1;
+int pagesChecked=0;
+int	itemsReplaced=-1;
 
 #ifdef _BUILDDOCVIEWER_
 
@@ -44,7 +34,9 @@ void webKitGoHome(GtkWidget* widget,gpointer data)
 
 PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 {
+
 #ifdef _BUILDDOCVIEWER_
+
 	gtk_window_set_title((GtkWindow*)docView,title);
 
 	if(howtodisplay==USEURI)
@@ -472,6 +464,15 @@ void doAllFiles(int dowhat,bool found)
 		regexFind(dowhat);
 }
 
+struct regexData
+{
+	int start;
+	int	end;
+};
+
+char*					searchtext=NULL;
+char*					replacetext=NULL;
+
 int findNextRegex(pageStruct* page,int charpos,int thisregxnum)
 {
 	int retval=-1;
@@ -522,6 +523,9 @@ int findThisRegex(pageStruct* page,int charpos)
 		}
 	return(retval);
 }
+
+bool fromregexreplace=false;
+bool gotselection=false,fromregexsinglereplace=false;
 
 void regexFind(int dowhat)
 {
@@ -1138,6 +1142,8 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 				break;
 			case 5:
 				useRegex=gtk_toggle_button_get_active((GtkToggleButton*)widget);
+				//button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,FINDPREV);
+				//gtk_widget_set_sensitive(button,!useRegex);
 				break;
 			case 6:
 				hightlightAll=gtk_toggle_button_get_active((GtkToggleButton*)widget);

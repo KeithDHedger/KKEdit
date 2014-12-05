@@ -204,7 +204,7 @@ GtkWidget*		secondWindowVPane=NULL;
 GtkWidget*		mainWindowHPane=NULL;
 GtkWidget*		secondWindowHPane=NULL;
 
-int				currentTabNumber;
+VISIBLE int				currentTabNumber;
 int 			untitledNumber=1;
 
 GtkToolItem*	newButton=NULL;
@@ -483,7 +483,21 @@ void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 	else
 		gtk_text_view_scroll_to_iter((GtkTextView*)page->view2,iter,0,true,0,0.5);
 }
+/*
+	int			thispage;
+	GtkWidget*	pageBox;
 
+	if(pagenum==-1)
+		thispage=gtk_notebook_get_current_page(notebook);
+	else
+		thispage=pagenum;
+
+	pageBox=gtk_notebook_get_nth_page(notebook,thispage);
+	if(pageBox==NULL)
+		return(NULL);
+	else
+		return((pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata"));
+*/
 VISIBLE pageStruct* getDocumentData(int pagenum)
 {
 	int			thispage;

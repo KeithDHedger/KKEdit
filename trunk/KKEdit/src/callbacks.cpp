@@ -344,6 +344,7 @@ VISIBLE void doOpenFile(GtkWidget* widget,gpointer data)
 	char*		filename;
 	GSList*		filenames;
 	GSList*		thisnext;
+	pageStruct*	page;
 
 	dialog=gtk_file_chooser_dialog_new(gettext("Open File"),NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,NULL);
 	gtk_file_chooser_set_select_multiple((GtkFileChooser*)dialog,true);
@@ -361,6 +362,9 @@ VISIBLE void doOpenFile(GtkWidget* widget,gpointer data)
 			g_slist_free(filenames);
 		}
 	gtk_widget_destroy (dialog);
+
+	page=getDocumentData(-1);
+	switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
 	refreshMainWindow();
 }
 
@@ -433,7 +437,7 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 	delete buf;
 }
 
-void setSensitive(void)
+VISIBLE void setSensitive(void)
 {
 	pageStruct*		page=getDocumentData(-1);
 	const gchar*	text;
@@ -445,7 +449,6 @@ void setSensitive(void)
 		return;
 
 	setToobarSensitive();
-
 	if(page==NULL)
 		{
 //menu
@@ -522,7 +525,7 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 	bool		changed=false;
 	GtkWidget*	menuitem;
 
-	busyFlag=true;	
+	gtk_widget_show((GtkWidget*)mainNotebook);
 	if(closingAll==true)
 		thispage=0;
 	else
@@ -558,6 +561,7 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 				}
 		}
 
+
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"closeFile");
 
@@ -591,43 +595,23 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 	gtk_widget_show_all(bookMarkMenu);
 
 	if(page->filePath!=NULL)
-		debugFree(&(page->filePath),"closeTab filePath");
+		debugFree(&page->filePath,"closeTab filePath");
 	if(page->fileName!=NULL)
-		debugFree(&(page->fileName),"closeTab fileName");
-
-	debugFree(&(page->dirName),"closeTab dirName");
-	debugFree(&(page->realFilePath),"closeTab realFilePath");
-	if(page->markList!=NULL)
-		g_list_free_full(page->markList,free);
-	page->markList=NULL;
-
-	if(page->userDataList!=NULL)
-		g_list_free_full(page->userDataList,free);
-	page->userDataList=NULL;
-
-	if(page->regexList!=NULL)
-		g_slist_free_full(page->regexList,free);
-	page->regexList=NULL;
-
-	if(page->monitor!=NULL)
-		g_clear_object(&(page->monitor));
+		debugFree(&page->fileName,"closeTab fileName");
 	if(page->gFile!=NULL)
-		g_clear_object(&(page->gFile));
+		g_object_unref(page->gFile);
+	if(page->monitor!=NULL)
+		g_object_unref(page->monitor);
 
 	currentPage--;
+	gtk_notebook_remove_page(mainNotebook,thispage);
 	setSensitive();
 
-	gtk_notebook_remove_page(mainNotebook,thispage);
-//TODO//
 //	debugFree((char**)&page,"closeTab page");
-	busyFlag=false;
 }
 
 VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
 {
-	bool shold=sessionBusy;
-	sessionBusy=true;
-
 	int	numtabs=gtk_notebook_get_n_pages(mainNotebook);
 
 	for(int loop=0; loop<numtabs; loop++)
@@ -638,7 +622,6 @@ VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
 
 //rebuild bookmark menu
 	rebuildBookMarkMenu();
-	sessionBusy=shold;
 	gtk_widget_show_all(bookMarkMenu);
 }
 
@@ -664,7 +647,7 @@ void sortTabs(GtkWidget* widget,gpointer data)
 		}
 }
 
-void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
+VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
 {
 	pageStruct*	page;
 	char*		functions=NULL;
@@ -683,9 +666,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 	GtkWidget*	submenu;
 	char*		correctedstr=NULL;
 
-	if(sessionBusy==true)
-		return;
-
+	
 	if(arg1==NULL)
 		return;
 
@@ -701,6 +682,8 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 
 	page->rebuildMenu=false;
 
+if(sessionBusy==false)
+{
 	getRecursiveTagList(page->filePath,&functions);
 	lineptr=functions;
 
@@ -772,7 +755,7 @@ void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user
 			debugFree(&correctedstr,"switchPage correctedstr");
 			debugFree(&ts,"switchPage ts");
 		}
-
+}
 	gtk_window_set_title((GtkWindow*)mainWindow,page->fileName);
 	refreshMainWindow();
 	if(functions!=NULL)
@@ -879,24 +862,6 @@ VISIBLE void redo(GtkWidget* widget,gpointer data)
 
 VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
 {
-//xxxxxxxxxxxxxxx
-printf("%i\n",info);
-const gchar *name = gtk_widget_get_name ((GtkWidget*)context);
-        g_print ("%s: drag_data_received_handl\n", name);
-if(info==1)
-	{
-		 GtkWidget  *notebook=NULL;
-		     notebook = gtk_drag_get_source_widget (context);
-if(notebook!=NULL)
-	printf("got widget\n");
-
-const guchar * data=NULL;
-data=gtk_selection_data_get_data(selection_data);
-if(data!=NULL)
-	printf("got data %s\n",data);
-		//return;
-	}
-
 	gchar**	array=gtk_selection_data_get_uris(selection_data);
 	int		cnt=g_strv_length(array);
 	char*	filename;

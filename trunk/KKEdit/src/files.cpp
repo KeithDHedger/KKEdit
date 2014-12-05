@@ -167,16 +167,17 @@ void setFilePrefs(pageStruct* page)
 
 	if(lineWrap==true)
 		{
-			gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_WORD_CHAR);
 			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
-			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
+			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);		
+			gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_WORD_CHAR);
 		}
 	else
 		{
 			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
-			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);		
 			gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_NONE);
 		}
+
 	gtk_source_view_set_tab_width(page->view,tabWidth);
 
 	font_desc=pango_font_description_from_string(fontAndSize);
@@ -522,7 +523,6 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	fd=fopen(filename,"r");
 	if (fd!=NULL)
 		{
-			closeAllTabs(NULL,NULL);
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
 					sscanf(buffer,"%i %[^\n]s",(int*)&currentline,(char*)&strarg);
@@ -538,6 +538,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 						}
 					else
 						{
+							sessionBusy=true;
 							fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 							page=getDocumentData(currentPage-1);
@@ -561,11 +562,15 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 			debugFree(&filename,"restoreSession filename");
 		}
 
-	gtk_widget_thaw_child_notify((GtkWidget*)mainNotebook);
 	sessionBusy=false;
+	page=getDocumentData(-1);
+	switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
+	gtk_widget_thaw_child_notify((GtkWidget*)mainNotebook);
 	while(gtk_events_pending())
 		gtk_main_iteration_do(false);
 	delete buf;
+	sessionBusy=false;
+	setSensitive();
 }
 
 int showFileChanged(char* filename)
@@ -905,9 +910,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
 	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
 	gtk_notebook_set_current_page(mainNotebook,currentPage);
-	gtk_notebook_set_tab_detachable(mainNotebook,page->tabVbox,true);
-////////////	gtk_widget_set_name(page->tabVbox,"XXXXXXXXXX");
-////////////////	gtk_widget_set_name(label,"ZZZZZZZZ");
 	currentPage++;
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 
@@ -963,8 +965,6 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
 	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
 	gtk_notebook_set_current_page(mainNotebook,currentPage);
-	gtk_notebook_set_tab_detachable(mainNotebook,page->tabVbox,true);
-
 	setToobarSensitive();
 	currentPage++;
 	gtk_widget_show_all((GtkWidget*)mainNotebook);
