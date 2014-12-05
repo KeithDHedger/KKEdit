@@ -166,10 +166,17 @@ void setFilePrefs(pageStruct* page)
 	gtk_source_view_set_mark_category_background(page->view,MARK_TYPE_1,&color);
 
 	if(lineWrap==true)
-		gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_WORD_CHAR);
+		{
+			gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_WORD_CHAR);
+			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
+			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
+		}
 	else
-		gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_NONE);
-
+		{
+			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+			gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_NONE);
+		}
 	gtk_source_view_set_tab_width(page->view,tabWidth);
 
 	font_desc=pango_font_description_from_string(fontAndSize);
@@ -899,8 +906,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
 	gtk_notebook_set_current_page(mainNotebook,currentPage);
 	gtk_notebook_set_tab_detachable(mainNotebook,page->tabVbox,true);
-	gtk_widget_set_name(page->tabVbox,"XXXXXXXXXX");
-	gtk_widget_set_name(label,"ZZZZZZZZ");
+////////////	gtk_widget_set_name(page->tabVbox,"XXXXXXXXXX");
+////////////////	gtk_widget_set_name(label,"ZZZZZZZZ");
 	currentPage++;
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 
