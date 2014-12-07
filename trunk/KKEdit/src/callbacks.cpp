@@ -603,23 +603,8 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 		g_object_unref(page->monitor);
 
 	currentPage--;
-//	setSensitive();
-//DANGER!!//
-//g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
-//g_object_unref(G_OBJECT(&page->tabVbox));
 
-//	page=getDocumentData(thispage);
-//	if(page!=NULL)
-//	{
-//		debugFree((char**)&page,"closeTab page");
 	gtk_notebook_remove_page(mainNotebook,thispage);
-//	}
-//	while(gtk_events_pending())
-//		gtk_main_iteration_do(false);
-//	gtk_widget_destroy(page->tabVbox);
-//	gtk_widget_destroy((GtkWidget*)page->pageWindow);
-//	gtk_widget_destroy((GtkWidget*)page->pageWindow2);
-//	gtk_widget_destroy((GtkWidget*)page->navSubMenu);
 
 	if(closingAll==false)
 		{
@@ -630,14 +615,13 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 
 VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
 {
-	int	numtabs=gtk_notebook_get_n_pages(mainNotebook);
-
 	while(gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)>0)
 		{
 			closingAll=true;
 			closeTab(NULL,0);
 		}
 
+	closingAll=false;
 	rebuildBookMarkMenu();
 	gtk_widget_show_all(bookMarkMenu);
 	setWidgets();

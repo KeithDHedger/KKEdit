@@ -204,7 +204,7 @@ GtkWidget*		secondWindowVPane=NULL;
 GtkWidget*		mainWindowHPane=NULL;
 GtkWidget*		secondWindowHPane=NULL;
 
-VISIBLE int				currentTabNumber;
+VISIBLE int		currentTabNumber;
 int 			untitledNumber=1;
 
 GtkToolItem*	newButton=NULL;
@@ -1198,7 +1198,7 @@ void doBusy(bool busy,pageStruct* page)
 		}
 }
 
-bool doUpdateWidgets=false;
+VISIBLE bool doUpdateWidgets=false;
 
 
 VISIBLE void setWidgets(void)

@@ -789,9 +789,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	char*					filepathcopy=NULL;
 	char*					tpath;
 
-	//busyFlag=true;
-	//sessionBusy=true;
-
 	if(readLinkFirst==true)
 		filepathcopy=realpath(filepath,NULL);
 	else
@@ -808,8 +805,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					if((tpath!=NULL) && (page->realFilePath!=NULL) && (strcmp(page->realFilePath,tpath)==0))
 						{
 							gtk_notebook_set_current_page(mainNotebook,j);
-							//busyFlag=false;
-							//sessionBusy=false;
 							debugFree(&tpath,"openFile tpath");
 							return(true);
 						}
@@ -825,8 +820,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
-			//busyFlag=false;
-			//sessionBusy=false;
 			return(false);
 		}
 
@@ -838,8 +831,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
-			//busyFlag=false;
-			//sessionBusy=false;
 			return(false);
 		}
 
@@ -869,8 +860,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
-			//busyFlag=false;
-			//sessionBusy=false;
 			return(false);
 		}
 
