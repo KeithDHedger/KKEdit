@@ -219,6 +219,8 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 			if(checkpage==page)
 				{
 					gtk_notebook_set_current_page(mainNotebook,loop);
+					gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&buf->cursorPos);
+					delete buf;
 					return;
 				}
 		}

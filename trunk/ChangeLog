@@ -1,4 +1,5 @@
 0.2.6
+Jumping to bookmar now also places cursor at bookmark.
 Plugins can now use restore session routine.
 Fixed minor dnd bug.
 Added barber pole to restore session.

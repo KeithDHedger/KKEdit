@@ -559,7 +559,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 							while(intarg!=-1)
 								{
 									if((bool)data==true)
-									{
+										{
 											gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
 											gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
 											toggleBookmark(NULL,&markiter);
@@ -570,7 +570,6 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 							buf->textBuffer=(GtkTextBuffer*)page->buffer;
 							buf->scroll2Line((GtkTextView*)page->view,currentline);					
 						}
-
 				}
 			fclose(fd);
 			debugFree(&filename,"restoreSession filename");
@@ -920,7 +919,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
-	gtk_widget_show_all((GtkWidget*)mainNotebook);
+//	gtk_widget_show_all((GtkWidget*)mainNotebook);
 
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"openFile");
