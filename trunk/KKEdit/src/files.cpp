@@ -517,7 +517,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	char			*barcontrol;
 
 	asprintf(&barcontrol,"%s/BarControl-%s",tmpFolderName,slice->randomName(6));
-	asprintf(&barcommand,POLEPATH " \"Restoring Session\" \"%s\" \"pulse\" &",barcontrol);
+	asprintf(&barcommand,POLEPATH " \"%s\" \"%s\" \"pulse\" &",gettext("Restoring Session ..."),barcontrol);
 
 	closeAllTabs(NULL,NULL);
 	while(gtk_events_pending())

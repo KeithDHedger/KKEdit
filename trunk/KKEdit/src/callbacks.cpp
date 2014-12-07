@@ -629,9 +629,17 @@ VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
 
 void sortTabs(GtkWidget* widget,gpointer data)
 {
-	bool		flag=true;
-	pageStruct	*page1=NULL;
-	pageStruct	*page2=NULL;
+	bool			flag=true;
+	pageStruct		*page1=NULL;
+	pageStruct		*page2=NULL;
+	StringSlice*	slice=new StringSlice;
+	char			*barcommand;
+	char			*barcontrol;
+
+	asprintf(&barcontrol,"%s/BarControl-%s",tmpFolderName,slice->randomName(6));
+	asprintf(&barcommand,POLEPATH " \"%s\" \"%s\" \"pulse\" &",gettext("Sorting Tabs ..."),barcontrol);
+	system(barcommand);
+	debugFree(&barcommand,"restore session barcommand");
 
 	while(flag==true)
 		{
@@ -647,6 +655,10 @@ void sortTabs(GtkWidget* widget,gpointer data)
 						}
 				}
 		}
+	asprintf(&barcommand,"echo quit>\"%s\"",barcontrol);
+	system(barcommand);
+	debugFree(&barcommand,"restore session barcommand");
+	debugFree(&barcontrol,"restore session barcontrol");
 }
 
 VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
