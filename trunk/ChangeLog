@@ -1,4 +1,6 @@
 0.2.6
+Plugins can now use restore session routine.
+Fixed minor dnd bug.
 Added barber pole to restore session.
 Fixed numerous minor widget sensitivity bugs.
 Plugin folder changed is now ~/.KKEdit/plugins-gtk.

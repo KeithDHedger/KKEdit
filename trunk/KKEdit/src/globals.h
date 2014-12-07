@@ -92,9 +92,8 @@ struct bookMarksNew
 
 //app
 extern GApplication*	mainApp;
-extern bool				busyFlag;
 extern bool				autoSelected;
-extern bool				sessionBusy;
+
 //main window
 extern GtkWidget*		mainWindow;
 extern GtkWidget*		menuBar;

@@ -527,10 +527,17 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 
 	doUpdateWidgets=false;
 
-	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
+	if(data==NULL)
+		asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
+	else
+		asprintf(&filename,"%s",(char*)data);
+
 	fd=fopen(filename,"r");
 	if (fd!=NULL)
 		{
+			if(data!=NULL)
+				fgets(buffer,2048,fd);
+
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
 					sscanf(buffer,"%i %[^\n]s",(int*)&currentline,(char*)&strarg);
@@ -656,9 +663,6 @@ void add_source_mark_pixbufs (GtkSourceView *view)
 
 gboolean clickInView(GtkWidget* widget,gpointer data)
 {
-	if(sessionBusy==true)
-		return(false);
-
 	if((statusMessage!=NULL))
 		{
 			debugFree(&statusMessage,"clickInView statusMessage");
@@ -917,9 +921,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
 	gtk_widget_show_all((GtkWidget*)mainNotebook);
-//	setToobarSensitive();
-
-	//setFilePrefs(page);
 
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"openFile");
@@ -931,8 +932,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_text_buffer_move_mark((GtkTextBuffer*)page->buffer,page->backMark,&iter);
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
 
-//	busyFlag=false;
-	//sessionBusy=false;
 	return TRUE;
 }
 

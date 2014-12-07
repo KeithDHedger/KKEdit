@@ -848,8 +848,6 @@ void basicFind(int dowhat)
 
 	page=getDocumentData(currentFindPage);
 
-	doBusy(true,page);
-
 	if(insensitiveSearch==true)
 		flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
 
@@ -1016,8 +1014,6 @@ void basicFind(int dowhat)
 					}
 			}
 
-	doBusy(false,page);
-
 	debugFree(&searchtext,"basicFind searchtext");
 	debugFree(&replacetext,"basicFind replacetext");
 }
@@ -1090,8 +1086,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 				}
 		}
 
-	busyFlag=true;
-
 	currentFindPage=gtk_notebook_get_current_page(mainNotebook);
 	pagesChecked=0;
 
@@ -1104,8 +1098,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 		basicFind(response_id);
 	else
 		regexFind(response_id);
-
-	busyFlag=false;
 
 	if(itemsReplaced>-1)
 		showOnStatus(gtk_entry_get_text((GtkEntry*)findBox),gtk_entry_get_text((GtkEntry*)replaceBox));

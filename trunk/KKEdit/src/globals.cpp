@@ -11,9 +11,8 @@
 
 //app
 GApplication*	mainApp;
-bool			busyFlag=false;
 bool			autoSelected=false;
-VISIBLE bool	sessionBusy=false;
+
 //main mainWindow
 GtkWidget*		mainWindow=NULL;
 GtkWidget*		menuBar=NULL;
@@ -1176,26 +1175,6 @@ VISIBLE void debugFree(char** ptr,const char* message)
 
 	*ptr=NULL;
 
-}
-
-void doBusy(bool busy,pageStruct* page)
-{
-	if(page==NULL)
-		return;
-
-	if(busy==true)
-		{
-			gtk_source_completion_words_unregister(docWordsProv,(GtkTextBuffer*)page->buffer);
-			gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
-			busyFlag=true;
-		}
-	else
-		{
-			gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
-			if(autoShowComps==true)
-				gtk_source_completion_words_register(docWordsProv,(GtkTextBuffer*)page->buffer);
-			busyFlag=false;
-		}
 }
 
 VISIBLE bool doUpdateWidgets=false;

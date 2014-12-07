@@ -811,14 +811,12 @@ VISIBLE void undo(GtkWidget* widget,gpointer data)
 
 	if(page!=NULL)
 		{
-			doBusy(true,page);
 			if(gtk_source_buffer_can_undo(page->buffer));
 			{
 				gtk_source_buffer_undo(page->buffer);
 				page->isFirst=true;
 				setSensitive();
 			}
-			doBusy(false,page);
 		}
 }
 
@@ -828,7 +826,6 @@ VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
 
 	if(page!=NULL)
 		{
-			doBusy(true,page);
 			if((long)data==0)
 				{
 					while(gtk_source_buffer_can_undo(page->buffer))
@@ -841,7 +838,6 @@ VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
 				}
 			page->isFirst=true;
 			setSensitive();
-			doBusy(false,page);
 		}
 }
 
@@ -851,14 +847,12 @@ VISIBLE void redo(GtkWidget* widget,gpointer data)
 
 	if(page!=NULL)
 		{
-			doBusy(true,page);
 			if(gtk_source_buffer_can_redo(page->buffer));
 			{
 				gtk_source_buffer_redo(page->buffer);
 				page->isFirst=true;
 				setSensitive();
 			}
-			doBusy(false,page);
 		}
 }
 
@@ -871,11 +865,10 @@ VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,Gtk
 	for(int j=0; j<cnt; j++)
 		{
 			filename=g_filename_from_uri(array[j],NULL,NULL);
-			printf("filename droped %s\n",filename);
-			printf("uri dropped %s\n",array[j]);
 			openFile(filename,0,true);
 		}
 
+	setWidgets();
 	g_strfreev(array);
 }
 
@@ -1069,9 +1062,6 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	functionData*	fdata;
 	char*			temptext=NULL;
 
-	if(sessionBusy==true)
-		return;
-
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 
@@ -1197,9 +1187,6 @@ gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
 {
 	pageStruct* page=(pageStruct*)getDocumentData(-1);
 
-	if(sessionBusy==true)
-		return(true);
-
 	if((long)data==1)
 		page->inTop=true;
 	else
@@ -1281,9 +1268,6 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 	char*						command;
 	char						line[2048];
 	char*						name;
-
-//	if(sessionBusy==true)
-//		return(false);
 
 	if(event->button==3 && event->type==GDK_BUTTON_PRESS)
 		{
@@ -1877,9 +1861,6 @@ VISIBLE void newEditor(GtkWidget* widget,gpointer data)
 
 void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButton* ev,pageStruct* page)
 {
-	if(sessionBusy==true)
-		return;
-
 	if(ev->button!=1)
 		return;
 
