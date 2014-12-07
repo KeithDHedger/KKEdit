@@ -8,11 +8,13 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <stdio.h>
 
 GtkWidget*	progressWindow;
 GtkWidget*	progressBar;
 bool		doPulse=true;
 int			percent;
+char		*path=NULL;
 
 enum {QUIT,PULSE,PERCENT};
 
@@ -25,6 +27,7 @@ void killBarberPole(void)
 {
 	gtk_widget_destroy(progressWindow);
 	progressBar=NULL;
+	remove(path);
 	shutdown(NULL,NULL);
 }
 
@@ -115,14 +118,15 @@ void showBarberPole(const char* title,char* filepath)
 int main(int argc,char **argv)
 {
 	char*	command;
+	path=argv[2];
 
+	doPulse=false;
 	if(argc>3)
-		asprintf(&command,"echo \"%s\" > \"%s\"",argv[3],argv[2]);
+		asprintf(&command,"/bin/echo \"%s\" > \"%s\"",argv[3],argv[2]);
 	else
-		asprintf(&command,"echo 0 > \"%s\"",argv[2]);
+		asprintf(&command,"/bin/echo 0 > \"%s\"",argv[2]);
 	system(command);
 	free(command);
-	doPulse=false;
 	gtk_init(&argc,&argv);
 	showBarberPole(argv[1],argv[2]);
 	gtk_main();

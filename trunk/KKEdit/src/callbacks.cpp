@@ -638,13 +638,14 @@ void sortTabs(GtkWidget* widget,gpointer data)
 
 	asprintf(&barcontrol,"%s/BarControl-%s",tmpFolderName,slice->randomName(6));
 	asprintf(&barcommand,POLEPATH " \"%s\" \"%s\" \"pulse\" &",gettext("Sorting Tabs ..."),barcontrol);
+	printf("%s\n",barcommand);
 	system(barcommand);
 	debugFree(&barcommand,"restore session barcommand");
 
 	while(flag==true)
 		{
 			flag=false;
-			for (int j=0; j<gtk_notebook_get_n_pages(mainNotebook)-1; j++)
+			for (int j=0;j<gtk_notebook_get_n_pages(mainNotebook)-1;j++)
 				{
 					page1=getDocumentData(j);
 					page2=getDocumentData(j+1);
@@ -655,8 +656,11 @@ void sortTabs(GtkWidget* widget,gpointer data)
 						}
 				}
 		}
-	asprintf(&barcommand,"echo quit>\"%s\"",barcontrol);
+	usleep(100000);
+	asprintf(&barcommand,"/bin/echo quit > \"%s\"",barcontrol);
 	system(barcommand);
+
+	printf("%s\n",barcommand);
 	debugFree(&barcommand,"restore session barcommand");
 	debugFree(&barcontrol,"restore session barcontrol");
 }
