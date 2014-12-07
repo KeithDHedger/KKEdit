@@ -116,7 +116,10 @@ int main(int argc,char **argv)
 {
 	char*	command;
 
-	asprintf(&command,"echo 0 > \"%s\"",argv[2]);
+	if(argc>3)
+		asprintf(&command,"echo \"%s\" > \"%s\"",argv[3],argv[2]);
+	else
+		asprintf(&command,"echo 0 > \"%s\"",argv[2]);
 	system(command);
 	free(command);
 	doPulse=false;

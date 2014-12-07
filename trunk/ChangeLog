@@ -1,4 +1,5 @@
 0.2.6
+Added barber pole to restore session.
 Fixed numerous minor widget sensitivity bugs.
 Plugin folder changed is now ~/.KKEdit/plugins-gtk.
 Fixed minor memory leak.

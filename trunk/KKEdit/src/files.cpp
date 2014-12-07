@@ -200,15 +200,18 @@ void setFilePrefs(pageStruct* page)
 
 void resetAllFilePrefs(void)
 {
-	pageStruct*			page;
+	pageStruct*	page;
 
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
 	for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 		{
 			page=getDocumentData(loop);
-			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
-			setFilePrefs(page);
+			if(page!=NULL)
+				{
+					gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
+					setFilePrefs(page);
+				}
 		}
 }
 
@@ -499,24 +502,30 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 
 VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 {
-	FILE*		fd=NULL;
-	char*		filename;
-	char		buffer[2048];
-	int			intarg;
-	char		strarg[2048];
-	pageStruct*	page;
-	GtkTextIter	markiter;
-	int			currentline;
-	TextBuffer*	buf=new TextBuffer;
+	FILE			*fd=NULL;
+	char			*filename;
+	char			buffer[2048];
+	int				intarg;
+	char			strarg[2048];
+	pageStruct		*page;
+	GtkTextIter		markiter;
+	int				currentline;
+	TextBuffer		*buf=new TextBuffer;
+
+	StringSlice*	slice=new StringSlice;
+	char			*barcommand;
+	char			*barcontrol;
+
+	asprintf(&barcontrol,"%s/BarControl-%s",tmpFolderName,slice->randomName(6));
+	asprintf(&barcommand,POLEPATH " \"Restoring Session\" \"%s\" \"pulse\" &",barcontrol);
+	system(barcommand);
+	debugFree(&barcommand,"restore session barcommand");
 
 	closeAllTabs(NULL,NULL);
 	while(gtk_events_pending())
 		gtk_main_iteration_do(false);
 
 	doUpdateWidgets=false;
-
-//	sessionBusy=true;
-//	gtk_widget_freeze_child_notify((GtkWidget*)mainNotebook);
 
 	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
 	fd=fopen(filename,"r");
@@ -527,7 +536,6 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 					sscanf(buffer,"%i %[^\n]s",(int*)&currentline,(char*)&strarg);
 					if(openFile(strarg,currentline,true)==false)
 						{
-							//sessionBusy=true;
 							intarg=999;
 							while(intarg!=-1)
 								{
@@ -537,7 +545,6 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 						}
 					else
 						{
-							//sessionBusy=true;
 							fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 							page=getDocumentData(currentPage-1);
@@ -545,7 +552,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 							while(intarg!=-1)
 								{
 									if((bool)data==true)
-										{
+									{
 											gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
 											gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
 											toggleBookmark(NULL,&markiter);
@@ -556,22 +563,24 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 							buf->textBuffer=(GtkTextBuffer*)page->buffer;
 							buf->scroll2Line((GtkTextView*)page->view,currentline);					
 						}
+
 				}
 			fclose(fd);
 			debugFree(&filename,"restoreSession filename");
 		}
 
-//	sessionBusy=false;
-//	page=getDocumentData(-1);
-//	if(page!=NULL)
-//		switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
-//	gtk_widget_thaw_child_notify((GtkWidget*)mainNotebook);
-//	while(gtk_events_pending())
-//		gtk_main_iteration_do(false);
 	delete buf;
-//	sessionBusy=false;
-//	setSensitive();
+	delete slice;
+
+	while(gtk_events_pending())
+		gtk_main_iteration_do(false);
+	currentTabNumber=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)-1;
 	setWidgets();
+	setSensitive();
+	asprintf(&barcommand,"echo quit>\"%s\"",barcontrol);
+	system(barcommand);
+	debugFree(&barcommand,"restore session barcommand");
+	debugFree(&barcontrol,"restore session barcontrol");
 }
 
 int showFileChanged(char* filename)
