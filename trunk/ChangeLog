@@ -1,6 +1,6 @@
 0.2.6
 All tabs updated at once when restoring session.
-Jumping to bookmar now also places cursor at bookmark.
+Jumping to bookmark now also places cursor at bookmark.
 Plugins can now use restore session routine.
 Fixed minor dnd bug.
 Added barber pole to restore session.

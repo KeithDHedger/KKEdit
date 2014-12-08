@@ -231,10 +231,7 @@ VISIBLE void doDoxy(GtkWidget* widget,long data)
 	asprintf(&thePage,"file://%s/html/index.html",page->dirName);
 	if(dorebuild==true)
 		{
-			fp=popen("doxygen Doxyfile","r");
-			while(fgets(line,1024,fp))
-				gtk_main_iteration_do(false);
-			pclose(fp);
+			system("doxygen Doxyfile");
 		}
 	showDocView(USEURI,thePage,"Doxygen Documentation");
 	killBarberPole();
@@ -292,8 +289,8 @@ VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
 			if(headcommand!=NULL)
 				debugFree(&headcommand,"doxyDocs headcommand 2");
 			debugFree(&findcommand,"doxyDocs findcommand 2");
-			killBarberPole();
 		}
+	killBarberPole();
 }
 
 //showDocViewWidget

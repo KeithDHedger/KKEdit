@@ -512,21 +512,13 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	int				currentline;
 	TextBuffer		*buf=new TextBuffer;
 
-	StringSlice*	slice=new StringSlice;
-	char			*barcommand;
-	char			*barcontrol;
-
-	asprintf(&barcontrol,"%s/BarControl-%s",tmpFolderName,slice->randomName(6));
-	asprintf(&barcommand,POLEPATH " \"%s\" \"%s\" \"pulse\" &",gettext("Restoring Session ..."),barcontrol);
 
 	closeAllTabs(NULL,NULL);
 	while(gtk_events_pending())
 		gtk_main_iteration_do(false);
 
-	system(barcommand);
-	debugFree(&barcommand,"restore session barcommand");
-
 	doUpdateWidgets=false;
+	showBarberPole(gettext("Restoring Session ..."));
 
 	if(data==NULL)
 		asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
@@ -577,17 +569,13 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 		}
 
 	delete buf;
-	delete slice;
 
 	while(gtk_events_pending())
 		gtk_main_iteration_do(false);
 	currentTabNumber=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)-1;
 	setWidgets();
 	setSensitive();
-	asprintf(&barcommand,"echo quit>\"%s\"",barcontrol);
-	system(barcommand);
-	debugFree(&barcommand,"restore session barcommand");
-	debugFree(&barcontrol,"restore session barcontrol");
+	killBarberPole();
 }
 
 int showFileChanged(char* filename)
