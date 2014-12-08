@@ -638,7 +638,6 @@ void sortTabs(GtkWidget* widget,gpointer data)
 
 	asprintf(&barcontrol,"%s/BarControl-%s",tmpFolderName,slice->randomName(6));
 	asprintf(&barcommand,POLEPATH " \"%s\" \"%s\" \"pulse\" &",gettext("Sorting Tabs ..."),barcontrol);
-	printf("%s\n",barcommand);
 	system(barcommand);
 	debugFree(&barcommand,"restore session barcommand");
 
@@ -660,7 +659,6 @@ void sortTabs(GtkWidget* widget,gpointer data)
 	asprintf(&barcommand,"/bin/echo quit > \"%s\"",barcontrol);
 	system(barcommand);
 
-	printf("%s\n",barcommand);
 	debugFree(&barcommand,"restore session barcommand");
 	debugFree(&barcontrol,"restore session barcontrol");
 }

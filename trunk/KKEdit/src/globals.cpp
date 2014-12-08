@@ -1155,7 +1155,7 @@ void showBarberPole(const char* title)
 	gtk_container_add(GTK_CONTAINER(progressWindow),vbox);
 
 	gtk_widget_show_all(progressWindow);
-	g_timeout_add(100,idleScroll,NULL);
+	g_timeout_add(50,idleScroll,NULL);
 }
 
 void killBarberPole(void)
