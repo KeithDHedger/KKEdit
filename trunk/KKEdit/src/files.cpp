@@ -551,12 +551,9 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 							gtk_notebook_set_current_page(mainNotebook,currentPage-1);
 							while(intarg!=-1)
 								{
-									if((bool)data==true)
-										{
-											gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
-											gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
-											toggleBookmark(NULL,&markiter);
-										}
+									gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
+									gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
+									toggleBookmark(NULL,&markiter);
 									fgets(buffer,2048,fd);
 									sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 								}

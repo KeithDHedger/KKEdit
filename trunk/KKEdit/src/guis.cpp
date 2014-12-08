@@ -1401,9 +1401,9 @@ void buildMainGui(void)
 //save session
 	menuitem=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveSession,0,SAVESESSIONMENUNAME,IMAGEMENU,gettext("Save Session"),(void*)false);
 //restore session
-	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONMENUNAME,IMAGEMENU,gettext("Restore Session"),(void*)false);
+	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONMENUNAME,IMAGEMENU,gettext("Restore Session"),NULL);
 //restore session and bookmarks
-	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONBMMENUNAME,IMAGEMENU,gettext("Restore Session With Bookmarks"),(void*)true);
+//	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONBMMENUNAME,IMAGEMENU,gettext("Restore Session With Bookmarks"),(void*)true);
 //printfile
 	printMenu=makeMenuItem(GTK_STOCK_PRINT,menu,(void*)printFile,0,PRINTMENUNAME,STOCKMENU,NULL,NULL);
 
