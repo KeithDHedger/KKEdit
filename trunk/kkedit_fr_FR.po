@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kkedit 1.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-07 18:25+0000\n"
-"PO-Revision-Date: 2014-12-07 18:27-0000\n"
+"PO-Revision-Date: 2014-12-11 13:28-0000\n"
 "Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
@@ -49,7 +49,7 @@ msgstr ""
 
 #: KKEdit/src/callbacks.cpp:640
 msgid "Sorting Tabs ..."
-msgstr ""
+msgstr "Trier Tabs ..."
 
 #: KKEdit/src/callbacks.cpp:1026 KKEdit/src/callbacks.cpp:1029
 msgid "KKEdit Help"
@@ -580,15 +580,15 @@ msgstr "Max Rechercher / Remplacer Histoire"
 
 #: KKEdit/src/guis.cpp:1219
 msgid "Max Characters In Tab:"
-msgstr ""
+msgstr "Max Caractères dans Tab:"
 
 #: KKEdit/src/guis.cpp:1221
 msgid "Max Characters In Function Defs:"
-msgstr ""
+msgstr "Caractères max de la fonction Defs:"
 
 #: KKEdit/src/guis.cpp:1223
 msgid "Max Characters In Bookmarks:"
-msgstr ""
+msgstr "Caractères max dans les signets:"
 
 #: KKEdit/src/guis.cpp:1226
 msgid "Check For Updates"
@@ -596,7 +596,7 @@ msgstr "Recherche de mises à jour"
 
 #: KKEdit/src/guis.cpp:1228
 msgid "Use Global Plugins Menu ( Requires Restart )"
-msgstr ""
+msgstr "Utilisez mondial Plugins Menu ( Nécessite un redémarrage)"
 
 #: KKEdit/src/guis.cpp:1231
 msgid "Administration"
@@ -668,7 +668,7 @@ msgstr "Fermer tous les onglets"
 
 #: KKEdit/src/guis.cpp:1418
 msgid "Sort Tabs"
-msgstr ""
+msgstr "Trier les onglets"
 
 #: KKEdit/src/guis.cpp:1432
 msgid "_Edit"
@@ -732,7 +732,7 @@ msgstr "Obtenir des greffons"
 
 #: KKEdit/src/guis.cpp:1567
 msgid "Plu_gins"
-msgstr ""
+msgstr "Plu_gins"
 
 #: KKEdit/src/guis.cpp:1686 KKEdit/src/searchcallbacks.cpp:1128
 msgid "Replace"

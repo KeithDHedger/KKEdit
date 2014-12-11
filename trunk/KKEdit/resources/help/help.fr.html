@@ -423,6 +423,7 @@
         </font></font><font size="-1"><a name="spellchk"></a></font><b>Dialogue
 
 
+
         du vérificateur orthographique</b><br>
       <br>
       <img alt="spellcheck" src="spellcheck.gif" width="336"
@@ -526,6 +527,7 @@
                         href="http://gtk-apps.org/content/show.php/GtkSu?content=158974">Disponible
 
 
+
                         ici</a><font size="-1"> )<font size="-1">, qui
                           s'utilise comme cela : 'gtksu --'. Les
                           utilisateurs d'Ubuntu peuvent être amenés à
@@ -563,18 +565,55 @@
                                               size="-1"><font size="-1">
                                               </font> La recherche et le
                                               remplacement utilisent les
-                                              expressions réguières. La
-                                              recherche rapide sur la
-                                              barre d'outils ne le fait
-                                              pas. La recherche en
-                                              arrière ne peut pas être
-                                              utilisée avec les
-                                              expressions régulières. Le
-                                              texte dans les boîtes
-                                              trouver/remplacer est pris
-                                              comme une chaîne de
-                                              caractères.<br>
-                                            </font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
+                                              expressions rationnelles,
+                                              alors que la recherche
+                                              rapide de la barre
+                                              d'outils ne le fait pas.
+                                              Le texte dans dans la
+                                              boîte de dialogue
+                                              "Trouver/Remplacer" est
+                                              pris comme une chaîne
+                                              littérale.<br>
+                                              Les caractères tels que
+                                              \n, \t, etc sont
+                                              interprétés comme leurs
+                                              équivalents (par exemple :
+                                              \t -&gt; 0x9). Pour
+                                              chercher la chaîne '\n',
+                                              vous devriez utiliser
+                                              '\\n'.<br>
+                                              Les expressions
+                                              rationnelles utilisées par
+                                              KKEdit utilisent les
+                                              expressions rationnelles
+                                              étendues mais n'utilisent
+                                              pas la chaîne '\s' pour
+                                              représenter un espace.
+                                              Pour inclure un espace
+                                              dans votre chaîne de
+                                              recherche, utilisez '[ ]'
+                                              pour un simple espace, '[
+                                              ]+' pour rechercher un
+                                              espace ou plus et ainsi de
+                                              suite. '[[:space:]]'
+                                              correspond à n'importe
+                                              quelle espace, retour à la
+                                              ligne inclus.<br>
+                                              <br>
+                                              Vous pouvez trouver et
+                                              remplacer dans un seul
+                                              fichier ou dans plusieurs
+                                              fichiers ouverts. Si vous
+                                              choisissez de remplacer
+                                              tout dans tous les
+                                              fichiers ouverts, il vous
+                                              sera demandé de confirmer
+                                              l'action.<br>
+                                              L'option de recherche
+                                              circulaire est ignorée
+                                              lorsque vous recherchez
+                                              dans tous les fichiers
+                                              ouverts.</font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font><font
         size="-1"><font size="-1"><font size="-1"><font size="-1"><font
                 size="-1"><font size="-1"><font size="-1"><font
                       size="-1"><font size="-1"><font size="-1"><font
@@ -588,62 +627,11 @@
                                                       size="-1"><font
                                                         size="-1"><font
                                                           size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><font
-                                                          size="-1"><br>
-                                                          Caractères
-                                                          échappé (\ n,
-                                                          \ t etc) sont
-                                                          convertis à
-                                                          leur «vraie»
-                                                          équivalents-à-dire
-                                                          \ t -&gt; 0x9.
-                                                          Pour chercher
-                                                          des '\ n' vous
-                                                          devriez
-                                                          utiliser '\\
-                                                          n'.<br>
-                                                          <br>
-                                                          </font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font>
-                                              Vous pouvez trouver et
-                                              remplacer dans un seul
-                                              fichier ou dans tous les
-                                              fichiers ouverts. Si vous
-                                              choisissez de faire 'Tout
-                                              remplacer' dans tous les
-                                              ficheirs ouverts, il vous
-                                              sera demandé de confirmer
-                                              l'action.<br>
-                                              L'option 'Recherche
-                                              circulaire' pour
-                                              trouver/remplacer est
-                                              ignorée lorsque vous
-                                              recherchez dans tous les
-                                              fichiers ouverts.<font
-                                                size="-1"><font
-                                                  size="-1"><font
-                                                    size="-1"><font
-                                                      size="-1"><font
-                                                        size="-1"><font
-                                                          size="-1"><font
                                                           size="-1"></font></font></font>
                                                     </font><br>
                                                   </font></font></font></font></font></font></font></font></font></font></font></font></font><br>
                         </font></font></font></font></font></font></font></font></font>Vous
+
 
 
         pouvez aller à une ligne en utilisant l'entrée dans la barre
@@ -694,6 +682,7 @@
       </font><font size="-1">Comme vous pouvez le voir, vous pouvez
         ajouter une liste de mots personnalisés au dialogue de
         complétion en créant le fichier '<big><font size="-1"><big>~/.KKEdit/customcompletions</big></font></big>',
+
 
 
         puis en ajoutant des mots à ce dernier. Le fichier DOIT se
@@ -872,6 +861,7 @@ href="https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins"
                                                           size="-1"><br>
                                                           <br>
                                                           &nbsp; </font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font></font>webkit
+
 
 
         est est une dépendance optionnelle si vous voulez construire le
