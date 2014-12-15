@@ -807,7 +807,7 @@ char* makeToolBarList(void)
 	return(g_string_free(str,false));
 }
 
-void clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
+bool clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 {
 	GtkTreePath*	path=NULL;
 	GdkModifierType	mask;
@@ -823,7 +823,9 @@ void clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 			gtk_tree_model_get((GtkTreeModel*)listStore,&iter,BUTTON_NUM,&button,-1);
 			gtk_widget_set_sensitive((GtkWidget*)tool[button],true);
 			gtk_list_store_remove((GtkListStore*)listStore,&iter);
+			return(true);
 		}
+	return(false);
 }
 
 void doIconView(void)

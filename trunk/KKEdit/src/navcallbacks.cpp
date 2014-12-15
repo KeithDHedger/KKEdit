@@ -120,6 +120,8 @@ VISIBLE void findFile(GtkWidget* widget,gpointer data)
 		}
 	delete buf;
 	delete slice;
+
+	setWidgets();
 }
 
 void gotoLine(GtkWidget* widget,gpointer data)

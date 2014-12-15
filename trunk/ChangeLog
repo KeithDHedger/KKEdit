@@ -1,3 +1,7 @@
+0.2.7
+Fixed "Open Include" not setting file prefs properly.
+Fixed dragging icons in prefs not working.
+
 0.2.6
 Removed redundant 'Restore Session With Bookmarks' bookmarks are now reloaded by default.
 All tabs updated at once when restoring session.
