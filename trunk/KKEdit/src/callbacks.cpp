@@ -21,7 +21,7 @@ void releasePlugs(gpointer data,gpointer user_data)
 
 void setToobarSensitive(void)
 {
-	pageStruct*	page=getDocumentData(currentTabNumber);
+	pageStruct*	page=getPageStructPtr(currentTabNumber);
 
 	for(int j=0; j<(int)strlen(toolBarLayout); j++)
 		{
@@ -191,7 +191,7 @@ VISIBLE void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer)
 	numpages=gtk_notebook_get_n_pages(mainNotebook);
 	for(int j=0; j<numpages; j++)
 		{
-			page=getDocumentData(j);
+			page=getPageStructPtr(j);
 			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
 			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
 			gtk_source_buffer_remove_source_marks(page->buffer,&startiter,&enditer,NULL);
@@ -204,7 +204,7 @@ VISIBLE void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer)
 
 VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 {
-	pageStruct*		page=getDocumentData(-1);
+	pageStruct*		page=getPageStructPtr(-1);
 	GtkWidget*		menuitem;
 	GtkTextMark*	mark;
 	GtkTextIter*	iter;
@@ -344,7 +344,6 @@ VISIBLE void doOpenFile(GtkWidget* widget,gpointer data)
 	char*		filename;
 	GSList*		filenames;
 	GSList*		thisnext;
-	pageStruct*	page;
 
 	dialog=gtk_file_chooser_dialog_new(gettext("Open File"),NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,NULL);
 	gtk_file_chooser_set_select_multiple((GtkFileChooser*)dialog,true);
@@ -362,9 +361,6 @@ VISIBLE void doOpenFile(GtkWidget* widget,gpointer data)
 			g_slist_free(filenames);
 		}
 	gtk_widget_destroy (dialog);
-
-	page=getDocumentData(-1);
-	switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
 	refreshMainWindow();
 }
 
@@ -404,7 +400,7 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 
 	if(busyFlag==true)
 		return;
-	pageStruct* pagecheck=getDocumentData(currentTabNumber);
+	pageStruct* pagecheck=getPageStructPtr(currentTabNumber);
 
 	if((page==NULL) || (showStatus==false))
 		{
@@ -437,9 +433,9 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 	delete buf;
 }
 
-VISIBLE void setSensitive(void)
+void setSensitive(void)
 {
-	pageStruct*		page=getDocumentData(-1);
+	pageStruct*		page=getPageStructPtr(-1);
 	const gchar*	text;
 	char*			newlabel;
 	int				offset=0;
@@ -449,6 +445,7 @@ VISIBLE void setSensitive(void)
 		return;
 
 	setToobarSensitive();
+
 	if(page==NULL)
 		{
 //menu
@@ -525,7 +522,10 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 	bool		changed=false;
 	GtkWidget*	menuitem;
 
-	gtk_widget_show((GtkWidget*)mainNotebook);
+	if(sessionBusy==true)
+		return;
+
+	busyFlag=true;	
 	if(closingAll==true)
 		thispage=0;
 	else
@@ -540,7 +540,7 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 		return;
 
 	closingAll=false;
-	page=getDocumentData(thispage);
+	page=getPageStructPtr(thispage);
 	if(page==NULL)
 		return;
 
@@ -560,7 +560,6 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 					break;
 				}
 		}
-
 
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"closeFile");
@@ -595,20 +594,36 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 	gtk_widget_show_all(bookMarkMenu);
 
 	if(page->filePath!=NULL)
-		debugFree(&page->filePath,"closeTab filePath");
+		debugFree(&(page->filePath),"closeTab filePath");
 	if(page->fileName!=NULL)
-		debugFree(&page->fileName,"closeTab fileName");
-	if(page->gFile!=NULL)
-		g_object_unref(page->gFile);
+		debugFree(&(page->fileName),"closeTab fileName");
+
+	debugFree(&(page->dirName),"closeTab dirName");
+	debugFree(&(page->realFilePath),"closeTab realFilePath");
+	if(page->markList!=NULL)
+		g_list_free_full(page->markList,free);
+	page->markList=NULL;
+
+	if(page->userDataList!=NULL)
+		g_list_free_full(page->userDataList,free);
+	page->userDataList=NULL;
+
+	if(page->regexList!=NULL)
+		g_slist_free_full(page->regexList,free);
+	page->regexList=NULL;
+
 	if(page->monitor!=NULL)
-		g_object_unref(page->monitor);
+		g_clear_object(&(page->monitor));
+	if(page->gFile!=NULL)
+		g_clear_object(&(page->gFile));
 
 	currentPage--;
 	setSensitive();
-//DANGER!!//
-	debugFree((char**)&page,"closeTab page");
-	gtk_notebook_remove_page(mainNotebook,thispage);
 
+	gtk_notebook_remove_page(mainNotebook,thispage);
+//TODO//
+//	debugFree((char**)&page,"closeTab page");
+	busyFlag=false;
 }
 
 VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
@@ -637,8 +652,8 @@ void sortTabs(GtkWidget* widget,gpointer data)
 			flag=false;
 			for (int j=0;j<gtk_notebook_get_n_pages(mainNotebook)-1;j++)
 				{
-					page1=getDocumentData(j);
-					page2=getDocumentData(j+1);
+					page1=getPageStructPtr(j);
+					page2=getPageStructPtr(j+1);
 					if(strcmp(page2->fileName,page1->fileName)<0)
 						{
 							flag=true;
@@ -648,8 +663,9 @@ void sortTabs(GtkWidget* widget,gpointer data)
 		}
 }
 
-VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
+void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
 {
+
 	pageStruct*	page;
 	char*		functions=NULL;
 	GtkWidget*	menuitem;
@@ -667,7 +683,6 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	GtkWidget*	submenu;
 	char*		correctedstr=NULL;
 
-	
 	if(arg1==NULL)
 		return;
 
@@ -683,8 +698,6 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 
 	page->rebuildMenu=false;
 
-if(sessionBusy==false)
-{
 	getRecursiveTagList(page->filePath,&functions);
 	lineptr=functions;
 
@@ -756,7 +769,7 @@ if(sessionBusy==false)
 			debugFree(&correctedstr,"switchPage correctedstr");
 			debugFree(&ts,"switchPage ts");
 		}
-}
+
 	gtk_window_set_title((GtkWindow*)mainWindow,page->fileName);
 	refreshMainWindow();
 	if(functions!=NULL)
@@ -775,20 +788,20 @@ if(sessionBusy==false)
 
 VISIBLE void copyToClip(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getDocumentData(-1);
+	pageStruct*	page=getPageStructPtr(-1);
 	gtk_text_buffer_copy_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD));
 }
 
 VISIBLE void cutToClip(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getDocumentData(-1);
+	pageStruct*	page=getPageStructPtr(-1);
 	gtk_text_buffer_cut_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),true);
 	setSensitive();
 }
 
 VISIBLE void pasteFromClip(GtkWidget* widget,gpointer data)
 {
-	pageStruct*		page=getDocumentData(-1);
+	pageStruct*		page=getPageStructPtr(-1);
 	char*			clipdata=NULL;
 	GtkClipboard*	mainclipboard;
 	GtkTextIter		start;
@@ -806,7 +819,7 @@ VISIBLE void pasteFromClip(GtkWidget* widget,gpointer data)
 
 VISIBLE void undo(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getDocumentData(-1);
+	pageStruct*	page=getPageStructPtr(-1);
 
 	if(page!=NULL)
 		{
@@ -823,7 +836,7 @@ VISIBLE void undo(GtkWidget* widget,gpointer data)
 
 VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getDocumentData(-1);
+	pageStruct*	page=getPageStructPtr(-1);
 
 	if(page!=NULL)
 		{
@@ -846,7 +859,7 @@ VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
 
 VISIBLE void redo(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getDocumentData(-1);
+	pageStruct*	page=getPageStructPtr(-1);
 
 	if(page!=NULL)
 		{
@@ -881,7 +894,7 @@ VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,Gtk
 void externalTool(GtkWidget* widget,gpointer data)
 {
 	toolStruct*		tool=(toolStruct*)data;
-	pageStruct*		page=getDocumentData(-1);
+	pageStruct*		page=getPageStructPtr(-1);
 	char*			docdirname=NULL;
 	char*			tooldirname=NULL;
 	char*			text=NULL;
@@ -1021,7 +1034,7 @@ VISIBLE void openHelp(GtkWidget* widget,gpointer data)
 #else
 	asprintf(&thePage,"%s %s/help/help.%s.shtml",browserCommand,DATADIR,lang);
 	runCommand(thePage,NULL,false,8,0,(char*)gettext("KKEdit Help"));
-	debugFree((char**)&thePage,"openHelp thePage");
+	debugFree(thePage,"openHelp thePage");
 	thePage=NULL;
 #endif
 }
@@ -1058,7 +1071,7 @@ VISIBLE void addtoCustomWordList(GtkWidget* widget,gpointer data)
 
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 {
-	pageStruct*		page=getDocumentData(-1);
+	pageStruct*		page=getPageStructPtr(-1);
 	GtkTextIter		start;
 	GtkTextIter		end;
 	char*			selection=NULL;
@@ -1194,7 +1207,7 @@ void doTabMenu(GtkWidget *widget,gpointer user_data)
 
 gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
 {
-	pageStruct* page=(pageStruct*)getDocumentData(-1);
+	pageStruct* page=(pageStruct*)getPageStructPtr(-1);
 
 	if(sessionBusy==true)
 		return(true);
@@ -1204,7 +1217,7 @@ gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
 	else
 		page->inTop=false;
 
-	autoSelected=false;
+	autoSeleced=false;
 	return(false);
 }
 
@@ -1239,7 +1252,7 @@ void doSplitView(GtkWidget *widget,gpointer user_data)
 
 void changeSourceStyle(GtkWidget* widget,gpointer data)
 {
-	pageStruct*					page=getDocumentData(-1);
+	pageStruct*					page=getPageStructPtr(-1);
 	GtkSourceLanguageManager*	lm=gtk_source_language_manager_get_default();
 	const gchar* const*			ids=gtk_source_language_manager_get_language_ids(lm);
 	GtkSourceLanguage*			lang=gtk_source_language_manager_get_language(lm,ids[(long)data]);
@@ -1252,16 +1265,10 @@ void changeSourceStyle(GtkWidget* widget,gpointer data)
 void openFromTab(GtkMenuItem* widget,pageStruct* page)
 {
 	char*		filepath=NULL;
-	pageStruct*	page1;
 
 	asprintf(&filepath,"%s/%s",page->dirName,gtk_menu_item_get_label(widget));
 	openFile(filepath,0,true);
 	debugFree(&filepath,"openFromTab filepath");
-	sessionBusy=false;
-	page1=getDocumentData(-1);
-	if(page1!=NULL)
-		switchPage(mainNotebook,page1->tabVbox,currentTabNumber,NULL);
-
 }
 
 bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
@@ -1501,7 +1508,7 @@ VISIBLE bool doSaveAll(GtkWidget* widget,gpointer data)
 
 	for(int loop=0; loop<numpages; loop++)
 		{
-			page=getDocumentData(loop);
+			page=getPageStructPtr(loop);
 			if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)))
 				{
 					if((bool)data==true)
@@ -1561,7 +1568,7 @@ VISIBLE void doShutdown(GtkWidget* widget,gpointer data)
 
 void setPrefs(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	tpage=getDocumentData(-1);
+	pageStruct*	tpage=getPageStructPtr(-1);
 	bool*		bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&restoreBookmarks,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen,&useGlobalPlugMenu};
 	unsigned int*		ints[MAXPREFSINTWIDGETS]={&maxTabChars,&maxFRHistory,&depth,&autoShowMinChars,&tabWidth,&maxFuncDefs,&maxBMChars};
 
@@ -1780,13 +1787,14 @@ void doCombineBuffers(void)
 
 	for(int j=0; j<gtk_notebook_get_n_pages(mainNotebook); j++)
 		{
-			page=getDocumentData(j);
+			page=getPageStructPtr(j);
 			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&fromstart);
 			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&fromend);
 			gtk_text_buffer_insert((GtkTextBuffer*)printBuffer,&iter,gtk_text_buffer_get_text((GtkTextBuffer *)page->buffer,&fromstart,&fromend,true),-1);
 			gtk_text_buffer_get_end_iter((GtkTextBuffer*)printBuffer,&iter);
 		}
 }
+
 
 void drawPage(GtkPrintOperation *operation,GtkPrintContext *context,gint page_nr,gpointer user_data)
 {
@@ -1836,14 +1844,10 @@ void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 {
 	gchar*	uri=NULL;
 	char*	filename;
-	pageStruct*	page;
 
 	if(data!=NULL)
 		{
 			openFile((char*)data,0,true);
-			page=getDocumentData(-1);
-			switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
-			setSensitive();	
 			return;
 		}
 
@@ -1855,9 +1859,6 @@ void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 			g_free (uri);
 			debugFree(&filename,"recentFileMenu filename");
 		}
-	page=getDocumentData(-1);
-	switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
-	setSensitive();	
 }
 
 VISIBLE void newEditor(GtkWidget* widget,gpointer data)
@@ -1966,6 +1967,7 @@ VISIBLE void toggleStatusBar(GtkWidget* widget,gpointer data)
 }
 
 #ifdef _BUILDDOCVIEWER_
+
 VISIBLE void toggleDocviewer(GtkWidget* widget,gpointer data)
 {
 	showHideDocviewer=!showHideDocviewer;
@@ -1987,7 +1989,7 @@ void doKeyShortCut(int what)
 {
 	TextBuffer*		buf;
 	char*			text;
-	pageStruct*		page=getDocumentData(-1);
+	pageStruct*		page=getPageStructPtr(-1);
 	GtkTextMark*	mark;
 
 	if(page==NULL)

@@ -48,7 +48,6 @@
 #define CUSTOMWORDFILE ".KKEdit/customcompletions"
 
 #define NUMSHORTCUTS	14
-#define PLATFORM		"gtk"
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 
@@ -89,12 +88,12 @@ struct bookMarksNew
 };
 
 
-
-//app
 extern GApplication*	mainApp;
 extern bool				busyFlag;
-extern bool				autoSelected;
+extern bool				autoSeleced;
 extern bool				sessionBusy;
+
+//app
 //main window
 extern GtkWidget*		mainWindow;
 extern GtkWidget*		menuBar;
@@ -392,7 +391,7 @@ extern args				keybindings_rc[];
 extern const char*		localeLang;
 
 void plugRunFunction(gpointer data,gpointer funcname);
-pageStruct* getDocumentData(int pagenum);
+pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title);

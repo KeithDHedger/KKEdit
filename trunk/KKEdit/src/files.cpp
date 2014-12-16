@@ -30,12 +30,15 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 					switch(dataptr[cnt].type)
 						{
 							case TYPEINT:
+//				printf("%s\n%s\n%i\n%i\n",filepath,dataptr[cnt].name,dataptr[cnt].type,*(int*)(dataptr[cnt].data));
 								fprintf(fd,"%s	%i\n",dataptr[cnt].name,*(int*)dataptr[cnt].data);
 								break;
 							case TYPESTRING:
+//				printf("%s\n%s\n%i\n%s\n",filepath,dataptr[cnt].name,dataptr[cnt].type,*(char**)(dataptr[cnt].data));
 								fprintf(fd,"%s	%s\n",dataptr[cnt].name,*(char**)(dataptr[cnt].data));
 								break;
 							case TYPEBOOL:
+//				printf("%s\n%s\n%i\n%i\n",filepath,dataptr[cnt].name,dataptr[cnt].type,(int)*(bool*)(dataptr[cnt].data));
 								fprintf(fd,"%s	%i\n",dataptr[cnt].name,(int)*(bool*)dataptr[cnt].data);
 								break;
 							case TYPELIST:
@@ -119,6 +122,8 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	char*		correctedname;
 
 	correctedname=truncateWithElipses(name,maxTabChars);
+//correctedname=(char*)malloc(6*g_utf8_strlen(name,-1));
+//correctedname=g_utf8_strncpy(correctedname,name,maxTabChars);
 
 	label=gtk_label_new(correctedname);
 	debugFree(&correctedname,"makeNewTab correctedname");
@@ -163,17 +168,9 @@ void setFilePrefs(pageStruct* page)
 	gtk_source_view_set_mark_category_background(page->view,MARK_TYPE_1,&color);
 
 	if(lineWrap==true)
-		{
-			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
-			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);		
-			gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_WORD_CHAR);
-		}
+		gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_WORD_CHAR);
 	else
-		{
-			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
-			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);		
-			gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_NONE);
-		}
+		gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_NONE);
 
 	gtk_source_view_set_tab_width(page->view,tabWidth);
 
@@ -206,7 +203,7 @@ void resetAllFilePrefs(void)
 
 	for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 		{
-			page=getDocumentData(loop);
+			page=getPageStructPtr(loop);
 			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 			setFilePrefs(page);
 		}
@@ -297,7 +294,7 @@ bool getSaveFile(void)
 
 VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getDocumentData(-1);
+	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start,end;
 	gchar*		text;
 	FILE*		fd=NULL;
@@ -399,7 +396,7 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 			filename=g_path_get_basename(filepath);
 			newFile(NULL,NULL);
 			pagenum=currentPage-1;
-			page=getDocumentData(pagenum);
+			page=getPageStructPtr(pagenum);
 			asprintf(&command,"hexdump -C %s",filepath);
 			fp=popen(command, "r");
 			while(fgets(line,1024,fp))
@@ -434,7 +431,7 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 
 VISIBLE void reloadFile(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getDocumentData(-1);
+	pageStruct*	page=getPageStructPtr(-1);
 	gchar*		buffer;
 	long		filelen;
 	GtkTextIter	start;
@@ -472,7 +469,7 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 		{
 			for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 				{
-					page=getDocumentData(loop);
+					page=getPageStructPtr(loop);
 					mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
 					linenumber=gtk_text_iter_get_line(&iter);
@@ -520,6 +517,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	fd=fopen(filename,"r");
 	if (fd!=NULL)
 		{
+			closeAllTabs(NULL,NULL);
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
 					sscanf(buffer,"%i %[^\n]s",(int*)&currentline,(char*)&strarg);
@@ -535,10 +533,9 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 						}
 					else
 						{
-							sessionBusy=true;
 							fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
-							page=getDocumentData(currentPage-1);
+							page=getPageStructPtr(currentPage-1);
 							gtk_notebook_set_current_page(mainNotebook,currentPage-1);
 							while(intarg!=-1)
 								{
@@ -559,16 +556,11 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 			debugFree(&filename,"restoreSession filename");
 		}
 
-	sessionBusy=false;
-	page=getDocumentData(-1);
-	if(page!=NULL)
-		switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
 	gtk_widget_thaw_child_notify((GtkWidget*)mainNotebook);
+	sessionBusy=false;
 	while(gtk_events_pending())
 		gtk_main_iteration_do(false);
 	delete buf;
-	sessionBusy=false;
-	setSensitive();
 }
 
 int showFileChanged(char* filename)
@@ -789,7 +781,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	for(int j=0; j<gtk_notebook_get_n_pages(mainNotebook); j++)
 		{
-			page=getDocumentData(j);
+			page=getPageStructPtr(j);
 			if(noDuplicates==true)
 				{
 					tpath=realpath(filepath,NULL);

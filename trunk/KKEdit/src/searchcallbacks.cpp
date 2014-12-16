@@ -88,7 +88,7 @@ PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 
 VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getDocumentData(-1);
+	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
@@ -197,7 +197,7 @@ VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
 
 VISIBLE void doDoxy(GtkWidget* widget,long data)
 {
-	pageStruct*	page=getDocumentData(-1);
+	pageStruct*	page=getPageStructPtr(-1);
 	struct stat	sb;
 	bool		dorebuild;
 	FILE*		fp;
@@ -243,7 +243,7 @@ VISIBLE void doDoxy(GtkWidget* widget,long data)
 //find in doxy docs
 VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getDocumentData(-1);
+	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
@@ -299,7 +299,7 @@ VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
 //showDocViewWidget
 VISIBLE void searchQT5Docs(GtkWidget* widget,gpointer data)
 {
-	pageStruct*	page=getDocumentData(-1);
+	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char*		selection=NULL;
@@ -441,7 +441,7 @@ void doAllFiles(int dowhat,bool found)
 		}
 
 	gtk_notebook_set_current_page(mainNotebook,currentFindPage);
-	page=getDocumentData(currentFindPage);
+	page=getPageStructPtr(currentFindPage);
 
 	if(dowhat==FINDNEXT)
 		{
@@ -547,7 +547,7 @@ void regexFind(int dowhat)
 	int						testformatch;
 	GtkTextIter				hastart,haend;
 
-	page=getDocumentData(currentFindPage);
+	page=getPageStructPtr(currentFindPage);
 	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
 		return;
 
@@ -662,7 +662,7 @@ void regexFind(int dowhat)
 								if(currentFindPage>=gtk_notebook_get_n_pages(mainNotebook))
 									currentFindPage=0;
 								gtk_notebook_set_current_page(mainNotebook,currentFindPage);
-								page=getDocumentData(currentFindPage);
+								page=getPageStructPtr(currentFindPage);
 								page->regexMatchNumber=-1;
 								dofindnext=true;
 								gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
@@ -713,7 +713,7 @@ void regexFind(int dowhat)
 								if(currentFindPage<0)
 									currentFindPage=gtk_notebook_get_n_pages(mainNotebook)-1;
 								gtk_notebook_set_current_page(mainNotebook,currentFindPage);
-								page=getDocumentData(currentFindPage);
+								page=getPageStructPtr(currentFindPage);
 								page->regexMatchNumber=-1;
 								dofindprev=true;
 								gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
@@ -754,7 +754,7 @@ fromregexsinglereplace=false;
 
 						for(int j=startloop;j<endloop;j++)
 							{
-								page=getDocumentData(j);
+								page=getPageStructPtr(j);
 								if(findInAllFiles==true)
 									{
 										gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
@@ -846,7 +846,7 @@ void basicFind(int dowhat)
 				pagesChecked=0;
 		}
 
-	page=getDocumentData(currentFindPage);
+	page=getPageStructPtr(currentFindPage);
 
 	doBusy(true,page);
 
@@ -878,14 +878,14 @@ void basicFind(int dowhat)
 
 	if(dowhat==FINDNEXT)
 		{
-			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSelected==false))
+			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSeleced==false))
 				{
 					gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 					page->match_end=page->match_start;
-					autoSelected=true;
+					autoSeleced=true;
 				}
 			else
-				autoSelected=true;
+				autoSeleced=true;
 
 			if(gtk_source_iter_forward_search(&page->match_end,searchtext,flags,&page->match_start,&page->match_end,NULL))
 				{
@@ -976,7 +976,7 @@ void basicFind(int dowhat)
 		if((dowhat==REPLACE) && (replaceAll==true))
 			{
 
-			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSelected==false))
+			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSeleced==false))
 				{
 					gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 					page->iter=page->match_start;
@@ -993,7 +993,7 @@ void basicFind(int dowhat)
 					{
 						if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
 							{
-								if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSelected==false))
+								if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSeleced==false))
 									{
 										gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,NULL,&maxlastiter);
 										if(gtk_text_iter_compare(&maxlastiter,&page->match_start)<=0)
@@ -1010,7 +1010,7 @@ void basicFind(int dowhat)
 							}
 						else
 							{
-								autoSelected=false;
+								autoSeleced=false;
 								replaceAllFlag=false;
 							}
 					}
@@ -1153,7 +1153,7 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 
 void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
 {
-	pageStruct* 			page=getDocumentData(-1);
+	pageStruct* 			page=getPageStructPtr(-1);
 	GtkSourceSearchFlags	flags;
 	char*					searchtext;
 	int						modkey=((GdkEventKey*)event)->state;

@@ -8,12 +8,12 @@
 
 #include "kkedit-includes.h"
 
-
-//app
 GApplication*	mainApp;
 bool			busyFlag=false;
-bool			autoSelected=false;
+bool			autoSeleced=false;
 VISIBLE bool	sessionBusy=false;
+
+//app
 //main mainWindow
 GtkWidget*		mainWindow=NULL;
 GtkWidget*		menuBar=NULL;
@@ -204,7 +204,7 @@ GtkWidget*		secondWindowVPane=NULL;
 GtkWidget*		mainWindowHPane=NULL;
 GtkWidget*		secondWindowHPane=NULL;
 
-VISIBLE int				currentTabNumber;
+int				currentTabNumber;
 int 			untitledNumber=1;
 
 GtkToolItem*	newButton=NULL;
@@ -483,22 +483,8 @@ void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 	else
 		gtk_text_view_scroll_to_iter((GtkTextView*)page->view2,iter,0,true,0,0.5);
 }
-/*
-	int			thispage;
-	GtkWidget*	pageBox;
 
-	if(pagenum==-1)
-		thispage=gtk_notebook_get_current_page(notebook);
-	else
-		thispage=pagenum;
-
-	pageBox=gtk_notebook_get_nth_page(notebook,thispage);
-	if(pageBox==NULL)
-		return(NULL);
-	else
-		return((pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata"));
-*/
-VISIBLE pageStruct* getDocumentData(int pagenum)
+VISIBLE pageStruct* getPageStructPtr(int pagenum)
 {
 	int			thispage;
 	GtkWidget*	pageBox;
@@ -701,7 +687,7 @@ functionData* getFunctionByName(char* name,bool recurse)
 	bool			checkthispage;
 	functionData*	fdata;
 
-	page=getDocumentData(-1);
+	page=getPageStructPtr(-1);
 	if(page==NULL)
 		return(NULL);
 
@@ -713,7 +699,7 @@ functionData* getFunctionByName(char* name,bool recurse)
 
 	while(whileflag==true)
 		{
-			page=getDocumentData(loop);
+			page=getPageStructPtr(loop);
 			if(page->filePath!=NULL)
 				{
 					getRecursiveTagList(page->filePath,&functions);
@@ -769,7 +755,7 @@ functionData* getFunctionByName(char* name,bool recurse)
 //dont do this from popup for speed reasons
 			for(int loop=0; loop<numpages; loop++)
 				{
-					page=getDocumentData(loop);
+					page=getPageStructPtr(loop);
 					if(page->filePath!=NULL)
 						{
 							dirname=strdup(g_path_get_dirname(page->filePath));

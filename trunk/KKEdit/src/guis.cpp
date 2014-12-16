@@ -855,6 +855,7 @@ void doIconView(void)
 
 void setKeyCuts(GtkWidget* widget,gpointer data)
 {
+
 	char*	filename;
 	const char*		text;
 

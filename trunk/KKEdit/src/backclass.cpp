@@ -82,7 +82,7 @@ int HistoryClass::getTabNumForPage(void)
 
 	for(int loop=0;loop<numpages;loop++)
 		{
-			page=getDocumentData(loop);
+			page=getPageStructPtr(loop);
 			if (page==savedPage)
 				{
 					this->goBack=true;
