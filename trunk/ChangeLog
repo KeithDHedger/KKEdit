@@ -16,6 +16,8 @@ Made switchPage callback visible to plugins.
 Stoped horizontal scrollbar flashing up when wrap lines is active.
 Removed some small error messages from startup.
 Fixed minor free bug when docviewer is disabled.
+
+
 Updated help file and translations.
 Fixed odd characters in tab name when truncated with elipses.
 Fixed crash when ctags gets confused and produces an enormous function name.
