@@ -1110,46 +1110,30 @@ VISIBLE void goBack(GtkWidget* widget,gpointer data)
 	setSensitive();
 }
 
-gboolean idleScroll(gpointer data)
-{
-	gtk_main_iteration_do(false);
-	if(progressBar!=NULL)
-		{
-			gtk_progress_bar_pulse((GtkProgressBar*)progressBar);
-			return(true);
-		}
-	else
-		return(false);
-}
+char	*barControl;
 
 void showBarberPole(const char* title)
 {
-	GtkWidget*		vbox;
+	StringSlice	*slice=new StringSlice;
+	char		*barcommand;
 
-	progressWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_widget_set_size_request(progressWindow,400,40);
-	gtk_window_set_deletable((GtkWindow*)progressWindow,false);
-	gtk_window_set_resizable((GtkWindow*)progressWindow,false);
-	gtk_window_set_type_hint((GtkWindow*)progressWindow,GDK_WINDOW_TYPE_HINT_DIALOG);
-	gtk_window_set_title((GtkWindow*)progressWindow,title);
-	vbox=gtk_vbox_new(FALSE,0);
-	progressBar=gtk_progress_bar_new();
-	gtk_progress_bar_pulse((GtkProgressBar*)progressBar);
-
-	gtk_progress_bar_set_orientation((GtkProgressBar*)progressBar,GTK_PROGRESS_LEFT_TO_RIGHT);
-
-	gtk_box_pack_start(GTK_BOX(vbox),progressBar,false,false,8);
-	gtk_container_add(GTK_CONTAINER(progressWindow),vbox);
-
-	gtk_widget_show_all(progressWindow);
-	g_timeout_add(100,idleScroll,NULL);
+	asprintf(&barControl,"%s/BarControl-%s",tmpFolderName,slice->randomName(6));
+	asprintf(&barcommand,POLEPATH " \"%s\" \"%s\" \"pulse\" &",title,barControl);
+	system(barcommand);
+	debugFree(&barcommand,"restore session barcommand");
 }
 
 void killBarberPole(void)
 {
-	gtk_widget_destroy(progressWindow);
-	progressBar=NULL;
+	char		*barcommand;
+
+	usleep(100000);
+	asprintf(&barcommand,"/bin/echo quit > \"%s\"",barControl);
+	system(barcommand);
+	debugFree(&barcommand,"restore session barcommand");
+	debugFree(&barControl,"restore session barcontrol");
 }
+
 
 VISIBLE void debugFree(char** ptr,const char* message)
 {

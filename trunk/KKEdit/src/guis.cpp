@@ -807,7 +807,7 @@ char* makeToolBarList(void)
 	return(g_string_free(str,false));
 }
 
-void clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
+bool clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 {
 	GtkTreePath*	path=NULL;
 	GdkModifierType	mask;
@@ -823,7 +823,9 @@ void clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 			gtk_tree_model_get((GtkTreeModel*)listStore,&iter,BUTTON_NUM,&button,-1);
 			gtk_widget_set_sensitive((GtkWidget*)tool[button],true);
 			gtk_list_store_remove((GtkListStore*)listStore,&iter);
+			return(true);
 		}
+	return(false);
 }
 
 void doIconView(void)
@@ -1402,9 +1404,10 @@ void buildMainGui(void)
 //save session
 	menuitem=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveSession,0,SAVESESSIONMENUNAME,IMAGEMENU,gettext("Save Session"),(void*)false);
 //restore session
-	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONMENUNAME,IMAGEMENU,gettext("Restore Session"),(void*)false);
-//restore session and bookmarks
-	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONBMMENUNAME,IMAGEMENU,gettext("Restore Session With Bookmarks"),(void*)true);
+	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONMENUNAME,IMAGEMENU,gettext("Restore Session"),NULL);
+////restore session and bookmarks
+//	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONBMMENUNAME,IMAGEMENU,gettext("Restore Session With Bookmarks"),(void*)true);
+
 //printfile
 	printMenu=makeMenuItem(GTK_STOCK_PRINT,menu,(void*)printFile,0,PRINTMENUNAME,STOCKMENU,NULL,NULL);
 

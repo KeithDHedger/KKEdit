@@ -48,6 +48,7 @@
 #define CUSTOMWORDFILE ".KKEdit/customcompletions"
 
 #define NUMSHORTCUTS	14
+#define PLATFORM		"gtk"
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 

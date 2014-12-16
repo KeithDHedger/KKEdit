@@ -168,9 +168,17 @@ void setFilePrefs(pageStruct* page)
 	gtk_source_view_set_mark_category_background(page->view,MARK_TYPE_1,&color);
 
 	if(lineWrap==true)
-		gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_WORD_CHAR);
+		{
+			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
+			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);		
+			gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_WORD_CHAR);
+		}
 	else
-		gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_NONE);
+		{
+			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);		
+			gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_NONE);
+		}
 
 	gtk_source_view_set_tab_width(page->view,tabWidth);
 
@@ -494,36 +502,43 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 		}
 }
 
+
 VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 {
-	FILE*		fd=NULL;
-	char*		filename;
-	char		buffer[2048];
-	int			intarg;
-	char		strarg[2048];
-	pageStruct*	page;
-	GtkTextIter	markiter;
-	int			currentline;
-	TextBuffer*	buf=new TextBuffer;
+	FILE			*fd=NULL;
+	char			*filename;
+	char			buffer[2048];
+	int				intarg;
+	char			strarg[2048];
+	pageStruct		*page;
+	GtkTextIter		markiter;
+	int				currentline;
+	TextBuffer		*buf=new TextBuffer;
+
 
 	closeAllTabs(NULL,NULL);
 	while(gtk_events_pending())
 		gtk_main_iteration_do(false);
 
-	sessionBusy=true;
-	gtk_widget_freeze_child_notify((GtkWidget*)mainNotebook);
+//	doUpdateWidgets=false;
+	showBarberPole(gettext("Restoring Session ..."));
 
-	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
+	if(data==NULL)
+		asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
+	else
+		asprintf(&filename,"%s",(char*)data);
+
 	fd=fopen(filename,"r");
 	if (fd!=NULL)
 		{
-			closeAllTabs(NULL,NULL);
+			if(data!=NULL)
+				fgets(buffer,2048,fd);
+
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
 					sscanf(buffer,"%i %[^\n]s",(int*)&currentline,(char*)&strarg);
 					if(openFile(strarg,currentline,true)==false)
 						{
-							sessionBusy=true;
 							intarg=999;
 							while(intarg!=-1)
 								{
@@ -539,12 +554,9 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 							gtk_notebook_set_current_page(mainNotebook,currentPage-1);
 							while(intarg!=-1)
 								{
-									if((bool)data==true)
-										{
-											gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
-											gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
-											toggleBookmark(NULL,&markiter);
-										}
+									gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
+									gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
+									toggleBookmark(NULL,&markiter);
 									fgets(buffer,2048,fd);
 									sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 								}
@@ -556,11 +568,14 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 			debugFree(&filename,"restoreSession filename");
 		}
 
-	gtk_widget_thaw_child_notify((GtkWidget*)mainNotebook);
-	sessionBusy=false;
+	delete buf;
+
 	while(gtk_events_pending())
 		gtk_main_iteration_do(false);
-	delete buf;
+	currentTabNumber=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)-1;
+	//setWidgets();
+	setSensitive();
+	killBarberPole();
 }
 
 int showFileChanged(char* filename)
@@ -662,9 +677,9 @@ pageStruct* makeNewPage(void)
 
 	page->pane=gtk_vpaned_new();
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
 	page->pageWindow2=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
 
 	page->buffer=gtk_source_buffer_new(NULL);
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);

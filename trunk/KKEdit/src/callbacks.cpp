@@ -663,7 +663,7 @@ void sortTabs(GtkWidget* widget,gpointer data)
 		}
 }
 
-void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
+VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
 {
 
 	pageStruct*	page;
