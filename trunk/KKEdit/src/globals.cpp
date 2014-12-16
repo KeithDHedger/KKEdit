@@ -6,6 +6,7 @@
  *
 */
 
+
 #include "kkedit-includes.h"
 
 GApplication*	mainApp;
@@ -1168,6 +1169,30 @@ void doBusy(bool busy,pageStruct* page)
 		}
 }
 
+VISIBLE bool doUpdateWidgets=false;
+
+VISIBLE void resetWidgetSenisitive(void)
+{
+	if(doUpdateWidgets==true)
+		{
+			resetAllFilePrefs();	
+			setSensitive();
+			refreshMainWindow();
+		}
+}
+
+VISIBLE void setWidgets(void)
+{
+	pageStruct* page;
+
+	doUpdateWidgets=true;
+	page=getPageStructPtr(-1);
+
+	if(page!=NULL)
+		switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
+
+	resetWidgetSenisitive();
+}
 
 
 

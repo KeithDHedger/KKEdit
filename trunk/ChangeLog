@@ -7,15 +7,15 @@
 All tabs updated at once when restoring session.
 		Jumping to bookmark now also places cursor at bookmark.
 		Plugins can now use restore session routine.
-Fixed minor dnd bug.
-Added barber pole to restore session.
+		Fixed minor dnd bug.
+		Added barber pole to restore session.
 Fixed numerous minor widget sensitivity bugs.
 		Plugin folder changed is now ~/.KKEdit/plugins-gtk.
-Fixed minor memory leak.
+		Fixed minor memory leak.
 		Made switchPage callback visible to plugins.
 		Stoped horizontal scrollbar flashing up when wrap lines is active.
-Removed some small error messages from startup.
-Fixed minor free bug when docviewer is disabled.
+		Removed some small error messages from startup.
+		Fixed minor free bug when docviewer is disabled.
 
 
 Updated help file and translations.

@@ -390,6 +390,7 @@ extern args				keybindings_rc[];
 
 
 extern const char*		localeLang;
+extern bool				doUpdateWidgets;
 
 void plugRunFunction(gpointer data,gpointer funcname);
 pageStruct* getPageStructPtr(int pagenum);
@@ -409,6 +410,10 @@ void debugFree(char** ptr,const char* message);
 char* truncateWithElipses(char* str,unsigned int maxlen);
 char* truncateTabNameWithElipses(char* str,unsigned int maxlen);
 void doBusy(bool busy,pageStruct* page);
+
+
+void setWidgets(void);
+void resetWidgetSenisitive(void);
 
 #endif
 

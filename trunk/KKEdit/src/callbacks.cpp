@@ -122,10 +122,12 @@ void setToobarSensitive(void)
 //go back
 					if(backButton!=NULL)
 						{
-							if(history->canGoBack()==true)
-								gtk_widget_set_sensitive((GtkWidget*)backButton,true);
-							else
-								gtk_widget_set_sensitive((GtkWidget*)backButton,false);
+							gtk_widget_set_sensitive((GtkWidget*)backButton,false);
+							if(page!=NULL)
+								{
+									if(history->canGoBack()==true)
+										gtk_widget_set_sensitive((GtkWidget*)backButton,true);
+								}
 						}
 					break;
 
@@ -392,6 +394,9 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 	const char*	path;
 	const char*	lang;
 
+	if(doUpdateWidgets==false)
+		return;
+
 	if(sessionBusy==true)
 		return;
 
@@ -526,6 +531,7 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 		return;
 
 	busyFlag=true;	
+//	doUpdateWidgets=false;
 	if(closingAll==true)
 		thispage=0;
 	else
@@ -618,12 +624,16 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 		g_clear_object(&(page->gFile));
 
 	currentPage--;
-	setSensitive();
 
 	gtk_notebook_remove_page(mainNotebook,thispage);
 //TODO//
 //	debugFree((char**)&page,"closeTab page");
 	busyFlag=false;
+	if(closingAll==false)
+		{
+			currentTabNumber=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
+			resetWidgetSenisitive();
+		}
 }
 
 VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
@@ -637,8 +647,10 @@ VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
 		}
 
 //rebuild bookmark menu
+	closingAll=false;
 	rebuildBookMarkMenu();
 	gtk_widget_show_all(bookMarkMenu);
+	setWidgets();
 }
 
 void sortTabs(GtkWidget* widget,gpointer data)
@@ -665,7 +677,6 @@ void sortTabs(GtkWidget* widget,gpointer data)
 
 VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
 {
-
 	pageStruct*	page;
 	char*		functions=NULL;
 	GtkWidget*	menuitem;
@@ -683,12 +694,18 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	GtkWidget*	submenu;
 	char*		correctedstr=NULL;
 
+	if(doUpdateWidgets==false)
+		return;
+
 	if(arg1==NULL)
 		return;
 
 	page=(pageStruct*)g_object_get_data((GObject*)arg1,"pagedata");
 	if(page==NULL)
-		return;
+		{
+			setWidgets();
+			return;
+		}
 
 	submenu=gtk_menu_item_get_submenu((GtkMenuItem*)funcMenu);
 	if (submenu!=NULL)
@@ -783,7 +800,6 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	globalPlugins->globalPlugData->page=page;
 	globalPlugins->globalPlugData->currentTab=currentTabNumber;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"switchTab");
-
 }
 
 VISIBLE void copyToClip(GtkWidget* widget,gpointer data)
@@ -883,11 +899,9 @@ VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,Gtk
 	for(int j=0; j<cnt; j++)
 		{
 			filename=g_filename_from_uri(array[j],NULL,NULL);
-			printf("filename droped %s\n",filename);
-			printf("uri dropped %s\n",array[j]);
 			openFile(filename,0,true);
 		}
-
+	setWidgets();
 	g_strfreev(array);
 }
 
@@ -1034,7 +1048,7 @@ VISIBLE void openHelp(GtkWidget* widget,gpointer data)
 #else
 	asprintf(&thePage,"%s %s/help/help.%s.shtml",browserCommand,DATADIR,lang);
 	runCommand(thePage,NULL,false,8,0,(char*)gettext("KKEdit Help"));
-	debugFree(thePage,"openHelp thePage");
+	debugFree((char**)&thePage,"openHelp thePage");
 	thePage=NULL;
 #endif
 }

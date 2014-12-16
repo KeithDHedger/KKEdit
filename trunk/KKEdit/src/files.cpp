@@ -502,7 +502,6 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 		}
 }
 
-
 VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 {
 	FILE			*fd=NULL;
@@ -520,7 +519,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	while(gtk_events_pending())
 		gtk_main_iteration_do(false);
 
-//	doUpdateWidgets=false;
+	doUpdateWidgets=false;
 	showBarberPole(gettext("Restoring Session ..."));
 
 	if(data==NULL)
@@ -573,7 +572,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	while(gtk_events_pending())
 		gtk_main_iteration_do(false);
 	currentTabNumber=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)-1;
-	//setWidgets();
+	setWidgets();
 	setSensitive();
 	killBarberPole();
 }

@@ -340,6 +340,7 @@ void open(GApplication* application,GFile** files,gint n_files,const gchar* hint
 
 	if(mainWindow!=NULL)
 		gtk_window_present((GtkWindow*)mainWindow);
+	setSensitive();
 
 	g_application_release(application);
 }
@@ -434,6 +435,7 @@ int main (int argc, char **argv)
 
 	singleOverRide=false;
 	loadPluginsFlag=true;
+	doUpdateWidgets=true;
 
 	GOptionEntry	entries[]=
 {
