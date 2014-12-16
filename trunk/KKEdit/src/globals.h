@@ -92,8 +92,9 @@ struct bookMarksNew
 
 //app
 extern GApplication*	mainApp;
+extern bool				busyFlag;
 extern bool				autoSelected;
-
+extern bool				sessionBusy;
 //main window
 extern GtkWidget*		mainWindow;
 extern GtkWidget*		menuBar;
@@ -389,7 +390,6 @@ extern args				keybindings_rc[];
 
 
 extern const char*		localeLang;
-extern bool doUpdateWidgets;
 
 void plugRunFunction(gpointer data,gpointer funcname);
 pageStruct* getDocumentData(int pagenum);
@@ -409,7 +409,6 @@ void debugFree(char** ptr,const char* message);
 char* truncateWithElipses(char* str,unsigned int maxlen);
 char* truncateTabNameWithElipses(char* str,unsigned int maxlen);
 void doBusy(bool busy,pageStruct* page);
-void setWidgets(void);
 
 #endif
 

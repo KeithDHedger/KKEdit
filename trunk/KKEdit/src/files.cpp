@@ -200,18 +200,15 @@ void setFilePrefs(pageStruct* page)
 
 void resetAllFilePrefs(void)
 {
-	pageStruct*	page;
+	pageStruct*			page;
 
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
 	for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 		{
 			page=getDocumentData(loop);
-			if(page!=NULL)
-				{
-					gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
-					setFilePrefs(page);
-				}
+			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
+			setFilePrefs(page);
 		}
 }
 
@@ -502,40 +499,33 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 
 VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 {
-	FILE			*fd=NULL;
-	char			*filename;
-	char			buffer[2048];
-	int				intarg;
-	char			strarg[2048];
-	pageStruct		*page;
-	GtkTextIter		markiter;
-	int				currentline;
-	TextBuffer		*buf=new TextBuffer;
-
+	FILE*		fd=NULL;
+	char*		filename;
+	char		buffer[2048];
+	int			intarg;
+	char		strarg[2048];
+	pageStruct*	page;
+	GtkTextIter	markiter;
+	int			currentline;
+	TextBuffer*	buf=new TextBuffer;
 
 	closeAllTabs(NULL,NULL);
 	while(gtk_events_pending())
 		gtk_main_iteration_do(false);
 
-	doUpdateWidgets=false;
-	showBarberPole(gettext("Restoring Session ..."));
+	sessionBusy=true;
+	gtk_widget_freeze_child_notify((GtkWidget*)mainNotebook);
 
-	if(data==NULL)
-		asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
-	else
-		asprintf(&filename,"%s",(char*)data);
-
+	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
 	fd=fopen(filename,"r");
 	if (fd!=NULL)
 		{
-			if(data!=NULL)
-				fgets(buffer,2048,fd);
-
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
 					sscanf(buffer,"%i %[^\n]s",(int*)&currentline,(char*)&strarg);
 					if(openFile(strarg,currentline,true)==false)
 						{
+							sessionBusy=true;
 							intarg=999;
 							while(intarg!=-1)
 								{
@@ -545,15 +535,19 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 						}
 					else
 						{
+							sessionBusy=true;
 							fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 							page=getDocumentData(currentPage-1);
 							gtk_notebook_set_current_page(mainNotebook,currentPage-1);
 							while(intarg!=-1)
 								{
-									gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
-									gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
-									toggleBookmark(NULL,&markiter);
+									if((bool)data==true)
+										{
+											gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
+											gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
+											toggleBookmark(NULL,&markiter);
+										}
 									fgets(buffer,2048,fd);
 									sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 								}
@@ -565,14 +559,16 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 			debugFree(&filename,"restoreSession filename");
 		}
 
-	delete buf;
-
+	sessionBusy=false;
+	page=getDocumentData(-1);
+	if(page!=NULL)
+		switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
+	gtk_widget_thaw_child_notify((GtkWidget*)mainNotebook);
 	while(gtk_events_pending())
 		gtk_main_iteration_do(false);
-	currentTabNumber=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)-1;
-	setWidgets();
+	delete buf;
+	sessionBusy=false;
 	setSensitive();
-	killBarberPole();
 }
 
 int showFileChanged(char* filename)
@@ -648,6 +644,9 @@ void add_source_mark_pixbufs (GtkSourceView *view)
 
 gboolean clickInView(GtkWidget* widget,gpointer data)
 {
+	if(sessionBusy==true)
+		return(false);
+
 	if((statusMessage!=NULL))
 		{
 			debugFree(&statusMessage,"clickInView statusMessage");
@@ -778,6 +777,9 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	char*					filepathcopy=NULL;
 	char*					tpath;
 
+	busyFlag=true;
+	sessionBusy=true;
+
 	if(readLinkFirst==true)
 		filepathcopy=realpath(filepath,NULL);
 	else
@@ -794,6 +796,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					if((tpath!=NULL) && (page->realFilePath!=NULL) && (strcmp(page->realFilePath,tpath)==0))
 						{
 							gtk_notebook_set_current_page(mainNotebook,j);
+							busyFlag=false;
+							sessionBusy=false;
 							debugFree(&tpath,"openFile tpath");
 							return(true);
 						}
@@ -809,6 +813,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
+			busyFlag=false;
+			sessionBusy=false;
 			return(false);
 		}
 
@@ -820,6 +826,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
+			busyFlag=false;
+			sessionBusy=false;
 			return(false);
 		}
 
@@ -849,6 +857,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
+			busyFlag=false;
+			sessionBusy=false;
 			return(false);
 		}
 
@@ -905,7 +915,10 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
-//	gtk_widget_show_all((GtkWidget*)mainNotebook);
+	gtk_widget_show_all((GtkWidget*)mainNotebook);
+	setToobarSensitive();
+
+	setFilePrefs(page);
 
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"openFile");
@@ -917,7 +930,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_text_buffer_move_mark((GtkTextBuffer*)page->buffer,page->backMark,&iter);
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
 
-	setWidgets();
+	busyFlag=false;
+	sessionBusy=false;
 	return TRUE;
 }
 

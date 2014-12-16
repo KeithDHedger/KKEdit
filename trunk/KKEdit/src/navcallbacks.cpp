@@ -23,7 +23,6 @@ void goToDefine(functionData* fdata)
 	if(fdata->intab==-1)
 		{
 			openFile(fdata->file,fdata->line-1,true);
-			setWidgets();
 			page=getDocumentData(gtk_notebook_get_n_pages(mainNotebook)-1);
 			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 			buf->scroll2Line((GtkTextView*)page->view,fdata->line-2);
@@ -120,8 +119,6 @@ VISIBLE void findFile(GtkWidget* widget,gpointer data)
 		}
 	delete buf;
 	delete slice;
-
-	setWidgets();
 }
 
 void gotoLine(GtkWidget* widget,gpointer data)
@@ -221,8 +218,6 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 			if(checkpage==page)
 				{
 					gtk_notebook_set_current_page(mainNotebook,loop);
-					gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&buf->cursorPos);
-					delete buf;
 					return;
 				}
 		}

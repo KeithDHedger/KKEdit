@@ -807,7 +807,7 @@ char* makeToolBarList(void)
 	return(g_string_free(str,false));
 }
 
-bool clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
+void clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 {
 	GtkTreePath*	path=NULL;
 	GdkModifierType	mask;
@@ -823,9 +823,7 @@ bool clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 			gtk_tree_model_get((GtkTreeModel*)listStore,&iter,BUTTON_NUM,&button,-1);
 			gtk_widget_set_sensitive((GtkWidget*)tool[button],true);
 			gtk_list_store_remove((GtkListStore*)listStore,&iter);
-			return(true);
 		}
-	return(false);
 }
 
 void doIconView(void)
@@ -1362,17 +1360,6 @@ void buildMainGui(void)
 //open as hexdump
 	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)openAsHexDump,0,HEXDUMPMENUNAME,IMAGEMENU,gettext("Open As Hexdump"),NULL);
 
-//recent menu
-	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
-	menuitem=gtk_image_menu_item_new_with_label(gettext("Recent Files"));
-	menurecent=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
-	addRecentToMenu((GtkRecentChooser*)recent,menurecent);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_widget_set_name(menuitem,RECENTMENUNAME);
-
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
@@ -1390,6 +1377,17 @@ void buildMainGui(void)
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
+//recent menu
+	menuitem=gtk_image_menu_item_new_with_label(gettext("Recent Files"));
+	menurecent=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
+	addRecentToMenu((GtkRecentChooser*)recent,menurecent);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_widget_set_name(menuitem,RECENTMENUNAME);
+
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
 //save
 	saveMenu=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveFile,'S',SAVEMENUNAME,STOCKMENU,NULL,NULL);
 //savas
@@ -1403,9 +1401,9 @@ void buildMainGui(void)
 //save session
 	menuitem=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveSession,0,SAVESESSIONMENUNAME,IMAGEMENU,gettext("Save Session"),(void*)false);
 //restore session
-	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONMENUNAME,IMAGEMENU,gettext("Restore Session"),NULL);
+	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONMENUNAME,IMAGEMENU,gettext("Restore Session"),(void*)false);
 //restore session and bookmarks
-//	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONBMMENUNAME,IMAGEMENU,gettext("Restore Session With Bookmarks"),(void*)true);
+	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONBMMENUNAME,IMAGEMENU,gettext("Restore Session With Bookmarks"),(void*)true);
 //printfile
 	printMenu=makeMenuItem(GTK_STOCK_PRINT,menu,(void*)printFile,0,PRINTMENUNAME,STOCKMENU,NULL,NULL);
 
