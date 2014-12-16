@@ -299,6 +299,7 @@ VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 void refreshMainWindow(void)
 {
 	gtk_widget_show(mainWindow);
+	gtk_widget_show_all((GtkWidget*)mainNotebook);
 	gtk_widget_show(mainWindowVBox);
 	gtk_widget_show(mainVPane);
 	gtk_widget_show(mainWindowHPane);
@@ -659,6 +660,8 @@ void sortTabs(GtkWidget* widget,gpointer data)
 	pageStruct	*page1=NULL;
 	pageStruct	*page2=NULL;
 
+	doUpdateWidgets=false;
+
 	while(flag==true)
 		{
 			flag=false;
@@ -673,6 +676,9 @@ void sortTabs(GtkWidget* widget,gpointer data)
 						}
 				}
 		}
+
+	doUpdateWidgets=true;
+	resetWidgetSenisitive();
 }
 
 VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
