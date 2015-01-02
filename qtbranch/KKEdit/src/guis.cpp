@@ -1150,7 +1150,7 @@ printf("doPrefs %i\n",(int)(long)data);
 	vbox->addWidget(button);
 
 	
-	prefsnotebook->addTab((QWidget*)vbox,QString("XXXXX"));
+	prefsnotebook->addTab((QWidget*)vbox,"XXXXX");
 
 	mainvbox->addWidget(prefsnotebook);
 	prefsWindow->setLayout(mainvbox);
