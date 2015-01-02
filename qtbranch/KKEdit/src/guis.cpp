@@ -1137,6 +1137,7 @@ printf("doPrefs %i\n",(int)(long)data);
 	QHBoxLayout*		hbox=new QHBoxLayout;
 	QTabWidget*			prefsnotebook=new QTabWidget;
 	QWidget*			button;
+	QWidget*			tab;
 
 	prefsWindow=new QDialog(mainWindow);
 	prefsWindow->setWindowTitle("Preferences");
@@ -1146,13 +1147,17 @@ printf("doPrefs %i\n",(int)(long)data);
 	vbox=new QVBoxLayout();
 
 	button=new QPushButton("xxx");
-	
+	tab=new QWidget();
+	vbox->addWidget(button);
+	button=new QPushButton("zzz");
 	vbox->addWidget(button);
 
+	tab->setLayout(vbox);
 	
-	prefsnotebook->addTab((QWidget*)vbox,"XXXXX");
+	prefsnotebook->addTab(tab,"XXXXX");
+//	prefsnotebook->addTab((QWidget*)button,"XXXXX");
 
-//	mainvbox->addWidget(prefsnotebook);
+	mainvbox->addWidget(prefsnotebook);
 	prefsWindow->setLayout(mainvbox);
 
 	prefsWindow->setWindowModality(Qt::WindowModal);
