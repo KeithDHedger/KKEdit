@@ -1152,7 +1152,7 @@ printf("doPrefs %i\n",(int)(long)data);
 	
 	prefsnotebook->addTab((QWidget*)vbox,"XXXXX");
 
-	mainvbox->addWidget(prefsnotebook);
+//	mainvbox->addWidget(prefsnotebook);
 	prefsWindow->setLayout(mainvbox);
 
 	prefsWindow->setWindowModality(Qt::WindowModal);
