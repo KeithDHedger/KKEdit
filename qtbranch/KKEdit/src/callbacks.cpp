@@ -699,6 +699,9 @@ VISIBLE void closeAllTabs(Widget* widget,uPtr data)
 {
 printf("closeAllTabs %i\n",(int)(long)data);
 
+	bool shold=sessionBusy;
+	sessionBusy=true;
+
 #ifndef _USEQT5_
 	int	numtabs=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook);
 #else
@@ -711,7 +714,9 @@ printf("closeAllTabs %i\n",(int)(long)data);
 		}
 
 //rebuild bookmark menu
-//	rebuildBookMarkMenu();
+//TODO//
+	rebuildBookMarkMenu();
+	sessionBusy=shold;
 #ifndef _USEQT5_
 	gtk_widget_show_all(bookMarkMenu);
 #endif
@@ -771,6 +776,9 @@ void switchPage(int thispage)
 	QMenu			*submenu;
 	bool			onefunc=false;
 	MenuItemClass	*menuitem;
+
+	if(sessionBusy==true)
+		return;
 
 	doc=(DocumentClass*)((QTabWidget*)mainNotebook)->widget(thispage);
 	if(doc==0)
@@ -863,6 +871,9 @@ void switchPage(int thispage)
 	GtkWidget*	typesubmenus[50]= {NULL,};
 	GtkWidget*	submenu;
 	char*		correctedstr=NULL;
+
+	if(sessionBusy==true)
+		return;
 
 	if(arg1==NULL)
 		return;
@@ -1900,7 +1911,7 @@ void setPrefs(void)
 		{
 			if(tpage!=NULL)
 				gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)tpage->buffer,styleScheme);
-			gtk_widget_destroy(prefswin);
+			gtk_widget_destroy(prefsWindow);
 		}
 
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
@@ -1964,7 +1975,7 @@ void setPrefs(void)
 			if(tpage!=NULL)
 				switchPage((GtkNotebook*)mainNotebook,tpage->tabVbox,currentTabNumber,NULL);
 
-			gtk_widget_destroy(prefswin);
+			gtk_widget_destroy(prefsWindow);
 			resetAllFilePrefs();
 			writeConfig();
 			setSensitive();

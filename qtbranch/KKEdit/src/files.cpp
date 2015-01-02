@@ -567,7 +567,74 @@ VISIBLE void restoreSession(Widget* widget,uPtr data)
 //TODO//
 {
 printf("restoreSession %i\n",(int)(long)data);
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	FILE*		fd=NULL;
+	char*		filename;
+	char		buffer[2048];
+	int			intarg;
+	char		strarg[2048];
+	int			currentline;
+
+	sessionBusy=true;
+
+	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
+	fd=fopen(filename,"r");
+	if (fd!=NULL)
+		{
+			closeAllTabs(NULL,NULL);
+			while(fgets(buffer,2048,fd)!=NULL)
+				{
+					sscanf(buffer,"%i %[^\n]s",(int*)&currentline,(char*)&strarg);
+					if(openFile(strarg,currentline,true)==false)
+						{
+							sessionBusy=true;
+							intarg=999;
+							while(intarg!=-1)
+								{
+									fgets(buffer,2048,fd);
+									sscanf(buffer,"%i",(int*)&intarg);
+								}
+						}
+					else
+						{
+							sessionBusy=true;
+							intarg=999;
+							fgets(buffer,2048,fd);
+							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
+							while(intarg!=-1)
+								{
+									fgets(buffer,2048,fd);
+									sscanf(buffer,"%i",(int*)&intarg);
+								}
+/*
+do bookmarks
+//TODO//
+							fgets(buffer,2048,fd);
+							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
+							page=getDocumentData(currentPage-1);
+							gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,currentPage-1);
+							while(intarg!=-1)
+								{
+									if((bool)data==true)
+										{
+											gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
+											gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
+											toggleBookmark(NULL,&markiter);
+										}
+									fgets(buffer,2048,fd);
+									sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
+								}
+							buf->textBuffer=(GtkTextBuffer*)page->buffer;
+							buf->scroll2Line((GtkTextView*)page->view,currentline);					
+*/
+						}
+				}
+			fclose(fd);
+			debugFree(&filename,"restoreSession filename");
+		}
+
+	sessionBusy=false;
+#else
 	FILE*		fd=NULL;
 	char*		filename;
 	char		buffer[2048];
@@ -930,6 +997,10 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	int				tabnum;
 	char*			filedata=NULL;
 	char			*filename;
+	bool			retval=false;
+
+	busyFlag=true;
+	sessionBusy=true;
 
 	doc=new DocumentClass();
 
@@ -952,8 +1023,12 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 			((QTabWidget*)mainNotebook)->setCurrentIndex(tabnum);
 			debugFree(&tstr,"openFile tstr 2");
 			debugFree(&convertedData,"openFile convertedData");
+			setFilePrefs((uPtr)doc);
+			retval=true;
 		}
-	setFilePrefs((uPtr)doc);
+	busyFlag=false;
+	sessionBusy=false;
+	return(retval);
 #else
 	GtkTextIter				iter;
 	GtkTextIter				startiter;

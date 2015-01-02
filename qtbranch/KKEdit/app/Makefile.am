@@ -17,8 +17,8 @@ kkedit_SOURCES = $(COMMONSRC)
 #KKEditProgressBar_CFLAGS = -ggdb -O0
 #KKEditProgressBar_CXXFLAGS =  -ggdb -O0
 
-kkedit_CFLAGS = -ggdb -O0 -fvisibility=hidden
-kkedit_CXXFLAGS = -ggdb -O0 -fvisibility=hidden
+kkedit_CFLAGS = -ggdb -O0 -fvisibility=default
+kkedit_CXXFLAGS = -ggdb -O0 -fvisibility=default
 
 pixfilesdir = $(pkgdatadir)/pixmaps
 pixfiles_DATA = ../resources/pixmaps/*

@@ -137,13 +137,13 @@ int				docWindowY=-1;
 
 ////prefs
 //#ifndef _USEQT5_
-//GtkWidget* prefswin;
+//GtkWidget* prefsWindow;
 //#else
 //TODO//
 //#endif
 
 //prefs
-Widget*			prefswin;
+Widget*			prefsWindow;
 bool			indent;
 bool			lineNumbers;
 bool			lineWrap;

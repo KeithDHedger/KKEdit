@@ -1131,7 +1131,34 @@ VISIBLE void doPrefs(Widget* widget,uPtr data)
 {
 printf("doPrefs %i\n",(int)(long)data);
 
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	QVBoxLayout*		vbox;
+	QVBoxLayout*		mainvbox=new QVBoxLayout();
+	QHBoxLayout*		hbox=new QHBoxLayout;
+	QTabWidget*			prefsnotebook=new QTabWidget;
+	QWidget*			button;
+
+	prefsWindow=new QDialog(mainWindow);
+	prefsWindow->setWindowTitle("Preferences");
+
+//pages
+//page1
+	vbox=new QVBoxLayout();
+
+	button=new QPushButton("xxx");
+	
+	vbox->addWidget(button);
+
+	
+	prefsnotebook->addTab((QWidget*)vbox,QString("XXXXX"));
+
+	mainvbox->addWidget(prefsnotebook);
+	prefsWindow->setLayout(mainvbox);
+
+	prefsWindow->setWindowModality(Qt::WindowModal);
+	prefsWindow->show();
+
+#else
 	GtkWidget*		vbox;
 	GtkWidget*		hbox;
 	GtkWidget*		pagevbox;
@@ -1140,8 +1167,8 @@ printf("doPrefs %i\n",(int)(long)data);
 	GtkNotebook*	prefsnotebook;
 	GtkAlignment*	align;
 
-	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title((GtkWindow*)prefswin,"Preferences");
+	prefsWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_title((GtkWindow*)prefsWindow,"Preferences");
 	vbox=gtk_vbox_new(false,8);
 	hbox=gtk_hbox_new(false,8);
 
@@ -1375,8 +1402,8 @@ printf("doPrefs %i\n",(int)(long)data);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,2);
 
 //show it
-	gtk_container_add(GTK_CONTAINER(prefswin),(GtkWidget*)vbox);
-	gtk_widget_show_all(prefswin);
+	gtk_container_add(GTK_CONTAINER(prefsWindow),(GtkWidget*)vbox);
+	gtk_widget_show_all(prefsWindow);
 #endif
 }
 

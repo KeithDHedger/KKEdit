@@ -242,7 +242,7 @@ extern int				docWindowY;
 //#endif
 
 //prefs
-extern Widget*			prefswin;
+extern Widget*			prefsWindow;
 extern bool				indent;
 extern bool				lineNumbers;
 extern bool				lineWrap;
