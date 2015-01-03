@@ -6,8 +6,9 @@
 
 #include "kkedit-includes.h"
 
-#ifndef _USEQT5_
 #define TABLECOLS 2
+
+#ifndef _USEQT5_
 
 GtkWidget*		recent;
 GtkToolItem*	tool[18]={NULL,};
@@ -20,6 +21,8 @@ GtkWidget*		prefsWidgets[MAXPREFSWIDGETS];
 GtkObject*		prefsIntWidgets[MAXPREFSINTWIDGETS];
 
 #else
+QGridLayout*	table;
+QWidget*		prefsWidgets[MAXPREFSWIDGETS];
 //TODO//
 #endif
 
@@ -1124,6 +1127,11 @@ void makePrefsCheck(int widgnum,const char* label,const char* name,bool onoff,in
 	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[widgnum],onoff);
 	if(posx!=-1)
 		gtk_table_attach_defaults(table,prefsWidgets[widgnum],posx,posx+1,posy,posy+1);
+#else
+	prefsWidgets[widgnum]=new QCheckBox(label);
+	((QCheckBox*)prefsWidgets[widgnum])->setChecked(onoff);
+	if(posx!=-1)
+		table->addWidget(prefsWidgets[widgnum],posx,posy);
 #endif
 }
 
@@ -1132,7 +1140,7 @@ VISIBLE void doPrefs(Widget* widget,uPtr data)
 printf("doPrefs %i\n",(int)(long)data);
 
 #ifdef _USEQT5_
-	QVBoxLayout*		vbox;
+//	QVBoxLayout*		vbox;
 	QVBoxLayout*		mainvbox=new QVBoxLayout();
 	QHBoxLayout*		hbox=new QHBoxLayout;
 	QTabWidget*			prefsnotebook=new QTabWidget;
@@ -1144,18 +1152,55 @@ printf("doPrefs %i\n",(int)(long)data);
 
 //pages
 //page1
-	vbox=new QVBoxLayout();
-
-	button=new QPushButton("xxx");
+	table=new QGridLayout;
 	tab=new QWidget();
-	vbox->addWidget(button);
-	button=new QPushButton("zzz");
-	vbox->addWidget(button);
 
-	tab->setLayout(vbox);
-	
-	prefsnotebook->addTab(tab,"XXXXX");
-//	prefsnotebook->addTab((QWidget*)button,"XXXXX");
+//appearence 1
+//indent
+	makePrefsCheck(AUTOINDENT,gettext("Auto Indent Lines"),"indent",indent,0,0);
+//linenumbers
+	makePrefsCheck(SHOWNUMS,gettext("Show Line Numbers"),"show",lineNumbers,1,0);
+//wraplines
+	makePrefsCheck(WRAP,gettext("Wrap Lines"),"wrap",lineWrap,2,0);
+//highlite
+	makePrefsCheck(HIGHLIGHT,gettext("Highlight Current Line"),"high",highLight,3,0);
+//no syntax colour
+	makePrefsCheck(NOSYNTAX,gettext("No Syntax Highlighting"),"nosyntax",noSyntax,4,0);
+//single instance
+	makePrefsCheck(USESINGLE,gettext("Use Single Instance"),"single",singleUse,5,0);
+
+//auto save session
+	makePrefsCheck(AUTOSAVE,gettext("Auto Save/Restore Session"),"save",onExitSaveSession,6,0);
+//	g_signal_connect(G_OBJECT(prefsWidgets[AUTOSAVE]),"toggled",G_CALLBACK(setPrefs),(void*)prefsWidgets[AUTOSAVE]);
+//auto restore bookmarks
+	makePrefsCheck(AUTOBM,gettext("Restore Session Bookmarks"),"marks",restoreBookmarks,6,1);
+//	gtk_widget_set_sensitive(prefsWidgets[AUTOBM],onExitSaveSession);
+
+//no duplicates
+	makePrefsCheck(NODUPLICATE,gettext("Don't Open Duplicate File"),"duplicates",noDuplicates,7,0);
+//turn off warnings
+	makePrefsCheck(NOWARN,gettext("Don't Warn On File Change"),"warning",noWarnings,8,0);
+//do readlink
+	makePrefsCheck(READLINK,gettext("Read Link Before Opening File"),"readlink",readLinkFirst,9,0);
+//autoshow completion
+	makePrefsCheck(AUTOSHOW,gettext("Auto show Completions"),"autocomp",autoShowComps,10,0);
+
+	tab->setLayout(table);
+	prefsnotebook->addTab(tab,gettext("General Appearance"));
+
+//page2
+	table=new QGridLayout;
+	tab=new QWidget();
+
+	tab->setLayout(table);
+	prefsnotebook->addTab(tab,gettext("Text Style"));
+
+//page 3
+	table=new QGridLayout;
+	tab=new QWidget();
+
+	tab->setLayout(table);
+	prefsnotebook->addTab(tab,gettext("Administration"));
 
 	mainvbox->addWidget(prefsnotebook);
 	prefsWindow->setLayout(mainvbox);
