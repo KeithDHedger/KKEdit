@@ -1267,7 +1267,7 @@ printf("doPrefs %i\n",(int)(long)data);
 #endif
 //autoshow completion
 	makePrefsDial(COMPLETIONSIZE,gettext("Completion Minimum Word Size:"),"minautochars",autoShowMinChars,2,20,4);
-	
+
 //makePrefsSpacer(
 #if 0
 //sort functions
