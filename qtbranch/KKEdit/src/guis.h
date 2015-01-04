@@ -15,6 +15,7 @@ extern	GtkWidget*	prefsWidgets[MAXPREFSWIDGETS];
 extern	GtkObject*	prefsIntWidgets[MAXPREFSINTWIDGETS];
 #else
 extern	QWidget*	prefsWidgets[MAXPREFSWIDGETS];
+extern	QWidget*	prefsIntWidgets[MAXPREFSINTWIDGETS];
 #endif
 
 enum {STOCKMENU=0,IMAGEMENU,PIXMAPMENU,NORMALMENU};

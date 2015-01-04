@@ -23,6 +23,7 @@ GtkObject*		prefsIntWidgets[MAXPREFSINTWIDGETS];
 #else
 QGridLayout*	table;
 QWidget*		prefsWidgets[MAXPREFSWIDGETS];
+QWidget*		prefsIntWidgets[MAXPREFSINTWIDGETS];
 //TODO//
 #endif
 
@@ -1103,7 +1104,6 @@ void makePrefsDial(int widgnum,const char* label,const char* name,int value,int 
 {
 //TODO//
 #ifndef _USEQT5_
-
 	GtkAlignment*	align;
 	GtkWidget*		item;
 
@@ -1115,6 +1115,22 @@ void makePrefsDial(int widgnum,const char* label,const char* name,int value,int 
 	item=gtk_spin_button_new((GtkAdjustment*)prefsIntWidgets[widgnum],1,0);
 	gtk_widget_set_name(item,name);
 	gtk_table_attach_defaults(table,item,1,2,posy,posy+1);
+#else
+	QLabel*	widgetlabel;
+	prefsIntWidgets[widgnum]=new QSpinBox;
+	((QSpinBox*)prefsIntWidgets[widgnum])->setMaximum(maxvalue);
+	((QSpinBox*)prefsIntWidgets[widgnum])->setMinimum(minvalue);
+	((QSpinBox*)prefsIntWidgets[widgnum])->setValue(value);
+	widgetlabel=new QLabel(label);
+	table->addWidget(widgetlabel,posy,0,Qt::AlignTop);
+	table->addWidget(prefsIntWidgets[widgnum],posy,1,Qt::AlignTop);
+//	table->setRowStretch(posy,1);
+//	table->setColumnStretch(0,0);
+//	table->setColumnStretch(1,0);
+//	table->setSpacing(0);
+//	table->setAlignment(Qt::AlignTop);
+//	table->setSizePolicy(QSizePolicy::Minimum);
+//	prefsIntWidgets[widgnum]->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
 #endif
 }
 
@@ -1131,9 +1147,17 @@ void makePrefsCheck(int widgnum,const char* label,const char* name,bool onoff,in
 	prefsWidgets[widgnum]=new QCheckBox(label);
 	((QCheckBox*)prefsWidgets[widgnum])->setChecked(onoff);
 	if(posx!=-1)
-		table->addWidget(prefsWidgets[widgnum],posx,posy);
+		table->addWidget(prefsWidgets[widgnum],posy,posx,Qt::AlignTop);
 #endif
 }
+
+#ifdef _USEQT5_
+void makePrefsSpacer(int posy)
+{
+//	QSpacerItem *space=new QSpacerItem(0,0,QSizePolicy::Minimum,QSizePolicy::Minimum);
+//	table->addItem(space,posy,0,Qt::AlignTop);
+}
+#endif
 
 VISIBLE void doPrefs(Widget* widget,uPtr data)
 {
@@ -1159,31 +1183,31 @@ printf("doPrefs %i\n",(int)(long)data);
 //indent
 	makePrefsCheck(AUTOINDENT,gettext("Auto Indent Lines"),"indent",indent,0,0);
 //linenumbers
-	makePrefsCheck(SHOWNUMS,gettext("Show Line Numbers"),"show",lineNumbers,1,0);
+	makePrefsCheck(SHOWNUMS,gettext("Show Line Numbers"),"show",lineNumbers,0,1);
 //wraplines
-	makePrefsCheck(WRAP,gettext("Wrap Lines"),"wrap",lineWrap,2,0);
+	makePrefsCheck(WRAP,gettext("Wrap Lines"),"wrap",lineWrap,0,2);
 //highlite
-	makePrefsCheck(HIGHLIGHT,gettext("Highlight Current Line"),"high",highLight,3,0);
+	makePrefsCheck(HIGHLIGHT,gettext("Highlight Current Line"),"high",highLight,0,3);
 //no syntax colour
-	makePrefsCheck(NOSYNTAX,gettext("No Syntax Highlighting"),"nosyntax",noSyntax,4,0);
+	makePrefsCheck(NOSYNTAX,gettext("No Syntax Highlighting"),"nosyntax",noSyntax,0,4);
 //single instance
-	makePrefsCheck(USESINGLE,gettext("Use Single Instance"),"single",singleUse,5,0);
+	makePrefsCheck(USESINGLE,gettext("Use Single Instance"),"single",singleUse,0,5);
 
 //auto save session
-	makePrefsCheck(AUTOSAVE,gettext("Auto Save/Restore Session"),"save",onExitSaveSession,6,0);
+	makePrefsCheck(AUTOSAVE,gettext("Auto Save/Restore Session"),"save",onExitSaveSession,0,6);
 //	g_signal_connect(G_OBJECT(prefsWidgets[AUTOSAVE]),"toggled",G_CALLBACK(setPrefs),(void*)prefsWidgets[AUTOSAVE]);
 //auto restore bookmarks
-	makePrefsCheck(AUTOBM,gettext("Restore Session Bookmarks"),"marks",restoreBookmarks,6,1);
+	makePrefsCheck(AUTOBM,gettext("Restore Session Bookmarks"),"marks",restoreBookmarks,1,6);
 //	gtk_widget_set_sensitive(prefsWidgets[AUTOBM],onExitSaveSession);
 
 //no duplicates
-	makePrefsCheck(NODUPLICATE,gettext("Don't Open Duplicate File"),"duplicates",noDuplicates,7,0);
+	makePrefsCheck(NODUPLICATE,gettext("Don't Open Duplicate File"),"duplicates",noDuplicates,0,7);
 //turn off warnings
-	makePrefsCheck(NOWARN,gettext("Don't Warn On File Change"),"warning",noWarnings,8,0);
+	makePrefsCheck(NOWARN,gettext("Don't Warn On File Change"),"warning",noWarnings,0,8);
 //do readlink
-	makePrefsCheck(READLINK,gettext("Read Link Before Opening File"),"readlink",readLinkFirst,9,0);
+	makePrefsCheck(READLINK,gettext("Read Link Before Opening File"),"readlink",readLinkFirst,0,9);
 //autoshow completion
-	makePrefsCheck(AUTOSHOW,gettext("Auto show Completions"),"autocomp",autoShowComps,10,0);
+	makePrefsCheck(AUTOSHOW,gettext("Auto show Completions"),"autocomp",autoShowComps,0,10);
 
 	tab->setLayout(table);
 	prefsnotebook->addTab(tab,gettext("General Appearance"));
@@ -1191,7 +1215,90 @@ printf("doPrefs %i\n",(int)(long)data);
 //page2
 	table=new QGridLayout;
 	tab=new QWidget();
+//tab->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
 
+
+//tabwidth
+	makePrefsDial(TABWIDTH,gettext("Tab width:"),"tabs",tabWidth,2,64,0);
+
+#if 0
+//style
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	int cnt=0;
+	int foundname=0;
+	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(schemeManager);
+
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Theme:")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,1,2);
+
+	item=gtk_combo_box_text_new();
+	gtk_widget_set_name(item,"style");
+	g_signal_connect(G_OBJECT(item),"changed",G_CALLBACK(setPrefs),(void*)item);
+	
+	while(ids[cnt]!=NULL)
+	{
+		gtk_combo_box_text_append_text((GtkComboBoxText*)item,ids[cnt]);
+		if(strcmp(ids[cnt],styleName)==0)
+			foundname=cnt;
+		cnt++;
+	}
+	gtk_combo_box_set_active((GtkComboBox*)item,foundname);
+	gtk_table_attach_defaults(table,item,1,2,1,2);
+
+//font button
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Font:")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,2,3);
+
+	fontButton=gtk_font_button_new_with_font(fontAndSize);
+	gtk_widget_set_name(fontButton,"fontbutton");
+	gtk_table_attach_defaults(table,fontButton,1,2,2,3);
+
+//bm highlight colour
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Bookmark Highlight Colour:")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,3,4);
+
+	GdkColor color;
+	gdk_color_parse ((const gchar *)highlightColour,&color);
+	bmHighlightBox=gtk_color_button_new_with_color(&color);
+
+	gtk_table_attach_defaults(table,bmHighlightBox,1,2,3,4);
+#endif
+//autoshow completion
+	makePrefsDial(COMPLETIONSIZE,gettext("Completion Minimum Word Size:"),"minautochars",autoShowMinChars,2,20,4);
+	
+//makePrefsSpacer(
+#if 0
+//sort functions
+	align=(GtkAlignment*)gtk_alignment_new(0.5,1,0,0);
+
+	funcListDrop=gtk_combo_box_text_new();
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and alphabetically"));
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and file position"));
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by file position"));
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu alphabetically"));
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu in categorised format"));
+
+	gtk_combo_box_set_active((GtkComboBox*)funcListDrop,listFunction);
+	gtk_container_add(GTK_CONTAINER(align),(GtkWidget*)funcListDrop);
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,16);
+
+	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("Text Style")));
+
+//show keybindings dialog
+	align=(GtkAlignment*)gtk_alignment_new(0.5,1,0,0);
+	item=gtk_button_new_with_label(gettext("Customize Keyboard Shortcuts"));
+	gtk_widget_set_name(item,"makekeys");
+	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
+	gtk_container_add(GTK_CONTAINER(align),item);
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,0);
+//end style
+#endif
+	QSpacerItem *space=new QSpacerItem(0,0,QSizePolicy::Maximum,QSizePolicy::Maximum);
+
+	table->addItem(space,5,0,100,-1);
+//	tab->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
 	tab->setLayout(table);
 	prefsnotebook->addTab(tab,gettext("Text Style"));
 
