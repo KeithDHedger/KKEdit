@@ -1221,6 +1221,10 @@ printf("doPrefs %i\n",(int)(long)data);
 //tabwidth
 	makePrefsDial(TABWIDTH,gettext("Tab width:"),"tabs",tabWidth,2,64,0);
 
+
+	QComboBox*	combo;
+	combo=new QComboBox;
+	table->addWidget(combo,1,1,Qt::AlignTop);	
 #if 0
 //style
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
