@@ -1122,15 +1122,8 @@ void makePrefsDial(int widgnum,const char* label,const char* name,int value,int 
 	((QSpinBox*)prefsIntWidgets[widgnum])->setMinimum(minvalue);
 	((QSpinBox*)prefsIntWidgets[widgnum])->setValue(value);
 	widgetlabel=new QLabel(label);
-	table->addWidget(widgetlabel,posy,0,Qt::AlignTop);
-	table->addWidget(prefsIntWidgets[widgnum],posy,1,Qt::AlignTop);
-//	table->setRowStretch(posy,1);
-//	table->setColumnStretch(0,0);
-//	table->setColumnStretch(1,0);
-//	table->setSpacing(0);
-//	table->setAlignment(Qt::AlignTop);
-//	table->setSizePolicy(QSizePolicy::Minimum);
-//	prefsIntWidgets[widgnum]->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
+	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
+	table->addWidget(prefsIntWidgets[widgnum],posy,1,1,-1,Qt::AlignVCenter);
 #endif
 }
 
@@ -1151,26 +1144,18 @@ void makePrefsCheck(int widgnum,const char* label,const char* name,bool onoff,in
 #endif
 }
 
-#ifdef _USEQT5_
-void makePrefsSpacer(int posy)
-{
-//	QSpacerItem *space=new QSpacerItem(0,0,QSizePolicy::Minimum,QSizePolicy::Minimum);
-//	table->addItem(space,posy,0,Qt::AlignTop);
-}
-#endif
-
 VISIBLE void doPrefs(Widget* widget,uPtr data)
 {
 printf("doPrefs %i\n",(int)(long)data);
 
 #ifdef _USEQT5_
-//	QVBoxLayout*		vbox;
 	QVBoxLayout*		mainvbox=new QVBoxLayout();
 	QHBoxLayout*		hbox=new QHBoxLayout;
 	QTabWidget*			prefsnotebook=new QTabWidget;
 	QWidget*			button;
 	QWidget*			tab;
 	QLabel				*widgetlabel;
+	int					posy;
 
 	prefsWindow=new QDialog(mainWindow);
 	prefsWindow->setWindowTitle("Preferences");
@@ -1216,97 +1201,75 @@ printf("doPrefs %i\n",(int)(long)data);
 //page2
 	table=new QGridLayout;
 	tab=new QWidget();
-//tab->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
-
 
 //tabwidth
-	makePrefsDial(TABWIDTH,gettext("Tab width:"),"tabs",tabWidth,2,64,0);
+	posy=0;
+	makePrefsDial(TABWIDTH,gettext("Tab width:"),"tabs",tabWidth,2,64,posy);
 
-
+//TODO//
+//style
+	posy++;
 	QComboBox*	combo;
 	combo=new QComboBox;
 	widgetlabel=new QLabel(gettext("Theme:"));
-	table->addWidget(widgetlabel,1,0,Qt::AlignTop);
-	table->addWidget(combo,1,1,Qt::AlignTop);	
-#if 0
-//style
-	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-	int cnt=0;
-	int foundname=0;
-	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(schemeManager);
-
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Theme:")));
-	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,1,2);
-
-	item=gtk_combo_box_text_new();
-	gtk_widget_set_name(item,"style");
-	g_signal_connect(G_OBJECT(item),"changed",G_CALLBACK(setPrefs),(void*)item);
-	
-	while(ids[cnt]!=NULL)
-	{
-		gtk_combo_box_text_append_text((GtkComboBoxText*)item,ids[cnt]);
-		if(strcmp(ids[cnt],styleName)==0)
-			foundname=cnt;
-		cnt++;
-	}
-	gtk_combo_box_set_active((GtkComboBox*)item,foundname);
-	gtk_table_attach_defaults(table,item,1,2,1,2);
+	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
+	table->addWidget(combo,posy,1,posy,-1,Qt::AlignVCenter);
 
 //font button
-	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Font:")));
-	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,2,3);
+	posy++;
+	QFontComboBox*	fontcombo;
+	fontcombo=new QFontComboBox;
+	widgetlabel=new QLabel(gettext("Font:"));
+	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
+	table->addWidget(fontcombo,posy,1,Qt::AlignVCenter);
 
-	fontButton=gtk_font_button_new_with_font(fontAndSize);
-	gtk_widget_set_name(fontButton,"fontbutton");
-	gtk_table_attach_defaults(table,fontButton,1,2,2,3);
+	combo=new QComboBox;
+    combo->setEditable(true);
+
+    QFontDatabase db;
+    foreach(int size, db.standardSizes())
+        combo->addItem(QString::number(size));
+
+	table->addWidget(combo,posy,2,Qt::AlignVCenter);
 
 //bm highlight colour
-	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Bookmark Highlight Colour:")));
-	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,3,4);
+	posy++;
+    widgetlabel = new QLabel(gettext("Bookmark Highlight Colour:"));
+    QLabel	*colorLabel = new QLabel(gettext(" "));
+ int frameStyle = QFrame::Sunken | QFrame::Panel;
+    colorLabel->setFrameStyle(frameStyle);
+    QPushButton *colorButton = new QPushButton(" ");
+	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
+	table->addWidget(colorLabel,posy,1,Qt::AlignVCenter);
+	table->addWidget(colorButton,posy,2,Qt::AlignVCenter);
 
-	GdkColor color;
-	gdk_color_parse ((const gchar *)highlightColour,&color);
-	bmHighlightBox=gtk_color_button_new_with_color(&color);
-
-	gtk_table_attach_defaults(table,bmHighlightBox,1,2,3,4);
-#endif
 //autoshow completion
-	makePrefsDial(COMPLETIONSIZE,gettext("Completion Minimum Word Size:"),"minautochars",autoShowMinChars,2,20,4);
+	posy++;
+	makePrefsDial(COMPLETIONSIZE,gettext("Completion Minimum Word Size:"),"minautochars",autoShowMinChars,2,20,posy);
 
-//makePrefsSpacer(
-#if 0
 //sort functions
-	align=(GtkAlignment*)gtk_alignment_new(0.5,1,0,0);
-
-	funcListDrop=gtk_combo_box_text_new();
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and alphabetically"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and file position"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by file position"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu alphabetically"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu in categorised format"));
-
-	gtk_combo_box_set_active((GtkComboBox*)funcListDrop,listFunction);
-	gtk_container_add(GTK_CONTAINER(align),(GtkWidget*)funcListDrop);
-	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,16);
-
-	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("Text Style")));
+	posy++;
+	combo=new QComboBox;
+	combo->addItem(gettext("Display functions etc in menu by type and alphabetically"));
+	combo->addItem(gettext("Display functions etc in menu by type and file position"));
+	combo->addItem(gettext("Display functions etc in menu by file position"));
+	combo->addItem(gettext("Display functions etc in menu alphabetically"));
+	combo->addItem(gettext("Display functions etc in menu in categorised format"));
+	combo->setCurrentIndex(listFunction);
+	table->addWidget(combo,posy,0,1,-1);
 
 //show keybindings dialog
-	align=(GtkAlignment*)gtk_alignment_new(0.5,1,0,0);
-	item=gtk_button_new_with_label(gettext("Customize Keyboard Shortcuts"));
-	gtk_widget_set_name(item,"makekeys");
-	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
-	gtk_container_add(GTK_CONTAINER(align),item);
-	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,0);
-//end style
-#endif
+	posy++;
+    button = new QPushButton(gettext("Customize Keyboard Shortcuts"));
+	table->addWidget(button,posy,0,Qt::AlignVCenter);
+	
 	QSpacerItem *space=new QSpacerItem(0,0,QSizePolicy::Maximum,QSizePolicy::Maximum);
+	posy++;
+	table->addItem(space,posy,0,100,-1);
 
-	table->addItem(space,5,0,100,-1);
-//	tab->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+	table->setColumnStretch(1,1);
 	tab->setLayout(table);
+
 	prefsnotebook->addTab(tab,gettext("Text Style"));
 
 //page 3
