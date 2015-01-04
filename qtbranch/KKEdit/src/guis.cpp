@@ -1170,6 +1170,7 @@ printf("doPrefs %i\n",(int)(long)data);
 	QTabWidget*			prefsnotebook=new QTabWidget;
 	QWidget*			button;
 	QWidget*			tab;
+	QLabel				*widgetlabel;
 
 	prefsWindow=new QDialog(mainWindow);
 	prefsWindow->setWindowTitle("Preferences");
@@ -1224,6 +1225,8 @@ printf("doPrefs %i\n",(int)(long)data);
 
 	QComboBox*	combo;
 	combo=new QComboBox;
+	widgetlabel=new QLabel(gettext("Theme:"));
+	table->addWidget(widgetlabel,1,0,Qt::AlignTop);
 	table->addWidget(combo,1,1,Qt::AlignTop);	
 #if 0
 //style
