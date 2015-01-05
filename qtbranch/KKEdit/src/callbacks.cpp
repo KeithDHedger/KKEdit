@@ -1890,6 +1890,8 @@ void setPrefs(void)
 #ifdef _USEQT5_
 printf("set prefs\n");
 	QString str;
+	char	*fontname;
+	char	*fontsize;
 //page 1
 	indent=((QCheckBox*)prefsWidgets[AUTOINDENT])->isChecked();
 	lineNumbers=((QCheckBox*)prefsWidgets[SHOWNUMS])->isChecked();
@@ -1907,8 +1909,14 @@ printf("set prefs\n");
 //page 2
 	tabWidth=((QSpinBox*)prefsIntWidgets[TABWIDTH])->value();
 //	styleName //TODO//
-//fontAndSize //TODO//
-printf("%s\n",fontAndSize);
+	debugFree(&fontAndSize,"setPrefs fontAndSize");
+	str=((QComboBox*)prefsOtherWidgets[FONTNAMECOMBO])->currentText();
+	fontname=toCharStar(&str);
+	str=((QComboBox*)prefsOtherWidgets[FONTSIZECOMBO])->currentText();
+	fontsize=toCharStar(&str);
+	asprintf(&fontAndSize,"%s %s",fontname,fontsize);
+	free(fontname);
+	free(fontsize);
 	debugFree(&highlightColour,"setPrefs highlightColour");
 	str=((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->text();
 	highlightColour=toCharStar(&str);

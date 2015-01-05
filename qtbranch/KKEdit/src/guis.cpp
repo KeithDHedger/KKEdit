@@ -1258,32 +1258,16 @@ printf("doPrefs %i\n",(int)(long)data);
 	int				foundsize=0;
 	char			fontname[256];
 	int				fontsize;
-	QString			str;
-	char*			striped;
+	const char*		stripped;
+
 	sscanf(fontAndSize,"%[^0-9]s",fontname);
 	fontsize=atoi(strrchr(fontAndSize,' '));
-	striped=g_strstrip(fontname);
-//	printf(">%s<\n",striped);
-//
-//	for(int j=0;j<((QComboBox*)prefsOtherWidgets[FONTNAMECOMBO])->count();j++)
-//		{
-//			str=((QComboBox*)prefsOtherWidgets[FONTNAMECOMBO])->itemText(j);
-//			rootCommand=toCharStar(&str);
-//			//striped=g_strchomp(rootCommand);
-//			printf(">%s<n",rootCommand);
-//			if(strcmp(rootCommand,striped)==0)
-//				{
-//					printf("found %s %in",striped,j);
-//					foundsize=j;
-//					break;
-//				}
-//		}
-	foundsize=((QComboBox*)prefsOtherWidgets[FONTNAMECOMBO])->findText(QString(striped),0);
+	stripped=g_strstrip(fontname);
+	foundsize=((QComboBox*)prefsOtherWidgets[FONTNAMECOMBO])->findText(QString(stripped),0);
 	((QComboBox*)prefsOtherWidgets[FONTNAMECOMBO])->setCurrentIndex(foundsize);
 
 	prefsOtherWidgets[FONTSIZECOMBO]=new QComboBox;
     ((QComboBox*)prefsOtherWidgets[FONTSIZECOMBO])->setEditable(true);
-
 
     QFontDatabase db;
 	comboindex=0;
