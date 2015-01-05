@@ -33,4 +33,8 @@ void buildGtkDocViewer(void);
 #endif
 void setUpToolBar(void);
 char* makeToolBarList(void);
+#ifdef _USEQT5_
+void cancelPrefs(void);
+#endif
+
 #endif

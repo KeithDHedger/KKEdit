@@ -1164,6 +1164,14 @@ void setColor()
 }
 #endif
 
+#ifdef _USEQT5_
+void cancelPrefs(void)
+{
+	prefsWindow->hide();
+	delete prefsWindow;
+}
+#endif
+
 VISIBLE void doPrefs(Widget* widget,uPtr data)
 {
 printf("doPrefs %i\n",(int)(long)data);
@@ -1265,7 +1273,7 @@ printf("doPrefs %i\n",(int)(long)data);
 	posy++;
     widgetlabel = new QLabel(gettext("Bookmark Highlight Colour:"));
 	prefsOtherWidgets[BMHIGHLIGHTCOLOUR]=new QLabel(highlightColour);
-	int frameStyle = QFrame::Sunken | QFrame::Panel;
+	int frameStyle = QFrame::Raised | QFrame::Panel;
     ((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setFrameStyle(frameStyle);
     QPushButton *colorButton = new QPushButton("Set Colour");
 	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
@@ -1376,6 +1384,65 @@ printf("doPrefs %i\n",(int)(long)data);
 	prefsnotebook->addTab(tab,gettext("Administration"));
 
 	mainvbox->addWidget(prefsnotebook);
+//nag
+	posy++;
+    widgetlabel=new QLabel(gettext("<b>Be Kind To Poor Programmers</b>"));
+
+	hbox=new QHBoxLayout;
+    hbox->addStretch(1);
+	hbox->addWidget(widgetlabel);
+	hbox->addStretch(1);
+	mainvbox->addLayout(hbox,0);
+
+	makePrefsCheck(BEKIND,gettext("I have donated"),"useplugmenu",nagScreen,-1,-1);
+	hbox=new QHBoxLayout;
+    hbox->addStretch(1);
+	hbox->addWidget(prefsWidgets[BEKIND]);
+	hbox->addStretch(1);
+	mainvbox->addLayout(hbox,0);
+
+    widgetlabel=new QLabel(gettext("I have really donated some some money to the author.\nMy conscience is clear and my Karma is squeaky clean :)"));
+	hbox=new QHBoxLayout;
+    hbox->addStretch(1);
+	hbox->addWidget(widgetlabel);
+	hbox->addStretch(1);
+	mainvbox->addLayout(hbox,0);
+ 
+    widgetlabel=new QLabel;
+    frameStyle=QFrame::Sunken | QFrame::HLine;
+	widgetlabel->setFrameStyle(frameStyle);
+	mainvbox->addWidget(widgetlabel);
+
+//buttons
+	hbox=new QHBoxLayout;
+	hbox->addStretch(1);
+	button=new QPushButton(gettext("Apply"));
+	QObject::connect(((QPushButton*)button),&QPushButton::clicked,setPrefs);
+	hbox->addWidget(button);
+	hbox->addStretch(1);
+	button=new QPushButton(gettext("Cancel"));
+	QObject::connect(((QPushButton*)button),&QPushButton::clicked,cancelPrefs);
+	hbox->addWidget(button);
+	hbox->addStretch(1);
+	mainvbox->addLayout(hbox);
+
+	
+/*
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
+
+	hbox=gtk_hbox_new(true,4);
+	item=gtk_button_new_from_stock(GTK_STOCK_APPLY);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
+	gtk_widget_set_name(item,"apply");
+	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setPrefs),(void*)item);	
+
+	item=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
+	gtk_widget_set_name(item,"cancel");
+	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setPrefs),(void*)item);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,2);
+
+*/
 	prefsWindow->setLayout(mainvbox);
 
 	prefsWindow->setWindowModality(Qt::WindowModal);

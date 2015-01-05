@@ -1887,7 +1887,26 @@ void setPrefs(GtkWidget* widget,gpointer data)
 void setPrefs(void)
 #endif
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+printf("set prefs\n");
+
+	indent=((QCheckBox*)prefsWidgets[AUTOINDENT])->isChecked();
+	lineNumbers=((QCheckBox*)prefsWidgets[SHOWNUMS])->isChecked();
+	lineWrap=((QCheckBox*)prefsWidgets[WRAP])->isChecked();
+	highLight=((QCheckBox*)prefsWidgets[HIGHLIGHT])->isChecked();
+	noSyntax=((QCheckBox*)prefsWidgets[NOSYNTAX])->isChecked();
+	singleUse=((QCheckBox*)prefsWidgets[USESINGLE])->isChecked();
+	onExitSaveSession=((QCheckBox*)prefsWidgets[AUTOSAVE])->isChecked();
+	restoreBookmarks=((QCheckBox*)prefsWidgets[AUTOBM])->isChecked();
+	noDuplicates=((QCheckBox*)prefsWidgets[NODUPLICATE])->isChecked();
+	noWarnings=((QCheckBox*)prefsWidgets[NOWARN])->isChecked();
+	readLinkFirst=((QCheckBox*)prefsWidgets[READLINK])->isChecked();
+	autoShowComps=((QCheckBox*)prefsWidgets[AUTOSHOW])->isChecked();
+
+	cancelPrefs();
+
+
+#else
 	pageStruct*	tpage=getDocumentData(-1);
 	bool*		bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&restoreBookmarks,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen,&useGlobalPlugMenu};
 	unsigned int*		ints[MAXPREFSINTWIDGETS]={&maxTabChars,&maxFRHistory,&depth,&autoShowMinChars,&tabWidth,&maxFuncDefs,&maxBMChars};
