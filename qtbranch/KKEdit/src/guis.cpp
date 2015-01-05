@@ -21,9 +21,10 @@ GtkWidget*		prefsWidgets[MAXPREFSWIDGETS];
 GtkObject*		prefsIntWidgets[MAXPREFSINTWIDGETS];
 
 #else
-QGridLayout*	table;
-QWidget*		prefsWidgets[MAXPREFSWIDGETS];
-QWidget*		prefsIntWidgets[MAXPREFSINTWIDGETS];
+QGridLayout		*table;
+QWidget			*prefsWidgets[MAXPREFSWIDGETS];
+QWidget			*prefsIntWidgets[MAXPREFSINTWIDGETS];
+QWidget			*prefsOtherWidgets[MAXPREFSOTHERWIDGETS];
 //TODO//
 #endif
 
@@ -1209,39 +1210,41 @@ printf("doPrefs %i\n",(int)(long)data);
 //TODO//
 //style
 	posy++;
-	QComboBox*	combo;
-	combo=new QComboBox;
+	prefsOtherWidgets[THEMECOMBO]=new QComboBox;
 	widgetlabel=new QLabel(gettext("Theme:"));
 	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
-	table->addWidget(combo,posy,1,posy,-1,Qt::AlignVCenter);
+	table->addWidget(prefsOtherWidgets[THEMECOMBO],posy,1,posy,-1,Qt::AlignVCenter);
 
 //font button
 	posy++;
-	QFontComboBox*	fontcombo;
-	fontcombo=new QFontComboBox;
+	prefsOtherWidgets[FONTNAMECOMBO]=new QFontComboBox;
 	widgetlabel=new QLabel(gettext("Font:"));
 	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
-	table->addWidget(fontcombo,posy,1,Qt::AlignVCenter);
+	table->addWidget(prefsOtherWidgets[FONTNAMECOMBO],posy,1,Qt::AlignVCenter);
 
-	combo=new QComboBox;
-    combo->setEditable(true);
+	prefsOtherWidgets[FONTSIZECOMBO]=new QComboBox;
+    ((QComboBox*)prefsOtherWidgets[FONTSIZECOMBO])->setEditable(true);
 
     QFontDatabase db;
     foreach(int size, db.standardSizes())
-        combo->addItem(QString::number(size));
+        ((QComboBox*)prefsOtherWidgets[FONTSIZECOMBO])->addItem(QString::number(size));
 
-	table->addWidget(combo,posy,2,Qt::AlignVCenter);
+	table->addWidget(prefsOtherWidgets[FONTSIZECOMBO],posy,2,Qt::AlignVCenter);
 
 //bm highlight colour
 	posy++;
     widgetlabel = new QLabel(gettext("Bookmark Highlight Colour:"));
-    QLabel	*colorLabel = new QLabel(gettext(" "));
- int frameStyle = QFrame::Sunken | QFrame::Panel;
-    colorLabel->setFrameStyle(frameStyle);
-    QPushButton *colorButton = new QPushButton(" ");
+	prefsOtherWidgets[BMHIGHLIGHTCOLOUR]=new QLabel(highlightColour);
+	int frameStyle = QFrame::Sunken | QFrame::Panel;
+    ((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setFrameStyle(frameStyle);
+    QPushButton *colorButton = new QPushButton("Set Colour");
 	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
-	table->addWidget(colorLabel,posy,1,Qt::AlignVCenter);
+	table->addWidget(prefsOtherWidgets[BMHIGHLIGHTCOLOUR],posy,1,Qt::AlignVCenter);
 	table->addWidget(colorButton,posy,2,Qt::AlignVCenter);
+
+	QColor color=QColor(highlightColour);
+	((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setPalette(QPalette(color));
+	((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setAutoFillBackground(true);
 
 //autoshow completion
 	posy++;
@@ -1249,19 +1252,30 @@ printf("doPrefs %i\n",(int)(long)data);
 
 //sort functions
 	posy++;
-	combo=new QComboBox;
-	combo->addItem(gettext("Display functions etc in menu by type and alphabetically"));
-	combo->addItem(gettext("Display functions etc in menu by type and file position"));
-	combo->addItem(gettext("Display functions etc in menu by file position"));
-	combo->addItem(gettext("Display functions etc in menu alphabetically"));
-	combo->addItem(gettext("Display functions etc in menu in categorised format"));
-	combo->setCurrentIndex(listFunction);
-	table->addWidget(combo,posy,0,1,-1);
+	prefsOtherWidgets[FUNCTIONCOMBO]=new QComboBox;
+	((QComboBox*)prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu by type and alphabetically"));
+	((QComboBox*)prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu by type and file position"));
+	((QComboBox*)prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu by file position"));
+	((QComboBox*)prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu alphabetically"));
+	((QComboBox*)prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu in categorised format"));
+	((QComboBox*)prefsOtherWidgets[FUNCTIONCOMBO])->setCurrentIndex(listFunction);
+
+	hbox=new QHBoxLayout;
+    hbox->addStretch(1);
+	hbox->addWidget(prefsOtherWidgets[FUNCTIONCOMBO]);
+	hbox->setStretch(1,2);
+	hbox->addStretch(1);
+	table->addLayout(hbox,posy,0,1,-1);
 
 //show keybindings dialog
 	posy++;
+	hbox=new QHBoxLayout;
     button = new QPushButton(gettext("Customize Keyboard Shortcuts"));
-	table->addWidget(button,posy,0,Qt::AlignVCenter);
+	hbox->addStretch(1);
+	hbox->addWidget(button);
+	hbox->setStretch(1,2);
+	hbox->addStretch(1);
+	table->addLayout(hbox,posy,0,1,-1,Qt::AlignVCenter);
 	
 	QSpacerItem *space=new QSpacerItem(0,0,QSizePolicy::Maximum,QSizePolicy::Maximum);
 	posy++;
