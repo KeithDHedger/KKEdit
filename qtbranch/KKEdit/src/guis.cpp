@@ -1145,6 +1145,25 @@ void makePrefsCheck(int widgnum,const char* label,const char* name,bool onoff,in
 #endif
 }
 
+#ifdef _USEQT5_
+void setColor()
+{
+	QString	str;
+	QByteArray ba;
+	const QColor color=QColorDialog::getColor(QColor(highlightColour),0,"Select Color",0);
+	if(color.isValid())
+		{
+			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setPalette(QPalette(color));
+			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setAutoFillBackground(true);
+			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setText(color.name());
+			debugFree(&highlightColour,"setColor highlightColour");
+			str=color.name();
+			ba=str.toLocal8Bit();
+			highlightColour=strdup(ba.data());
+		}
+}
+#endif
+
 VISIBLE void doPrefs(Widget* widget,uPtr data)
 {
 printf("doPrefs %i\n",(int)(long)data);
@@ -1168,33 +1187,44 @@ printf("doPrefs %i\n",(int)(long)data);
 
 //appearence 1
 //indent
-	makePrefsCheck(AUTOINDENT,gettext("Auto Indent Lines"),"indent",indent,0,0);
+	posy++;
+	makePrefsCheck(AUTOINDENT,gettext("Auto Indent Lines"),"indent",indent,0,posy);
 //linenumbers
-	makePrefsCheck(SHOWNUMS,gettext("Show Line Numbers"),"show",lineNumbers,0,1);
+	posy++;
+	makePrefsCheck(SHOWNUMS,gettext("Show Line Numbers"),"show",lineNumbers,0,posy);
 //wraplines
-	makePrefsCheck(WRAP,gettext("Wrap Lines"),"wrap",lineWrap,0,2);
+	posy++;
+	makePrefsCheck(WRAP,gettext("Wrap Lines"),"wrap",lineWrap,0,posy);
 //highlite
-	makePrefsCheck(HIGHLIGHT,gettext("Highlight Current Line"),"high",highLight,0,3);
+	posy++;
+	makePrefsCheck(HIGHLIGHT,gettext("Highlight Current Line"),"high",highLight,0,posy);
 //no syntax colour
-	makePrefsCheck(NOSYNTAX,gettext("No Syntax Highlighting"),"nosyntax",noSyntax,0,4);
+	posy++;
+	makePrefsCheck(NOSYNTAX,gettext("No Syntax Highlighting"),"nosyntax",noSyntax,0,posy);
 //single instance
-	makePrefsCheck(USESINGLE,gettext("Use Single Instance"),"single",singleUse,0,5);
+	posy++;
+	makePrefsCheck(USESINGLE,gettext("Use Single Instance"),"single",singleUse,0,posy);
 
 //auto save session
-	makePrefsCheck(AUTOSAVE,gettext("Auto Save/Restore Session"),"save",onExitSaveSession,0,6);
+	posy++;
+	makePrefsCheck(AUTOSAVE,gettext("Auto Save/Restore Session"),"save",onExitSaveSession,0,posy);
 //	g_signal_connect(G_OBJECT(prefsWidgets[AUTOSAVE]),"toggled",G_CALLBACK(setPrefs),(void*)prefsWidgets[AUTOSAVE]);
 //auto restore bookmarks
-	makePrefsCheck(AUTOBM,gettext("Restore Session Bookmarks"),"marks",restoreBookmarks,1,6);
+	makePrefsCheck(AUTOBM,gettext("Restore Session Bookmarks"),"marks",restoreBookmarks,1,posy);
 //	gtk_widget_set_sensitive(prefsWidgets[AUTOBM],onExitSaveSession);
 
 //no duplicates
-	makePrefsCheck(NODUPLICATE,gettext("Don't Open Duplicate File"),"duplicates",noDuplicates,0,7);
+	posy++;
+	makePrefsCheck(NODUPLICATE,gettext("Don't Open Duplicate File"),"duplicates",noDuplicates,0,posy);
 //turn off warnings
-	makePrefsCheck(NOWARN,gettext("Don't Warn On File Change"),"warning",noWarnings,0,8);
+	posy++;
+	makePrefsCheck(NOWARN,gettext("Don't Warn On File Change"),"warning",noWarnings,0,posy);
 //do readlink
-	makePrefsCheck(READLINK,gettext("Read Link Before Opening File"),"readlink",readLinkFirst,0,9);
+	posy++;
+	makePrefsCheck(READLINK,gettext("Read Link Before Opening File"),"readlink",readLinkFirst,0,posy);
 //autoshow completion
-	makePrefsCheck(AUTOSHOW,gettext("Auto show Completions"),"autocomp",autoShowComps,0,10);
+	posy++;
+	makePrefsCheck(AUTOSHOW,gettext("Auto show Completions"),"autocomp",autoShowComps,0,posy);
 
 	tab->setLayout(table);
 	prefsnotebook->addTab(tab,gettext("General Appearance"));
@@ -1245,7 +1275,7 @@ printf("doPrefs %i\n",(int)(long)data);
 	QColor color=QColor(highlightColour);
 	((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setPalette(QPalette(color));
 	((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setAutoFillBackground(true);
-
+	QObject::connect(((QPushButton*)colorButton),&QPushButton::clicked,setColor);
 //autoshow completion
 	posy++;
 	makePrefsDial(COMPLETIONSIZE,gettext("Completion Minimum Word Size:"),"minautochars",autoShowMinChars,2,20,posy);
