@@ -1346,6 +1346,14 @@ void doBusy(bool busy,pageStruct* page)
 #endif
 }
 
-
+#ifdef _USEQT5_
+char* toCharStar(QString *str)
+{
+	QByteArray ba;
+	ba=str->toLocal8Bit();
+	return(strdup(ba.data()));
+}
+#endif
+ 
 
 

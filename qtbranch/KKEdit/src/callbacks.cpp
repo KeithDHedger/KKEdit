@@ -1889,7 +1889,7 @@ void setPrefs(void)
 {
 #ifdef _USEQT5_
 printf("set prefs\n");
-
+//page 1
 	indent=((QCheckBox*)prefsWidgets[AUTOINDENT])->isChecked();
 	lineNumbers=((QCheckBox*)prefsWidgets[SHOWNUMS])->isChecked();
 	lineWrap=((QCheckBox*)prefsWidgets[WRAP])->isChecked();
@@ -1902,6 +1902,14 @@ printf("set prefs\n");
 	noWarnings=((QCheckBox*)prefsWidgets[NOWARN])->isChecked();
 	readLinkFirst=((QCheckBox*)prefsWidgets[READLINK])->isChecked();
 	autoShowComps=((QCheckBox*)prefsWidgets[AUTOSHOW])->isChecked();
+
+//page 2
+	tabWidth=((QSpinBox*)prefsIntWidgets[TABWIDTH])->value();
+//	styleName //TODO//
+//fontAndSize //TODO//
+	debugFree(&highlightColour,"setPrefs highlightColour");
+	QString str=((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->text();
+	highlightColour=toCharStar(&str);
 
 	cancelPrefs();
 

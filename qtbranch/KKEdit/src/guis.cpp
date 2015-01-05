@@ -1148,18 +1148,18 @@ void makePrefsCheck(int widgnum,const char* label,const char* name,bool onoff,in
 #ifdef _USEQT5_
 void setColor()
 {
-	QString	str;
-	QByteArray ba;
-	const QColor color=QColorDialog::getColor(QColor(highlightColour),0,"Select Color",0);
-	if(color.isValid())
+//	QString	str;
+//	QByteArray ba;
+	const QColor colour=QColorDialog::getColor(QColor(highlightColour),0,"Select Color",0);
+	if(colour.isValid())
 		{
-			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setPalette(QPalette(color));
+			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setPalette(QPalette(colour));
 			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setAutoFillBackground(true);
-			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setText(color.name());
-			debugFree(&highlightColour,"setColor highlightColour");
-			str=color.name();
-			ba=str.toLocal8Bit();
-			highlightColour=strdup(ba.data());
+			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setText(colour.name());
+//			debugFree(&highlightColour,"setColor highlightColour");
+//			str=color.name();
+//			ba=str.toLocal8Bit();
+//			highlightColour=strdup(ba.data());
 		}
 }
 #endif
@@ -1426,23 +1426,6 @@ printf("doPrefs %i\n",(int)(long)data);
 	hbox->addStretch(1);
 	mainvbox->addLayout(hbox);
 
-	
-/*
-	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
-
-	hbox=gtk_hbox_new(true,4);
-	item=gtk_button_new_from_stock(GTK_STOCK_APPLY);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
-	gtk_widget_set_name(item,"apply");
-	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setPrefs),(void*)item);	
-
-	item=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
-	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
-	gtk_widget_set_name(item,"cancel");
-	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setPrefs),(void*)item);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,2);
-
-*/
 	prefsWindow->setLayout(mainvbox);
 
 	prefsWindow->setWindowModality(Qt::WindowModal);
