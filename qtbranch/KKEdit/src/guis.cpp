@@ -1187,7 +1187,7 @@ printf("doPrefs %i\n",(int)(long)data);
 
 //appearence 1
 //indent
-	posy++;
+	posy=0;
 	makePrefsCheck(AUTOINDENT,gettext("Auto Indent Lines"),"indent",indent,0,posy);
 //linenumbers
 	posy++;
@@ -1317,71 +1317,60 @@ printf("doPrefs %i\n",(int)(long)data);
 	prefsnotebook->addTab(tab,gettext("Text Style"));
 
 //page 3
-/*
 //admin
-	table=(GtkTable*)gtk_table_new(10,TABLECOLS,true);
-	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-
-//function search depth
-	makePrefsDial(MAXFUNCDEPTH,gettext("Tag File Search Depth:"),"depth",depth,0,20,0);
-
-//terminalcommand
-	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Terminal Command:")));
-	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,1,2);
-
-	terminalBox=gtk_entry_new();
-	gtk_entry_set_text((GtkEntry*)terminalBox,terminalCommand);
-	gtk_table_attach_defaults(table,terminalBox,1,2,1,2);
-
-//root command
-	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Run As Root Command:")));
-	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,2,3);
-
-	rootCommandBox=gtk_entry_new();
-	if(rootCommand!=NULL)
-		gtk_entry_set_text((GtkEntry*)rootCommandBox,rootCommand);
-	gtk_table_attach_defaults(table,rootCommandBox,1,2,2,3);
-
-//set default browser
-	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
-	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Default Browser:")));
-	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,3,4);
-
-	defaultBrowserBox=gtk_entry_new();
-	gtk_widget_set_name(defaultBrowserBox,"defaultbrowser");
-	if(browserCommand!=NULL)
-		gtk_entry_set_text((GtkEntry*)defaultBrowserBox,browserCommand);
-	gtk_table_attach_defaults(table,defaultBrowserBox,1,2,3,4);
-
-//find replace history max
-	makePrefsDial(MAXHISTORY,gettext("Max Find/Replace History:"),"maxfrhistory",maxFRHistory,0,MAXTEXTWIDTH,4);
-//max tab label width
-	makePrefsDial(MAXTABCHARS,gettext("Max Characters In Tab:"),"maxtabchars",maxTabChars,5,MAXTEXTWIDTH,5);
-//max function strings
-	makePrefsDial(MENUWIDTH,gettext("Max Characters In Function Defs:"),"maxmenuchars",maxFuncDefs,5,MAXTEXTWIDTH,6);
-//max bookmark strings
-	makePrefsDial(MAXBMWIDTH,gettext("Max Characters In Bookmarks:"),"maxbmchars",maxBMChars,5,MAXTEXTWIDTH,7);
-
-//check for update
-	makePrefsCheck(UPDATECHECK,gettext("Check For Updates"),"updatecheck",autoCheck,0,8);
-//use global plug menu
-	makePrefsCheck(GLOBALPLUGMENU,gettext("Use Global Plugins Menu ( Requires Restart )"),"useplugmenu",useGlobalPlugMenu,0,9);
-
-	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
-	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("Administration")));
-
-//end admin
-
-*/
 	table=new QGridLayout;
 	tab=new QWidget();
-//page 3
 //function search depth
 	posy=0;
 	makePrefsDial(MAXFUNCDEPTH,gettext("Tag File Search Depth:"),"depth",depth,0,20,posy);
 
+//terminalcommand
+	posy++;
+    widgetlabel=new QLabel(gettext("Terminal Command:"));
+	prefsOtherWidgets[PREFSTERMCOMMAND]=new QLineEdit(terminalCommand);
+	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
+	table->addWidget(prefsOtherWidgets[PREFSTERMCOMMAND],posy,1,1,-1,Qt::AlignVCenter);
+
+//root command
+	posy++;
+    widgetlabel=new QLabel(gettext("Run As Root Command:"));
+	prefsOtherWidgets[PREFSROOTCOMMAND]=new QLineEdit(rootCommand);
+	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
+	table->addWidget(prefsOtherWidgets[PREFSROOTCOMMAND],posy,1,1,-1,Qt::AlignVCenter);
+
+//set default browser
+	posy++;
+    widgetlabel=new QLabel(gettext("Default Browser:"));
+	prefsOtherWidgets[PREFSBROWSERCOMMAND]=new QLineEdit(browserCommand);
+	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
+	table->addWidget(prefsOtherWidgets[PREFSBROWSERCOMMAND],posy,1,1,-1,Qt::AlignVCenter);
+	space=new QSpacerItem(0,0,QSizePolicy::Maximum,QSizePolicy::Maximum);
+
+//find replace history max
+	posy++;
+	makePrefsDial(MAXHISTORY,gettext("Max Find/Replace History:"),"maxfrhistory",maxFRHistory,0,MAXTEXTWIDTH,posy);
+//max tab label width
+	posy++;
+	makePrefsDial(MAXTABCHARS,gettext("Max Characters In Tab:"),"maxtabchars",maxTabChars,5,MAXTEXTWIDTH,posy);
+//max function strings
+	posy++;
+	makePrefsDial(MENUWIDTH,gettext("Max Characters In Function Defs:"),"maxmenuchars",maxFuncDefs,5,MAXTEXTWIDTH,posy);
+//max bookmark strings
+	posy++;
+	makePrefsDial(MAXBMWIDTH,gettext("Max Characters In Bookmarks:"),"maxbmchars",maxBMChars,5,MAXTEXTWIDTH,posy);
+
+//check for update
+	posy++;
+	makePrefsCheck(UPDATECHECK,gettext("Check For Updates"),"updatecheck",autoCheck,0,posy);
+//use global plug menu
+	posy++;
+	makePrefsCheck(GLOBALPLUGMENU,gettext("Use Global Plugins Menu ( Requires Restart )"),"useplugmenu",useGlobalPlugMenu,0,posy);
+//end admin
+
+	posy++;
+	table->addItem(space,posy,0,100,-1);
+
+	table->setColumnStretch(1,1);
 
 	tab->setLayout(table);
 	prefsnotebook->addTab(tab,gettext("Administration"));
