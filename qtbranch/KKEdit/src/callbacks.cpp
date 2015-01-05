@@ -1889,6 +1889,7 @@ void setPrefs(void)
 {
 #ifdef _USEQT5_
 printf("set prefs\n");
+	QString str;
 //page 1
 	indent=((QCheckBox*)prefsWidgets[AUTOINDENT])->isChecked();
 	lineNumbers=((QCheckBox*)prefsWidgets[SHOWNUMS])->isChecked();
@@ -1907,9 +1908,31 @@ printf("set prefs\n");
 	tabWidth=((QSpinBox*)prefsIntWidgets[TABWIDTH])->value();
 //	styleName //TODO//
 //fontAndSize //TODO//
+printf("%s\n",fontAndSize);
 	debugFree(&highlightColour,"setPrefs highlightColour");
-	QString str=((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->text();
+	str=((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->text();
 	highlightColour=toCharStar(&str);
+	autoShowMinChars=((QSpinBox*)prefsIntWidgets[COMPLETIONSIZE])->value();
+	listFunction=((QComboBox*)prefsOtherWidgets[FUNCTIONCOMBO])->currentIndex();
+
+//page 3
+	depth=((QSpinBox*)prefsIntWidgets[MAXFUNCDEPTH])->value();
+	debugFree(&terminalCommand,"setPrefs terminalCommand");
+	str=((QLineEdit*)prefsOtherWidgets[PREFSTERMCOMMAND])->text();
+	terminalCommand=toCharStar(&str);
+	debugFree(&rootCommand,"setPrefs rootCommand");
+	str=((QLineEdit*)prefsOtherWidgets[PREFSROOTCOMMAND])->text();
+	rootCommand=toCharStar(&str);
+	debugFree(&browserCommand,"setPrefs browserCommand");
+	str=((QLineEdit*)prefsOtherWidgets[PREFSBROWSERCOMMAND])->text();
+	browserCommand=toCharStar(&str);
+	maxFRHistory=((QSpinBox*)prefsIntWidgets[MAXHISTORY])->value();
+	maxTabChars=((QSpinBox*)prefsIntWidgets[MAXTABCHARS])->value();
+	maxFuncDefs=((QSpinBox*)prefsIntWidgets[MENUWIDTH])->value();
+	maxBMChars=((QSpinBox*)prefsIntWidgets[MAXBMWIDTH])->value();
+	autoCheck=((QCheckBox*)prefsWidgets[UPDATECHECK])->isChecked();
+	useGlobalPlugMenu=((QCheckBox*)prefsWidgets[GLOBALPLUGMENU])->isChecked();
+	nagScreen=((QCheckBox*)prefsWidgets[BEKIND])->isChecked();
 
 	cancelPrefs();
 

@@ -1148,18 +1148,12 @@ void makePrefsCheck(int widgnum,const char* label,const char* name,bool onoff,in
 #ifdef _USEQT5_
 void setColor()
 {
-//	QString	str;
-//	QByteArray ba;
 	const QColor colour=QColorDialog::getColor(QColor(highlightColour),0,"Select Color",0);
 	if(colour.isValid())
 		{
 			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setPalette(QPalette(colour));
 			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setAutoFillBackground(true);
 			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setText(colour.name());
-//			debugFree(&highlightColour,"setColor highlightColour");
-//			str=color.name();
-//			ba=str.toLocal8Bit();
-//			highlightColour=strdup(ba.data());
 		}
 }
 #endif
@@ -1260,13 +1254,48 @@ printf("doPrefs %i\n",(int)(long)data);
 	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
 	table->addWidget(prefsOtherWidgets[FONTNAMECOMBO],posy,1,Qt::AlignVCenter);
 
+	int				comboindex=0;
+	int				foundsize=0;
+	char			fontname[256];
+	int				fontsize;
+	QString			str;
+	char*			striped;
+	sscanf(fontAndSize,"%[^0-9]s",fontname);
+	fontsize=atoi(strrchr(fontAndSize,' '));
+	striped=g_strstrip(fontname);
+//	printf(">%s<\n",striped);
+//
+//	for(int j=0;j<((QComboBox*)prefsOtherWidgets[FONTNAMECOMBO])->count();j++)
+//		{
+//			str=((QComboBox*)prefsOtherWidgets[FONTNAMECOMBO])->itemText(j);
+//			rootCommand=toCharStar(&str);
+//			//striped=g_strchomp(rootCommand);
+//			printf(">%s<n",rootCommand);
+//			if(strcmp(rootCommand,striped)==0)
+//				{
+//					printf("found %s %in",striped,j);
+//					foundsize=j;
+//					break;
+//				}
+//		}
+	foundsize=((QComboBox*)prefsOtherWidgets[FONTNAMECOMBO])->findText(QString(striped),0);
+	((QComboBox*)prefsOtherWidgets[FONTNAMECOMBO])->setCurrentIndex(foundsize);
+
 	prefsOtherWidgets[FONTSIZECOMBO]=new QComboBox;
     ((QComboBox*)prefsOtherWidgets[FONTSIZECOMBO])->setEditable(true);
 
-    QFontDatabase db;
-    foreach(int size, db.standardSizes())
-        ((QComboBox*)prefsOtherWidgets[FONTSIZECOMBO])->addItem(QString::number(size));
 
+    QFontDatabase db;
+	comboindex=0;
+	foreach(int size, db.standardSizes())
+		{
+			if(size==fontsize)
+				foundsize=comboindex;
+			((QComboBox*)prefsOtherWidgets[FONTSIZECOMBO])->addItem(QString::number(size));
+			comboindex++;
+		}
+
+	((QComboBox*)prefsOtherWidgets[FONTSIZECOMBO])->setCurrentIndex(foundsize);
 	table->addWidget(prefsOtherWidgets[FONTSIZECOMBO],posy,2,Qt::AlignVCenter);
 
 //bm highlight colour
