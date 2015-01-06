@@ -1171,17 +1171,30 @@ VISIBLE void doPrefs(Widget* widget,uPtr data)
 printf("doPrefs %i\n",(int)(long)data);
 
 #ifdef _USEQT5_
-	QVBoxLayout*		mainvbox=new QVBoxLayout();
-	QHBoxLayout*		hbox=new QHBoxLayout;
-	QTabWidget*			prefsnotebook=new QTabWidget;
-	QWidget*			button;
-	QWidget*			tab;
+	QVBoxLayout			*mainvbox=new QVBoxLayout();
+	QHBoxLayout			*hbox=new QHBoxLayout;
+	QTabWidget			*prefsnotebook=new QTabWidget;
+	QWidget				*button;
+	QWidget				*tab;
 	QLabel				*widgetlabel;
 	int					posy;
+	QListWidget			*listWidget=new QListWidget;
 
 	prefsWindow=new QDialog(mainWindow);
 	prefsWindow->setWindowTitle("Preferences");
 
+	listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+	listWidget->setDragEnabled(true);
+	listWidget->setDragDropMode(QAbstractItemView::InternalMove);
+	listWidget->viewport()->setAcceptDrops(true);
+	listWidget->setFlow(QListView::LeftToRight);
+	listWidget->setGridSize(QSize(32,32));
+	listWidget->addItem(QString("1"));
+	listWidget->addItem(QString("2"));
+	listWidget->addItem(QString("3"));
+	listWidget->setSizePolicy (QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
+	listWidget->setMinimumHeight(48);
+	mainvbox->addWidget(listWidget,1);
 
 //pages
 //page1
