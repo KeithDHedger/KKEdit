@@ -1226,9 +1226,9 @@ void makePrefsDial(int widgnum,const char* label,const char* name,int value,int 
 #else
 	QLabel*	widgetlabel;
 	prefsIntWidgets[widgnum]=new QSpinBox;
-	((QSpinBox*)prefsIntWidgets[widgnum])->setMaximum(maxvalue);
-	((QSpinBox*)prefsIntWidgets[widgnum])->setMinimum(minvalue);
-	((QSpinBox*)prefsIntWidgets[widgnum])->setValue(value);
+	dynamic_cast<QSpinBox*>(prefsIntWidgets[widgnum])->setMaximum(maxvalue);
+	dynamic_cast<QSpinBox*>(prefsIntWidgets[widgnum])->setMinimum(minvalue);
+	dynamic_cast<QSpinBox*>(prefsIntWidgets[widgnum])->setValue(value);
 	widgetlabel=new QLabel(label);
 	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
 	table->addWidget(prefsIntWidgets[widgnum],posy,1,1,-1,Qt::AlignVCenter);
@@ -1246,7 +1246,7 @@ void makePrefsCheck(int widgnum,const char* label,const char* name,bool onoff,in
 		gtk_table_attach_defaults(table,prefsWidgets[widgnum],posx,posx+1,posy,posy+1);
 #else
 	prefsWidgets[widgnum]=new QCheckBox(label);
-	((QCheckBox*)prefsWidgets[widgnum])->setChecked(onoff);
+	dynamic_cast<QCheckBox*>(prefsWidgets[widgnum])->setChecked(onoff);
 	if(posx!=-1)
 		table->addWidget(prefsWidgets[widgnum],posy,posx,Qt::AlignTop);
 #endif
@@ -1258,7 +1258,8 @@ void setColor()
 	const QColor colour=QColorDialog::getColor(QColor(highlightColour),0,"Select Color",0);
 	if(colour.isValid())
 		{
-			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setPalette(QPalette(colour));
+			//(()
+			static_cast<QLabel*>(prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setPalette(QPalette(colour));
 			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setAutoFillBackground(true);
 			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setText(colour.name());
 		}
