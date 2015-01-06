@@ -43,6 +43,12 @@
 #define USEURI			-1
 #define USEFILE			-2
 
+#ifdef	_USEQT5_
+#define KKEDITFOLDER	".KKEditQT"
+#else
+#define KKEDITFOLDER	".KKEdit"
+#endif
+
 #define	POLEPATH		PREFIX "/bin/KKEditProgressBar"
 #define CUSTOMWORDFILE ".KKEdit/customcompletions"
 

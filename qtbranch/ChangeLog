@@ -1,4 +1,5 @@
 0.3.0
+Font prefs changes take effect immediately, (mostly).
 Basic hightlight current line.
 Basic line numbers.
 Synched gtk code v0.2.6 to 0.3.0

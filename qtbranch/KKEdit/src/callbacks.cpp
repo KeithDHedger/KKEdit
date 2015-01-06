@@ -1778,10 +1778,10 @@ void writeExitData(void)
 		asprintf(&windowAllocData,"%i %i %i %i",mainWindow->width(),mainWindow->height(),mainWindow->x(),mainWindow->y());
 #endif
 
-	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
+	asprintf(&filename,"%s/" KKEDITFOLDER,getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	debugFree(&filename,"writeExitData filename");
-	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
+	asprintf(&filename,"%s/" KKEDITFOLDER "/kkedit.window.rc",getenv("HOME"));
 
 	saveVarsToFile(filename,kkedit_window_rc);
 	debugFree(&filename,"writeExitData filename");
@@ -1790,17 +1790,15 @@ void writeExitData(void)
 
 void writeConfig(void)
 {
-#ifndef _USEQT5_
-	char*			filename;
+	char	*filename;
 
-	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
+	asprintf(&filename,"%s/" KKEDITFOLDER,getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	debugFree(&filename,"writeConfig filename");
 
-	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
+	asprintf(&filename,"%s/" KKEDITFOLDER "/kkedit.rc",getenv("HOME"));
 	saveVarsToFile(filename,kkedit_rc);
 	debugFree(&filename,"writeConfig filename");
-#endif
 }
 
 VISIBLE bool doSaveAll(Widget* widget,uPtr data)
@@ -1944,6 +1942,10 @@ printf("set prefs\n");
 
 	cancelPrefs();
 
+	resetAllFilePrefs();
+	writeConfig();
+//	setSensitive();
+//	refreshMainWindow();
 
 #else
 	pageStruct*	tpage=getDocumentData(-1);
@@ -2055,10 +2057,10 @@ void setToolOptions(void)
 	char*		toolpath;
 	int			flags;
 
-	asprintf(&dirname,"%s/.KKEdit/tools",getenv("HOME"));
+	asprintf(&dirname,"%s/" KKEDITFOLDER "/tools",getenv("HOME"));
 	text=strdup(gtk_entry_get_text((GtkEntry*)toolNameWidget));
 	text=g_strdelimit(text," ",'-');
-	asprintf(&toolpath,"%s/.KKEdit/tools/%s",getenv("HOME"),text);
+	asprintf(&toolpath,"%s/" KKEDITFOLDER "/tools/%s",getenv("HOME"),text);
 
 	if((gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false) || (gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget)==true))
 		{
@@ -2604,10 +2606,9 @@ void doKeyShortCut(int what)
 
 void loadKeybindings(void)
 {
-#ifndef _USEQT5_
 	char*	filename;
 
-	asprintf(&filename,"%s/.KKEdit/keybindings.rc",getenv("HOME"));
+	asprintf(&filename,"%s/" KKEDITFOLDER "/keybindings.rc",getenv("HOME"));
 
 	loadVarsFromFile(filename,keybindings_rc);
 	for(int j=0;j<NUMSHORTCUTS;j++)
@@ -2616,7 +2617,6 @@ void loadKeybindings(void)
 				sscanf(shortCutStrings[j],"%i %i",(int*)&shortCuts[j][0],(int*)&shortCuts[j][1]);
 		}
 	debugFree(&filename,"readConfig filename");
-#endif
 }
 
 #ifndef _USEQT5_

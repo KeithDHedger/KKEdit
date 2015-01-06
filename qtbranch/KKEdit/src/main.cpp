@@ -20,11 +20,11 @@ void readConfig(void)
 {
 	char*	filename;
 
-	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
+	asprintf(&filename,"%s/" KKEDITFOLDER "/kkedit.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_rc);
 	debugFree(&filename,"readConfig filename");
 
-	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
+	asprintf(&filename,"%s/" KKEDITFOLDER "/kkedit.window.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_window_rc);
 	if(windowAllocData!=NULL)
 		sscanf(windowAllocData,"%i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
@@ -60,7 +60,7 @@ void init(void)
 	tabWidth=4;
 	depth=1;
 	singleUse=true;
-	fontAndSize=strdup("mono 10");
+	fontAndSize=strdup("Monospace 10");
 	terminalCommand=strdup("xterm -e");
 	rootCommand=strdup(GTKSUPATH);
 	autoShowMinChars=4;
@@ -108,7 +108,7 @@ void init(void)
 	listFunction=0;
 	showStatus=true;
 
-	asprintf(&filename,"%s/.KKEdit/tools",getenv("HOME"));
+	asprintf(&filename,"%s/" KKEDITFOLDER "/tools",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	debugFree(&filename,"init filename");
 
@@ -290,7 +290,7 @@ void initX(void)
 	listFunction=0;
 	showStatus=true;
 
-	asprintf(&filename,"%s/.KKEdit/tools",getenv("HOME"));
+	asprintf(&filename,"%s/" KKEDITFOLDER "/tools",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	debugFree(&filename,"init filename");
 
@@ -734,7 +734,7 @@ int main (int argc, char **argv)
 			loadPluginsFlag=false;
 		}
 
-	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
+	asprintf(&filename,"%s/" KKEDITFOLDER "/kkedit.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_startup_vars);
 	debugFree(&filename,"main filename");
 #ifndef _USEQT5_

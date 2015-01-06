@@ -235,9 +235,16 @@ void setFilePrefs(uPtr pagedata)
 
 void resetAllFilePrefs(void)
 {
-//TODO//
-#ifndef _USEQT5_
-	pageStruct*			page;
+#ifdef _USEQT5_
+	DocumentClass	*doc;
+
+	for(int loop=0;loop<((QTabWidget*)mainNotebook)->count();loop++)
+		{
+			doc=getDocumentData(loop);
+			setFilePrefs((uPtr)doc);
+		}
+#else
+	pageStruct		*page;
 
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
@@ -528,10 +535,10 @@ printf("saveSession %i\n",(int)(long)data);
 	GtkTextIter		markiter;
 	GList*			ptr;
 
-	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
+	asprintf(&filename,"%s/" KKEDITFOLDER,getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	debugFree(&filename,"saveSession filename");
-	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
+	asprintf(&filename,"%s/" KKEDITFOLDER "/session",getenv("HOME"));
 	fd=fopen(filename,"w");
 	if (fd!=NULL)
 		{
@@ -577,7 +584,7 @@ printf("restoreSession %i\n",(int)(long)data);
 
 	sessionBusy=true;
 
-	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
+	asprintf(&filename,"%s/" KKEDITFOLDER "/session",getenv("HOME"));
 	fd=fopen(filename,"r");
 	if (fd!=NULL)
 		{
@@ -652,7 +659,7 @@ do bookmarks
 	sessionBusy=true;
 	gtk_widget_freeze_child_notify((GtkWidget*)mainNotebook);
 
-	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
+	asprintf(&filename,"%s/" KKEDITFOLDER "/session",getenv("HOME"));
 	fd=fopen(filename,"r");
 	if (fd!=NULL)
 		{
