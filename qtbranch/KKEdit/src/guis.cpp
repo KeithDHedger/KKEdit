@@ -1180,7 +1180,7 @@ printf("doPrefs %i\n",(int)(long)data);
 	int					posy;
 	QListWidget			*listWidget=new QListWidget;
 QIcon icon=QIcon::fromTheme("document-new",QIcon("document-new"));
-QListWidgetItem *iconw=new QListWidgetItem(icon,"document-new");
+QListWidgetItem *iconw=new QListWidgetItem(icon);
 
 	prefsWindow=new QDialog(mainWindow);
 	prefsWindow->setWindowTitle("Preferences");
