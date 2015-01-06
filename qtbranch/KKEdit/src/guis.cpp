@@ -563,7 +563,9 @@ printf("buildTools\n");
 
 void populateStore(void)
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+printf("%s\n",toolBarLayout);
+#else
 	GdkPixbuf*	pbuf;
 	GtkWidget*	image;
 	GtkTreeIter iter;
@@ -1200,7 +1202,7 @@ QListWidgetItem *iconw=new QListWidgetItem(icon,"");
 	listWidget->setSizePolicy (QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
 	listWidget->setMinimumHeight(48);
 	mainvbox->addWidget(listWidget,1);
-
+	populateStore();
 //pages
 //page1
 	table=new QGridLayout;
