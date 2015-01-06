@@ -1182,6 +1182,7 @@ printf("doPrefs %i\n",(int)(long)data);
 	prefsWindow=new QDialog(mainWindow);
 	prefsWindow->setWindowTitle("Preferences");
 
+
 //pages
 //page1
 	table=new QGridLayout;
@@ -1319,6 +1320,7 @@ printf("doPrefs %i\n",(int)(long)data);
 	table->addLayout(hbox,posy,0,1,-1);
 
 //show keybindings dialog
+//TODO//
 	posy++;
 	hbox=new QHBoxLayout;
     button = new QPushButton(gettext("Customize Keyboard Shortcuts"));
