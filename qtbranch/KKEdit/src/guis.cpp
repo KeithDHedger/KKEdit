@@ -1179,6 +1179,8 @@ printf("doPrefs %i\n",(int)(long)data);
 	QLabel				*widgetlabel;
 	int					posy;
 	QListWidget			*listWidget=new QListWidget;
+QIcon icon=QIcon::fromTheme("document-new",QIcon("document-new"));
+QListWidgetItem *iconw=new QListWidgetItem(icon,"document-new");
 
 	prefsWindow=new QDialog(mainWindow);
 	prefsWindow->setWindowTitle("Preferences");
@@ -1192,6 +1194,9 @@ printf("doPrefs %i\n",(int)(long)data);
 	listWidget->addItem(QString("1"));
 	listWidget->addItem(QString("2"));
 	listWidget->addItem(QString("3"));
+
+	listWidget->addItem(iconw);
+
 	listWidget->setSizePolicy (QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
 	listWidget->setMinimumHeight(48);
 	mainvbox->addWidget(listWidget,1);
