@@ -765,6 +765,7 @@ int main (int argc, char **argv)
 		app.setWindowIcon(QIcon::fromTheme(PACKAGE "Root",QIcon(DATADIR"/pixmaps/KKEditRoot.png")));
 	//app.setStyleSheet("QMenu { columnCount: 1;}");
 	status=app.exec();
+	doShutdown(NULL,1);
 #endif
 	delete history;
 	delete globalSlice;

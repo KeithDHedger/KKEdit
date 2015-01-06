@@ -238,7 +238,7 @@ void resetAllFilePrefs(void)
 #ifdef _USEQT5_
 	DocumentClass	*doc;
 
-	for(int loop=0;loop<((QTabWidget*)mainNotebook)->count();loop++)
+	for(int loop=0;loop<qobject_cast<QTabWidget*>(mainNotebook)->count();loop++)
 		{
 			doc=getDocumentData(loop);
 			setFilePrefs((uPtr)doc);
@@ -1025,9 +1025,9 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 			doc->setPathname(strdup(filepath));
 			doc->setFilename(strdup(basename(tstr)));
 			doc->setTabname((char*)truncateWithElipses((char*)doc->getFilename(),maxTabChars));
-			tabnum=((QTabWidget*)mainNotebook)->addTab(doc,doc->getTabname());
-			((QTabWidget*)mainNotebook)->setTabToolTip(tabnum,doc->getPathname());
-			((QTabWidget*)mainNotebook)->setCurrentIndex(tabnum);
+			tabnum=qobject_cast<QTabWidget*>(mainNotebook)->addTab(doc,doc->getTabname());
+			qobject_cast<QTabWidget*>(mainNotebook)->setTabToolTip(tabnum,doc->getPathname());
+			qobject_cast<QTabWidget*>(mainNotebook)->setCurrentIndex(tabnum);
 			debugFree(&tstr,"openFile tstr 2");
 			debugFree(&convertedData,"openFile convertedData");
 			setFilePrefs((uPtr)doc);
@@ -1225,7 +1225,7 @@ printf("triggered newfile id %i\n",data);
 	asprintf(&filename,"%s-%i",gettext("Untitled"),untitledNumber);
 	untitledNumber++;
 	doc->setFilename(filename);
-	((QTabWidget*)mainNotebook)->addTab(doc,doc->getFilename());
+	qobject_cast<QTabWidget*>(mainNotebook)->addTab(doc,doc->getFilename());
 	
 #else
 	GtkTextIter	iter;

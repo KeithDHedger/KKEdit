@@ -1202,7 +1202,7 @@ QAction* makeMenuItem(Widget* menu,const char* name,const QKeySequence key,const
 	else
 		menuitem->setCallBackBool(ptrbool);
 	menuitem->setMenuID(data);
-	((QMenu*)menu)->addAction(menuitem);
+	qobject_cast<QMenu*>(menu)->addAction(menuitem);
 	
 	return(menuitem);
 }
@@ -1226,9 +1226,9 @@ void makePrefsDial(int widgnum,const char* label,const char* name,int value,int 
 #else
 	QLabel*	widgetlabel;
 	prefsIntWidgets[widgnum]=new QSpinBox;
-	dynamic_cast<QSpinBox*>(prefsIntWidgets[widgnum])->setMaximum(maxvalue);
-	dynamic_cast<QSpinBox*>(prefsIntWidgets[widgnum])->setMinimum(minvalue);
-	dynamic_cast<QSpinBox*>(prefsIntWidgets[widgnum])->setValue(value);
+	qobject_cast<QSpinBox*>(prefsIntWidgets[widgnum])->setMaximum(maxvalue);
+	qobject_cast<QSpinBox*>(prefsIntWidgets[widgnum])->setMinimum(minvalue);
+	qobject_cast<QSpinBox*>(prefsIntWidgets[widgnum])->setValue(value);
 	widgetlabel=new QLabel(label);
 	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
 	table->addWidget(prefsIntWidgets[widgnum],posy,1,1,-1,Qt::AlignVCenter);
@@ -1246,7 +1246,7 @@ void makePrefsCheck(int widgnum,const char* label,const char* name,bool onoff,in
 		gtk_table_attach_defaults(table,prefsWidgets[widgnum],posx,posx+1,posy,posy+1);
 #else
 	prefsWidgets[widgnum]=new QCheckBox(label);
-	dynamic_cast<QCheckBox*>(prefsWidgets[widgnum])->setChecked(onoff);
+	qobject_cast<QCheckBox*>(prefsWidgets[widgnum])->setChecked(onoff);
 	if(posx!=-1)
 		table->addWidget(prefsWidgets[widgnum],posy,posx,Qt::AlignTop);
 #endif
@@ -1258,10 +1258,9 @@ void setColor()
 	const QColor colour=QColorDialog::getColor(QColor(highlightColour),0,"Select Color",0);
 	if(colour.isValid())
 		{
-			//(()
-			static_cast<QLabel*>(prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setPalette(QPalette(colour));
-			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setAutoFillBackground(true);
-			((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setText(colour.name());
+			qobject_cast<QLabel*>(prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setPalette(QPalette(colour));
+			qobject_cast<QLabel*>(prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setAutoFillBackground(true);
+			qobject_cast<QLabel*>(prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setText(colour.name());
 		}
 }
 #endif
@@ -1383,11 +1382,11 @@ VISIBLE void doPrefs(Widget* widget,uPtr data)
 	sscanf(fontAndSize,"%[^0-9]s",fontname);
 	fontsize=atoi(strrchr(fontAndSize,' '));
 	stripped=g_strstrip(fontname);
-	foundsize=((QComboBox*)prefsOtherWidgets[FONTNAMECOMBO])->findText(QString(stripped),0);
-	((QComboBox*)prefsOtherWidgets[FONTNAMECOMBO])->setCurrentIndex(foundsize);
+	foundsize=qobject_cast<QComboBox*>(prefsOtherWidgets[FONTNAMECOMBO])->findText(QString(stripped),0);
+	qobject_cast<QComboBox*>(prefsOtherWidgets[FONTNAMECOMBO])->setCurrentIndex(foundsize);
 
 	prefsOtherWidgets[FONTSIZECOMBO]=new QComboBox;
-    ((QComboBox*)prefsOtherWidgets[FONTSIZECOMBO])->setEditable(true);
+    qobject_cast<QComboBox*>(prefsOtherWidgets[FONTSIZECOMBO])->setEditable(true);
 
     QFontDatabase db;
 	comboindex=0;
@@ -1395,11 +1394,11 @@ VISIBLE void doPrefs(Widget* widget,uPtr data)
 		{
 			if(size==fontsize)
 				foundsize=comboindex;
-			((QComboBox*)prefsOtherWidgets[FONTSIZECOMBO])->addItem(QString::number(size));
+			qobject_cast<QComboBox*>(prefsOtherWidgets[FONTSIZECOMBO])->addItem(QString::number(size));
 			comboindex++;
 		}
 
-	((QComboBox*)prefsOtherWidgets[FONTSIZECOMBO])->setCurrentIndex(foundsize);
+	qobject_cast<QComboBox*>(prefsOtherWidgets[FONTSIZECOMBO])->setCurrentIndex(foundsize);
 	table->addWidget(prefsOtherWidgets[FONTSIZECOMBO],posy,2,Qt::AlignVCenter);
 
 //bm highlight colour
@@ -1407,15 +1406,15 @@ VISIBLE void doPrefs(Widget* widget,uPtr data)
     widgetlabel = new QLabel(gettext("Bookmark Highlight Colour:"));
 	prefsOtherWidgets[BMHIGHLIGHTCOLOUR]=new QLabel(highlightColour);
 	int frameStyle = QFrame::Raised | QFrame::Panel;
-    ((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setFrameStyle(frameStyle);
+    qobject_cast<QLabel*>(prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setFrameStyle(frameStyle);
     QPushButton *colorButton = new QPushButton("Set Colour");
 	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
 	table->addWidget(prefsOtherWidgets[BMHIGHLIGHTCOLOUR],posy,1,Qt::AlignVCenter);
 	table->addWidget(colorButton,posy,2,Qt::AlignVCenter);
 
 	QColor color=QColor(highlightColour);
-	((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setPalette(QPalette(color));
-	((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setAutoFillBackground(true);
+	qobject_cast<QLabel*>(prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setPalette(QPalette(color));
+	qobject_cast<QLabel*>(prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setAutoFillBackground(true);
 	QObject::connect(((QPushButton*)colorButton),&QPushButton::clicked,setColor);
 //autoshow completion
 	posy++;
@@ -1424,12 +1423,12 @@ VISIBLE void doPrefs(Widget* widget,uPtr data)
 //sort functions
 	posy++;
 	prefsOtherWidgets[FUNCTIONCOMBO]=new QComboBox;
-	((QComboBox*)prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu by type and alphabetically"));
-	((QComboBox*)prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu by type and file position"));
-	((QComboBox*)prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu by file position"));
-	((QComboBox*)prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu alphabetically"));
-	((QComboBox*)prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu in categorised format"));
-	((QComboBox*)prefsOtherWidgets[FUNCTIONCOMBO])->setCurrentIndex(listFunction);
+	qobject_cast<QComboBox*>(prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu by type and alphabetically"));
+	qobject_cast<QComboBox*>(prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu by type and file position"));
+	qobject_cast<QComboBox*>(prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu by file position"));
+	qobject_cast<QComboBox*>(prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu alphabetically"));
+	qobject_cast<QComboBox*>(prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu in categorised format"));
+	qobject_cast<QComboBox*>(prefsOtherWidgets[FUNCTIONCOMBO])->setCurrentIndex(listFunction);
 
 	hbox=new QHBoxLayout;
     hbox->addStretch(1);
@@ -1871,17 +1870,17 @@ void buildMainGuiQT(void)
 	mainWindow->setLayout(mainWindowVBox);
 
 	mainNotebook=new QTabWidget;
-	((QTabWidget*)mainNotebook)->setDocumentMode(true);
-	((QTabWidget*)mainNotebook)->setTabsClosable(true);
-	((QTabWidget*)mainNotebook)->setMovable(true);
+	qobject_cast<QTabWidget*>(mainNotebook)->setDocumentMode(true);
+	qobject_cast<QTabWidget*>(mainNotebook)->setTabsClosable(true);
+	qobject_cast<QTabWidget*>(mainNotebook)->setMovable(true);
 	
-	QObject::connect(((QTabWidget*)mainNotebook),&QTabWidget::currentChanged,switchPage);
-	QObject::connect(((QTabWidget*)mainNotebook),&QTabWidget::tabCloseRequested,closeTabQT);
+	QObject::connect(qobject_cast<QTabWidget*>(mainNotebook),&QTabWidget::currentChanged,switchPage);
+	QObject::connect(qobject_cast<QTabWidget*>(mainNotebook),&QTabWidget::tabCloseRequested,closeTabQT);
 
 	menuBar=new QMenuBar;
 //file menu
 	fileMenu=new QMenu("&File");
-	((QMenuBar*)menuBar)->addMenu((QMenu*)fileMenu);
+	qobject_cast<QMenuBar*>(menuBar)->addMenu(qobject_cast<QMenu*>(fileMenu));
 
 //new
 	makeMenuItem(fileMenu,gettext("New"),QKeySequence::New,"document-new",NEWMENUNAME,&newFile,NULL,0);
@@ -1890,7 +1889,7 @@ void buildMainGuiQT(void)
 //open as hexdump
 	makeMenuItem(fileMenu,gettext("Open As HeXdump"),0,"document-open",HEXDUMPMENUNAME,&openAsHexDump,NULL,2);
 
-	((QMenu*)fileMenu)->addSeparator();
+	qobject_cast<QMenu*>(fileMenu)->addSeparator();
 
 //extras
 	makeMenuItem(fileMenu,gettext("New Admin Editor"),0,DATADIR"/pixmaps/ROOTKKEdit.png",NEWADMINMENUNAME,&newEditor,NULL,1);
@@ -1903,12 +1902,12 @@ void buildMainGuiQT(void)
 	if(gotDoxygen==0)
 		makeMenuItem(fileMenu,gettext("Build Documentation"),0,"edit-copy",DOXYBUILDMENUNAME,&doDoxy,NULL,1);
 
-	((QMenu*)fileMenu)->addSeparator();
+	qobject_cast<QMenu*>(fileMenu)->addSeparator();
 
 //recent menu
 //TODO//
 	makeMenuItem(fileMenu,gettext("Recent Files"),0,NULL,RECENTMENUNAME,&newFile,NULL,1000);
-	((QMenu*)fileMenu)->addSeparator();
+	qobject_cast<QMenu*>(fileMenu)->addSeparator();
 
 //save
 	saveMenu=(Widget*)makeMenuItem(fileMenu,gettext("Save"),QKeySequence::Save,"document-save",SAVEMENUNAME,NULL,&saveFile,0);
@@ -1916,7 +1915,7 @@ void buildMainGuiQT(void)
 	saveAsMenu=(Widget*)makeMenuItem(fileMenu,gettext("Save As"),QKeySequence::SaveAs,"document-save-as",SAVEASMENUNAME,NULL,&saveFile,1);
 //save all
 	saveAllMenu=(Widget*)makeMenuItem(fileMenu,gettext("Save All"),0,"document-save",SAVEALLMENUNAME,NULL,&doSaveAll,0);
-	((QMenu*)fileMenu)->addSeparator();
+	qobject_cast<QMenu*>(fileMenu)->addSeparator();
 
 //save session
 	makeMenuItem(fileMenu,gettext("Save Session"),0,"document-save",SAVESESSIONMENUNAME,&saveSession,NULL,0);
@@ -1926,17 +1925,17 @@ void buildMainGuiQT(void)
 	makeMenuItem(fileMenu,gettext("Restore Session With Bookmark"),0,"document-open",RESTORESESSIONBMMENUNAME,&restoreSession,NULL,0);
 //printfile
 	printMenu=(Widget*)makeMenuItem(fileMenu,gettext("Print"),QKeySequence::Print,"document-print",PRINTMENUNAME,&printFile,NULL,0);
-	((QMenu*)fileMenu)->addSeparator();
+	qobject_cast<QMenu*>(fileMenu)->addSeparator();
 
 //close
 	closeMenu=(Widget*)makeMenuItem(fileMenu,gettext("Close"),QKeySequence::Close,"window-close",CLOSEMENUNAME,&closeTab,NULL,0);
 //close-all
 	closeAllMenu=(Widget*)makeMenuItem(fileMenu,gettext("Close All Tabs"),0,"window-close",CLOSEALLMENUNAME,&closeAllTabs,NULL,0);
-	((QMenu*)fileMenu)->addSeparator();
+	qobject_cast<QMenu*>(fileMenu)->addSeparator();
 
 //reload file
 	revertMenu=(Widget*)makeMenuItem(fileMenu,gettext("Revert"),0,NULL,REVERTMENUNAME,&reloadFile,NULL,0);
-	((QMenu*)fileMenu)->addSeparator();
+	qobject_cast<QMenu*>(fileMenu)->addSeparator();
 
 //quit
 	makeMenuItem(fileMenu,gettext("Quit"),QKeySequence::Quit,"application-exit",QUITMENUNAME,&doShutdown,NULL,0);
@@ -1944,7 +1943,7 @@ void buildMainGuiQT(void)
 	
 //edit menu
 	editMenu=new QMenu("&Edit");
-	((QMenuBar*)menuBar)->addMenu((QMenu*)editMenu);
+	qobject_cast<QMenuBar*>(menuBar)->addMenu(qobject_cast<QMenu*>(editMenu));
 
 //undo
 	undoMenu=(Widget*)makeMenuItem(editMenu,gettext("Undo"),QKeySequence::Undo,"edit-undo",UNDOMENUNAME,&undo,NULL,0);
@@ -1954,7 +1953,7 @@ void buildMainGuiQT(void)
 	undoAllMenu=(Widget*)makeMenuItem(editMenu,gettext("Undo All"),0,"edit-undo",UNDOALLMENUNAME,&unRedoAll,NULL,0);
 //redoall
 	redoAllMenu=(Widget*)makeMenuItem(editMenu,gettext("Redo All"),0,"edit-redo",REDOALLMENUNAME,&unRedoAll,NULL,1);
-	((QMenu*)editMenu)->addSeparator();
+	qobject_cast<QMenu*>(editMenu)->addSeparator();
 
 //cut
 	cutMenu=(Widget*)makeMenuItem(editMenu,gettext("Cut"),QKeySequence::Cut,"edit-cut",CUTMENUNAME,&cutToClip,NULL,0);
@@ -1962,11 +1961,11 @@ void buildMainGuiQT(void)
 	copyMenu=(Widget*)makeMenuItem(editMenu,gettext("Copy"),QKeySequence::Copy,"edit-copy",COPYMENUNAME,&copyToClip,NULL,0);
 //paste
 	pasteMenu=(Widget*)makeMenuItem(editMenu,gettext("Paste"),QKeySequence::Paste,"edit-paste",PASTEMENUNAME,&pasteFromClip,NULL,0);
-	((QMenu*)editMenu)->addSeparator();
+	qobject_cast<QMenu*>(editMenu)->addSeparator();
 
 //find
 	makeMenuItem(editMenu,gettext("Find"),QKeySequence::Find,"edit-find",FINDMENUNAME,&find,NULL,0);
-	((QMenu*)editMenu)->addSeparator();
+	qobject_cast<QMenu*>(editMenu)->addSeparator();
 
 //prefs
 	makeMenuItem(editMenu,gettext("Preferences"),QKeySequence::Preferences,"preferences-desktop",PREFSMENUNAME,&doPrefs,NULL,0);
@@ -1976,7 +1975,7 @@ void buildMainGuiQT(void)
 
 //view menu
 	viewMenu=new QMenu("&View");
-	((QMenuBar*)menuBar)->addMenu((QMenu*)viewMenu);
+	qobject_cast<QMenuBar*>(menuBar)->addMenu(qobject_cast<QMenu*>(viewMenu));
 
 //show docs
 	makeMenuItem(viewMenu,gettext("Show Documentaion"),0,NULL,SHOWDOCSMENUNAME,&doDoxy,NULL,2);
@@ -2010,7 +2009,7 @@ void buildMainGuiQT(void)
 
 //navigation menu
 	navMenu=new QMenu("&Navigation");
-	((QMenuBar*)menuBar)->addMenu((QMenu*)navMenu);
+	qobject_cast<QMenuBar*>(menuBar)->addMenu(qobject_cast<QMenu*>(navMenu));
 
 //goto define
 	makeMenuItem(navMenu,gettext("Go To Definition"),QKeySequence::fromString("Ctrl+D"),"dialog-question",GOTODEFMENUNAME,&goToDefinition,NULL,0);
@@ -2030,32 +2029,32 @@ void buildMainGuiQT(void)
 		makeMenuItem(navMenu,gettext("Find In Documentation"),0,"edit-find",SEARCHDOXYMENUNAME,&doxyDocs,NULL,0);
 ////go back
 		goBackMenu=(Widget*)makeMenuItem(navMenu,gettext("Back"),0,"go-previous",GOBACKMENUNAME,&goBack,NULL,0);
-	((QMenu*)navMenu)->addSeparator();
+	qobject_cast<QMenu*>(navMenu)->addSeparator();
 //////////////////////////////////////////
 
 //function menu
 	funcMenu=new QMenu("Fun&ctions");
-	((QMenuBar*)menuBar)->addMenu((QMenu*)funcMenu);
+	qobject_cast<QMenuBar*>(menuBar)->addMenu(qobject_cast<QMenu*>(funcMenu));
 
 ///////////////////////////////////////////
 
 //newbookmarks
 	bookMarkMenu=new QMenu("&Bookmarks");
-	((QMenuBar*)menuBar)->addMenu((QMenu*)bookMarkMenu);
+	qobject_cast<QMenuBar*>(menuBar)->addMenu(qobject_cast<QMenu*>(bookMarkMenu));
 	rebuildBookMarkMenu();
 
 ///////////////////////////////////////////
 
 //external tools	
 	toolsMenu=new QMenu("&Tools");
-	((QMenuBar*)menuBar)->addMenu((QMenu*)toolsMenu);
+	qobject_cast<QMenuBar*>(menuBar)->addMenu(qobject_cast<QMenu*>(toolsMenu));
 	buildTools();
 
 ///////////////////////////////////////////
 
 //help
 	helpMenu=new QMenu("&Help");
-	((QMenuBar*)menuBar)->addMenu((QMenu*)helpMenu);
+	qobject_cast<QMenuBar*>(menuBar)->addMenu(qobject_cast<QMenu*>(helpMenu));
 
 //about
 	makeMenuItem(helpMenu,gettext("&About"),0,"help-about",ABOUTMENUNAME,&doAbout,NULL,0);

@@ -625,9 +625,9 @@ VISIBLE DocumentClass* getDocumentData(int pagenum)
 		return((pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata"));
 #else
 	if(pagenum==-1)
-		return((DocumentClass*)((QTabWidget*)mainNotebook)->currentWidget());
+		return((DocumentClass*)qobject_cast<QTabWidget*>(mainNotebook)->currentWidget());
 	else
-		return((DocumentClass*)((QTabWidget*)mainNotebook)->widget(pagenum));
+		return((DocumentClass*)qobject_cast<QTabWidget*>(mainNotebook)->widget(pagenum));
 #endif
 }
 

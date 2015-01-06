@@ -783,7 +783,7 @@ void switchPage(int thispage)
 	doc=(DocumentClass*)((QTabWidget*)mainNotebook)->widget(thispage);
 	if(doc==0)
 		return;
-	((QMenu*)funcMenu)->clear();
+	qobject_cast<QMenu*>(funcMenu)->clear();
 	
 	getRecursiveTagList((char*)doc->getPathname(),&functions);
 	lineptr=functions;
@@ -826,7 +826,7 @@ void switchPage(int thispage)
 												asprintf(&newstr,"%ss",typenames[numtypes]);
 											newstr[0]=toupper(newstr[0]);
 											typesubmenus[numtypes]=new QMenu(newstr);
-											((QMenu*)funcMenu)->addMenu((QMenu*)typesubmenus[numtypes]);
+											qobject_cast<QMenu*>(funcMenu)->addMenu(qobject_cast<QMenu*>(typesubmenus[numtypes]));
 											whattypemenu=typesubmenus[numtypes];
 											numtypes++;
 										}
@@ -837,7 +837,7 @@ void switchPage(int thispage)
 									menuitem=new MenuItemClass(tmpstr);
 									menuitem->setCallBackVoid(gotoLine);
 									menuitem->setMenuID(linenum);	
-									((QMenu*)whattypemenu)->addAction(menuitem);
+									qobject_cast<QMenu*>(whattypemenu)->addAction(menuitem);
 								}
 						}
 					else
@@ -846,7 +846,7 @@ void switchPage(int thispage)
 							menuitem=new MenuItemClass(tmpstr);
 							menuitem->setCallBackVoid(gotoLine);
 							menuitem->setMenuID(linenum);	
-							((QMenu*)funcMenu)->addAction(menuitem);
+							qobject_cast<QMenu*>(funcMenu)->addAction(menuitem);
 						}
 				}
 
@@ -1849,7 +1849,6 @@ printf("doSaveAll %i\n",(int)(long)data);
 VISIBLE void doShutdown(Widget* widget,uPtr data)
 //TODO//
 {
-printf("doShutdown %i\n",(int)(long)data);
 	char*	command=NULL;
 
 	if(doSaveAll(widget,(uPtr)true)==false)
@@ -1886,62 +1885,59 @@ void setPrefs(void)
 #endif
 {
 #ifdef _USEQT5_
+printf("set prefs\n");
 	QString str;
 	char	*fontname;
 	char	*fontsize;
-
-	debugFree(&toolBarLayout,"setPrefs toolBarLayout");
-	toolBarLayout=makeToolBarList();
-	
 //page 1
-	indent=((QCheckBox*)prefsWidgets[AUTOINDENT])->isChecked();
-	lineNumbers=((QCheckBox*)prefsWidgets[SHOWNUMS])->isChecked();
-	lineWrap=((QCheckBox*)prefsWidgets[WRAP])->isChecked();
-	highLight=((QCheckBox*)prefsWidgets[HIGHLIGHT])->isChecked();
-	noSyntax=((QCheckBox*)prefsWidgets[NOSYNTAX])->isChecked();
-	singleUse=((QCheckBox*)prefsWidgets[USESINGLE])->isChecked();
-	onExitSaveSession=((QCheckBox*)prefsWidgets[AUTOSAVE])->isChecked();
-	restoreBookmarks=((QCheckBox*)prefsWidgets[AUTOBM])->isChecked();
-	noDuplicates=((QCheckBox*)prefsWidgets[NODUPLICATE])->isChecked();
-	noWarnings=((QCheckBox*)prefsWidgets[NOWARN])->isChecked();
-	readLinkFirst=((QCheckBox*)prefsWidgets[READLINK])->isChecked();
-	autoShowComps=((QCheckBox*)prefsWidgets[AUTOSHOW])->isChecked();
+	indent=qobject_cast<QCheckBox*>(prefsWidgets[AUTOINDENT])->isChecked();
+	lineNumbers=qobject_cast<QCheckBox*>(prefsWidgets[SHOWNUMS])->isChecked();
+	lineWrap=qobject_cast<QCheckBox*>(prefsWidgets[WRAP])->isChecked();
+	highLight=qobject_cast<QCheckBox*>(prefsWidgets[HIGHLIGHT])->isChecked();
+	noSyntax=qobject_cast<QCheckBox*>(prefsWidgets[NOSYNTAX])->isChecked();
+	singleUse=qobject_cast<QCheckBox*>(prefsWidgets[USESINGLE])->isChecked();
+	onExitSaveSession=qobject_cast<QCheckBox*>(prefsWidgets[AUTOSAVE])->isChecked();
+	restoreBookmarks=qobject_cast<QCheckBox*>(prefsWidgets[AUTOBM])->isChecked();
+	noDuplicates=qobject_cast<QCheckBox*>(prefsWidgets[NODUPLICATE])->isChecked();
+	noWarnings=qobject_cast<QCheckBox*>(prefsWidgets[NOWARN])->isChecked();
+	readLinkFirst=qobject_cast<QCheckBox*>(prefsWidgets[READLINK])->isChecked();
+	autoShowComps=qobject_cast<QCheckBox*>(prefsWidgets[AUTOSHOW])->isChecked();
 
 //page 2
 	tabWidth=((QSpinBox*)prefsIntWidgets[TABWIDTH])->value();
 //	styleName //TODO//
 	debugFree(&fontAndSize,"setPrefs fontAndSize");
-	str=((QComboBox*)prefsOtherWidgets[FONTNAMECOMBO])->currentText();
+	str=qobject_cast<QComboBox*>(prefsOtherWidgets[FONTNAMECOMBO])->currentText();
 	fontname=toCharStar(&str);
-	str=((QComboBox*)prefsOtherWidgets[FONTSIZECOMBO])->currentText();
+	str=qobject_cast<QComboBox*>(prefsOtherWidgets[FONTSIZECOMBO])->currentText();
 	fontsize=toCharStar(&str);
 	asprintf(&fontAndSize,"%s %s",fontname,fontsize);
 	free(fontname);
 	free(fontsize);
 	debugFree(&highlightColour,"setPrefs highlightColour");
-	str=((QLabel*)prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->text();
+	str=qobject_cast<QLabel*>(prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->text();
 	highlightColour=toCharStar(&str);
 	autoShowMinChars=((QSpinBox*)prefsIntWidgets[COMPLETIONSIZE])->value();
-	listFunction=((QComboBox*)prefsOtherWidgets[FUNCTIONCOMBO])->currentIndex();
+	listFunction=qobject_cast<QComboBox*>(prefsOtherWidgets[FUNCTIONCOMBO])->currentIndex();
 
 //page 3
 	depth=((QSpinBox*)prefsIntWidgets[MAXFUNCDEPTH])->value();
 	debugFree(&terminalCommand,"setPrefs terminalCommand");
-	str=((QLineEdit*)prefsOtherWidgets[PREFSTERMCOMMAND])->text();
+	str=qobject_cast<QLineEdit*>(prefsOtherWidgets[PREFSTERMCOMMAND])->text();
 	terminalCommand=toCharStar(&str);
 	debugFree(&rootCommand,"setPrefs rootCommand");
-	str=((QLineEdit*)prefsOtherWidgets[PREFSROOTCOMMAND])->text();
+	str=qobject_cast<QLineEdit*>(prefsOtherWidgets[PREFSROOTCOMMAND])->text();
 	rootCommand=toCharStar(&str);
 	debugFree(&browserCommand,"setPrefs browserCommand");
-	str=((QLineEdit*)prefsOtherWidgets[PREFSBROWSERCOMMAND])->text();
+	str=qobject_cast<QLineEdit*>(prefsOtherWidgets[PREFSBROWSERCOMMAND])->text();
 	browserCommand=toCharStar(&str);
 	maxFRHistory=((QSpinBox*)prefsIntWidgets[MAXHISTORY])->value();
 	maxTabChars=((QSpinBox*)prefsIntWidgets[MAXTABCHARS])->value();
 	maxFuncDefs=((QSpinBox*)prefsIntWidgets[MENUWIDTH])->value();
 	maxBMChars=((QSpinBox*)prefsIntWidgets[MAXBMWIDTH])->value();
-	autoCheck=((QCheckBox*)prefsWidgets[UPDATECHECK])->isChecked();
-	useGlobalPlugMenu=((QCheckBox*)prefsWidgets[GLOBALPLUGMENU])->isChecked();
-	nagScreen=((QCheckBox*)prefsWidgets[BEKIND])->isChecked();
+	autoCheck=qobject_cast<QCheckBox*>(prefsWidgets[UPDATECHECK])->isChecked();
+	useGlobalPlugMenu=qobject_cast<QCheckBox*>(prefsWidgets[GLOBALPLUGMENU])->isChecked();
+	nagScreen=qobject_cast<QCheckBox*>(prefsWidgets[BEKIND])->isChecked();
 
 	cancelPrefs();
 
@@ -2060,10 +2056,10 @@ void setToolOptions(void)
 	char*		toolpath;
 	int			flags;
 
-	asprintf(&dirname,"%s/" KKEDITFOLDER "/tools",getenv("HOME"));
+	asprintf(&dirname,"%s/.KKEdit/tools",getenv("HOME"));
 	text=strdup(gtk_entry_get_text((GtkEntry*)toolNameWidget));
 	text=g_strdelimit(text," ",'-');
-	asprintf(&toolpath,"%s/" KKEDITFOLDER "/tools/%s",getenv("HOME"),text);
+	asprintf(&toolpath,"%s/.KKEdit/tools/%s",getenv("HOME"),text);
 
 	if((gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false) || (gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget)==true))
 		{
@@ -2379,9 +2375,9 @@ VISIBLE void toggleToolOutput(Widget* widget,uPtr data)
 		}
 #else
 	if(showToolOutWin)
-		((QAction*)widget)->setText(gettext("Hide Tool Output"));
+		qobject_cast<QAction*>(widget)->setText(gettext("Hide Tool Output"));
 	else
-		((QAction*)widget)->setText(gettext("Show Bookmarks Bar"));
+		qobject_cast<QAction*>(widget)->setText(gettext("Show Bookmarks Bar"));
 #endif
 }
 
@@ -2398,9 +2394,9 @@ VISIBLE void toggleBookMarkBar(Widget* widget,uPtr data)
 	resetAllFilePrefs();
 #else
 	if(showBMBar)
-		((QAction*)widget)->setText(gettext("Hide Bookmarks Bar"));
+		qobject_cast<QAction*>(widget)->setText(gettext("Hide Bookmarks Bar"));
 	else
-		((QAction*)widget)->setText(gettext("Show Bookmarks Bar"));
+		qobject_cast<QAction*>(widget)->setText(gettext("Show Bookmarks Bar"));
 #endif
 }
 
@@ -2416,9 +2412,9 @@ VISIBLE void toggleToolBar(Widget* widget,uPtr data)
 	refreshMainWindow();
 #else
 	if(showToolBar)
-		((QAction*)widget)->setText(gettext("Hide Tool Bar"));
+		qobject_cast<QAction*>(widget)->setText(gettext("Hide Tool Bar"));
 	else
-		((QAction*)widget)->setText(gettext("Show Tool Bar"));
+		qobject_cast<QAction*>(widget)->setText(gettext("Show Tool Bar"));
 #endif
 }
 
@@ -2435,9 +2431,9 @@ VISIBLE void toggleStatusBar(Widget* widget,uPtr data)
 	refreshMainWindow();
 #else
 	if(showStatus)
-		((QAction*)widget)->setText(gettext("Hide Status Bar"));
+		qobject_cast<QAction*>(widget)->setText(gettext("Hide Status Bar"));
 	else
-		((QAction*)widget)->setText(gettext("Show Status Bar"));
+		qobject_cast<QAction*>(widget)->setText(gettext("Show Status Bar"));
 #endif
 }
 
@@ -2609,9 +2605,10 @@ void doKeyShortCut(int what)
 
 void loadKeybindings(void)
 {
+#ifndef _USEQT5_
 	char*	filename;
 
-	asprintf(&filename,"%s/" KKEDITFOLDER "/keybindings.rc",getenv("HOME"));
+	asprintf(&filename,"%s/.KKEdit/keybindings.rc",getenv("HOME"));
 
 	loadVarsFromFile(filename,keybindings_rc);
 	for(int j=0;j<NUMSHORTCUTS;j++)
@@ -2620,6 +2617,7 @@ void loadKeybindings(void)
 				sscanf(shortCutStrings[j],"%i %i",(int*)&shortCuts[j][0],(int*)&shortCuts[j][1]);
 		}
 	debugFree(&filename,"readConfig filename");
+#endif
 }
 
 #ifndef _USEQT5_
