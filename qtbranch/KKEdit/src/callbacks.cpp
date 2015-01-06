@@ -1886,10 +1886,13 @@ void setPrefs(void)
 #endif
 {
 #ifdef _USEQT5_
-printf("set prefs\n");
 	QString str;
 	char	*fontname;
 	char	*fontsize;
+
+	debugFree(&toolBarLayout,"setPrefs toolBarLayout");
+	toolBarLayout=makeToolBarList();
+	
 //page 1
 	indent=((QCheckBox*)prefsWidgets[AUTOINDENT])->isChecked();
 	lineNumbers=((QCheckBox*)prefsWidgets[SHOWNUMS])->isChecked();

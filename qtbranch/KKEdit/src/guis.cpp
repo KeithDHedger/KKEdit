@@ -25,6 +25,7 @@ QGridLayout		*table;
 QWidget			*prefsWidgets[MAXPREFSWIDGETS];
 QWidget			*prefsIntWidgets[MAXPREFSINTWIDGETS];
 QWidget			*prefsOtherWidgets[MAXPREFSOTHERWIDGETS];
+QListWidget		*listWidget;
 //TODO//
 #endif
 
@@ -561,10 +562,105 @@ printf("buildTools\n");
 #endif
 }
 
+#ifdef _USEQT5_
+void addIconToList(const char* name,int type)
+{
+	QIcon icon;
+	QListWidgetItem *iconw;
+
+	icon=QIcon::fromTheme(name,QIcon(name));
+	iconw=new QListWidgetItem(icon,"",0,type);
+	listWidget->addItem(iconw);
+}
+#endif
+
 void populateStore(void)
 {
 #ifdef _USEQT5_
-printf("%s\n",toolBarLayout);
+	QIcon icon;
+	QListWidgetItem *iconw;
+	char*		type;
+
+	for(int j=0;j<(int)strlen(toolBarLayout);j++)
+		{
+			type=strndup((char*)&toolBarLayout[j],1);
+			switch(toolBarLayout[j])
+				{
+//new
+					case 'N':
+						addIconToList("document-new",'N');
+						break;
+
+//open+recent
+					case 'O':
+						addIconToList("document-open",'O');
+						break;
+//save
+					case 'S':
+						addIconToList("document-save",'S');
+						break;
+//cut
+					case 'X':
+						addIconToList("edit-cut",'X');
+						break;
+//copy
+					case 'C':
+						addIconToList("edit-copy",'C');
+						break;
+//paste
+					case 'P':
+						addIconToList("edit-paste",'P');
+						break;
+//undo
+					case 'U':
+						addIconToList("edit-undo",'U');
+						break;
+//redo
+					case 'R':
+						addIconToList("edit-redo",'R');
+						break;
+//find
+					case 'F':
+						addIconToList("edit-find",'F');
+						break;
+//navigation
+					case 'G':
+						addIconToList("dialog-question",'G');
+						break;
+//go back
+					case 'B':
+						addIconToList("go-previous",'B');
+						break;
+//go to line
+					case '9':
+						addIconToList(DATADIR"/pixmaps/num.png",'9');
+						break;
+//find api gtk
+					case 'A':
+						addIconToList(DATADIR"/pixmaps/api.png",'A');
+						break;
+//find api qt5
+					case 'Q':
+						addIconToList(DATADIR"/pixmaps/qtapi.png",'Q');
+						break;
+//find def
+					case 'D':
+						addIconToList(DATADIR"/pixmaps/finddef.png",'D');
+						break;
+//live search
+					case 'L':
+						addIconToList(DATADIR"/pixmaps/live.png",'L');
+						break;
+//seperator
+					case 's':
+						addIconToList(DATADIR"/pixmaps/sep.png",'s');
+						break;
+//expander
+					case 'E':
+						addIconToList(DATADIR"/pixmaps/expand.png",'E');
+						break;
+				}
+		}
 #else
 	GdkPixbuf*	pbuf;
 	GtkWidget*	image;
@@ -849,7 +945,16 @@ void populateDnD(void)
 
 char* makeToolBarList(void)
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	GString*	str=g_string_new("");
+
+	for (int j=0;j<listWidget->count();j++)
+		{
+		//	printf("type=%c\n",listWidget->item(j)->type());
+			g_string_append_c(str,listWidget->item(j)->type());
+		}
+
+#else
 	GtkTreeIter iter;
 	gboolean	valid;
 	gchar*		str_data;
@@ -865,8 +970,8 @@ char* makeToolBarList(void)
 			valid=gtk_tree_model_iter_next((GtkTreeModel *)listStore,&iter);
 			free(str_data);
 		}
-	return(g_string_free(str,false));
 #endif
+	return(g_string_free(str,false));
 }
 
 #ifndef _USEQT5_
@@ -1170,8 +1275,6 @@ void cancelPrefs(void)
 
 VISIBLE void doPrefs(Widget* widget,uPtr data)
 {
-printf("doPrefs %i\n",(int)(long)data);
-
 #ifdef _USEQT5_
 	QVBoxLayout			*mainvbox=new QVBoxLayout();
 	QHBoxLayout			*hbox=new QHBoxLayout;
@@ -1180,29 +1283,24 @@ printf("doPrefs %i\n",(int)(long)data);
 	QWidget				*tab;
 	QLabel				*widgetlabel;
 	int					posy;
-	QListWidget			*listWidget=new QListWidget;
-QIcon icon=QIcon::fromTheme("document-new",QIcon("document-new"));
-QListWidgetItem *iconw=new QListWidgetItem(icon,"");
+
+	listWidget=new QListWidget;
 
 	prefsWindow=new QDialog(mainWindow);
 	prefsWindow->setWindowTitle("Preferences");
 
+	populateStore();
 	listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 	listWidget->setDragEnabled(true);
 	listWidget->setDragDropMode(QAbstractItemView::InternalMove);
 	listWidget->viewport()->setAcceptDrops(true);
 	listWidget->setFlow(QListView::LeftToRight);
 	listWidget->setGridSize(QSize(32,32));
-	listWidget->addItem(QString("1"));
-	listWidget->addItem(QString("2"));
-	listWidget->addItem(QString("3"));
-
-	listWidget->addItem(iconw);
-
-	listWidget->setSizePolicy (QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
+	listWidget->setSizePolicy (QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));
 	listWidget->setMinimumHeight(48);
-	mainvbox->addWidget(listWidget,1);
-	populateStore();
+	listWidget->setMinimumWidth(32*(strlen(toolBarLayout))+4);
+
+	mainvbox->addWidget(listWidget,2);
 //pages
 //page1
 	table=new QGridLayout;
