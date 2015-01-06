@@ -1,5 +1,7 @@
 0.3.0
+Moved prefs to ~/.KKEditQT and ~/.KKEdit.
 Font prefs changes take effect immediately, (mostly).
+Done 'Apply' prefs.
 Basic hightlight current line.
 Basic line numbers.
 Synched gtk code v0.2.6 to 0.3.0
