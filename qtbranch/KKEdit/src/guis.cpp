@@ -20,12 +20,15 @@ GtkTable*		table;
 GtkWidget*		prefsWidgets[MAXPREFSWIDGETS];
 GtkObject*		prefsIntWidgets[MAXPREFSINTWIDGETS];
 
+GtkWidget		*fromHBox;
+
 #else
 QGridLayout		*table;
 QWidget			*prefsWidgets[MAXPREFSWIDGETS];
 QWidget			*prefsIntWidgets[MAXPREFSINTWIDGETS];
 QWidget			*prefsOtherWidgets[MAXPREFSOTHERWIDGETS];
 QListWidget		*listWidget;
+QToolBar		*fromHBox;
 //TODO//
 #endif
 
@@ -876,18 +879,23 @@ void populateStore(void)
 #endif
 }
 
-#ifndef _USEQT5_
-void addToToolBar(GtkWidget* widget,gpointer ptr)
-#else
 //TODO//
-void addToToolBar(void)
-#endif
+void addToToolBar(Widget* widget,uPtr data)
 {
-#ifndef _USEQT5_
-	char*	holddata=toolBarLayout;
-	char*	type;
+	char	*holddata=toolBarLayout;
+#ifdef _USEQT5_
+//printf("clicked\n");
+//printf("data=%i\n",qobject_cast<MenuItemClass*>(widget)->getMenuID());
+//printf("name=%s\n",qobject_cast<MenuItemClass*>(widget)->objectName().constData());
+//printf("data=%i\n",(long)data);
 
-	type=strndup((char*)ptr,1);
+	toolBarLayout=(char*)qobject_cast<MenuItemClass*>(widget)->objectName().constData();
+	populateStore();
+	toolBarLayout=holddata;
+#else
+	char	*type;
+
+	type=strndup((char*)data,1);
 	toolBarLayout=type;
 	populateStore();
 	toolBarLayout=holddata;
@@ -897,7 +905,19 @@ void addToToolBar(void)
 
 void addIcon(const char* icon,const char* data,int toolnumber,const char* tooltip)
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	QIcon qicon;
+	MenuItemClass* menuitem=new MenuItemClass(icon);
+
+	qicon=QIcon::fromTheme(icon,QIcon(icon));
+	menuitem->setObjectName(data);
+	menuitem->setIcon(qicon);
+	menuitem->setCallBackVoid(&addToToolBar);
+	menuitem->setMenuID(toolnumber);
+	menuitem->setToolTip(tooltip);
+
+	fromHBox->addAction(menuitem);
+#else
 	tool[toolnumber]=gtk_tool_button_new_from_stock(icon);
 	gtk_box_pack_start(GTK_BOX(fromHBox),(GtkWidget*)tool[toolnumber],false,false,2);
 	g_signal_connect(G_OBJECT(tool[toolnumber]),"clicked",G_CALLBACK(addToToolBar),(void*)data);
@@ -905,9 +925,9 @@ void addIcon(const char* icon,const char* data,int toolnumber,const char* toolti
 #endif
 }
 
+#ifndef _USEQT5_
 void addPixbuf(const char* pixbuf,const char* data,int toolnumber,const char* tooltip)
 {
-#ifndef _USEQT5_
 	GtkWidget*		image;
 	image=gtk_image_new_from_file(pixbuf);
 
@@ -915,12 +935,31 @@ void addPixbuf(const char* pixbuf,const char* data,int toolnumber,const char* to
 	gtk_box_pack_start(GTK_BOX(fromHBox),(GtkWidget*)tool[toolnumber],false,false,2);
 	g_signal_connect(G_OBJECT(tool[toolnumber]),"clicked",G_CALLBACK(addToToolBar),(void*)data);
 	gtk_widget_set_tooltip_text((GtkWidget*)tool[toolnumber],tooltip);
-#endif
 }
+#endif
 
 void populateDnD(void)
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	addIcon("document-new","N",0,gettext("New File"));
+	addIcon("document-open","O",1,gettext("Open File"));
+	addIcon("document-save","S",2,gettext("Save File"));
+	addIcon("edit-cut","X",3,gettext("Cut"));
+	addIcon("edit-copy","C",4,gettext("Copy"));
+	addIcon("edit-paste","P",5,gettext("Paste"));
+	addIcon("edit-undo","U",6,gettext("Undo"));
+	addIcon("edit-redo","R",7,gettext("Redo"));
+	addIcon("edit-find","F",8,gettext("Find"));
+	addIcon("dialog-question","G",9,gettext("Go To Definition"));
+	addIcon("go-previous","B",17,gettext("Go Back"));
+	addIcon(DATADIR"/pixmaps/num.png","9",10,gettext("Go To Line"));
+	addIcon(DATADIR"/pixmaps/api.png","A",11,gettext("Find API In Gtk Docs"));
+	addIcon(DATADIR"/pixmaps/qtapi.png","Q",16,gettext("Find API In Qt5 Docs"));
+	addIcon(DATADIR"/pixmaps/finddef.png","D",12,gettext("Search For Define"));
+	addIcon(DATADIR"/pixmaps/live.png","L",13,gettext("Live Search"));
+	addIcon(DATADIR"/pixmaps/sep.png","s",14,gettext("Separator"));
+	addIcon(DATADIR"/pixmaps/expand.png","E",15,gettext("Expander"));
+#else
 	addIcon(GTK_STOCK_NEW,"N",0,gettext("New File"));
 	addIcon(GTK_STOCK_OPEN,"O",1,gettext("Open File"));
 	addIcon(GTK_STOCK_SAVE,"S",2,gettext("Save File"));
@@ -949,11 +988,7 @@ char* makeToolBarList(void)
 	GString*	str=g_string_new("");
 
 	for (int j=0;j<listWidget->count();j++)
-		{
-		//	printf("type=%c\n",listWidget->item(j)->type());
-			g_string_append_c(str,listWidget->item(j)->type());
-		}
-
+		g_string_append_c(str,listWidget->item(j)->type());
 #else
 	GtkTreeIter iter;
 	gboolean	valid;
@@ -978,10 +1013,17 @@ char* makeToolBarList(void)
 void clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 #else
 //TODO//
-void clickIt(void)
+void clickIt(QListWidgetItem* item)
 #endif
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+printf("XXXXXXXXclicked\n");
+printf("clicked\n");
+printf("data=%i\n",((MenuItemClass*)item)->getMenuID());
+//printf("name=%s\n",qobject_cast<MenuItemClass*>(item)->objectName().constData());
+//printf("data=%i\n",(long)data);
+
+#else
 	GtkTreePath*	path=NULL;
 	GdkModifierType	mask;
 	GtkTreeIter		iter;
@@ -1290,6 +1332,9 @@ VISIBLE void doPrefs(Widget* widget,uPtr data)
 	prefsWindow->setWindowTitle("Preferences");
 
 	populateStore();
+	fromHBox=new QToolBar;
+	QObject::connect(((QListWidget*)listWidget),&QListWidget::itemDoubleClicked,clickIt);
+
 	listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 	listWidget->setDragEnabled(true);
 	listWidget->setDragDropMode(QAbstractItemView::InternalMove);
@@ -1301,6 +1346,9 @@ VISIBLE void doPrefs(Widget* widget,uPtr data)
 	listWidget->setMinimumWidth(32*(strlen(toolBarLayout))+4);
 
 	mainvbox->addWidget(listWidget,2);
+
+	populateDnD();
+	mainvbox->addWidget(fromHBox);
 //pages
 //page1
 	table=new QGridLayout;

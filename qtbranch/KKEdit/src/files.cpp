@@ -190,7 +190,7 @@ void setFilePrefs(uPtr pagedata)
 	doc->setTabStopWidth(tabWidth*8);
 	doc->document()->setDefaultFont(QFont(fontname,fontsize,-1,false));
 #else
-	pageStruct* page
+	pageStruct* page;
 	PangoFontDescription*	font_desc;
 	GdkColor				color;
 	GtkTextAttributes*		attr;

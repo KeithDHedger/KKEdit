@@ -426,7 +426,7 @@ extern GtkWidget*		replaceDropBox;
 
 //custom toolbar
 #ifndef _USEQT5_
-extern GtkWidget*		fromHBox;
+//extern GtkWidget*		fromHBox;
 extern GtkWidget*		iconViewBox;
 #else
 //TODO//

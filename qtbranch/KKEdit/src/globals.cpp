@@ -318,8 +318,8 @@ GtkWidget*		replaceDropBox;
 #endif
 
 //custom toolbar
+//Widget			*fromHBox;
 #ifndef _USEQT5_
-GtkWidget*		fromHBox;
 GtkWidget*		iconViewBox;
 #else
 //TODO//
