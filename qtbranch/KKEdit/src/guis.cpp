@@ -1022,7 +1022,7 @@ printf("clicked\n");
 printf("data=%i\n",((MenuItemClass*)item)->getMenuID());
 //printf("name=%s\n",qobject_cast<MenuItemClass*>(item)->objectName().constData());
 //printf("data=%i\n",(long)data);
-
+listWidget->removeItemWidget(item);
 #else
 	GtkTreePath*	path=NULL;
 	GdkModifierType	mask;
