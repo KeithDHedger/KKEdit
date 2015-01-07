@@ -1887,57 +1887,45 @@ void setPrefs(void)
 #ifdef _USEQT5_
 printf("set prefs\n");
 	QString str;
-	char	*fontname;
-	char	*fontsize;
 //page 1
-	indent=qobject_cast<QCheckBox*>(prefsWidgets[AUTOINDENT])->isChecked();
-	lineNumbers=qobject_cast<QCheckBox*>(prefsWidgets[SHOWNUMS])->isChecked();
-	lineWrap=qobject_cast<QCheckBox*>(prefsWidgets[WRAP])->isChecked();
-	highLight=qobject_cast<QCheckBox*>(prefsWidgets[HIGHLIGHT])->isChecked();
-	noSyntax=qobject_cast<QCheckBox*>(prefsWidgets[NOSYNTAX])->isChecked();
-	singleUse=qobject_cast<QCheckBox*>(prefsWidgets[USESINGLE])->isChecked();
-	onExitSaveSession=qobject_cast<QCheckBox*>(prefsWidgets[AUTOSAVE])->isChecked();
-	restoreBookmarks=qobject_cast<QCheckBox*>(prefsWidgets[AUTOBM])->isChecked();
-	noDuplicates=qobject_cast<QCheckBox*>(prefsWidgets[NODUPLICATE])->isChecked();
-	noWarnings=qobject_cast<QCheckBox*>(prefsWidgets[NOWARN])->isChecked();
-	readLinkFirst=qobject_cast<QCheckBox*>(prefsWidgets[READLINK])->isChecked();
-	autoShowComps=qobject_cast<QCheckBox*>(prefsWidgets[AUTOSHOW])->isChecked();
+	indent=prefsWidgets[AUTOINDENT]->property("checked").toBool();
+	lineNumbers=prefsWidgets[SHOWNUMS]->property("checked").toBool();
+	lineWrap=prefsWidgets[WRAP]->property("checked").toBool();
+	highLight=prefsWidgets[HIGHLIGHT]->property("checked").toBool();
+	noSyntax=prefsWidgets[NOSYNTAX]->property("checked").toBool();
+	singleUse=prefsWidgets[USESINGLE]->property("checked").toBool();
+	onExitSaveSession=prefsWidgets[AUTOSAVE]->property("checked").toBool();
+	restoreBookmarks=prefsWidgets[AUTOBM]->property("checked").toBool();
+	noDuplicates=prefsWidgets[NODUPLICATE]->property("checked").toBool();
+	noWarnings=prefsWidgets[NOWARN]->property("checked").toBool();
+	readLinkFirst=prefsWidgets[READLINK]->property("checked").toBool();
+	autoShowComps=prefsWidgets[AUTOSHOW]->property("checked").toBool();
 
 //page 2
-	tabWidth=((QSpinBox*)prefsIntWidgets[TABWIDTH])->value();
+	tabWidth=prefsIntWidgets[TABWIDTH]->property("value").toInt();
 //	styleName //TODO//
 	debugFree(&fontAndSize,"setPrefs fontAndSize");
-	str=qobject_cast<QComboBox*>(prefsOtherWidgets[FONTNAMECOMBO])->currentText();
-	fontname=toCharStar(&str);
-	str=qobject_cast<QComboBox*>(prefsOtherWidgets[FONTSIZECOMBO])->currentText();
-	fontsize=toCharStar(&str);
-	asprintf(&fontAndSize,"%s %s",fontname,fontsize);
-	free(fontname);
-	free(fontsize);
+	asprintf(&fontAndSize,"%s %s",prefsOtherWidgets[FONTNAMECOMBO]->property("currentText").toByteArray().constData(),prefsOtherWidgets[FONTSIZECOMBO]->property("currentText").toByteArray().constData());
 	debugFree(&highlightColour,"setPrefs highlightColour");
-	str=qobject_cast<QLabel*>(prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->text();
-	highlightColour=toCharStar(&str);
-	autoShowMinChars=((QSpinBox*)prefsIntWidgets[COMPLETIONSIZE])->value();
-	listFunction=qobject_cast<QComboBox*>(prefsOtherWidgets[FUNCTIONCOMBO])->currentIndex();
+	highlightColour=strdup(prefsOtherWidgets[BMHIGHLIGHTCOLOUR]->property("text").toByteArray().constData());
+	autoShowMinChars=prefsIntWidgets[COMPLETIONSIZE]->property("value").toInt();
+	listFunction=prefsOtherWidgets[FUNCTIONCOMBO]->property("currentIndex").toInt();
 
 //page 3
-	depth=((QSpinBox*)prefsIntWidgets[MAXFUNCDEPTH])->value();
+	depth=prefsIntWidgets[MAXFUNCDEPTH]->property("value").toInt();
 	debugFree(&terminalCommand,"setPrefs terminalCommand");
-	str=qobject_cast<QLineEdit*>(prefsOtherWidgets[PREFSTERMCOMMAND])->text();
-	terminalCommand=toCharStar(&str);
+	terminalCommand=strdup(prefsOtherWidgets[PREFSTERMCOMMAND]->property("text").toByteArray().constData());
 	debugFree(&rootCommand,"setPrefs rootCommand");
-	str=qobject_cast<QLineEdit*>(prefsOtherWidgets[PREFSROOTCOMMAND])->text();
-	rootCommand=toCharStar(&str);
+	rootCommand=strdup(prefsOtherWidgets[PREFSROOTCOMMAND]->property("text").toByteArray().constData());
 	debugFree(&browserCommand,"setPrefs browserCommand");
-	str=qobject_cast<QLineEdit*>(prefsOtherWidgets[PREFSBROWSERCOMMAND])->text();
-	browserCommand=toCharStar(&str);
-	maxFRHistory=((QSpinBox*)prefsIntWidgets[MAXHISTORY])->value();
-	maxTabChars=((QSpinBox*)prefsIntWidgets[MAXTABCHARS])->value();
-	maxFuncDefs=((QSpinBox*)prefsIntWidgets[MENUWIDTH])->value();
-	maxBMChars=((QSpinBox*)prefsIntWidgets[MAXBMWIDTH])->value();
-	autoCheck=qobject_cast<QCheckBox*>(prefsWidgets[UPDATECHECK])->isChecked();
-	useGlobalPlugMenu=qobject_cast<QCheckBox*>(prefsWidgets[GLOBALPLUGMENU])->isChecked();
-	nagScreen=qobject_cast<QCheckBox*>(prefsWidgets[BEKIND])->isChecked();
+	browserCommand=strdup(prefsOtherWidgets[PREFSBROWSERCOMMAND]->property("text").toByteArray().constData());
+	maxFRHistory=prefsIntWidgets[MAXHISTORY]->property("value").toInt();
+	maxTabChars=prefsIntWidgets[MAXTABCHARS]->property("value").toInt();
+	maxFuncDefs=prefsIntWidgets[MENUWIDTH]->property("value").toInt();
+	maxBMChars=prefsIntWidgets[MAXBMWIDTH]->property("value").toInt();
+	autoCheck=prefsWidgets[UPDATECHECK]->property("checked").toBool();
+	useGlobalPlugMenu=prefsWidgets[GLOBALPLUGMENU]->property("checked").toBool();
+	nagScreen=prefsWidgets[BEKIND]->property("checked").toBool();
 
 	cancelPrefs();
 
