@@ -1226,9 +1226,9 @@ void makePrefsDial(int widgnum,const char* label,const char* name,int value,int 
 #else
 	QLabel*	widgetlabel;
 	prefsIntWidgets[widgnum]=new QSpinBox;
-	qobject_cast<QSpinBox*>(prefsIntWidgets[widgnum])->setMaximum(maxvalue);
-	qobject_cast<QSpinBox*>(prefsIntWidgets[widgnum])->setMinimum(minvalue);
-	qobject_cast<QSpinBox*>(prefsIntWidgets[widgnum])->setValue(value);
+	prefsIntWidgets[widgnum]->setProperty("maximum",maxvalue);
+	prefsIntWidgets[widgnum]->setProperty("minimum",minvalue);
+	prefsIntWidgets[widgnum]->setProperty("value",value);
 	widgetlabel=new QLabel(label);
 	table->addWidget(widgetlabel,posy,0,Qt::AlignVCenter);
 	table->addWidget(prefsIntWidgets[widgnum],posy,1,1,-1,Qt::AlignVCenter);
@@ -1246,7 +1246,7 @@ void makePrefsCheck(int widgnum,const char* label,const char* name,bool onoff,in
 		gtk_table_attach_defaults(table,prefsWidgets[widgnum],posx,posx+1,posy,posy+1);
 #else
 	prefsWidgets[widgnum]=new QCheckBox(label);
-	qobject_cast<QCheckBox*>(prefsWidgets[widgnum])->setChecked(onoff);
+	prefsWidgets[widgnum]->setProperty("checked", onoff);
 	if(posx!=-1)
 		table->addWidget(prefsWidgets[widgnum],posy,posx,Qt::AlignTop);
 #endif
@@ -1258,9 +1258,9 @@ void setColor()
 	const QColor colour=QColorDialog::getColor(QColor(highlightColour),0,"Select Color",0);
 	if(colour.isValid())
 		{
-			qobject_cast<QLabel*>(prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setPalette(QPalette(colour));
-			qobject_cast<QLabel*>(prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setAutoFillBackground(true);
-			qobject_cast<QLabel*>(prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setText(colour.name());
+			prefsOtherWidgets[BMHIGHLIGHTCOLOUR]->setProperty("palette",QPalette(colour));
+			prefsOtherWidgets[BMHIGHLIGHTCOLOUR]->setProperty("autoFillBackground",true);
+			prefsOtherWidgets[BMHIGHLIGHTCOLOUR]->setProperty("text",colour.name());
 		}
 }
 #endif
@@ -1383,10 +1383,10 @@ VISIBLE void doPrefs(Widget* widget,uPtr data)
 	fontsize=atoi(strrchr(fontAndSize,' '));
 	stripped=g_strstrip(fontname);
 	foundsize=qobject_cast<QComboBox*>(prefsOtherWidgets[FONTNAMECOMBO])->findText(QString(stripped),0);
-	qobject_cast<QComboBox*>(prefsOtherWidgets[FONTNAMECOMBO])->setCurrentIndex(foundsize);
+	prefsOtherWidgets[FONTNAMECOMBO]->setProperty("currentIndex",foundsize);
 
 	prefsOtherWidgets[FONTSIZECOMBO]=new QComboBox;
-    qobject_cast<QComboBox*>(prefsOtherWidgets[FONTSIZECOMBO])->setEditable(true);
+    prefsOtherWidgets[FONTSIZECOMBO]->setProperty("editable",true);
 
     QFontDatabase db;
 	comboindex=0;
@@ -1398,7 +1398,7 @@ VISIBLE void doPrefs(Widget* widget,uPtr data)
 			comboindex++;
 		}
 
-	qobject_cast<QComboBox*>(prefsOtherWidgets[FONTSIZECOMBO])->setCurrentIndex(foundsize);
+	prefsOtherWidgets[FONTSIZECOMBO]->setProperty("currentIndex",foundsize);
 	table->addWidget(prefsOtherWidgets[FONTSIZECOMBO],posy,2,Qt::AlignVCenter);
 
 //bm highlight colour
@@ -1412,10 +1412,11 @@ VISIBLE void doPrefs(Widget* widget,uPtr data)
 	table->addWidget(prefsOtherWidgets[BMHIGHLIGHTCOLOUR],posy,1,Qt::AlignVCenter);
 	table->addWidget(colorButton,posy,2,Qt::AlignVCenter);
 
-	QColor color=QColor(highlightColour);
-	qobject_cast<QLabel*>(prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setPalette(QPalette(color));
-	qobject_cast<QLabel*>(prefsOtherWidgets[BMHIGHLIGHTCOLOUR])->setAutoFillBackground(true);
+	QColor colour=QColor(highlightColour);
+	prefsOtherWidgets[BMHIGHLIGHTCOLOUR]->setProperty("palette",QPalette(colour));
+	prefsOtherWidgets[BMHIGHLIGHTCOLOUR]->setProperty("autoFillBackground",true);
 	QObject::connect(((QPushButton*)colorButton),&QPushButton::clicked,setColor);
+
 //autoshow completion
 	posy++;
 	makePrefsDial(COMPLETIONSIZE,gettext("Completion Minimum Word Size:"),"minautochars",autoShowMinChars,2,20,posy);

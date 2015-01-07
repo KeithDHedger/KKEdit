@@ -1,4 +1,5 @@
 0.3.0
+Done save exit data if using quit or closing main window.
 Done DnD toolbar customize in prefs.
 Moved prefs to ~/.KKEditQT and ~/.KKEdit.
 Font prefs changes take effect immediately, (mostly).
