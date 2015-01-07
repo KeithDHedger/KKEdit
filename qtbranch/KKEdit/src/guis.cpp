@@ -1429,7 +1429,8 @@ VISIBLE void doPrefs(Widget* widget,uPtr data)
 	qobject_cast<QComboBox*>(prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu by file position"));
 	qobject_cast<QComboBox*>(prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu alphabetically"));
 	qobject_cast<QComboBox*>(prefsOtherWidgets[FUNCTIONCOMBO])->addItem(gettext("Display functions etc in menu in categorised format"));
-	qobject_cast<QComboBox*>(prefsOtherWidgets[FUNCTIONCOMBO])->setCurrentIndex(listFunction);
+	//qobject_cast<QComboBox*>(prefsOtherWidgets[FUNCTIONCOMBO])->setCurrentIndex(listFunction);
+	prefsOtherWidgets[FUNCTIONCOMBO]->setProperty("currentIndex",listFunction);
 
 	hbox=new QHBoxLayout;
     hbox->addStretch(1);
