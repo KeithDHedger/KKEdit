@@ -1877,6 +1877,18 @@ VISIBLE void doShutdown(Widget* widget,uPtr data)
 #endif
 }
 
+/*
+			if(toolBarLayout!=NULL)
+				{
+					debugFree(&toolBarLayout,"setPrefs toolBarLayout");
+					toolBarLayout=makeToolBarList();
+					gtk_widget_destroy((GtkWidget*)toolBar);
+					toolBar=(GtkToolbar*)gtk_toolbar_new();
+					gtk_box_pack_start(GTK_BOX(toolBarBox),(GtkWidget*)toolBar,true,true,0);
+					setUpToolBar();
+				}
+
+*/
 #ifndef _USEQT5_
 void setPrefs(GtkWidget* widget,gpointer data)
 #else
@@ -1886,7 +1898,8 @@ void setPrefs(void)
 {
 #ifdef _USEQT5_
 printf("set prefs\n");
-	QString str;
+	debugFree(&toolBarLayout,"setPrefs toolBarLayout");
+	toolBarLayout=makeToolBarList();
 //page 1
 	indent=prefsWidgets[AUTOINDENT]->property("checked").toBool();
 	lineNumbers=prefsWidgets[SHOWNUMS]->property("checked").toBool();
