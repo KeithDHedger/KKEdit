@@ -985,8 +985,8 @@ functionData* getFunctionByName(char* name,bool recurse)
 				}
 		}
 
-	return(NULL);
 #endif
+	return(NULL);
 }
 
 void destroyData(functionData* fdata)
@@ -1095,9 +1095,7 @@ void destroyTool(gpointer data)
 
 gint sortTools(gconstpointer a,gconstpointer b)
 {
-#ifndef _USEQT5_
 	return(strcasecmp(((toolStruct*)a)->menuName,((toolStruct*)b)->menuName));
-#endif
 }
 
 void buildToolsList(void)
@@ -1275,6 +1273,7 @@ gboolean idleScroll(gpointer data)
 	else
 		return(false);
 #endif
+	return(false);
 }
 
 void showBarberPole(const char* title)

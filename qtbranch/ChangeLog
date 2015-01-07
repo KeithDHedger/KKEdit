@@ -1,4 +1,7 @@
 0.3.0
+Set Function menu enabled.
+Done set enavbled on selected toolitems in prefs.
+Done remove items from DnD prefs, and save.
 Done save exit data if using quit or closing main window.
 Done DnD toolbar customize in prefs.
 Moved prefs to ~/.KKEditQT and ~/.KKEdit.

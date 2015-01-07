@@ -347,9 +347,9 @@ void refreshMainWindow(void)
 
 int yesNo(char* question,char* file)
 {
+	int			result=0;
 #ifndef _USEQT5_
 	GtkWidget*	dialog;
-	int			result;
 
 	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,"%s %s",question,file);
 
@@ -359,8 +359,8 @@ int yesNo(char* question,char* file)
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 
-	return(result);
 #endif
+	return(result);
 }
 
 VISIBLE void doOpenFile(Widget* widget,uPtr data)
@@ -402,9 +402,9 @@ VISIBLE void doOpenFile(Widget* widget,uPtr data)
 
 int show_question(char* filename)
 {
+	gint		result=0;
 #ifndef _USEQT5_
 	GtkWidget*	dialog;
-	gint		result;
 	char*		message;
 
 	asprintf(&message,gettext("Save file %s before closing?"),filename);
@@ -417,8 +417,8 @@ int show_question(char* filename)
 
 	gtk_widget_destroy(dialog);
 	debugFree(&message,"show_question message");
-	return(result);
 #endif
+	return(result);
 }
 
 #ifndef _USEQT5_
@@ -571,7 +571,7 @@ VISIBLE void closeTab(Widget* widget,uPtr data)
 		thispage=0;
 	else
 		{
-			if(data==NULL)
+			if(data==0)
 				thispage=((QTabWidget*)mainNotebook)->currentIndex();
 		}
 
@@ -773,7 +773,6 @@ void switchPage(int thispage)
 	int				numtypes=0;
 	QMenu			*whattypemenu;
 	QMenu			*typesubmenus[50]= {NULL,};
-	QMenu			*submenu;
 	bool			onefunc=false;
 	MenuItemClass	*menuitem;
 
@@ -854,6 +853,7 @@ void switchPage(int thispage)
 			if (lineptr!=NULL)
 				lineptr++;
 		}
+	funcMenu->setEnabled(onefunc);
 #else
 	pageStruct*	page;
 	char*		functions=NULL;
@@ -1877,27 +1877,13 @@ VISIBLE void doShutdown(Widget* widget,uPtr data)
 #endif
 }
 
-/*
-			if(toolBarLayout!=NULL)
-				{
-					debugFree(&toolBarLayout,"setPrefs toolBarLayout");
-					toolBarLayout=makeToolBarList();
-					gtk_widget_destroy((GtkWidget*)toolBar);
-					toolBar=(GtkToolbar*)gtk_toolbar_new();
-					gtk_box_pack_start(GTK_BOX(toolBarBox),(GtkWidget*)toolBar,true,true,0);
-					setUpToolBar();
-				}
-
-*/
 #ifndef _USEQT5_
 void setPrefs(GtkWidget* widget,gpointer data)
 #else
-//TODO//
 void setPrefs(void)
 #endif
 {
 #ifdef _USEQT5_
-printf("set prefs\n");
 	debugFree(&toolBarLayout,"setPrefs toolBarLayout");
 	toolBarLayout=makeToolBarList();
 //page 1

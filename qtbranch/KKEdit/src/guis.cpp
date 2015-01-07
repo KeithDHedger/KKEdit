@@ -29,6 +29,7 @@ QWidget			*prefsIntWidgets[MAXPREFSINTWIDGETS];
 QWidget			*prefsOtherWidgets[MAXPREFSOTHERWIDGETS];
 QListWidget		*listWidget;
 QToolBar		*fromHBox;
+QAction			*tool[18];
 //TODO//
 #endif
 
@@ -313,8 +314,8 @@ gboolean getToolKey(void)
 	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
 		gtk_entry_set_text(widget,gdk_keyval_name(event->keyval));
 
-	return(true);
 #endif
+	return(true);
 }
 
 void doMakeTool(void)
@@ -580,79 +581,91 @@ void addIconToList(const char* name,int type)
 void populateStore(void)
 {
 #ifdef _USEQT5_
-	QIcon icon;
-	QListWidgetItem *iconw;
-	char*		type;
 
 	for(int j=0;j<(int)strlen(toolBarLayout);j++)
 		{
-			type=strndup((char*)&toolBarLayout[j],1);
 			switch(toolBarLayout[j])
 				{
 //new
 					case 'N':
 						addIconToList("document-new",'N');
+						tool[0]->setEnabled(false);
 						break;
 
 //open+recent
 					case 'O':
 						addIconToList("document-open",'O');
+						tool[1]->setEnabled(false);
 						break;
 //save
 					case 'S':
 						addIconToList("document-save",'S');
+						tool[2]->setEnabled(false);
 						break;
 //cut
 					case 'X':
 						addIconToList("edit-cut",'X');
+						tool[3]->setEnabled(false);
 						break;
 //copy
 					case 'C':
 						addIconToList("edit-copy",'C');
+						tool[4]->setEnabled(false);
 						break;
 //paste
 					case 'P':
 						addIconToList("edit-paste",'P');
+						tool[5]->setEnabled(false);
 						break;
 //undo
 					case 'U':
 						addIconToList("edit-undo",'U');
+						tool[6]->setEnabled(false);
 						break;
 //redo
 					case 'R':
 						addIconToList("edit-redo",'R');
+						tool[7]->setEnabled(false);
 						break;
 //find
 					case 'F':
 						addIconToList("edit-find",'F');
+						tool[8]->setEnabled(false);
 						break;
 //navigation
 					case 'G':
 						addIconToList("dialog-question",'G');
+						tool[9]->setEnabled(false);
 						break;
 //go back
 					case 'B':
 						addIconToList("go-previous",'B');
+						tool[17]->setEnabled(false);
 						break;
 //go to line
 					case '9':
 						addIconToList(DATADIR"/pixmaps/num.png",'9');
+						tool[10]->setEnabled(false);
 						break;
 //find api gtk
 					case 'A':
 						addIconToList(DATADIR"/pixmaps/api.png",'A');
+						tool[11]->setEnabled(false);
 						break;
 //find api qt5
 					case 'Q':
 						addIconToList(DATADIR"/pixmaps/qtapi.png",'Q');
+						tool[16]->setEnabled(false);
 						break;
 //find def
 					case 'D':
 						addIconToList(DATADIR"/pixmaps/finddef.png",'D');
+						tool[12]->setEnabled(false);
 						break;
 //live search
 					case 'L':
 						addIconToList(DATADIR"/pixmaps/live.png",'L');
+						tool[13]->setEnabled(false);
 						break;
 //seperator
 					case 's':
@@ -879,16 +892,10 @@ void populateStore(void)
 #endif
 }
 
-//TODO//
 void addToToolBar(Widget* widget,uPtr data)
 {
 	char	*holddata=toolBarLayout;
 #ifdef _USEQT5_
-//printf("clicked\n");
-//printf("data=%i\n",qobject_cast<MenuItemClass*>(widget)->getMenuID());
-//printf("name=%s\n",qobject_cast<MenuItemClass*>(widget)->objectName().constData());
-//printf("data=%i\n",(long)data);
-
 	toolBarLayout=(char*)qobject_cast<MenuItemClass*>(widget)->objectName().constData();
 	populateStore();
 	toolBarLayout=holddata;
@@ -908,7 +915,6 @@ void addIcon(const char* icon,const char* data,int toolnumber,const char* toolti
 #ifdef _USEQT5_
 	QIcon qicon;
 	MenuItemClass* menuitem=new MenuItemClass(icon);
-
 	qicon=QIcon::fromTheme(icon,QIcon(icon));
 	menuitem->setObjectName(data);
 	menuitem->setIcon(qicon);
@@ -917,6 +923,7 @@ void addIcon(const char* icon,const char* data,int toolnumber,const char* toolti
 	menuitem->setToolTip(tooltip);
 
 	fromHBox->addAction(menuitem);
+	tool[toolnumber]=menuitem;
 #else
 	tool[toolnumber]=gtk_tool_button_new_from_stock(icon);
 	gtk_box_pack_start(GTK_BOX(fromHBox),(GtkWidget*)tool[toolnumber],false,false,2);
@@ -985,16 +992,16 @@ void populateDnD(void)
 char* makeToolBarList(void)
 {
 #ifdef _USEQT5_
-	GString*	str=g_string_new("");
+	GString		*str=g_string_new("");
 
 	for (int j=0;j<listWidget->count();j++)
 		g_string_append_c(str,listWidget->item(j)->type());
 #else
 	GtkTreeIter iter;
 	gboolean	valid;
-	gchar*		str_data;
+	gchar		*str_data;
 	gint		row_count=0;
-	GString*	str=g_string_new("");
+	GString		*str=g_string_new("");
 
 	valid=gtk_tree_model_get_iter_first((GtkTreeModel *)listStore,&iter);
 	while(valid)
@@ -1012,19 +1019,23 @@ char* makeToolBarList(void)
 #ifndef _USEQT5_
 void clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 #else
-//TODO//
 void clickIt(QListWidgetItem* item)
 #endif
 {
 #ifdef _USEQT5_
-printf("XXXXXXXXclicked\n");
-printf("clicked\n");
-printf("data=%i\n",((MenuItemClass*)item)->getMenuID());
-//printf("name=%s\n",qobject_cast<MenuItemClass*>(item)->objectName().constData());
-//printf("data=%i\n",(long)data);
-int row=listWidget->currentRow();
-QListWidgetItem* titem=listWidget->takeItem(row);
-delete titem;
+	const char		*data="NOSXCPURFG9ADLsEQB";
+	int				row=listWidget->currentRow();
+	QListWidgetItem	*titem=listWidget->takeItem(row);
+
+	for(unsigned int j=0;j<strlen(data);j++)
+		{
+			if(item->type()==data[j])
+				{
+					tool[j]->setEnabled(true);
+					break;
+				}
+		}
+	delete titem;
 #else
 	GtkTreePath*	path=NULL;
 	GdkModifierType	mask;
@@ -1122,8 +1133,8 @@ gboolean setKeyInEntry(void)
 	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
 		gtk_entry_set_text(widget,gdk_keyval_name(event->keyval));
 
-	return(true);
 #endif
+	return(true);
 }
 
 void buildKeys()
@@ -1329,12 +1340,14 @@ VISIBLE void doPrefs(Widget* widget,uPtr data)
 	int					posy;
 
 	listWidget=new QListWidget;
-
+	fromHBox=new QToolBar;
 	prefsWindow=new QDialog(mainWindow);
+
 	prefsWindow->setWindowTitle("Preferences");
 
+	populateDnD();
 	populateStore();
-	fromHBox=new QToolBar;
+
 	QObject::connect(((QListWidget*)listWidget),&QListWidget::itemDoubleClicked,clickIt);
 
 	listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -1348,8 +1361,6 @@ VISIBLE void doPrefs(Widget* widget,uPtr data)
 	listWidget->setMinimumWidth(32*(strlen(toolBarLayout))+4);
 
 	mainvbox->addWidget(listWidget,2);
-
-	populateDnD();
 	mainvbox->addWidget(fromHBox);
 //pages
 //page1
@@ -2670,9 +2681,9 @@ void buildWordCheck(int documentCheck)
 
 int showFunctionEntry(void)
 {
+	gint		result=false;
 #ifndef _USEQT5_
 	GtkWidget*	dialog;
-	gint		result;
 	GtkWidget*	content_area;
 	GtkWidget*	entrybox;
 
@@ -2693,8 +2704,8 @@ int showFunctionEntry(void)
 	functionSearchText=strdup(gtk_entry_get_text((GtkEntry*)entrybox));
 	gtk_widget_destroy(dialog);
 
-	return(result);
 #endif
+	return(result);
 }
 
 #ifdef _BUILDDOCVIEWER_
