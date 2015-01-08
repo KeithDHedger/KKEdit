@@ -180,9 +180,9 @@ void jumpToLineFromBar(void)
 
 int showLineEntry(void)
 {
+	gint		result=0;
 #ifndef _USEQT5_
 	GtkWidget*	dialog;
-	gint		result;
 	GtkWidget*	content_area;
 	GtkWidget*	entrybox;
 	char		line[48];
@@ -205,8 +205,8 @@ int showLineEntry(void)
 
 	gtk_widget_destroy(dialog);
 
-	return(result);
 #endif
+	return(result);
 }
 
 VISIBLE void jumpToLine(Widget* widget,uPtr data)

@@ -655,8 +655,6 @@ int getWorkspaceNumber(void)
 #ifdef _USEQT5_
 void qtAppStart(int argc, char **argv)
 {
-	int	w,h;
-
 	setlocale(LC_ALL,"");
 	bindtextdomain("kkedit",LOCALEDIR);
 	textdomain("kkedit");
@@ -709,7 +707,6 @@ int main (int argc, char **argv)
 
 	int				status;
 	char*			filename;
-	char*			dbusname;
 	bool			safeflag=false;
 	GOptionContext*	context;
 

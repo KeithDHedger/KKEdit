@@ -129,8 +129,8 @@ gboolean doSetPlugData(void)
 				}
 		}
 
-	return(false);
 #endif
+	return(false);
 }
 
 void setPlugsEnabled(void)

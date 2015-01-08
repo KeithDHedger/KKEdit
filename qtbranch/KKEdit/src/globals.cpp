@@ -45,7 +45,6 @@ char*			highlightColour;
 char*			tmpHighlightColour;
 bool			showBMBar;
 int				bmMarkNumber=0;
-
 char*			toolBarLayout=NULL;
 
 #ifndef _USEQT5_
@@ -62,6 +61,9 @@ GtkWidget*		findQtApiWidget;
 GtkWidget*		findDefWidget;
 GtkWidget*		liveSearchWidget;
 #else
+QToolBar		*toolBar;
+//GtkWidget*		toolBarBox;
+
 //TODO//
 #endif
 
@@ -83,6 +85,8 @@ Widget*			mainNotebook;
 Widget*			menuBar;
 //file menu
 Widget*			fileMenu;
+Widget*			newMenu;
+Widget*			openMenu;
 Widget*			saveMenu;
 Widget*			saveAsMenu;
 Widget*			saveAllMenu;
@@ -101,13 +105,15 @@ Widget*			redoAllMenu;
 Widget*			cutMenu;
 Widget*			copyMenu;
 Widget*			pasteMenu;
+Widget*			findMenu;
 //view menu
 Widget*			viewMenu;
 Widget*			toolOutMenu;
 Widget*			statusBarMenu;
 //nav menu
-Widget*			navMenu;
-Widget*			goBackMenu;
+Widget			*navMenu;
+Widget			*goBackMenu;
+Widget			*goToDefineMenu;
 //function menu
 Widget*			funcMenu;
 //bm menu
@@ -315,6 +321,22 @@ GtkWidget*		findDropBox=NULL;
 GtkWidget*		replaceDropBox;
 #else
 //TODO//
+//QAction			*newButton;
+//QAction			*openButton=NULL;
+//QAction			*saveButton=NULL;
+//QAction			*redoButton=NULL;
+//QAction			*undoButton=NULL;
+//QAction			*cutButton=NULL;
+//QAction			*copyButton=NULL;
+//QAction			*pasteButton=NULL;
+//QAction			*findButton=NULL;
+//QAction			*gotoDefButton=NULL;
+//QAction			*backButton=NULL;
+QAction			*gotoLineButton=NULL;
+QAction			*findApiButton=NULL;
+QAction			*findQtApiButton=NULL;
+QAction			*findFuncDefButton=NULL;
+QAction			*liveSearchButton=NULL;
 #endif
 
 //custom toolbar
@@ -1062,8 +1084,8 @@ void getRecursiveTagList(char* filepath,void* ptr)
 			break;
 		}
 
+//TODO// filepath
 	asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - -x|%s|sed 's@ \\+@ @g'",filepath,depth,sort);
-
 	fp=popen(command, "r");
 	while(fgets(line,2048,fp))
 		{

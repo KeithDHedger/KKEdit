@@ -58,6 +58,7 @@ gchar* function_provider_get_name(void)
 #ifndef _USEQT5_
 	return g_strdup(((FunctionProvider *)provider)->name);
 #endif
+return(NULL);
 }
 
 #ifndef _USEQT5_
@@ -70,6 +71,7 @@ gint function_provider_get_priority(void)
 #ifndef _USEQT5_
 	return((FunctionProvider*)provider)->priority;
 #endif
+return(0);
 }
 
 #ifndef _USEQT5_
@@ -79,9 +81,7 @@ gboolean function_provider_match(GtkSourceCompletionProvider* provider,GtkSource
 gboolean function_provider_match(void)
 #endif
 {
-#ifndef _USEQT5_
-	return TRUE;
-#endif
+	return true;
 }
 
 #ifndef _USEQT5_
@@ -103,8 +103,8 @@ char* get_word_at_iter(void)
 			if(strlen(word)>=autoShowMinChars)
 				return(word);
 		}
-	return(NULL);
 #endif
+	return(NULL);
 }
 
 #ifndef _USEQT5_
@@ -158,6 +158,7 @@ GList* addPropsFromWord(void)
 		}
 	return(newlist);
 #endif
+return(NULL);
 }
 
 #ifndef _USEQT5_

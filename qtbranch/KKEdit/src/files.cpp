@@ -321,9 +321,9 @@ void dropText(void)
 bool getSaveFile(void)
 {
 //TODO//
+	bool		retval=false;
 #ifndef _USEQT5_
 	GtkWidget*	dialog;
-	bool		retval=false;
 
 	dialog=gtk_file_chooser_dialog_new(gettext("Save File"),(GtkWindow*)mainWindow, GTK_FILE_CHOOSER_ACTION_SAVE,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_SAVE,GTK_RESPONSE_ACCEPT,NULL);
 
@@ -346,8 +346,8 @@ bool getSaveFile(void)
 
 	gtk_widget_destroy(dialog);
 	refreshMainWindow();
-	return(retval);
 #endif
+	return(retval);
 }
 
 VISIBLE bool saveFile(Widget* widget,uPtr data)
@@ -433,8 +433,8 @@ printf("save %i\n",(int)(long)data);
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"saveFile");
 
-	return(true);
 #endif
+	return(true);
 }
 
 VISIBLE void openAsHexDump(Widget *widget,uPtr user_data)
@@ -588,7 +588,7 @@ printf("restoreSession %i\n",(int)(long)data);
 	fd=fopen(filename,"r");
 	if (fd!=NULL)
 		{
-			closeAllTabs(NULL,NULL);
+			closeAllTabs(NULL,0);
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
 					sscanf(buffer,"%i %[^\n]s",(int*)&currentline,(char*)&strarg);
@@ -712,9 +712,9 @@ do bookmarks
 
 int showFileChanged(char* filename)
 {
+	gint		result=0;
 #ifndef _USEQT5_
 	GtkWidget*	dialog;
-	gint		result;
 	char*		message;
 
 	asprintf(&message,gettext("File %s Has Changed on disk\nDo you want to reload it?"),filename);
@@ -727,8 +727,8 @@ int showFileChanged(char* filename)
 
 	gtk_widget_destroy(dialog);
 	debugFree(&message,"showFileChanged message");
-	return(result);
 #endif
+	return(result);
 }
 
 #ifndef _USEQT5_
@@ -811,8 +811,8 @@ gboolean clickInView(void)
 			statusMessage=NULL;
 			
 		}
-	return(false);
 #endif
+	return(false);
 }
 
 pageStruct* makeNewPage(void)
@@ -899,8 +899,6 @@ printf("makenewpage\n");
 #endif
 }
 
-
-
 void fileErrorMessages(char *message,const gchar *filepath)
 {
 #ifdef _USEQT5_
@@ -935,18 +933,11 @@ void convertContents(char *data,int datalen)
 
 void getFileContents(const gchar *filepath,bool warn)
 {
-	struct stat	sb;
-	char*		linkname=NULL;
-	ssize_t		r;
 	char		*filepathcopy=NULL;
-	char		*str=NULL;
 	gchar		*contents=NULL;
 	gsize		length;
 	GError		*err=NULL;
-	const gchar	*charset;
-	gsize		br;
 	bool		ret=false;
-	gchar*		filename;
 
 	busyFlag=true;
 	sessionBusy=true;
@@ -956,12 +947,10 @@ void getFileContents(const gchar *filepath,bool warn)
 	else
 		filepathcopy=strdup(filepath);
 
-	filename=g_path_get_basename(filepathcopy);
-
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		{
 			if(warn==true)
-				fileErrorMessages("File doesn't exist",filepath);
+				fileErrorMessages((char*)"File doesn't exist",filepath);
 
 			busyFlag=false;
 			sessionBusy=false;
@@ -971,7 +960,7 @@ void getFileContents(const gchar *filepath,bool warn)
 	if(access(filepathcopy,R_OK)!=0)
 		{
 			if(warn==true)
-				fileErrorMessages("Can't acsess file",filepath);
+				fileErrorMessages((char*)"Can't acsess file",filepath);
 			busyFlag=false;
 			sessionBusy=false;
 			return;
@@ -982,7 +971,7 @@ void getFileContents(const gchar *filepath,bool warn)
 	if(ret==false)
 		{
 			if(warn==true)
-				fileErrorMessages("Can't open file",filepath);
+				fileErrorMessages((char*)"Can't open file",filepath);
 			busyFlag=false;
 			sessionBusy=false;
 			return;
@@ -1002,8 +991,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	char			*tstr;
 	char			*realfilepath;
 	int				tabnum;
-	char*			filedata=NULL;
-	char			*filename;
 	bool			retval=false;
 
 	busyFlag=true;
@@ -1215,7 +1202,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 //TODO//
 VISIBLE void newFile(Widget* widget,uPtr data)
 {
-printf("triggered newfile id %i\n",data);
+printf("triggered newfile id\n");
 #ifdef _USEQT5_
 
 	DocumentClass*	doc;

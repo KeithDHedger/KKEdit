@@ -116,9 +116,159 @@ void selectToolOptions(void)
 #endif
 }
 
+#ifdef _USEQT5_
+QAction* addToolButton(const char* icon,int toolnumber,const char* tooltip,menuCallbackVoid fv,menuCallbackBool fb)
+{
+	QIcon qicon;
+	MenuItemClass* menuitem=new MenuItemClass(icon);
+	qicon=QIcon::fromTheme(icon,QIcon(icon));
+	menuitem->setIcon(qicon);
+	if(fv!=NULL)
+		menuitem->setCallBackVoid(fv);
+	else
+		menuitem->setCallBackBool(fb);
+	menuitem->setMenuID(toolnumber);
+	menuitem->setToolTip(tooltip);
+
+	return(menuitem);
+}
+#endif
+
 void setUpToolBar(void)
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	toolBar->clear();
+	for(int j=0;j<(int)strlen(toolBarLayout);j++)
+		{
+			switch(toolBarLayout[j])
+				{
+//new
+					case 'N':
+						//newButton=addToolButton("document-new",0,gettext("New File"),&newFile,NULL);
+						toolBar->addAction(qobject_cast<QAction*>(newMenu));
+						//toolBar->addAction(qobject_cast<QAction*>(fileMenu));
+						break;
+//open+recent
+					case 'O':
+						//openButton=addToolButton("document-open",0,gettext("Open File"),&doOpenFile,NULL);
+						//toolBar->addAction(openButton);
+						toolBar->addAction(qobject_cast<QAction*>(openMenu));
+						break;
+//save
+					case 'S':
+						//saveButton=addToolButton("document-save",0,gettext("Save File"),NULL,&saveFile);
+						//toolBar->addAction(saveButton);
+						toolBar->addAction(qobject_cast<QAction*>(saveMenu));
+						break;
+
+					case 's':
+						toolBar->addSeparator();
+						break;
+//cut
+					case 'X':
+						//cutButton=addToolButton("edit-cut",0,gettext("Cut"),&cutToClip,NULL);
+						//toolBar->addAction(cutButton);
+						toolBar->addAction(qobject_cast<QAction*>(cutMenu));
+						break;
+//copy
+					case 'C':
+						//copyButton=addToolButton("edit-copy",0,gettext("Copy"),&copyToClip,NULL);
+						//toolBar->addAction(copyButton);
+						toolBar->addAction(qobject_cast<QAction*>(copyMenu));
+						break;
+//paste
+					case 'P':
+						//pasteButton=addToolButton("edit-paste",0,gettext("Paste"),&pasteFromClip,NULL);
+						//toolBar->addAction(pasteButton);
+						toolBar->addAction(qobject_cast<QAction*>(pasteMenu));
+						break;
+//undo
+					case 'U':
+						//undoButton=addToolButton("edit-undo",0,gettext("Undo"),&undo,NULL);
+						//toolBar->addAction(undoButton);
+						toolBar->addAction(qobject_cast<QAction*>(undoMenu));
+						break;
+//redo
+					case 'R':
+						//redoButton=addToolButton("edit-redo",0,gettext("Redo"),&redo,NULL);
+						//toolBar->addAction(redoButton);
+						toolBar->addAction(qobject_cast<QAction*>(redoMenu));
+						break;
+//find
+					case 'F':
+						//findButton=addToolButton("edit-find",0,gettext("Find"),&find,NULL);
+						//toolBar->addAction(findButton);
+						toolBar->addAction(qobject_cast<QAction*>(findMenu));
+						break;
+//navigation
+					case 'G':
+						//gotoDefButton=addToolButton("dialog-question",0,gettext("Find"),&goToDefinition,NULL);
+						//toolBar->addAction(gotoDefButton);
+						toolBar->addAction(qobject_cast<QAction*>(goToDefineMenu));
+						break;
+//go back
+					case 'B':
+						//backButton=addToolButton("go-previous",0,gettext("Go Back"),&goBack,NULL);
+						//toolBar->addAction(backButton);
+						toolBar->addAction(qobject_cast<QAction*>(goBackMenu));
+						break;
+
+					case '9':
+//						lineNumberWidget=gtk_entry_new();
+//						gotoLineButton=gtk_tool_item_new();
+//						gtk_container_add((GtkContainer *)gotoLineButton,lineNumberWidget);
+//						gtk_toolbar_insert(toolBar,gotoLineButton,-1);
+//						g_signal_connect_after(G_OBJECT(lineNumberWidget),"key-release-event",G_CALLBACK(jumpToLineFromBar),NULL);
+//						gtk_widget_set_size_request((GtkWidget*)gotoLineButton,48,-1);
+//						gtk_widget_set_tooltip_text((GtkWidget*)gotoLineButton,gettext("Go To Line"));
+						break;
+					case 'A':
+//find in gtkdoc
+//						findApiWidget=gtk_entry_new();
+//						findApiButton=gtk_tool_item_new();
+//						gtk_container_add((GtkContainer *)findApiButton,findApiWidget);
+//						gtk_toolbar_insert(toolBar,findApiButton,-1);
+//						g_signal_connect_after(G_OBJECT(findApiWidget),"activate",G_CALLBACK(docSearchFromBar),(void*)findApiWidget);
+//						gtk_widget_set_tooltip_text((GtkWidget*)findApiButton,gettext("Find API In Gtk Docs"));
+						break;
+
+					case 'Q':
+//find in qt5doc
+//						findQtApiWidget=gtk_entry_new();
+//						findQtApiButton=gtk_tool_item_new();
+//						gtk_container_add((GtkContainer *)findQtApiButton,findQtApiWidget);
+//						gtk_toolbar_insert(toolBar,findQtApiButton,-1);
+//						g_signal_connect_after(G_OBJECT(findQtApiWidget),"activate",G_CALLBACK(qt5DocSearchFromBar),(void*)findQtApiWidget);
+//						gtk_widget_set_tooltip_text((GtkWidget*)findQtApiButton,gettext("Find API In Qt5 Docs"));
+						break;
+					case 'D':
+//find in function def
+//						findDefWidget=gtk_entry_new();
+//						findFuncDefButton=gtk_tool_item_new();
+//						gtk_container_add((GtkContainer *)findFuncDefButton,findDefWidget);
+//						gtk_toolbar_insert(toolBar,findFuncDefButton,-1);
+//						g_signal_connect_after(G_OBJECT(findDefWidget),"activate",G_CALLBACK(defSearchFromBar),(void*)findDefWidget);
+//						gtk_widget_set_tooltip_text((GtkWidget*)findFuncDefButton,gettext("Search For Define"));
+						break;
+					case 'L':
+//livesearch
+//						liveSearchWidget=gtk_entry_new();
+//						liveSearchButton=gtk_tool_item_new();
+//						gtk_container_add((GtkContainer *)liveSearchButton,liveSearchWidget);
+//						gtk_toolbar_insert(toolBar,liveSearchButton,-1);
+//						g_signal_connect_after(G_OBJECT(liveSearchWidget),"key-release-event",G_CALLBACK(doLiveSearch),NULL);
+//						gtk_widget_set_tooltip_text((GtkWidget*)liveSearchButton,gettext("Live Search"));
+						break;
+//expander
+					case 'E':
+//						toolbutton=gtk_separator_tool_item_new();
+//						gtk_tool_item_set_expand(toolbutton,true);
+//						gtk_separator_tool_item_set_draw((GtkSeparatorToolItem*)toolbutton,false);
+//						gtk_toolbar_insert(toolBar,toolbutton,-1);
+						break;
+				}
+		}
+#else
 	GtkToolItem*		toolbutton;
 	GtkRecentFilter*	filter;
 
@@ -1939,15 +2089,19 @@ void buildMainGuiQT(void)
 	QObject::connect(qobject_cast<QTabWidget*>(mainNotebook),&QTabWidget::currentChanged,switchPage);
 	QObject::connect(qobject_cast<QTabWidget*>(mainNotebook),&QTabWidget::tabCloseRequested,closeTabQT);
 
+	toolBar=new QToolBar;
+//	setUpToolBar();
+
 	menuBar=new QMenuBar;
 //file menu
 	fileMenu=new QMenu("&File");
 	qobject_cast<QMenuBar*>(menuBar)->addMenu(qobject_cast<QMenu*>(fileMenu));
 
 //new
-	makeMenuItem(fileMenu,gettext("New"),QKeySequence::New,"document-new",NEWMENUNAME,&newFile,NULL,0);
+	newMenu=reinterpret_cast<Widget*>(makeMenuItem(fileMenu,gettext("New"),QKeySequence::New,"document-new",NEWMENUNAME,&newFile,NULL,0));
 //open
-	makeMenuItem(fileMenu,gettext("Open"),QKeySequence::Open,"document-open",OPENMENUNAME,&doOpenFile,NULL,1);
+	//openMenu=(Widget*)(makeMenuItem(fileMenu,gettext("Open"),QKeySequence::Open,"document-open",OPENMENUNAME,&doOpenFile,NULL,1));
+	openMenu=reinterpret_cast<Widget*>(makeMenuItem(fileMenu,gettext("Open"),QKeySequence::Open,"document-open",OPENMENUNAME,&doOpenFile,NULL,1));
 //open as hexdump
 	makeMenuItem(fileMenu,gettext("Open As HeXdump"),0,"document-open",HEXDUMPMENUNAME,&openAsHexDump,NULL,2);
 
@@ -1972,11 +2126,11 @@ void buildMainGuiQT(void)
 	qobject_cast<QMenu*>(fileMenu)->addSeparator();
 
 //save
-	saveMenu=(Widget*)makeMenuItem(fileMenu,gettext("Save"),QKeySequence::Save,"document-save",SAVEMENUNAME,NULL,&saveFile,0);
+	saveMenu=reinterpret_cast<Widget*>(makeMenuItem(fileMenu,gettext("Save"),QKeySequence::Save,"document-save",SAVEMENUNAME,NULL,&saveFile,0));
 //savas
-	saveAsMenu=(Widget*)makeMenuItem(fileMenu,gettext("Save As"),QKeySequence::SaveAs,"document-save-as",SAVEASMENUNAME,NULL,&saveFile,1);
+	saveAsMenu=reinterpret_cast<Widget*>(makeMenuItem(fileMenu,gettext("Save As"),QKeySequence::SaveAs,"document-save-as",SAVEASMENUNAME,NULL,&saveFile,1));
 //save all
-	saveAllMenu=(Widget*)makeMenuItem(fileMenu,gettext("Save All"),0,"document-save",SAVEALLMENUNAME,NULL,&doSaveAll,0);
+	saveAllMenu=reinterpret_cast<Widget*>(makeMenuItem(fileMenu,gettext("Save All"),0,"document-save",SAVEALLMENUNAME,NULL,&doSaveAll,0));
 	qobject_cast<QMenu*>(fileMenu)->addSeparator();
 
 //save session
@@ -1986,17 +2140,17 @@ void buildMainGuiQT(void)
 //restore session and bookmarks
 	makeMenuItem(fileMenu,gettext("Restore Session With Bookmark"),0,"document-open",RESTORESESSIONBMMENUNAME,&restoreSession,NULL,0);
 //printfile
-	printMenu=(Widget*)makeMenuItem(fileMenu,gettext("Print"),QKeySequence::Print,"document-print",PRINTMENUNAME,&printFile,NULL,0);
+	printMenu=reinterpret_cast<Widget*>(makeMenuItem(fileMenu,gettext("Print"),QKeySequence::Print,"document-print",PRINTMENUNAME,&printFile,NULL,0));
 	qobject_cast<QMenu*>(fileMenu)->addSeparator();
 
 //close
-	closeMenu=(Widget*)makeMenuItem(fileMenu,gettext("Close"),QKeySequence::Close,"window-close",CLOSEMENUNAME,&closeTab,NULL,0);
+	closeMenu=reinterpret_cast<Widget*>(makeMenuItem(fileMenu,gettext("Close"),QKeySequence::Close,"window-close",CLOSEMENUNAME,&closeTab,NULL,0));
 //close-all
-	closeAllMenu=(Widget*)makeMenuItem(fileMenu,gettext("Close All Tabs"),0,"window-close",CLOSEALLMENUNAME,&closeAllTabs,NULL,0);
+	closeAllMenu=reinterpret_cast<Widget*>(makeMenuItem(fileMenu,gettext("Close All Tabs"),0,"window-close",CLOSEALLMENUNAME,&closeAllTabs,NULL,0));
 	qobject_cast<QMenu*>(fileMenu)->addSeparator();
 
 //reload file
-	revertMenu=(Widget*)makeMenuItem(fileMenu,gettext("Revert"),0,NULL,REVERTMENUNAME,&reloadFile,NULL,0);
+	revertMenu=reinterpret_cast<Widget*>(makeMenuItem(fileMenu,gettext("Revert"),0,NULL,REVERTMENUNAME,&reloadFile,NULL,0));
 	qobject_cast<QMenu*>(fileMenu)->addSeparator();
 
 //quit
@@ -2008,25 +2162,25 @@ void buildMainGuiQT(void)
 	qobject_cast<QMenuBar*>(menuBar)->addMenu(qobject_cast<QMenu*>(editMenu));
 
 //undo
-	undoMenu=(Widget*)makeMenuItem(editMenu,gettext("Undo"),QKeySequence::Undo,"edit-undo",UNDOMENUNAME,&undo,NULL,0);
+	undoMenu=reinterpret_cast<Widget*>(makeMenuItem(editMenu,gettext("Undo"),QKeySequence::Undo,"edit-undo",UNDOMENUNAME,&undo,NULL,0));
 //redo
-	redoMenu=(Widget*)makeMenuItem(editMenu,gettext("Redo"),QKeySequence::Redo,"edit-redo",REDOMENUNAME,&redo,NULL,0);
+	redoMenu=reinterpret_cast<Widget*>(makeMenuItem(editMenu,gettext("Redo"),QKeySequence::Redo,"edit-redo",REDOMENUNAME,&redo,NULL,0));
 //undoall
-	undoAllMenu=(Widget*)makeMenuItem(editMenu,gettext("Undo All"),0,"edit-undo",UNDOALLMENUNAME,&unRedoAll,NULL,0);
+	undoAllMenu=reinterpret_cast<Widget*>(makeMenuItem(editMenu,gettext("Undo All"),0,"edit-undo",UNDOALLMENUNAME,&unRedoAll,NULL,0));
 //redoall
-	redoAllMenu=(Widget*)makeMenuItem(editMenu,gettext("Redo All"),0,"edit-redo",REDOALLMENUNAME,&unRedoAll,NULL,1);
+	redoAllMenu=reinterpret_cast<Widget*>(makeMenuItem(editMenu,gettext("Redo All"),0,"edit-redo",REDOALLMENUNAME,&unRedoAll,NULL,1));
 	qobject_cast<QMenu*>(editMenu)->addSeparator();
 
 //cut
-	cutMenu=(Widget*)makeMenuItem(editMenu,gettext("Cut"),QKeySequence::Cut,"edit-cut",CUTMENUNAME,&cutToClip,NULL,0);
+	cutMenu=reinterpret_cast<Widget*>(makeMenuItem(editMenu,gettext("Cut"),QKeySequence::Cut,"edit-cut",CUTMENUNAME,&cutToClip,NULL,0));
 //copy
-	copyMenu=(Widget*)makeMenuItem(editMenu,gettext("Copy"),QKeySequence::Copy,"edit-copy",COPYMENUNAME,&copyToClip,NULL,0);
+	copyMenu=reinterpret_cast<Widget*>(makeMenuItem(editMenu,gettext("Copy"),QKeySequence::Copy,"edit-copy",COPYMENUNAME,&copyToClip,NULL,0));
 //paste
-	pasteMenu=(Widget*)makeMenuItem(editMenu,gettext("Paste"),QKeySequence::Paste,"edit-paste",PASTEMENUNAME,&pasteFromClip,NULL,0);
+	pasteMenu=reinterpret_cast<Widget*>(makeMenuItem(editMenu,gettext("Paste"),QKeySequence::Paste,"edit-paste",PASTEMENUNAME,&pasteFromClip,NULL,0));
 	qobject_cast<QMenu*>(editMenu)->addSeparator();
 
 //find
-	makeMenuItem(editMenu,gettext("Find"),QKeySequence::Find,"edit-find",FINDMENUNAME,&find,NULL,0);
+	findMenu=reinterpret_cast<Widget*>(makeMenuItem(editMenu,gettext("Find"),QKeySequence::Find,"edit-find",FINDMENUNAME,&find,NULL,0));
 	qobject_cast<QMenu*>(editMenu)->addSeparator();
 
 //prefs
@@ -2074,7 +2228,7 @@ void buildMainGuiQT(void)
 	qobject_cast<QMenuBar*>(menuBar)->addMenu(qobject_cast<QMenu*>(navMenu));
 
 //goto define
-	makeMenuItem(navMenu,gettext("Go To Definition"),QKeySequence::fromString("Ctrl+D"),"dialog-question",GOTODEFMENUNAME,&goToDefinition,NULL,0);
+	goToDefineMenu=reinterpret_cast<Widget*>(makeMenuItem(navMenu,gettext("Go To Definition"),QKeySequence::fromString("Ctrl+D"),"dialog-question",GOTODEFMENUNAME,&goToDefinition,NULL,0));
 
 //open include
 	makeMenuItem(navMenu,gettext("Open Include File"),QKeySequence::fromString("Ctrl+I"),"document-open",OPENINCLUDEMENUNAME,&findFile,NULL,0);
@@ -2090,7 +2244,7 @@ void buildMainGuiQT(void)
 	if(gotDoxygen==0)
 		makeMenuItem(navMenu,gettext("Find In Documentation"),0,"edit-find",SEARCHDOXYMENUNAME,&doxyDocs,NULL,0);
 ////go back
-		goBackMenu=(Widget*)makeMenuItem(navMenu,gettext("Back"),0,"go-previous",GOBACKMENUNAME,&goBack,NULL,0);
+		goBackMenu=reinterpret_cast<Widget*>(makeMenuItem(navMenu,gettext("Back"),0,"go-previous",GOBACKMENUNAME,&goBack,NULL,0));
 	qobject_cast<QMenu*>(navMenu)->addSeparator();
 //////////////////////////////////////////
 
@@ -2129,8 +2283,10 @@ void buildMainGuiQT(void)
 //	menuitem=makeMenuItem(DATADIR"/pixmaps/KKEditPlugMenu.png",menu,(void*)getPlugins,0,GETPLUGSMENUNAME,PIXMAPMENU,gettext("Get Plugins"),NULL);
 
 ///////////////////////////////////////////
+	setUpToolBar();
 
 	mainWindowVBox->addWidget(menuBar);
+	mainWindowVBox->addWidget(toolBar);
 	mainWindowVBox->addWidget(mainNotebook);
 
  	mainWindow->show();

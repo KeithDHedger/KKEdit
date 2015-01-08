@@ -124,8 +124,8 @@ bool TextBuffer::selectWord()
 			gtk_text_iter_forward_word_end(&cursorPos);
 			return(true);
 		}
-	return(false);
 #endif
+	return(false);
 }
 
 char* TextBuffer::getSelectedText()
@@ -133,6 +133,7 @@ char* TextBuffer::getSelectedText()
 #ifndef _USEQT5_
 	return(gtk_text_buffer_get_text(textBuffer,&lineStart,&lineEnd,true));
 #endif
+return(NULL);
 }
 
 #ifndef _USEQT5_

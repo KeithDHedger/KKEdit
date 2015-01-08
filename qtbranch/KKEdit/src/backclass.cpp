@@ -48,6 +48,7 @@ pageStruct* HistoryClass::getPage(void)
 #ifndef _USEQT5_
 	return(savedPage);
 #endif
+return(NULL);
 }
 
 bool HistoryClass::canGoBack(void)
@@ -68,6 +69,7 @@ TextBuffer* HistoryClass::getTextBuffer(void)
 #ifndef _USEQT5_
 	return(buf);
 #endif
+return(NULL);
 }
 
 bool HistoryClass::savePosition(void)
@@ -87,8 +89,8 @@ bool HistoryClass::savePosition(void)
 
 	this->goBack=false;
 	setSensitive();
-	return(false);
 #endif
+	return(false);
 }
 
 int HistoryClass::getTabNumForPage(void)
@@ -109,8 +111,8 @@ int HistoryClass::getTabNumForPage(void)
 
 	this->savedPage=NULL;
 	this->goBack=false;
-	return(-1);
 #endif
+	return(-1);
 }
 
 

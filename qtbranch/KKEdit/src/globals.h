@@ -157,6 +157,8 @@ extern GtkWidget*		findQtApiWidget;
 extern GtkWidget*		findDefWidget;
 extern GtkWidget*		liveSearchWidget;
 #else
+extern QToolBar			*toolBar;
+
 //TODO//
 //extern QMenuBar*		menubar;
 //extern QMenu*			menufile;
@@ -189,6 +191,8 @@ extern Widget*			mainNotebook;
 extern Widget*			menuBar;
 //file menu
 extern Widget*			fileMenu;
+extern Widget*			newMenu;
+extern Widget*			openMenu;
 extern Widget*			saveMenu;
 extern Widget*			saveAsMenu;
 extern Widget*			saveAllMenu;
@@ -206,13 +210,15 @@ extern Widget*			redoAllMenu;
 extern Widget*			cutMenu;
 extern Widget*			copyMenu;
 extern Widget*			pasteMenu;
+extern Widget*			findMenu;
 //view menu
 extern Widget*			viewMenu;
 extern Widget*			toolOutMenu;
 extern Widget*			statusBarMenu;
 //nav menu
-extern Widget*			navMenu;
-extern Widget*			goBackMenu;
+extern Widget			*navMenu;
+extern Widget			*goBackMenu;
+extern Widget			*goToDefineMenu;
 //function menu
 extern Widget*			funcMenu;
 //bm menu
@@ -397,17 +403,17 @@ extern int				currentTabNumber;
 extern int 				untitledNumber;
 
 #ifndef _USEQT5_
-extern GtkToolItem*		newButton;
-extern GtkToolItem*		openButton;
-extern GtkToolItem*		saveButton;
-extern GtkToolItem*		redoButton;
-extern GtkToolItem*		undoButton;
-extern GtkToolItem*		cutButton;
-extern GtkToolItem*		copyButton;
-extern GtkToolItem*		pasteButton;
-extern GtkToolItem*		findButton;
-extern GtkToolItem*		gotoDefButton;
-extern GtkToolItem*		backButton;
+//extern GtkToolItem*		newButton;
+//extern GtkToolItem*		openButton;
+//extern GtkToolItem*		saveButton;
+//extern GtkToolItem*		redoButton;
+//extern GtkToolItem*		undoButton;
+//extern GtkToolItem*		cutButton;
+//extern GtkToolItem*		copyButton;
+//extern GtkToolItem*		pasteButton;
+//extern GtkToolItem*		findButton;
+//extern GtkToolItem*		gotoDefButton;
+//extern GtkToolItem*		backButton;
 extern GtkToolItem*		gotoLineButton;
 extern GtkToolItem*		findApiButton;
 extern GtkToolItem*		findQtApiButton;
@@ -420,8 +426,25 @@ extern GtkWidget*		findBox;
 extern GtkWidget*		replaceBox;
 extern GtkWidget*		findDropBox;
 extern GtkWidget*		replaceDropBox;
+
 #else
 //TODO//
+//extern QAction			*newButton;
+//extern QAction			*openButton;
+//extern QAction			*saveButton;
+//extern QAction			*redoButton;
+//extern QAction			*undoButton;
+//extern QAction			*cutButton;
+//extern QAction			*copyButton;
+//extern QAction			*pasteButton;
+//extern QAction			*findButton;
+//extern QAction			*gotoDefButton;
+//extern QAction			*backButton;
+extern QAction			*gotoLineButton;
+extern QAction			*findApiButton;
+extern QAction			*findQtApiButton;
+extern QAction			*findFuncDefButton;
+extern QAction			*liveSearchButton;
 #endif
 
 //custom toolbar

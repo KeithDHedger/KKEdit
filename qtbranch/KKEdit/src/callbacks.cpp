@@ -1487,8 +1487,8 @@ gboolean whatPane(void)
 	else
 		page->inTop=false;
 
-	return(false);
 #endif
+	return(false);
 }
 
 #ifndef _USEQT5_
@@ -1741,6 +1741,7 @@ bool tabPopUp(void)
 	else
 		return(false);
 #endif
+	return(false);
 }
 
 void writeExitData(void)
@@ -1855,7 +1856,7 @@ VISIBLE void doShutdown(Widget* widget,uPtr data)
 		return;
 
 	if(onExitSaveSession)
-		saveSession(NULL,NULL);
+		saveSession(NULL,0);
 	writeExitData();
 
 #ifdef _ASPELL_
@@ -1886,6 +1887,7 @@ void setPrefs(void)
 #ifdef _USEQT5_
 	debugFree(&toolBarLayout,"setPrefs toolBarLayout");
 	toolBarLayout=makeToolBarList();
+	setUpToolBar();
 //page 1
 	indent=prefsWidgets[AUTOINDENT]->property("checked").toBool();
 	lineNumbers=prefsWidgets[SHOWNUMS]->property("checked").toBool();
@@ -2639,8 +2641,8 @@ VISIBLE gboolean keyShortCut(void)
 			return(gtk_window_propagate_key_event((GtkWindow*)mainWindow, event));
 		}
 
-	return(false);
 #endif
+	return(false);
 }
 
 VISIBLE void getPlugins(Widget* widget,uPtr data)
