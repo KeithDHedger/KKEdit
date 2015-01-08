@@ -151,11 +151,6 @@ extern GtkWidget*		menuItemOpen;
 
 
 
-extern GtkWidget*		lineNumberWidget;
-extern GtkWidget*		findApiWidget;
-extern GtkWidget*		findQtApiWidget;
-extern GtkWidget*		findDefWidget;
-extern GtkWidget*		liveSearchWidget;
 #else
 extern QToolBar			*toolBar;
 
@@ -170,6 +165,12 @@ extern QToolBar			*toolBar;
 extern QAction*			menuItemOpen;
 
 #endif
+
+extern Widget			*lineNumberWidget;
+extern Widget			*findApiWidget;
+extern Widget			*findQtApiWidget;
+extern Widget			*findDefWidget;
+extern Widget			*liveSearchWidget;
 
 //find replaceAll
 extern GSList*			findList;

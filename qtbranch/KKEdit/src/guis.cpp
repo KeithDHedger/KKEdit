@@ -144,20 +144,14 @@ void setUpToolBar(void)
 				{
 //new
 					case 'N':
-						//newButton=addToolButton("document-new",0,gettext("New File"),&newFile,NULL);
 						toolBar->addAction(qobject_cast<QAction*>(newMenu));
-						//toolBar->addAction(qobject_cast<QAction*>(fileMenu));
 						break;
 //open+recent
 					case 'O':
-						//openButton=addToolButton("document-open",0,gettext("Open File"),&doOpenFile,NULL);
-						//toolBar->addAction(openButton);
 						toolBar->addAction(qobject_cast<QAction*>(openMenu));
 						break;
 //save
 					case 'S':
-						//saveButton=addToolButton("document-save",0,gettext("Save File"),NULL,&saveFile);
-						//toolBar->addAction(saveButton);
 						toolBar->addAction(qobject_cast<QAction*>(saveMenu));
 						break;
 
@@ -166,55 +160,43 @@ void setUpToolBar(void)
 						break;
 //cut
 					case 'X':
-						//cutButton=addToolButton("edit-cut",0,gettext("Cut"),&cutToClip,NULL);
-						//toolBar->addAction(cutButton);
 						toolBar->addAction(qobject_cast<QAction*>(cutMenu));
 						break;
 //copy
 					case 'C':
-						//copyButton=addToolButton("edit-copy",0,gettext("Copy"),&copyToClip,NULL);
-						//toolBar->addAction(copyButton);
 						toolBar->addAction(qobject_cast<QAction*>(copyMenu));
 						break;
 //paste
 					case 'P':
-						//pasteButton=addToolButton("edit-paste",0,gettext("Paste"),&pasteFromClip,NULL);
-						//toolBar->addAction(pasteButton);
 						toolBar->addAction(qobject_cast<QAction*>(pasteMenu));
 						break;
 //undo
 					case 'U':
-						//undoButton=addToolButton("edit-undo",0,gettext("Undo"),&undo,NULL);
-						//toolBar->addAction(undoButton);
 						toolBar->addAction(qobject_cast<QAction*>(undoMenu));
 						break;
 //redo
 					case 'R':
-						//redoButton=addToolButton("edit-redo",0,gettext("Redo"),&redo,NULL);
-						//toolBar->addAction(redoButton);
 						toolBar->addAction(qobject_cast<QAction*>(redoMenu));
 						break;
 //find
 					case 'F':
-						//findButton=addToolButton("edit-find",0,gettext("Find"),&find,NULL);
-						//toolBar->addAction(findButton);
 						toolBar->addAction(qobject_cast<QAction*>(findMenu));
 						break;
 //navigation
 					case 'G':
-						//gotoDefButton=addToolButton("dialog-question",0,gettext("Find"),&goToDefinition,NULL);
-						//toolBar->addAction(gotoDefButton);
 						toolBar->addAction(qobject_cast<QAction*>(goToDefineMenu));
 						break;
 //go back
 					case 'B':
-						//backButton=addToolButton("go-previous",0,gettext("Go Back"),&goBack,NULL);
-						//toolBar->addAction(backButton);
 						toolBar->addAction(qobject_cast<QAction*>(goBackMenu));
 						break;
 
 					case '9':
-//						lineNumberWidget=gtk_entry_new();
+						lineNumberWidget=new QLineEdit;
+						lineNumberWidget->setToolTip(gettext("Go To Line"));
+						toolBar->addWidget(lineNumberWidget);
+						
+						
 //						gotoLineButton=gtk_tool_item_new();
 //						gtk_container_add((GtkContainer *)gotoLineButton,lineNumberWidget);
 //						gtk_toolbar_insert(toolBar,gotoLineButton,-1);

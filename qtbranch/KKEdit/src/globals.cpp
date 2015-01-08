@@ -55,17 +55,17 @@ GtkWidget*		toolBarBox;
 
 
 
-GtkWidget*		lineNumberWidget;
-GtkWidget*		findApiWidget;
-GtkWidget*		findQtApiWidget;
-GtkWidget*		findDefWidget;
-GtkWidget*		liveSearchWidget;
 #else
 QToolBar		*toolBar;
 //GtkWidget*		toolBarBox;
 
 //TODO//
 #endif
+Widget			*lineNumberWidget;
+Widget			*findApiWidget;
+Widget			*findQtApiWidget;
+Widget			*findDefWidget;
+Widget			*liveSearchWidget;
 
 //app stuff
 bool			busyFlag=false;
