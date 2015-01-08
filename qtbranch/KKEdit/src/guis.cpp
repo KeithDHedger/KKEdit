@@ -134,6 +134,11 @@ QAction* addToolButton(const char* icon,int toolnumber,const char* tooltip,menuC
 }
 #endif
 
+void testit(int x)
+{
+printf(">%i<\n",x);
+}
+
 void setUpToolBar(void)
 {
 #ifdef _USEQT5_
@@ -199,28 +204,20 @@ void setUpToolBar(void)
 						QObject::connect(((QLineEdit*)lineNumberWidget),&QLineEdit::textChanged,jumpToLineFromBar);
 						toolBar->addWidget(lineNumberWidget);
 						break;
-					case 'A':
 //find in gtkdoc
+					case 'A':
 						findApiWidget=new QLineEdit;
 						findApiWidget->setToolTip(gettext("Find API In Gtk Docs"));
 						QObject::connect(((QLineEdit*)findApiWidget),&QLineEdit::returnPressed,docSearchFromBar);
 						toolBar->addWidget(findApiWidget);
-//						findApiWidget=gtk_entry_new();
-//						findApiButton=gtk_tool_item_new();
-//						gtk_container_add((GtkContainer *)findApiButton,findApiWidget);
-//						gtk_toolbar_insert(toolBar,findApiButton,-1);
-//						g_signal_connect_after(G_OBJECT(findApiWidget),"activate",G_CALLBACK(docSearchFromBar),(void*)findApiWidget);
-//						gtk_widget_set_tooltip_text((GtkWidget*)findApiButton,gettext("Find API In Gtk Docs"));
 						break;
 
-					case 'Q':
 //find in qt5doc
-//						findQtApiWidget=gtk_entry_new();
-//						findQtApiButton=gtk_tool_item_new();
-//						gtk_container_add((GtkContainer *)findQtApiButton,findQtApiWidget);
-//						gtk_toolbar_insert(toolBar,findQtApiButton,-1);
-//						g_signal_connect_after(G_OBJECT(findQtApiWidget),"activate",G_CALLBACK(qt5DocSearchFromBar),(void*)findQtApiWidget);
-//						gtk_widget_set_tooltip_text((GtkWidget*)findQtApiButton,gettext("Find API In Qt5 Docs"));
+					case 'Q':
+						findQtApiWidget=new QLineEdit;
+						findQtApiWidget->setToolTip(gettext("Find API In Qt5 Docs"));
+						QObject::connect(((QLineEdit*)findQtApiWidget),&QLineEdit::returnPressed,qt5DocSearchFromBar);
+						toolBar->addWidget(findQtApiWidget);
 						break;
 					case 'D':
 //find in function def

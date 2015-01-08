@@ -45,7 +45,12 @@ void basicFind(int dowhat);
 void regexFind(int dowhat);
 
 void searchQT5Docs(Widget* widget,uPtr data);
+#ifndef _USEQT5_
 void qt5DocSearchFromBar(Widget* widget,uPtr data);
+#else
+void qt5DocSearchFromBar(void);
+#endif
+
 void searchGtkDocs(Widget* widget,uPtr data);
 
 void showDocView(int howtodisplay,char* text,const char* title);

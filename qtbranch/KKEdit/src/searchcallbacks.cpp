@@ -108,7 +108,7 @@ PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 VISIBLE void searchGtkDocs(Widget* widget,uPtr data)
 //TODO//
 {
-printf("searchGtkDocs %i\n",(int)(long)data);
+printf("searchGtkDocs %s\n",(char*)data);
 
 #ifndef _USEQT5_
 	pageStruct*	page=getDocumentData(-1);
@@ -333,7 +333,7 @@ printf("doxyDocs %i\n",(int)(long)data);
 VISIBLE void searchQT5Docs(Widget* widget,uPtr data)
 //TODO//
 {
-printf("searchQT5Docs %i\n",(int)(long)data);
+printf("searchQT5Docs %s\n",(char*)data);
 
 #ifndef _USEQT5_
 	pageStruct*	page=getDocumentData(-1);
@@ -424,17 +424,15 @@ void docSearchFromBar(Widget* widget,uPtr data)
 #else
 void docSearchFromBar(void)
 #endif
-//TODO//
 {
-
 #ifdef _USEQT5_
-printf("docSearchFromBar %s\n",findApiWidget->property("text").toByteArray().constData());
+	const char* text=findApiWidget->property("text").toByteArray().constData();
 #else
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
+#endif
 
 	if(text!=NULL && strlen(text)>0)
-		searchGtkDocs(NULL,(void*)text);
-#endif
+		searchGtkDocs(NULL,(uPtr)text);
 }
 
 #ifdef _BUILDDOCVIEWER_
@@ -461,15 +459,20 @@ void docSearchInPageBack(Widget* widget,uPtr data)
 }
 #endif
 
+#ifndef _USEQT5_
 void qt5DocSearchFromBar(Widget* widget,uPtr data)
-//TODO//
+#else
+void qt5DocSearchFromBar(void)
+#endif
 {
 #ifndef _USEQT5_
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
+#else
+	const char* text=findQtApiWidget->property("text").toByteArray().constData();
+#endif
 
 	if(text!=NULL && strlen(text)>0)
-		searchQT5Docs(NULL,(void*)text);
-#endif
+		searchQT5Docs(NULL,(uPtr)text);
 }
 
 void doAllFiles(int dowhat,bool found)

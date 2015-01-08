@@ -135,8 +135,7 @@ printf("findFile %i\n",(int)(long)data);
 
 void gotoLine(Widget* widget,uPtr data)
 {
-	int			line=(int)(long)data;
-
+	int	line=(int)(long)data;
 #ifndef _USEQT5_
 	pageStruct*	page=getDocumentData(-1);
 	TextBuffer*	buf;
@@ -152,13 +151,13 @@ void gotoLine(Widget* widget,uPtr data)
 			delete buf;
 		}
 #else
-//TODO//
-//scroll to line but not with cursor
 	DocumentClass	*doc=NULL;
 	QTextBlock		block;
 	QTextCursor		cursor;
 
 	doc=getDocumentData(-1);
+	if(doc==NULL)
+		return;
 	block=doc->document()->findBlockByNumber(line-1);
 	cursor=doc->textCursor();
 	cursor.setPosition(block.position());
@@ -170,17 +169,12 @@ void gotoLine(Widget* widget,uPtr data)
 #ifndef _USEQT5_
 void jumpToLineFromBar(GtkWidget* widget,gpointer data)
 #else
-//TODO//
 void jumpToLineFromBar(const QString text)
 #endif
 {
-printf("jumpToLineFromBar %s\n",text.toLocal8Bit().constData());
+	printf("jumpToLineFromBar %s\n",text.toLocal8Bit().constData());
 	theLineNum=atoi(text.toLocal8Bit().constData());
 	gotoLine(NULL,(long)theLineNum);
-//printf("jumpToLineFromBar %s\n",toCharStar((QString*)&text));
-//printf("jumpToLineFromBar %s\n",text.constData());
-//QString *qs=new QString("123456");
-//printf("jumpToLineFromBar %s\n",qs->toLocal8Bit().constData());
 #ifndef _USEQT5_
 	theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
 	gotoLine(NULL,(gpointer)(long)theLineNum);
