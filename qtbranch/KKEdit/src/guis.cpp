@@ -193,21 +193,18 @@ void setUpToolBar(void)
 
 					case '9':
 						lineNumberWidget=new QLineEdit;
+						reinterpret_cast<QLineEdit*>(lineNumberWidget)->setValidator(new QIntValidator);
 						lineNumberWidget->setToolTip(gettext("Go To Line"));
+						lineNumberWidget->setMaximumWidth(48);
 						QObject::connect(((QLineEdit*)lineNumberWidget),&QLineEdit::textChanged,jumpToLineFromBar);
-
 						toolBar->addWidget(lineNumberWidget);
-						
-						
-//						gotoLineButton=gtk_tool_item_new();
-//						gtk_container_add((GtkContainer *)gotoLineButton,lineNumberWidget);
-//						gtk_toolbar_insert(toolBar,gotoLineButton,-1);
-//						g_signal_connect_after(G_OBJECT(lineNumberWidget),"key-release-event",G_CALLBACK(jumpToLineFromBar),NULL);
-//						gtk_widget_set_size_request((GtkWidget*)gotoLineButton,48,-1);
-//						gtk_widget_set_tooltip_text((GtkWidget*)gotoLineButton,gettext("Go To Line"));
 						break;
 					case 'A':
 //find in gtkdoc
+						findApiWidget=new QLineEdit;
+						findApiWidget->setToolTip(gettext("Find API In Gtk Docs"));
+						QObject::connect(((QLineEdit*)findApiWidget),&QLineEdit::returnPressed,docSearchFromBar);
+						toolBar->addWidget(findApiWidget);
 //						findApiWidget=gtk_entry_new();
 //						findApiButton=gtk_tool_item_new();
 //						gtk_container_add((GtkContainer *)findApiButton,findApiWidget);

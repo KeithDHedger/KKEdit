@@ -152,6 +152,8 @@ void gotoLine(Widget* widget,uPtr data)
 			delete buf;
 		}
 #else
+//TODO//
+//scroll to line but not with cursor
 	DocumentClass	*doc=NULL;
 	QTextBlock		block;
 	QTextCursor		cursor;
@@ -160,7 +162,7 @@ void gotoLine(Widget* widget,uPtr data)
 	block=doc->document()->findBlockByNumber(line-1);
 	cursor=doc->textCursor();
 	cursor.setPosition(block.position());
-	doc->setFocus();
+	//doc->setFocus();
 	doc->setTextCursor(cursor);
 #endif
 }
@@ -169,9 +171,16 @@ void gotoLine(Widget* widget,uPtr data)
 void jumpToLineFromBar(GtkWidget* widget,gpointer data)
 #else
 //TODO//
-void jumpToLineFromBar(void)
+void jumpToLineFromBar(const QString text)
 #endif
 {
+printf("jumpToLineFromBar %s\n",text.toLocal8Bit().constData());
+	theLineNum=atoi(text.toLocal8Bit().constData());
+	gotoLine(NULL,(long)theLineNum);
+//printf("jumpToLineFromBar %s\n",toCharStar((QString*)&text));
+//printf("jumpToLineFromBar %s\n",text.constData());
+//QString *qs=new QString("123456");
+//printf("jumpToLineFromBar %s\n",qs->toLocal8Bit().constData());
 #ifndef _USEQT5_
 	theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
 	gotoLine(NULL,(gpointer)(long)theLineNum);

@@ -419,10 +419,17 @@ void defSearchFromBar(Widget* widget,uPtr data)
 #endif
 }
 
+#ifndef _USEQT5_
 void docSearchFromBar(Widget* widget,uPtr data)
+#else
+void docSearchFromBar(void)
+#endif
 //TODO//
 {
-#ifndef _USEQT5_
+
+#ifdef _USEQT5_
+printf("docSearchFromBar %s\n",findApiWidget->property("text").toByteArray().constData());
+#else
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
 	if(text!=NULL && strlen(text)>0)

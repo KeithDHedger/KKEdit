@@ -27,7 +27,12 @@ void doFindReplace(void);
 void find(Widget* widget,uPtr data);
 
 void doSearchPrefs(Widget* widget,uPtr data);
+#ifndef _USEQT5_
 void docSearchFromBar(Widget* widget,uPtr data);
+#else
+void docSearchFromBar(void);
+#endif
+
 void defSearchFromBar(Widget* widget,uPtr data);
 
 #ifndef _USEQT5_

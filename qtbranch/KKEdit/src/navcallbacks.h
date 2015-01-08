@@ -20,7 +20,7 @@ void gotoLine(Widget* widget,uPtr data);
 void jumpToLineFromBar(GtkWidget* widget,gpointer data);
 #else
 //TODO//
-void jumpToLineFromBar(void);
+void jumpToLineFromBar(const QString text);
 #endif
 
 void functionSearch(Widget* widget,uPtr data);
