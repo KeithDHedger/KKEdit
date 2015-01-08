@@ -194,6 +194,8 @@ void setUpToolBar(void)
 					case '9':
 						lineNumberWidget=new QLineEdit;
 						lineNumberWidget->setToolTip(gettext("Go To Line"));
+						QObject::connect(((QLineEdit*)lineNumberWidget),&QLineEdit::textChanged,jumpToLineFromBar);
+
 						toolBar->addWidget(lineNumberWidget);
 						
 						
