@@ -361,7 +361,7 @@ printf("save %i\n",(int)(long)data);
 	if(page==NULL)
 		return(false);
 
-	line=page->textCursor().blockNumber();
+//	line=page->textCursor().blockNumber();
 	if(page->getPathname()!=NULL && data==0)
 		{
 			fd=fopen(page->getPathname(),"w");
@@ -387,7 +387,7 @@ printf("save %i\n",(int)(long)data);
 					page->setDirname(g_path_get_dirname(page->getPathname()));
 				}
 
-			saveFileName=page->fileName;
+			saveFileName=page->getFilename();
 			if(getSaveFile()==false)
 				return(false);
 		}
