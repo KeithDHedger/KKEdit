@@ -33,7 +33,12 @@ void docSearchFromBar(Widget* widget,uPtr data);
 void docSearchFromBar(void);
 #endif
 
+#ifndef _USEQT5_
 void defSearchFromBar(Widget* widget,uPtr data);
+#else
+void defSearchFromBar(void);
+#endif
+
 
 #ifndef _USEQT5_
 void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data);

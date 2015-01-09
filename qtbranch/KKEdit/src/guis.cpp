@@ -134,11 +134,6 @@ QAction* addToolButton(const char* icon,int toolnumber,const char* tooltip,menuC
 }
 #endif
 
-void testit(int x)
-{
-printf(">%i<\n",x);
-}
-
 void setUpToolBar(void)
 {
 #ifdef _USEQT5_
@@ -219,30 +214,29 @@ void setUpToolBar(void)
 						QObject::connect(((QLineEdit*)findQtApiWidget),&QLineEdit::returnPressed,qt5DocSearchFromBar);
 						toolBar->addWidget(findQtApiWidget);
 						break;
-					case 'D':
 //find in function def
-//						findDefWidget=gtk_entry_new();
-//						findFuncDefButton=gtk_tool_item_new();
-//						gtk_container_add((GtkContainer *)findFuncDefButton,findDefWidget);
-//						gtk_toolbar_insert(toolBar,findFuncDefButton,-1);
-//						g_signal_connect_after(G_OBJECT(findDefWidget),"activate",G_CALLBACK(defSearchFromBar),(void*)findDefWidget);
-//						gtk_widget_set_tooltip_text((GtkWidget*)findFuncDefButton,gettext("Search For Define"));
+					case 'D':
+						findDefWidget=new QLineEdit;
+						findDefWidget->setToolTip(gettext("Search For Define"));
+						QObject::connect(((QLineEdit*)findDefWidget),&QLineEdit::returnPressed,defSearchFromBar);
+						toolBar->addWidget(findDefWidget);
 						break;
-					case 'L':
 //livesearch
-//						liveSearchWidget=gtk_entry_new();
-//						liveSearchButton=gtk_tool_item_new();
-//						gtk_container_add((GtkContainer *)liveSearchButton,liveSearchWidget);
-//						gtk_toolbar_insert(toolBar,liveSearchButton,-1);
-//						g_signal_connect_after(G_OBJECT(liveSearchWidget),"key-release-event",G_CALLBACK(doLiveSearch),NULL);
-//						gtk_widget_set_tooltip_text((GtkWidget*)liveSearchButton,gettext("Live Search"));
+					case 'L':
+						liveSearchWidget=new QLineEdit;
+						liveSearchWidget->setToolTip(gettext("Live Search"));
+						QObject::connect(((QLineEdit*)liveSearchWidget),&QLineEdit::textChanged,doLiveSearch);
+						toolBar->addWidget(liveSearchWidget);
 						break;
 //expander
 					case 'E':
-//						toolbutton=gtk_separator_tool_item_new();
-//						gtk_tool_item_set_expand(toolbutton,true);
-//						gtk_separator_tool_item_set_draw((GtkSeparatorToolItem*)toolbutton,false);
-//						gtk_toolbar_insert(toolBar,toolbutton,-1);
+						{
+							QHBoxLayout *hbox=new QHBoxLayout;
+							QWidget		*widg=new QWidget;
+    						hbox->addStretch(1);
+    						widg->setLayout(hbox);
+    						toolBar->addWidget(widg);
+    					}
 						break;
 				}
 		}

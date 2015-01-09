@@ -20,7 +20,7 @@ char*		saveFileName=NULL;
 char*		saveFilePath=NULL;
 bool		dropTextFile=false;
 char		*convertedData=NULL;
-long		dataLen=0;
+long		dataLen=1;
 
 VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 {
@@ -997,10 +997,10 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	sessionBusy=true;
 
 	doc=new DocumentClass();
-
+	dataLen=-1;
 	getFileContents(filepath,true);
 	
-	if(dataLen>0)
+	if(dataLen>-1)
 		{
 			doc->setPlainText(QString::fromUtf8(convertedData,dataLen));
 			realfilepath=realpath(filepath,NULL);
@@ -1018,6 +1018,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 			debugFree(&tstr,"openFile tstr 2");
 			debugFree(&convertedData,"openFile convertedData");
 			setFilePrefs((uPtr)doc);
+			gotoLine(NULL,(long)linenumber);
 			retval=true;
 		}
 	busyFlag=false;

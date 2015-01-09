@@ -399,15 +399,21 @@ printf("searchQT5Docs %s\n",(char*)data);
 #endif
 }
 
-void defSearchFromBar(Widget* widget,uPtr data)
-//TODO//
-{
 #ifndef _USEQT5_
+void defSearchFromBar(Widget* widget,uPtr data)
+#else
+void defSearchFromBar(void)
+#endif
+{
 	functionData* fdata;
-
+#ifdef _USEQT5_
+	functionSearchText=strdup(findDefWidget->property("text").toByteArray().constData());
+#else
 	functionSearchText=strdup(gtk_entry_get_text((GtkEntry*)widget));
+#endif
 	if(functionSearchText!=NULL)
 		{
+			printf("defSearchFromBar %s\n",functionSearchText);
 			fdata=getFunctionByName(functionSearchText,true);
 			if(fdata!=NULL)
 				{
@@ -416,7 +422,6 @@ void defSearchFromBar(Widget* widget,uPtr data)
 				}
 			debugFree(&functionSearchText,"defSearchFromBar functionSearchText");
 		}
-#endif
 }
 
 #ifndef _USEQT5_
@@ -1238,6 +1243,7 @@ void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
 void doLiveSearch(void)
 #endif
 {
+printf("doLiveSearch\n");
 #ifndef _USEQT5_
 	pageStruct* 			page=getDocumentData(-1);
 	GtkSourceSearchFlags	flags;
