@@ -16,8 +16,8 @@ GtkWidget*	vbox;
 //TODO//
 #endif
 
-char*		saveFileName=NULL;
-char*		saveFilePath=NULL;
+const char	*saveFileName=NULL;
+const char	*saveFilePath=NULL;
 bool		dropTextFile=false;
 char		*convertedData=NULL;
 long		dataLen=1;
@@ -354,7 +354,46 @@ VISIBLE bool saveFile(Widget* widget,uPtr data)
 //TODO//
 {
 printf("save %i\n",(int)(long)data);
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	DocumentClass	*page=getDocumentData(-1);
+	FILE			*fd=NULL;
+
+	if(page==NULL)
+		return(false);
+
+	line=page->textCursor().blockNumber();
+	if(page->getPathname()!=NULL && data==0)
+		{
+			fd=fopen(page->getPathname(),"w");
+			if (fd!=NULL)
+				{
+					fputs(page->toPlainText().toLocal8Bit().constData(),fd);
+					fclose(fd);
+					page->document()->setModified(false);
+				}
+			else
+				{
+					QMessageBox *msg=new QMessageBox(QMessageBox::Warning,QString("Save File"),QString("Cant save file \"%1\"").arg(page->getPathname()),QMessageBox::Ok,mainWindow,Qt::Dialog);
+					msg->exec();
+					delete msg;
+				}
+		}
+	else
+		{
+			if(data!=0)
+				{
+					saveFilePath=page->getPathname();
+					saveFileName=page->getFilename();
+					page->setDirname(g_path_get_dirname(page->getPathname()));
+				}
+
+			saveFileName=page->fileName;
+			if(getSaveFile()==false)
+				return(false);
+		}
+
+	return(true);
+#else
 	pageStruct*	page=getDocumentData(-1);
 	GtkTextIter	start,end;
 	gchar*		text;

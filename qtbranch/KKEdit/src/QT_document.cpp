@@ -147,6 +147,8 @@ const char* DocumentClass::getPathname(void)
 
 void DocumentClass::setDirname(char* dirname)
 {
+	if(this->page->dirName!=NULL)
+		debugFree(&(this->page->dirName),"DocumentClass::setDirname dirName");
 	this->page->dirName=dirname;
 }
 
