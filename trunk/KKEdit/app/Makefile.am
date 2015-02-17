@@ -10,8 +10,8 @@ KKEditProgressBar_SOURCES = ../pole/main.cpp
 KKEditProgressBar_CFLAGS = -ggdb -O0
 KKEditProgressBar_CXXFLAGS =  -ggdb -O0
 
-kkedit_CFLAGS = -O3 -fvisibility=hidden
-kkedit_CXXFLAGS = -O3 -fvisibility=hidden
+kkedit_CFLAGS = -ggdb -O3 -fvisibility=hidden
+kkedit_CXXFLAGS = -ggdb -O3 -fvisibility=hidden
 
 pixfilesdir = $(pkgdatadir)/pixmaps
 pixfiles_DATA = ../resources/pixmaps/*

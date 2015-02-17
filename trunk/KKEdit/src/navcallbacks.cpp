@@ -47,6 +47,9 @@ VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
 	char*			selection=NULL;
 	functionData*	fdata=NULL;
 
+	if(page==NULL)
+		return;
+
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
