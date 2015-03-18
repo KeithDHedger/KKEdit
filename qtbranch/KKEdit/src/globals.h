@@ -11,8 +11,8 @@
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
-//#undef _DEBUG_FREE_
-#define _DEBUG_FREE_ 1
+#undef _DEBUG_FREE_
+//#define _DEBUG_FREE_ 1
 
 #define REPLACE			100
 #define FINDNEXT		200

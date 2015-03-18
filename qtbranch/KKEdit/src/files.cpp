@@ -322,7 +322,17 @@ bool getSaveFile(void)
 {
 //TODO//
 	bool		retval=false;
-#ifndef _USEQT5_
+
+#ifdef _USEQT5_
+	QString	fileName=QFileDialog::getSaveFileName(mainWindow,"Save File",saveFileName,"Text (*)");
+
+	if(!fileName.isEmpty())
+		{
+			saveFilePath=fileName.toUtf8().constData();
+			saveFileName=g_path_get_basename(saveFilePath);
+			retval=true;
+		}
+#else
 	GtkWidget*	dialog;
 
 	dialog=gtk_file_chooser_dialog_new(gettext("Save File"),(GtkWindow*)mainWindow, GTK_FILE_CHOOSER_ACTION_SAVE,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_SAVE,GTK_RESPONSE_ACCEPT,NULL);
@@ -390,7 +400,29 @@ printf("save %i\n",(int)(long)data);
 			saveFileName=page->getFilename();
 			if(getSaveFile()==false)
 				return(false);
+
+			fd=fopen(saveFilePath,"w");
+			if (fd!=NULL)
+				{
+					page->setPathname((char*)saveFilePath);
+					page->setFilename((char*)saveFileName);
+					//page->filePath=saveFilePath;
+					//page->fileName=saveFileName;
+					//if(page->dirName!=NULL)
+					//	debugFree(&page->dirName,"saveFile dirName");
+						
+					page->setDirname(g_path_get_dirname(page->getPathname()));
+					//page->dirName=g_path_get_dirname(page->filePath);
+					//gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,FALSE);
+//
+					//gtk_widget_set_tooltip_text(page->tabName,page->filePath);
+					//gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)saveFileName);
+					//fprintf(fd,"%s",text);
+					fclose(fd);
+				}
 		}
+			saveFileName=NULL;
+			saveFilePath=NULL;
 
 	return(true);
 #else
