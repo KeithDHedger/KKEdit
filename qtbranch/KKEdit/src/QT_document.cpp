@@ -113,6 +113,14 @@ void DocumentClass::updateLineNumberArea(const QRect &rect,int dy)
 DocumentClass::DocumentClass(QWidget *parent): QPlainTextEdit(parent)
 {
 	this->page=new pageStruct;
+	this->page->fileName=NULL;
+	this->page->filePath=NULL;
+	this->page->dirName=NULL;
+	this->page->realFilePath=NULL;
+	this->page->tabName=NULL;
+	this->page->regexList=NULL;
+	this->page->reserved4=0;
+
 	this->highlighter=new Highlighter(this->document());
 	this->setCenterOnScroll(true);
 	lineNumberArea=new LineNumberArea(this);

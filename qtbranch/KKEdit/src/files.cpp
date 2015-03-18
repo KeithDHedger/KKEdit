@@ -1018,8 +1018,6 @@ void getFileContents(const gchar *filepath,bool warn)
 
 	convertContents((char*)contents,length);
 	debugFree(&contents,"openFile contents");
-	
-	debugFree(&contents,"openFile contents");
 }
 
 VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
@@ -1038,7 +1036,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	doc=new DocumentClass();
 	dataLen=-1;
 	getFileContents(filepath,true);
-	
 	if(dataLen>-1)
 		{
 			doc->setPlainText(QString::fromUtf8(convertedData,dataLen));
