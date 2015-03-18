@@ -418,7 +418,9 @@ printf("save %i\n",(int)(long)data);
 					//gtk_widget_set_tooltip_text(page->tabName,page->filePath);
 					//gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)saveFileName);
 					//fprintf(fd,"%s",text);
+					fputs(page->toPlainText().toLocal8Bit().constData(),fd);
 					fclose(fd);
+					page->document()->setModified(false);
 				}
 		}
 			saveFileName=NULL;
