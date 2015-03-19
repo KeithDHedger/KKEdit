@@ -2692,8 +2692,10 @@ void buildFindReplace(void)
 //case
 	checkbox=new QCheckBox(gettext("Case insensitive"));
 	QObject::connect((QCheckBox*)checkbox,&QCheckBox::stateChanged,doneDialog);
+	hlayout->addWidget(findDropBox);
 //use regex
 
+	vlayout->addWidget(hbox);
 
 	findReplaceDialog->setLayout(vlayout);
 
