@@ -1117,13 +1117,15 @@ void doFindReplace(int response_id)
 #endif
 {
 #ifdef _USEQT5_
-printf(">>%i<<\n",response_id);
-	DocumentClass* page=getDocumentData(-1);
+	int				flags=0;
 
-	if(response_id!=FINDNEXT)
-		{
-			page->find(reinterpret_cast<QComboBox*>(findDropBox)->currentText());
-		}
+	DocumentClass	*page=getDocumentData(-1);
+	flags+=(((!insensitiveSearch)<<((QTextDocument::FindCaseSensitively)-1)));
+	flags+=(((response_id==FINDPREV)<<((QTextDocument::FindBackward)-1)));
+	
+	printf(">>%i<>%i<<\n",response_id,flags);
+
+	page->find(reinterpret_cast<QComboBox*>(findDropBox)->currentText(),(QTextDocument::FindFlags)flags);
 #else
 	bool		flag=false;
 	GSList*		tlist;
