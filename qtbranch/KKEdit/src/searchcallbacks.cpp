@@ -1118,6 +1118,12 @@ void doFindReplace(int response_id)
 {
 #ifdef _USEQT5_
 printf(">>%i<<\n",response_id);
+	DocumentClass* page=getDocumentData(-1);
+
+	if(response_id!=FINDNEXT)
+		{
+			page->find(reinterpret_cast<QComboBox*>(findDropBox)->currentText());
+		}
 #else
 	bool		flag=false;
 	GSList*		tlist;
