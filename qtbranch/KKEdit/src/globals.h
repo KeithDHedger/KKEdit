@@ -56,6 +56,7 @@
 #define NUMSHORTCUTS	14
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
+enum {FRCASE=0,FRUSEREGEX,FRWRAP,FRALLFILES,FRHIGHLIGHTALL,FRREPLACEALL,FRMAXSWITCHES};
 
 #ifndef _USEQT5_
 	#include <gtk/gtk.h>
@@ -234,6 +235,8 @@ extern Widget*			helpMenu;
 extern Widget			*findReplaceDialog;
 extern Widget			*findDropBox;
 extern Widget			*replaceDropBox;
+extern Widget			*frSwitches[FRMAXSWITCHES];
+extern Widget			*frReplace;
 
 extern int				currentPage;
 //nag

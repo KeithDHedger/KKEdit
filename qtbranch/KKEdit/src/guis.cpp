@@ -2645,6 +2645,21 @@ printf(">>%i<<\n",state);
 //	spellCheckWord=NULL;
 }
 
+#ifdef _USEQT5_
+void doFindForwardWrap(void)
+{
+	doFindReplace(FINDNEXT);
+}
+void doFindBackWrap(void)
+{
+	doFindReplace(FINDPREV);
+}
+void doReplaceWrap(void)
+{
+	doFindReplace(REPLACE);
+}
+#endif
+
 void buildFindReplace(void)
 {
 #ifdef _USEQT5_
@@ -2652,7 +2667,9 @@ void buildFindReplace(void)
 	QWidget*		hbox;
 	QHBoxLayout*	hlayout;
 	QLabel			*label;
-	QCheckBox		*checkbox;
+	QPushButton		*button;
+	QIcon			icon;
+//	QCheckBox		*checkbox;
 
 //	Button*			button;
 //	char*			labeltext=NULL;
@@ -2660,6 +2677,7 @@ void buildFindReplace(void)
 
 	findReplaceDialog=new QDialog(mainWindow);
 	findReplaceDialog->setWindowTitle(gettext("Find/Replace"));
+	vlayout->setContentsMargins(4,0,4,0);
 //	QObject::connect((QDialog*)spellCheckWord,&QDialog::finished,doneDialog);
 
 //	hlayout=new QHBoxLayout;
@@ -2686,14 +2704,69 @@ void buildFindReplace(void)
 
 //switches 1st row
 	hlayout=new QHBoxLayout;
+	hlayout->setContentsMargins(0,0,0,0);
 	hbox=new QWidget;
 	hbox->setLayout(hlayout);
 
 //case
-	checkbox=new QCheckBox(gettext("Case insensitive"));
-	QObject::connect((QCheckBox*)checkbox,&QCheckBox::stateChanged,doneDialog);
-	hlayout->addWidget(findDropBox);
+	frSwitches[FRCASE]=new QCheckBox(gettext("Case insensitive"));
+	QObject::connect((QCheckBox*)frSwitches[FRCASE],&QCheckBox::stateChanged,doSearchPrefs);
+	hlayout->addWidget(frSwitches[FRCASE]);
 //use regex
+	frSwitches[FRUSEREGEX]=new QCheckBox(gettext("Use Regex"));
+	QObject::connect((QCheckBox*)frSwitches[FRUSEREGEX],&QCheckBox::stateChanged,doSearchPrefs);
+	hlayout->addWidget(frSwitches[FRUSEREGEX]);
+
+	vlayout->addWidget(hbox);
+
+//switches 2nd row
+	hlayout=new QHBoxLayout;
+	hlayout->setContentsMargins(0,0,0,0);
+	hbox=new QWidget;
+	hbox->setLayout(hlayout);
+//wrap
+	frSwitches[FRWRAP]=new QCheckBox(gettext("Wrap"));
+	QObject::connect((QCheckBox*)frSwitches[FRWRAP],&QCheckBox::stateChanged,doSearchPrefs);
+	hlayout->addWidget(frSwitches[FRWRAP]);
+
+//all files
+	frSwitches[FRALLFILES]=new QCheckBox(gettext("All Files"));
+	QObject::connect((QCheckBox*)frSwitches[FRALLFILES],&QCheckBox::stateChanged,doSearchPrefs);
+	hlayout->addWidget(frSwitches[FRALLFILES]);
+//hilite all
+	frSwitches[FRHIGHLIGHTALL]=new QCheckBox(gettext("Highlight All"));
+	QObject::connect((QCheckBox*)frSwitches[FRHIGHLIGHTALL],&QCheckBox::stateChanged,doSearchPrefs);
+	hlayout->addWidget(frSwitches[FRHIGHLIGHTALL]);
+//rep all
+	frSwitches[FRREPLACEALL]=new QCheckBox(gettext("Replace All"));
+	QObject::connect((QCheckBox*)frSwitches[FRREPLACEALL],&QCheckBox::stateChanged,doSearchPrefs);
+	hlayout->addWidget(frSwitches[FRREPLACEALL]);
+
+	vlayout->addWidget(hbox);
+
+//switches 3rd row
+	hlayout=new QHBoxLayout;
+	hlayout->setContentsMargins(0,4,0,4);
+	hbox=new QWidget;
+	hbox->setLayout(hlayout);
+
+	button=new QPushButton(gettext("Forward"));
+	QObject::connect((QPushButton*)button,&QPushButton::clicked,doFindForwardWrap);
+	icon=QIcon::fromTheme("go-next",QIcon("go-next"));
+	button->setIcon(icon);
+	hlayout->addWidget(button);
+
+	button=new QPushButton(gettext("Back"));
+	QObject::connect((QPushButton*)button,&QPushButton::clicked,doFindBackWrap);
+	icon=QIcon::fromTheme("go-previous",QIcon("go-previous"));
+	button->setIcon(icon);
+	hlayout->addWidget(button);
+
+	frReplace=new QPushButton(gettext("Replace"));
+	QObject::connect((QPushButton*)frReplace,&QPushButton::clicked,doReplaceWrap);
+	icon=QIcon::fromTheme("edit-find-replace",QIcon("edit-find-replace"));
+	reinterpret_cast<QPushButton*>(frReplace)->setIcon(icon);
+	hlayout->addWidget(frReplace);
 
 	vlayout->addWidget(hbox);
 

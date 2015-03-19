@@ -20,13 +20,17 @@ void docSearchInPageBack(Widget* widget,uPtr data);
 #ifndef _USEQT5_
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data);
 #else
-//TODO//
-void doFindReplace(void);
+void doFindReplace(int response_id);
 #endif
 
 void find(Widget* widget,uPtr data);
 
+#ifndef _USEQT5_
 void doSearchPrefs(Widget* widget,uPtr data);
+#else
+void doSearchPrefs(int state);
+#endif
+
 #ifndef _USEQT5_
 void docSearchFromBar(Widget* widget,uPtr data);
 #else

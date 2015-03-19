@@ -1113,10 +1113,12 @@ void showOnStatus(const char* from,const char* to)
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 #else
 //TODO//
-void doFindReplace(void)
+void doFindReplace(int response_id)
 #endif
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+printf(">>%i<<\n",response_id);
+#else
 	bool		flag=false;
 	GSList*		tlist;
 	const char*	edata;
@@ -1202,11 +1204,39 @@ printf("find %i\n",(int)(long)data);
 #ifndef _USEQT5_
 void doSearchPrefs(Widget* widget,uPtr data)
 #else
-//TODO//
-void doSearchPrefs(void)
+void doSearchPrefs(int state)
 #endif
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	for(int j=FRCASE;j<FRMAXSWITCHES;j++)
+		{
+			switch(j)
+				{
+					case FRCASE:
+						insensitiveSearch=reinterpret_cast<QCheckBox*>(frSwitches[FRCASE])->isChecked();
+						break;
+					case FRUSEREGEX:
+						useRegex=reinterpret_cast<QCheckBox*>(frSwitches[FRUSEREGEX])->isChecked();
+						break;
+					case FRWRAP:
+						wrapSearch=reinterpret_cast<QCheckBox*>(frSwitches[FRWRAP])->isChecked();
+						break;
+					case FRALLFILES:
+						findInAllFiles=reinterpret_cast<QCheckBox*>(frSwitches[FRALLFILES])->isChecked();
+						break;
+					case FRHIGHLIGHTALL:
+						hightlightAll=reinterpret_cast<QCheckBox*>(frSwitches[FRHIGHLIGHTALL])->isChecked();
+						break;
+					case FRREPLACEALL:
+						replaceAll=reinterpret_cast<QCheckBox*>(frSwitches[FRREPLACEALL])->isChecked();
+						if(replaceAll==false)
+							reinterpret_cast<QPushButton*>(frReplace)->setText(gettext("Replace"));
+						else
+							reinterpret_cast<QPushButton*>(frReplace)->setText(gettext("Replace All"));
+						break;
+				}
+		}
+#else
 	GtkWidget*	button;
 
 	switch ((long)data)

@@ -126,8 +126,10 @@ Widget*			helpMenu;
 
 //find replace
 Widget			*findReplaceDialog;
-Widget			*findDropBox=NULL;
+Widget			*findDropBox;
 Widget			*replaceDropBox;
+Widget			*frSwitches[FRMAXSWITCHES];
+Widget			*frReplace;
 
 int				currentPage=0;
 //nag
