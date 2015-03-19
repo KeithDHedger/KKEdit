@@ -52,6 +52,7 @@ class DocumentClass : public QPlainTextEdit
 		void				updateLineNumberAreaWidth(int newBlockCount);
 		void				highlightCurrentLine();
 		void				updateLineNumberArea(const QRect &, int);
+		void				clearAllBlocks();
 
 	private:
 		QWidget 			*lineNumberArea;

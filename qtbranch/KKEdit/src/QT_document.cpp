@@ -68,35 +68,39 @@ DocumentClass::~DocumentClass()
 	
 }
 
-void DocumentClass::updateLineNumberAreaWidth(int/* newBlockCount */)
+void DocumentClass::updateLineNumberAreaWidth(int)
 {
 	setViewportMargins(lineNumberAreaWidth(),0,0,0);
 }
 
-void DocumentClass::highlightCurrentLine()
+void DocumentClass::clearAllBlocks(void)
 {
-	QList<QTextEdit::ExtraSelection>	extraSelections;
-	QTextBlockFormat					block;
-
-	this->oldCursor.setBlockFormat(this->oldBlockFormat);
+	QTextBlockFormat	block;
+	QTextCharFormat		format;
+	QTextCursor			cursor;
 
 	if (!isReadOnly())
 		{
-			QTextEdit::ExtraSelection selection;
-			QColor lineColor=QColor(Qt::yellow).lighter(160);
-	
-			selection.cursor=textCursor();
-			block=selection.cursor.blockFormat();
-			this->oldBlockFormat=selection.cursor.blockFormat();
-			block.setBackground(lineColor);
-			selection.cursor.setBlockFormat(block);
-
-			selection.cursor=textCursor();
-			selection.cursor.clearSelection();
-			extraSelections.append(selection);
-			this->oldCursor=selection.cursor;
+			cursor=this->textCursor();
+			cursor.select(QTextCursor::Document);
+			block=cursor.blockFormat();
+			block.clearBackground();
+			cursor.setBlockFormat(block);
 		}
-	setExtraSelections(extraSelections);
+}
+
+void DocumentClass::highlightCurrentLine()
+{
+	QTextBlockFormat	block;
+
+	if (!isReadOnly())
+		{
+			QColor lineColor=QColor(Qt::yellow).lighter(160);
+
+			block=this->textCursor().blockFormat();
+			block.setBackground(lineColor);
+			this->textCursor().setBlockFormat(block);
+		}
 }
 
 void DocumentClass::updateLineNumberArea(const QRect &rect,int dy)
@@ -127,6 +131,7 @@ DocumentClass::DocumentClass(QWidget *parent): QPlainTextEdit(parent)
 
 	connect(this,SIGNAL(blockCountChanged(int)),this,SLOT(updateLineNumberAreaWidth(int)));
 	connect(this,SIGNAL(updateRequest(QRect,int)),this,SLOT(updateLineNumberArea(QRect,int)));
+	connect(this,SIGNAL(cursorPositionChanged()),this,SLOT(clearAllBlocks()));
 	connect(this,SIGNAL(cursorPositionChanged()),this,SLOT(highlightCurrentLine()));
 
 	updateLineNumberAreaWidth(0);

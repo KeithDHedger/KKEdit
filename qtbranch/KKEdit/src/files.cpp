@@ -406,25 +406,15 @@ printf("save %i\n",(int)(long)data);
 				{
 					page->setPathname((char*)saveFilePath);
 					page->setFilename((char*)saveFileName);
-					//page->filePath=saveFilePath;
-					//page->fileName=saveFileName;
-					//if(page->dirName!=NULL)
-					//	debugFree(&page->dirName,"saveFile dirName");
-						
 					page->setDirname(g_path_get_dirname(page->getPathname()));
-					//page->dirName=g_path_get_dirname(page->filePath);
-					//gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,FALSE);
-//
-					//gtk_widget_set_tooltip_text(page->tabName,page->filePath);
-					//gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)saveFileName);
-					//fprintf(fd,"%s",text);
 					fputs(page->toPlainText().toLocal8Bit().constData(),fd);
 					fclose(fd);
 					page->document()->setModified(false);
 				}
 		}
-			saveFileName=NULL;
-			saveFilePath=NULL;
+
+	saveFileName=NULL;
+	saveFilePath=NULL;
 
 	return(true);
 #else
