@@ -2639,6 +2639,11 @@ void buildMainGui(void)
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
 }
 #endif
+void doneDialog(int state)
+{
+printf(">>%i<<\n",state);
+//	spellCheckWord=NULL;
+}
 
 void buildFindReplace(void)
 {
@@ -2647,6 +2652,7 @@ void buildFindReplace(void)
 	QWidget*		hbox;
 	QHBoxLayout*	hlayout;
 	QLabel			*label;
+	QCheckBox		*checkbox;
 
 //	Button*			button;
 //	char*			labeltext=NULL;
@@ -2677,6 +2683,17 @@ void buildFindReplace(void)
 	replaceDropBox=new QComboBox;
 	reinterpret_cast<QComboBox*>(replaceDropBox)->setEditable(true);
 	vlayout->addWidget(replaceDropBox);
+
+//switches 1st row
+	hlayout=new QHBoxLayout;
+	hbox=new QWidget;
+	hbox->setLayout(hlayout);
+
+//case
+	checkbox=new QCheckBox(gettext("Case insensitive"));
+	QObject::connect((QCheckBox*)checkbox,&QCheckBox::stateChanged,doneDialog);
+//use regex
+
 
 	findReplaceDialog->setLayout(vlayout);
 
