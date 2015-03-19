@@ -671,7 +671,7 @@ void qtAppStart(int argc, char **argv)
 //	refreshMainWindow();
 
 //TODO//
-//	buildFindReplace();
+	buildFindReplace();
 //TODO//
 //	for(unsigned int j=0; j<g_slist_length(findList); j++)
 //		gtk_combo_box_text_append_text((GtkComboBoxText*)findDropBox,(const char*)g_slist_nth_data(findList,j));
@@ -755,6 +755,9 @@ int main (int argc, char **argv)
 	QApplication app(argc,argv);
 
 	qtAppStart(argc,argv);
+
+	for(int j=1;j<argc;j++)
+		openFile(argv[j],0,true);
 
 	if(getuid()!=0)
 		app.setWindowIcon(QIcon::fromTheme(PACKAGE,QIcon(DATADIR"/pixmaps/KKEdit.png")));

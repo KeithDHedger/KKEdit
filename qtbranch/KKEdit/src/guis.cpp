@@ -2642,7 +2642,28 @@ void buildMainGui(void)
 
 void buildFindReplace(void)
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	QVBoxLayout*	vlayout=new QVBoxLayout;
+	QWidget*		hbox;
+	QHBoxLayout*	hlayout;
+	
+//	Button*			button;
+//	char*			labeltext=NULL;
+//	int				docflag=documentCheck;
+
+	findReplaceDialog=new QDialog(mainWindow);
+//	QObject::connect((QDialog*)spellCheckWord,&QDialog::finished,doneDialog);
+
+//	hlayout=new QHBoxLayout;
+//	hbox=new QWidget;
+//	hbox->setLayout(hlayout);
+
+	findDropBox=new QComboBox;
+	reinterpret_cast<QComboBox*>(findDropBox)->setEditable(true);
+	vlayout->addWidget(findDropBox);
+	findReplaceDialog->setLayout(vlayout);
+
+#else
 	GtkWidget*	content_area;
 	GtkWidget*	replace;
 	GtkWidget*	goback;

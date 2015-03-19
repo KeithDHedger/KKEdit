@@ -1191,7 +1191,9 @@ VISIBLE void find(Widget* widget,uPtr data)
 {
 printf("find %i\n",(int)(long)data);
 
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	findReplaceDialog->show();
+#else
 	gtk_widget_show(findReplaceDialog);
 	gtk_dialog_run((GtkDialog *)findReplaceDialog);
 #endif

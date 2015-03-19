@@ -124,6 +124,10 @@ Widget*			toolsMenu;
 //help
 Widget*			helpMenu;
 
+//find replace
+Widget			*findReplaceDialog;
+Widget			*findDropBox=NULL;
+
 int				currentPage=0;
 //nag
 bool			nagScreen;
@@ -314,10 +318,10 @@ GtkToolItem*	findFuncDefButton=NULL;
 GtkToolItem*	liveSearchButton=NULL;
 
 //find replace
-GtkWidget*		findReplaceDialog;
+//GtkWidget*		findReplaceDialog;
 GtkWidget*		findBox;
 GtkWidget*		replaceBox;
-GtkWidget*		findDropBox=NULL;
+//GtkWidget*		findDropBox=NULL;
 GtkWidget*		replaceDropBox;
 #else
 //TODO//

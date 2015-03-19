@@ -230,6 +230,9 @@ extern Widget*			bookMarkSubMenu;
 extern Widget*			toolsMenu;
 //help
 extern Widget*			helpMenu;
+//find replace
+extern Widget			*findReplaceDialog;
+extern Widget			*findDropBox;
 
 extern int				currentPage;
 //nag
@@ -423,10 +426,10 @@ extern GtkToolItem*		findFuncDefButton;
 extern GtkToolItem*		liveSearchButton;
 
 //find replace
-extern GtkWidget*		findReplaceDialog;
+//extern GtkWidget*		findReplaceDialog;
 extern GtkWidget*		findBox;
 extern GtkWidget*		replaceBox;
-extern GtkWidget*		findDropBox;
+//extern GtkWidget*		findDropBox;
 extern GtkWidget*		replaceDropBox;
 
 #else
