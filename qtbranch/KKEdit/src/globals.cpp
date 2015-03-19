@@ -127,6 +127,7 @@ Widget*			helpMenu;
 //find replace
 Widget			*findReplaceDialog;
 Widget			*findDropBox=NULL;
+Widget			*replaceDropBox;
 
 int				currentPage=0;
 //nag
@@ -322,7 +323,7 @@ GtkToolItem*	liveSearchButton=NULL;
 GtkWidget*		findBox;
 GtkWidget*		replaceBox;
 //GtkWidget*		findDropBox=NULL;
-GtkWidget*		replaceDropBox;
+//GtkWidget*		replaceDropBox;
 #else
 //TODO//
 //QAction			*newButton;

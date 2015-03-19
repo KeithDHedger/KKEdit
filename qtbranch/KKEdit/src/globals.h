@@ -233,6 +233,7 @@ extern Widget*			helpMenu;
 //find replace
 extern Widget			*findReplaceDialog;
 extern Widget			*findDropBox;
+extern Widget			*replaceDropBox;
 
 extern int				currentPage;
 //nag
@@ -430,7 +431,7 @@ extern GtkToolItem*		liveSearchButton;
 extern GtkWidget*		findBox;
 extern GtkWidget*		replaceBox;
 //extern GtkWidget*		findDropBox;
-extern GtkWidget*		replaceDropBox;
+//extern GtkWidget*		replaceDropBox;
 
 #else
 //TODO//

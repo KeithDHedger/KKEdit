@@ -2646,21 +2646,38 @@ void buildFindReplace(void)
 	QVBoxLayout*	vlayout=new QVBoxLayout;
 	QWidget*		hbox;
 	QHBoxLayout*	hlayout;
-	
+	QLabel			*label;
+
 //	Button*			button;
 //	char*			labeltext=NULL;
 //	int				docflag=documentCheck;
 
 	findReplaceDialog=new QDialog(mainWindow);
+	findReplaceDialog->setWindowTitle(gettext("Find/Replace"));
 //	QObject::connect((QDialog*)spellCheckWord,&QDialog::finished,doneDialog);
 
 //	hlayout=new QHBoxLayout;
 //	hbox=new QWidget;
 //	hbox->setLayout(hlayout);
 
+//find
+	label=new QLabel(gettext("Find"));
+	label->setAlignment(Qt::AlignCenter);
+	vlayout->addWidget(label);
+
 	findDropBox=new QComboBox;
 	reinterpret_cast<QComboBox*>(findDropBox)->setEditable(true);
 	vlayout->addWidget(findDropBox);
+
+//replace
+	label=new QLabel(gettext("Replace With"));
+	label->setAlignment(Qt::AlignCenter);
+	vlayout->addWidget(label);
+
+	replaceDropBox=new QComboBox;
+	reinterpret_cast<QComboBox*>(replaceDropBox)->setEditable(true);
+	vlayout->addWidget(replaceDropBox);
+
 	findReplaceDialog->setLayout(vlayout);
 
 #else
