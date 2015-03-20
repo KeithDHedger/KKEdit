@@ -674,21 +674,15 @@ void qtAppStart(int argc, char **argv)
 
 	for(unsigned int j=0; j<g_slist_length(findList); j++)
 		{
-#ifdef _USEQT5_
 			reinterpret_cast<QComboBox*>(findDropBox)->addItem((const char*)g_slist_nth_data(findList,j));
-#else
-			gtk_combo_box_text_append_text((GtkComboBoxText*)findDropBox,(const char*)g_slist_nth_data(findList,j));
-#endif
 		}
+	reinterpret_cast<QComboBox*>(findDropBox)->setCurrentIndex(g_slist_length(findList)-1);
 
 	for(unsigned int j=0; j<g_slist_length(findList); j++)
 		{
-#ifdef _USEQT5_
 			reinterpret_cast<QComboBox*>(replaceDropBox)->addItem((const char*)g_slist_nth_data(replaceList,j));
-#else
-			gtk_combo_box_text_append_text((GtkComboBoxText*)replaceDropBox,(const char*)g_slist_nth_data(findList,j));
-#endif
 		}
+	reinterpret_cast<QComboBox*>(replaceDropBox)->setCurrentIndex(g_slist_length(findList)-1);
 
 //TODO//
 //#ifdef _BUILDDOCVIEWER_

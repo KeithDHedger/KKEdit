@@ -2669,20 +2669,11 @@ void buildFindReplace(void)
 	QLabel			*label;
 	QPushButton		*button;
 	QIcon			icon;
-//	QCheckBox		*checkbox;
-
-//	Button*			button;
-//	char*			labeltext=NULL;
-//	int				docflag=documentCheck;
 
 	findReplaceDialog=new QDialog(mainWindow);
 	findReplaceDialog->setWindowTitle(gettext("Find/Replace"));
 	vlayout->setContentsMargins(4,0,4,0);
 //	QObject::connect((QDialog*)spellCheckWord,&QDialog::finished,doneDialog);
-
-//	hlayout=new QHBoxLayout;
-//	hbox=new QWidget;
-//	hbox->setLayout(hlayout);
 
 //find
 	label=new QLabel(gettext("Find"));
@@ -2691,7 +2682,6 @@ void buildFindReplace(void)
 
 	findDropBox=new QComboBox;
 	reinterpret_cast<QComboBox*>(findDropBox)->setEditable(true);
-//	reinterpret_cast<QComboBox*>(findDropBox)->setDuplicatesEnabled(true);
 	reinterpret_cast<QComboBox*>(findDropBox)->setCompleter(0);
 	vlayout->addWidget(findDropBox);
 
@@ -2702,7 +2692,6 @@ void buildFindReplace(void)
 
 	replaceDropBox=new QComboBox;
 	reinterpret_cast<QComboBox*>(replaceDropBox)->setEditable(true);
-//	reinterpret_cast<QComboBox*>(replaceDropBox)->setDuplicatesEnabled(true);
 	reinterpret_cast<QComboBox*>(replaceDropBox)->setCompleter(0);
 	vlayout->addWidget(replaceDropBox);
 

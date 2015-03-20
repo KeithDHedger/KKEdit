@@ -1127,6 +1127,8 @@ void doFindReplace(int response_id)
 	QComboBox		*combo;
 	bool			flag=false;
 	int				cnt;
+	QString			str;
+	QString			captured;
 
 	flags+=(((!insensitiveSearch)<<((QTextDocument::FindCaseSensitively)-1)));
 	flags+=(((response_id==FINDPREV)<<((QTextDocument::FindBackward)-1)));
@@ -1134,12 +1136,17 @@ void doFindReplace(int response_id)
 	currentfindtext=strdup(reinterpret_cast<QComboBox*>(findDropBox)->currentText().toUtf8().constData());
 	currentreplacetext=strdup(reinterpret_cast<QComboBox*>(replaceDropBox)->currentText().toUtf8().constData());
 
+	QRegExp			rx(currentfindtext);
+
 	if(response_id!=REPLACE)
 		{
 			combo=reinterpret_cast<QComboBox*>(findDropBox);
 			list=findList;
 			thetext=currentfindtext;
-			page->find(thetext,(QTextDocument::FindFlags)flags);
+			if(useRegex==false)
+				page->find(thetext,(QTextDocument::FindFlags)flags);
+			else
+				page->find(rx,(QTextDocument::FindFlags)flags);
 		}
 	else
 		{
@@ -1148,21 +1155,47 @@ void doFindReplace(int response_id)
 			thetext=currentreplacetext;
 			if(replaceAll==false)
 				{
-					if(page->textCursor().hasSelection())
-						page->textCursor().insertText(thetext);
-					page->find(currentfindtext,(QTextDocument::FindFlags)flags);
+					if(useRegex==false)
+						{
+							if(page->textCursor().hasSelection())
+								page->textCursor().insertText(thetext);
+							page->find(currentfindtext,(QTextDocument::FindFlags)flags);
+						}
+					else
+						{
+							if(page->textCursor().hasSelection())
+								{
+									str=page->textCursor().selectedText();
+									str.replace(rx,thetext);
+									page->textCursor().insertText(str);
+								}
+							page->find(rx,(QTextDocument::FindFlags)flags);
+						}
 				}
 			else
 				{
 					cnt=0;
-					//page->textCursor().setPosition(0,QTextCursor::MoveAnchor);
 					gotoLine(NULL,0);
-					page->find(currentfindtext,(QTextDocument::FindFlags)flags);
+					if(useRegex==false)
+						page->find(currentfindtext,(QTextDocument::FindFlags)flags);
+					else
+						page->find(rx,(QTextDocument::FindFlags)flags);
 					while(page->textCursor().hasSelection()==true)
 						{
-							page->textCursor().insertText(thetext);
-							page->find(currentfindtext,(QTextDocument::FindFlags)flags);
-							cnt++;
+							if(useRegex==false)
+								{
+									page->textCursor().insertText(thetext);
+									page->find(currentfindtext,(QTextDocument::FindFlags)flags);
+									cnt++;
+								}
+							else
+								{
+									str=page->textCursor().selectedText();
+									str.replace(rx,thetext);
+									page->textCursor().insertText(str);
+									page->find(rx,(QTextDocument::FindFlags)flags);
+									cnt++;
+								}
 						}
 					printf("Replaced %i occurrances of %s with %s\n",cnt,currentfindtext,thetext);
 				}
