@@ -123,6 +123,8 @@ DocumentClass::DocumentClass(QWidget *parent): QPlainTextEdit(parent)
 	this->page->realFilePath=NULL;
 	this->page->tabName=NULL;
 	this->page->regexList=NULL;
+	this->page->doneHighlightAll=false;
+	this->page->lastFind=NULL;
 	this->page->reserved4=0;
 
 	this->highlighter=new Highlighter(this->document());

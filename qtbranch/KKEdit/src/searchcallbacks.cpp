@@ -1118,7 +1118,7 @@ void doFindReplace(int response_id)
 #ifdef _USEQT5_
 
 	int				flags=0;
-	DocumentClass	*page=getDocumentData(-1);
+	DocumentClass	*document=getDocumentData(-1);
 	char			*currentfindtext;
 	char			*currentreplacetext;
 	const char		*thetext;
@@ -1129,6 +1129,7 @@ void doFindReplace(int response_id)
 	int				cnt;
 	QString			str;
 	bool			gotresult;
+	pageStruct		*page=document->getPage();
 
 	currentfindtext=strdup(reinterpret_cast<QComboBox*>(findDropBox)->currentText().toUtf8().constData());
 	currentreplacetext=strdup(reinterpret_cast<QComboBox*>(replaceDropBox)->currentText().toUtf8().constData());
@@ -1145,24 +1146,63 @@ void doFindReplace(int response_id)
 
 	flags+=(((response_id==FINDPREV)<<((QTextDocument::FindBackward)-1)));
 
+	if((response_id==FINDNEXT) && (hightlightAll==true) && (((page->lastFind!=NULL) && (strcasecmp(page->lastFind,currentfindtext)!=0)) || (page->doneHighlightAll==false)))
+		{
+			QList<QTextEdit::ExtraSelection> extraSelections;
+			QTextEdit::ExtraSelection selection;
+			QColor lineColor = QColor(Qt::green);
+
+			selection.format.setBackground(lineColor);
+			if(useRegex==false)
+				gotresult=document->find(currentfindtext,(QTextDocument::FindFlags)flags);
+			else
+				gotresult=document->find(rx,(QTextDocument::FindFlags)flags);
+
+			int ln=document->textCursor().blockNumber()+1;
+			gotoLine(NULL,0);
+			while(gotresult==true)
+				{
+					selection.cursor=document->textCursor();
+					extraSelections.append(selection);
+					if(useRegex==false)
+						gotresult=document->find(currentfindtext,(QTextDocument::FindFlags)flags);
+					else
+						gotresult=document->find(rx,(QTextDocument::FindFlags)flags);
+				}
+			document->setExtraSelections(extraSelections);
+			gotoLine(NULL,ln);
+			page->doneHighlightAll=true;
+			debugFree(&page->lastFind,"page->lastFind doFindReplace");
+				page->lastFind=strdup(currentfindtext);
+		}
+
+	if(hightlightAll==false)
+		{
+			QList<QTextEdit::ExtraSelection> extraSelections;
+			QTextEdit::ExtraSelection selection;
+			document->setExtraSelections(extraSelections);
+			debugFree(&page->lastFind,"page->lastFind doFindReplace 2");
+			page->doneHighlightAll=false;
+		}
+
 	if(response_id!=REPLACE)
 		{
 			combo=reinterpret_cast<QComboBox*>(findDropBox);
 			list=findList;
 			thetext=currentfindtext;
 			if(useRegex==false)
-				gotresult=page->find(thetext,(QTextDocument::FindFlags)flags);
+				gotresult=document->find(thetext,(QTextDocument::FindFlags)flags);
 			else
-				gotresult=page->find(rx,(QTextDocument::FindFlags)flags);
+				gotresult=document->find(rx,(QTextDocument::FindFlags)flags);
 
 			if((wrapSearch==true) && (gotresult==false))
 				{
-					int ln=page->textCursor().blockNumber()+1;
+					int ln=document->textCursor().blockNumber()+1;
 					gotoLine(NULL,0);
 					if(useRegex==false)
-						gotresult=page->find(thetext,(QTextDocument::FindFlags)flags);
+						gotresult=document->find(thetext,(QTextDocument::FindFlags)flags);
 					else
-						gotresult=page->find(rx,(QTextDocument::FindFlags)flags);
+						gotresult=document->find(rx,(QTextDocument::FindFlags)flags);
 					if(gotresult==false)
 						gotoLine(NULL,ln);			
 				}
@@ -1176,19 +1216,19 @@ void doFindReplace(int response_id)
 				{
 					if(useRegex==false)
 						{
-							if(page->textCursor().hasSelection())
-								page->textCursor().insertText(thetext);
-							page->find(currentfindtext,(QTextDocument::FindFlags)flags);
+							if(document->textCursor().hasSelection())
+								document->textCursor().insertText(thetext);
+							document->find(currentfindtext,(QTextDocument::FindFlags)flags);
 						}
 					else
 						{
-							if(page->textCursor().hasSelection())
+							if(document->textCursor().hasSelection())
 								{
-									str=page->textCursor().selectedText();
+									str=document->textCursor().selectedText();
 									str.replace(rx,thetext);
-									page->textCursor().insertText(str);
+									document->textCursor().insertText(str);
 								}
-							page->find(rx,(QTextDocument::FindFlags)flags);
+							document->find(rx,(QTextDocument::FindFlags)flags);
 						}
 				}
 			else
@@ -1196,23 +1236,23 @@ void doFindReplace(int response_id)
 					cnt=0;
 					gotoLine(NULL,0);
 					if(useRegex==false)
-						page->find(currentfindtext,(QTextDocument::FindFlags)flags);
+						document->find(currentfindtext,(QTextDocument::FindFlags)flags);
 					else
-						page->find(rx,(QTextDocument::FindFlags)flags);
-					while(page->textCursor().hasSelection()==true)
+						document->find(rx,(QTextDocument::FindFlags)flags);
+					while(document->textCursor().hasSelection()==true)
 						{
 							if(useRegex==false)
 								{
-									page->textCursor().insertText(thetext);
-									page->find(currentfindtext,(QTextDocument::FindFlags)flags);
+									document->textCursor().insertText(thetext);
+									document->find(currentfindtext,(QTextDocument::FindFlags)flags);
 									cnt++;
 								}
 							else
 								{
-									str=page->textCursor().selectedText();
+									str=document->textCursor().selectedText();
 									str.replace(rx,thetext);
-									page->textCursor().insertText(str);
-									page->find(rx,(QTextDocument::FindFlags)flags);
+									document->textCursor().insertText(str);
+									document->find(rx,(QTextDocument::FindFlags)flags);
 									cnt++;
 								}
 						}

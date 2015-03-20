@@ -140,11 +140,13 @@ struct pageStruct
 struct pageStruct
 {
 //qt page structure
-	char*				fileName;
-	char*				filePath;
-	char*				dirName;
-	char*				realFilePath;
-	char*				tabName;
+	char				*fileName;
+	char				*filePath;
+	char				*dirName;
+	char				*realFilePath;
+	char				*tabName;
+	bool				doneHighlightAll;
+	char				*lastFind;
 //	Widget*				pane;
 //	Widget*				pageWindow;
 //	Widget*				pageWindow2;
