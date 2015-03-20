@@ -1129,7 +1129,9 @@ void doFindReplace(int response_id)
 	int				cnt;
 	QString			str;
 	QString			captured;
-	
+	bool			gotresult;
+	bool			triedwrap;
+
 	currentfindtext=strdup(reinterpret_cast<QComboBox*>(findDropBox)->currentText().toUtf8().constData());
 	currentreplacetext=strdup(reinterpret_cast<QComboBox*>(replaceDropBox)->currentText().toUtf8().constData());
 
@@ -1150,10 +1152,21 @@ void doFindReplace(int response_id)
 			combo=reinterpret_cast<QComboBox*>(findDropBox);
 			list=findList;
 			thetext=currentfindtext;
+			gotresult=false;
+			triedwrap=false;
 			if(useRegex==false)
-				page->find(thetext,(QTextDocument::FindFlags)flags);
+				gotresult=page->find(thetext,(QTextDocument::FindFlags)flags);
 			else
-				page->find(rx,(QTextDocument::FindFlags)flags);
+				gotresult=page->find(rx,(QTextDocument::FindFlags)flags);
+
+			if((wrapSearch==true) && (gotresult==false))
+				{
+					//gotoLine(NULL,0);
+					if(useRegex==false)
+						gotresult=page->find(thetext,0,(QTextDocument::FindFlags)flags);
+					else
+						gotresult=page->find(rx,0,(QTextDocument::FindFlags)flags);					
+				}
 		}
 	else
 		{
