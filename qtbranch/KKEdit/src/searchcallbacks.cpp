@@ -1116,8 +1116,8 @@ void doFindReplace(int response_id)
 #endif
 {
 #ifdef _USEQT5_
-	int				flags=0;
 
+	int				flags=0;
 	DocumentClass	*page=getDocumentData(-1);
 	char			*currentfindtext;
 	char			*currentreplacetext;
@@ -1129,14 +1129,21 @@ void doFindReplace(int response_id)
 	int				cnt;
 	QString			str;
 	QString			captured;
-
-	flags+=(((!insensitiveSearch)<<((QTextDocument::FindCaseSensitively)-1)));
-	flags+=(((response_id==FINDPREV)<<((QTextDocument::FindBackward)-1)));
 	
 	currentfindtext=strdup(reinterpret_cast<QComboBox*>(findDropBox)->currentText().toUtf8().constData());
 	currentreplacetext=strdup(reinterpret_cast<QComboBox*>(replaceDropBox)->currentText().toUtf8().constData());
 
 	QRegExp			rx(currentfindtext);
+
+	if(insensitiveSearch==true)
+		rx.setCaseSensitivity(Qt::CaseInsensitive);
+	else
+		{
+			flags+=QTextDocument::FindCaseSensitively;
+			rx.setCaseSensitivity(Qt::CaseSensitive);
+		}
+
+	flags+=(((response_id==FINDPREV)<<((QTextDocument::FindBackward)-1)));
 
 	if(response_id!=REPLACE)
 		{
