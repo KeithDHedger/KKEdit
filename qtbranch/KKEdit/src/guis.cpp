@@ -2691,6 +2691,8 @@ void buildFindReplace(void)
 
 	findDropBox=new QComboBox;
 	reinterpret_cast<QComboBox*>(findDropBox)->setEditable(true);
+//	reinterpret_cast<QComboBox*>(findDropBox)->setDuplicatesEnabled(true);
+	reinterpret_cast<QComboBox*>(findDropBox)->setCompleter(0);
 	vlayout->addWidget(findDropBox);
 
 //replace
@@ -2700,6 +2702,8 @@ void buildFindReplace(void)
 
 	replaceDropBox=new QComboBox;
 	reinterpret_cast<QComboBox*>(replaceDropBox)->setEditable(true);
+//	reinterpret_cast<QComboBox*>(replaceDropBox)->setDuplicatesEnabled(true);
+	reinterpret_cast<QComboBox*>(replaceDropBox)->setCompleter(0);
 	vlayout->addWidget(replaceDropBox);
 
 //switches 1st row
@@ -2710,10 +2714,12 @@ void buildFindReplace(void)
 
 //case
 	frSwitches[FRCASE]=new QCheckBox(gettext("Case insensitive"));
+	reinterpret_cast<QCheckBox*>(frSwitches[FRCASE])->setChecked(insensitiveSearch);
 	QObject::connect((QCheckBox*)frSwitches[FRCASE],&QCheckBox::stateChanged,doSearchPrefs);
 	hlayout->addWidget(frSwitches[FRCASE]);
 //use regex
 	frSwitches[FRUSEREGEX]=new QCheckBox(gettext("Use Regex"));
+	reinterpret_cast<QCheckBox*>(frSwitches[FRUSEREGEX])->setChecked(useRegex);
 	QObject::connect((QCheckBox*)frSwitches[FRUSEREGEX],&QCheckBox::stateChanged,doSearchPrefs);
 	hlayout->addWidget(frSwitches[FRUSEREGEX]);
 
@@ -2726,19 +2732,23 @@ void buildFindReplace(void)
 	hbox->setLayout(hlayout);
 //wrap
 	frSwitches[FRWRAP]=new QCheckBox(gettext("Wrap"));
+	reinterpret_cast<QCheckBox*>(frSwitches[FRWRAP])->setChecked(wrapSearch);
 	QObject::connect((QCheckBox*)frSwitches[FRWRAP],&QCheckBox::stateChanged,doSearchPrefs);
 	hlayout->addWidget(frSwitches[FRWRAP]);
 
 //all files
 	frSwitches[FRALLFILES]=new QCheckBox(gettext("All Files"));
+	reinterpret_cast<QCheckBox*>(frSwitches[FRALLFILES])->setChecked(findInAllFiles);
 	QObject::connect((QCheckBox*)frSwitches[FRALLFILES],&QCheckBox::stateChanged,doSearchPrefs);
 	hlayout->addWidget(frSwitches[FRALLFILES]);
 //hilite all
 	frSwitches[FRHIGHLIGHTALL]=new QCheckBox(gettext("Highlight All"));
+	reinterpret_cast<QCheckBox*>(frSwitches[FRHIGHLIGHTALL])->setChecked(hightlightAll);
 	QObject::connect((QCheckBox*)frSwitches[FRHIGHLIGHTALL],&QCheckBox::stateChanged,doSearchPrefs);
 	hlayout->addWidget(frSwitches[FRHIGHLIGHTALL]);
 //rep all
 	frSwitches[FRREPLACEALL]=new QCheckBox(gettext("Replace All"));
+	reinterpret_cast<QCheckBox*>(frSwitches[FRREPLACEALL])->setChecked(replaceAll);
 	QObject::connect((QCheckBox*)frSwitches[FRREPLACEALL],&QCheckBox::stateChanged,doSearchPrefs);
 	hlayout->addWidget(frSwitches[FRREPLACEALL]);
 
@@ -2762,7 +2772,10 @@ void buildFindReplace(void)
 	button->setIcon(icon);
 	hlayout->addWidget(button);
 
-	frReplace=new QPushButton(gettext("Replace"));
+	if(replaceAll==false)
+		frReplace=new QPushButton(gettext("Replace"));
+	else
+		frReplace=new QPushButton(gettext("Replace All"));
 	QObject::connect((QPushButton*)frReplace,&QPushButton::clicked,doReplaceWrap);
 	icon=QIcon::fromTheme("edit-find-replace",QIcon("edit-find-replace"));
 	reinterpret_cast<QPushButton*>(frReplace)->setIcon(icon);

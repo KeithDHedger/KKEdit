@@ -1112,7 +1112,6 @@ void showOnStatus(const char* from,const char* to)
 #ifndef _USEQT5_
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 #else
-//TODO//
 void doFindReplace(int response_id)
 #endif
 {
@@ -1120,12 +1119,63 @@ void doFindReplace(int response_id)
 	int				flags=0;
 
 	DocumentClass	*page=getDocumentData(-1);
+	char			*currentfindtext;
+	char			*currentreplacetext;
+	const char		*thetext;
+	GSList			*tlist;
+	GSList			*list;
+	QComboBox		*combo;
+	bool			flag=false;
+
 	flags+=(((!insensitiveSearch)<<((QTextDocument::FindCaseSensitively)-1)));
 	flags+=(((response_id==FINDPREV)<<((QTextDocument::FindBackward)-1)));
 	
-	printf(">>%i<>%i<<\n",response_id,flags);
+	currentfindtext=strdup(reinterpret_cast<QComboBox*>(findDropBox)->currentText().toUtf8().constData());
+	currentreplacetext=strdup(reinterpret_cast<QComboBox*>(replaceDropBox)->currentText().toUtf8().constData());
+//	printf(">>%s-%s<<\n",currentfindtext,currentreplacetext);
+	if(response_id!=REPLACE)
+		{
+			combo=reinterpret_cast<QComboBox*>(findDropBox);
+			list=findList;
+			thetext=currentfindtext;
+			page->find(thetext,(QTextDocument::FindFlags)flags);
+		}
+	else
+		{
+			combo=reinterpret_cast<QComboBox*>(replaceDropBox);
+			list=replaceList;
+			thetext=currentreplacetext;
+		}
 
-	page->find(reinterpret_cast<QComboBox*>(findDropBox)->currentText(),(QTextDocument::FindFlags)flags);
+//	printf(">>%i<>%i<<>%s-%s-%s<<\n",response_id,flags,thetext,currentfindtext,currentreplacetext);
+	
+
+	if(list==NULL)
+		{
+			list=g_slist_append(list,strdup(thetext));
+			combo->addItem(thetext);
+		}
+	else
+		{
+			tlist=list;
+			flag=false;
+			do
+				{
+					if(strcmp((const gchar*)tlist->data,thetext)==0)
+						flag=true;
+					tlist=tlist->next;
+				}
+			while(tlist!=NULL);
+
+			if(flag==false)
+				{
+					list=g_slist_append(list,strdup(thetext));
+					combo->addItem(thetext);
+				}
+		}
+
+	debugFree(&currentfindtext,"doFindReplace currentfindtext");
+	debugFree(&currentreplacetext,"doFindReplace currentreplacetext");
 #else
 	bool		flag=false;
 	GSList*		tlist;
