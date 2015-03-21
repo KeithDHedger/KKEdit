@@ -7,7 +7,6 @@
 */
 
 #include "kkedit-includes.h"
-#include <QtConcurrent>
 
 int		currentFindPage=-1;
 int		firstPage=-1;
