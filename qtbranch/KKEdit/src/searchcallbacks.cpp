@@ -7,6 +7,7 @@
 */
 
 #include "kkedit-includes.h"
+#include <QtConcurrent>
 
 int		currentFindPage=-1;
 int		firstPage=-1;
@@ -1129,7 +1130,6 @@ void doFindReplace(int response_id)
 	int				cnt;
 	QString			str;
 	bool			gotresult;
-	pageStruct		*page=document->getPage();
 
 	currentfindtext=strdup(reinterpret_cast<QComboBox*>(findDropBox)->currentText().toUtf8().constData());
 	currentreplacetext=strdup(reinterpret_cast<QComboBox*>(replaceDropBox)->currentText().toUtf8().constData());
@@ -1146,34 +1146,29 @@ void doFindReplace(int response_id)
 
 	flags+=(((response_id==FINDPREV)<<((QTextDocument::FindBackward)-1)));
 
-	if((response_id==FINDNEXT) && (hightlightAll==true) && (((page->lastFind!=NULL) && (strcasecmp(page->lastFind,currentfindtext)!=0)) || (page->doneHighlightAll==false)))
+	if((response_id==FINDNEXT) && (hightlightAll==true))
 		{
-			QList<QTextEdit::ExtraSelection> extraSelections;
-			QTextEdit::ExtraSelection selection;
-			QColor lineColor = QColor(Qt::green);
+			QTextDocument						*doc=document->document();
+			QTextCursor							newCursor(doc);
+			QColor								lineColor=QColor(Qt::green);
+			QList<QTextEdit::ExtraSelection>	extraSelections;
+			QTextEdit::ExtraSelection			selection;
 
 			selection.format.setBackground(lineColor);
-			if(useRegex==false)
-				gotresult=document->find(currentfindtext,(QTextDocument::FindFlags)flags);
-			else
-				gotresult=document->find(rx,(QTextDocument::FindFlags)flags);
-
-			int ln=document->textCursor().blockNumber()+1;
-			gotoLine(NULL,0);
-			while(gotresult==true)
+			while(!newCursor.isNull() && !newCursor.atEnd())
 				{
-					selection.cursor=document->textCursor();
-					extraSelections.append(selection);
 					if(useRegex==false)
-						gotresult=document->find(currentfindtext,(QTextDocument::FindFlags)flags);
+						newCursor=doc->find(currentfindtext,newCursor,(QTextDocument::FindFlags)flags);
 					else
-						gotresult=document->find(rx,(QTextDocument::FindFlags)flags);
+						newCursor=doc->find(rx,newCursor,(QTextDocument::FindFlags)flags);
+					
+					if(!newCursor.isNull())
+						{
+							selection.cursor=newCursor;
+							extraSelections.append(selection);
+						}
 				}
 			document->setExtraSelections(extraSelections);
-			gotoLine(NULL,ln);
-			page->doneHighlightAll=true;
-			debugFree(&page->lastFind,"page->lastFind doFindReplace");
-				page->lastFind=strdup(currentfindtext);
 		}
 
 	if(hightlightAll==false)
@@ -1181,8 +1176,6 @@ void doFindReplace(int response_id)
 			QList<QTextEdit::ExtraSelection> extraSelections;
 			QTextEdit::ExtraSelection selection;
 			document->setExtraSelections(extraSelections);
-			debugFree(&page->lastFind,"page->lastFind doFindReplace 2");
-			page->doneHighlightAll=false;
 		}
 
 	if(response_id!=REPLACE)
