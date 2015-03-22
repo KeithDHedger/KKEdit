@@ -1027,9 +1027,13 @@ printf("pasteFromClip %i\n",(int)(long)data);
 VISIBLE void undo(Widget* widget,uPtr data)
 //TODO//
 {
-printf("undo %i\n",(int)(long)data);
+#ifdef _USEQT5_
+	DocumentClass	*document=getDocumentData(-1);
+printf("undo step %i\n",document->document()->availableUndoSteps());
 
-#ifndef _USEQT5_
+	document->undo();
+
+#else
 	pageStruct*	page=getDocumentData(-1);
 
 	if(page!=NULL)

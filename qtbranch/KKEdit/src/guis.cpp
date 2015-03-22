@@ -2035,6 +2035,14 @@ void addRecentToMenu(void)
 		}
 #endif
 }
+#ifdef _USEQT5_
+void keyp(QKeyEvent * event)
+{
+//	closingAll=false;
+//	closeTab(NULL,tabnum);
+printf("qqqqqqqqqqqqqqq\n");
+}
+#endif
 
 #ifdef _USEQT5_
 void buildMainGuiQT(void)
@@ -2060,6 +2068,7 @@ void buildMainGuiQT(void)
 	
 	QObject::connect(qobject_cast<QTabWidget*>(mainNotebook),&QTabWidget::currentChanged,switchPage);
 	QObject::connect(qobject_cast<QTabWidget*>(mainNotebook),&QTabWidget::tabCloseRequested,closeTabQT);
+//	QObject::connect(qobject_cast<QWidget*>(mainNotebook),&QWidget::keyPressEvent,keyp);
 
 	toolBar=new QToolBar;
 //	setUpToolBar();

@@ -1117,18 +1117,23 @@ void doFindReplace(int response_id)
 {
 #ifdef _USEQT5_
 
-	int				flags=0;
-	DocumentClass	*document=getDocumentData(-1);
-	char			*currentfindtext;
-	char			*currentreplacetext;
-	const char		*thetext;
-	GSList			*tlist;
-	GSList			*list;
-	QComboBox		*combo;
-	bool			flag=false;
-	int				cnt;
-	QString			str;
-	bool			gotresult;
+	int									flags=0;
+	DocumentClass						*document=getDocumentData(-1);
+	char								*currentfindtext;
+	char								*currentreplacetext;
+	const char							*thetext;
+	GSList								*tlist;
+	GSList								*list;
+	QComboBox							*combo;
+	bool								flag=false;
+	int									cnt;
+	QString								str;
+	bool								gotresult;
+	QTextDocument						*doc=document->document();
+	QTextCursor							newCursor(doc);
+	QColor								lineColor=QColor(Qt::green);
+//	QList<QTextEdit::ExtraSelection>	extraSelections;
+//	QTextEdit::ExtraSelection			selection;
 
 	currentfindtext=strdup(reinterpret_cast<QComboBox*>(findDropBox)->currentText().toUtf8().constData());
 	currentreplacetext=strdup(reinterpret_cast<QComboBox*>(replaceDropBox)->currentText().toUtf8().constData());
@@ -1147,13 +1152,8 @@ void doFindReplace(int response_id)
 
 	if((response_id==FINDNEXT) && (hightlightAll==true))
 		{
-			QTextDocument						*doc=document->document();
-			QTextCursor							newCursor(doc);
-			QColor								lineColor=QColor(Qt::green);
-			QList<QTextEdit::ExtraSelection>	extraSelections;
-			QTextEdit::ExtraSelection			selection;
-
-			selection.format.setBackground(lineColor);
+			document->clearXtraSelections();
+			document->selection.format.setBackground(lineColor);
 			while(!newCursor.isNull() && !newCursor.atEnd())
 				{
 					if(useRegex==false)
@@ -1163,18 +1163,18 @@ void doFindReplace(int response_id)
 					
 					if(!newCursor.isNull())
 						{
-							selection.cursor=newCursor;
-							extraSelections.append(selection);
+							document->selection.cursor=newCursor;
+							document->extraSelections.append(document->selection);
 						}
 				}
-			document->setExtraSelections(extraSelections);
+			document->setExtraSelections(document->extraSelections);
 		}
 
 	if(hightlightAll==false)
 		{
-			QList<QTextEdit::ExtraSelection> extraSelections;
-			QTextEdit::ExtraSelection selection;
-			document->setExtraSelections(extraSelections);
+			document->clearXtraSelections();
+			//document->setExtraSelections(document->extraSelections);
+			//document->setExtraSelections(extraSelections);
 		}
 
 	if(response_id!=REPLACE)
@@ -1231,21 +1231,28 @@ void doFindReplace(int response_id)
 						document->find(currentfindtext,(QTextDocument::FindFlags)flags);
 					else
 						document->find(rx,(QTextDocument::FindFlags)flags);
-					while(document->textCursor().hasSelection()==true)
+
+					while(!newCursor.isNull() && !newCursor.atEnd())
 						{
 							if(useRegex==false)
-								{
-									document->textCursor().insertText(thetext);
-									document->find(currentfindtext,(QTextDocument::FindFlags)flags);
-									cnt++;
-								}
+								newCursor=doc->find(currentfindtext,newCursor,(QTextDocument::FindFlags)flags);
 							else
+								newCursor=doc->find(rx,newCursor,(QTextDocument::FindFlags)flags);
+					
+							if(!newCursor.isNull())
 								{
-									str=document->textCursor().selectedText();
-									str.replace(rx,thetext);
-									document->textCursor().insertText(str);
-									document->find(rx,(QTextDocument::FindFlags)flags);
-									cnt++;
+									if(useRegex==false)
+										{
+											newCursor.insertText(thetext);
+											cnt++;
+										}
+									else
+										{
+											str=newCursor.selectedText();
+											str.replace(rx,thetext);
+											newCursor.insertText(str);
+											cnt++;
+										}
 								}
 						}
 					printf("Replaced %i occurrances of %s with %s\n",cnt,currentfindtext,thetext);

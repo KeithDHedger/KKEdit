@@ -75,10 +75,23 @@ void DocumentClass::updateLineNumberAreaWidth(int)
 
 void DocumentClass::clearAllBlocks(void)
 {
+	QList<QTextEdit::ExtraSelection>	extraSelections;
+	QTextEdit::ExtraSelection			selection;
+	
+//	this->setExtraSelections(extraSelections);
+//	QTextBlockFormat	block;
+//	QTextCursor			cursor;
+//return;
+//	cursor=this->textCursor();
+//	cursor.select(QTextCursor::Document);
+//	block=cursor.blockFormat();
+//	block.clearBackground();
+//	cursor.setBlockFormat(block);
+#if 0
 	QTextBlockFormat	block;
 	QTextCharFormat		format;
 	QTextCursor			cursor;
-
+	this->textCursor().beginEditBlock();
 	if (!isReadOnly())
 		{
 			cursor=this->textCursor();
@@ -87,11 +100,23 @@ void DocumentClass::clearAllBlocks(void)
 			block.clearBackground();
 			cursor.setBlockFormat(block);
 		}
+	this->textCursor().endEditBlock();
+#endif
 }
 
 void DocumentClass::highlightCurrentLine()
 {
+return;
+//	QTextBlockFormat	block;
+//	QColor lineColor=QColor(Qt::yellow).lighter(160);
+//
+//	block=this->textCursor().blockFormat();
+//	block.setBackground(lineColor);
+//	this->textCursor().setBlockFormat(block);
+#if 0
 	QTextBlockFormat	block;
+
+	this->textCursor().beginEditBlock();
 
 	if (!isReadOnly())
 		{
@@ -101,10 +126,29 @@ void DocumentClass::highlightCurrentLine()
 			block.setBackground(lineColor);
 			this->textCursor().setBlockFormat(block);
 		}
+	
+	this->textCursor().endEditBlock();
+#endif
+}
+void DocumentClass::setXtraSelections()
+{
+	this->setExtraSelections(this->extraSelections);
+}
+
+void DocumentClass::addXtraSelections()
+{
+}
+
+void DocumentClass::clearXtraSelections()
+{
+	this->extraSelections.clear();
+	this->setXtraSelections();
+	
 }
 
 void DocumentClass::updateLineNumberArea(const QRect &rect,int dy)
 {
+return;
 	if(dy)
 		lineNumberArea->scroll(0,dy);
 	else

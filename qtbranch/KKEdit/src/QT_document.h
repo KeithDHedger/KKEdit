@@ -30,36 +30,44 @@ class DocumentClass : public QPlainTextEdit
 		explicit DocumentClass(QWidget *parent = 0);
 		~DocumentClass();
 
-		void				setFilename(char* filename);
-		const char			*getFilename(void);
-		void				setPathname(char* filename);
-		const char			*getPathname(void);
-		void				setDirname(char* filename);
-		const char			*getDirname(void);
-		void				setRealpath(char* filename);
-		const char			*getRealpath(void);
-		void				setTabname(char* filename);
-		const char			*getTabname(void);
-		pageStruct			*getPage(void);
+		void								setFilename(char* filename);
+		const char							*getFilename(void);
+		void								setPathname(char* filename);
+		const char							*getPathname(void);
+		void								setDirname(char* filename);
+		const char							*getDirname(void);
+		void								setRealpath(char* filename);
+		const char							*getRealpath(void);
+		void								setTabname(char* filename);
+		const char							*getTabname(void);
+		pageStruct							*getPage(void);
 
-		void				lineNumberAreaPaintEvent(QPaintEvent *event);
-		int					lineNumberAreaWidth(void);
+		void								lineNumberAreaPaintEvent(QPaintEvent *event);
+		int									lineNumberAreaWidth(void);
+
+		QList<QTextEdit::ExtraSelection>	extraSelections;
+		QTextEdit::ExtraSelection			selection;
+
+		void								setXtraSelections(void);
+		void								addXtraSelections(void);
+		void								clearXtraSelections(void);
 
 	protected:
-	    void				resizeEvent(QResizeEvent *event);
+	    void								resizeEvent(QResizeEvent *event);
 
 	private slots:
-		void				updateLineNumberAreaWidth(int newBlockCount);
-		void				highlightCurrentLine();
-		void				updateLineNumberArea(const QRect &, int);
-		void				clearAllBlocks();
+		void								updateLineNumberAreaWidth(int newBlockCount);
+		void								highlightCurrentLine();
+		void								updateLineNumberArea(const QRect &, int);
+		void								clearAllBlocks();
 
 	private:
-		QWidget 			*lineNumberArea;
-		pageStruct			*page;
-		Highlighter			*highlighter;
-		QTextCursor			oldCursor;
-		QTextBlockFormat	oldBlockFormat;
+		QWidget 							*lineNumberArea;
+		pageStruct							*page;
+		Highlighter							*highlighter;
+		QTextCursor							oldCursor;
+		QTextBlockFormat					oldBlockFormat;
+
 };
 
 class LineNumberArea : public QWidget

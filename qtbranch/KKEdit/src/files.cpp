@@ -1079,6 +1079,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 			debugFree(&convertedData,"openFile convertedData");
 			setFilePrefs((uPtr)doc);
 			gotoLine(NULL,(long)linenumber);
+			doc->document()->clearUndoRedoStacks(QTextDocument::UndoAndRedoStacks);
+
 			retval=true;
 		}
 	busyFlag=false;
