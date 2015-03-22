@@ -65,7 +65,6 @@ DocumentClass::~DocumentClass()
 	debugFree(&(this->page->realFilePath),"~DocumentClass this->page->realFilePath");
 	debugFree(&(this->page->tabName),"~DocumentClass this->page->tabName");
 	debugFree((char**)&(this->page),"~DocumentClass page");
-	
 }
 
 void DocumentClass::updateLineNumberAreaWidth(int)
@@ -104,7 +103,6 @@ void DocumentClass::clearXtraSelections()
 	this->setXtraSelections();
 }
 
-
 void DocumentClass::clearHilites()
 {
 	this->hilightSelections.clear();
@@ -113,7 +111,6 @@ void DocumentClass::clearHilites()
 
 void DocumentClass::updateLineNumberArea(const QRect &rect,int dy)
 {
-return;
 	if(dy)
 		lineNumberArea->scroll(0,dy);
 	else
