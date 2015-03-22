@@ -106,6 +106,50 @@ void DocumentClass::clearAllBlocks(void)
 
 void DocumentClass::highlightCurrentLine()
 {
+	QColor lineColor = QColor(Qt::yellow).lighter(160);
+
+	this->selectedLine.format.setBackground(lineColor);
+	this->selectedLine.format.setProperty(QTextFormat::FullWidthSelection, true);
+	this->selectedLine.cursor=textCursor();
+
+	this->selectedLine.cursor.movePosition(QTextCursor::StartOfBlock,QTextCursor::MoveAnchor);
+	this->selectedLine.cursor.movePosition(QTextCursor::NextBlock,QTextCursor::KeepAnchor);
+
+	this->setXtraSelections();	
+return;
+this->currentLineSelection.clear();
+    if (!isReadOnly()) {
+        QTextEdit::ExtraSelection selection;
+
+        QColor lineColor = QColor(Qt::yellow).lighter(160);
+	
+        selection.format.setBackground(lineColor);
+        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+        selection.cursor = textCursor();
+
+		selection.cursor.movePosition(QTextCursor::StartOfBlock,QTextCursor::MoveAnchor);
+		selection.cursor.movePosition(QTextCursor::NextBlock,QTextCursor::KeepAnchor);
+        this->currentLineSelection.append(selection);
+    }
+this->setXtraSelections();
+ //   setExtraSelections(extraSelections);
+
+
+
+//	QColor lineColor=QColor(Qt::yellow).lighter(160);
+//	QTextEdit::ExtraSelection			selection;
+//
+//	this->currentLineSelection.clear();
+//	this->selection.format.setBackground(lineColor);
+
+//	this->currentLineSelection.format.setBackground(currentLineHighlight);
+//	this->currentLineSelection.format.setProperty(QTextFormat::FullWidthSelection, true);
+//
+//	this->currentLineSelection.cursor = textCursor();
+//	this->currentLineSelection.cursor.clearSelection();
+
+//es.append(selection);
+//setExtraSelections(es);
 return;
 //	QTextBlockFormat	block;
 //	QColor lineColor=QColor(Qt::yellow).lighter(160);
@@ -132,6 +176,9 @@ return;
 }
 void DocumentClass::setXtraSelections()
 {
+	this->extraSelections.clear();
+	this->extraSelections=this->extraSelections+this->hilightSelections;
+	this->extraSelections.append(this->selectedLine);
 	this->setExtraSelections(this->extraSelections);
 }
 
@@ -143,7 +190,13 @@ void DocumentClass::clearXtraSelections()
 {
 	this->extraSelections.clear();
 	this->setXtraSelections();
-	
+}
+
+
+void DocumentClass::clearHilites()
+{
+	this->hilightSelections.clear();
+	this->setXtraSelections();
 }
 
 void DocumentClass::updateLineNumberArea(const QRect &rect,int dy)

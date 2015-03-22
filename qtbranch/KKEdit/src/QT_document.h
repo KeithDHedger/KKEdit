@@ -46,11 +46,16 @@ class DocumentClass : public QPlainTextEdit
 		int									lineNumberAreaWidth(void);
 
 		QList<QTextEdit::ExtraSelection>	extraSelections;
+		QList<QTextEdit::ExtraSelection>	hilightSelections;
+		QList<QTextEdit::ExtraSelection>	currentLineSelection;
+		
 		QTextEdit::ExtraSelection			selection;
+		QTextEdit::ExtraSelection			selectedLine;
 
 		void								setXtraSelections(void);
 		void								addXtraSelections(void);
 		void								clearXtraSelections(void);
+		void								clearHilites(void);
 
 	protected:
 	    void								resizeEvent(QResizeEvent *event);

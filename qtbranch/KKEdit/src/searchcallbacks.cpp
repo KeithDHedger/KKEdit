@@ -1152,7 +1152,7 @@ void doFindReplace(int response_id)
 
 	if((response_id==FINDNEXT) && (hightlightAll==true))
 		{
-			document->clearXtraSelections();
+			document->clearHilites();
 			document->selection.format.setBackground(lineColor);
 			while(!newCursor.isNull() && !newCursor.atEnd())
 				{
@@ -1164,17 +1164,15 @@ void doFindReplace(int response_id)
 					if(!newCursor.isNull())
 						{
 							document->selection.cursor=newCursor;
-							document->extraSelections.append(document->selection);
+							document->hilightSelections.append(document->selection);
 						}
 				}
-			document->setExtraSelections(document->extraSelections);
+				document->setXtraSelections();
 		}
 
 	if(hightlightAll==false)
 		{
-			document->clearXtraSelections();
-			//document->setExtraSelections(document->extraSelections);
-			//document->setExtraSelections(extraSelections);
+			document->clearHilites();
 		}
 
 	if(response_id!=REPLACE)
