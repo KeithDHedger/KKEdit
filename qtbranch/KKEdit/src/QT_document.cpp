@@ -73,37 +73,6 @@ void DocumentClass::updateLineNumberAreaWidth(int)
 	setViewportMargins(lineNumberAreaWidth(),0,0,0);
 }
 
-void DocumentClass::clearAllBlocks(void)
-{
-	QList<QTextEdit::ExtraSelection>	extraSelections;
-	QTextEdit::ExtraSelection			selection;
-	
-//	this->setExtraSelections(extraSelections);
-//	QTextBlockFormat	block;
-//	QTextCursor			cursor;
-//return;
-//	cursor=this->textCursor();
-//	cursor.select(QTextCursor::Document);
-//	block=cursor.blockFormat();
-//	block.clearBackground();
-//	cursor.setBlockFormat(block);
-#if 0
-	QTextBlockFormat	block;
-	QTextCharFormat		format;
-	QTextCursor			cursor;
-	this->textCursor().beginEditBlock();
-	if (!isReadOnly())
-		{
-			cursor=this->textCursor();
-			cursor.select(QTextCursor::Document);
-			block=cursor.blockFormat();
-			block.clearBackground();
-			cursor.setBlockFormat(block);
-		}
-	this->textCursor().endEditBlock();
-#endif
-}
-
 void DocumentClass::highlightCurrentLine()
 {
 	QColor lineColor = QColor(Qt::yellow).lighter(160);
@@ -116,63 +85,6 @@ void DocumentClass::highlightCurrentLine()
 	this->selectedLine.cursor.movePosition(QTextCursor::NextBlock,QTextCursor::KeepAnchor);
 
 	this->setXtraSelections();	
-return;
-this->currentLineSelection.clear();
-    if (!isReadOnly()) {
-        QTextEdit::ExtraSelection selection;
-
-        QColor lineColor = QColor(Qt::yellow).lighter(160);
-	
-        selection.format.setBackground(lineColor);
-        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-        selection.cursor = textCursor();
-
-		selection.cursor.movePosition(QTextCursor::StartOfBlock,QTextCursor::MoveAnchor);
-		selection.cursor.movePosition(QTextCursor::NextBlock,QTextCursor::KeepAnchor);
-        this->currentLineSelection.append(selection);
-    }
-this->setXtraSelections();
- //   setExtraSelections(extraSelections);
-
-
-
-//	QColor lineColor=QColor(Qt::yellow).lighter(160);
-//	QTextEdit::ExtraSelection			selection;
-//
-//	this->currentLineSelection.clear();
-//	this->selection.format.setBackground(lineColor);
-
-//	this->currentLineSelection.format.setBackground(currentLineHighlight);
-//	this->currentLineSelection.format.setProperty(QTextFormat::FullWidthSelection, true);
-//
-//	this->currentLineSelection.cursor = textCursor();
-//	this->currentLineSelection.cursor.clearSelection();
-
-//es.append(selection);
-//setExtraSelections(es);
-return;
-//	QTextBlockFormat	block;
-//	QColor lineColor=QColor(Qt::yellow).lighter(160);
-//
-//	block=this->textCursor().blockFormat();
-//	block.setBackground(lineColor);
-//	this->textCursor().setBlockFormat(block);
-#if 0
-	QTextBlockFormat	block;
-
-	this->textCursor().beginEditBlock();
-
-	if (!isReadOnly())
-		{
-			QColor lineColor=QColor(Qt::yellow).lighter(160);
-
-			block=this->textCursor().blockFormat();
-			block.setBackground(lineColor);
-			this->textCursor().setBlockFormat(block);
-		}
-	
-	this->textCursor().endEditBlock();
-#endif
 }
 void DocumentClass::setXtraSelections()
 {
@@ -230,7 +142,6 @@ DocumentClass::DocumentClass(QWidget *parent): QPlainTextEdit(parent)
 
 	connect(this,SIGNAL(blockCountChanged(int)),this,SLOT(updateLineNumberAreaWidth(int)));
 	connect(this,SIGNAL(updateRequest(QRect,int)),this,SLOT(updateLineNumberArea(QRect,int)));
-	connect(this,SIGNAL(cursorPositionChanged()),this,SLOT(clearAllBlocks()));
 	connect(this,SIGNAL(cursorPositionChanged()),this,SLOT(highlightCurrentLine()));
 
 	updateLineNumberAreaWidth(0);
