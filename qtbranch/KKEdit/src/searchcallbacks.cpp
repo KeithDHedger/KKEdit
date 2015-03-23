@@ -1129,11 +1129,15 @@ void doFindReplace(int response_id)
 	int									cnt;
 	QString								str;
 	bool								gotresult;
-	QTextDocument						*doc=document->document();
-	QTextCursor							newCursor(doc);
 	QColor								lineColor=QColor(Qt::green);
-//	QList<QTextEdit::ExtraSelection>	extraSelections;
-//	QTextEdit::ExtraSelection			selection;
+	QTextDocument						*doc;
+
+	if(document==NULL)
+		return;
+
+	doc=document->document();
+	QTextCursor							newCursor(doc);
+
 
 	currentfindtext=strdup(reinterpret_cast<QComboBox*>(findDropBox)->currentText().toUtf8().constData());
 	currentreplacetext=strdup(reinterpret_cast<QComboBox*>(replaceDropBox)->currentText().toUtf8().constData());

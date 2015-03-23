@@ -1025,13 +1025,12 @@ printf("pasteFromClip %i\n",(int)(long)data);
 }
 
 VISIBLE void undo(Widget* widget,uPtr data)
-//TODO//
 {
 #ifdef _USEQT5_
 	DocumentClass	*document=getDocumentData(-1);
-printf("undo step %i\n",document->document()->availableUndoSteps());
 
-	document->undo();
+	if(document!=NULL)
+		document->undo();
 
 #else
 	pageStruct*	page=getDocumentData(-1);
@@ -1051,11 +1050,25 @@ printf("undo step %i\n",document->document()->availableUndoSteps());
 }
 
 VISIBLE void unRedoAll(Widget* widget,uPtr data)
-//TODO//
 {
-printf("unRedoAll %i\n",(int)(long)data);
+#ifdef _USEQT5_
+	DocumentClass	*document=getDocumentData(-1);
 
-#ifndef _USEQT5_
+	if(document!=NULL)
+		{
+			if((long)data==0)
+				{
+					while(document->document()->availableUndoSteps()>0)
+						document->undo();
+				}
+			else
+				{
+					while(document->document()->availableRedoSteps()>0)
+						document->redo();
+					document->redo();
+				}
+		}
+#else
 	pageStruct*	page=getDocumentData(-1);
 
 	if(page!=NULL)
@@ -1079,9 +1092,11 @@ printf("unRedoAll %i\n",(int)(long)data);
 }
 
 VISIBLE void redo(Widget* widget,uPtr data)
-//TODO//
 {
-printf("redo %i\n",(int)(long)data);
+	DocumentClass	*document=getDocumentData(-1);
+
+	if(document!=NULL)
+		document->redo();
 
 #ifndef _USEQT5_
 	pageStruct*	page=getDocumentData(-1);
