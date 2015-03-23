@@ -32,7 +32,7 @@
 #define	TOOL_VIEW_OP 16
 
 #define VALIDFILENAMECHARS "[A-Za-z0-9_-./ <>]"
-#define VALIDFUNCTIONCHARS "[A-Za-z0-9_*:/@ ()-,.#;[\"]"
+#define VALIDFUNCTIONCHARS "[A-Za-z0-9_*:/@()-,.#;][\"]"
 
 #define BOOKMAXMARKMENULEN 40
 #define MAXRECENT 10
@@ -566,7 +566,7 @@ DocumentClass* getDocumentData(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title);
-functionData* getFunctionByName(char* name,bool recurse);
+functionData* getFunctionByName(const char* name,bool recurse);
 void destroyData(functionData* fdata);
 void getRecursiveTagList(char* filepath,void* ptr);
 void buildToolsList(void);

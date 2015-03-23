@@ -17,7 +17,17 @@ char	*classFileName=NULL;
 
 void goToDefine(functionData* fdata)
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	if(fdata->intab!=-1)
+		{
+			qobject_cast<QTabWidget*>(mainNotebook)->setCurrentIndex(fdata->intab);
+			gotoLine(NULL,fdata->line);
+		}
+	else
+		{
+			openFile(fdata->file,fdata->line-1,true);
+		}
+#else
 	pageStruct*	page;
 	TextBuffer*	buf;
 
@@ -46,11 +56,30 @@ void goToDefine(functionData* fdata)
 }
 
 VISIBLE void goToDefinition(Widget* widget,uPtr data)
-//TODO//
 {
-printf("goToDefinition %i\n",(int)(long)data);
+#ifdef _USEQT5_
+	DocumentClass	*document=getDocumentData(-1);
+	functionData	*fdata=NULL;
+	char			*selection;
+	const char		*selectionptr;
 
-#ifndef _USEQT5_
+	if(document==NULL)
+		return;
+
+	selection=strdup(document->textCursor().selectedText().toUtf8().constData());
+	selectionptr=selection;
+
+	fdata=getFunctionByName(selectionptr,true);
+	if(fdata!=NULL)
+		{
+			//TODO//
+//			history->savePosition();
+			goToDefine(fdata);
+			destroyData(fdata);
+		}
+
+	free(selection);
+#else
 	pageStruct*		page=getDocumentData(-1);
 	GtkTextIter		start;
 	GtkTextIter		end;

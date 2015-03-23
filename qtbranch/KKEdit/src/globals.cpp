@@ -827,10 +827,135 @@ VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int u
 #endif
 }
 
-functionData* getFunctionByName(char* name,bool recurse)
+functionData* getFunctionByName(const char* name,bool recurse)
 {
 //TODO//
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	DocumentClass	*document=getDocumentData(-1);
+	pageStruct		*page;
+	char			*functions=NULL;
+	QString			str;
+	char			*lineptr;
+	int				gotmatch=-1;
+	char			function[1024];
+	functionData*	fdata;
+	int				loop;
+	int				startpage;
+	int				holdlistfunction=listFunction;
+	StringSlice		slice;
+	bool			whileflag=true;
+	bool			checkthispage=true;
+	int				maxpage;;
+	char			funcname[256];
+	char			filepath[1024];
+	int				linenumber;
+	QStringList		strlist;
+
+	if(document==NULL)
+		return(NULL);
+
+	loop=qobject_cast<QTabWidget*>(mainNotebook)->currentIndex();
+	startpage=loop;
+	checkthispage=true;
+	maxpage=qobject_cast<QTabWidget*>(mainNotebook)->count();
+
+	while(whileflag==true)
+		{
+			document=getDocumentData(loop);
+			page=document->getPage();
+			if(page->filePath!=NULL)
+				{
+					listFunction=0;
+					getRecursiveTagList(page->filePath,&functions);
+					listFunction=holdlistfunction;
+					if(functions!=NULL)
+						{
+							str=functions;
+							strlist=str.split("\n",QString::SkipEmptyParts);
+							gotmatch=-1;
+							for(int i=0;i<strlist.size();i++)
+								{
+								//TODO//
+									//lineptr=slice.sliceBetween((char*)strlist.at(i).toUtf8().constData(),NULL,(char*)" ");
+									//printf(">>>>%s<<<<<\n",lineptr);
+									//if(slice.getResult()==NOERROR)
+									if(strlist.at(i).startsWith(name))
+									//if(slice.sliceBetween((char*)strlist.at(i).toUtf8().constData(),NULL,(char*)" ")!=NULL)	
+										{
+									//printf(">>%s<<\n",slice.sliceBetween((char*)strlist.at(i).toUtf8().constData(),NULL,(char*)" "));
+											gotmatch=0;
+											lineptr=strdup(strlist.at(i).toLocal8Bit().constData());
+											break;
+										}
+								
+								}
+							debugFree(&functions,"functions getFunctionByName");
+							if(gotmatch==0)
+								{
+									fdata=(functionData*)malloc(sizeof(functionData));
+									sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
+									fdata->name=strdup(function);
+									sscanf (lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
+									fdata->type=strdup(function);
+									sscanf (lineptr,"%*s %*s %i",&fdata->line);
+									sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
+									fdata->file=strdup(function);
+									sscanf (lineptr,"%*s %*s %*i %*s %[^\n]s",function);
+									fdata->define=strdup(function);
+									fdata->intab=loop;
+									debugFree(&lineptr,"lineptr getFunctionByName");
+									return(fdata);
+								}
+						}
+				}
+
+			if(checkthispage==true)
+				{
+					loop=-1;
+					checkthispage=false;
+				}
+
+			loop++;
+			if(loop==startpage)
+				loop++;
+			if(loop==maxpage)
+				whileflag=false;
+
+		}
+
+//not in any open files
+//check ./ from all files
+//dont do this from popup for speed reasons
+//	if(recurse==true)
+		{
+			if(document->getDirname()!=NULL)
+				{
+					getRecursiveTagListFileName((char*)document->getDirname(),&functions);
+					if(functions!=NULL)
+						{
+							str=functions;
+							gotmatch=str.indexOf(name);
+							debugFree(&functions,"functions getFunctionByName");
+							if(gotmatch!=-1)
+								{
+									lineptr=slice.sliceBetween((char*)&(str.toUtf8().constData()[gotmatch]),NULL,(char*)"\n");
+									sscanf (lineptr, "%s\t%s\t%i",funcname,filepath,&linenumber);
+									fdata=(functionData*)malloc(sizeof(functionData));
+									fdata->name=strdup(funcname);
+									fdata->file=strdup(filepath);
+									fdata->line=linenumber+1;
+									fdata->type=NULL;
+									fdata->define=NULL;
+									fdata->intab=-1;
+									return(fdata);
+								}
+						}
+					
+				}
+		}
+	return(NULL);			
+
+#else
 	pageStruct*		page;
 	int				numpages=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook);
 	char*			lineptr;
@@ -1036,7 +1161,6 @@ void destroyData(functionData* fdata)
 
 void getRecursiveTagListFileName(char* filepath,void* ptr)
 {
-#ifndef _USEQT5_
 	FILE*		fp;
 	char		line[1024];
 	GString*	str=g_string_new(NULL);
@@ -1057,7 +1181,6 @@ void getRecursiveTagListFileName(char* filepath,void* ptr)
 	g_string_free(str,false);
 
 	debugFree(&command,"getRecursiveTagListFileName command");
-#endif
 }
 
 void getRecursiveTagList(char* filepath,void* ptr)
