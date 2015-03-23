@@ -980,11 +980,13 @@ void switchPage(int thispage)
 }
 
 VISIBLE void copyToClip(Widget* widget,uPtr data)
-//TODO//
 {
-printf("copyToClip %i\n",(int)(long)data);
+#ifdef _USEQT5_
+	DocumentClass	*document=getDocumentData(-1);
 
-#ifndef _USEQT5_
+	if(document!=NULL)
+		document->copy();
+#else
 	pageStruct*	page=getDocumentData(-1);
 	gtk_text_buffer_copy_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD));
 #endif
@@ -992,9 +994,12 @@ printf("copyToClip %i\n",(int)(long)data);
 
 VISIBLE void cutToClip(Widget* widget,uPtr data)
 {
-printf("cutToClip %i\n",(int)(long)data);
+#ifdef _USEQT5_
+	DocumentClass	*document=getDocumentData(-1);
 
-#ifndef _USEQT5_
+	if(document!=NULL)
+		document->cut();
+#else
 	pageStruct*	page=getDocumentData(-1);
 	gtk_text_buffer_cut_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),true);
 	setSensitive();
@@ -1002,11 +1007,13 @@ printf("cutToClip %i\n",(int)(long)data);
 }
 
 VISIBLE void pasteFromClip(Widget* widget,uPtr data)
-//TODO//
 {
-printf("pasteFromClip %i\n",(int)(long)data);
+#ifdef _USEQT5_
+	DocumentClass	*document=getDocumentData(-1);
 
-#ifndef _USEQT5_
+	if(document!=NULL)
+		document->paste();
+#else
 	pageStruct*		page=getDocumentData(-1);
 	char*			clipdata=NULL;
 	GtkClipboard*	mainclipboard;
