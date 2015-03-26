@@ -111,7 +111,55 @@ VISIBLE void findFile(Widget* widget,uPtr data)
 {
 printf("findFile %i\n",(int)(long)data);
 
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	DocumentClass	*document=getDocumentData(-1);
+	char			*selection;
+	StringSlice		slice;
+	char			*filename=NULL;
+	char			*filepath=NULL;
+	char			*command;
+	char			buffer[2048];
+	char			*searchdir=NULL;
+	FILE			*fp;
+
+	if(document==NULL)
+		return;
+
+	selection=strdup(document->textCursor().block().text().toUtf8().constData());
+	if(selection[0]!='#')
+		return;
+
+	filename=slice.sliceBetween(selection,(char*)"include ",NULL);
+
+	if(slice.getResult()==0)
+		{
+			if(filename[0]=='<')
+				searchdir=strdup("/usr/include");
+			else
+				searchdir=strdup(document->getDirname());
+
+			asprintf(&filepath,"%s/%s",searchdir,slice.sliceLen(filename,1,strlen(filename)-2));
+			if(openFile(filepath,0,false)==false)
+				{
+					asprintf(&command,"find \"%s\" -name \"%s\"",searchdir,basename(filepath));
+					fp=popen(command, "r");
+					if(fp!=NULL)
+						{
+							while(fgets(buffer,1024,fp))
+								{
+									buffer[strlen(buffer)-1]=0;
+									openFile(buffer,0,false);
+								}
+							pclose(fp);
+						}
+					debugFree(&command,"findFile command");
+				}
+			debugFree(&filepath,"findFile filepath");
+			debugFree(&searchdir,"searchdir filepath");
+		}
+
+	free(selection);
+#else
 	char*			command;
 	char			buffer[2048];
 	TextBuffer*		buf;
