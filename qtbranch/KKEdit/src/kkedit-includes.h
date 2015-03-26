@@ -53,6 +53,7 @@
 #endif
 
 #ifdef _USEQT5_
+#include <QtWebEngineWidgets>
 #include "QT_menuitem.h"
 #include "QT_document.h"
 #endif

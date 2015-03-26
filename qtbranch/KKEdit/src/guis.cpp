@@ -2987,14 +2987,6 @@ void buildDocViewer(void)
 	QVBoxLayout	*docvlayout=new QVBoxLayout;
 	QHBoxLayout	*dochlayout=new QHBoxLayout;
 	QWidget		*widget;
-//	mainTopUserVBox=new QVBoxLayout;
-//	mainLeftUserVBox=new QVBoxLayout;
-//	mainNotebookVBox=new QVBoxLayout;
-//	mainRightUserVBox=new QVBoxLayout;/
-//	/mainBottomUserVBox=new QVBoxLayout;
-//	mainWindowHBox=new QHBoxLayout;
-
-//	mainWindow->setGeometry(windowX,windowY,windowWidth,windowHeight);
 
 	docView=new QMainWindow(mainWindow);
 	docView->setGeometry(docWindowX,docWindowY,docWindowWidth,docWindowHeight);
@@ -3002,6 +2994,41 @@ void buildDocViewer(void)
 	widget=new QWidget;
 	widget->setLayout(docvlayout);
 	qobject_cast<QMainWindow*>(docView)->setCentralWidget(widget);
+
+	QWebEngineView *view = new QWebEngineView(widget);
+    view->load(QUrl("file://" DATADIR "/help/help.en.html"));
+    docvlayout->addWidget(view);
+
+	widget=new QPushButton(QIcon::fromTheme("go-previous",QIcon("go-previous")),gettext("Back"));
+	dochlayout->addWidget(widget);
+
+	dochlayout->addStretch(1);
+
+	widget=new QPushButton(QIcon::fromTheme("go-home",QIcon("go-home")),gettext("Home"));
+	dochlayout->addWidget(widget);
+
+	dochlayout->addStretch(1);
+
+	widget=new QPushButton(QIcon::fromTheme("edit-find",QIcon("edit-find")),gettext("Find"));
+	dochlayout->addWidget(widget);
+
+	widget=new QLineEdit;
+	dochlayout->addWidget(widget);
+
+	widget=new QPushButton(QIcon::fromTheme("go-down",QIcon("go-down")),gettext("Down"));
+	dochlayout->addWidget(widget);
+	widget=new QPushButton(QIcon::fromTheme("go-up",QIcon("go-up")),gettext("Up"));
+	dochlayout->addWidget(widget);
+
+	dochlayout->addStretch(1);
+
+	widget=new QPushButton(QIcon::fromTheme("go-next",QIcon("go-next")),gettext("Forward"));
+	dochlayout->addWidget(widget);
+
+	widget=new QWidget;
+	widget->setLayout(dochlayout);
+	docvlayout->addWidget(widget);
+
 	docView->hide();
 }
 #endif
