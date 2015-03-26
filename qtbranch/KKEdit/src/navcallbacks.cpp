@@ -69,7 +69,7 @@ VISIBLE void goToDefinition(Widget* widget,uPtr data)
 	selection=strdup(document->textCursor().selectedText().toUtf8().constData());
 	selectionptr=selection;
 
-	fdata=getFunctionByName(selectionptr,true);
+	fdata=getFunctionByName(selectionptr,true,true);
 	if(fdata!=NULL)
 		{
 			//TODO//
@@ -322,11 +322,17 @@ VISIBLE void functionSearch(Widget* widget,uPtr data)
 				debugFree(&functionSearchText,"functionSearchText functionSearch");
 			functionSearchText=strdup(text.toUtf8().constData());
 
-			fdata=getFunctionByName(functionSearchText,true);
-			if(fdata!=NULL)
+			ok=true;
+			for(int j=0;j<2;j++)
 				{
-					goToDefine(fdata);
-					destroyData(fdata);
+					fdata=getFunctionByName(functionSearchText,true,ok);
+					if(fdata!=NULL)
+						{
+							goToDefine(fdata);
+							destroyData(fdata);
+							return;
+						}
+					ok=false;
 				}
 		}
 #else

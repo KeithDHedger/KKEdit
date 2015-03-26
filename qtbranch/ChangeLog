@@ -1,4 +1,6 @@
 0.3.0
+Search for define now tries case sensitive then insensitive.
+Done search for define.
 Done open include.
 Done go to definition.
 Done find/replace.

@@ -566,7 +566,7 @@ DocumentClass* getDocumentData(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title);
-functionData* getFunctionByName(const char* name,bool recurse);
+functionData* getFunctionByName(const char* name,bool recurse,bool casesensitive);
 void destroyData(functionData* fdata);
 void getRecursiveTagList(char* filepath,void* ptr);
 void buildToolsList(void);

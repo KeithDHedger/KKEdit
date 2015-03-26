@@ -414,7 +414,7 @@ void defSearchFromBar(void)
 	if(functionSearchText!=NULL)
 		{
 			printf("defSearchFromBar %s\n",functionSearchText);
-			fdata=getFunctionByName(functionSearchText,true);
+			fdata=getFunctionByName(functionSearchText,true,true);
 			if(fdata!=NULL)
 				{
 					goToDefine(fdata);

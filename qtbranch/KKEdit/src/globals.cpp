@@ -827,32 +827,38 @@ VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int u
 #endif
 }
 
-functionData* getFunctionByName(const char* name,bool recurse)
+functionData* getFunctionByName(const char* name,bool recurse,bool casesensitive)
 {
 //TODO//
 #ifdef _USEQT5_
-	DocumentClass	*document=getDocumentData(-1);
-	pageStruct		*page;
-	char			*functions=NULL;
-	QString			str;
-	char			*lineptr;
-	int				gotmatch=-1;
-	char			function[1024];
-	functionData*	fdata;
-	int				loop;
-	int				startpage;
-	int				holdlistfunction=listFunction;
-	StringSlice		slice;
-	bool			whileflag=true;
-	bool			checkthispage=true;
-	int				maxpage;;
-	char			funcname[256];
-	char			filepath[1024];
-	int				linenumber;
-	QStringList		strlist;
+	DocumentClass		*document=getDocumentData(-1);
+	pageStruct			*page;
+	char				*functions=NULL;
+	QString				str;
+	char				*lineptr;
+	int					gotmatch=-1;
+	char				function[1024];
+	functionData*		fdata;
+	int					loop;
+	int					startpage;
+	int					holdlistfunction=listFunction;
+	StringSlice			slice;
+	bool				whileflag=true;
+	bool				checkthispage=true;
+	int					maxpage;;
+	char				funcname[256];
+	char				filepath[1024];
+	int					linenumber;
+	QStringList			strlist;
+	Qt::CaseSensitivity	cs;
 
 	if(document==NULL)
 		return(NULL);
+
+	if(casesensitive==true)
+		cs=Qt::CaseSensitive;
+	else
+		cs=Qt::CaseInsensitive;
 
 	loop=qobject_cast<QTabWidget*>(mainNotebook)->currentIndex();
 	startpage=loop;
@@ -875,14 +881,8 @@ functionData* getFunctionByName(const char* name,bool recurse)
 							gotmatch=-1;
 							for(int i=0;i<strlist.size();i++)
 								{
-								//TODO//
-									//lineptr=slice.sliceBetween((char*)strlist.at(i).toUtf8().constData(),NULL,(char*)" ");
-									//printf(">>>>%s<<<<<\n",lineptr);
-									//if(slice.getResult()==NOERROR)
-									if(strlist.at(i).startsWith(name))
-									//if(slice.sliceBetween((char*)strlist.at(i).toUtf8().constData(),NULL,(char*)" ")!=NULL)	
+									if(strlist.at(i).startsWith(name,cs))
 										{
-									//printf(">>%s<<\n",slice.sliceBetween((char*)strlist.at(i).toUtf8().constData(),NULL,(char*)" "));
 											gotmatch=0;
 											lineptr=strdup(strlist.at(i).toLocal8Bit().constData());
 											break;
@@ -934,11 +934,20 @@ functionData* getFunctionByName(const char* name,bool recurse)
 					if(functions!=NULL)
 						{
 							str=functions;
-							gotmatch=str.indexOf(name);
-							debugFree(&functions,"functions getFunctionByName");
+							strlist=str.split("\n",QString::SkipEmptyParts);
+							gotmatch=-1;
+							for(int i=0;i<strlist.size();i++)
+								{
+									if(strlist.at(i).startsWith(name,cs))
+										{
+											gotmatch=0;
+											lineptr=strdup(strlist.at(i).toLocal8Bit().constData());
+											break;
+										}
+								}
+
 							if(gotmatch!=-1)
 								{
-									lineptr=slice.sliceBetween((char*)&(str.toUtf8().constData()[gotmatch]),NULL,(char*)"\n");
 									sscanf (lineptr, "%s\t%s\t%i",funcname,filepath,&linenumber);
 									fdata=(functionData*)malloc(sizeof(functionData));
 									fdata->name=strdup(funcname);
