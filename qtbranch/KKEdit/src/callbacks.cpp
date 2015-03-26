@@ -2458,10 +2458,12 @@ VISIBLE void toggleDocviewer(Widget* widget,uPtr data)
 	showHideDocviewer=!showHideDocviewer;
 	if(showHideDocviewer)
 		{
+			qobject_cast<QAction*>(showDocViewWidget)->setText(gettext("Hide Docviewer"));
 			docView->show();
 		}
 	else
 		{
+			qobject_cast<QAction*>(showDocViewWidget)->setText(gettext("Show Docviewer"));
 			docView->hide();
 		}
 #else
