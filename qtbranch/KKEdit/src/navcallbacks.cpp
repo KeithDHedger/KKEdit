@@ -107,10 +107,7 @@ VISIBLE void goToDefinition(Widget* widget,uPtr data)
 }
 
 VISIBLE void findFile(Widget* widget,uPtr data)
-//TODO//
 {
-printf("findFile %i\n",(int)(long)data);
-
 #ifdef _USEQT5_
 	DocumentClass	*document=getDocumentData(-1);
 	char			*selection;

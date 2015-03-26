@@ -1,5 +1,6 @@
 0.3.0
-Done g ot definition.
+Done open include.
+Done go to definition.
 Done find/replace.
 Fixed highlight current line bug.
 Fixed non inited pointers in document class.
