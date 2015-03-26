@@ -2986,6 +2986,7 @@ void buildDocViewer(void)
 {
 	QVBoxLayout	*docvlayout=new QVBoxLayout;
 	QHBoxLayout	*dochlayout=new QHBoxLayout;
+	QWidget		*widget;
 //	mainTopUserVBox=new QVBoxLayout;
 //	mainLeftUserVBox=new QVBoxLayout;
 //	mainNotebookVBox=new QVBoxLayout;
@@ -2995,12 +2996,13 @@ void buildDocViewer(void)
 
 //	mainWindow->setGeometry(windowX,windowY,windowWidth,windowHeight);
 
-printf("XXXXXXXXXX\n");
-	docView=new QMainWindow;
-	docView->setLayout(docvlayout);
-	docView->show();
+	docView=new QMainWindow(mainWindow);
+	docView->setGeometry(docWindowX,docWindowY,docWindowWidth,docWindowHeight);
 	
-	
+	widget=new QWidget;
+	widget->setLayout(docvlayout);
+	qobject_cast<QMainWindow*>(docView)->setCentralWidget(widget);
+	docView->hide();
 }
 #endif
 
