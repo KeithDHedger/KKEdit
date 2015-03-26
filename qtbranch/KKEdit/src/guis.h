@@ -29,9 +29,15 @@ void buildTools(void);
 void buildFindReplace(void);
 void buildWordCheck(int documentCheck);
 int showFunctionEntry(void);
+
+#ifdef _USEQT5_
+void buildDocViewer(void);
+#endif
+
 #ifdef _BUILDDOCVIEWER_
 void buildGtkDocViewer(void);
 #endif
+
 void setUpToolBar(void);
 char* makeToolBarList(void);
 #ifdef _USEQT5_

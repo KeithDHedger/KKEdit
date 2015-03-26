@@ -2452,11 +2452,20 @@ VISIBLE void toggleStatusBar(Widget* widget,uPtr data)
 #endif
 }
 
-#ifdef _BUILDDOCVIEWER_
-VISIBLE void toggleDocviewer(GtkWidget* widget,gpointer data)
+VISIBLE void toggleDocviewer(Widget* widget,uPtr data)
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
 	showHideDocviewer=!showHideDocviewer;
+	if(showHideDocviewer)
+		{
+			docView->show();
+		}
+	else
+		{
+			docView->hide();
+		}
+#else
+#ifdef _BUILDDOCVIEWER_
 	if(showHideDocviewer)
 		{
 			gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,gettext("Hide Docviewer"));
@@ -2468,11 +2477,9 @@ VISIBLE void toggleDocviewer(GtkWidget* widget,gpointer data)
 			gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,gettext("Show Docviewer"));
 			gtk_widget_hide(docView);
 		}
-#else
-	//TODO//
+#endif
 #endif
 }
-#endif
 
 void doKeyShortCut(int what)
 {

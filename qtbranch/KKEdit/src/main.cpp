@@ -685,6 +685,8 @@ void qtAppStart(int argc, char **argv)
 	reinterpret_cast<QComboBox*>(replaceDropBox)->setCurrentIndex(g_slist_length(findList)-1);
 
 //TODO//
+	buildDocViewer();
+
 //#ifdef _BUILDDOCVIEWER_
 //	buildGtkDocViewer();
 //#endif

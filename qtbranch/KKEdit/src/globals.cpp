@@ -142,6 +142,11 @@ unsigned int	lastUpdate=0;
 unsigned int	lastPlugUpdate=0;
 unsigned int	updateWait=2678400;
 
+//docview
+Widget			*docView=NULL;
+Widget*			showDocViewWidget;
+bool			showHideDocviewer;
+
 //docview size and position
 int				docWindowWidth;
 int				docWindowHeight;
@@ -380,14 +385,14 @@ GtkSourceStyleScheme*			styleScheme;
 #endif
 
 #ifdef _BUILDDOCVIEWER_
-Widget*			showDocViewWidget;
+//Widget*			showDocViewWidget;
 #ifndef _USEQT5_
-GtkWidget*		docView;
+//GtkWidget*		docView;
 WebKitWebView*	webView;
 #else
 //TODO//
 #endif
-bool			showHideDocviewer;
+//bool			showHideDocviewer;
 #endif
 
 //spellcheck
@@ -829,7 +834,6 @@ VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int u
 
 functionData* getFunctionByName(const char* name,bool recurse,bool casesensitive)
 {
-//TODO//
 #ifdef _USEQT5_
 	DocumentClass		*document=getDocumentData(-1);
 	pageStruct			*page;
@@ -887,8 +891,8 @@ functionData* getFunctionByName(const char* name,bool recurse,bool casesensitive
 											lineptr=strdup(strlist.at(i).toLocal8Bit().constData());
 											break;
 										}
-								
 								}
+
 							debugFree(&functions,"functions getFunctionByName");
 							if(gotmatch==0)
 								{

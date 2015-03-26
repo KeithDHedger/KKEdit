@@ -249,6 +249,11 @@ extern unsigned int		lastUpdate;
 extern unsigned int		lastPlugUpdate;
 extern unsigned int		updateWait;
 
+//docview
+extern Widget			*docView;
+extern Widget			*showDocViewWidget;
+extern bool				showHideDocviewer;
+
 //docview size and position
 extern int				docWindowWidth;
 extern int				docWindowHeight;
@@ -491,21 +496,23 @@ extern GtkSourceStyleScheme*		styleScheme;
 #endif
 
 #ifdef _BUILDDOCVIEWER_
-extern Widget*		showDocViewWidget;
+//extern Widget*		showDocViewWidget;
 #ifndef _USEQT5_
-extern GtkWidget*		docView;
+//extern GtkWidget*		docView;
 extern WebKitWebView*	webView;
 #else
 //TODO//
 #endif
-extern bool				showHideDocviewer;
+//extern bool				showHideDocviewer;
 #endif
 
 #ifdef _BUILDDOCVIEWER_
+#ifndef _USEQT5_
 extern GtkWidget*		spellCheckWord;
 extern GtkWidget*		wordListDropbox;
 #else
 //TODO//
+#endif
 #endif
 
 extern char*			badWord;
@@ -520,10 +527,12 @@ extern unsigned int		shortCuts[NUMSHORTCUTS][2];
 extern char*			shortCutStrings[NUMSHORTCUTS];
 
 #ifdef _BUILDDOCVIEWER_
+#ifndef _USEQT5_
 extern GtkWidget*		progressWindow;
 extern GtkWidget*		progressBar;
 #else
 //TODO//
+#endif
 #endif
 
 #include "pluginclass.h"

@@ -2198,6 +2198,10 @@ void buildMainGuiQT(void)
 	else
 		statusBarMenu=(Widget*)makeMenuItem(viewMenu,gettext("Show Status Bar"),0,NULL,SHOWSTATUSMENUNAME,&toggleStatusBar,NULL,0);
 
+#ifdef _USEQT5_
+	showDocViewWidget=(Widget*)makeMenuItem(viewMenu,gettext("Show Docviewer"),0,NULL,SHOWDOCVIEWERMENUNAME,&toggleDocviewer,NULL,0);
+#endif
+
 #ifdef _BUILDDOCVIEWER_
 //toggle docviewer
 	showDocViewWidget=(Widget*)makeMenuItem(viewMenu,gettext("Show Docviewer"),0,NULL,SHOWDOCVIEWERMENUNAME,&toggleDocviewer,NULL,0);
@@ -2976,6 +2980,29 @@ int showFunctionEntry(void)
 #endif
 	return(result);
 }
+
+#ifdef _USEQT5_
+void buildDocViewer(void)
+{
+	QVBoxLayout	*docvlayout=new QVBoxLayout;
+	QHBoxLayout	*dochlayout=new QHBoxLayout;
+//	mainTopUserVBox=new QVBoxLayout;
+//	mainLeftUserVBox=new QVBoxLayout;
+//	mainNotebookVBox=new QVBoxLayout;
+//	mainRightUserVBox=new QVBoxLayout;/
+//	/mainBottomUserVBox=new QVBoxLayout;
+//	mainWindowHBox=new QHBoxLayout;
+
+//	mainWindow->setGeometry(windowX,windowY,windowWidth,windowHeight);
+
+printf("XXXXXXXXXX\n");
+	docView=new QMainWindow;
+	docView->setLayout(docvlayout);
+	docView->show();
+	
+	
+}
+#endif
 
 #ifdef _BUILDDOCVIEWER_
 void buildGtkDocViewer(void)

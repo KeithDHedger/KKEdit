@@ -43,6 +43,7 @@ if test $enable_qt5 = "yes" ;then
 #	AC_SUBST(QTCONCURRENT_LIBS)
 
 	AC_DEFINE([_USEQT5_], [], [Build Qt5])
+#	AC_DEFINE([_BUILDQTDOCVIEWER_], [], [Build doc viewer])
 
 #	GIO_MODULES="gio-2.0 >= 2.38.2"
 #	PKG_CHECK_MODULES(GIO, $GIO_MODULES)
@@ -98,6 +99,8 @@ PKG_CHECK_MODULES(GMODULE, $GMODULE_MODULES)
 AC_SUBST(GMODULE_CFLAGS)
 AC_SUBST(GMODULE_LIBS)
 
+if test $enable_qt5 = "no" ;then
+
 AC_MSG_CHECKING(whether to build gtk-doc viewer)
 AC_ARG_ENABLE(docviewer,AS_HELP_STRING([--enable-docviewer],[Build the Gtk-Doc viewer]),
     [enable_docviewer=$enableval],
@@ -109,6 +112,8 @@ if test "$enable_docviewer" = "yes"; then
 	AC_SUBST(WEBKIT_CFLAGS)
 	AC_SUBST(WEBKIT_LIBS)
 	AC_DEFINE([_BUILDDOCVIEWER_], [], [Build gtk-doc viewer])
+fi
+
 fi
 
 AC_ARG_WITH(qt5-docdir,AS_HELP_STRING([--with-qt5-docdir],[Installtion DIR for Qt5 documentation]),
