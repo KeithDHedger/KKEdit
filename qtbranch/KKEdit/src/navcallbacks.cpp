@@ -257,8 +257,19 @@ void jumpToLineFromBar(const QString text)
 
 int showLineEntry(void)
 {
-	gint		result=0;
-#ifndef _USEQT5_
+	gint	result=0;
+#ifdef _USEQT5_
+	bool	ok;
+	QString	text=QInputDialog::getText(mainWindow,gettext("Go To Line"),gettext("Enter Line Number"),QLineEdit::Normal,"0",&ok);
+
+	if ((ok==true) && (!text.isEmpty()))
+		{
+			theLineNum=text.toUInt();
+			result=0;
+		}
+	else
+		result=-1;
+#else
 	GtkWidget*	dialog;
 	GtkWidget*	content_area;
 	GtkWidget*	entrybox;
@@ -287,23 +298,38 @@ int showLineEntry(void)
 }
 
 VISIBLE void jumpToLine(Widget* widget,uPtr data)
-//TODO//
 {
-printf("jumpToLine %i\n",(int)(long)data);
-
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	if(showLineEntry()==0)
+		gotoLine(NULL,(long)theLineNum);
+#else
 	if(showLineEntry()==GTK_RESPONSE_YES)
 		gotoLine(NULL,(gpointer)(long)theLineNum);
 #endif
 }
 
 VISIBLE void functionSearch(Widget* widget,uPtr data)
-//TODO//
 {
-printf("functionSearch %i\n",(int)(long)data);
+	functionData*	fdata;
 
-#ifndef _USEQT5_
-	functionData* fdata;
+#ifdef _USEQT5_
+	bool			ok;
+	QString			text=QInputDialog::getText(mainWindow,gettext("Find Function"),gettext("Enter Function Name"),QLineEdit::Normal,"",&ok);
+
+	if ((ok==true) && (!text.isEmpty()))
+		{
+			if(functionSearchText!=NULL)
+				debugFree(&functionSearchText,"functionSearchText functionSearch");
+			functionSearchText=strdup(text.toUtf8().constData());
+
+			fdata=getFunctionByName(functionSearchText,true);
+			if(fdata!=NULL)
+				{
+					goToDefine(fdata);
+					destroyData(fdata);
+				}
+		}
+#else
 
 	if(showFunctionEntry()==GTK_RESPONSE_YES)
 		{
