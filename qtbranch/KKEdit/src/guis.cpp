@@ -2198,9 +2198,9 @@ void buildMainGuiQT(void)
 	else
 		statusBarMenu=(Widget*)makeMenuItem(viewMenu,gettext("Show Status Bar"),0,NULL,SHOWSTATUSMENUNAME,&toggleStatusBar,NULL,0);
 
-#ifdef _USEQT5_
-	showDocViewWidget=(Widget*)makeMenuItem(viewMenu,gettext("Show Docviewer"),0,NULL,SHOWDOCVIEWERMENUNAME,&toggleDocviewer,NULL,0);
-#endif
+//#ifdef _USEQT5_
+//	showDocViewWidget=(Widget*)makeMenuItem(viewMenu,gettext("Show Docviewer"),0,NULL,SHOWDOCVIEWERMENUNAME,&toggleDocviewer,NULL,0);
+//#endif
 
 #ifdef _BUILDDOCVIEWER_
 //toggle docviewer
@@ -2981,6 +2981,7 @@ int showFunctionEntry(void)
 	return(result);
 }
 
+#ifdef _BUILDDOCVIEWER_
 #ifdef _USEQT5_
 void buildDocViewer(void)
 {
@@ -2995,8 +2996,8 @@ void buildDocViewer(void)
 	widget->setLayout(docvlayout);
 	qobject_cast<QMainWindow*>(docView)->setCentralWidget(widget);
 
-	webView=new QWebEngineView(widget);
-    qobject_cast<QWebEngineView*>(webView)->load(QUrl("file://" DATADIR "/help/help.en.html"));
+	webView=new QWebView(widget);
+    qobject_cast<QWebView*>(webView)->load(QUrl("file://" DATADIR "/help/help.en.html"));
     docvlayout->addWidget(webView);
 
 	widget=new QPushButton(QIcon::fromTheme("go-previous",QIcon("go-previous")),gettext("Back"));
@@ -3033,6 +3034,7 @@ void buildDocViewer(void)
 
 	docView->hide();
 }
+#endif
 #endif
 
 #ifdef _BUILDDOCVIEWER_

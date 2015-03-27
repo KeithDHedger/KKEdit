@@ -31,7 +31,7 @@ void webKitGoBack(Widget* widget,uPtr data)
 #endif
 {
 #ifdef _USEQT5_
-	qobject_cast<QWebEngineView*>(webView)->page()->triggerAction(QWebEnginePage::Back);
+	qobject_cast<QWebView*>(webView)->page()->triggerAction(QWebPage::Back);
 #else
 	webkit_web_view_go_back((WebKitWebView*)data);
 #endif
@@ -44,7 +44,7 @@ void webKitGoForward(Widget* widget,uPtr data)
 #endif
 {
 #ifdef _USEQT5_
-	qobject_cast<QWebEngineView*>(webView)->page()->triggerAction(QWebEnginePage::Forward);
+	qobject_cast<QWebView*>(webView)->page()->triggerAction(QWebPage::Forward);
 #else
 	webkit_web_view_go_forward((WebKitWebView*)data);
 #endif
@@ -65,11 +65,14 @@ void webKitGoHome(Widget* widget,uPtr data)
 }
 #endif
 
-#ifdef _BUILDDOCVIEWER_
 PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 {
-#ifndef _USEQT5_
+#ifdef _BUILDDOCVIEWER_
+#ifdef _USEQT5_
+	qobject_cast<QMainWindow*>(docView)->setWindowTitle(title);
+#else
 	gtk_window_set_title((GtkWindow*)docView,title);
+#endif
 
 	if(howtodisplay==USEURI)
 		{
@@ -78,18 +81,28 @@ PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 					debugFree(&thePage,"showDocView thePage");
 					asprintf(&thePage,"https://www.google.co.uk/search?q=%s",text);
 				}
+#ifdef _USEQT5_
+			qobject_cast<QWebView*>(webView)->load(QUrl(thePage));
+#else
 			webkit_web_view_load_uri((WebKitWebView*)webView,thePage);
+#endif
 		}
 
 	if(howtodisplay==USEFILE)
+#ifdef _USEQT5_
+			qobject_cast<QWebView*>(webView)->load(QUrl(htmlURI));
+
+	qobject_cast<QAction*>(showDocViewWidget)->setText(gettext("Hide Docviewer"));
+	docView->show();
+#else
 		webkit_web_view_load_uri((WebKitWebView*)webView,htmlURI);
 
 	gtk_widget_show_all(docView);
 	gtk_window_present((GtkWindow*)docView);
+	gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,gettext("Hide Docviewer"));
+#endif
 
 	showHideDocviewer=true;
-	gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,gettext("Hide Docviewer"));
-
 #else
 	char*		command;
 	command=NULL;
@@ -109,26 +122,17 @@ PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 			system(command);
 			debugFree(&command,"showDocView command");
 		}
-#endif
 
+#endif
 	if(thePage!=NULL)
 		debugFree(&thePage,"showDocView thePage");
 	thePage=NULL;
 		
 	return;
-
 }
-#endif
 
 VISIBLE void searchGtkDocs(Widget* widget,uPtr data)
-//TODO//
 {
-printf("searchGtkDocs %s\n",(char*)data);
-
-#ifndef _USEQT5_
-	pageStruct*	page=getDocumentData(-1);
-	GtkTextIter	start;
-	GtkTextIter	end;
 	char*		selection=NULL;
 	char*		searchdata[2048][2];
 	char		line[1024];
@@ -142,18 +146,34 @@ printf("searchGtkDocs %s\n",(char*)data);
 	char*		link;
 	int			cnt=0;
 
+printf("searchGtkDocs %s\n",(char*)data);
+#ifdef _USEQT5_
+	DocumentClass	*document=getDocumentData(-1);
+
+	if(document==NULL)
+		return;
+#else
+	pageStruct*	page=getDocumentData(-1);
+	GtkTextIter	start;
+	GtkTextIter	end;
+#endif
+
 	for(int loop=0;loop<2048;loop++)
 		{
 			searchdata[loop][0]=NULL;
 			searchdata[loop][1]=NULL;
 		}
 
-	if(data!=NULL)
+	if((gpointer)data!=NULL)
 		selection=strdup((char*)data);
 	else
 		{
+#ifdef _USEQT5_
+			selection=strdup(document->textCursor().selectedText().toUtf8().constData());
+#else
 			if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 				selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+#endif
 		}
 
 	if(selection!=NULL)
@@ -229,9 +249,8 @@ printf("searchGtkDocs %s\n",(char*)data);
 			if(searchdata[loop][1]!=NULL)
 				debugFree(&searchdata[loop][1],"seachGtkDocs searchdata[loop][1]");
 		}
-	if((selection!=NULL) && (data==NULL))
+	if((selection!=NULL) && ((gpointer)data==NULL))
 		debugFree(&selection,"seachGtkDocs selection");
-#endif
 }
 
 VISIBLE void doDoxy(Widget* widget,uPtr data)

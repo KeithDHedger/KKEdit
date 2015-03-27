@@ -50,7 +50,7 @@
 
 #ifdef _BUILDDOCVIEWER_
 #ifdef _USEQT5_
-#include <QtWebEngineWidgets>
+#include <QtWebKitWidgets>
 #else
 #include <webkit/webkit.h>
 #endif
