@@ -24,37 +24,51 @@ bool	fromregexreplace=false;
 bool	gotselection=false,fromregexsinglereplace=false;
 
 #ifdef _BUILDDOCVIEWER_
-
+#ifdef _USEQT5_
+void webKitGoBack(void)
+#else
 void webKitGoBack(Widget* widget,uPtr data)
-//TODO//
+#endif
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	qobject_cast<QWebEngineView*>(webView)->page()->triggerAction(QWebEnginePage::Back);
+#else
 	webkit_web_view_go_back((WebKitWebView*)data);
 #endif
 }
 
+#ifdef _USEQT5_
+void webKitGoForward(void)
+#else
 void webKitGoForward(Widget* widget,uPtr data)
-//TODO//
+#endif
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+	qobject_cast<QWebEngineView*>(webView)->page()->triggerAction(QWebEnginePage::Forward);
+#else
 	webkit_web_view_go_forward((WebKitWebView*)data);
 #endif
 }
 
+#ifdef _USEQT5_
+void webKitGoHome(void)
+#else
 void webKitGoHome(Widget* widget,uPtr data)
+#endif
 //TODO//
 {
-#ifndef _USEQT5_
+#ifdef _USEQT5_
+#else
 	if(g_file_test(htmlFile,G_FILE_TEST_EXISTS)==true)
 		webkit_web_view_load_uri((WebKitWebView*)data,htmlURI);
 #endif
 }
 #endif
 
+#ifdef _BUILDDOCVIEWER_
 PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 {
 #ifndef _USEQT5_
-#ifdef _BUILDDOCVIEWER_
 	gtk_window_set_title((GtkWindow*)docView,title);
 
 	if(howtodisplay==USEURI)
@@ -64,11 +78,11 @@ PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 					debugFree(&thePage,"showDocView thePage");
 					asprintf(&thePage,"https://www.google.co.uk/search?q=%s",text);
 				}
-			webkit_web_view_load_uri(webView,thePage);
+			webkit_web_view_load_uri((WebKitWebView*)webView,thePage);
 		}
 
 	if(howtodisplay==USEFILE)
-		webkit_web_view_load_uri(webView,htmlURI);
+		webkit_web_view_load_uri((WebKitWebView*)webView,htmlURI);
 
 	gtk_widget_show_all(docView);
 	gtk_window_present((GtkWindow*)docView);
@@ -102,8 +116,9 @@ PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 	thePage=NULL;
 		
 	return;
-#endif
+
 }
+#endif
 
 VISIBLE void searchGtkDocs(Widget* widget,uPtr data)
 //TODO//
@@ -448,7 +463,7 @@ void docSearchInPageFoward(Widget* widget,uPtr data)
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
 	if(text!=NULL && strlen(text)>0)
-		webkit_web_view_search_text(webView,text,false,true,true);
+		webkit_web_view_search_text((WebKitWebView*)webView,text,false,true,true);
 #endif
 }
 
@@ -459,7 +474,7 @@ void docSearchInPageBack(Widget* widget,uPtr data)
 	const char* text=gtk_entry_get_text((GtkEntry*)data);
 
 	if(text!=NULL && strlen(text)>0)
-		webkit_web_view_search_text(webView,text,false,false,true);
+		webkit_web_view_search_text((WebKitWebView*)webView,text,false,false,true);
 #endif
 }
 #endif

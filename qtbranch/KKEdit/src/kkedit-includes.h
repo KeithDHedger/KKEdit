@@ -49,11 +49,14 @@
 #endif
 
 #ifdef _BUILDDOCVIEWER_
+#ifdef _USEQT5_
+#include <QtWebEngineWidgets>
+#else
 #include <webkit/webkit.h>
+#endif
 #endif
 
 #ifdef _USEQT5_
-#include <QtWebEngineWidgets>
 #include "QT_menuitem.h"
 #include "QT_document.h"
 #endif

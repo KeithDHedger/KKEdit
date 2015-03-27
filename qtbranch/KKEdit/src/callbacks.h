@@ -124,7 +124,9 @@ void setToobarSensitive(void);
 void toggleToolBar(Widget* widget,uPtr data);
 void toggleToolOutput(Widget* widget,uPtr data);
 void toggleStatusBar(Widget* widget,uPtr data);
+#ifdef _BUILDDOCVIEWER_
 void toggleDocviewer(Widget* widget,uPtr data);
+#endif
 
 #ifndef _USEQT5_
 void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer);

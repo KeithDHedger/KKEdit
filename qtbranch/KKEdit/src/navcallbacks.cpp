@@ -94,8 +94,8 @@ VISIBLE void goToDefinition(Widget* widget,uPtr data)
 		}
 	else
 		return;
-
-	fdata=getFunctionByName(selection,true);
+//TODO//
+	fdata=getFunctionByName(selection,true,true);
 	if(fdata!=NULL)
 		{
 			history->savePosition();
@@ -246,10 +246,12 @@ void jumpToLineFromBar(GtkWidget* widget,gpointer data)
 void jumpToLineFromBar(const QString text)
 #endif
 {
+#ifdef _USEQT5_
+//TODO//
 	printf("jumpToLineFromBar %s\n",text.toLocal8Bit().constData());
 	theLineNum=atoi(text.toLocal8Bit().constData());
 	gotoLine(NULL,(long)theLineNum);
-#ifndef _USEQT5_
+#else
 	theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
 	gotoLine(NULL,(gpointer)(long)theLineNum);
 #endif
@@ -311,9 +313,9 @@ VISIBLE void jumpToLine(Widget* widget,uPtr data)
 VISIBLE void functionSearch(Widget* widget,uPtr data)
 {
 	functionData*	fdata;
+	bool			ok;
 
 #ifdef _USEQT5_
-	bool			ok;
 	QString			text=QInputDialog::getText(mainWindow,gettext("Find Function"),gettext("Enter Function Name"),QLineEdit::Normal,"",&ok);
 
 	if ((ok==true) && (!text.isEmpty()))
@@ -341,11 +343,17 @@ VISIBLE void functionSearch(Widget* widget,uPtr data)
 		{
 			if(functionSearchText!=NULL)
 				{
-					fdata=getFunctionByName(functionSearchText,true);
-					if(fdata!=NULL)
+					ok=true;
+					for(int j=0;j<2;j++)
 						{
-							goToDefine(fdata);
-							destroyData(fdata);
+							fdata=getFunctionByName(functionSearchText,true,ok);
+							if(fdata!=NULL)
+								{
+									goToDefine(fdata);
+									destroyData(fdata);
+									return;
+								}
+							ok=false;
 						}
 				}
 		}
@@ -619,6 +627,7 @@ docFileData* getDoxyFileData(char* uri)
 #endif
 }
 
+#ifndef _USEQT5_
 gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest* request,WebKitWebNavigationAction* navigationAction,WebKitWebPolicyDecision* policy_decision, gpointer user_data)
 {
 #ifndef _USEQT5_
@@ -658,6 +667,7 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 	return(false);
 #endif
 }
+#endif
 
 #endif
 

@@ -463,8 +463,8 @@ printf("save %i\n",(int)(long)data);
 			fd=fopen(saveFilePath,"w");
 			if (fd!=NULL)
 				{
-					page->filePath=saveFilePath;
-					page->fileName=saveFileName;
+					page->filePath=(char*)saveFilePath;
+					page->fileName=(char*)saveFileName;
 					if(page->dirName!=NULL)
 						debugFree(&page->dirName,"saveFile dirName");
 					page->dirName=g_path_get_dirname(page->filePath);

@@ -37,10 +37,10 @@ if test $enable_qt5 = "yes" ;then
 	AC_SUBST(QTWIDGETS_CFLAGS)
 	AC_SUBST(QTWIDGETS_LIBS)
 
-	WEBENGINEWIDGETS_MODULES="Qt5WebEngineWidgets >= 5.4.0"
-	PKG_CHECK_MODULES(WEBENGINEWIDGETS, $WEBENGINEWIDGETS_MODULES)
-	AC_SUBST(WEBENGINEWIDGETS_CFLAGS)
-	AC_SUBST(WEBENGINEWIDGETS_LIBS)
+#	WEBENGINEWIDGETS_MODULES="Qt5WebEngineWidgets >= 5.4.0"
+#	PKG_CHECK_MODULES(WEBENGINEWIDGETS, $WEBENGINEWIDGETS_MODULES)
+#	AC_SUBST(WEBENGINEWIDGETS_CFLAGS)
+#	AC_SUBST(WEBENGINEWIDGETS_LIBS)
 
 	AC_DEFINE([_USEQT5_], [], [Build Qt5])
 #	AC_DEFINE([_BUILDQTDOCVIEWER_], [], [Build doc viewer])
@@ -99,7 +99,7 @@ PKG_CHECK_MODULES(GMODULE, $GMODULE_MODULES)
 AC_SUBST(GMODULE_CFLAGS)
 AC_SUBST(GMODULE_LIBS)
 
-if test $enable_qt5 = "no" ;then
+#if test $enable_qt5 = "no" ;then
 
 AC_MSG_CHECKING(whether to build gtk-doc viewer)
 AC_ARG_ENABLE(docviewer,AS_HELP_STRING([--enable-docviewer],[Build the Gtk-Doc viewer]),
@@ -107,14 +107,21 @@ AC_ARG_ENABLE(docviewer,AS_HELP_STRING([--enable-docviewer],[Build the Gtk-Doc v
     [enable_docviewer="yes"])
 AC_MSG_RESULT($enable_docviewer)
 if test "$enable_docviewer" = "yes"; then
+if test $enable_qt5 = "no" ;then
 	WEBKIT_MODULES="webkit-1.0 >= 1.6.1"
 	PKG_CHECK_MODULES(WEBKIT, $WEBKIT_MODULES)
 	AC_SUBST(WEBKIT_CFLAGS)
 	AC_SUBST(WEBKIT_LIBS)
+else
+	WEBENGINEWIDGETS_MODULES="Qt5WebEngineWidgets >= 5.4.0"
+	PKG_CHECK_MODULES(WEBENGINEWIDGETS, $WEBENGINEWIDGETS_MODULES)
+	AC_SUBST(WEBENGINEWIDGETS_CFLAGS)
+	AC_SUBST(WEBENGINEWIDGETS_LIBS)
+fi
 	AC_DEFINE([_BUILDDOCVIEWER_], [], [Build gtk-doc viewer])
 fi
 
-fi
+#fi
 
 AC_ARG_WITH(qt5-docdir,AS_HELP_STRING([--with-qt5-docdir],[Installtion DIR for Qt5 documentation]),
     [with_qt5_docdir=$withval],

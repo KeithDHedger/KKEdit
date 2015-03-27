@@ -253,6 +253,7 @@ extern unsigned int		updateWait;
 extern Widget			*docView;
 extern Widget			*showDocViewWidget;
 extern bool				showHideDocviewer;
+extern Widget			*webView;
 
 //docview size and position
 extern int				docWindowWidth;
@@ -417,17 +418,17 @@ extern int				currentTabNumber;
 extern int 				untitledNumber;
 
 #ifndef _USEQT5_
-//extern GtkToolItem*		newButton;
-//extern GtkToolItem*		openButton;
-//extern GtkToolItem*		saveButton;
-//extern GtkToolItem*		redoButton;
-//extern GtkToolItem*		undoButton;
-//extern GtkToolItem*		cutButton;
-//extern GtkToolItem*		copyButton;
-//extern GtkToolItem*		pasteButton;
-//extern GtkToolItem*		findButton;
-//extern GtkToolItem*		gotoDefButton;
-//extern GtkToolItem*		backButton;
+extern GtkToolItem*		newButton;
+extern GtkToolItem*		openButton;
+extern GtkToolItem*		saveButton;
+extern GtkToolItem*		redoButton;
+extern GtkToolItem*		undoButton;
+extern GtkToolItem*		cutButton;
+extern GtkToolItem*		copyButton;
+extern GtkToolItem*		pasteButton;
+extern GtkToolItem*		findButton;
+extern GtkToolItem*		gotoDefButton;
+extern GtkToolItem*		backButton;
 extern GtkToolItem*		gotoLineButton;
 extern GtkToolItem*		findApiButton;
 extern GtkToolItem*		findQtApiButton;
@@ -495,18 +496,8 @@ extern GtkSourceStyleScheme*		styleScheme;
 //TODO//
 #endif
 
-#ifdef _BUILDDOCVIEWER_
-//extern Widget*		showDocViewWidget;
-#ifndef _USEQT5_
-//extern GtkWidget*		docView;
-extern WebKitWebView*	webView;
-#else
-//TODO//
-#endif
-//extern bool				showHideDocviewer;
-#endif
 
-#ifdef _BUILDDOCVIEWER_
+#ifdef _ASPELL_
 #ifndef _USEQT5_
 extern GtkWidget*		spellCheckWord;
 extern GtkWidget*		wordListDropbox;

@@ -715,6 +715,7 @@ int main (int argc, char **argv)
 	char*			filename;
 	bool			safeflag=false;
 	GOptionContext*	context;
+	char*			dbusname;
 
 	singleOverRide=false;
 	loadPluginsFlag=true;

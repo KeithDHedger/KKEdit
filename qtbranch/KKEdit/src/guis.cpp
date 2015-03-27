@@ -2995,12 +2995,13 @@ void buildDocViewer(void)
 	widget->setLayout(docvlayout);
 	qobject_cast<QMainWindow*>(docView)->setCentralWidget(widget);
 
-	QWebEngineView *view = new QWebEngineView(widget);
-    view->load(QUrl("file://" DATADIR "/help/help.en.html"));
-    docvlayout->addWidget(view);
+	webView=new QWebEngineView(widget);
+    qobject_cast<QWebEngineView*>(webView)->load(QUrl("file://" DATADIR "/help/help.en.html"));
+    docvlayout->addWidget(webView);
 
 	widget=new QPushButton(QIcon::fromTheme("go-previous",QIcon("go-previous")),gettext("Back"));
 	dochlayout->addWidget(widget);
+	QObject::connect((QPushButton*)widget,&QPushButton::clicked,webKitGoBack);
 
 	dochlayout->addStretch(1);
 
@@ -3024,6 +3025,7 @@ void buildDocViewer(void)
 
 	widget=new QPushButton(QIcon::fromTheme("go-next",QIcon("go-next")),gettext("Forward"));
 	dochlayout->addWidget(widget);
+	QObject::connect((QPushButton*)widget,&QPushButton::clicked,webKitGoForward);
 
 	widget=new QWidget;
 	widget->setLayout(dochlayout);
@@ -3056,10 +3058,10 @@ void buildGtkDocViewer(void)
 	vbox=gtk_vbox_new(false,0);
 	hbox=gtk_hbox_new(false,4);
 
-	webView=WEBKIT_WEB_VIEW(webkit_web_view_new());
+	webView=webkit_web_view_new();
 	g_signal_connect(G_OBJECT(webView),"navigation-policy-decision-requested",G_CALLBACK(docLinkTrap),NULL);	
 
-	settings=webkit_web_view_get_settings(webView);
+	settings=webkit_web_view_get_settings((WebKitWebView*)webView);
 	g_object_set((gpointer)settings,"enable-file-access-from-file-uris",true,NULL);
 	g_object_set((gpointer)settings,"enable-page-cache",true,NULL);
 	g_object_set((gpointer)settings,"enable-plugins",false,NULL);

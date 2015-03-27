@@ -1100,12 +1100,13 @@ VISIBLE void unRedoAll(Widget* widget,uPtr data)
 
 VISIBLE void redo(Widget* widget,uPtr data)
 {
+#ifdef _USEQT5_
 	DocumentClass	*document=getDocumentData(-1);
 
 	if(document!=NULL)
 		document->redo();
 
-#ifndef _USEQT5_
+#else
 	pageStruct*	page=getDocumentData(-1);
 
 	if(page!=NULL)
@@ -1377,7 +1378,8 @@ void populatePopupMenu(void)
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 			if(selection!=NULL)
 				{
-					fdata=getFunctionByName(selection,false);
+				//TODO//
+					fdata=getFunctionByName(selection,false,true);
 					if(fdata!=NULL)
 						{
 							temptext=truncateWithElipses(fdata->define,maxFuncDefs);
@@ -2452,6 +2454,7 @@ VISIBLE void toggleStatusBar(Widget* widget,uPtr data)
 #endif
 }
 
+#ifdef _BUILDDOCVIEWER_
 VISIBLE void toggleDocviewer(Widget* widget,uPtr data)
 {
 #ifdef _USEQT5_
@@ -2467,7 +2470,6 @@ VISIBLE void toggleDocviewer(Widget* widget,uPtr data)
 			docView->hide();
 		}
 #else
-#ifdef _BUILDDOCVIEWER_
 	if(showHideDocviewer)
 		{
 			gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,gettext("Hide Docviewer"));
@@ -2480,8 +2482,9 @@ VISIBLE void toggleDocviewer(Widget* widget,uPtr data)
 			gtk_widget_hide(docView);
 		}
 #endif
-#endif
+
 }
+#endif
 
 void doKeyShortCut(int what)
 {

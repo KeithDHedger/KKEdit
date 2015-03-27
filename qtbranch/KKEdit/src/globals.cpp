@@ -146,6 +146,7 @@ unsigned int	updateWait=2678400;
 Widget			*docView=NULL;
 Widget*			showDocViewWidget;
 bool			showHideDocviewer;
+Widget			*webView;
 
 //docview size and position
 int				docWindowWidth;
@@ -382,17 +383,6 @@ GtkSourceStyleSchemeManager*	schemeManager;
 GtkSourceStyleScheme*			styleScheme;
 #else
 //TODO//
-#endif
-
-#ifdef _BUILDDOCVIEWER_
-//Widget*			showDocViewWidget;
-#ifndef _USEQT5_
-//GtkWidget*		docView;
-WebKitWebView*	webView;
-#else
-//TODO//
-#endif
-//bool			showHideDocviewer;
 #endif
 
 //spellcheck
