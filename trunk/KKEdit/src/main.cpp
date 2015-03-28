@@ -433,6 +433,19 @@ int main (int argc, char **argv)
 	bool			safeflag=false;
 	GOptionContext*	context;
 
+#if _DEBUGLEVEL_ > DBG0
+	if(signal(SIGSEGV,catchSignal)==SIG_ERR)
+		{
+        	fprintf(stderr,"An error occurred while setting a signal handler.\n");
+			return EXIT_FAILURE;
+		}
+	if(signal(SIGFPE,catchSignal)==SIG_ERR)
+		{
+        	fprintf(stderr,"An error occurred while setting a signal handler.\n");
+			return EXIT_FAILURE;
+		}
+#endif
+
 	singleOverRide=false;
 	loadPluginsFlag=true;
 	doUpdateWidgets=true;
@@ -443,7 +456,6 @@ int main (int argc, char **argv)
     { "safe",'s',0,G_OPTION_ARG_NONE,&safeflag,"Safe mode ( disable all plugins and use new instance )",NULL},
     { NULL }
 };
-
 
 	context=g_option_context_new(NULL);
 	g_option_context_add_main_entries(context,entries,NULL);

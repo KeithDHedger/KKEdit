@@ -15,6 +15,10 @@
 #include <sys/stat.h>
 #include <glib.h>
 
+#include <signal.h>
+#include <stdio.h>
+#include <errno.h>
+
 #include <gtksourceview/gtksourcestyleschememanager.h>
 #include <gtksourceview/gtksourceview.h>
 #include <gtksourceview/gtksourcebuffer.h>

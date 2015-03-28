@@ -11,12 +11,26 @@
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
-#undef _DEBUG_FREE_
-//#define _DEBUG_FREE_
+#define DBG0 0
+#define DBG1 1
+#define DBG2 2
+#define DBG3 3
+#define DBG4 4
+#define DBGFREE 5
+
+#define _DEBUGLEVEL_ DBG3
 
 #define REPLACE			100
 #define FINDNEXT		200
 #define FINDPREV		300
+
+#if _DEBUGLEVEL_ == DBG0
+#define ERRDATA
+#endif
+
+#if _DEBUGLEVEL_ == DBG1 || _DEBUGLEVEL_ == DBG2 || _DEBUGLEVEL_ == DBG3
+#define ERRDATA errLine=__LINE__,errFile=__FILE__,errFunc=__func__;
+#endif
 
 #define MYEMAIL "kdhedger68713@gmail.com"
 #define MYWEBSITE "https://sites.google.com/site/kkeditlinuxtexteditor/home"
@@ -88,6 +102,10 @@ struct bookMarksNew
 	int					line;
 };
 
+extern int				errno;
+extern int				errLine;
+extern const char		*errFile;
+extern const char		*errFunc;
 
 extern GApplication*	mainApp;
 extern bool				busyFlag;
@@ -411,9 +429,11 @@ char* truncateWithElipses(char* str,unsigned int maxlen);
 char* truncateTabNameWithElipses(char* str,unsigned int maxlen);
 void doBusy(bool busy,pageStruct* page);
 
-
 void setWidgets(void);
 void resetWidgetSenisitive(void);
+
+void catchSignal(int signal);
+void freeAndNull(char** ptr);
 
 #endif
 

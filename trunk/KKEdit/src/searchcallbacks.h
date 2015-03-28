@@ -26,6 +26,7 @@ void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data);
 void basicFind(int dowhat);
 void regexFind(int dowhat);
 void searchQT5Docs(GtkWidget* widget,gpointer data);
+void searchQT5Assist(GtkWidget* widget,gpointer data);
 void qt5DocSearchFromBar(GtkWidget* widget,gpointer data);
 void searchGtkDocs(GtkWidget* widget,gpointer data);
 void showDocView(int howtodisplay,char* text,const char* title);

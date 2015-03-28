@@ -104,8 +104,9 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 								}
 							cnt++;
 						}
-					debugFree(&argname,"loadVarsFromFile argname");
-					debugFree(&strarg,"loadVarsFromFile strarg");
+					ERRDATA
+					freeAndNull(&argname);
+					freeAndNull(&strarg);
 				}
 			fclose(fd);
 		}
@@ -121,9 +122,9 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	GtkRcStyle*	style=gtk_rc_style_new();
 	char*		correctedname;
 
+	ERRDATA
+
 	correctedname=truncateWithElipses(name,maxTabChars);
-//correctedname=(char*)malloc(6*g_utf8_strlen(name,-1));
-//correctedname=g_utf8_strncpy(correctedname,name,maxTabChars);
 
 	label=gtk_label_new(correctedname);
 	debugFree(&correctedname,"makeNewTab correctedname");
@@ -148,6 +149,7 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 
 	gtk_widget_show_all(evbox);
 
+	ERRDATA
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"newTab");
 
@@ -160,6 +162,7 @@ void setFilePrefs(pageStruct* page)
 	GdkColor				color;
 	GtkTextAttributes*		attr;
 
+	ERRDATA
 	gtk_source_view_set_auto_indent(page->view,indent);
 	gtk_source_view_set_show_line_numbers(page->view,lineNumbers);
 	gtk_source_view_set_highlight_current_line(page->view,highLight);
@@ -200,6 +203,7 @@ void setFilePrefs(pageStruct* page)
 	else
 		gtk_source_completion_block_interactive(page->completion);
 
+	ERRDATA
 	createCompletion(page);
 }
 
@@ -207,6 +211,7 @@ void resetAllFilePrefs(void)
 {
 	pageStruct*			page;
 
+	ERRDATA
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 
 	for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
@@ -230,6 +235,7 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 	GtkTextIter		iter;
 	GtkTextMark*	mark;
 
+	ERRDATA
 	array=gtk_selection_data_get_uris(selection_data);
 	if(array==NULL)
 		{
@@ -268,6 +274,7 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 	else
 		dropTextFile=false;
 
+	ERRDATA
 	gtk_drag_finish (context,true,true,time);
 }
 
@@ -308,6 +315,7 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 	FILE*		fd=NULL;
 	GtkWidget*	dialog;
 
+	ERRDATA
 	page->itsMe=true;
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
@@ -345,6 +353,7 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 				return(false);
 
 			fd=fopen(saveFilePath,"w");
+			ERRDATA
 			if (fd!=NULL)
 				{
 					page->filePath=saveFilePath;
@@ -377,6 +386,7 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 	switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
 	setSensitive();
 
+	ERRDATA
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"saveFile");
 
@@ -397,6 +407,7 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 	pageStruct*		page;
 	char*			convstr=NULL;
 
+	ERRDATA
 	dialog=gtk_file_chooser_dialog_new(gettext("Open File"),NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,NULL);
 	if (gtk_dialog_run(GTK_DIALOG (dialog))==GTK_RESPONSE_ACCEPT)
 		{
@@ -445,6 +456,7 @@ VISIBLE void reloadFile(GtkWidget* widget,gpointer data)
 	GtkTextIter	start;
 	GtkTextIter	end;
 
+	ERRDATA
 	if(page->filePath!=NULL)
 		{
 			g_file_get_contents(page->filePath,&buffer,(gsize*)&filelen,NULL);
@@ -468,6 +480,7 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 	GtkTextIter		markiter;
 	GList*			ptr;
 
+	ERRDATA
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	debugFree(&filename,"saveSession filename");
@@ -497,6 +510,7 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 					fprintf(fd,"-1 endmarks\n");
 				}
 
+			ERRDATA
 			fclose(fd);
 			debugFree(&filename,"saveSession filename");
 		}
@@ -514,6 +528,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	int				currentline;
 	TextBuffer		*buf=new TextBuffer;
 
+	ERRDATA
 
 	closeAllTabs(NULL,NULL);
 	while(gtk_events_pending())
@@ -567,6 +582,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 			debugFree(&filename,"restoreSession filename");
 		}
 
+	ERRDATA
 	delete buf;
 
 	while(gtk_events_pending())
@@ -574,6 +590,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	currentTabNumber=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)-1;
 	setWidgets();
 	setSensitive();
+	ERRDATA
 	killBarberPole();
 }
 
@@ -583,6 +600,7 @@ int showFileChanged(char* filename)
 	gint		result;
 	char*		message;
 
+	ERRDATA
 	asprintf(&message,gettext("File %s Has Changed on disk\nDo you want to reload it?"),filename);
 	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
 
@@ -592,6 +610,7 @@ int showFileChanged(char* filename)
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 
 	gtk_widget_destroy(dialog);
+	ERRDATA
 	debugFree(&message,"showFileChanged message");
 	return(result);
 }
@@ -605,6 +624,7 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 	long			filelen;
 	int				answer;
 
+	ERRDATA
 	if(G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT==event_type)
 		{
 			if((page->itsMe==false) && (page->showingChanged==false))
@@ -639,6 +659,7 @@ void add_source_mark_pixbufs (GtkSourceView *view)
 	GtkImage*	image;
 	GdkPixbuf*	pbuf;
 
+	ERRDATA
 	image=(GtkImage*)gtk_image_new_from_file(DATADIR"/pixmaps/BookMark.png");
 	pbuf=gtk_image_get_pixbuf(image);
 
@@ -653,6 +674,7 @@ gboolean clickInView(GtkWidget* widget,gpointer data)
 	if(sessionBusy==true)
 		return(false);
 
+	ERRDATA
 	if((statusMessage!=NULL))
 		{
 			debugFree(&statusMessage,"clickInView statusMessage");
@@ -668,6 +690,7 @@ pageStruct* makeNewPage(void)
 	GtkTextIter			iter;
 	GtkTextAttributes*	attr;
 
+	ERRDATA
 	page=(pageStruct*)malloc(sizeof(pageStruct));
 	page->buffer=NULL;
 	page->userDataList=NULL;
@@ -718,6 +741,7 @@ pageStruct* makeNewPage(void)
 	page->regexList=NULL;
 	page->regexMatchNumber=-1;
 
+	ERRDATA
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&iter);
 	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),page->backMark,&iter);
 
@@ -736,6 +760,7 @@ pageStruct* makeNewPage(void)
 	add_source_mark_pixbufs(GTK_SOURCE_VIEW(page->view));
 //status bar
 	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(updateStatusBar),(void*)page);
+	ERRDATA
 
 	return(page);
 }
@@ -747,6 +772,8 @@ void convertContents(char *data,int datalen)
     size_t		len_src;
     size_t		len_dst;
 	char		*startptr;
+
+	ERRDATA
 
 	charset=detect_charset(data);
 	if (charset==NULL)
@@ -783,6 +810,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	char*					filepathcopy=NULL;
 	char*					tpath;
 
+	ERRDATA
 	busyFlag=true;
 	sessionBusy=true;
 
@@ -845,6 +873,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	page->filePath=strdup(filepathcopy);
 	page->fileName=strdup(filename);
 	page->dirName=g_path_get_dirname(filepathcopy);
+	ERRDATA
 
 	page->realFilePath=realpath(filepath,NULL);
 
@@ -935,6 +964,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_text_iter_set_line(&iter,linenum);
 	gtk_text_buffer_move_mark((GtkTextBuffer*)page->buffer,page->backMark,&iter);
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
+	ERRDATA
 
 	busyFlag=false;
 	sessionBusy=false;
@@ -947,6 +977,7 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 	GtkWidget*	label;
 	pageStruct*	page;
 
+	ERRDATA
 	page=makeNewPage();
 	page->tabVbox=gtk_vbox_new(true,4);
 	page->filePath=NULL;
@@ -974,6 +1005,7 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 	gtk_widget_show_all((GtkWidget*)mainNotebook);
 	setFilePrefs(page);
 
+	ERRDATA
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"newFile");
 }

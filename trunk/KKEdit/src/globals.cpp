@@ -1135,18 +1135,34 @@ void killBarberPole(void)
 	debugFree(&barControl,"restore session barcontrol");
 }
 
+VISIBLE void freeAndNull(char** ptr)
+{
+	if (*ptr!=NULL)
+		free(*ptr);
+
+	*ptr=NULL;
+}
 
 VISIBLE void debugFree(char** ptr,const char* message)
 {
-#ifdef _DEBUG_FREE_
-	fprintf(stderr,"free :%s\n",message);
-#endif
+	FILE*	fp=NULL;
 
+#if _DEBUGLEVEL_ > DBG0
+	if((_DEBUGLEVEL_ == DBG1) || (_DEBUGLEVEL_ == DBG3))
+		fp=stderr;
+
+	if(_DEBUGLEVEL_ == DBG2)
+		fp=fopen("/tmp/kkedit.log","a");
+
+	fprintf(fp,"free :%s\n",message);
+#endif
 	if (*ptr!=NULL)
 		free(*ptr);
 
 	*ptr=NULL;
 
+	if((_DEBUGLEVEL_ == DBG2) && (fp!=NULL))
+		fclose(fp);
 }
 
 void doBusy(bool busy,pageStruct* page)
@@ -1194,6 +1210,29 @@ VISIBLE void setWidgets(void)
 	resetWidgetSenisitive();
 }
 
+int			errLine;
+const char	*errFile;
+const char	*errFunc;
 
+void catchSignal(int signal)
+{
+	FILE*	fp;
+
+	if(_DEBUGLEVEL_ == DBG0)
+		exit(EXIT_FAILURE);
+
+	if(_DEBUGLEVEL_ == DBG1)
+		fp=stderr;
+
+	if((_DEBUGLEVEL_ == DBG2) || (_DEBUGLEVEL_ == DBG3))
+		fp=fopen("/tmp/kkedit.log","a");
+
+	fprintf(fp,"Traped signal %s\n",strsignal(signal));
+	fprintf(fp,"File: %s, Function: %s, Line: %i\n",errFile,errFunc,errLine);
+	if(_DEBUGLEVEL_ == DBG2)
+		fclose(fp);
+    exit(EXIT_FAILURE);
+}
+ 
 
 

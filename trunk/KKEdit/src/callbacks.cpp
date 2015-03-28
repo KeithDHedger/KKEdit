@@ -406,7 +406,10 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 
 	if(busyFlag==true)
 		return;
+
 	pageStruct* pagecheck=getPageStructPtr(currentTabNumber);
+	if(pagecheck==NULL)
+		return;
 
 	if((page==NULL) || (showStatus==false))
 		{
@@ -415,11 +418,11 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 			return;
 		}
 
-	page->regexList=NULL;
-	page->regexMatchNumber=-1;
-
 	if(pagecheck!=page)
 		return;
+
+	page->regexList=NULL;
+	page->regexMatchNumber=-1;
 
 	path=page->filePath;
 	lang=page->lang;
@@ -446,6 +449,9 @@ void setSensitive(void)
 	char*			newlabel;
 	int				offset=0;
 	GtkTextIter	start_find,end_find;
+
+	if(page==NULL)
+		return;
 
 	if(sessionBusy==true)
 		return;

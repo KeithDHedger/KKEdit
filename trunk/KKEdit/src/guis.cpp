@@ -1522,6 +1522,8 @@ void buildMainGui(void)
 	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)searchGtkDocs,0,SEARCHGTKMENUNAME,IMAGEMENU,gettext("Search In Gtk Docs"),NULL);
 //find qt5
 	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)searchQT5Docs,0,SEARCHQT5MENUNAME,IMAGEMENU,gettext("Search In Qt5 Docs"),NULL);
+//find qt5 in qt5assistant
+	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)searchQT5Assist,0,SEARCHQT5ASSISTMENUNAME,IMAGEMENU,gettext("Search In Qt5 Assistant"),NULL);
 
 //goto doxy docs
 	if(gotDoxygen==0)
