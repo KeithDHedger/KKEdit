@@ -18,7 +18,7 @@
 #define DBG4 4
 #define DBGFREE 5
 
-#define _DEBUGLEVEL_ DBG3
+#define _DEBUGLEVEL_ DBG2
 
 #define REPLACE			100
 #define FINDNEXT		200

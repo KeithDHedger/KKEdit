@@ -338,7 +338,7 @@ void doMakeTool(void)
 	infolabel=gtk_label_new(placeholderinfo);
 	gtk_label_set_selectable((GtkLabel*)infolabel,true);
 	gtk_box_pack_start(GTK_BOX(vbox),infolabel,false,false,0);
-	debugFree(&placeholderinfo,"doMakeTool placeholderinfo");
+	ERRDATA debugFree(&placeholderinfo,"doMakeTool placeholderinfo");
 //in terminal
 	inTermWidget=gtk_check_button_new_with_label(gettext("Run Tool In Terminal"));
 	gtk_widget_set_name(inTermWidget,"interm");
@@ -729,7 +729,7 @@ void populateStore(void)
 						break;
 
 				}
-			debugFree(&type,"populateStore type");
+			ERRDATA debugFree(&type,"populateStore type");
 		}
 }
 
@@ -742,7 +742,7 @@ void addToToolBar(GtkWidget* widget,gpointer ptr)
 	toolBarLayout=type;
 	populateStore();
 	toolBarLayout=holddata;
-	debugFree(&type,"addToToolBar type");
+	ERRDATA debugFree(&type,"addToToolBar type");
 }
 
 void addIcon(const char* icon,const char* data,int toolnumber,const char* tooltip)
@@ -802,7 +802,7 @@ char* makeToolBarList(void)
 			g_string_append_c(str,str_data[0]);
 			row_count++;
 			valid=gtk_tree_model_iter_next((GtkTreeModel *)listStore,&iter);
-			debugFree(&str_data,"makeToolBarList str_data");
+			ERRDATA debugFree(&str_data,"makeToolBarList str_data");
 		}
 	return(g_string_free(str,false));
 }
@@ -872,7 +872,7 @@ void setKeyCuts(GtkWidget* widget,gpointer data)
 					shortCuts[j][0]=gdk_keyval_from_name(text);
 					shortCuts[j][1]=j;
 					if(shortCutStrings[j]!=NULL)
-						debugFree(&shortCutStrings[j],"setKeyCuts shortCutStrings");
+						ERRDATA debugFree(&shortCutStrings[j],"setKeyCuts shortCutStrings");
 					asprintf(&shortCutStrings[j],"%i %i - ^%c %s",shortCuts[j][0],shortCuts[j][1],shortCuts[j][0],shortcuttext[j]);
 				}
 			asprintf(&filename,"%s/.KKEdit/keybindings.rc",getenv("HOME"));
@@ -915,7 +915,7 @@ void buildKeys()
 			gtk_label_set_justify((GtkLabel*)item,GTK_JUSTIFY_CENTER);
 			gtk_label_set_line_wrap((GtkLabel*)item,true);
 			gtk_box_pack_start(GTK_BOX(vbox),item,false,false,0);
-			debugFree(&keycutsinfo,"buildKeys keycutsinfo");
+			ERRDATA debugFree(&keycutsinfo,"buildKeys keycutsinfo");
 //functions
 			for(loop=0;loop<NUMSHORTCUTS;loop++)
 				{
@@ -1862,7 +1862,7 @@ int showFunctionEntry(void)
 	gtk_widget_show_all(content_area);
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 	if(functionSearchText!=NULL)
-		debugFree(&functionSearchText,"showFunctionEntry functionSearchText");
+		ERRDATA debugFree(&functionSearchText,"showFunctionEntry functionSearchText");
 	functionSearchText=strdup(gtk_entry_get_text((GtkEntry*)entrybox));
 	gtk_widget_destroy(dialog);
 

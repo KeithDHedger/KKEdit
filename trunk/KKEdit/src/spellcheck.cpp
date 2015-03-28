@@ -27,7 +27,7 @@ void doCancelCheck(GtkWidget* widget,gpointer data)
 {
 	gtk_widget_destroy(spellCheckWord);
 	if(badWord!=NULL)
-		debugFree(&badWord,"doCancelCheck badWord");
+		ERRDATA debugFree(&badWord,"doCancelCheck badWord");
 	cancelCheck=true;
 }
 
@@ -109,9 +109,9 @@ void doChangeWord(GtkWidget* widget,gpointer data)
 		aspell_speller_store_replacement(spellChecker,badWord,-1,goodWord,-1);
 
 	gtk_widget_destroy(spellCheckWord);
-	debugFree(&badWord,"doChangeWord badWord");
+	ERRDATA debugFree(&badWord,"doChangeWord badWord");
 	if((long)data==0)
-		debugFree(&goodWord,"doChangeWord goodWord");
+		ERRDATA debugFree(&goodWord,"doChangeWord goodWord");
 }
 
 void doAddIgnoreWord(GtkWidget* widget,gpointer data)
@@ -126,7 +126,7 @@ void doAddIgnoreWord(GtkWidget* widget,gpointer data)
 
 	gtk_widget_destroy(spellCheckWord);
 	if(badWord!=NULL)
-		debugFree(&badWord,"doAddIgnoreWord badWord");
+		ERRDATA debugFree(&badWord,"doAddIgnoreWord badWord");
 }
 
 void doSpellCheckDoc(GtkWidget* widget,gpointer data)
@@ -200,7 +200,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 							fclose(out);
 							fclose(doc);
 							remove(tempfile);
-							debugFree(&tempfile,"doSpellCheckDoc tempfile");
+							ERRDATA debugFree(&tempfile,"doSpellCheckDoc tempfile");
 							gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 							return;
 						}
@@ -213,7 +213,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 							diff+=goodwordlen-token.len;
 							memmove(word_begin+goodwordlen,word_begin+token.len,strlen(word_begin+token.len)+1);
 							memcpy(word_begin,goodWord,goodwordlen);
-							debugFree(&goodWord,"doSpellCheckDoc goodWord");
+							ERRDATA debugFree(&goodWord,"doSpellCheckDoc goodWord");
 						}
 				}
 
@@ -233,8 +233,8 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 	gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
 
 	remove(tempfile);
-	debugFree(&buffer,"doSpellCheckDoc buffer");
-	debugFree(&tempfile,"doSpellCheckDoc tempfile");
+	ERRDATA debugFree(&buffer,"doSpellCheckDoc buffer");
+	ERRDATA debugFree(&tempfile,"doSpellCheckDoc tempfile");
 	delete slice;
 
 	if(page->filePath!=NULL)

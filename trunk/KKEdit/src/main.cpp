@@ -18,7 +18,7 @@ void readConfig(void)
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_rc);
-	debugFree(&filename,"readConfig filename");
+	ERRDATA debugFree(&filename,"readConfig filename");
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_window_rc);
@@ -28,7 +28,7 @@ void readConfig(void)
 	if(docWindowAllocData!=NULL)
 		sscanf(docWindowAllocData,"%i %i %i %i",(int*)&docWindowWidth,(int*)&docWindowHeight,(int*)&docWindowX,(int*)&docWindowY);
 
-	debugFree(&filename,"readConfig filename");
+	ERRDATA debugFree(&filename,"readConfig filename");
 }
 
 void init(void)
@@ -106,15 +106,15 @@ void init(void)
 
 	asprintf(&filename,"%s/.KKEdit/tools",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
-	debugFree(&filename,"init filename");
+	ERRDATA debugFree(&filename,"init filename");
 
 	schemeManager=gtk_source_style_scheme_manager_get_default();
 	asprintf(&filename,"%s/.gnome2/gedit/styles",getenv("HOME"));
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
-	debugFree(&filename,"init filename");
+	ERRDATA debugFree(&filename,"init filename");
 	asprintf(&filename,"%s/styles",DATADIR);
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
-	debugFree(&filename,"init filename");
+	ERRDATA debugFree(&filename,"init filename");
 
 //toolbar layout
 	toolBarLayout=strdup("NOSsXCPsURsFGsE9ADL");
@@ -238,11 +238,11 @@ void doNagStuff(void)
 	while(gtk_events_pending())
 		gtk_main_iteration();
 
-	debugFree(&command,"command pulse from donagstuff");
+	ERRDATA debugFree(&command,"command pulse from donagstuff");
 
 	asprintf(&control,"echo \"pulse\" > \"%s/updatecontrol\"",tmpFolderName);
 	system(control);
-	debugFree(&control,"control from donagstuff");
+	ERRDATA debugFree(&control,"control from donagstuff");
 
 	exitstatus=system("which curl 2>&1 >/dev/null");
 	gotcurl=WEXITSTATUS(exitstatus);
@@ -276,7 +276,7 @@ void doNagStuff(void)
 
 			asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
 			system(control);
-			debugFree(&control,"control from do nag stuff");
+			ERRDATA debugFree(&control,"control from do nag stuff");
 			if(strlen(t1)>1)
 				{
 					thisupdate=atol(t1);
@@ -286,13 +286,13 @@ void doNagStuff(void)
 
 							if(strcmp(VERSION,vers)!=0)
 								{
-									debugFree(&kkeditupdatemessage,"doNagStuff kkeditupdatemessage");
+									ERRDATA debugFree(&kkeditupdatemessage,"doNagStuff kkeditupdatemessage");
 									asprintf(&kkeditupdatemessage,"%s <b>%s</b> %s <b>%s</b>\n%s:\n<b>%s</b>\n",gettext("KKEdit update available to"),vers,gettext("from"),VERSION,gettext("From here"),MYWEBSITE);
 								}
 
 							if(lastPlugUpdate<atol(plugt))
 								{
-									debugFree(&plugupdatemessage,"doNagStuff plugupdatemessage");
+									ERRDATA debugFree(&plugupdatemessage,"doNagStuff plugupdatemessage");
 									asprintf(&plugupdatemessage,"\n%s:\n<b>https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins</b>",gettext("Plugin updates are available from here"));
 									lastPlugUpdate=thisupdate;
 								}
@@ -302,12 +302,12 @@ void doNagStuff(void)
 
 							gtk_dialog_run(GTK_DIALOG (dialog));
 							gtk_widget_destroy(dialog);
-							debugFree(&kkeditupdatemessage,"doNagStuff kkeditupdatemessage");
-							debugFree(&plugupdatemessage,"doNagStuff plugupdatemessage");
+							ERRDATA debugFree(&kkeditupdatemessage,"doNagStuff kkeditupdatemessage");
+							ERRDATA debugFree(&plugupdatemessage,"doNagStuff plugupdatemessage");
 							lastUpdate=thisupdate;
 						}
 				}
-			debugFree(&command,"command from donagstuff");
+			ERRDATA debugFree(&command,"command from donagstuff");
 		}
 
 	if((nagScreen==false))
@@ -315,7 +315,7 @@ void doNagStuff(void)
 
 	asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
 	system(control);
-	debugFree(&control,"control from do nag stuff");
+	ERRDATA debugFree(&control,"control from do nag stuff");
 }
 
 void activate(GApplication* application)
@@ -334,7 +334,7 @@ void open(GApplication* application,GFile** files,gint n_files,const gchar* hint
 			if(filepath!=NULL)
 				{
 					openFile(filepath,0,true);
-					debugFree(&filepath,"open filepath");
+					ERRDATA debugFree(&filepath,"open filepath");
 				}
 		}
 
@@ -434,12 +434,23 @@ int main (int argc, char **argv)
 	GOptionContext*	context;
 
 #if _DEBUGLEVEL_ > DBG0
+	system(":>/tmp/kkedit.log");
 	if(signal(SIGSEGV,catchSignal)==SIG_ERR)
 		{
         	fprintf(stderr,"An error occurred while setting a signal handler.\n");
 			return EXIT_FAILURE;
 		}
 	if(signal(SIGFPE,catchSignal)==SIG_ERR)
+		{
+        	fprintf(stderr,"An error occurred while setting a signal handler.\n");
+			return EXIT_FAILURE;
+		}
+	if(signal(SIGILL,catchSignal)==SIG_ERR)
+		{
+        	fprintf(stderr,"An error occurred while setting a signal handler.\n");
+			return EXIT_FAILURE;
+		}
+	if(signal(SIGBUS,catchSignal)==SIG_ERR)
 		{
         	fprintf(stderr,"An error occurred while setting a signal handler.\n");
 			return EXIT_FAILURE;
@@ -470,7 +481,7 @@ int main (int argc, char **argv)
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_startup_vars);
-	debugFree(&filename,"main filename");
+	ERRDATA debugFree(&filename,"main filename");
 
 	gtk_init(&argc,&argv);
 

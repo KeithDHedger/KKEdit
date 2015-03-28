@@ -92,7 +92,7 @@ GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 				{
 					if(strncasecmp(text,theword,strlen(theword))==0)
 						newlist=g_list_append(newlist,gtk_source_completion_item_new(text,text,NULL,infostr));
-					debugFree(&text,"addPropsFromWord text");
+					ERRDATA debugFree(&text,"addPropsFromWord text");
 				}
 			customlist=customlist->next;
 		}
@@ -137,7 +137,7 @@ void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceC
 				}
 		}
 	if(word!=NULL)
-		debugFree(&word,"function_provider_populate word");
+		ERRDATA debugFree(&word,"function_provider_populate word");
 }
 
 void function_provider_iface_init(GtkSourceCompletionProviderIface* iface)
@@ -213,15 +213,15 @@ void addProp(pageStruct* page)
 					if(strcasecmp(functype,"variable")==0)
 						varsProv->proposals=g_list_append(varsProv->proposals,gtk_source_completion_item_new(tmpstr,holdstr,NULL,infostr));
 				}
-			debugFree(&correctedstr,"addProp correctedstr");
-			debugFree(&holdstr,"addProp holdstr");
+			ERRDATA debugFree(&correctedstr,"addProp correctedstr");
+			ERRDATA debugFree(&holdstr,"addProp holdstr");
 
 			lineptr=strchr(lineptr,'\n');
 			if (lineptr!=NULL)
 				lineptr++;
 		}
 	if(functions!=NULL)
-		debugFree(&functions,"switchPage functions");
+		ERRDATA debugFree(&functions,"switchPage functions");
 }
 
 void removeProps(void)
