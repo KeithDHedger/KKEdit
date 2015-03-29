@@ -55,9 +55,10 @@ void webKitGoHome(void)
 #else
 void webKitGoHome(Widget* widget,uPtr data)
 #endif
-//TODO//
 {
 #ifdef _USEQT5_
+	if(g_file_test(htmlFile,G_FILE_TEST_EXISTS)==true)
+		qobject_cast<QWebView*>(webView)->load(QUrl(htmlURI));
 #else
 	if(g_file_test(htmlFile,G_FILE_TEST_EXISTS)==true)
 		webkit_web_view_load_uri((WebKitWebView*)data,htmlURI);
@@ -146,7 +147,6 @@ VISIBLE void searchGtkDocs(Widget* widget,uPtr data)
 	char*		link;
 	int			cnt=0;
 
-printf("searchGtkDocs %s\n",(char*)data);
 #ifdef _USEQT5_
 	DocumentClass	*document=getDocumentData(-1);
 
@@ -363,31 +363,45 @@ printf("doxyDocs %i\n",(int)(long)data);
 #endif
 }
 
-//showDocViewWidget
+//search QT5 Documentaiion
 VISIBLE void searchQT5Docs(Widget* widget,uPtr data)
-//TODO//
 {
-printf("searchQT5Docs %s\n",(char*)data);
-
-#ifndef _USEQT5_
-	pageStruct*	page=getDocumentData(-1);
-	GtkTextIter	start;
-	GtkTextIter	end;
 	char*		selection=NULL;
+//	char*		searchdata[2048][2];
+	char		line[1024];
 	FILE*		fp;
 	FILE*		fd;
 	char*		command=NULL;
-	GString*	str;
-	char		line[1024];
-	char*		func=NULL;
+//	char*		ptr=NULL;
+//	char*		funcname;
+//	char*		foldername;
+//	char*		tempstr;
+//	char*		link;
 	int			cnt=0;
+	GString*	str;
+	char*		func=NULL;
 
-	if(data!=NULL)
+#ifdef _USEQT5_
+	DocumentClass	*document=getDocumentData(-1);
+
+	if(document==NULL)
+		return;
+#else
+	pageStruct*	page=getDocumentData(-1);
+	GtkTextIter	start;
+	GtkTextIter	end;
+#endif
+
+	if((gpointer)data!=NULL)
 		selection=strdup((char*)data);
 	else
 		{
+#ifdef _USEQT5_
+			selection=strdup(document->textCursor().selectedText().toUtf8().constData());
+#else
 			if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 				selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+#endif
 		}
 
 	if(selection!=NULL)
@@ -430,7 +444,6 @@ printf("searchQT5Docs %s\n",(char*)data);
 			g_string_free(str,true);
 			debugFree(&selection,"searchQT5Docs selection");
 		}
-#endif
 }
 
 #ifndef _USEQT5_

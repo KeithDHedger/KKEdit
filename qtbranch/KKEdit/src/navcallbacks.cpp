@@ -437,25 +437,25 @@ bool readFile(char *name)
 	//Read file contents into buffer
 	fread(filebuffer,fileLen,1,file);
 	fclose(file);
-	return(true);
 #endif
+	return(true);
 }
 
 int getLineFromXML(char* xml)
 {
+	int				retline=1;
 #ifndef _USEQT5_
 	StringSlice*	slice=new StringSlice;
 
 	char*			data;
 	char*			xmldata=xml;
-	int				retline=1;
 
 	data=slice->sliceBetween(xmldata,(char*)"Definition at line",(char*)"\">");
 	if(slice->getResult()==0)
 		retline=atoi(slice->sliceBetween(data,(char*)"#l",NULL));
 	delete slice;
-	return(retline);
 #endif
+	return(retline);
 }
 
 char* getPathFromXML(char* xml)
@@ -557,6 +557,7 @@ char* getPathFromXML(char* xml)
 	delete slice;
 	return(buffer);
 #endif
+	return(NULL);
 }
 
 docFileData* getDoxyFileData(char* uri)
@@ -625,6 +626,7 @@ docFileData* getDoxyFileData(char* uri)
 	debugFree(&filepath,"getDoxyFileData filepath");
 	return(doxydata);
 #endif
+	return(NULL);
 }
 
 #ifndef _USEQT5_

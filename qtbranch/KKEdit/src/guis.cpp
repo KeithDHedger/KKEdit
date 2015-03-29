@@ -3008,6 +3008,7 @@ void buildDocViewer(void)
 
 	widget=new QPushButton(QIcon::fromTheme("go-home",QIcon("go-home")),gettext("Home"));
 	dochlayout->addWidget(widget);
+	QObject::connect((QPushButton*)widget,&QPushButton::clicked,webKitGoHome);
 
 	dochlayout->addStretch(1);
 
