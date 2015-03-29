@@ -207,7 +207,6 @@ void DocumentClass::contextMenuEvent(QContextMenuEvent *event)
 {
 	QMenu				menu(this);
 	QList<QAction *>	menuactions;
-//	QList<QAction *>	editmenuactions;
 
 	menuactions=qobject_cast<QMenu*>(editMenu)->actions();
 	menu.addAction(menuactions.at(UNDOITEM));
@@ -226,8 +225,6 @@ void DocumentClass::contextMenuEvent(QContextMenuEvent *event)
 	menu.addAction(menuactions.at(GOTODEFINE));
 	menu.addSeparator();
 
-
 	menu.exec(event->globalPos());
-
 }
 

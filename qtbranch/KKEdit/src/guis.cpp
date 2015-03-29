@@ -2209,21 +2209,21 @@ void buildMainGuiQT(void)
 	qobject_cast<QMenuBar*>(menuBar)->addMenu(qobject_cast<QMenu*>(navMenu));
 
 //goto define
-	goToDefineMenu=reinterpret_cast<Widget*>(makeMenuItem(navMenu,gettext("Go To Definition"),QKeySequence::fromString("Ctrl+D"),"dialog-question",GOTODEFMENUNAME,&goToDefinition,NULL,0));
+	goBackMenu=reinterpret_cast<Widget*>(makeMenuItem(navMenu,gettext("Go To Definition"),QKeySequence::fromString("Ctrl+D"),"dialog-question",GOTODEFMENUNAME,&goToDefinition,NULL,0));
 
 //open include
-	openIncludeMenu=reinterpret_cast<Widget*>(makeMenuItem(navMenu,gettext("Open Include File"),QKeySequence::fromString("Ctrl+I"),"document-open",OPENINCLUDEMENUNAME,&findFile,NULL,0));
+	makeMenuItem(navMenu,gettext("Open Include File"),QKeySequence::fromString("Ctrl+I"),"document-open",OPENINCLUDEMENUNAME,&findFile,NULL,0);
 //goto line number
-	gotoLineMenu=reinterpret_cast<Widget*>(makeMenuItem(navMenu,gettext("Go To Line"),0,"go-down",GOTOLINEMENUNAME,&jumpToLine,NULL,0));
+	makeMenuItem(navMenu,gettext("Go To Line"),0,"go-down",GOTOLINEMENUNAME,&jumpToLine,NULL,0);
 //find define
-	searchForDefineMenu=reinterpret_cast<Widget*>(makeMenuItem(navMenu,gettext("Search For Define"),0,"edit-find",SEARCHFORDEFMENUNAME,&functionSearch,NULL,0));
+	makeMenuItem(navMenu,gettext("Search For Define"),0,"edit-find",SEARCHFORDEFMENUNAME,&functionSearch,NULL,0);
 //find gtkdoc
-	searchGtkDocsMenu=reinterpret_cast<Widget*>(makeMenuItem(navMenu,gettext("Search In Gtk Docs"),0,"edit-find",SEARCHGTKMENUNAME,&searchGtkDocs,NULL,0));
+	makeMenuItem(navMenu,gettext("Search In Gtk Docs"),0,"edit-find",SEARCHGTKMENUNAME,&searchGtkDocs,NULL,0);
 //find qt5
-	searchQt5Menu=reinterpret_cast<Widget*>(makeMenuItem(navMenu,gettext("Search In Qt5 Docs"),0,"edit-find",SEARCHQT5MENUNAME,&searchQT5Docs,NULL,0));
+	makeMenuItem(navMenu,gettext("Search In Qt5 Docs"),0,"edit-find",SEARCHQT5MENUNAME,&searchQT5Docs,NULL,0);
 //goto doxy docs
 	if(gotDoxygen==0)
-		searchDoxyMenu=reinterpret_cast<Widget*>(makeMenuItem(navMenu,gettext("Find In Documentation"),0,"edit-find",SEARCHDOXYMENUNAME,&doxyDocs,NULL,0));
+		makeMenuItem(navMenu,gettext("Find In Documentation"),0,"edit-find",SEARCHDOXYMENUNAME,&doxyDocs,NULL,0);
 ////go back
 		goBackMenu=reinterpret_cast<Widget*>(makeMenuItem(navMenu,gettext("Back"),0,"go-previous",GOBACKMENUNAME,&goBack,NULL,0));
 	qobject_cast<QMenu*>(navMenu)->addSeparator();

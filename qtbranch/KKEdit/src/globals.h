@@ -221,12 +221,6 @@ extern Widget*			statusBarMenu;
 //nav menu
 extern Widget			*navMenu;
 extern Widget			*goToDefineMenu;
-extern Widget			*openIncludeMenu;
-extern Widget			*gotoLineMenu;
-extern Widget			*searchForDefineMenu;
-extern Widget			*searchGtkDocsMenu;
-extern Widget			*searchQt5Menu;
-extern Widget			*searchDoxyMenu;
 extern Widget			*goBackMenu;
 
 //function menu

@@ -113,12 +113,6 @@ Widget*			statusBarMenu;
 //nav menu
 Widget			*navMenu;
 Widget			*goToDefineMenu;
-Widget			*openIncludeMenu;
-Widget			*gotoLineMenu;
-Widget			*searchForDefineMenu;
-Widget			*searchGtkDocsMenu;
-Widget			*searchQt5Menu;
-Widget			*searchDoxyMenu;
 Widget			*goBackMenu;
 
 //function menu
