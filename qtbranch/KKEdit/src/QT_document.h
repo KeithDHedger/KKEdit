@@ -57,6 +57,7 @@ class DocumentClass : public QPlainTextEdit
 
 	protected:
 	    void								resizeEvent(QResizeEvent *event);
+		void contextMenuEvent(QContextMenuEvent *event) Q_DECL_OVERRIDE;
 
 	private slots:
 		void								updateLineNumberAreaWidth(int newBlockCount);

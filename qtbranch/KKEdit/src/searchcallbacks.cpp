@@ -367,16 +367,10 @@ printf("doxyDocs %i\n",(int)(long)data);
 VISIBLE void searchQT5Docs(Widget* widget,uPtr data)
 {
 	char*		selection=NULL;
-//	char*		searchdata[2048][2];
 	char		line[1024];
 	FILE*		fp;
 	FILE*		fd;
 	char*		command=NULL;
-//	char*		ptr=NULL;
-//	char*		funcname;
-//	char*		foldername;
-//	char*		tempstr;
-//	char*		link;
 	int			cnt=0;
 	GString*	str;
 	char*		func=NULL;

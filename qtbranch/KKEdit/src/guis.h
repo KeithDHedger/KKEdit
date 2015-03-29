@@ -44,4 +44,13 @@ char* makeToolBarList(void);
 void cancelPrefs(void);
 #endif
 
+typedef void (*menuCallbackVoid)(Widget* widget,long data);
+typedef bool (*menuCallbackBool)(Widget* widget,long data);
+
+#ifndef _USEQT5_
+GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,char hotkey,const char* name,int setimage,const char* menulabel,void* userdata);
+#else
+QAction* makeMenuItem(Widget* menu,const char* name,const QKeySequence key,const char* iconname,const char* widgetname,menuCallbackVoid ptrvoid,menuCallbackBool ptrbool,int data);
+#endif
+
 #endif

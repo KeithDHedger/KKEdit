@@ -203,4 +203,31 @@ pageStruct* DocumentClass::getPage(void)
 	return(this->page);
 }
 
+void DocumentClass::contextMenuEvent(QContextMenuEvent *event)
+{
+	QMenu				menu(this);
+	QList<QAction *>	menuactions;
+//	QList<QAction *>	editmenuactions;
+
+	menuactions=qobject_cast<QMenu*>(editMenu)->actions();
+	menu.addAction(menuactions.at(UNDOITEM));
+	menu.addAction(menuactions.at(REDOITEM));
+	menu.addSeparator();
+	menu.addAction(menuactions.at(CUTITEM));
+	menu.addAction(menuactions.at(COPYITEM));
+	menu.addAction(menuactions.at(PASTEITEM));
+	menu.addSeparator();
+
+	menuactions=qobject_cast<QMenu*>(navMenu)->actions();
+
+	menu.addAction(menuactions.at(SEARCHGTKDOCS));
+	menu.addAction(menuactions.at(SEARCHQT5DOCS));
+	menu.addAction(menuactions.at(SEARCHDOXYDOCS));
+	menu.addAction(menuactions.at(GOTODEFINE));
+	menu.addSeparator();
+
+
+	menu.exec(event->globalPos());
+
+}
 
