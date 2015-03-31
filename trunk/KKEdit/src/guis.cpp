@@ -1405,8 +1405,6 @@ void buildMainGui(void)
 	menuitem=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveSession,0,SAVESESSIONMENUNAME,IMAGEMENU,gettext("Save Session"),(void*)false);
 //restore session
 	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONMENUNAME,IMAGEMENU,gettext("Restore Session"),NULL);
-////restore session and bookmarks
-//	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONBMMENUNAME,IMAGEMENU,gettext("Restore Session With Bookmarks"),(void*)true);
 
 //printfile
 	printMenu=makeMenuItem(GTK_STOCK_PRINT,menu,(void*)printFile,0,PRINTMENUNAME,STOCKMENU,NULL,NULL);
@@ -1418,8 +1416,6 @@ void buildMainGui(void)
 	closeMenu=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeTab,'W',CLOSEMENUNAME,STOCKMENU,NULL,NULL);
 //close-all
 	closeAllMenu=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeAllTabs,0,CLOSEALLMENUNAME,IMAGEMENU,gettext("Close All Tabs"),NULL);
-//sort
-	sortTabsMenu=makeMenuItem(GTK_STOCK_SORT_ASCENDING,menu,(void*)sortTabs,0,SORTTABSMENUNAME,IMAGEMENU,gettext("Sort Tabs"),NULL);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -1461,6 +1457,19 @@ void buildMainGui(void)
 
 //find
 	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)find,'F',FINDMENUNAME,STOCKMENU,NULL,NULL);
+
+	menuitem=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+//sort
+	sortTabsMenu=makeMenuItem(GTK_STOCK_SORT_ASCENDING,menu,(void*)sortTabs,0,SORTTABSMENUNAME,IMAGEMENU,gettext("Sort Tabs"),NULL);
+//jump to tab
+	GtkWidget*	image;
+	viewTabMenu=gtk_image_menu_item_new_with_label(gettext("Select Tab"));
+	image=gtk_image_new_from_stock(GTK_STOCK_EDIT,GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image((GtkImageMenuItem *)viewTabMenu,image);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),viewTabMenu);
+	rebuildTabsMenu();
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -1522,8 +1531,6 @@ void buildMainGui(void)
 	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)searchGtkDocs,0,SEARCHGTKMENUNAME,IMAGEMENU,gettext("Search In Gtk Docs"),NULL);
 //find qt5
 	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)searchQT5Docs,0,SEARCHQT5MENUNAME,IMAGEMENU,gettext("Search In Qt5 Docs"),NULL);
-//find qt5 in qt5assistant
-	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)searchQT5Assist,0,SEARCHQT5ASSISTMENUNAME,IMAGEMENU,gettext("Search In Qt5 Assistant"),NULL);
 
 //goto doxy docs
 	if(gotDoxygen==0)

@@ -603,3 +603,38 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 
 #endif
 
+//jump to tab
+void selectTab(GtkWidget* widget,gpointer data)
+{
+	gtk_notebook_set_current_page(mainNotebook,(int)(long)data);
+}
+
+//rebuild tabs menu
+void rebuildTabsMenu(void)
+{
+	GtkWidget	*menuitem;
+	GtkWidget	*submenu;
+	pageStruct	*page;
+
+	int			numtabs=gtk_notebook_get_n_pages(mainNotebook);
+
+	submenu=gtk_menu_item_get_submenu((GtkMenuItem*)viewTabMenu);
+	if(submenu!=NULL)
+		gtk_menu_item_set_submenu((GtkMenuItem*)viewTabMenu,NULL);
+
+	viewTabSubMenu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(viewTabMenu),viewTabSubMenu);
+
+	for(int j=0;j<numtabs;j++)
+		{
+			page=getPageStructPtr(j);
+			if(page!=NULL)
+				{
+					menuitem=gtk_menu_item_new_with_label(gtk_label_get_text((GtkLabel *)page->tabName));
+					gtk_menu_shell_append(GTK_MENU_SHELL(viewTabSubMenu),menuitem);
+					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(selectTab),(gpointer)(long)j);
+				}
+		}
+	gtk_widget_show_all(viewTabMenu);
+}
+

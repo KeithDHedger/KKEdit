@@ -683,6 +683,7 @@ void sortTabs(GtkWidget* widget,gpointer data)
 				}
 		}
 
+	rebuildTabsMenu();
 	doUpdateWidgets=true;
 	resetWidgetSenisitive();
 }
@@ -805,6 +806,9 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 		ERRDATA debugFree(&functions,"switchPage functions");
 
 	gtk_widget_set_sensitive((GtkWidget*)funcMenu,onefunc);
+
+	rebuildTabsMenu();
+
 	setSensitive();
 
 	createCompletion(page);

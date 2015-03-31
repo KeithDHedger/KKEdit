@@ -37,6 +37,9 @@ void init(void)
 	int			exitstatus;
 	char		tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
 
+	tmpFolderName=strdup(mkdtemp(tmpfoldertemplate));
+	asprintf(&logFile,"%s.log",tmpFolderName);
+
 //nag times
 	lastNagTime=-1;
 	nagTime=(long)time(NULL);
@@ -45,8 +48,6 @@ void init(void)
 	AspellCanHaveError*	possible_err;
 #endif
 	globalSlice=new StringSlice;
-
-	tmpFolderName=strdup(mkdtemp(tmpfoldertemplate));
 
 	indent=true;
 	lineNumbers=true;
@@ -434,26 +435,16 @@ int main (int argc, char **argv)
 	GOptionContext*	context;
 
 #if _DEBUGLEVEL_ > DBG0
-	system(":>/tmp/kkedit.log");
-	if(signal(SIGSEGV,catchSignal)==SIG_ERR)
+	int				data[]={SIGSEGV,SIGFPE,SIGILL,SIGBUS,SIGINT,SIGABRT};
+	int				num=6;
+
+	for(int j=0;j<num;j++)
 		{
-        	fprintf(stderr,"An error occurred while setting a signal handler.\n");
-			return EXIT_FAILURE;
-		}
-	if(signal(SIGFPE,catchSignal)==SIG_ERR)
-		{
-        	fprintf(stderr,"An error occurred while setting a signal handler.\n");
-			return EXIT_FAILURE;
-		}
-	if(signal(SIGILL,catchSignal)==SIG_ERR)
-		{
-        	fprintf(stderr,"An error occurred while setting a signal handler.\n");
-			return EXIT_FAILURE;
-		}
-	if(signal(SIGBUS,catchSignal)==SIG_ERR)
-		{
-        	fprintf(stderr,"An error occurred while setting a signal handler.\n");
-			return EXIT_FAILURE;
+			if(signal(data[j],catchSignal)==SIG_ERR)
+				{
+        			fprintf(stderr,"An error occurred while setting a signal handler.\n");
+					return EXIT_FAILURE;
+				}
 		}
 #endif
 

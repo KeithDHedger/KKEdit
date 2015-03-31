@@ -106,6 +106,7 @@ extern int				errno;
 extern int				errLine;
 extern const char		*errFile;
 extern const char		*errFunc;
+extern char				*logFile;
 
 extern GApplication*	mainApp;
 extern bool				busyFlag;
@@ -144,6 +145,8 @@ extern GtkWidget*		navMenu;
 //view menu
 extern GtkWidget*		goBackMenu;
 extern GtkWidget*		viewMenu;
+extern GtkWidget		*viewTabMenu;
+extern GtkWidget		*viewTabSubMenu;
 //func menu
 extern GtkWidget*		funcMenu;
 //bookmark menu

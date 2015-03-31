@@ -1,4 +1,6 @@
 0.2.7
+Moved 'Sort/Select Tab' menus to Edit menu.
+Added 'Select Tab' to File menu to select a tab by name. 
 Fixed "Open Include" not setting file prefs properly.
 Fixed dragging icons in prefs not working.
 

@@ -43,6 +43,9 @@ GtkWidget*		copyMenu;
 GtkWidget*		pasteMenu;
 //view menu
 GtkWidget*		viewMenu=NULL;
+GtkWidget		*viewTabMenu=NULL;
+GtkWidget		*viewTabSubMenu=NULL;
+
 //nav menu
 GtkWidget*		navMenu;
 GtkWidget*		goBackMenu;
@@ -1151,18 +1154,19 @@ VISIBLE void debugFree(char** ptr,const char* message)
 	if((_DEBUGLEVEL_ == DBG1) || (_DEBUGLEVEL_ == DBG3))
 		fp=stderr;
 
-	if(_DEBUGLEVEL_ == DBG2)
-		fp=fopen("/tmp/kkedit.log","a");
+	if(logFile!=NULL)
+		{
+			if(_DEBUGLEVEL_ == DBG2)
+				fp=fopen(logFile,"a");
 
-	fprintf(fp,"free :%s\n",message);
+			fprintf(fp,"free :%s\n",message);
+			fclose(fp);
+		}
 #endif
 	if (*ptr!=NULL)
 		free(*ptr);
 
 	*ptr=NULL;
-
-	if((_DEBUGLEVEL_ == DBG2) && (fp!=NULL))
-		fclose(fp);
 }
 
 void doBusy(bool busy,pageStruct* page)
@@ -1213,6 +1217,7 @@ VISIBLE void setWidgets(void)
 int			errLine;
 const char	*errFile;
 const char	*errFunc;
+char*		logFile=NULL;
 
 void catchSignal(int signal)
 {
@@ -1225,7 +1230,12 @@ void catchSignal(int signal)
 		fp=stderr;
 
 	if((_DEBUGLEVEL_ == DBG2) || (_DEBUGLEVEL_ == DBG3))
-		fp=fopen("/tmp/kkedit.log","a");
+		{
+			if(logFile!=NULL)
+				fp=fopen(logFile,"a");
+			else
+				fp=stderr;
+		}
 
 	fprintf(fp,"Traped signal %s\n",strsignal(signal));
 	fprintf(fp,"File: %s, Function: %s, Line: %i\n",errFile,errFunc,errLine);

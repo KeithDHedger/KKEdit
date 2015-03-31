@@ -124,6 +124,8 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 
 	ERRDATA
 
+	rebuildTabsMenu();
+
 	correctedname=truncateWithElipses(name,maxTabChars);
 
 	label=gtk_label_new(correctedname);
