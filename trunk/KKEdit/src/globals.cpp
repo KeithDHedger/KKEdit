@@ -1149,9 +1149,9 @@ VISIBLE void freeAndNull(char** ptr)
 
 VISIBLE void debugFree(char** ptr,const char* message)
 {
+#if _DEBUGLEVEL_ > DBG0
 	FILE*	fp=NULL;
 
-#if _DEBUGLEVEL_ > DBG0
 	if((_DEBUGLEVEL_ == DBG1) || (_DEBUGLEVEL_ == DBG3))
 		fp=stderr;
 

@@ -1,4 +1,5 @@
 0.2.7
+Fixed highlight colour when highlighting all in find/replace.
 Now checks for binary data and asks whether to continue loading.
 Fixed d'n'd in prefs, again!
 Seaching for defines now searches for case sensitive then case insensitive.
