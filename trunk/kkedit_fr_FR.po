@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kkedit 1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-07 18:25+0000\n"
-"PO-Revision-Date: 2014-12-11 13:28-0000\n"
+"POT-Creation-Date: 2015-04-01 15:12+0100\n"
+"PO-Revision-Date: 2015-04-01 15:18-0000\n"
 "Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
@@ -19,104 +19,100 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.6.9\n"
 
-#: KKEdit/src/callbacks.cpp:272
+#: KKEdit/src/callbacks.cpp:274
 msgid "Bookmark"
 msgstr "Signet"
 
-#: KKEdit/src/callbacks.cpp:332
+#: KKEdit/src/callbacks.cpp:336
 msgid "What Do You Want To Do?"
 msgstr "Que voulez-vous faire?"
 
-#: KKEdit/src/callbacks.cpp:347 KKEdit/src/files.cpp:398
+#: KKEdit/src/callbacks.cpp:351 KKEdit/src/files.cpp:411
 #: KKEdit/src/guis.cpp:128 KKEdit/src/guis.cpp:770
 msgid "Open File"
 msgstr "Ouvrir"
 
-#: KKEdit/src/callbacks.cpp:373
+#: KKEdit/src/callbacks.cpp:376
 #, c-format
 msgid "Save file %s before closing?"
 msgstr "Enregistrer le fichier %s avant de fermer?"
 
-#: KKEdit/src/callbacks.cpp:377
+#: KKEdit/src/callbacks.cpp:380
 msgid "Warning unsaved data!"
 msgstr "Attention, données non enregistrées"
 
-#: KKEdit/src/callbacks.cpp:425
+#: KKEdit/src/callbacks.cpp:439
 #, c-format
 msgid "Line %i Column %i \t\tSyntax Highlighting %s\t\tFilePath %s"
 msgstr ""
 "Ligne %i Colonne %i \t\tColoration syntaxique %s\t\tChemin du fichier %s"
 
-#: KKEdit/src/callbacks.cpp:640
-msgid "Sorting Tabs ..."
-msgstr "Trier Tabs ..."
-
-#: KKEdit/src/callbacks.cpp:1026 KKEdit/src/callbacks.cpp:1029
+#: KKEdit/src/callbacks.cpp:1063 KKEdit/src/callbacks.cpp:1066
 msgid "KKEdit Help"
 msgstr "Aide"
 
-#: KKEdit/src/callbacks.cpp:1097 KKEdit/src/guis.cpp:187
-#: KKEdit/src/guis.cpp:778 KKEdit/src/guis.cpp:1510
+#: KKEdit/src/callbacks.cpp:1137 KKEdit/src/guis.cpp:187
+#: KKEdit/src/guis.cpp:778 KKEdit/src/guis.cpp:1523
 msgid "Go To Definition"
 msgstr "Aller à la définition"
 
-#: KKEdit/src/callbacks.cpp:1105 KKEdit/src/guis.cpp:1524
+#: KKEdit/src/callbacks.cpp:1145 KKEdit/src/guis.cpp:1537
 msgid "Find In Documentation"
 msgstr "Trouver dans la documentation"
 
-#: KKEdit/src/callbacks.cpp:1111 KKEdit/src/guis.cpp:1520
+#: KKEdit/src/callbacks.cpp:1151 KKEdit/src/guis.cpp:1533
 msgid "Search In Qt5 Docs"
 msgstr "Chercher dans la documentation Qt5"
 
-#: KKEdit/src/callbacks.cpp:1117 KKEdit/src/guis.cpp:1518
+#: KKEdit/src/callbacks.cpp:1157 KKEdit/src/guis.cpp:1531
 msgid "Search In Gtk Docs"
 msgstr "Chercher dans les documents Gtk"
 
-#: KKEdit/src/callbacks.cpp:1123
+#: KKEdit/src/callbacks.cpp:1163
 msgid "Add To Custom Word List"
 msgstr "Mots personnalisés"
 
-#: KKEdit/src/callbacks.cpp:1133
+#: KKEdit/src/callbacks.cpp:1173
 msgid "Check Spellling"
 msgstr "Vérifier l'orthographe"
 
-#: KKEdit/src/callbacks.cpp:1179 KKEdit/src/globals.cpp:1071
+#: KKEdit/src/callbacks.cpp:1219 KKEdit/src/globals.cpp:1063
 msgid "Toggle Bookmark"
 msgstr "Placer un signet"
 
-#: KKEdit/src/callbacks.cpp:1291
+#: KKEdit/src/callbacks.cpp:1334
 msgid "Copy Folder Path"
 msgstr "Copier le chemin du dossier parent"
 
-#: KKEdit/src/callbacks.cpp:1297
+#: KKEdit/src/callbacks.cpp:1340
 msgid "Copy Filepath"
 msgstr "Copier le chemin du fichier"
 
-#: KKEdit/src/callbacks.cpp:1303
+#: KKEdit/src/callbacks.cpp:1346
 msgid "Copy FileName"
 msgstr "Copier le nom du fichier"
 
-#: KKEdit/src/callbacks.cpp:1313
+#: KKEdit/src/callbacks.cpp:1356
 msgid "Spell Check Document"
 msgstr "Vérifier l'orthographe du document"
 
-#: KKEdit/src/callbacks.cpp:1323
+#: KKEdit/src/callbacks.cpp:1366
 msgid "Un-Split View"
 msgstr "Unifier l'affichage"
 
-#: KKEdit/src/callbacks.cpp:1325
+#: KKEdit/src/callbacks.cpp:1368
 msgid "Split View"
 msgstr "Scinder l'affichage"
 
-#: KKEdit/src/callbacks.cpp:1336
+#: KKEdit/src/callbacks.cpp:1379
 msgid "Source Highlight"
 msgstr "Coloration syntaxique"
 
-#: KKEdit/src/callbacks.cpp:1725
+#: KKEdit/src/callbacks.cpp:1768
 msgid "Are you sure you want to delete"
 msgstr "Êtes-vous sûr de vouloir supprimer"
 
-#: KKEdit/src/callbacks.cpp:1743
+#: KKEdit/src/callbacks.cpp:1786
 msgid ""
 "\n"
 "More by the same author\n"
@@ -124,66 +120,66 @@ msgstr ""
 "\n"
 "Plus du même auteur\n"
 
-#: KKEdit/src/callbacks.cpp:1745
+#: KKEdit/src/callbacks.cpp:1788
 msgid "KKEdit Code Text Editor"
 msgstr "Éditeur de code source KKEdit"
 
-#: KKEdit/src/callbacks.cpp:1749
+#: KKEdit/src/callbacks.cpp:1792
 msgid "French Translation"
 msgstr "Traduction française"
 
-#: KKEdit/src/callbacks.cpp:1886 KKEdit/src/callbacks.cpp:1912
-#: KKEdit/src/globals.cpp:648 KKEdit/src/guis.cpp:1489
+#: KKEdit/src/callbacks.cpp:1931 KKEdit/src/callbacks.cpp:1957
+#: KKEdit/src/globals.cpp:639 KKEdit/src/guis.cpp:1502
 msgid "Hide Tool Output"
 msgstr "Cacher la sortie des outils"
 
-#: KKEdit/src/callbacks.cpp:1898 KKEdit/src/callbacks.cpp:1917
-#: KKEdit/src/guis.cpp:1491
+#: KKEdit/src/callbacks.cpp:1943 KKEdit/src/callbacks.cpp:1962
+#: KKEdit/src/guis.cpp:1504
 msgid "Show Tool Output"
 msgstr "Montrer la sortie des outils"
 
-#: KKEdit/src/callbacks.cpp:1925 KKEdit/src/guis.cpp:1479
+#: KKEdit/src/callbacks.cpp:1970 KKEdit/src/guis.cpp:1492
 msgid "Hide Bookmarks Bar"
 msgstr "Cacher la barre des signets"
 
-#: KKEdit/src/callbacks.cpp:1927 KKEdit/src/guis.cpp:1481
+#: KKEdit/src/callbacks.cpp:1972 KKEdit/src/guis.cpp:1494
 msgid "Show Bookmarks Bar"
 msgstr "Montrer la barre des signets"
 
-#: KKEdit/src/callbacks.cpp:1935 KKEdit/src/guis.cpp:1484
+#: KKEdit/src/callbacks.cpp:1980 KKEdit/src/guis.cpp:1497
 msgid "Hide Tool Bar"
 msgstr "Cacher la barre d'outils"
 
-#: KKEdit/src/callbacks.cpp:1937 KKEdit/src/guis.cpp:1486
+#: KKEdit/src/callbacks.cpp:1982 KKEdit/src/guis.cpp:1499
 msgid "Show Tool Bar"
 msgstr "Montrer la barre d'outils"
 
-#: KKEdit/src/callbacks.cpp:1958 KKEdit/src/searchcallbacks.cpp:59
+#: KKEdit/src/callbacks.cpp:2004 KKEdit/src/searchcallbacks.cpp:59
 msgid "Hide Docviewer"
 msgstr "Cacher le visionneur de documents"
 
-#: KKEdit/src/callbacks.cpp:1964 KKEdit/src/guis.cpp:1500
+#: KKEdit/src/callbacks.cpp:2010 KKEdit/src/guis.cpp:1513
 msgid "Show Docviewer"
 msgstr "Montrer le visionneur de documents"
 
-#: KKEdit/src/files.cpp:277 KKEdit/src/guis.cpp:135 KKEdit/src/guis.cpp:771
+#: KKEdit/src/files.cpp:286 KKEdit/src/guis.cpp:135 KKEdit/src/guis.cpp:771
 msgid "Save File"
 msgstr "Enregistrer"
 
-#: KKEdit/src/files.cpp:287 KKEdit/src/files.cpp:949
+#: KKEdit/src/files.cpp:296 KKEdit/src/files.cpp:997
 msgid "Untitled"
 msgstr "Sans nom"
 
-#: KKEdit/src/files.cpp:324 KKEdit/src/files.cpp:364
+#: KKEdit/src/files.cpp:334 KKEdit/src/files.cpp:375
 #, c-format
 msgid "Can't save file '%s' :("
 msgstr "Impossible d'enregistrer le fichier '%s' :("
 
-#: KKEdit/src/files.cpp:520
+#: KKEdit/src/files.cpp:538
 msgid "Restoring Session ..."
 msgstr "Restaurer la session ..."
 
-#: KKEdit/src/files.cpp:599
+#: KKEdit/src/files.cpp:604
 #, c-format
 msgid ""
 "File %s Has Changed on disk\n"
@@ -192,21 +188,25 @@ msgstr ""
 "Le fichier %s a été modifié\n"
 "Voulez-vous le recharger?"
 
-#: KKEdit/src/files.cpp:603
+#: KKEdit/src/files.cpp:608
 msgid "Warning file changed!"
 msgstr "Attention le fichier a été modifié!"
 
-#: KKEdit/src/files.cpp:823
+#: KKEdit/src/files.cpp:847
 #, c-format
 msgid "File '%s' doesn't exist :("
 msgstr "Le fichier '%s' n'existe pas :("
 
-#: KKEdit/src/files.cpp:834 KKEdit/src/files.cpp:863
+#: KKEdit/src/files.cpp:860 KKEdit/src/files.cpp:892
 #, c-format
 msgid "Can't open file '%s' :("
 msgstr "Impossible d'ouvrir le fichier '%s' :("
 
-#: KKEdit/src/globals.cpp:1067
+#: KKEdit/src/files.cpp:913
+msgid "Contains non text data, continue loading?\n"
+msgstr "Contient des données non texte, continuer le chargement?\n"
+
+#: KKEdit/src/globals.cpp:1059
 msgid "Remove All Bookmarks"
 msgstr "Retirer tous les signets"
 
@@ -294,7 +294,7 @@ msgstr "Annuler"
 msgid "Redo"
 msgstr "Rétablir"
 
-#: KKEdit/src/guis.cpp:180 KKEdit/src/guis.cpp:1686
+#: KKEdit/src/guis.cpp:180 KKEdit/src/guis.cpp:1699
 msgid "Find/Replace"
 msgstr "Trouver/Remplacer"
 
@@ -302,8 +302,8 @@ msgstr "Trouver/Remplacer"
 msgid "Go Back"
 msgstr "Vue précédente"
 
-#: KKEdit/src/guis.cpp:204 KKEdit/src/guis.cpp:781 KKEdit/src/guis.cpp:1514
-#: KKEdit/src/navcallbacks.cpp:160
+#: KKEdit/src/guis.cpp:204 KKEdit/src/guis.cpp:781 KKEdit/src/guis.cpp:1527
+#: KKEdit/src/navcallbacks.cpp:158
 msgid "Go To Line"
 msgstr "Aller à la ligne ..."
 
@@ -315,7 +315,7 @@ msgstr "Trouver l'API dans les documents Gtk"
 msgid "Find API In Qt5 Docs"
 msgstr "Trouver l'API dans la documentation Qt5"
 
-#: KKEdit/src/guis.cpp:232 KKEdit/src/guis.cpp:784 KKEdit/src/guis.cpp:1516
+#: KKEdit/src/guis.cpp:232 KKEdit/src/guis.cpp:784 KKEdit/src/guis.cpp:1529
 msgid "Search For Define"
 msgstr "Chercher une définition"
 
@@ -422,7 +422,7 @@ msgstr "Afficher la sortie"
 msgid "Manage External Tools"
 msgstr "Gérer les outils externes"
 
-#: KKEdit/src/guis.cpp:777 KKEdit/src/guis.cpp:1695
+#: KKEdit/src/guis.cpp:777 KKEdit/src/guis.cpp:1708
 msgid "Find"
 msgstr "Trouver"
 
@@ -434,11 +434,11 @@ msgstr "Séparateur"
 msgid "Expander"
 msgstr "Étendre"
 
-#: KKEdit/src/guis.cpp:907
+#: KKEdit/src/guis.cpp:910
 msgid "Define Keyboard Shortcuts"
 msgstr "Définir des raccourcis clavier"
 
-#: KKEdit/src/guis.cpp:910
+#: KKEdit/src/guis.cpp:913
 msgid ""
 "To set a custom shortcut:\n"
 "Click in the appropriate box and press CONTROL ( and optionally SHIFT ) plus "
@@ -453,164 +453,164 @@ msgstr ""
 "Cliquez sur 'Appliquer' pour garder les changements ou sur 'Annuler' pour "
 "annuler toute modification."
 
-#: KKEdit/src/guis.cpp:1041
+#: KKEdit/src/guis.cpp:1044
 msgid "<b>Customize Tool Bar</b>"
 msgstr "<b>Personnaliser la barre d'outils</b>"
 
-#: KKEdit/src/guis.cpp:1062
+#: KKEdit/src/guis.cpp:1065
 msgid "Auto Indent Lines"
 msgstr "Auto-indentation"
 
-#: KKEdit/src/guis.cpp:1064
+#: KKEdit/src/guis.cpp:1067
 msgid "Show Line Numbers"
 msgstr "Montrer le numéro des lignes"
 
-#: KKEdit/src/guis.cpp:1066
+#: KKEdit/src/guis.cpp:1069
 msgid "Wrap Lines"
 msgstr "Activer le retour à la ligne"
 
-#: KKEdit/src/guis.cpp:1068
+#: KKEdit/src/guis.cpp:1071
 msgid "Highlight Current Line"
 msgstr "Surligner la ligne en cours"
 
-#: KKEdit/src/guis.cpp:1070
+#: KKEdit/src/guis.cpp:1073
 msgid "No Syntax Highlighting"
 msgstr "Désactiver la coloration syntaxique"
 
-#: KKEdit/src/guis.cpp:1072
+#: KKEdit/src/guis.cpp:1075
 msgid "Use Single Instance"
 msgstr "Autoriser une seule instance"
 
-#: KKEdit/src/guis.cpp:1075
+#: KKEdit/src/guis.cpp:1078
 msgid "Auto Save/Restore Session"
 msgstr "Enregistrer/Restaurer automatiquement la session"
 
-#: KKEdit/src/guis.cpp:1078
+#: KKEdit/src/guis.cpp:1081
 msgid "Restore Session Bookmarks"
 msgstr "Restaurer la session avec les signets"
 
-#: KKEdit/src/guis.cpp:1082
+#: KKEdit/src/guis.cpp:1085
 msgid "Don't Open Duplicate File"
 msgstr "Ne pas ouvrir deux fois le même fichier"
 
-#: KKEdit/src/guis.cpp:1084
+#: KKEdit/src/guis.cpp:1087
 msgid "Don't Warn On File Change"
 msgstr "Ne pas avertir lorsqu'un fichier a été modifié"
 
-#: KKEdit/src/guis.cpp:1086
+#: KKEdit/src/guis.cpp:1089
 msgid "Read Link Before Opening File"
 msgstr "Suivre les liens avant d'ouvrir un fichier"
 
-#: KKEdit/src/guis.cpp:1088
+#: KKEdit/src/guis.cpp:1091
 msgid "Auto show Completions"
 msgstr "Montrer automatiquement les complétions"
 
-#: KKEdit/src/guis.cpp:1091
+#: KKEdit/src/guis.cpp:1094
 msgid "General Appearance"
 msgstr "Apparence général"
 
-#: KKEdit/src/guis.cpp:1102
+#: KKEdit/src/guis.cpp:1105
 msgid "Tab width:"
 msgstr "Largeur de tabulation:"
 
-#: KKEdit/src/guis.cpp:1110
+#: KKEdit/src/guis.cpp:1113
 msgid "Theme:"
 msgstr "Thème:"
 
-#: KKEdit/src/guis.cpp:1129
+#: KKEdit/src/guis.cpp:1132
 msgid "Font:"
 msgstr "Police:"
 
-#: KKEdit/src/guis.cpp:1138
+#: KKEdit/src/guis.cpp:1141
 msgid "Bookmark Highlight Colour:"
 msgstr "Couleur de surlignage:"
 
-#: KKEdit/src/guis.cpp:1148
+#: KKEdit/src/guis.cpp:1151
 msgid "Completion Minimum Word Size:"
 msgstr "Taille minimale des mots pour la complétion:"
 
-#: KKEdit/src/guis.cpp:1156
+#: KKEdit/src/guis.cpp:1159
 msgid "Display functions etc in menu by type and alphabetically"
 msgstr ""
 "Afficher les fonctions dans le menu selon leur type et par ordre alphabétique"
 
-#: KKEdit/src/guis.cpp:1157
+#: KKEdit/src/guis.cpp:1160
 msgid "Display functions etc in menu by type and file position"
 msgstr "Afficher les fonctions dans le menu selon leur type et leur position"
 
-#: KKEdit/src/guis.cpp:1158
+#: KKEdit/src/guis.cpp:1161
 msgid "Display functions etc in menu by file position"
 msgstr "Afficher les fonctions dans le menu selon leur position"
 
-#: KKEdit/src/guis.cpp:1159
+#: KKEdit/src/guis.cpp:1162
 msgid "Display functions etc in menu alphabetically"
 msgstr "Afficher les fonctions dans le menu par ordre alphabétique"
 
-#: KKEdit/src/guis.cpp:1160
+#: KKEdit/src/guis.cpp:1163
 msgid "Display functions etc in menu in categorised format"
 msgstr "Afficher les fonctions dans le menu par catégorie"
 
-#: KKEdit/src/guis.cpp:1166
+#: KKEdit/src/guis.cpp:1169
 msgid "Text Style"
 msgstr "Style du texte"
 
-#: KKEdit/src/guis.cpp:1170
+#: KKEdit/src/guis.cpp:1173
 msgid "Customize Keyboard Shortcuts"
 msgstr "Personnaliser les raccourcis clavier"
 
-#: KKEdit/src/guis.cpp:1184
+#: KKEdit/src/guis.cpp:1187
 msgid "Tag File Search Depth:"
 msgstr "Profondeur de recherche dans les sous-répertoires:"
 
-#: KKEdit/src/guis.cpp:1188
+#: KKEdit/src/guis.cpp:1191
 msgid "Terminal Command:"
 msgstr "Commande de terminal:"
 
-#: KKEdit/src/guis.cpp:1197
+#: KKEdit/src/guis.cpp:1200
 msgid "Run As Root Command:"
 msgstr "Commande d’exécution en tant qu'administrateur:"
 
-#: KKEdit/src/guis.cpp:1207
+#: KKEdit/src/guis.cpp:1210
 msgid "Default Browser:"
 msgstr "Navigateur web par défaut:"
 
-#: KKEdit/src/guis.cpp:1217
+#: KKEdit/src/guis.cpp:1220
 msgid "Max Find/Replace History:"
 msgstr "Max Rechercher / Remplacer Histoire"
 
-#: KKEdit/src/guis.cpp:1219
+#: KKEdit/src/guis.cpp:1222
 msgid "Max Characters In Tab:"
 msgstr "Max Caractères dans Tab:"
 
-#: KKEdit/src/guis.cpp:1221
+#: KKEdit/src/guis.cpp:1224
 msgid "Max Characters In Function Defs:"
 msgstr "Caractères max de la fonction Defs:"
 
-#: KKEdit/src/guis.cpp:1223
+#: KKEdit/src/guis.cpp:1226
 msgid "Max Characters In Bookmarks:"
 msgstr "Caractères max dans les signets:"
 
-#: KKEdit/src/guis.cpp:1226
+#: KKEdit/src/guis.cpp:1229
 msgid "Check For Updates"
 msgstr "Recherche de mises à jour"
 
-#: KKEdit/src/guis.cpp:1228
+#: KKEdit/src/guis.cpp:1231
 msgid "Use Global Plugins Menu ( Requires Restart )"
 msgstr "Utilisez mondial Plugins Menu ( Nécessite un redémarrage)"
 
-#: KKEdit/src/guis.cpp:1231
+#: KKEdit/src/guis.cpp:1234
 msgid "Administration"
 msgstr "Administration"
 
-#: KKEdit/src/guis.cpp:1236
+#: KKEdit/src/guis.cpp:1239
 msgid "<b>Be Kind To Poor Programmers</b>"
 msgstr "<b>Soyez gentil avec des programmeurs pauvres</b>"
 
-#: KKEdit/src/guis.cpp:1241
+#: KKEdit/src/guis.cpp:1244
 msgid "I have donated"
 msgstr "J'ai déjà fait un don"
 
-#: KKEdit/src/guis.cpp:1249
+#: KKEdit/src/guis.cpp:1252
 msgid ""
 "I have really donated some some money to the author.\n"
 "My conscience is clear and my Karma is squeaky clean :)"
@@ -618,57 +618,49 @@ msgstr ""
 "J'ai vraiment déjà fait un don à l'auteur.\n"
 "Ma conscience est tranquille et mon Karma est irréprochable :)"
 
-#: KKEdit/src/guis.cpp:1351
+#: KKEdit/src/guis.cpp:1354
 msgid "_File"
 msgstr "_Fichier"
 
-#: KKEdit/src/guis.cpp:1361
+#: KKEdit/src/guis.cpp:1364
 msgid "Open As Hexdump"
 msgstr "Ouvrir en vue hexadécimal"
 
-#: KKEdit/src/guis.cpp:1367
-msgid "Recent Files"
-msgstr "Fichiers récents"
-
-#: KKEdit/src/guis.cpp:1378
+#: KKEdit/src/guis.cpp:1370
 msgid "New Admin Editor"
 msgstr "Nouvelle fenêtre (administrateur)"
 
-#: KKEdit/src/guis.cpp:1379
+#: KKEdit/src/guis.cpp:1371
 msgid "New Editor"
 msgstr "Nouvelle fenêtre"
 
-#: KKEdit/src/guis.cpp:1382
+#: KKEdit/src/guis.cpp:1374
 msgid "Manpage Editor"
 msgstr "Éditeur de pages de manuel"
 
-#: KKEdit/src/guis.cpp:1386
+#: KKEdit/src/guis.cpp:1378
 msgid "Build Documentation"
 msgstr "Construire la documentation"
 
-#: KKEdit/src/guis.cpp:1396
+#: KKEdit/src/guis.cpp:1384
+msgid "Recent Files"
+msgstr "Fichiers récents"
+
+#: KKEdit/src/guis.cpp:1399
 msgid "Save All"
 msgstr "Tout sauvegarder"
 
-#: KKEdit/src/guis.cpp:1402
+#: KKEdit/src/guis.cpp:1405
 msgid "Save Session"
 msgstr "Enregistrer la session"
 
-#: KKEdit/src/guis.cpp:1404
+#: KKEdit/src/guis.cpp:1407
 msgid "Restore Session"
 msgstr "Restaurer la session"
 
-#: KKEdit/src/guis.cpp:1406
-msgid "Restore Session With Bookmarks"
-msgstr "Restaurer la session avec les signets"
-
-#: KKEdit/src/guis.cpp:1416
+#: KKEdit/src/guis.cpp:1418
 msgid "Close All Tabs"
 msgstr "Fermer tous les onglets"
-
-#: KKEdit/src/guis.cpp:1418
-msgid "Sort Tabs"
-msgstr "Trier les onglets"
 
 #: KKEdit/src/guis.cpp:1432
 msgid "_Edit"
@@ -682,133 +674,141 @@ msgstr "Tout annuler"
 msgid "Redo All"
 msgstr "Tout rétablir"
 
-#: KKEdit/src/guis.cpp:1467
+#: KKEdit/src/guis.cpp:1465
+msgid "Sort Tabs"
+msgstr "Trier les onglets"
+
+#: KKEdit/src/guis.cpp:1468
+msgid "Select Tab"
+msgstr "Sélectionnez l'onglet"
+
+#: KKEdit/src/guis.cpp:1480
 msgid "Plugin Prefs"
 msgstr "Préférences des greffons"
 
-#: KKEdit/src/guis.cpp:1470
+#: KKEdit/src/guis.cpp:1483
 msgid "_View"
 msgstr "_Affichage"
 
-#: KKEdit/src/guis.cpp:1476
+#: KKEdit/src/guis.cpp:1489
 msgid "Show Documentaion"
 msgstr "Montrer la documentation"
 
-#: KKEdit/src/guis.cpp:1494
+#: KKEdit/src/guis.cpp:1507
 msgid "Hide Status Bar"
 msgstr "Cacher la barre d'état"
 
-#: KKEdit/src/guis.cpp:1496
+#: KKEdit/src/guis.cpp:1509
 msgid "Show Status Bar"
 msgstr "Montrer la barre d'état"
 
-#: KKEdit/src/guis.cpp:1504
+#: KKEdit/src/guis.cpp:1517
 msgid "_Navigation"
 msgstr "_Navigation"
 
-#: KKEdit/src/guis.cpp:1512
+#: KKEdit/src/guis.cpp:1525
 msgid "Open Include File"
 msgstr "Ouvrir l'en-tête"
 
-#: KKEdit/src/guis.cpp:1530
+#: KKEdit/src/guis.cpp:1543
 msgid "Fun_ctions"
 msgstr "Fon_ctions"
 
-#: KKEdit/src/guis.cpp:1534
+#: KKEdit/src/guis.cpp:1547
 msgid "_Bookmarks"
 msgstr "_Signets"
 
-#: KKEdit/src/guis.cpp:1539
+#: KKEdit/src/guis.cpp:1552
 msgid "_Tools"
 msgstr "_Outils"
 
-#: KKEdit/src/guis.cpp:1544
+#: KKEdit/src/guis.cpp:1557
 msgid "_Help"
 msgstr "_Aide"
 
-#: KKEdit/src/guis.cpp:1554
+#: KKEdit/src/guis.cpp:1567
 msgid "Get Plugins"
 msgstr "Obtenir des greffons"
 
-#: KKEdit/src/guis.cpp:1567
+#: KKEdit/src/guis.cpp:1580
 msgid "Plu_gins"
 msgstr "Plu_gins"
 
-#: KKEdit/src/guis.cpp:1686 KKEdit/src/searchcallbacks.cpp:1128
+#: KKEdit/src/guis.cpp:1699 KKEdit/src/searchcallbacks.cpp:1153
 msgid "Replace"
 msgstr "Remplacer"
 
-#: KKEdit/src/guis.cpp:1707
+#: KKEdit/src/guis.cpp:1720
 msgid "Replace With"
 msgstr "Remplacer par"
 
-#: KKEdit/src/guis.cpp:1719
+#: KKEdit/src/guis.cpp:1732
 msgid "Case insensitive"
 msgstr "Casse insensible"
 
-#: KKEdit/src/guis.cpp:1725
+#: KKEdit/src/guis.cpp:1738
 msgid "Use Regex"
 msgstr "Expression régulière"
 
-#: KKEdit/src/guis.cpp:1736
+#: KKEdit/src/guis.cpp:1749
 msgid "Wrap"
 msgstr "Recherche circulaire"
 
-#: KKEdit/src/guis.cpp:1742
+#: KKEdit/src/guis.cpp:1755
 msgid "All Files"
 msgstr "Tous les fichiers"
 
-#: KKEdit/src/guis.cpp:1748
+#: KKEdit/src/guis.cpp:1761
 msgid "Highlight All"
 msgstr "Tout surligner"
 
-#: KKEdit/src/guis.cpp:1754 KKEdit/src/guis.cpp:1769
-#: KKEdit/src/searchcallbacks.cpp:1130
+#: KKEdit/src/guis.cpp:1767 KKEdit/src/guis.cpp:1782
+#: KKEdit/src/searchcallbacks.cpp:1155
 msgid "Replace All"
 msgstr "Tout remplacer"
 
-#: KKEdit/src/guis.cpp:1792
+#: KKEdit/src/guis.cpp:1805
 msgid "Spell check word"
 msgstr "Vérifier l'orthographe du mot"
 
-#: KKEdit/src/guis.cpp:1797
+#: KKEdit/src/guis.cpp:1810
 #, c-format
 msgid "Change <i><b>%s</b></i> to: "
 msgstr "Changer <i><b>%s</b></i> en:"
 
-#: KKEdit/src/guis.cpp:1814
+#: KKEdit/src/guis.cpp:1827
 msgid "Ignore"
 msgstr "Ignorer"
 
-#: KKEdit/src/guis.cpp:1846
+#: KKEdit/src/guis.cpp:1859
 msgid "Enter Function Name"
 msgstr "Donnez le nom d'une fonction"
 
-#: KKEdit/src/guis.cpp:1849
+#: KKEdit/src/guis.cpp:1862
 msgid "Find Function"
 msgstr "Trouver une fonction"
 
-#: KKEdit/src/guis.cpp:1879
+#: KKEdit/src/guis.cpp:1892
 msgid "Doc Viewer"
 msgstr "Visionneur de documents"
 
-#: KKEdit/src/main.cpp:191
+#: KKEdit/src/main.cpp:192
 msgid "Functions"
 msgstr "Fonctions"
 
-#: KKEdit/src/main.cpp:196
+#: KKEdit/src/main.cpp:197
 msgid "Variables"
 msgstr "Variables"
 
-#: KKEdit/src/main.cpp:201
+#: KKEdit/src/main.cpp:202
 msgid "Custom Words"
 msgstr "Mots personnalisés"
 
-#: KKEdit/src/main.cpp:214
+#: KKEdit/src/main.cpp:215
 msgid "Please donate"
 msgstr "Faites un don, s'il vous plaît"
 
-#: KKEdit/src/main.cpp:215
+#: KKEdit/src/main.cpp:216
 msgid ""
 "If you have a PayPal account you can donate any amount you like by logging "
 "into yor account and click the 'Send Money' tab, enter my email address"
@@ -817,50 +817,50 @@ msgstr ""
 "quel montant en vous connectant à votre compte et en allant dans l'onglet "
 "'Envoi d'argent'. Entrez mon adresse courriel"
 
-#: KKEdit/src/main.cpp:215
+#: KKEdit/src/main.cpp:216
 msgid "and then send it."
 msgstr " et envoyez."
 
-#: KKEdit/src/main.cpp:215
+#: KKEdit/src/main.cpp:216
 msgid "Thank you for helping to support Free software."
 msgstr "Merci d'aider à soutenir le logiciel libre."
 
-#: KKEdit/src/main.cpp:236
+#: KKEdit/src/main.cpp:237
 msgid "Checking for updates ..."
 msgstr "Recherche de mises à jour ..."
 
 # it goes with "from"
-#: KKEdit/src/main.cpp:290
+#: KKEdit/src/main.cpp:291
 msgid "KKEdit update available to"
 msgstr "Mises à jour pour KKEdit disponibles de"
 
 # it goes with "KKEdit update available to"
-#: KKEdit/src/main.cpp:290
+#: KKEdit/src/main.cpp:291
 msgid "from"
 msgstr "vers"
 
-#: KKEdit/src/main.cpp:290
+#: KKEdit/src/main.cpp:291
 msgid "From here"
 msgstr "vers"
 
-#: KKEdit/src/main.cpp:296
+#: KKEdit/src/main.cpp:297
 msgid "Plugin updates are available from here"
 msgstr "Des mises à jour pour les greffons sont disponibles ici"
 
-#: KKEdit/src/main.cpp:300
+#: KKEdit/src/main.cpp:301
 msgid "Updates Available"
 msgstr "Mises à jour disponibles"
 
-#: KKEdit/src/navcallbacks.cpp:157
+#: KKEdit/src/navcallbacks.cpp:155
 msgid "Enter Line Number"
 msgstr "Donnez le numéro d'une ligne"
 
-#: KKEdit/src/navcallbacks.cpp:253
+#: KKEdit/src/navcallbacks.cpp:365
 #, c-format
 msgid "Unable to open file %s"
 msgstr "Impossible d'ouvrir le fichier %s"
 
-#: KKEdit/src/navcallbacks.cpp:266
+#: KKEdit/src/navcallbacks.cpp:378
 #, c-format
 msgid "Memory error!"
 msgstr "Erreur de mémoire !"
@@ -894,18 +894,24 @@ msgstr "Documentation en construction ..."
 msgid "Searching ..."
 msgstr "Recherche en cours ..."
 
-#: KKEdit/src/searchcallbacks.cpp:357
+#: KKEdit/src/searchcallbacks.cpp:363
 msgid "Qt5 Docs"
 msgstr "Documentation Qt5"
 
-#: KKEdit/src/searchcallbacks.cpp:744 KKEdit/src/searchcallbacks.cpp:963
+#: KKEdit/src/searchcallbacks.cpp:760 KKEdit/src/searchcallbacks.cpp:982
 msgid "Do you want to replace in ALL open files?"
 msgstr "Voulez-vous remplacer dans tous les fichiers ouverts ?"
 
-#: KKEdit/src/searchcallbacks.cpp:1034
+#: KKEdit/src/searchcallbacks.cpp:1055
 #, c-format
 msgid "Replaced %i instances of '%s' with '%s'"
 msgstr "%i instances de '%s' remplacées par '%s'"
+
+#~ msgid "Sorting Tabs ..."
+#~ msgstr "Trier Tabs ..."
+
+#~ msgid "Restore Session With Bookmarks"
+#~ msgstr "Restaurer la session avec les signets"
 
 #~ msgid "Function List Sorting"
 #~ msgstr "Rangement de la liste des fonctions"

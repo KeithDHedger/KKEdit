@@ -538,7 +538,7 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 		return;
 
 	busyFlag=true;	
-//	doUpdateWidgets=false;
+
 	if(closingAll==true)
 		thispage=0;
 	else
@@ -1122,7 +1122,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 			if(selection!=NULL)
 				{
-					fdata=getFunctionByName(selection,false);
+					fdata=getFunctionByName(selection,false,true);
 					if(fdata!=NULL)
 						{
 							temptext=truncateWithElipses(fdata->define,maxFuncDefs);
@@ -1263,8 +1263,6 @@ void doSplitView(GtkWidget *widget,gpointer user_data)
 			page->view2 = (GtkSourceView*)gtk_source_view_new_with_buffer (page->buffer);
 			g_signal_connect(G_OBJECT(page->view2),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
 			setFilePrefs(page);
-//	g_signal_connect(G_OBJECT(page->view2),"paste-clipboard",G_CALLBACK(testcallback),NULL);
-
 
 			gtk_paned_add2(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow2);
 			gtk_container_add(GTK_CONTAINER((GtkWidget*)page->pageWindow2),(GtkWidget*)page->view2);

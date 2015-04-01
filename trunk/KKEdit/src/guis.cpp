@@ -807,6 +807,7 @@ char* makeToolBarList(void)
 	return(g_string_free(str,false));
 }
 
+
 bool clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 {
 	GtkTreePath*	path=NULL;
@@ -823,7 +824,6 @@ bool clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 			gtk_tree_model_get((GtkTreeModel*)listStore,&iter,BUTTON_NUM,&button,-1);
 			gtk_widget_set_sensitive((GtkWidget*)tool[button],true);
 			gtk_list_store_remove((GtkListStore*)listStore,&iter);
-			return(true);
 		}
 	return(false);
 }
@@ -1050,7 +1050,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 
 	populateDnD();
 	doIconView();
-	
+
 //end customize
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 

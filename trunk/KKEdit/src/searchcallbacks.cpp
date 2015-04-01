@@ -369,16 +369,24 @@ VISIBLE void searchQT5Docs(GtkWidget* widget,gpointer data)
 
 void defSearchFromBar(GtkWidget* widget,gpointer data)
 {
-	functionData* fdata;
+	functionData	*fdata;
+	bool			ok;
 
 	functionSearchText=strdup(gtk_entry_get_text((GtkEntry*)widget));
 	if(functionSearchText!=NULL)
 		{
-			fdata=getFunctionByName(functionSearchText,true);
-			if(fdata!=NULL)
+			ok=true;
+			for(int j=0;j<2;j++)
 				{
-					goToDefine(fdata);
-					destroyData(fdata);
+					fdata=getFunctionByName(functionSearchText,true,ok);
+					if(fdata!=NULL)
+						{
+							goToDefine(fdata);
+							destroyData(fdata);
+							ERRDATA debugFree(&functionSearchText,"defSearchFromBar functionSearchText");
+							return;
+						}
+					ok=false;
 				}
 			ERRDATA debugFree(&functionSearchText,"defSearchFromBar functionSearchText");
 		}
@@ -554,6 +562,8 @@ void regexFind(int dowhat)
 	GtkTextIter				hastart,haend;
 
 	page=getPageStructPtr(currentFindPage);
+	if(page==NULL)
+		return;
 	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
 		return;
 
@@ -739,11 +749,11 @@ void regexFind(int dowhat)
 				break;
 
 			case REPLACE:
-								fromregexreplace=false;
-fromregexsinglereplace=false;
+				fromregexreplace=false;
+				fromregexsinglereplace=false;
 				if(replaceAll==true)
 					{
-	fromregexreplace=true;					
+						fromregexreplace=true;					
 						int startloop,endloop;
 						if(findInAllFiles==true)
 							{
@@ -809,6 +819,7 @@ fromregexsinglereplace=false;
 										dofindnext=true;
 										fromregexsinglereplace=true;
 									}
+								ERRDATA debugFree(&text,"findregex text");
 							}
 					}				
 				break;

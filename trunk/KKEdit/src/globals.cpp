@@ -666,7 +666,7 @@ VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int u
 	ERRDATA debugFree(&asroot,"runCommand asroot");
 }
 
-functionData* getFunctionByName(char* name,bool recurse)
+functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 {
 	pageStruct*		page;
 	int				numpages=gtk_notebook_get_n_pages(mainNotebook);
@@ -712,11 +712,12 @@ functionData* getFunctionByName(char* name,bool recurse)
 					while (lineptr!=NULL)
 						{
 							sscanf (lineptr,"%s",function);
-							if(strlen(name)==strlen(function))
-								{
-									gotmatch=strncasecmp(function,name,strlen(function));
-									thislen=strlen(name);
-								}
+							if(casesensitive==true)
+								gotmatch=strncmp(function,name,strlen(function));
+							else
+								gotmatch=strncasecmp(function,name,strlen(function));
+							thislen=strlen(name);
+
 							if((gotmatch==0) && (strlen(name)==strlen(function)))
 								{
 									fdata=(functionData*)malloc(sizeof(functionData));

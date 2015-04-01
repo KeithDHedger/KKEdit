@@ -59,7 +59,7 @@ VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
 	else
 		return;
 
-	fdata=getFunctionByName(selection,true);
+	fdata=getFunctionByName(selection,true,true);
 	if(fdata!=NULL)
 		{
 			history->savePosition();
@@ -181,17 +181,24 @@ VISIBLE void jumpToLine(GtkWidget* widget,gpointer data)
 
 VISIBLE void functionSearch(GtkWidget* widget,gpointer data)
 {
-	functionData* fdata;
+	functionData	*fdata;
+	bool			ok;
 
 	if(showFunctionEntry()==GTK_RESPONSE_YES)
 		{
 			if(functionSearchText!=NULL)
 				{
-					fdata=getFunctionByName(functionSearchText,true);
-					if(fdata!=NULL)
+					ok=true;
+					for(int j=0;j<2;j++)
 						{
-							goToDefine(fdata);
-							destroyData(fdata);
+							fdata=getFunctionByName(functionSearchText,true,ok);
+							if(fdata!=NULL)
+								{
+									goToDefine(fdata);
+									destroyData(fdata);
+									return;
+								}
+							ok=false;
 						}
 				}
 		}

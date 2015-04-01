@@ -1,4 +1,8 @@
 0.2.7
+Now checks for binary data and asks whether to continue loading.
+Fixed d'n'd in prefs, again!
+Seaching for defines now searches for case sensitive then case insensitive.
+Fixed regex find, again!
 Moved 'Sort/Select Tab' menus to Edit menu.
 Added 'Select Tab' to File menu to select a tab by name. 
 Fixed "Open Include" not setting file prefs properly.

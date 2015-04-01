@@ -122,9 +122,7 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	GtkRcStyle*	style=gtk_rc_style_new();
 	char*		correctedname;
 
-	ERRDATA
-
-	rebuildTabsMenu();
+	ERRDATA rebuildTabsMenu();
 
 	correctedname=truncateWithElipses(name,maxTabChars);
 
@@ -811,6 +809,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	GtkWidget*				dialog;
 	char*					filepathcopy=NULL;
 	char*					tpath;
+	int						whattodo;
 
 	ERRDATA
 	busyFlag=true;
@@ -909,7 +908,18 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 			gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &enditer);
 			gtk_text_buffer_delete ( GTK_TEXT_BUFFER (page->buffer),&startiter, &enditer);
 			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
-			gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&startiter,convertedData,dataLen);
+			whattodo=GTK_RESPONSE_YES;
+			if(g_utf8_validate((const gchar*)convertedData,dataLen,NULL)==false)
+				whattodo=yesNo(gettext("Contains non text data, continue loading?\n"),(char*)filepath);
+			if(whattodo==GTK_RESPONSE_YES)
+				gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&startiter,convertedData,dataLen);
+			else
+				{
+					busyFlag=false;
+					sessionBusy=false;
+					gtk_widget_destroy(label);
+					return(false);
+				}
 			gtk_source_buffer_end_not_undoable_action(page->buffer);
 		}
 	else
@@ -919,7 +929,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 			gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &enditer);
 			gtk_text_buffer_delete ( GTK_TEXT_BUFFER (page->buffer),&startiter, &enditer);
 			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
-			gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&startiter,"THE CONTENTS OF THIS FILE ARE UNREADABLE!",-1);
 			gtk_source_buffer_end_not_undoable_action(page->buffer);
 		}
 	ERRDATA debugFree(&convertedData,"openFile convertedData");
