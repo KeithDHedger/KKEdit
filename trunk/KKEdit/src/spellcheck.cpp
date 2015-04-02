@@ -25,14 +25,19 @@ bool	cancelCheck=false;
 
 void doCancelCheck(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	gtk_widget_destroy(spellCheckWord);
 	if(badWord!=NULL)
-		ERRDATA debugFree(&badWord,"doCancelCheck badWord");
+		{
+			ERRDATA debugFree(&badWord,"doCancelCheck badWord");
+		}
 	cancelCheck=true;
+	ERRDATA
 }
 
 void checkTheWord(char* word,int checkDoc)
 {
+	ERRDATA
 	int							correct;
 	AspellWordList*				suggestions;
 	AspellStringEnumeration*	elements;
@@ -59,10 +64,12 @@ void checkTheWord(char* word,int checkDoc)
 			gtk_widget_show_all(spellCheckWord);
 			gtk_dialog_run((GtkDialog *)spellCheckWord);
 		}
+	ERRDATA
 }
 
 void checkWord(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
@@ -72,17 +79,23 @@ void checkWord(GtkWidget* widget,gpointer data)
 		{
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 			if(selection==NULL)
-				return;
+				{
+					ERRDATA return;
+				}
 		}
 	else
-		return;
+		{
+			ERRDATA return;
+		}
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 	checkTheWord(selection,false);
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+	ERRDATA
 }
 
 void doChangeWord(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
@@ -93,7 +106,9 @@ void doChangeWord(GtkWidget* widget,gpointer data)
 				{
 					badWord=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 					if(badWord==NULL)
-						return;
+						{
+							ERRDATA return;
+						}
 				}
 
 			goodWord=gtk_combo_box_text_get_active_text((GtkComboBoxText*)wordListDropbox);
@@ -111,11 +126,15 @@ void doChangeWord(GtkWidget* widget,gpointer data)
 	gtk_widget_destroy(spellCheckWord);
 	ERRDATA debugFree(&badWord,"doChangeWord badWord");
 	if((long)data==0)
-		ERRDATA debugFree(&goodWord,"doChangeWord goodWord");
+		{
+			ERRDATA debugFree(&goodWord,"doChangeWord goodWord");
+		}
+	ERRDATA
 }
 
 void doAddIgnoreWord(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	if((long)data==1)
 		aspell_speller_add_to_session(spellChecker,badWord,-1);
 	else
@@ -126,11 +145,15 @@ void doAddIgnoreWord(GtkWidget* widget,gpointer data)
 
 	gtk_widget_destroy(spellCheckWord);
 	if(badWord!=NULL)
-		ERRDATA debugFree(&badWord,"doAddIgnoreWord badWord");
+		{
+			ERRDATA debugFree(&badWord,"doAddIgnoreWord badWord");
+		}
+	ERRDATA
 }
 
 void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	pageStruct*				page=getPageStructPtr(-1);
 	gchar*					buffer;
 	long					filelen;
@@ -157,7 +180,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 	if (doc<=0)
 		{
 	  		printf("Error: Unable to open the file \"%s\" for reading.",filename);
-	  		return;
+	  		ERRDATA return;
 		}
 
 	/* Open tempfile for writing the results */
@@ -166,7 +189,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 		{
 			printf("Error: Unable to open the file \"%s\" for writing.",tempfile);
 			fclose(doc);
-			return;
+			ERRDATA return;
 		}
 
 	/* Set up the document checker */
@@ -176,7 +199,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 			printf("Error: %s\n",aspell_error_message(ret));
 			fclose(out);
 			fclose(doc);
-			return;
+			ERRDATA return;
 		}
 
 	checker=to_aspell_document_checker(ret);
@@ -202,7 +225,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 							remove(tempfile);
 							ERRDATA debugFree(&tempfile,"doSpellCheckDoc tempfile");
 							gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
-							return;
+							ERRDATA return;
 						}
 					word_begin=line+token.offset+diff;
 
@@ -235,7 +258,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 	remove(tempfile);
 	ERRDATA debugFree(&buffer,"doSpellCheckDoc buffer");
 	ERRDATA debugFree(&tempfile,"doSpellCheckDoc tempfile");
-	delete slice;
+	ERRDATA delete slice;
 
 	if(page->filePath!=NULL)
 		{
@@ -255,6 +278,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 			setSensitive();
 		}
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+	ERRDATA
 }
 #endif
 

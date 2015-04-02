@@ -20,6 +20,7 @@ GtkWidget*	treeview;
 
 void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
 {
+	ERRDATA
 	GtkTreeModel *model = (GtkTreeModel *)data;
 	GtkTreeIter  iter;
 	GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
@@ -37,20 +38,24 @@ void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
 
 	/* clean up */
 	gtk_tree_path_free (path);
+	ERRDATA
 }
 
 void getPlugName(gpointer data,gpointer store)
 {
+	ERRDATA
 	GtkTreeIter		iter;
 	moduleData*		plugdata;
 
 	plugdata=(moduleData*)data;
 	gtk_list_store_append((GtkListStore*)store,&iter);
 	gtk_list_store_set((GtkListStore*)store,&iter,COLUMN_ENABLE,plugdata->enabled,COLUMN_PLUGIN,plugdata->name,-1);
+	ERRDATA
 }
 
 gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data)
 {
+	ERRDATA
 	int			enabled;
 	char*		name=NULL;
 	moduleData*	pd;
@@ -72,7 +77,7 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 						pd->module=NULL;
 						pd->loaded=false;
 						pd->enabled=false;
-						return(false);
+						ERRDATA return(false);
 					}
 				else
 					{
@@ -80,7 +85,7 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 						gtk_dialog_run(GTK_DIALOG(dialog));
 						gtk_widget_destroy(dialog);
 						pd->enabled=false;
-						return(false);
+						ERRDATA return(false);
 					}
 			}
 
@@ -90,7 +95,7 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 			if(filepath==NULL)
 				{
 					printf("Can't open: %s\n",name);
-					return(false);
+					ERRDATA return(false);
 				}
 
 			pd->module=g_module_open(filepath,G_MODULE_BIND_LAZY);
@@ -110,20 +115,23 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 				}
 		}
 
-	return(false);
+	ERRDATA return(false);
 }
 
 void setPlugsEnabled(void)
 {
+	ERRDATA
 	GtkTreeModel*	model;
 
 	globalPlugins->deleteBlackList();
 	model=gtk_tree_view_get_model((GtkTreeView*)treeview);
     gtk_tree_model_foreach(model,doSetPlugData,NULL);
+	ERRDATA
 }
 
 void setPlugPrefs(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	GtkTreeModel*		model;
 	GtkTreeSelection*	selection=NULL;
 	GtkTreeIter			iter;
@@ -159,10 +167,12 @@ void setPlugPrefs(GtkWidget* widget,gpointer data)
 				gtk_widget_destroy(plugwindow);
 				break;
 		}
+	ERRDATA
 }
 
 void onRowSelected(GtkTreeView* treeview,gpointer userdata)
 {
+	ERRDATA
 	GtkTreeModel*		model;
 	GtkTreeSelection*	selection=NULL;
 	GtkTreeIter			iter;
@@ -176,10 +186,12 @@ void onRowSelected(GtkTreeView* treeview,gpointer userdata)
 			gtk_widget_set_sensitive(plugPrefsButton,globalPlugins->checkForFunction(plugname,"plugPrefs"));
 			ERRDATA debugFree(&plugname,"onRowSelected plugname");
 		}
+	ERRDATA
 }
 
 VISIBLE void doPlugPrefs(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	GtkWidget*		vbox;
 	GtkListStore*	store;
 	GtkTreeModel*	model=NULL;
@@ -237,11 +249,13 @@ VISIBLE void doPlugPrefs(GtkWidget* widget,gpointer data)
 	gtk_container_add (GTK_CONTAINER(vbox),hbox);
 	gtk_container_add (GTK_CONTAINER(plugwindow),vbox);
 	gtk_widget_show_all(plugwindow);
+	ERRDATA
 }
 
 //left/right
 VISIBLE void showSide(bool left)
 {
+	ERRDATA
 	if(left==true)
 		{
 			gtk_widget_show(globalPlugins->globalPlugData->leftUserBox);
@@ -252,10 +266,12 @@ VISIBLE void showSide(bool left)
 			gtk_widget_show(globalPlugins->globalPlugData->rightUserBox);
 			globalPlugins->globalPlugData->rightShow++;
 		}
+	ERRDATA
 }
 
 VISIBLE void hideSide(bool left)
 {
+	ERRDATA
 	if(left==true)
 		{
 			globalPlugins->globalPlugData->leftShow--;
@@ -275,11 +291,13 @@ VISIBLE void hideSide(bool left)
 				}
 		}
 	
+	ERRDATA
 }
 
 //top/bottom
 VISIBLE void showTop(bool top)
 {
+	ERRDATA
 	if(top==true)
 		{
 			gtk_widget_show(globalPlugins->globalPlugData->topUserBox);
@@ -290,10 +308,12 @@ VISIBLE void showTop(bool top)
 			gtk_widget_show(globalPlugins->globalPlugData->bottomUserBox);
 			globalPlugins->globalPlugData->bottomShow++;
 		}
+	ERRDATA
 }
 
 VISIBLE void hideTop(bool top)
 {
+	ERRDATA
 	if(top==true)
 		{
 			globalPlugins->globalPlugData->topShow--;
@@ -312,6 +332,7 @@ VISIBLE void hideTop(bool top)
 					globalPlugins->globalPlugData->bottomShow=0;
 				}
 		}
+	ERRDATA
 }
 
 

@@ -14,6 +14,7 @@ bool	loadPluginsFlag=true;
 
 void readConfig(void)
 {
+	ERRDATA
 	char*	filename;
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
@@ -33,6 +34,7 @@ void readConfig(void)
 
 void init(void)
 {
+	ERRDATA
 	char*		filename;
 	int			exitstatus;
 	char		tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
@@ -205,10 +207,12 @@ void init(void)
 	g_object_set(docWordsProv,"priority",10,NULL);
 	g_object_set(docWordsProv,"minimum-word-size",autoShowMinChars,NULL);
 	g_object_set(docWordsProv,"interactive-delay",50,NULL);
+	ERRDATA
 }
 
 void doNagScreen(void)
 {
+	ERRDATA
 	GtkWidget* dialog;
 
 	dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",gettext("Please donate"));
@@ -216,10 +220,12 @@ void doNagScreen(void)
 
 	gtk_dialog_run(GTK_DIALOG (dialog));
 	gtk_widget_destroy(dialog);
+	ERRDATA
 }
 
 void doNagStuff(void)
 {
+	ERRDATA
 	char*			command=NULL;
 	char*			control=NULL;
 	int				gotcurl=-1;
@@ -320,10 +326,13 @@ void doNagStuff(void)
 
 void activate(GApplication* application)
 {
+	ERRDATA
+	ERRDATA
 }
 
 void open(GApplication* application,GFile** files,gint n_files,const gchar* hint)
 {
+	ERRDATA
 	char*	filepath=NULL;
 
 	g_application_hold(application);
@@ -343,10 +352,12 @@ void open(GApplication* application,GFile** files,gint n_files,const gchar* hint
 	setSensitive();
 
 	g_application_release(application);
+	ERRDATA
 }
 
 void appStart(GApplication  *application,gpointer data)
 {
+	ERRDATA
 	int	w,h;
 
 	g_application_hold(application);
@@ -398,10 +409,12 @@ void appStart(GApplication  *application,gpointer data)
 		doNagStuff();
 
 	gtk_widget_set_size_request(mainWindow,100,100);
+	ERRDATA
 }
 
 int getWorkspaceNumber(void)
 {
+	ERRDATA
 	GdkDisplay*		display;
 	GdkWindow*		root_win;
 	Atom			_net_current_desktop,type;
@@ -422,11 +435,12 @@ int getWorkspaceNumber(void)
 			retnum=(int)data_return[0];
 			XFree(data_return);
 		}
-	return retnum;
+	ERRDATA return retnum;
 }
 
 int main (int argc, char **argv)
 {
+	ERRDATA
 	int				status;
 	char*			filename;
 	char*			dbusname;
@@ -442,7 +456,7 @@ int main (int argc, char **argv)
 			if(signal(data[j],catchSignal)==SIG_ERR)
 				{
         			fprintf(stderr,"An error occurred while setting a signal handler.\n");
-					return EXIT_FAILURE;
+					ERRDATA return(EXIT_FAILURE);
 				}
 		}
 #endif
@@ -488,9 +502,9 @@ int main (int argc, char **argv)
 	status=g_application_run(mainApp,argc,argv);
 
 	g_object_unref(mainApp);
-	delete history;
-	delete globalSlice;
+	ERRDATA delete history;
+	ERRDATA delete globalSlice;
 
-	return status;
+	ERRDATA return(status);
 }
 

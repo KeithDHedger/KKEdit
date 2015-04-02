@@ -22,12 +22,15 @@ GtkObject*	prefsIntWidgets[MAXPREFSINTWIDGETS];
 
 void findTool(toolStruct* data,char* toolname)
 {
+	ERRDATA
 	if(strcmp(toolname,data->menuName)==0)
 		selectedToolFromDrop=data;
+	ERRDATA
 }
 
 void selectToolOptions(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	char*	text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
 	int		flags=0;
 
@@ -90,10 +93,12 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 			else
 				gtk_toggle_button_set_active((GtkToggleButton*)showDocWidget,false);
 		}
+	ERRDATA
 }
 
 void setUpToolBar(void)
 {
+	ERRDATA
 	GtkToolItem*		toolbutton;
 	GtkRecentFilter*	filter;
 
@@ -249,35 +254,42 @@ void setUpToolBar(void)
 						break;
 				}
 		}
+	ERRDATA
 }
 
 void addToolToDrop(gpointer data,gpointer user_data)
 {
+	ERRDATA
 	if(((toolStruct*)data)->global==false)
 		gtk_combo_box_text_append_text((GtkComboBoxText*)toolSelect,((toolStruct*)data)->menuName);
+	ERRDATA
 }
 
 void fillCombo(GtkComboBoxText* combo)
 {
+	ERRDATA
 	g_list_foreach(toolsList,addToolToDrop,NULL);
+	ERRDATA
 }
 
 gboolean getToolKey(GtkEntry* widget,GdkEventKey* event,gpointer data)
 {
+	ERRDATA
 	if((event->type==GDK_KEY_PRESS) && (event->keyval==GDK_KEY_Delete))
 		{
 			gtk_entry_set_text(widget,"");
-			return(true);
+			ERRDATA return(true);
 		}
 
 	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
 		gtk_entry_set_text(widget,gdk_keyval_name(event->keyval));
 
-	return(true);
+	ERRDATA return(true);
 }
 
 void doMakeTool(void)
 {
+	ERRDATA
 	GtkWidget*	vbox;
 	GtkWidget*	hbox;
 	GtkWidget*	button;
@@ -430,10 +442,12 @@ void doMakeTool(void)
 //show it
 	gtk_container_add(GTK_CONTAINER(toolwin),(GtkWidget*)vbox);
 	gtk_widget_show_all(toolwin);
+	ERRDATA
 }
 
 void buildTools(void)
 {
+	ERRDATA
 	GtkWidget*		menuitem;
 	GtkWidget*		menu;
 	GtkWidget*		image;
@@ -516,10 +530,12 @@ void buildTools(void)
 				}
 			ptr=g_list_next(ptr);
 		}
+	ERRDATA
 }
 
 void populateStore(void)
 {
+	ERRDATA
 	GdkPixbuf*	pbuf;
 	GtkWidget*	image;
 	GtkTreeIter iter;
@@ -731,10 +747,12 @@ void populateStore(void)
 				}
 			ERRDATA debugFree(&type,"populateStore type");
 		}
+	ERRDATA
 }
 
 void addToToolBar(GtkWidget* widget,gpointer ptr)
 {
+	ERRDATA
 	char*	holddata=toolBarLayout;
 	char*	type;
 
@@ -743,18 +761,22 @@ void addToToolBar(GtkWidget* widget,gpointer ptr)
 	populateStore();
 	toolBarLayout=holddata;
 	ERRDATA debugFree(&type,"addToToolBar type");
+	ERRDATA
 }
 
 void addIcon(const char* icon,const char* data,int toolnumber,const char* tooltip)
 {
+	ERRDATA
 	tool[toolnumber]=gtk_tool_button_new_from_stock(icon);
 	gtk_box_pack_start(GTK_BOX(fromHBox),(GtkWidget*)tool[toolnumber],false,false,2);
 	g_signal_connect(G_OBJECT(tool[toolnumber]),"clicked",G_CALLBACK(addToToolBar),(void*)data);
 	gtk_widget_set_tooltip_text((GtkWidget*)tool[toolnumber],tooltip);
+	ERRDATA
 }
 
 void addPixbuf(const char* pixbuf,const char* data,int toolnumber,const char* tooltip)
 {
+	ERRDATA
 	GtkWidget*		image;
 	image=gtk_image_new_from_file(pixbuf);
 
@@ -762,10 +784,12 @@ void addPixbuf(const char* pixbuf,const char* data,int toolnumber,const char* to
 	gtk_box_pack_start(GTK_BOX(fromHBox),(GtkWidget*)tool[toolnumber],false,false,2);
 	g_signal_connect(G_OBJECT(tool[toolnumber]),"clicked",G_CALLBACK(addToToolBar),(void*)data);
 	gtk_widget_set_tooltip_text((GtkWidget*)tool[toolnumber],tooltip);
+	ERRDATA
 }
 
 void populateDnD(void)
 {
+	ERRDATA
 	addIcon(GTK_STOCK_NEW,"N",0,gettext("New File"));
 	addIcon(GTK_STOCK_OPEN,"O",1,gettext("Open File"));
 	addIcon(GTK_STOCK_SAVE,"S",2,gettext("Save File"));
@@ -785,10 +809,12 @@ void populateDnD(void)
 	addPixbuf(DATADIR"/pixmaps/live.png","L",13,gettext("Live Search"));
 	addPixbuf(DATADIR"/pixmaps/sep.png","s",14,gettext("Separator"));
 	addPixbuf(DATADIR"/pixmaps/expand.png","E",15,gettext("Expander"));
+	ERRDATA
 }
 
 char* makeToolBarList(void)
 {
+	ERRDATA
 	GtkTreeIter iter;
 	gboolean	valid;
 	gchar*		str_data;
@@ -804,12 +830,13 @@ char* makeToolBarList(void)
 			valid=gtk_tree_model_iter_next((GtkTreeModel *)listStore,&iter);
 			ERRDATA debugFree(&str_data,"makeToolBarList str_data");
 		}
-	return(g_string_free(str,false));
+	ERRDATA return(g_string_free(str,false));
 }
 
 
 bool clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 {
+	ERRDATA
 	GtkTreePath*	path=NULL;
 	GdkModifierType	mask;
 	GtkTreeIter		iter;
@@ -825,11 +852,12 @@ bool clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 			gtk_widget_set_sensitive((GtkWidget*)tool[button],true);
 			gtk_list_store_remove((GtkListStore*)listStore,&iter);
 		}
-	return(false);
+	ERRDATA return(false);
 }
 
 void doIconView(void)
 {
+	ERRDATA
 	GtkCellRenderer *renderer;
 
 	listStore=gtk_list_store_new(3,GDK_TYPE_PIXBUF,G_TYPE_STRING,G_TYPE_INT);
@@ -853,10 +881,12 @@ void doIconView(void)
 
 	gtk_box_pack_start(GTK_BOX(iconViewBox),(GtkWidget*)iconView,false,false,2);
 	g_signal_connect(G_OBJECT(iconView),"button-press-event",G_CALLBACK(clickIt),NULL);
+	ERRDATA
 }
 
 void setKeyCuts(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 
 	char*	filename;
 	const char*		text;
@@ -872,31 +902,36 @@ void setKeyCuts(GtkWidget* widget,gpointer data)
 					shortCuts[j][0]=gdk_keyval_from_name(text);
 					shortCuts[j][1]=j;
 					if(shortCutStrings[j]!=NULL)
-						ERRDATA debugFree(&shortCutStrings[j],"setKeyCuts shortCutStrings");
+						{
+							ERRDATA debugFree(&shortCutStrings[j],"setKeyCuts shortCutStrings");
+						}
 					asprintf(&shortCutStrings[j],"%i %i - ^%c %s",shortCuts[j][0],shortCuts[j][1],shortCuts[j][0],shortcuttext[j]);
 				}
 			asprintf(&filename,"%s/.KKEdit/keybindings.rc",getenv("HOME"));
 			saveVarsToFile(filename,keybindings_rc);
 			gtk_widget_hide(keysWindow);
 		}
+	ERRDATA
 }
 
 gboolean setKeyInEntry(GtkEntry* widget,GdkEventKey* event,gpointer data)
 {
+	ERRDATA
 	if((event->type==GDK_KEY_PRESS) && (event->keyval==GDK_KEY_Delete))
 		{
 			gtk_entry_set_text(widget,"");
-			return(true);
+			ERRDATA return(true);
 		}
 
 	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
 		gtk_entry_set_text(widget,gdk_keyval_name(event->keyval));
 
-	return(true);
+	ERRDATA return(true);
 }
 
 void buildKeys()
 {
+	ERRDATA
 	GtkWidget*	vbox;
 	GtkWidget*	item;
 	GtkWidget*	hbox;
@@ -955,10 +990,12 @@ void buildKeys()
 				}
 		}
 	gtk_widget_show_all(keysWindow);
+	ERRDATA
 }
 
 GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,char hotkey,const char* name,int setimage,const char* menulabel,void* userdata)
 {
+	ERRDATA
 	GtkWidget*	widg;
 	GtkWidget*	image;
 
@@ -994,12 +1031,12 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 		gtk_widget_add_accelerator((GtkWidget *)widg,"activate",accgroup,hotkey*-1,(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
 
 	gtk_widget_set_name(widg,name);
-	return(widg);
-
+	ERRDATA return(widg);
 }
 
 void makePrefsDial(int widgnum,const char* label,const char* name,int value,int minvalue,int maxvalue,int posy)
 {
+	ERRDATA
 	GtkAlignment*	align;
 	GtkWidget*		item;
 
@@ -1011,19 +1048,23 @@ void makePrefsDial(int widgnum,const char* label,const char* name,int value,int 
 	item=gtk_spin_button_new((GtkAdjustment*)prefsIntWidgets[widgnum],1,0);
 	gtk_widget_set_name(item,name);
 	gtk_table_attach_defaults(table,item,1,2,posy,posy+1);
+	ERRDATA
 }
 
 void makePrefsCheck(int widgnum,const char* label,const char* name,bool onoff,int posx,int posy)
 {
+	ERRDATA
 	prefsWidgets[widgnum]=gtk_check_button_new_with_label(label);
 	gtk_widget_set_name(prefsWidgets[widgnum],name);
 	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[widgnum],onoff);
 	if(posx!=-1)
 		gtk_table_attach_defaults(table,prefsWidgets[widgnum],posx,posx+1,posy,posy+1);
+	ERRDATA
 }
 
 VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	GtkWidget*		vbox;
 	GtkWidget*		hbox;
 	GtkWidget*		pagevbox;
@@ -1269,10 +1310,12 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 //show it
 	gtk_container_add(GTK_CONTAINER(prefswin),(GtkWidget*)vbox);
 	gtk_widget_show_all(prefswin);
+	ERRDATA
 }
 
 void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 {
+	ERRDATA
 	GList*		itemlist=NULL;
 	GList*		l=NULL;
 	GtkWidget*	menuitem;
@@ -1301,10 +1344,12 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 					g_free (uri);
 				}
 		}
+	ERRDATA
 }
 
 void buildMainGui(void)
 {
+	ERRDATA
 	GtkWidget*		menuitem;
 	GtkWidget*		menu;
 	GtkWidget*		menurecent;
@@ -1684,10 +1729,12 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->locale=LOCALEDIR;
 
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
+	ERRDATA
 }
 
 void buildFindReplace(void)
 {
+	ERRDATA
 	GtkWidget*	content_area;
 	GtkWidget*	replace;
 	GtkWidget*	image;
@@ -1788,11 +1835,13 @@ void buildFindReplace(void)
 
 	g_signal_connect_object(G_OBJECT(findReplaceDialog),"delete_event",G_CALLBACK(gtk_widget_hide),G_OBJECT(findReplaceDialog),G_CONNECT_SWAPPED);
 	g_signal_connect(G_OBJECT(findReplaceDialog),"delete_event",G_CALLBACK(gtk_true),NULL);
+	ERRDATA
 }
 
 #ifdef _ASPELL_
 void buildWordCheck(int documentCheck)
 {
+	ERRDATA
 	GtkWidget*	vbox;
 	GtkWidget*	button;
 	GtkWidget*	hbox;
@@ -1846,11 +1895,13 @@ void buildWordCheck(int documentCheck)
 
 	g_signal_connect_object(G_OBJECT(spellCheckWord),"delete_event",G_CALLBACK(gtk_widget_hide),G_OBJECT(spellCheckWord),G_CONNECT_SWAPPED);
 	g_signal_connect(G_OBJECT(spellCheckWord),"delete_event",G_CALLBACK(gtk_true),NULL);
+	ERRDATA
 }
 #endif
 
 int showFunctionEntry(void)
 {
+	ERRDATA
 	GtkWidget*	dialog;
 	gint		result;
 	GtkWidget*	content_area;
@@ -1869,16 +1920,19 @@ int showFunctionEntry(void)
 	gtk_widget_show_all(content_area);
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 	if(functionSearchText!=NULL)
-		ERRDATA debugFree(&functionSearchText,"showFunctionEntry functionSearchText");
+		{
+			ERRDATA debugFree(&functionSearchText,"showFunctionEntry functionSearchText");
+		}
 	functionSearchText=strdup(gtk_entry_get_text((GtkEntry*)entrybox));
 	gtk_widget_destroy(dialog);
 
-	return(result);
+	ERRDATA return(result);
 }
 
 #ifdef _BUILDDOCVIEWER_
 void buildGtkDocViewer(void)
 {
+	ERRDATA
 	GtkWidget*	vbox;
 	GtkWidget*	hbox;
 	GtkWidget*	button;
@@ -1969,6 +2023,7 @@ void buildGtkDocViewer(void)
 	asprintf(&thePage,"file://%s/help/help.%s.html",DATADIR,lang);
 	webkit_web_view_load_uri(webView,thePage);
 	ERRDATA freeAndNull(&thePage);
+	ERRDATA
 }
 #endif
 

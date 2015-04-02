@@ -80,9 +80,10 @@ PROTECTED void showDocView(int howtodisplay,char* text,const char* title)
 #endif
 
 	if(thePage!=NULL)
-		ERRDATA debugFree(&thePage,"showDocView thePage");
+		{
+			ERRDATA debugFree(&thePage,"showDocView thePage");
+		}
 	thePage=NULL;
-		
 	return;
 }
 
@@ -187,12 +188,18 @@ VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
 	for(int loop=0;loop<cnt;loop++)
 		{
 			if(searchdata[loop][0]!=NULL)
-				ERRDATA debugFree(&searchdata[loop][0],"seachGtkDocs searchdata[loop][0]");
+				{
+					ERRDATA debugFree(&searchdata[loop][0],"seachGtkDocs searchdata[loop][0]");
+				}
 			if(searchdata[loop][1]!=NULL)
-				ERRDATA debugFree(&searchdata[loop][1],"seachGtkDocs searchdata[loop][1]");
+				{
+					ERRDATA debugFree(&searchdata[loop][1],"seachGtkDocs searchdata[loop][1]");
+				}
 		}
 	if((selection!=NULL) && (data==NULL))
-		ERRDATA debugFree(&selection,"seachGtkDocs selection");
+		{
+			ERRDATA debugFree(&selection,"seachGtkDocs selection");
+		}
 }
 
 VISIBLE void doDoxy(GtkWidget* widget,long data)
@@ -209,7 +216,9 @@ VISIBLE void doDoxy(GtkWidget* widget,long data)
 		dorebuild=false;
 
 	if(page==NULL)
-		return;
+		{
+			ERRDATA return;
+		}
 
 	showBarberPole(gettext("Building Documentaion ..."));
 	chdir(page->dirName);
@@ -226,7 +235,9 @@ VISIBLE void doDoxy(GtkWidget* widget,long data)
 		}
 
 	if(thePage!=NULL)
-		ERRDATA debugFree(&thePage,"doDoxy thePage");
+		{
+			ERRDATA debugFree(&thePage,"doDoxy thePage");
+		}
 
 	asprintf(&thePage,"file://%s/html/index.html",page->dirName);
 	if(dorebuild==true)
@@ -274,7 +285,9 @@ VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
 							if(strstr(titleline,selection)!=NULL)
 								{
 									if(thePage!=NULL)
-										ERRDATA debugFree(&thePage,"doxyDocs thePage");
+										{
+											ERRDATA debugFree(&thePage,"doxyDocs thePage");
+										}
 									asprintf(&thePage,"file://%s",line);
 									while(fgets(titleline,1024,headfile));
 									while(fgets(titleline,1024,findfile));
@@ -283,17 +296,25 @@ VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
 									ERRDATA debugFree(&headcommand,"doxyDocs headcommand 1");
 									showDocView(USEURI,thePage,"Doxygen Documentation");
 									killBarberPole();
-									return;
+									ERRDATA return;
 								}
 						}
 					pclose(headfile);
 				}
 			pclose(findfile);
 			if(headcommand!=NULL)
-				ERRDATA debugFree(&headcommand,"doxyDocs headcommand 2");
+				{
+					ERRDATA debugFree(&headcommand,"doxyDocs headcommand 2");
+				}
 			ERRDATA debugFree(&findcommand,"doxyDocs findcommand 2");
 			killBarberPole();
 		}
+}
+
+//searc qt5 aasistant
+void searchQT5Assist(GtkWidget* widget,gpointer data)
+{
+	printf("search qt5 assistant\n");
 }
 
 //showDocViewWidget
@@ -378,7 +399,7 @@ void defSearchFromBar(GtkWidget* widget,gpointer data)
 							goToDefine(fdata);
 							destroyData(fdata);
 							ERRDATA debugFree(&functionSearchText,"defSearchFromBar functionSearchText");
-							return;
+							ERRDATA return;
 						}
 					ok=false;
 				}
@@ -444,7 +465,7 @@ void doAllFiles(int dowhat,bool found)
 					currentFindPage=-1;
 					gtk_notebook_set_current_page(mainNotebook,firstPage);
 					pagesChecked=0;
-					return;
+					ERRDATA return;
 				}
 		}
 
@@ -492,10 +513,10 @@ int findNextRegex(pageStruct* page,int charpos,int thisregxnum)
 			if(xdata->start>charpos)
 				{
 					retval=j;
-					return(j);
+					ERRDATA return(j);
 				}
 		}
-	return(retval);
+	ERRDATA return(retval);
 }
 
 int findPrevRegex(pageStruct* page,int charpos)
@@ -509,10 +530,10 @@ int findPrevRegex(pageStruct* page,int charpos)
 			if(xdata->start<charpos)
 				{
 					retval=j;
-					return(j);
+					ERRDATA return(j);
 				}
 		}
-	return(retval);
+	ERRDATA return(retval);
 }
 
 int findThisRegex(pageStruct* page,int charpos)
@@ -526,10 +547,10 @@ int findThisRegex(pageStruct* page,int charpos)
 			if(xdata->start==charpos)
 				{
 					retval=j;
-					return(j);
+					ERRDATA return(j);
 				}
 		}
-	return(retval);
+	ERRDATA return(retval);
 }
 
 bool fromregexreplace=false;
@@ -557,9 +578,13 @@ void regexFind(int dowhat)
 
 	page=getPageStructPtr(currentFindPage);
 	if(page==NULL)
-		return;
+		{
+			ERRDATA return;
+		}
 	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
-		return;
+		{
+			ERRDATA return;
+		}
 
 	gotselection=gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&startiter,&enditer);
 
@@ -752,7 +777,9 @@ void regexFind(int dowhat)
 						if(findInAllFiles==true)
 							{
 								if(yesNo((char*)gettext("Do you want to replace in ALL open files?"),(char*)"")==GTK_RESPONSE_CANCEL)
-									return;
+									{
+										ERRDATA return;
+									}
 								startloop=0;
 								endloop=gtk_notebook_get_n_pages(mainNotebook);
 							}
@@ -820,7 +847,7 @@ void regexFind(int dowhat)
 		}
 
 	ERRDATA debugFree(&text,"findregex text");
-	delete textbuffer;
+	ERRDATA delete textbuffer;
 
 	if(dofindnext==true)
 		regexFind(FINDNEXT);
@@ -842,7 +869,9 @@ void basicFind(int dowhat)
 	GtkTextIter				maxlastiter;
 
 	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
-		return;
+		{
+			ERRDATA return;
+		}
 
 	if(findInAllFiles==false)
 		currentFindPage=-1;
@@ -920,7 +949,7 @@ void basicFind(int dowhat)
 							gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 							ERRDATA debugFree(&searchtext,"basicFind searchtext");
 							ERRDATA debugFree(&replacetext,"basicFind replacetext");
-							return;
+							ERRDATA return;
 						}
 					if((wrapSearch==true) || (findInAllFiles==true))
 						doAllFiles(dowhat,found);
@@ -951,7 +980,7 @@ void basicFind(int dowhat)
 								gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 								ERRDATA debugFree(&searchtext,"basicFind searchtext");
 								ERRDATA debugFree(&replacetext,"basicFind replacetext");
-								return;
+								ERRDATA return;
 							}
 					if((wrapSearch==true) || (findInAllFiles==true))
 						doAllFiles(dowhat,found);
@@ -974,7 +1003,9 @@ void basicFind(int dowhat)
 		if((dowhat==REPLACE) && (findInAllFiles==true) && (replaceAll==true))
 			{
 				if(yesNo((char*)gettext("Do you want to replace in ALL open files?"),(char*)"")==GTK_RESPONSE_CANCEL)
-					return;
+					{
+						ERRDATA return;
+					}
 						findInAllFiles=false;
 						for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
 							{
@@ -1043,7 +1074,9 @@ void showOnStatus(const char* from,const char* to)
 	char*	message=NULL;
 
 	if( (showStatus==false))
-			return;
+		{
+			ERRDATA return;
+		}
 
 	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
 	asprintf(&message,gettext("Replaced %i instances of '%s' with '%s'"),itemsReplaced+1,from,to);

@@ -11,14 +11,13 @@
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
-#define DBG0 0
-#define DBG1 1
-#define DBG2 2
-#define DBG3 3
-#define DBG4 4
-#define DBGFREE 5
+#define DBG0 0 //no debug
+#define DBG1 1 //debug to stderr
+#define DBG2 2 //debug to file
+#define DBG3 3 //debug to both
+#define DBG4 4 //only catch faults
 
-#define _DEBUGLEVEL_ DBG1
+#define _DEBUGLEVEL_ DBG4
 
 #define REPLACE			100
 #define FINDNEXT		200
@@ -26,9 +25,7 @@
 
 #if _DEBUGLEVEL_ == DBG0
 #define ERRDATA
-#endif
-
-#if _DEBUGLEVEL_ == DBG1 || _DEBUGLEVEL_ == DBG2 || _DEBUGLEVEL_ == DBG3
+#else
 #define ERRDATA errLine=__LINE__,errFile=__FILE__,errFunc=__func__;
 #endif
 

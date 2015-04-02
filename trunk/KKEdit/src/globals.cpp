@@ -451,6 +451,7 @@ args			tool_vars[]=
 //truncate tabname with elipses
 char* truncateWithElipses(char* str,unsigned int maxlen)
 {
+	ERRDATA
 	char*	retstr;
 	char	*front,*back;
 	int		sides;
@@ -472,24 +473,29 @@ char* truncateWithElipses(char* str,unsigned int maxlen)
 	else
 		retstr=strdup(str);
 
-	return(retstr);
+	ERRDATA return(retstr);
 }
 
 void plugRunFunction(gpointer data,gpointer funcname)
 {
+	ERRDATA
 	globalPlugins->runPlugFunction((moduleData*)data,(const char*)funcname);
+	ERRDATA
 }
 
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 {
+	ERRDATA
 	if(page->inTop==true)
 		gtk_text_view_scroll_to_iter((GtkTextView*)page->view,iter,0,true,0,0.5);
 	else
 		gtk_text_view_scroll_to_iter((GtkTextView*)page->view2,iter,0,true,0,0.5);
+	ERRDATA
 }
 
 VISIBLE pageStruct* getPageStructPtr(int pagenum)
 {
+	ERRDATA
 	int			thispage;
 	GtkWidget*	pageBox;
 
@@ -500,13 +506,19 @@ VISIBLE pageStruct* getPageStructPtr(int pagenum)
 
 	pageBox=gtk_notebook_get_nth_page(mainNotebook,thispage);
 	if(pageBox==NULL)
-		return(NULL);
+		{
+			ERRDATA return(NULL);
+		}
 	else
-		return((pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata"));
+		{
+			ERRDATA return((pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata"));
+		}
+	ERRDATA
 }
 
 void getMimeType(char* filepath,void* ptr)
 {
+	ERRDATA
 	char*	command;
 	gchar	*stdout=NULL;
 	gchar	*stderr=NULL;
@@ -521,10 +533,12 @@ void getMimeType(char* filepath,void* ptr)
 			ERRDATA debugFree(&stdout,"getMimeType stdout");
 			ERRDATA debugFree(&stderr,"getMimeType stderr");
 		}
+	ERRDATA
 }
 
 void setLanguage(pageStruct* page)
 {
+	ERRDATA
 	GtkSourceLanguage*			lang=NULL;
 	GtkSourceLanguageManager*	lm=NULL;
 	char*						mimetype;
@@ -590,11 +604,15 @@ void setLanguage(pageStruct* page)
 	g_object_unref(gfileinfo);
 
 	if(mimetype!=NULL)
-		ERRDATA debugFree(&mimetype,"setLanguage mimetype");
+		{
+			ERRDATA debugFree(&mimetype,"setLanguage mimetype");
+		}
+	ERRDATA
 }
 
 VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title)
 {
+	ERRDATA
 	char*		command;
 	FILE*		fp=NULL;
 	GString*	str=NULL;
@@ -668,6 +686,7 @@ VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int u
 
 functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 {
+	ERRDATA
 	pageStruct*		page;
 	int				numpages=gtk_notebook_get_n_pages(mainNotebook);
 	char*			lineptr;
@@ -693,7 +712,9 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 
 	page=getPageStructPtr(-1);
 	if(page==NULL)
-		return(NULL);
+		{
+			ERRDATA return(NULL);
+		}
 
 	getfromfile=false;
 
@@ -731,7 +752,7 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 									sscanf (lineptr,"%*s %*s %*i %*s %[^\n]s",function);
 									fdata->define=strdup(function);
 									fdata->intab=loop;
-									return(fdata);
+									ERRDATA return(fdata);
 								}
 
 							lineptr=strchr(lineptr,'\n');
@@ -799,7 +820,7 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 											fdata->type=NULL;
 											fdata->define=NULL;
 											fdata->intab=-1;
-											return(fdata);
+											ERRDATA return(fdata);
 										}
 									if((gotmatch==0) && (bestlen<thislen))
 										{
@@ -814,9 +835,13 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 										lineptr++;
 								}
 							if(stdout!=NULL)
-								ERRDATA debugFree(&stdout,"getFunctionByName stdout");
+								{
+									ERRDATA debugFree(&stdout,"getFunctionByName stdout");
+								}
 							if(dirname!=NULL)
-								ERRDATA debugFree(&dirname,"getFunctionByName dirname");
+								{
+									ERRDATA debugFree(&dirname,"getFunctionByName dirname");
+								}
 						}
 				}
 		}
@@ -836,7 +861,7 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 					sscanf (possmatch,"%*s %*s %*i %*s %[^\n]s",function);
 					fdata->define=strdup(function);
 					fdata->intab=loophold;
-					return(fdata);
+					ERRDATA return(fdata);
 				}
 			else
 				{
@@ -848,38 +873,51 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 					fdata->type=NULL;
 					fdata->define=NULL;
 					fdata->intab=-1;
-					return(fdata);
+					ERRDATA return(fdata);
 				}
 		}
 
-	return(NULL);
+	ERRDATA return(NULL);
 }
 
 void destroyData(functionData* fdata)
 {
+	ERRDATA
 	if(fdata!=NULL)
 		{
 			if(fdata->name!=NULL)
-				ERRDATA debugFree(&fdata->name,"destroyData name");
+				{
+					ERRDATA debugFree(&fdata->name,"destroyData name");
+				}
 			if(fdata->type!=NULL)
-				ERRDATA debugFree(&fdata->type,"destroyData type");
+				{
+					ERRDATA debugFree(&fdata->type,"destroyData type");
+				}
 			if(fdata->file!=NULL)
-				ERRDATA debugFree(&fdata->file,"destroyData file");
+				{
+					ERRDATA debugFree(&fdata->file,"destroyData file");
+				}
 			if(fdata->define!=NULL)
-				ERRDATA debugFree(&fdata->define,"destroyData define");
+				{
+					ERRDATA debugFree(&fdata->define,"destroyData define");
+				}
 			ERRDATA debugFree((char**)&fdata,"destroyData fdata");
 		}
+	ERRDATA
 }
 
 void getRecursiveTagListFileName(char* filepath,void* ptr)
 {
+	ERRDATA
 	FILE*		fp;
 	char		line[1024];
 	GString*	str=g_string_new(NULL);
 	char*		command;
 
 	if(filepath==NULL)
-		return;
+		{
+			ERRDATA return;
+		}
 
 	asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - --excmd=number --format=1 -f -",filepath,depth);
 	fp=popen(command, "r");
@@ -893,10 +931,12 @@ void getRecursiveTagListFileName(char* filepath,void* ptr)
 	g_string_free(str,false);
 
 	ERRDATA debugFree(&command,"getRecursiveTagListFileName command");
+	ERRDATA
 }
 
 void getRecursiveTagList(char* filepath,void* ptr)
 {
+	ERRDATA
 	FILE*		fp;
 	char		line[2048];
 	GString*	str=g_string_new(NULL);
@@ -905,7 +945,9 @@ void getRecursiveTagList(char* filepath,void* ptr)
 	char*		sort=NULL;
 
 	if(filepath==NULL)
-		return;
+		{
+			ERRDATA return;
+		}
 
 	switch (listFunction)
 		{
@@ -944,26 +986,35 @@ void getRecursiveTagList(char* filepath,void* ptr)
 	g_string_free(str,false);
 	ERRDATA debugFree(&command,"getRecursiveTagList command");
 	ERRDATA debugFree(&sort,"getRecursiveTagList sort");
+	ERRDATA
 }
 
 void destroyTool(gpointer data)
 {
+	ERRDATA
 	if(((toolStruct*)data)->menuName!=NULL)
-		ERRDATA debugFree(&((toolStruct*)data)->menuName,"destroyTool menuName");
+		{
+			ERRDATA debugFree(&((toolStruct*)data)->menuName,"destroyTool menuName");
+		}
 	if(((toolStruct*)data)->filePath!=NULL)
-		ERRDATA debugFree(&((toolStruct*)data)->filePath,"destroyTool filePath");
+		{
+			ERRDATA debugFree(&((toolStruct*)data)->filePath,"destroyTool filePath");
+		}
 	if(((toolStruct*)data)->command!=NULL)
-		ERRDATA debugFree(&((toolStruct*)data)->command,"destroyTool command");
+		{
+			ERRDATA debugFree(&((toolStruct*)data)->command,"destroyTool command");
+		}
 	ERRDATA debugFree((char**)&data,"destroyTool data");
 }
 
 gint sortTools(gconstpointer a,gconstpointer b)
 {
-	return(strcasecmp(((toolStruct*)a)->menuName,((toolStruct*)b)->menuName));
+	ERRDATA return(strcasecmp(((toolStruct*)a)->menuName,((toolStruct*)b)->menuName));
 }
 
 void buildToolsList(void)
 {
+	ERRDATA
 	GDir*			folder;
 	const gchar*	entry=NULL;
 	char*			filepath;
@@ -1029,7 +1080,9 @@ void buildToolsList(void)
 									ERRDATA debugFree(&menuname,"buildToolsList menuname");
 									ERRDATA debugFree(&commandarg,"buildToolsList commandarg");
 									if(commentarg!=NULL)
-										ERRDATA debugFree(&commentarg,"buildToolsList commentarg");
+										{
+											ERRDATA debugFree(&commentarg,"buildToolsList commentarg");
+										}
 								}
 
 							ERRDATA debugFree(&filepath,"buildToolsList filepath");
@@ -1042,10 +1095,12 @@ void buildToolsList(void)
 	ERRDATA debugFree(&datafolder[1],"buildToolsList datafolder[1]");
 
 	toolsList=g_list_sort(toolsList,sortTools);
+	ERRDATA
 }
 
 void rebuildBookMarkMenu(void)
 {
+	ERRDATA
 	GtkWidget*	menuitem;
 	GtkWidget*	submenu;
 
@@ -1066,10 +1121,12 @@ void rebuildBookMarkMenu(void)
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
+	ERRDATA
 }
 
 VISIBLE void goBack(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	HistoryClass*	hist=new HistoryClass;
 
 	GtkTextIter		iter;
@@ -1077,7 +1134,9 @@ VISIBLE void goBack(GtkWidget* widget,gpointer data)
 	TextBuffer*		buf;
 
 	if(page==NULL)
-		return;
+		{
+			ERRDATA return;
+		}
 
 	buf=history->getTextBuffer();
 
@@ -1094,9 +1153,9 @@ VISIBLE void goBack(GtkWidget* widget,gpointer data)
 		{
 			if(history->canGoBack()==false)
 				{
-					delete hist;
+					ERRDATA delete hist;
 					setSensitive();
-					return;
+					ERRDATA return;
 				}
 		if(hist->savePosition()==true)
 				{
@@ -1104,21 +1163,23 @@ VISIBLE void goBack(GtkWidget* widget,gpointer data)
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
 					gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 					scrollToIterInPane(page,&iter);
-					delete history;
+					ERRDATA delete history;
 					history=hist;
 				}
 			else
 				{
-					delete hist;
+					ERRDATA delete hist;
 				}
 		}
 	setSensitive();
+	ERRDATA
 }
 
 char	*barControl;
 
 void showBarberPole(const char* title)
 {
+	ERRDATA
 	StringSlice	*slice=new StringSlice;
 	char		*barcommand;
 
@@ -1126,10 +1187,12 @@ void showBarberPole(const char* title)
 	asprintf(&barcommand,POLEPATH " \"%s\" \"%s\" \"pulse\" &",title,barControl);
 	system(barcommand);
 	ERRDATA debugFree(&barcommand,"restore session barcommand");
+	ERRDATA
 }
 
 void killBarberPole(void)
 {
+	ERRDATA
 	char		*barcommand;
 
 	usleep(100000);
@@ -1137,43 +1200,51 @@ void killBarberPole(void)
 	system(barcommand);
 	ERRDATA debugFree(&barcommand,"restore session barcommand");
 	ERRDATA debugFree(&barControl,"restore session barcontrol");
+	ERRDATA
 }
 
 VISIBLE void freeAndNull(char** ptr)
 {
+	ERRDATA
 	if (*ptr!=NULL)
 		free(*ptr);
 
 	*ptr=NULL;
+	ERRDATA
 }
 
 VISIBLE void debugFree(char** ptr,const char* message)
 {
-#if _DEBUGLEVEL_ > DBG0
-	FILE*	fp=NULL;
+#if _DEBUGLEVEL_ > DBG0 && _DEBUGLEVEL_ < DBG4
+	FILE*	fp=stderr;
 
 	if((_DEBUGLEVEL_ == DBG1) || (_DEBUGLEVEL_ == DBG3))
-		fp=stderr;
+		fprintf(stderr,"free :%s\n",message);
 
-	if(logFile!=NULL)
+	if((_DEBUGLEVEL_ == DBG2) || (_DEBUGLEVEL_ == DBG3))
 		{
-			if(_DEBUGLEVEL_ == DBG2)
-				fp=fopen(logFile,"a");
-
-			fprintf(fp,"free :%s\n",message);
-			fclose(fp);
+			if(logFile!=NULL)
+				{
+					fp=fopen(logFile,"a");
+					fprintf(fp,"free :%s\n",message);
+					fclose(fp);
+				}
+			else
+				{
+					fprintf(stderr,"free :%s\n",message);
+				}
 		}
 #endif
-	if (*ptr!=NULL)
-		free(*ptr);
-
-	*ptr=NULL;
+	freeAndNull(ptr);
 }
 
 void doBusy(bool busy,pageStruct* page)
 {
+	ERRDATA
 	if(page==NULL)
-		return;
+		{
+			ERRDATA return;
+		}
 
 	if(busy==true)
 		{
@@ -1188,22 +1259,26 @@ void doBusy(bool busy,pageStruct* page)
 				gtk_source_completion_words_register(docWordsProv,(GtkTextBuffer*)page->buffer);
 			busyFlag=false;
 		}
+	ERRDATA
 }
 
 VISIBLE bool doUpdateWidgets=false;
 
 VISIBLE void resetWidgetSenisitive(void)
 {
+	ERRDATA
 	if(doUpdateWidgets==true)
 		{
 			resetAllFilePrefs();	
 			setSensitive();
 			refreshMainWindow();
 		}
+	ERRDATA
 }
 
 VISIBLE void setWidgets(void)
 {
+	ERRDATA
 	pageStruct* page;
 
 	doUpdateWidgets=true;
@@ -1213,6 +1288,7 @@ VISIBLE void setWidgets(void)
 		switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
 
 	resetWidgetSenisitive();
+	ERRDATA
 }
 
 int			errLine;
@@ -1230,7 +1306,7 @@ void catchSignal(int signal)
 	if(_DEBUGLEVEL_ == DBG1)
 		fp=stderr;
 
-	if((_DEBUGLEVEL_ == DBG2) || (_DEBUGLEVEL_ == DBG3))
+	if((_DEBUGLEVEL_ == DBG2) || (_DEBUGLEVEL_ == DBG3) || (_DEBUGLEVEL_ == DBG4))
 		{
 			if(logFile!=NULL)
 				fp=fopen(logFile,"a");

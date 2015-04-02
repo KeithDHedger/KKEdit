@@ -62,6 +62,7 @@ const char *encoding_table[][ENCODING_MAX_ITEM_NUM] =
 
 guint get_encoding_code(void)
 {
+	ERRDATA
 	guint 		code=END_CODE;
 	const char*	env;
 	guint		i,j=1;
@@ -90,11 +91,12 @@ guint get_encoding_code(void)
 				code=0;
 	}
 	
-	return code;
+	ERRDATA return code;
 }
 
 EncArray *get_encoding_items(guint code)
 {
+	ERRDATA
 	gint		i;
 	EncArray*	array=NULL;
 	
@@ -105,11 +107,12 @@ EncArray *get_encoding_items(guint code)
 				(char*)encoding_table[code][i] : NULL;
 	}
 	
-	return array;
+	ERRDATA return array;
 }
 
 char *detect_charset_cylillic(const gchar *text)
 {
+	ERRDATA
 	guint8		c=*text;
 	gboolean	noniso=FALSE;
 	guint32		xc=0,xd=0,xef=0;
@@ -133,11 +136,12 @@ char *detect_charset_cylillic(const gchar *text)
 	else if((xc + xd) < xef)
 		charset=(char*)"CP1251";
 	
-	return charset;
+	ERRDATA return charset;
 }
 
 char *detect_charset_chinese(const gchar *text)
 {
+	ERRDATA
 	guint8		c=*text;
 	
 	const char*	charset=get_encoding_items(get_encoding_code())->item[IANA];
@@ -180,11 +184,12 @@ char *detect_charset_chinese(const gchar *text)
 				}
 		}
 	
-	return (char*)charset;
+	ERRDATA return (char*)charset;
 }
 
 char *detect_charset_japanese(const gchar *text)
 {
+	ERRDATA
 	guint8		c=*text;
 	const char*	charset=NULL;
 	
@@ -232,11 +237,12 @@ char *detect_charset_japanese(const gchar *text)
 	if(charset==NULL)
 		charset="EUC-JP";
 	
-	return (char*)charset;
+	ERRDATA return (char*)charset;
 }
 
 static const gchar *detect_charset_korean(const gchar *text)
 {
+	ERRDATA
 	guint8		c=*text;
 	gboolean	noneuc=FALSE;
 	gboolean	nonjohab=FALSE;
@@ -300,32 +306,37 @@ static const gchar *detect_charset_korean(const gchar *text)
 				charset="EUC-KR";
 		}
 	
-	return (char*)charset;
+	ERRDATA return (char*)charset;
 }
 
 static gboolean detect_noniso(const gchar *text)
 {
+	ERRDATA
 	guint8 c=*text;
 	
 	while((c=*text++) != '\0')
 		{
 			if(c >= 0x80 && c <= 0x9F)
-				return TRUE;
+				{
+					ERRDATA ERRDATA return TRUE;
+				}
 		}
-	return FALSE;
+	ERRDATA return FALSE;
 }
 
 const gchar *get_default_charset(void)
 {
+	ERRDATA
 	const gchar *charset;
 	
 	g_get_charset(&charset);
 	
-	return charset;
+	ERRDATA return charset;
 }
 
 const gchar *detect_charset(const gchar *text)
 {
+	ERRDATA
 	guint8		c=*text;
 	const char*	charset=NULL;
 	
@@ -412,5 +423,5 @@ const gchar *detect_charset(const gchar *text)
 			}
 		}
 	
-	return charset;
+	ERRDATA return charset;
 }

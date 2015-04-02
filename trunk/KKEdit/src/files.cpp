@@ -18,6 +18,8 @@ long		dataLen=0;
 
 VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 {
+	ERRDATA
+	ERRDATA
 	FILE*	fd=NULL;
 	int		cnt=0;
 	GSList*	list=NULL;
@@ -59,10 +61,14 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 				}
 			fclose(fd);
 		}
+	ERRDATA
+	ERRDATA
 }
 
 VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 {
+	ERRDATA
+	ERRDATA
 	FILE*	fd=NULL;
 	char	buffer[2048];
 	int		cnt;
@@ -90,7 +96,9 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 												break;
 											case TYPESTRING:
 												if(*(char**)(dataptr[cnt].data)!=NULL)
-													ERRDATA debugFree(&*(char**)(dataptr[cnt].data),"loadVarsFromFile dataptr[cnt].data");
+													{
+														ERRDATA debugFree(&*(char**)(dataptr[cnt].data),"loadVarsFromFile dataptr[cnt].data");
+													}
 												sscanf(buffer,"%*s %m[^\n]s",(char**)dataptr[cnt].data);
 												break;
 											case TYPEBOOL:
@@ -110,10 +118,14 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 				}
 			fclose(fd);
 		}
+	ERRDATA
+	ERRDATA
 }
 
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
+	ERRDATA
+	ERRDATA
 	GtkWidget*	evbox=gtk_event_box_new();
 	GtkWidget*	hbox=gtk_hbox_new(false,0);
 	GtkWidget*	label;
@@ -153,11 +165,12 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"newTab");
 
-	return(evbox);
+	ERRDATA return(evbox);
 }
 
 void setFilePrefs(pageStruct* page)
 {
+	ERRDATA
 	PangoFontDescription*	font_desc;
 	GdkColor				color;
 	GtkTextAttributes*		attr;
@@ -205,10 +218,14 @@ void setFilePrefs(pageStruct* page)
 
 	ERRDATA
 	createCompletion(page);
+	ERRDATA
+	ERRDATA
 }
 
 void resetAllFilePrefs(void)
 {
+	ERRDATA
+	ERRDATA
 	pageStruct*			page;
 
 	ERRDATA
@@ -220,10 +237,14 @@ void resetAllFilePrefs(void)
 			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 			setFilePrefs(page);
 		}
+	ERRDATA
+	ERRDATA
 }
 
 void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
 {
+	ERRDATA
+	ERRDATA
 	gchar**			array=NULL;
 	int				cnt;
 	char*			filename;
@@ -240,7 +261,7 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 	if(array==NULL)
 		{
 			gtk_drag_finish (context,true,true,time);
-			return;
+			ERRDATA return;
 		}
 
 	cnt=g_strv_length(array);
@@ -276,10 +297,14 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 
 	ERRDATA
 	gtk_drag_finish (context,true,true,time);
+	ERRDATA
+	ERRDATA
 }
 
 bool getSaveFile(void)
 {
+	ERRDATA
+	ERRDATA
 	GtkWidget*	dialog;
 	bool		retval=false;
 
@@ -304,11 +329,13 @@ bool getSaveFile(void)
 
 	gtk_widget_destroy(dialog);
 	refreshMainWindow();
-	return(retval);
+	ERRDATA return(retval);
 }
 
 VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
+	ERRDATA
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start,end;
 	gchar*		text;
@@ -334,7 +361,7 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Can't save file '%s' :("),page->filePath);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
-					return(false);
+					ERRDATA return(false);
 				}
 		}
 	else
@@ -344,13 +371,17 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 					saveFilePath=page->filePath;
 					saveFileName=page->fileName;
 					if(page->dirName!=NULL)
-						ERRDATA debugFree(&page->dirName,"saveFile dirName");
+						{
+							ERRDATA debugFree(&page->dirName,"saveFile dirName");
+						}
 					page->dirName=g_path_get_dirname(page->filePath);
 				}
 
 			saveFileName=page->fileName;
 			if(getSaveFile()==false)
-				return(false);
+				{
+					ERRDATA return(false);
+				}
 
 			fd=fopen(saveFilePath,"w");
 			ERRDATA
@@ -359,7 +390,9 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 					page->filePath=saveFilePath;
 					page->fileName=saveFileName;
 					if(page->dirName!=NULL)
-						ERRDATA debugFree(&page->dirName,"saveFile dirName");
+						{
+							ERRDATA debugFree(&page->dirName,"saveFile dirName");
+						}
 					page->dirName=g_path_get_dirname(page->filePath);
 
 					gtk_text_buffer_set_modified ((GtkTextBuffer*)page->buffer,FALSE);
@@ -375,7 +408,7 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Can't save file '%s' :("),page->filePath);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
-					return(false);
+					ERRDATA return(false);
 				}
 
 			saveFileName=NULL;
@@ -390,11 +423,13 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"saveFile");
 
-	return(true);
+	ERRDATA return(true);
 }
 
 VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 {
+	ERRDATA
+	ERRDATA
 	GtkWidget*		dialog;
 	char*			filepath;
 	char*			filename;
@@ -446,10 +481,14 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 
 	gtk_widget_destroy (dialog);
 	refreshMainWindow();
+	ERRDATA
+	ERRDATA
 }
 
 VISIBLE void reloadFile(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
+	ERRDATA
 	pageStruct*	page=getPageStructPtr(-1);
 	gchar*		buffer;
 	long		filelen;
@@ -467,10 +506,14 @@ VISIBLE void reloadFile(GtkWidget* widget,gpointer data)
 			gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
 			ERRDATA debugFree(&buffer,"reloadFile buffer");
 		}
+	ERRDATA
+	ERRDATA
 }
 
 VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
+	ERRDATA
 	pageStruct*		page;
 	FILE*			fd=NULL;
 	char*			filename;
@@ -514,10 +557,14 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 			fclose(fd);
 			ERRDATA debugFree(&filename,"saveSession filename");
 		}
+	ERRDATA
+	ERRDATA
 }
 
 VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
+	ERRDATA
 	FILE			*fd=NULL;
 	char			*filename;
 	char			buffer[2048];
@@ -582,8 +629,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 			ERRDATA debugFree(&filename,"restoreSession filename");
 		}
 
-	ERRDATA
-	delete buf;
+	ERRDATA delete buf;
 
 	while(gtk_events_pending())
 		gtk_main_iteration_do(false);
@@ -592,10 +638,14 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	setSensitive();
 	ERRDATA
 	killBarberPole();
+	ERRDATA
+	ERRDATA
 }
 
 int showFileChanged(char* filename)
 {
+	ERRDATA
+	ERRDATA
 	GtkWidget*	dialog;
 	gint		result;
 	char*		message;
@@ -610,13 +660,14 @@ int showFileChanged(char* filename)
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 
 	gtk_widget_destroy(dialog);
-	ERRDATA
 	ERRDATA debugFree(&message,"showFileChanged message");
-	return(result);
+	ERRDATA return(result);
 }
 
 void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data)
 {
+	ERRDATA
+	ERRDATA
 	pageStruct*		page=(pageStruct*)user_data;
 	GtkTextIter		start;
 	GtkTextIter		end;
@@ -651,10 +702,14 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 			else
 				page->itsMe=false;
 		}
+	ERRDATA
+	ERRDATA
 }
 
 void add_source_mark_pixbufs (GtkSourceView *view)
 {
+	ERRDATA
+	ERRDATA
 	GdkColor	color;
 	GtkImage*	image;
 	GdkPixbuf*	pbuf;
@@ -667,12 +722,17 @@ void add_source_mark_pixbufs (GtkSourceView *view)
 	gtk_source_view_set_mark_category_background(view,MARK_TYPE_1,&color);
 	gtk_source_view_set_mark_category_icon_from_pixbuf (view,MARK_TYPE_1,pbuf);
 	gtk_source_view_set_mark_category_priority(view,MARK_TYPE_1,1);
+	ERRDATA
+	ERRDATA
 }
 
 gboolean clickInView(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	if(sessionBusy==true)
-		return(false);
+		{
+			ERRDATA return(false);
+		}
 
 	ERRDATA
 	if((statusMessage!=NULL))
@@ -681,11 +741,13 @@ gboolean clickInView(GtkWidget* widget,gpointer data)
 			statusMessage=NULL;
 			
 		}
-	return(false);
+	ERRDATA return(false);
 }
 
 pageStruct* makeNewPage(void)
 {
+	ERRDATA
+	ERRDATA
 	pageStruct*			page;
 	GtkTextIter			iter;
 	GtkTextAttributes*	attr;
@@ -762,11 +824,13 @@ pageStruct* makeNewPage(void)
 	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(updateStatusBar),(void*)page);
 	ERRDATA
 
-	return(page);
+	ERRDATA return(page);
 }
 
 void convertContents(char *data,int datalen)
 {
+	ERRDATA
+	ERRDATA
  	const gchar	*charset;
 	iconv_t		cd;
     size_t		len_src;
@@ -790,10 +854,13 @@ void convertContents(char *data,int datalen)
     iconv_close(cd);
 
 	dataLen=(long)startptr-(long)convertedData;
+	ERRDATA
+	ERRDATA
 }
 
 VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
+	ERRDATA
 	GtkTextIter				iter;
 	GtkTextIter				startiter;
 	GtkTextIter				enditer;
@@ -811,7 +878,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	char*					tpath;
 	int						whattodo;
 
-	ERRDATA
 	busyFlag=true;
 	sessionBusy=true;
 
@@ -834,7 +900,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 							busyFlag=false;
 							sessionBusy=false;
 							ERRDATA debugFree(&tpath,"openFile tpath");
-							return(true);
+							ERRDATA return(true);
 						}
 					ERRDATA debugFree(&tpath,"openFile ");
 				}
@@ -850,7 +916,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 				}
 			busyFlag=false;
 			sessionBusy=false;
-			return(false);
+			ERRDATA return(false);
 		}
 
 	if(access(filepathcopy,R_OK)!=0)
@@ -863,7 +929,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 				}
 			busyFlag=false;
 			sessionBusy=false;
-			return(false);
+			ERRDATA return(false);
 		}
 
 	if(linenum<0)
@@ -895,7 +961,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 				}
 			busyFlag=false;
 			sessionBusy=false;
-			return(false);
+			ERRDATA return(false);
 		}
 
 	convertContents((char*)contents,length);
@@ -918,7 +984,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					busyFlag=false;
 					sessionBusy=false;
 					gtk_widget_destroy(label);
-					return(false);
+					ERRDATA return(false);
 				}
 			gtk_source_buffer_end_not_undoable_action(page->buffer);
 		}
@@ -975,15 +1041,16 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_text_iter_set_line(&iter,linenum);
 	gtk_text_buffer_move_mark((GtkTextBuffer*)page->buffer,page->backMark,&iter);
 	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
-	ERRDATA
 
 	busyFlag=false;
 	sessionBusy=false;
-	return TRUE;
+	ERRDATA return(TRUE);
 }
 
 VISIBLE void newFile(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
+	ERRDATA
 	GtkTextIter	iter;
 	GtkWidget*	label;
 	pageStruct*	page;
@@ -1019,4 +1086,6 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 	ERRDATA
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"newFile");
+	ERRDATA
+	ERRDATA
 }

@@ -31,21 +31,22 @@ GtkSourceCompletionWords*	docWordsProv;
 
 gchar* function_provider_get_name(GtkSourceCompletionProvider* provider)
 {
-	return g_strdup(((FunctionProvider *)provider)->name);
+	ERRDATA return g_strdup(((FunctionProvider *)provider)->name);
 }
 
 gint function_provider_get_priority(GtkSourceCompletionProvider* provider)
 {
-	return((FunctionProvider*)provider)->priority;
+	ERRDATA return((FunctionProvider*)provider)->priority;
 }
 
 gboolean function_provider_match(GtkSourceCompletionProvider* provider,GtkSourceCompletionContext*context)
 {
-	return TRUE;
+	ERRDATA return TRUE;
 }
 
 char* get_word_at_iter(GtkTextIter* iter,GtkTextBuffer *buffer)
 {
+	ERRDATA
 	GtkTextIter*	startiter;
 	char*			word;
 
@@ -55,33 +56,34 @@ char* get_word_at_iter(GtkTextIter* iter,GtkTextBuffer *buffer)
 			gtk_text_iter_backward_word_start(startiter);
 			word=gtk_text_buffer_get_text(buffer,startiter,iter,true);
 			if(strlen(word)>=autoShowMinChars)
-				return(word);
+				{
+					ERRDATA return(word);
+				}
 		}
-	return(NULL);
+	ERRDATA return(NULL);
 }
 
 GdkPixbuf* function_provider_get_icon(GtkSourceCompletionProvider* provider)
 {
+	ERRDATA
 	FunctionProvider* tp=(FunctionProvider*)provider;
 
-//	if (tp->icon==NULL)
-//		{
-//			GtkIconTheme* theme=gtk_icon_theme_get_default();
-//			tp->icon=gtk_icon_theme_load_icon(theme,GTK_STOCK_DIALOG_INFO,16,(GtkIconLookupFlags)0,NULL);
-//		}
-	return tp->icon;
+	ERRDATA return tp->icon;
 }
 
 //completion
 GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 {
+	ERRDATA
 	char*	infostr;
 	GList*	newlist=NULL;
 	GList*	customlist=customProv->proposals;
 	char*	text;
 
 	if(page->filePath==NULL)
-		return(newlist);
+		{
+			ERRDATA return(newlist);
+		}
 
 	customlist=prov->proposals;
 	while(customlist!=NULL)
@@ -96,11 +98,12 @@ GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 				}
 			customlist=customlist->next;
 		}
-	return(newlist);
+	ERRDATA return(newlist);
 }
 
 void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceCompletionContext* context)
 {
+	ERRDATA
 	GtkTextIter 	iter;
 	gchar*			word=NULL;
 	GtkTextBuffer*	buffer;
@@ -110,7 +113,7 @@ void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceC
 	if(forcePopup==true)
 		{
 			gtk_source_completion_context_add_proposals(context,provider,((FunctionProvider *)provider)->proposals,true);
-			return;
+			ERRDATA return;
 		}
 
 	gtk_source_completion_context_get_iter(context,&iter);
@@ -122,7 +125,7 @@ void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceC
 		{
 			g_free (word);
 			gtk_source_completion_context_add_proposals(context,provider,NULL,true);
-			return;
+			ERRDATA return;
 		}
 
 	if(word!=NULL)
@@ -138,29 +141,37 @@ void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceC
 		}
 	if(word!=NULL)
 		ERRDATA debugFree(&word,"function_provider_populate word");
+	ERRDATA
 }
 
 void function_provider_iface_init(GtkSourceCompletionProviderIface* iface)
 {
+	ERRDATA
 	iface->get_name=function_provider_get_name;
 	iface->populate=function_provider_populate;
 	iface->match=function_provider_match;
 	iface->get_priority=function_provider_get_priority;
 	iface->get_icon=function_provider_get_icon;
+	ERRDATA
 }
 
 void function_provider_class_init(FunctionProviderClass* klass)
 {
+	ERRDATA
+	ERRDATA
 }
 
 void function_provider_init(FunctionProvider* self)
 {
+	ERRDATA
 	self->icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER(self));
+	ERRDATA
 }
 
 //completion
 void addProp(pageStruct* page)
 {
+	ERRDATA
 	char*		functions=NULL;
 	char		tmpstr[1024];
 	char*		lineptr;
@@ -173,7 +184,9 @@ void addProp(pageStruct* page)
 	char*		customfile;
 
 	if(page->filePath==NULL)
-		return;
+		{
+			ERRDATA return;
+		}
 
 //custom
 	asprintf(&customfile,"%s/%s",getenv("HOME"),CUSTOMWORDFILE);
@@ -222,20 +235,24 @@ void addProp(pageStruct* page)
 		}
 	if(functions!=NULL)
 		ERRDATA debugFree(&functions,"switchPage functions");
+	ERRDATA
 }
 
 void removeProps(void)
 {
+	ERRDATA
 	g_list_free_full(funcProv->proposals,g_object_unref);
 	g_list_free_full(varsProv->proposals,g_object_unref);
 	g_list_free_full(customProv->proposals,g_object_unref);
 	funcProv->proposals=NULL;
 	varsProv->proposals=NULL;
 	customProv->proposals=NULL;
+	ERRDATA
 }
 
 void createCompletion(pageStruct* page)
 {
+	ERRDATA
 	removeProps();
 
 	gtk_source_completion_words_register(docWordsProv,gtk_text_view_get_buffer(GTK_TEXT_VIEW(page->view)));
@@ -247,14 +264,17 @@ void createCompletion(pageStruct* page)
 	gtk_source_completion_add_provider(page->completion,GTK_SOURCE_COMPLETION_PROVIDER(customProv),NULL);
 
 	addProp(page);
+	ERRDATA
 }
 
 void doCompletionPopUp(pageStruct* page)
 {
+	ERRDATA
 	GtkSourceCompletionContext*	context;
 	GList*						list;
 
 	context=gtk_source_completion_create_context(page->completion,NULL);
 	list=gtk_source_completion_get_providers(page->completion);
 	gtk_source_completion_show(page->completion,list,context);
+	ERRDATA
 }

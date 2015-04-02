@@ -13,6 +13,7 @@ int marknum=0;
 
 void goToDefine(functionData* fdata)
 {
+	ERRDATA
 	pageStruct*	page;
 	TextBuffer*	buf;
 
@@ -22,7 +23,7 @@ void goToDefine(functionData* fdata)
 			page=getPageStructPtr(gtk_notebook_get_n_pages(mainNotebook)-1);
 			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 			buf->scroll2Line((GtkTextView*)page->view,fdata->line-2);
-			delete buf;
+			ERRDATA delete buf;
 		}
 	else
 		{
@@ -35,12 +36,14 @@ void goToDefine(functionData* fdata)
 			else
 				buf->scroll2Line((GtkTextView*)page->view2,fdata->line-1);
 
-			delete buf;
+			ERRDATA delete buf;
 		}
+	ERRDATA
 }
 
 VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	pageStruct*		page=getPageStructPtr(-1);
 	GtkTextIter		start;
 	GtkTextIter		end;
@@ -48,16 +51,22 @@ VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
 	functionData*	fdata=NULL;
 
 	if(page==NULL)
-		return;
+		{
+			ERRDATA return;
+		}
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 			if(selection==NULL)
-				return;
+				{
+					ERRDATA return;
+				}
 		}
 	else
-		return;
+		{
+			ERRDATA return;
+		}
 
 	fdata=getFunctionByName(selection,true,true);
 	if(fdata!=NULL)
@@ -66,11 +75,12 @@ VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
 			goToDefine(fdata);
 			destroyData(fdata);
 		}
-	return;
+	ERRDATA return;
 }
 
 VISIBLE void findFile(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	char*			command;
 	char			buffer[2048];
 	TextBuffer*		buf;
@@ -87,7 +97,9 @@ VISIBLE void findFile(GtkWidget* widget,gpointer data)
 
 	selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&buf->lineStart,&buf->lineEnd,false);
 	if(selection[0]!='#')
-		return;
+		{
+			ERRDATA return;
+		}
 	slice->setReturnDupString(false);
 	filename=slice->sliceBetween(selection,(char*)"include ",NULL);
 
@@ -116,12 +128,13 @@ VISIBLE void findFile(GtkWidget* widget,gpointer data)
 				}
 			ERRDATA debugFree(&filepath,"findFile filepath");
 		}
-	delete buf;
-	delete slice;
+	ERRDATA delete buf;
+	ERRDATA delete slice;
 }
 
 void gotoLine(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	int			line=(long)data;
 	pageStruct*	page=getPageStructPtr(-1);
 	TextBuffer*	buf;
@@ -134,18 +147,22 @@ void gotoLine(GtkWidget* widget,gpointer data)
 				buf->scroll2Line((GtkTextView*)page->view,line-1);
 			else
 				buf->scroll2Line((GtkTextView*)page->view2,line-1);
-			delete buf;
+			ERRDATA delete buf;
 		}
+	ERRDATA
 }
 
 void jumpToLineFromBar(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
 	gotoLine(NULL,(gpointer)(long)theLineNum);
+	ERRDATA
 }
 
 int showLineEntry(void)
 {
+	ERRDATA
 	GtkWidget*	dialog;
 	gint		result;
 	GtkWidget*	content_area;
@@ -170,17 +187,20 @@ int showLineEntry(void)
 
 	gtk_widget_destroy(dialog);
 
-	return(result);
+	ERRDATA return(result);
 }
 
 VISIBLE void jumpToLine(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	if(showLineEntry()==GTK_RESPONSE_YES)
 		gotoLine(NULL,(gpointer)(long)theLineNum);
+	ERRDATA
 }
 
 VISIBLE void functionSearch(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	functionData	*fdata;
 	bool			ok;
 
@@ -196,16 +216,18 @@ VISIBLE void functionSearch(GtkWidget* widget,gpointer data)
 								{
 									goToDefine(fdata);
 									destroyData(fdata);
-									return;
+									ERRDATA return;
 								}
 							ok=false;
 						}
 				}
 		}
+	ERRDATA
 }
 
 void jumpToMark(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	GtkTextMark*	mark;
 	pageStruct*		page;
 	pageStruct*		checkpage;
@@ -225,17 +247,18 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 				{
 					gtk_notebook_set_current_page(mainNotebook,loop);
 					gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&buf->cursorPos);
-					delete buf;
-					return;
+					ERRDATA delete buf;
+					ERRDATA return;
 				}
 		}
-	delete buf;
+	ERRDATA delete buf;
 }
 
 #ifdef _BUILDDOCVIEWER_
 
 char* unEscapeFileNAme(char* name)
 {
+	ERRDATA
 	char*	buffer;
 	int		charpos;
 	unsigned int		namepos;
@@ -337,7 +360,7 @@ char* unEscapeFileNAme(char* name)
 			charpos++;
 		}
 
-	return(buffer);
+	ERRDATA return(buffer);
 }
 
 struct docFileData
@@ -353,17 +376,20 @@ char*	filebuffer=NULL;
 
 bool readFile(char *name)
 {
+	ERRDATA
 	FILE*			file;
 	unsigned long	fileLen;
 
 	if(filebuffer!=NULL)
-		ERRDATA debugFree(&filebuffer,"readFile filebuffer");
+		{
+			ERRDATA debugFree(&filebuffer,"readFile filebuffer");
+		}
 	//Open file
 	file=fopen(name,"rb");
 	if (!file)
 		{
 			fprintf(stderr,gettext("Unable to open file %s"),name);
-			return(false);
+			ERRDATA return(false);
 		}
 
 	//Get file length
@@ -377,17 +403,18 @@ bool readFile(char *name)
 		{
 			fprintf(stderr,gettext("Memory error!"));
 			fclose(file);
-			return(false);
+			ERRDATA return(false);
 		}
 
 	//Read file contents into buffer
 	fread(filebuffer,fileLen,1,file);
 	fclose(file);
-	return(true);
+	ERRDATA return(true);
 }
 
 int getLineFromXML(char* xml)
 {
+	ERRDATA
 	StringSlice*	slice=new StringSlice;
 
 	char*			data;
@@ -397,8 +424,8 @@ int getLineFromXML(char* xml)
 	data=slice->sliceBetween(xmldata,(char*)"Definition at line",(char*)"\">");
 	if(slice->getResult()==0)
 		retline=atoi(slice->sliceBetween(data,(char*)"#l",NULL));
-	delete slice;
-	return(retline);
+	ERRDATA delete slice;
+	ERRDATA return(retline);
 }
 
 bool	mustBeAClass=false;
@@ -407,6 +434,7 @@ char*	classFileName=NULL;
 
 char* getPathFromXML(char* xml)
 {
+	ERRDATA
 	StringSlice*	slice=new StringSlice;
 	bool			done=false;
 	char*			data;
@@ -450,8 +478,8 @@ char* getPathFromXML(char* xml)
 				{
 					char*	tfile;
 					asprintf(&tfile,"/%s",slice->sliceBetween(xmldata,(char*)".html\">",(char*)"</a>"));					
-					delete slice;
-					return(tfile);
+					ERRDATA delete slice;
+					ERRDATA return(tfile);
 				}
 		}
 
@@ -493,19 +521,20 @@ char* getPathFromXML(char* xml)
 										mustBeAClass=false;
 										classLineNumber=atoi(slice->sliceBetween(xmldata,(char*)"#l",(char*)"\">"));
 										asprintf(&classFileName,"/%s",slice->sliceBetween(xmldata,(char*)".html\">",(char*)"</a>"));
-										delete slice;
-										return(classFileName);
+										ERRDATA delete slice;
+										ERRDATA return(classFileName);
 									}
 							}
 						}
 				}
 		}
-	delete slice;
-	return(buffer);
+	ERRDATA delete slice;
+	ERRDATA return(buffer);
 }
 
 docFileData* getDoxyFileData(char* uri)
 {
+	ERRDATA
 	char*	linetag=NULL;
 	bool	gotline=false;
 
@@ -567,11 +596,12 @@ docFileData* getDoxyFileData(char* uri)
 	ERRDATA debugFree(&unhashedline,"getDoxyFileData unhashedline");
 	ERRDATA debugFree(&linetag,"getDoxyFileData linetag");
 	ERRDATA debugFree(&filepath,"getDoxyFileData filepath");
-	return(doxydata);
+	ERRDATA return(doxydata);
 }
 
 gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest* request,WebKitWebNavigationAction* navigationAction,WebKitWebPolicyDecision* policy_decision, gpointer user_data)
 {
+	ERRDATA
 	int				mod=-1;
 	const char*		uri;
 	pageStruct*		page;
@@ -584,7 +614,9 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 			uri=webkit_network_request_get_uri(request);
 			doxydata=getDoxyFileData((char*)uri);
 			if(doxydata==NULL)
-				return(false);
+				{
+					ERRDATA return(false);
+				}
 
 //check in open tabs
 			buf=new TextBuffer;
@@ -596,16 +628,16 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 							gtk_notebook_set_current_page(mainNotebook,j);
 							buf->textBuffer=(GtkTextBuffer*)page->buffer;
 							buf->scroll2LineM(page,doxydata->lineNum-1);
-							delete buf;
+							ERRDATA delete buf;
 							ERRDATA debugFree((char**)&doxydata,"docLinkTrap doxydata");
-							return(false);
+							ERRDATA return(false);
 						}
 				}
 //try to open file f not in tabs
 			openFile(doxydata->sourceFile,doxydata->lineNum,false);
 			ERRDATA debugFree((char**)&doxydata,"docLinkTrap doxydata");
 		}
-	return(false);
+	ERRDATA return(false);
 }
 
 #endif
@@ -613,12 +645,15 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 //jump to tab
 void selectTab(GtkWidget* widget,gpointer data)
 {
+	ERRDATA
 	gtk_notebook_set_current_page(mainNotebook,(int)(long)data);
+	ERRDATA
 }
 
 //rebuild tabs menu
 void rebuildTabsMenu(void)
 {
+	ERRDATA
 	GtkWidget	*menuitem;
 	GtkWidget	*submenu;
 	pageStruct	*page;
@@ -643,5 +678,6 @@ void rebuildTabsMenu(void)
 				}
 		}
 	gtk_widget_show_all(viewTabMenu);
+	ERRDATA
 }
 
