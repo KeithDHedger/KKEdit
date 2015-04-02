@@ -1,4 +1,5 @@
 0.2.7
+Fixed errant characters when searching gtk docs.
 Fixed minor bug displaying help in browser.
 Fixed highlight colour when highlighting all in find/replace.
 Now checks for binary data and asks whether to continue loading.

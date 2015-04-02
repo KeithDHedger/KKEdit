@@ -104,6 +104,12 @@ VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
 	char*		tempstr;
 	char*		link;
 	int			cnt=0;
+	char		ds[2];
+
+	ERRDATA
+
+	ds[0]=0xc2;
+	ds[1]=0;
 
 	for(int loop=0;loop<2048;loop++)
 		{
@@ -142,7 +148,7 @@ VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
 															link=globalSlice->sliceBetween(line,(char*)"link=\"",(char*)"\"");
 															if((foldername!=NULL) && (link!=NULL))
 																{
-																	searchdata[cnt][0]=strdup(funcname);
+																	searchdata[cnt][0]=strdup(globalSlice->deleteSlice(funcname,ds));
 																	asprintf(&searchdata[cnt][1],"%s/%s",foldername,link);
 																	ERRDATA debugFree(&foldername,"seachGtkDocs foldername");
 																	ERRDATA debugFree(&link,"seachGtkDocs link");
@@ -153,7 +159,6 @@ VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
 												}
 										}
 									ERRDATA debugFree(&funcname,"seachGtkDocs funcname");
-									funcname=NULL;
 								}
 						}
 				}
