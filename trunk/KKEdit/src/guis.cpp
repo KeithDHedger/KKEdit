@@ -1958,6 +1958,17 @@ void buildGtkDocViewer(void)
 	gtk_widget_grab_focus(GTK_WIDGET(webView));
 
 	g_signal_connect_object(G_OBJECT(docView),"delete-event",G_CALLBACK(toggleDocviewer),G_OBJECT(docView),G_CONNECT_SWAPPED);
+
+	const char* lang;
+
+	if(strncmp(localeLang,"en",2)==0)
+		lang="en";
+	else
+		lang="fr";
+
+	asprintf(&thePage,"file://%s/help/help.%s.html",DATADIR,lang);
+	webkit_web_view_load_uri(webView,thePage);
+	ERRDATA freeAndNull(&thePage);
 }
 #endif
 

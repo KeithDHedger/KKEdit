@@ -296,12 +296,6 @@ VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
 		}
 }
 
-//searc qt5 aasistant
-void searchQT5Assist(GtkWidget* widget,gpointer data)
-{
-	printf("search qt5 assistant\n");
-}
-
 //showDocViewWidget
 VISIBLE void searchQT5Docs(GtkWidget* widget,gpointer data)
 {

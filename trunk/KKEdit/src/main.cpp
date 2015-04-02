@@ -104,18 +104,17 @@ void init(void)
 	showBMBar=false;
 	listFunction=0;
 	showStatus=true;
-
+ 
 	asprintf(&filename,"%s/.KKEdit/tools",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
-	ERRDATA debugFree(&filename,"init filename");
-
+	ERRDATA debugFree(&filename,"init 0 filename");
 	schemeManager=gtk_source_style_scheme_manager_get_default();
 	asprintf(&filename,"%s/.gnome2/gedit/styles",getenv("HOME"));
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
 	ERRDATA debugFree(&filename,"init filename");
 	asprintf(&filename,"%s/styles",DATADIR);
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
-	ERRDATA debugFree(&filename,"init filename");
+	ERRDATA debugFree(&filename,"init 1 filename");
 
 //toolbar layout
 	toolBarLayout=strdup("NOSsXCPsURsFGsE9ADL");
