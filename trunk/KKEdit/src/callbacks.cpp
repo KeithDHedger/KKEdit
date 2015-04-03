@@ -1474,7 +1474,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 			submenu=gtk_menu_new();
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),submenu);
 
-			asprintf(&command,"ls -1 \"%s\"|sort|sed -n '/^.*[^\\.o]$/p'",page->dirName);
+			asprintf(&command,"ls --color=never -Bp  \"%s\" | grep -v /|sort|sed -n '/^.*[^\\.o]$/p'",page->dirName);
 			fp=popen(command,"r");
 			if(fp!=NULL)
 				{
