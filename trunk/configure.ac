@@ -105,6 +105,13 @@ AC_ARG_WITH(gsu-path,AS_HELP_STRING([ --with-gsu-path],[Path to graphical su app
 AC_SUBST(with_gsu_path)
 AC_MSG_RESULT([Setting path to graphical su app to \"$with_gsu_path\"])
 
+AC_ARG_WITH(debug_level,AS_HELP_STRING([ --with-debug-level],[Debug level ( 0,1,2,3,4 )]),
+    [with_debug_level=$withval],
+    [with_debug_level=0])
+AC_SUBST(with_debug_level)
+AC_MSG_RESULT([Setting debug level to $with_debug_level])
+
+
 AC_OUTPUT(Makefile KKEdit/app/Makefile)
 
 

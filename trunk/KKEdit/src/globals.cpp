@@ -81,9 +81,6 @@ int				bmMarkNumber=0;
 char*			toolBarLayout=NULL;
 GtkWidget*		toolBarBox;
 
-
-
-
 GtkWidget*		lineNumberWidget;
 GtkWidget*		findApiWidget;
 GtkWidget*		findQtApiWidget;
@@ -279,6 +276,9 @@ AspellSpeller*	spellChecker=0;
 #endif
 
 const char*		localeLang;
+
+//notebook
+int				openInThisTab=-1;
 
 HistoryClass*	history;
 StringSlice*	globalSlice;

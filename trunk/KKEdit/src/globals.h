@@ -17,8 +17,6 @@
 #define DBG3 3 //debug to both
 #define DBG4 4 //only catch faults
 
-#define _DEBUGLEVEL_ DBG4
-
 #define REPLACE			100
 #define FINDNEXT		200
 #define FINDPREV		300
@@ -174,11 +172,7 @@ extern int				bmMarkNumber;
 extern char*			toolBarLayout;
 extern GtkWidget*		toolBarBox;
 
-
-
 extern GtkWidget*		menuItemOpen;
-
-
 
 extern GtkWidget*		lineNumberWidget;
 extern GtkWidget*		findApiWidget;
@@ -409,6 +403,9 @@ extern args				keybindings_rc[];
 
 extern const char*		localeLang;
 extern bool				doUpdateWidgets;
+
+//notebook
+extern int				openInThisTab;
 
 void plugRunFunction(gpointer data,gpointer funcname);
 pageStruct* getPageStructPtr(int pagenum);

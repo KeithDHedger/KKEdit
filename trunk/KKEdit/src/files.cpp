@@ -1017,14 +1017,19 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
 	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
 
-	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
+	if(openInThisTab==-1)
+		currentPage=gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
+	else
+		currentPage=gtk_notebook_insert_page(mainNotebook,page->tabVbox,label,openInThisTab+1);
+
 	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
 	gtk_notebook_set_current_page(mainNotebook,currentPage);
-	currentPage++;
+
+	if(openInThisTab==-1)
+		currentPage++;
+
 	gtk_widget_grab_focus((GtkWidget*)page->view);
-
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
-
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
 	gtk_widget_show_all((GtkWidget*)mainNotebook);
