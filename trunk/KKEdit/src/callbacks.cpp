@@ -1328,8 +1328,8 @@ void openFromTab(GtkMenuItem* widget,pageStruct* page)
 	openInThisTab=gtk_notebook_get_current_page(mainNotebook);
 	asprintf(&filepath,"%s/%s",page->dirName,gtk_menu_item_get_label(widget));
 	openFile(filepath,0,true);
-	ERRDATA debugFree(&filepath,"openFromTab filepath");
 	openInThisTab=-1;
+	ERRDATA debugFree(&filepath,"openFromTab filepath");
 }
 
 bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)

@@ -91,6 +91,8 @@ void init(void)
 	maxFuncDefs=MAXTEXTWIDTH;
 	maxBMChars=MAXTEXTWIDTH;
 
+	openInThisTab=-1;
+
 //runtime deps
 	exitstatus=system("which manpageeditor 2>&1 >/dev/null");
 	gotManEditor=WEXITSTATUS(exitstatus);

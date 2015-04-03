@@ -1,6 +1,6 @@
 0.2.7
-Added debug level to configure ( deafults to 0 no debug info ).
-when opening file from tab dop down now opens file adjacent to current tab.
+Added debug level to configure ( defaults to 0 no debug info ).
+When opening file from tab dop down now opens file adjacent to current tab.
 Fixed errant characters when searching gtk docs.
 Fixed minor bug displaying help in browser.
 Fixed highlight colour when highlighting all in find/replace.
