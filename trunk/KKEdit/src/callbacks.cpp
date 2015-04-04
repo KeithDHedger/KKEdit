@@ -1589,7 +1589,7 @@ VISIBLE bool doSaveAll(GtkWidget* widget,gpointer data)
 								case GTK_RESPONSE_NO:
 									break;
 								case GTK_RESPONSE_CANCEL:
-									return(true);
+									return(false);
 									break;
 
 								default:

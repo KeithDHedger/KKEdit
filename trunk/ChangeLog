@@ -1,4 +1,5 @@
 0.2.7
+Fixed not cancelling quit with unsaved files.
 Updated kkedit-plugins.h so plugins will need updateding as well.
 Added some debug code ( only for devs ).
 Removed foldernames and backup (*~) files to open from tab popup.
