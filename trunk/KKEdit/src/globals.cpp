@@ -1205,12 +1205,10 @@ void killBarberPole(void)
 
 VISIBLE void freeAndNull(char** ptr)
 {
-	ERRDATA
 	if (*ptr!=NULL)
 		free(*ptr);
 
 	*ptr=NULL;
-	ERRDATA
 }
 
 VISIBLE void debugFree(char** ptr,const char* message)

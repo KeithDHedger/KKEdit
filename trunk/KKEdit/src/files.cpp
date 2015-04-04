@@ -19,7 +19,6 @@ long		dataLen=0;
 VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 {
 	ERRDATA
-	ERRDATA
 	FILE*	fd=NULL;
 	int		cnt=0;
 	GSList*	list=NULL;
@@ -62,12 +61,10 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 			fclose(fd);
 		}
 	ERRDATA
-	ERRDATA
 }
 
 VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 {
-	ERRDATA
 	ERRDATA
 	FILE*	fd=NULL;
 	char	buffer[2048];
@@ -112,19 +109,16 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 								}
 							cnt++;
 						}
-					ERRDATA
 					freeAndNull(&argname);
 					freeAndNull(&strarg);
 				}
 			fclose(fd);
 		}
 	ERRDATA
-	ERRDATA
 }
 
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
-	ERRDATA
 	ERRDATA
 	GtkWidget*	evbox=gtk_event_box_new();
 	GtkWidget*	hbox=gtk_hbox_new(false,0);
@@ -219,12 +213,10 @@ void setFilePrefs(pageStruct* page)
 	ERRDATA
 	createCompletion(page);
 	ERRDATA
-	ERRDATA
 }
 
 void resetAllFilePrefs(void)
 {
-	ERRDATA
 	ERRDATA
 	pageStruct*			page;
 
@@ -238,12 +230,10 @@ void resetAllFilePrefs(void)
 			setFilePrefs(page);
 		}
 	ERRDATA
-	ERRDATA
 }
 
 void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
 {
-	ERRDATA
 	ERRDATA
 	gchar**			array=NULL;
 	int				cnt;
@@ -298,12 +288,10 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 	ERRDATA
 	gtk_drag_finish (context,true,true,time);
 	ERRDATA
-	ERRDATA
 }
 
 bool getSaveFile(void)
 {
-	ERRDATA
 	ERRDATA
 	GtkWidget*	dialog;
 	bool		retval=false;
@@ -334,7 +322,6 @@ bool getSaveFile(void)
 
 VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 {
-	ERRDATA
 	ERRDATA
 	pageStruct*	page=getPageStructPtr(-1);
 	GtkTextIter	start,end;
@@ -429,7 +416,6 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 {
 	ERRDATA
-	ERRDATA
 	GtkWidget*		dialog;
 	char*			filepath;
 	char*			filename;
@@ -482,12 +468,10 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 	gtk_widget_destroy (dialog);
 	refreshMainWindow();
 	ERRDATA
-	ERRDATA
 }
 
 VISIBLE void reloadFile(GtkWidget* widget,gpointer data)
 {
-	ERRDATA
 	ERRDATA
 	pageStruct*	page=getPageStructPtr(-1);
 	gchar*		buffer;
@@ -507,12 +491,10 @@ VISIBLE void reloadFile(GtkWidget* widget,gpointer data)
 			ERRDATA debugFree(&buffer,"reloadFile buffer");
 		}
 	ERRDATA
-	ERRDATA
 }
 
 VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 {
-	ERRDATA
 	ERRDATA
 	pageStruct*		page;
 	FILE*			fd=NULL;
@@ -558,12 +540,10 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 			ERRDATA debugFree(&filename,"saveSession filename");
 		}
 	ERRDATA
-	ERRDATA
 }
 
 VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 {
-	ERRDATA
 	ERRDATA
 	FILE			*fd=NULL;
 	char			*filename;
@@ -639,12 +619,10 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	ERRDATA
 	killBarberPole();
 	ERRDATA
-	ERRDATA
 }
 
 int showFileChanged(char* filename)
 {
-	ERRDATA
 	ERRDATA
 	GtkWidget*	dialog;
 	gint		result;
@@ -666,7 +644,6 @@ int showFileChanged(char* filename)
 
 void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data)
 {
-	ERRDATA
 	ERRDATA
 	pageStruct*		page=(pageStruct*)user_data;
 	GtkTextIter		start;
@@ -703,12 +680,10 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 				page->itsMe=false;
 		}
 	ERRDATA
-	ERRDATA
 }
 
 void add_source_mark_pixbufs (GtkSourceView *view)
 {
-	ERRDATA
 	ERRDATA
 	GdkColor	color;
 	GtkImage*	image;
@@ -722,7 +697,6 @@ void add_source_mark_pixbufs (GtkSourceView *view)
 	gtk_source_view_set_mark_category_background(view,MARK_TYPE_1,&color);
 	gtk_source_view_set_mark_category_icon_from_pixbuf (view,MARK_TYPE_1,pbuf);
 	gtk_source_view_set_mark_category_priority(view,MARK_TYPE_1,1);
-	ERRDATA
 	ERRDATA
 }
 
@@ -746,7 +720,6 @@ gboolean clickInView(GtkWidget* widget,gpointer data)
 
 pageStruct* makeNewPage(void)
 {
-	ERRDATA
 	ERRDATA
 	pageStruct*			page;
 	GtkTextIter			iter;
@@ -830,7 +803,6 @@ pageStruct* makeNewPage(void)
 void convertContents(char *data,int datalen)
 {
 	ERRDATA
-	ERRDATA
  	const gchar	*charset;
 	iconv_t		cd;
     size_t		len_src;
@@ -854,7 +826,6 @@ void convertContents(char *data,int datalen)
     iconv_close(cd);
 
 	dataLen=(long)startptr-(long)convertedData;
-	ERRDATA
 	ERRDATA
 }
 
@@ -1055,7 +1026,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 VISIBLE void newFile(GtkWidget* widget,gpointer data)
 {
 	ERRDATA
-	ERRDATA
 	GtkTextIter	iter;
 	GtkWidget*	label;
 	pageStruct*	page;
@@ -1091,6 +1061,5 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 	ERRDATA
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"newFile");
-	ERRDATA
 	ERRDATA
 }

@@ -16,6 +16,7 @@
 #define DBG2 2 //debug to file
 #define DBG3 3 //debug to both
 #define DBG4 4 //only catch faults
+#define DBG5 5 //trace progflow
 
 #define REPLACE			100
 #define FINDNEXT		200
@@ -24,7 +25,11 @@
 #if _DEBUGLEVEL_ == DBG0
 #define ERRDATA
 #else
+#if _DEBUGLEVEL_ == DBG5
+#define ERRDATA errLine=__LINE__,errFile=__FILE__,errFunc=__func__;printf("File: %s,Func: %s,Line: %i\n",errFile,errFunc,errLine);
+#else
 #define ERRDATA errLine=__LINE__,errFile=__FILE__,errFunc=__func__;
+#endif
 #endif
 
 #define MYEMAIL "kdhedger68713@gmail.com"

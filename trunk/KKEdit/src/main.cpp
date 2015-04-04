@@ -329,7 +329,6 @@ void doNagStuff(void)
 void activate(GApplication* application)
 {
 	ERRDATA
-	ERRDATA
 }
 
 void open(GApplication* application,GFile** files,gint n_files,const gchar* hint)

@@ -158,7 +158,6 @@ void function_provider_iface_init(GtkSourceCompletionProviderIface* iface)
 void function_provider_class_init(FunctionProviderClass* klass)
 {
 	ERRDATA
-	ERRDATA
 }
 
 void function_provider_init(FunctionProvider* self)
