@@ -464,8 +464,8 @@ char* truncateWithElipses(char* str,unsigned int maxlen)
 					front=g_utf8_substring(str,0,sides);
 					back=g_utf8_substring(str,g_utf8_strlen(str,-1)-sides,g_utf8_strlen(str,-1));
 					asprintf(&retstr,"%s ... %s",front,back);
-					ERRDATA debugFree(&front,"truncateWithElipses front");
-					ERRDATA debugFree(&back,"truncateWithElipses back");
+					ERRDATA debugFree(&front);
+					ERRDATA debugFree(&back);
 				}
 			else
 				retstr=strdup(str);
@@ -530,8 +530,8 @@ void getMimeType(char* filepath,void* ptr)
 		{
 			stdout[strlen(stdout)-1]=0;
 			*((char**)ptr)=strdup(stdout);
-			ERRDATA debugFree(&stdout,"getMimeType stdout");
-			ERRDATA debugFree(&stderr,"getMimeType stderr");
+			ERRDATA debugFree(&stdout);
+			ERRDATA debugFree(&stderr);
 		}
 	ERRDATA
 }
@@ -576,7 +576,7 @@ void setLanguage(pageStruct* page)
 			else
 				mimetype=strndup(line,strlen(line)-1);
 
-			ERRDATA debugFree(&hold,"setLanguage hold");
+			ERRDATA debugFree(&hold);
 			pclose(fp);
 		}
 
@@ -605,7 +605,7 @@ void setLanguage(pageStruct* page)
 
 	if(mimetype!=NULL)
 		{
-			ERRDATA debugFree(&mimetype,"setLanguage mimetype");
+			ERRDATA debugFree(&mimetype);
 		}
 	ERRDATA
 }
@@ -680,8 +680,8 @@ VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int u
 	if(flags & TOOL_SHOW_DOC)
 		showDocView(USEFILE,(char*)"",title);
 
-	ERRDATA debugFree(&command,"runCommand command");
-	ERRDATA debugFree(&asroot,"runCommand asroot");
+	ERRDATA debugFree(&command);
+	ERRDATA debugFree(&asroot);
 }
 
 functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
@@ -734,9 +734,9 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 						{
 							sscanf (lineptr,"%s",function);
 							if(casesensitive==true)
-								gotmatch=strncmp(function,name,strlen(function));
+								gotmatch=strncmp(function,name,(int)strlen(function));
 							else
-								gotmatch=strncasecmp(function,name,strlen(function));
+								gotmatch=strncasecmp(function,name,(int)strlen(function));
 							thislen=strlen(name);
 
 							if((gotmatch==0) && (strlen(name)==strlen(function)))
@@ -791,23 +791,20 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 							while (lineptr!=NULL)
 								{
 									sscanf (lineptr,"%s",function);
+
+									if(casesensitive==true)
+										gotmatch=strncmp(function,name,(int)strlen(name));
+									else
+										gotmatch=strncasecmp(function,name,(int)strlen(name));
+
 									if(strlen(name)==strlen(function))
-										{
-											gotmatch=strncasecmp(function,name,strlen(function));
-											thislen=strlen(name);
-										}
+										thislen=strlen(name);
 									else
 										{
 											if(strlen(name)>strlen(function))
-												{
-													gotmatch=strncasecmp(function,name,strlen(function));
-													thislen=strlen(function);
-												}
+												thislen=strlen(function);
 											else
-												{
-													gotmatch=strncasecmp(name,function,strlen(name));
-													thislen=strlen(name);
-												}
+												thislen=strlen(name);
 										}
 
 									if((gotmatch==0) && (strlen(name)==strlen(function)))
@@ -822,6 +819,7 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 											fdata->intab=-1;
 											ERRDATA return(fdata);
 										}
+
 									if((gotmatch==0) && (bestlen<thislen))
 										{
 											possmatch=strdup(lineptr);
@@ -836,11 +834,11 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 								}
 							if(stdout!=NULL)
 								{
-									ERRDATA debugFree(&stdout,"getFunctionByName stdout");
+									ERRDATA debugFree(&stdout);
 								}
 							if(dirname!=NULL)
 								{
-									ERRDATA debugFree(&dirname,"getFunctionByName dirname");
+									ERRDATA debugFree(&dirname);
 								}
 						}
 				}
@@ -887,21 +885,21 @@ void destroyData(functionData* fdata)
 		{
 			if(fdata->name!=NULL)
 				{
-					ERRDATA debugFree(&fdata->name,"destroyData name");
+					ERRDATA debugFree(&fdata->name);
 				}
 			if(fdata->type!=NULL)
 				{
-					ERRDATA debugFree(&fdata->type,"destroyData type");
+					ERRDATA debugFree(&fdata->type);
 				}
 			if(fdata->file!=NULL)
 				{
-					ERRDATA debugFree(&fdata->file,"destroyData file");
+					ERRDATA debugFree(&fdata->file);
 				}
 			if(fdata->define!=NULL)
 				{
-					ERRDATA debugFree(&fdata->define,"destroyData define");
+					ERRDATA debugFree(&fdata->define);
 				}
-			ERRDATA debugFree((char**)&fdata,"destroyData fdata");
+			ERRDATA debugFree((char**)&fdata);
 		}
 	ERRDATA
 }
@@ -930,7 +928,7 @@ void getRecursiveTagListFileName(char* filepath,void* ptr)
 	*((char**)ptr)=str->str;
 	g_string_free(str,false);
 
-	ERRDATA debugFree(&command,"getRecursiveTagListFileName command");
+	ERRDATA debugFree(&command);
 	ERRDATA
 }
 
@@ -977,15 +975,15 @@ void getRecursiveTagList(char* filepath,void* ptr)
 			if(globalSlice->getResult()==NOERROR)
 				{
 					g_string_append_printf(str,"%s",newstr);
-					ERRDATA debugFree(&newstr,"getRecursiveTagList newstr");
+					ERRDATA debugFree(&newstr);
 				}
 		}
 	pclose(fp);
 
 	*((char**)ptr)=str->str;
 	g_string_free(str,false);
-	ERRDATA debugFree(&command,"getRecursiveTagList command");
-	ERRDATA debugFree(&sort,"getRecursiveTagList sort");
+	ERRDATA debugFree(&command);
+	ERRDATA debugFree(&sort);
 	ERRDATA
 }
 
@@ -994,17 +992,17 @@ void destroyTool(gpointer data)
 	ERRDATA
 	if(((toolStruct*)data)->menuName!=NULL)
 		{
-			ERRDATA debugFree(&((toolStruct*)data)->menuName,"destroyTool menuName");
+			ERRDATA debugFree(&((toolStruct*)data)->menuName);
 		}
 	if(((toolStruct*)data)->filePath!=NULL)
 		{
-			ERRDATA debugFree(&((toolStruct*)data)->filePath,"destroyTool filePath");
+			ERRDATA debugFree(&((toolStruct*)data)->filePath);
 		}
 	if(((toolStruct*)data)->command!=NULL)
 		{
-			ERRDATA debugFree(&((toolStruct*)data)->command,"destroyTool command");
+			ERRDATA debugFree(&((toolStruct*)data)->command);
 		}
-	ERRDATA debugFree((char**)&data,"destroyTool data");
+	ERRDATA debugFree((char**)&data);
 }
 
 gint sortTools(gconstpointer a,gconstpointer b)
@@ -1077,22 +1075,22 @@ void buildToolsList(void)
 										tool->global=false;
 
 									toolsList=g_list_prepend(toolsList,(gpointer)tool);
-									ERRDATA debugFree(&menuname,"buildToolsList menuname");
-									ERRDATA debugFree(&commandarg,"buildToolsList commandarg");
+									ERRDATA debugFree(&menuname);
+									ERRDATA debugFree(&commandarg);
 									if(commentarg!=NULL)
 										{
-											ERRDATA debugFree(&commentarg,"buildToolsList commentarg");
+											ERRDATA debugFree(&commentarg);
 										}
 								}
 
-							ERRDATA debugFree(&filepath,"buildToolsList filepath");
+							ERRDATA debugFree(&filepath);
 
 							entry=g_dir_read_name(folder);
 						}
 				}
 		}
-	ERRDATA debugFree(&datafolder[0],"buildToolsList datafolder[0]");
-	ERRDATA debugFree(&datafolder[1],"buildToolsList datafolder[1]");
+	ERRDATA debugFree(&datafolder[0]);
+	ERRDATA debugFree(&datafolder[1]);
 
 	toolsList=g_list_sort(toolsList,sortTools);
 	ERRDATA
@@ -1186,7 +1184,7 @@ void showBarberPole(const char* title)
 	asprintf(&barControl,"%s/BarControl-%s",tmpFolderName,slice->randomName(6));
 	asprintf(&barcommand,POLEPATH " \"%s\" \"%s\" \"pulse\" &",title,barControl);
 	system(barcommand);
-	ERRDATA debugFree(&barcommand,"restore session barcommand");
+	ERRDATA debugFree(&barcommand);
 	ERRDATA
 }
 
@@ -1198,9 +1196,8 @@ void killBarberPole(void)
 	usleep(100000);
 	asprintf(&barcommand,"/bin/echo quit > \"%s\"",barControl);
 	system(barcommand);
-	ERRDATA debugFree(&barcommand,"restore session barcommand");
-	ERRDATA debugFree(&barControl,"restore session barcontrol");
-	ERRDATA
+	ERRDATA debugFree(&barcommand);
+	ERRDATA debugFree(&barControl);
 }
 
 VISIBLE void freeAndNull(char** ptr)
@@ -1211,25 +1208,26 @@ VISIBLE void freeAndNull(char** ptr)
 	*ptr=NULL;
 }
 
-VISIBLE void debugFree(char** ptr,const char* message)
+VISIBLE void debugFree(char** ptr)
 {
 #if _DEBUGLEVEL_ > DBG0 && _DEBUGLEVEL_ < DBG4
 	FILE*	fp=stderr;
 
 	if((_DEBUGLEVEL_ == DBG1) || (_DEBUGLEVEL_ == DBG3))
-		fprintf(stderr,"free :%s\n",message);
+		fprintf(stderr,"Free: File:%s ,Func:%s, Line:%i\n",errFile,errFunc,errLine);
 
-	if((_DEBUGLEVEL_ == DBG2) || (_DEBUGLEVEL_ == DBG3))
+	if(_DEBUGLEVEL_ == DBG2)
 		{
 			if(logFile!=NULL)
 				{
 					fp=fopen(logFile,"a");
-					fprintf(fp,"free :%s\n",message);
+					fprintf(fp,"Free: File:%s ,Func:%s, Line:%i\n",errFile,errFunc,errLine);
 					fclose(fp);
 				}
 			else
 				{
-					fprintf(stderr,"free :%s\n",message);
+					fprintf(stderr,"Can't open log file\n");
+					fprintf(stderr,"Free: File:%s ,Func:%s, Line:%i\n",errFile,errFunc,errLine);
 				}
 		}
 #endif

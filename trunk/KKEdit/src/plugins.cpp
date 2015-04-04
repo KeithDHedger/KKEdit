@@ -99,7 +99,7 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 				}
 
 			pd->module=g_module_open(filepath,G_MODULE_BIND_LAZY);
-			ERRDATA debugFree(&filepath,"doSetPlugData filepath");
+			ERRDATA debugFree(&filepath);
 				
 			if(pd->module!= NULL)
 				{
@@ -145,7 +145,7 @@ void setPlugPrefs(GtkWidget* widget,gpointer data)
 					{
 						gtk_tree_model_get(model,&iter,COLUMN_PLUGIN,&plugname,-1);
 						globalPlugins->runPlugFunction(globalPlugins->getPluginByName(plugname),"plugPrefs");
-						ERRDATA debugFree(&plugname,"setPlugPrefs plugname");
+						ERRDATA debugFree(&plugname);
 					}
 				break;
 			case 2:
@@ -154,7 +154,7 @@ void setPlugPrefs(GtkWidget* widget,gpointer data)
 					{
 						gtk_tree_model_get(model,&iter,COLUMN_PLUGIN,&plugname,-1);
 						globalPlugins->runPlugFunction(globalPlugins->getPluginByName(plugname),"doAbout");
-						ERRDATA debugFree(&plugname,"setPlugPrefs plugname");
+						ERRDATA debugFree(&plugname);
 					}
 				break;
 //apply
@@ -184,7 +184,7 @@ void onRowSelected(GtkTreeView* treeview,gpointer userdata)
 			gtk_tree_model_get(model,&iter,COLUMN_PLUGIN,&plugname,-1);
 			gtk_widget_set_sensitive(plugAboutButton,globalPlugins->checkForFunction(plugname,"doAbout"));
 			gtk_widget_set_sensitive(plugPrefsButton,globalPlugins->checkForFunction(plugname,"plugPrefs"));
-			ERRDATA debugFree(&plugname,"onRowSelected plugname");
+			ERRDATA debugFree(&plugname);
 		}
 	ERRDATA
 }

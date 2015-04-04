@@ -182,7 +182,7 @@ void setToobarSensitive(void)
 
 void destroyBMData(gpointer data)
 {
-	ERRDATA debugFree(&((bookMarksNew*)data)->markName,"destroyBMData markName");
+	ERRDATA debugFree(&((bookMarksNew*)data)->markName);
 }
 
 VISIBLE void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer)
@@ -246,7 +246,7 @@ VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 				{
 					if((gpointer)((bookMarksNew*)ptr->data)->mark==(gpointer)GTK_TEXT_MARK(mark_list->data))
 						{
-							ERRDATA debugFree(&((bookMarksNew*)ptr->data)->markName,"toggleBookmark markName");
+							ERRDATA debugFree(&((bookMarksNew*)ptr->data)->markName);
 							newBookMarksList=g_list_remove(newBookMarksList,ptr->data);
 							gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),GTK_TEXT_MARK(mark_list->data));
 							break;
@@ -288,7 +288,7 @@ VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 			g_strchomp(previewtext);
 
 			correctedpreview=truncateWithElipses(previewtext,maxBMChars);
-			ERRDATA debugFree(&previewtext,"toggleBookmark previewtext");
+			ERRDATA debugFree(&previewtext);
 			previewtext=correctedpreview;
 
 			bookmarkdata->label=previewtext;
@@ -390,14 +390,12 @@ int show_question(char* filename)
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 
 	gtk_widget_destroy(dialog);
-	ERRDATA debugFree(&message,"show_question message");
+	ERRDATA debugFree(&message);
 	return(result);
 }
 
-
 void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data)
 {
-	ERRDATA
 	pageStruct* page=(pageStruct*)data;
 	TextBuffer*	buf;
 	char*		message=NULL;
@@ -420,6 +418,7 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 	if(pagecheck==NULL)
 		return;
 
+
 	if((page==NULL) || (showStatus==false))
 		{
 			gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
@@ -429,6 +428,8 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 
 	if(pagecheck!=page)
 		return;
+
+	ERRDATA
 
 	page->regexList=NULL;
 	page->regexMatchNumber=-1;
@@ -447,7 +448,7 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
 	asprintf(&message,gettext("Line %i Column %i \t\tSyntax Highlighting %s\t\tFilePath %s"),buf->lineNum,buf->column,lang,path);
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
-	ERRDATA debugFree(&message,"updateStatusBar message");
+	ERRDATA debugFree(&message);
 	delete buf;
 }
 
@@ -512,7 +513,7 @@ void setSensitive(void)
 				newlabel=strdup(&text[offset]);
 
 			gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)newlabel);
-			ERRDATA debugFree(&newlabel,"setSensitive newlabel");
+			ERRDATA debugFree(&newlabel);
 			gtk_widget_set_sensitive((GtkWidget*)cutMenu,true);
 			gtk_widget_set_sensitive((GtkWidget*)copyMenu,true);
 			gtk_widget_set_sensitive((GtkWidget*)pasteMenu,true);
@@ -597,9 +598,9 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 				{
 					if(((bookMarksNew*)ptr->data)->page==page)
 						{
-							ERRDATA debugFree(&((bookMarksNew*)ptr->data)->markName,"closeTab ((bookMarksNew*)ptr->data)->markName");
-							ERRDATA debugFree(&((bookMarksNew*)ptr->data)->label,"closeTab ((bookMarksNew*)ptr->data)->label");
-							ERRDATA debugFree((char**)&ptr->data,"closeTab ptr->data");
+							ERRDATA debugFree(&((bookMarksNew*)ptr->data)->markName);
+							ERRDATA debugFree(&((bookMarksNew*)ptr->data)->label);
+							ERRDATA debugFree((char**)&ptr->data);
 							changed=false;
 							newBookMarksList=g_list_remove_link(newBookMarksList,ptr);
 						}
@@ -618,12 +619,12 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 	gtk_widget_show_all(bookMarkMenu);
 
 	if(page->filePath!=NULL)
-		ERRDATA debugFree(&(page->filePath),"closeTab filePath");
+		ERRDATA debugFree(&(page->filePath));
 	if(page->fileName!=NULL)
-		ERRDATA debugFree(&(page->fileName),"closeTab fileName");
+		ERRDATA debugFree(&(page->fileName));
 
-	ERRDATA debugFree(&(page->dirName),"closeTab dirName");
-	ERRDATA debugFree(&(page->realFilePath),"closeTab realFilePath");
+	ERRDATA debugFree(&(page->dirName));
+	ERRDATA debugFree(&(page->realFilePath));
 	if(page->markList!=NULL)
 		g_list_free_full(page->markList,free);
 	page->markList=NULL;
@@ -645,7 +646,7 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 
 	gtk_notebook_remove_page(mainNotebook,thispage);
 //TODO//
-//	ERRDATA debugFree((char**)&page,"closeTab page");
+//	ERRDATA debugFree((char**)&page);
 	busyFlag=false;
 	if(closingAll==false)
 		{
@@ -777,7 +778,7 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 									if(flag==false)
 										{
 											typenames[numtypes]=strdup(newstr);
-											ERRDATA debugFree(&newstr,"switchPage newstr");
+											ERRDATA debugFree(&newstr);
 											if(typenames[numtypes][strlen(typenames[numtypes])-1]=='s')
 												asprintf(&newstr,"%s's",typenames[numtypes]);
 											else
@@ -791,7 +792,7 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 											numtypes++;
 										}
 
-									ERRDATA debugFree(&newstr,"switchPage newstr");
+									ERRDATA debugFree(&newstr);
 
 									onefunc=true;
 									menuitem=gtk_image_menu_item_new_with_label(correctedstr);
@@ -810,14 +811,14 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 			lineptr=strchr(lineptr,'\n');
 			if (lineptr!=NULL)
 				lineptr++;
-			ERRDATA debugFree(&correctedstr,"switchPage correctedstr");
-			ERRDATA debugFree(&ts,"switchPage ts");
+			ERRDATA debugFree(&correctedstr);
+			ERRDATA debugFree(&ts);
 		}
 
 	gtk_window_set_title((GtkWindow*)mainWindow,page->fileName);
 	refreshMainWindow();
 	if(functions!=NULL)
-		ERRDATA debugFree(&functions,"switchPage functions");
+		ERRDATA debugFree(&functions);
 
 	gtk_widget_set_sensitive((GtkWidget*)funcMenu,onefunc);
 
@@ -1029,7 +1030,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 		}
 
 	runCommand(tempCommand->str,&text,tool->inTerminal,tool->flags,tool->runAsRoot,tool->menuName);
-	ERRDATA debugFree(&selection,"externalTool selection");
+	ERRDATA debugFree(&selection);
 
 	if(text!=NULL)
 		{
@@ -1057,17 +1058,17 @@ void externalTool(GtkWidget* widget,gpointer data)
 	unsetenv("KKEDIT_HTMLFILE");
 	unsetenv("KKEDIT_BAR_CONTROL");
 
-	ERRDATA debugFree(&text,"externalTool text");
-	ERRDATA debugFree(&docdirname,"externalTool docdirname");
-	ERRDATA debugFree(&tooldirname,"externalTool tooldirname");
+	ERRDATA debugFree(&text);
+	ERRDATA debugFree(&docdirname);
+	ERRDATA debugFree(&tooldirname);
 	if(barcommand!=NULL)
 		{
-			ERRDATA debugFree(&barcommand,"externalTool barcommand");
+			ERRDATA debugFree(&barcommand);
 			asprintf(&barcommand,"echo quit>%s",barcontrol);
 			system(barcommand);
-			ERRDATA debugFree(&barcommand,"externalTool barcommand");
+			ERRDATA debugFree(&barcommand);
 		}
-	ERRDATA debugFree(&barcontrol,"externalTool barcontrol");
+	ERRDATA debugFree(&barcontrol);
 	delete slice;
 }
 
@@ -1087,7 +1088,7 @@ VISIBLE void openHelp(GtkWidget* widget,gpointer data)
 #else
 	asprintf(&thePage,"%s %s/help/help.%s.html",browserCommand,DATADIR,lang);
 	runCommand(thePage,NULL,false,8,0,(char*)gettext("KKEdit Help"));
-	ERRDATA debugFree((char**)&thePage,"openHelp thePage");
+	ERRDATA debugFree((char**)&thePage);
 	thePage=NULL;
 #endif
 }
@@ -1119,8 +1120,8 @@ VISIBLE void addtoCustomWordList(GtkWidget* widget,gpointer data)
 
 	asprintf(&command,"echo '%s'|cat - %s/%s|sort -u -o %s/%s.tmp;mv %s/%s.tmp %s/%s",selection,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE);
 	system(command);
-	ERRDATA debugFree(&command,"addtoCustomWordList command");
-	ERRDATA debugFree(&selection,"addtoCustomWordList selection");
+	ERRDATA debugFree(&command);
+	ERRDATA debugFree(&selection);
 	createCompletion(page);
 }
 
@@ -1153,7 +1154,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 						{
 							temptext=truncateWithElipses(fdata->define,maxFuncDefs);
 							menuitem=gtk_menu_item_new_with_label(temptext);
-							ERRDATA debugFree(&temptext,"populatePopupMenu temptext");
+							ERRDATA debugFree(&temptext);
 							sprintf((char*)&defineText,"%s",fdata->define);
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)defineText);
@@ -1329,7 +1330,7 @@ void openFromTab(GtkMenuItem* widget,pageStruct* page)
 	asprintf(&filepath,"%s/%s",page->dirName,gtk_menu_item_get_label(widget));
 	openFile(filepath,0,true);
 	openInThisTab=-1;
-	ERRDATA debugFree(&filepath,"openFromTab filepath");
+	ERRDATA debugFree(&filepath);
 }
 
 bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
@@ -1488,7 +1489,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 						}
 					fclose(fp);
 				}
-			ERRDATA debugFree(&command,"tabpopup command");
+			ERRDATA debugFree(&command);
 
 			gtk_widget_show_all(menuitem);
 
@@ -1541,13 +1542,13 @@ void writeExitData(void)
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
-	ERRDATA debugFree(&filename,"writeExitData filename");
+	ERRDATA debugFree(&filename);
 	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
 
 	saveVarsToFile(filename,kkedit_window_rc);
 
-	ERRDATA debugFree(&filename,"writeExitData filename");
-	ERRDATA debugFree(&windowAllocData,"writeExitData windowAllocData");
+	ERRDATA debugFree(&filename);
+	ERRDATA debugFree(&windowAllocData);
 }
 
 void writeConfig(void)
@@ -1557,11 +1558,11 @@ void writeConfig(void)
 
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
-	ERRDATA debugFree(&filename,"writeConfig filename");
+	ERRDATA debugFree(&filename);
 
 	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	saveVarsToFile(filename,kkedit_rc);
-	ERRDATA debugFree(&filename,"writeConfig filename");
+	ERRDATA debugFree(&filename);
 }
 
 VISIBLE bool doSaveAll(GtkWidget* widget,gpointer data)
@@ -1626,7 +1627,7 @@ VISIBLE void doShutdown(GtkWidget* widget,gpointer data)
 
 	asprintf(&command,"rm -rf %s",tmpFolderName);
 	system(command);
-	ERRDATA debugFree(&command,"doShutdown command");
+	ERRDATA debugFree(&command);
 	system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
 
 	g_application_release(mainApp);
@@ -1642,7 +1643,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 	if(strcmp(gtk_widget_get_name(widget),"style")==0)
 		{
 			if(tmpStyleName!=NULL)
-				ERRDATA debugFree(&tmpStyleName,"setPrefs tmpStyleName");
+				ERRDATA debugFree(&tmpStyleName);
 			tmpStyleName=gtk_combo_box_text_get_active_text((GtkComboBoxText*)data);
 			if(tpage!=NULL)
 				gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)tpage->buffer,gtk_source_style_scheme_manager_get_scheme(schemeManager,tmpStyleName));
@@ -1671,45 +1672,45 @@ void setPrefs(GtkWidget* widget,gpointer data)
 
 			if(styleName!=NULL)
 				{
-					ERRDATA debugFree(&styleName,"setPrefs tmpStyleName");
+					ERRDATA debugFree(&styleName);
 					styleName=strdup(tmpStyleName);
 				}
 
 			if(highlightColour!=NULL)
 				{
 					GdkColor	colour;
-					ERRDATA debugFree(&highlightColour,"setPrefs highlightColour");
+					ERRDATA debugFree(&highlightColour);
 					gtk_color_button_get_color((GtkColorButton*)bmHighlightBox,&colour);
 					highlightColour=gdk_color_to_string(&colour);
 				}
 
 			if(terminalCommand!=NULL)
 				{
-					ERRDATA debugFree(&terminalCommand,"setPrefs terminalCommand");
+					ERRDATA debugFree(&terminalCommand);
 					terminalCommand=strdup(gtk_entry_get_text((GtkEntry*)terminalBox));
 				}
 
 			if(rootCommand!=NULL)
 				{
-					ERRDATA debugFree(&rootCommand,"setPrefs rootCommand");
+					ERRDATA debugFree(&rootCommand);
 					rootCommand=strdup(gtk_entry_get_text((GtkEntry*)rootCommandBox));
 				}
 
 			if(fontAndSize!=NULL)
 				{
-					ERRDATA debugFree(&fontAndSize,"setPrefs fontAndSize");
+					ERRDATA debugFree(&fontAndSize);
 					fontAndSize=strdup(gtk_font_button_get_font_name((GtkFontButton*)fontButton));
 				}
 
 			if(browserCommand!=NULL)
 				{
-					ERRDATA debugFree(&browserCommand,"setPrefs browserCommand");
+					ERRDATA debugFree(&browserCommand);
 					browserCommand=strdup(gtk_entry_get_text((GtkEntry*)defaultBrowserBox));
 				}
 
 			if(toolBarLayout!=NULL)
 				{
-					ERRDATA debugFree(&toolBarLayout,"setPrefs toolBarLayout");
+					ERRDATA debugFree(&toolBarLayout);
 					toolBarLayout=makeToolBarList();
 					gtk_widget_destroy((GtkWidget*)toolBar);
 					toolBar=(GtkToolbar*)gtk_toolbar_new();
@@ -1816,9 +1817,9 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 				}
 		}
 
-	ERRDATA debugFree(&toolpath,"setToolOptions toolpath");
-	ERRDATA debugFree(&text,"setToolOptions text");
-	ERRDATA debugFree(&dirname,"setToolOptions dirname");
+	ERRDATA debugFree(&toolpath);
+	ERRDATA debugFree(&text);
+	ERRDATA debugFree(&dirname);
 }
 
 VISIBLE void doAbout(GtkWidget* widget,gpointer data)
@@ -1835,8 +1836,8 @@ VISIBLE void doAbout(GtkWidget* widget,gpointer data)
 
 	gtk_show_about_dialog(NULL,"authors",authors,"translator-credits",translators,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",MYWEBSITE,"program-name","KKEdit","logo-icon-name","KKEdit","license",licence,NULL);
 
-	ERRDATA debugFree(&licence,"doAbout licence");
-	ERRDATA debugFree(&translators,"doAbout licence");
+	ERRDATA debugFree(&licence);
+	ERRDATA debugFree(&translators);
 }
 
 GtkSourceBuffer*	printBuffer;
@@ -1931,7 +1932,7 @@ void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 			filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
 			openFile(filename,0,true);
 			g_free (uri);
-			ERRDATA debugFree(&filename,"recentFileMenu filename");
+			ERRDATA debugFree(&filename);
 		}
 }
 
@@ -1948,7 +1949,7 @@ VISIBLE void newEditor(GtkWidget* widget,gpointer data)
 			else
 				asprintf(&command,"%s sudo kkedit -m 2>&1 >/dev/null &",terminalCommand);
 			system(command);
-			ERRDATA debugFree(&command,"newEditor command");
+			ERRDATA debugFree(&command);
 			break;
 		case 2:
 			system("kkedit -m 2>&1 >/dev/null &");
@@ -2114,7 +2115,7 @@ void doKeyShortCut(int what)
 			gtk_text_iter_backward_lines(&buf->cursorPos,-1);
 			gtk_text_buffer_begin_user_action(buf->textBuffer);
 			gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
-			ERRDATA debugFree(&text,"doKeyShortCut text");
+			ERRDATA debugFree(&text);
 			gtk_text_buffer_end_user_action(buf->textBuffer);
 			break;
 //select line ^l
@@ -2224,7 +2225,7 @@ void loadKeybindings(void)
 			if(shortCutStrings[j]!=NULL)
 				sscanf(shortCutStrings[j],"%i %i",(int*)&shortCuts[j][0],(int*)&shortCuts[j][1]);
 		}
-	ERRDATA debugFree(&filename,"readConfig filename");
+	ERRDATA debugFree(&filename);
 }
 
 VISIBLE gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
@@ -2264,6 +2265,6 @@ VISIBLE void getPlugins(GtkWidget* widget,gpointer data)
 
 	asprintf(&command,"%s \"%s\" &",browserCommand,PLUGINSLINK);
 	system(command);
-	ERRDATA debugFree(&command,"getPlugins command");
+	ERRDATA debugFree(&command);
 }
 

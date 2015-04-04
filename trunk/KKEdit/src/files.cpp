@@ -94,7 +94,7 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 											case TYPESTRING:
 												if(*(char**)(dataptr[cnt].data)!=NULL)
 													{
-														ERRDATA debugFree(&*(char**)(dataptr[cnt].data),"loadVarsFromFile dataptr[cnt].data");
+														ERRDATA debugFree(&*(char**)(dataptr[cnt].data));
 													}
 												sscanf(buffer,"%*s %m[^\n]s",(char**)dataptr[cnt].data);
 												break;
@@ -133,7 +133,7 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	correctedname=truncateWithElipses(name,maxTabChars);
 
 	label=gtk_label_new(correctedname);
-	ERRDATA debugFree(&correctedname,"makeNewTab correctedname");
+	ERRDATA debugFree(&correctedname);
 
 	gtk_button_set_relief((GtkButton*)button,GTK_RELIEF_NONE);
 	gtk_widget_set_tooltip_text(label,tooltip);
@@ -275,7 +275,7 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 					gtk_text_iter_forward_chars(&iter,str->len);
 					gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
 
-					ERRDATA debugFree(&command,"dropText command");
+					ERRDATA debugFree(&command);
 					g_string_free(str,true);
 					pclose(fp);
 				}
@@ -359,7 +359,7 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 					saveFileName=page->fileName;
 					if(page->dirName!=NULL)
 						{
-							ERRDATA debugFree(&page->dirName,"saveFile dirName");
+							ERRDATA debugFree(&page->dirName);
 						}
 					page->dirName=g_path_get_dirname(page->filePath);
 				}
@@ -378,7 +378,7 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 					page->fileName=saveFileName;
 					if(page->dirName!=NULL)
 						{
-							ERRDATA debugFree(&page->dirName,"saveFile dirName");
+							ERRDATA debugFree(&page->dirName);
 						}
 					page->dirName=g_path_get_dirname(page->filePath);
 
@@ -450,7 +450,7 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 				{
 					convstr=g_locale_to_utf8(str->str,-1,NULL,NULL,NULL);
 					gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&iter,convstr,-1);
-					ERRDATA debugFree(&convstr,"openAsHexDump convstr");
+					ERRDATA debugFree(&convstr);
 				}
 			else
 				{
@@ -460,8 +460,8 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 			gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
 
 			g_string_free(str,true);
-			ERRDATA debugFree(&filepath,"openAsHexDump filepath");
-			ERRDATA debugFree(&filename,"openAsHexDump filename");
+			ERRDATA debugFree(&filepath);
+			ERRDATA debugFree(&filename);
 			setSensitive();
 		}
 
@@ -488,7 +488,7 @@ VISIBLE void reloadFile(GtkWidget* widget,gpointer data)
 			gtk_text_buffer_delete_selection((GtkTextBuffer*)page->buffer,true,true);
 			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 			gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
-			ERRDATA debugFree(&buffer,"reloadFile buffer");
+			ERRDATA debugFree(&buffer);
 		}
 	ERRDATA
 }
@@ -508,7 +508,7 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 	ERRDATA
 	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
-	ERRDATA debugFree(&filename,"saveSession filename");
+	ERRDATA debugFree(&filename);
 	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
 	fd=fopen(filename,"w");
 	if (fd!=NULL)
@@ -537,7 +537,7 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 
 			ERRDATA
 			fclose(fd);
-			ERRDATA debugFree(&filename,"saveSession filename");
+			ERRDATA debugFree(&filename);
 		}
 	ERRDATA
 }
@@ -606,7 +606,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 						}
 				}
 			fclose(fd);
-			ERRDATA debugFree(&filename,"restoreSession filename");
+			ERRDATA debugFree(&filename);
 		}
 
 	ERRDATA delete buf;
@@ -638,7 +638,7 @@ int showFileChanged(char* filename)
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 
 	gtk_widget_destroy(dialog);
-	ERRDATA debugFree(&message,"showFileChanged message");
+	ERRDATA debugFree(&message);
 	ERRDATA return(result);
 }
 
@@ -673,7 +673,7 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 							gtk_text_buffer_delete_selection((GtkTextBuffer*)page->buffer,true,true);
 							gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 							gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
-							ERRDATA debugFree(&buffer,"fileChangedOnDisk buffer");
+							ERRDATA debugFree(&buffer);
 						}
 				}
 			else
@@ -711,7 +711,7 @@ gboolean clickInView(GtkWidget* widget,gpointer data)
 	ERRDATA
 	if((statusMessage!=NULL))
 		{
-			ERRDATA debugFree(&statusMessage,"clickInView statusMessage");
+			ERRDATA debugFree(&statusMessage);
 			statusMessage=NULL;
 			
 		}
@@ -870,10 +870,10 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 							gtk_notebook_set_current_page(mainNotebook,j);
 							busyFlag=false;
 							sessionBusy=false;
-							ERRDATA debugFree(&tpath,"openFile tpath");
+							ERRDATA debugFree(&tpath);
 							ERRDATA return(true);
 						}
-					ERRDATA debugFree(&tpath,"openFile ");
+					ERRDATA debugFree(&tpath);
 				}
 		}
 
@@ -936,7 +936,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 		}
 
 	convertContents((char*)contents,length);
-	ERRDATA debugFree(&contents,"openFile contents");
+	ERRDATA debugFree(&contents);
 
 	if(dataLen>0)
 		{
@@ -968,7 +968,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
 			gtk_source_buffer_end_not_undoable_action(page->buffer);
 		}
-	ERRDATA debugFree(&convertedData,"openFile convertedData");
+	ERRDATA debugFree(&convertedData);
 
 	page->gFile=g_file_new_for_path(page->filePath);
 	page->monitor=g_file_monitor_file(page->gFile,(GFileMonitorFlags)G_FILE_MONITOR_NONE,NULL,NULL);
@@ -979,10 +979,10 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	str=g_file_get_path(page->gFile);
 	recenturi=g_filename_to_uri(str,NULL,NULL);
 	gtk_recent_manager_add_item(gtk_recent_manager_get_default(),recenturi);
-	ERRDATA debugFree(&filename,"openFile filename");
-	ERRDATA debugFree(&recenturi,"openFile recenturi");
-	ERRDATA debugFree(&str,"openFile str");
-	ERRDATA debugFree(&filepathcopy,"openFile filepathcopy");
+	ERRDATA debugFree(&filename);
+	ERRDATA debugFree(&recenturi);
+	ERRDATA debugFree(&str);
+	ERRDATA debugFree(&filepathcopy);
 
 //connect to mainNotebook
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));

@@ -29,7 +29,7 @@ void doCancelCheck(GtkWidget* widget,gpointer data)
 	gtk_widget_destroy(spellCheckWord);
 	if(badWord!=NULL)
 		{
-			ERRDATA debugFree(&badWord,"doCancelCheck badWord");
+			ERRDATA debugFree(&badWord);
 		}
 	cancelCheck=true;
 	ERRDATA
@@ -124,10 +124,10 @@ void doChangeWord(GtkWidget* widget,gpointer data)
 		aspell_speller_store_replacement(spellChecker,badWord,-1,goodWord,-1);
 
 	gtk_widget_destroy(spellCheckWord);
-	ERRDATA debugFree(&badWord,"doChangeWord badWord");
+	ERRDATA debugFree(&badWord);
 	if((long)data==0)
 		{
-			ERRDATA debugFree(&goodWord,"doChangeWord goodWord");
+			ERRDATA debugFree(&goodWord);
 		}
 	ERRDATA
 }
@@ -146,7 +146,7 @@ void doAddIgnoreWord(GtkWidget* widget,gpointer data)
 	gtk_widget_destroy(spellCheckWord);
 	if(badWord!=NULL)
 		{
-			ERRDATA debugFree(&badWord,"doAddIgnoreWord badWord");
+			ERRDATA debugFree(&badWord);
 		}
 	ERRDATA
 }
@@ -223,7 +223,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 							fclose(out);
 							fclose(doc);
 							remove(tempfile);
-							ERRDATA debugFree(&tempfile,"doSpellCheckDoc tempfile");
+							ERRDATA debugFree(&tempfile);
 							gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 							ERRDATA return;
 						}
@@ -236,7 +236,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 							diff+=goodwordlen-token.len;
 							memmove(word_begin+goodwordlen,word_begin+token.len,strlen(word_begin+token.len)+1);
 							memcpy(word_begin,goodWord,goodwordlen);
-							ERRDATA debugFree(&goodWord,"doSpellCheckDoc goodWord");
+							ERRDATA debugFree(&goodWord);
 						}
 				}
 
@@ -256,8 +256,8 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 	gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
 
 	remove(tempfile);
-	ERRDATA debugFree(&buffer,"doSpellCheckDoc buffer");
-	ERRDATA debugFree(&tempfile,"doSpellCheckDoc tempfile");
+	ERRDATA debugFree(&buffer);
+	ERRDATA debugFree(&tempfile);
 	ERRDATA delete slice;
 
 	if(page->filePath!=NULL)

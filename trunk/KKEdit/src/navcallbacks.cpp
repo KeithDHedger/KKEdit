@@ -124,9 +124,9 @@ VISIBLE void findFile(GtkWidget* widget,gpointer data)
 								}
 							pclose(fp);
 						}
-					ERRDATA debugFree(&command,"findFile command");
+					ERRDATA debugFree(&command);
 				}
-			ERRDATA debugFree(&filepath,"findFile filepath");
+			ERRDATA debugFree(&filepath);
 		}
 	ERRDATA delete buf;
 	ERRDATA delete slice;
@@ -382,7 +382,7 @@ bool readFile(char *name)
 
 	if(filebuffer!=NULL)
 		{
-			ERRDATA debugFree(&filebuffer,"readFile filebuffer");
+			ERRDATA debugFree(&filebuffer);
 		}
 	//Open file
 	file=fopen(name,"rb");
@@ -590,12 +590,12 @@ docFileData* getDoxyFileData(char* uri)
 		}
 	else
 		{
-			ERRDATA debugFree((char**)&doxydata,"getDoxyFileData doxydata");
+			ERRDATA debugFree((char**)&doxydata);
 			doxydata=NULL;
 		}
-	ERRDATA debugFree(&unhashedline,"getDoxyFileData unhashedline");
-	ERRDATA debugFree(&linetag,"getDoxyFileData linetag");
-	ERRDATA debugFree(&filepath,"getDoxyFileData filepath");
+	ERRDATA debugFree(&unhashedline);
+	ERRDATA debugFree(&linetag);
+	ERRDATA debugFree(&filepath);
 	ERRDATA return(doxydata);
 }
 
@@ -629,13 +629,13 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 							buf->textBuffer=(GtkTextBuffer*)page->buffer;
 							buf->scroll2LineM(page,doxydata->lineNum-1);
 							ERRDATA delete buf;
-							ERRDATA debugFree((char**)&doxydata,"docLinkTrap doxydata");
+							ERRDATA debugFree((char**)&doxydata);
 							ERRDATA return(false);
 						}
 				}
 //try to open file f not in tabs
 			openFile(doxydata->sourceFile,doxydata->lineNum,false);
-			ERRDATA debugFree((char**)&doxydata,"docLinkTrap doxydata");
+			ERRDATA debugFree((char**)&doxydata);
 		}
 	ERRDATA return(false);
 }

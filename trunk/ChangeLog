@@ -1,4 +1,6 @@
 0.2.7
+Updated kkedit-plugins.h so plugins will need updateding as well.
+Added some debug code ( only for devs ).
 Removed foldernames and backup (*~) files to open from tab popup.
 Added debug level to configure ( defaults to 0 no debug info ).
 When opening file from tab dop down now opens file adjacent to current tab.

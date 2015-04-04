@@ -350,7 +350,7 @@ void doMakeTool(void)
 	infolabel=gtk_label_new(placeholderinfo);
 	gtk_label_set_selectable((GtkLabel*)infolabel,true);
 	gtk_box_pack_start(GTK_BOX(vbox),infolabel,false,false,0);
-	ERRDATA debugFree(&placeholderinfo,"doMakeTool placeholderinfo");
+	ERRDATA debugFree(&placeholderinfo);
 //in terminal
 	inTermWidget=gtk_check_button_new_with_label(gettext("Run Tool In Terminal"));
 	gtk_widget_set_name(inTermWidget,"interm");
@@ -745,7 +745,7 @@ void populateStore(void)
 						break;
 
 				}
-			ERRDATA debugFree(&type,"populateStore type");
+			ERRDATA debugFree(&type);
 		}
 	ERRDATA
 }
@@ -760,8 +760,7 @@ void addToToolBar(GtkWidget* widget,gpointer ptr)
 	toolBarLayout=type;
 	populateStore();
 	toolBarLayout=holddata;
-	ERRDATA debugFree(&type,"addToToolBar type");
-	ERRDATA
+	ERRDATA debugFree(&type);
 }
 
 void addIcon(const char* icon,const char* data,int toolnumber,const char* tooltip)
@@ -770,8 +769,7 @@ void addIcon(const char* icon,const char* data,int toolnumber,const char* toolti
 	tool[toolnumber]=gtk_tool_button_new_from_stock(icon);
 	gtk_box_pack_start(GTK_BOX(fromHBox),(GtkWidget*)tool[toolnumber],false,false,2);
 	g_signal_connect(G_OBJECT(tool[toolnumber]),"clicked",G_CALLBACK(addToToolBar),(void*)data);
-	gtk_widget_set_tooltip_text((GtkWidget*)tool[toolnumber],tooltip);
-	ERRDATA
+	ERRDATA gtk_widget_set_tooltip_text((GtkWidget*)tool[toolnumber],tooltip);
 }
 
 void addPixbuf(const char* pixbuf,const char* data,int toolnumber,const char* tooltip)
@@ -828,7 +826,7 @@ char* makeToolBarList(void)
 			g_string_append_c(str,str_data[0]);
 			row_count++;
 			valid=gtk_tree_model_iter_next((GtkTreeModel *)listStore,&iter);
-			ERRDATA debugFree(&str_data,"makeToolBarList str_data");
+			ERRDATA debugFree(&str_data);
 		}
 	ERRDATA return(g_string_free(str,false));
 }
@@ -903,7 +901,7 @@ void setKeyCuts(GtkWidget* widget,gpointer data)
 					shortCuts[j][1]=j;
 					if(shortCutStrings[j]!=NULL)
 						{
-							ERRDATA debugFree(&shortCutStrings[j],"setKeyCuts shortCutStrings");
+							ERRDATA debugFree(&shortCutStrings[j]);
 						}
 					asprintf(&shortCutStrings[j],"%i %i - ^%c %s",shortCuts[j][0],shortCuts[j][1],shortCuts[j][0],shortcuttext[j]);
 				}
@@ -950,7 +948,7 @@ void buildKeys()
 			gtk_label_set_justify((GtkLabel*)item,GTK_JUSTIFY_CENTER);
 			gtk_label_set_line_wrap((GtkLabel*)item,true);
 			gtk_box_pack_start(GTK_BOX(vbox),item,false,false,0);
-			ERRDATA debugFree(&keycutsinfo,"buildKeys keycutsinfo");
+			ERRDATA debugFree(&keycutsinfo);
 //functions
 			for(loop=0;loop<NUMSHORTCUTS;loop++)
 				{
@@ -1921,7 +1919,7 @@ int showFunctionEntry(void)
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 	if(functionSearchText!=NULL)
 		{
-			ERRDATA debugFree(&functionSearchText,"showFunctionEntry functionSearchText");
+			ERRDATA debugFree(&functionSearchText);
 		}
 	functionSearchText=strdup(gtk_entry_get_text((GtkEntry*)entrybox));
 	gtk_widget_destroy(dialog);
