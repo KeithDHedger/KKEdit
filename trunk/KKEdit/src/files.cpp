@@ -809,8 +809,6 @@ void convertContents(char *data,int datalen)
     size_t		len_dst;
 	char		*startptr;
 
-	ERRDATA
-
 	charset=detect_charset(data);
 	if (charset==NULL)
 		charset=get_default_charset();
@@ -825,8 +823,7 @@ void convertContents(char *data,int datalen)
     iconv(cd,&data,&len_src,&startptr,&len_dst);
     iconv_close(cd);
 
-	dataLen=(long)startptr-(long)convertedData;
-	ERRDATA
+	ERRDATA dataLen=(long)startptr-(long)convertedData;
 }
 
 VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
@@ -848,6 +845,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	char*					filepathcopy=NULL;
 	char*					tpath;
 	int						whattodo;
+	const gchar				*end;
 
 	busyFlag=true;
 	sessionBusy=true;
@@ -946,10 +944,14 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 			gtk_text_buffer_delete ( GTK_TEXT_BUFFER (page->buffer),&startiter, &enditer);
 			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
 			whattodo=GTK_RESPONSE_YES;
-			if(g_utf8_validate((const gchar*)convertedData,dataLen,NULL)==false)
+			if(g_utf8_validate((const gchar*)convertedData,dataLen,&end)==false)
 				whattodo=yesNo(gettext("Contains non text data, continue loading?\n"),(char*)filepath);
 			if(whattodo==GTK_RESPONSE_YES)
-				gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&startiter,convertedData,dataLen);
+				{
+					//g_utf8_validate(convertedData,dataLen,&end);
+					dataLen=(long)end-(long)convertedData;
+					gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&startiter,convertedData,dataLen);
+				}
 			else
 				{
 					busyFlag=false;

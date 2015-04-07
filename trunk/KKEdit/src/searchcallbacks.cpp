@@ -390,24 +390,48 @@ VISIBLE void searchQT5Docs(GtkWidget* widget,gpointer data)
 void defSearchFromBar(GtkWidget* widget,gpointer data)
 {
 	functionData	*fdata=NULL;
-	bool			ok;
+	bool			searchcase;
+	bool			searchwhole;
 
-	functionSearchText=strdup(gtk_entry_get_text((GtkEntry*)widget));
+	if(data!=NULL)
+		functionSearchText=strdup(gtk_entry_get_text((GtkEntry*)widget));
+	else
+		functionSearchText=strdup((char*)widget);
+
 	if(functionSearchText!=NULL)
 		{
-			ok=true;
+			searchwhole=true;
+			for(int k=0;k<2;k++)
+				{
+					searchcase=true;
+					for(int j=0;j<2;j++)
+						{
+							fdata=getFunctionByNameOpenFiles(functionSearchText,searchcase,searchwhole);
+							if(fdata!=NULL)
+								{
+									history->savePosition();
+									goToDefine(fdata);
+									destroyData(fdata);
+									ERRDATA debugFree(&functionSearchText);
+									ERRDATA return;
+								}
+							searchcase=false;
+						}
+					searchwhole=false;
+				}
+
 			for(int j=0;j<2;j++)
 				{
-					fdata=getFunctionByName(functionSearchText,true,ok);
+					fdata=getFunctionByName(functionSearchText,true,searchcase);
 					if(fdata!=NULL)
 						{
+							history->savePosition();
 							goToDefine(fdata);
 							destroyData(fdata);
 							ERRDATA debugFree(&functionSearchText);
 							ERRDATA return;
 						}
-					fdata=NULL;
-					ok=false;
+					searchcase=false;
 				}
 			ERRDATA debugFree(&functionSearchText);
 		}

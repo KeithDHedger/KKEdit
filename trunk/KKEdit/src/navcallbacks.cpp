@@ -48,7 +48,6 @@ VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
 	GtkTextIter		start;
 	GtkTextIter		end;
 	char*			selection=NULL;
-	functionData*	fdata=NULL;
 
 	if(page==NULL)
 		{
@@ -67,15 +66,7 @@ VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
 		{
 			ERRDATA return;
 		}
-
-	fdata=getFunctionByName(selection,true,true);
-	if(fdata!=NULL)
-		{
-			history->savePosition();
-			goToDefine(fdata);
-			destroyData(fdata);
-		}
-	ERRDATA return;
+	ERRDATA defSearchFromBar((GtkWidget*)selection,NULL);
 }
 
 VISIBLE void findFile(GtkWidget* widget,gpointer data)
@@ -628,14 +619,15 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 							gtk_notebook_set_current_page(mainNotebook,j);
 							buf->textBuffer=(GtkTextBuffer*)page->buffer;
 							buf->scroll2LineM(page,doxydata->lineNum-1);
-							ERRDATA delete buf;
 							ERRDATA debugFree((char**)&doxydata);
+							ERRDATA delete buf;
 							ERRDATA return(false);
 						}
 				}
 //try to open file f not in tabs
 			openFile(doxydata->sourceFile,doxydata->lineNum,false);
 			ERRDATA debugFree((char**)&doxydata);
+			ERRDATA delete buf;
 		}
 	ERRDATA return(false);
 }

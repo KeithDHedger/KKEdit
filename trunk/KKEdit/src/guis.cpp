@@ -1951,7 +1951,7 @@ void buildGtkDocViewer(void)
 	hbox=gtk_hbox_new(false,4);
 
 	webView=WEBKIT_WEB_VIEW(webkit_web_view_new());
-	g_signal_connect(G_OBJECT(webView),"navigation-policy-decision-requested",G_CALLBACK(docLinkTrap),NULL);	
+	g_signal_connect(G_OBJECT(webView),"navigation-policy-decision-requested",G_CALLBACK(docLinkTrap),NULL);
 
 	settings=webkit_web_view_get_settings(webView);
 	g_object_set((gpointer)settings,"enable-file-access-from-file-uris",true,NULL);

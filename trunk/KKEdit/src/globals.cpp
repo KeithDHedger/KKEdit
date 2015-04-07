@@ -684,31 +684,23 @@ VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int u
 	ERRDATA debugFree(&asroot);
 }
 
-functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
+functionData* getFunctionByNameOpenFiles(char* name,bool casesensitive,bool wholefname)
 {
 	ERRDATA
 	pageStruct*		page;
 	int				numpages=gtk_notebook_get_n_pages(mainNotebook);
 	char*			lineptr;
 	char*			functions=NULL;
-	char*			dirname;
 	gchar*			stdout=NULL;
 	char			function[1024];
-	char			funcname[256];
-	char			filepath[1024];
-	int				linenumber;
 	int				gotmatch;
-	char*			possmatch=NULL;
-	int				bestlen=-1;
-	int				thislen;
-	int				loophold=-1;
-	bool			getfromfile;
 	int				loop;
 	int				maxpage=numpages;
-	bool			whileflag=true;
+	bool			whileflag;
 	int				startpage;
 	bool			checkthispage;
 	functionData*	fdata;
+	int				longest;
 
 	page=getPageStructPtr(-1);
 	if(page==NULL)
@@ -716,11 +708,10 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 			ERRDATA return(NULL);
 		}
 
-	getfromfile=false;
-
 	loop=gtk_notebook_get_current_page(mainNotebook);
 	startpage=loop;
 	checkthispage=true;
+	whileflag=true;
 
 	while(whileflag==true)
 		{
@@ -733,13 +724,27 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 					while (lineptr!=NULL)
 						{
 							sscanf (lineptr,"%s",function);
-							if(casesensitive==true)
-								gotmatch=strncmp(function,name,(int)strlen(function));
+							if(strlen(function)>=strlen(name))
+								longest=strlen(function);
 							else
-								gotmatch=strncasecmp(function,name,(int)strlen(function));
-							thislen=strlen(name);
+								longest=strlen(name);
 
-							if((gotmatch==0) && (strlen(name)==strlen(function)))
+							if(casesensitive==true)
+								{
+									if(wholefname==true)
+										gotmatch=strncmp(function,name,longest);
+									else
+										gotmatch=strncmp(function,name,(int)strlen(name));
+								}
+							else
+								{
+									if(wholefname==true)
+										gotmatch=strncasecmp(function,name,longest);
+									else
+										gotmatch=strncasecmp(function,name,(int)strlen(name));
+							}
+
+							if(gotmatch==0)
 								{
 									fdata=(functionData*)malloc(sizeof(functionData));
 									sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
@@ -773,6 +778,28 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 			if(loop==maxpage)
 				whileflag=false;
 		}
+	return(NULL);
+}
+
+functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
+{
+	ERRDATA
+	pageStruct*		page;
+	int				numpages=gtk_notebook_get_n_pages(mainNotebook);
+	char*			lineptr;
+	char*			dirname;
+	gchar*			stdout=NULL;
+	char			function[1024];
+	char			funcname[256];
+	char			filepath[1024];
+	int				linenumber;
+	int				gotmatch;
+	char*			possmatch=NULL;
+	int				bestlen=-1;
+	int				thislen;
+	int				loophold=-1;
+	bool			getfromfile;
+	functionData*	fdata;
 
 	if(recurse==true)
 		{
@@ -984,7 +1011,6 @@ void getRecursiveTagList(char* filepath,void* ptr)
 	g_string_free(str,false);
 	ERRDATA debugFree(&command);
 	ERRDATA debugFree(&sort);
-	ERRDATA
 }
 
 void destroyTool(gpointer data)

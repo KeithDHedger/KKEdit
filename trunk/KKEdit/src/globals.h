@@ -417,7 +417,10 @@ pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);
 void setLanguage(pageStruct* page);
 void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title);
+
 functionData* getFunctionByName(char* name,bool recurse,bool casesensitive);
+functionData* getFunctionByNameOpenFiles(char* name,bool casesensitive,bool wholefname);
+
 void destroyData(functionData* fdata);
 void getRecursiveTagList(char* filepath,void* ptr);
 void buildToolsList(void);
@@ -436,6 +439,7 @@ void resetWidgetSenisitive(void);
 
 void catchSignal(int signal);
 void freeAndNull(char** ptr);
+
 
 #endif
 
