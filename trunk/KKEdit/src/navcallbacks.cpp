@@ -537,7 +537,7 @@ docFileData* getDoxyFileData(char* uri)
 	slice->setReturnDupString(true);
 	docFileData* doxydata=(docFileData*)malloc(sizeof(docFileData));
 
-	doxydata->lineNum=1;
+	doxydata->lineNum=-1;
 	doxydata->fileName=(char*)"";
 	doxydata->filePath=(char*)"";
 	doxydata->hashTag=(char*)"";
@@ -599,10 +599,42 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 	TextBuffer*		buf;
 	docFileData*	doxydata;
 
+	StringSlice		slce;
+	char			*htmlpage;
+
 	mod=webkit_web_navigation_action_get_modifier_state(navigationAction);
 	if(mod&GDK_SHIFT_MASK)
 		{
 			uri=webkit_network_request_get_uri(request);
+			printf(">>%s<<\n",uri);
+			slce.setReturnDupString(true);
+			htmlpage=slce.sliceBetween((char*)uri,(char*)"file://",(char*)"#");
+			printf("++%s++\n",htmlpage);
+			FILE	*fp;
+			char	*command;
+			char	line[4096];
+			char	*filep;
+
+			memset(line,0,4096);
+			asprintf(&command,"cat %s|grep \"<p>Definition at line \"",htmlpage);
+			fp=popen(command,"r");
+			free(command);
+			fgets(line,4096,fp);
+			pclose(fp);
+			printf("~~%s~~\n",line);
+			if(strlen(line)>0)
+				{
+					int linenum=atoi(slce.sliceBetween(line,(char*)"#l",(char*)"\">"));
+					filep=slce.sliceBetween(htmlpage,NULL,(char*)"/html/");
+					slce.setReturnDupString(false);
+					printf("===%s====\n",filep);
+					printf("line %i of file %s/%s\n",linenum,filep,slce.sliceBetween(line,(char*)"html\">",(char*)"</a>"));
+					asprintf(&command,"%s/%s",filep,slce.sliceBetween(line,(char*)"html\">",(char*)"</a>"));
+					if(openFile(command,linenum,false)==true)
+						gotoLine(NULL,(gpointer)(long)linenum);
+					free(command);
+				}
+			ERRDATA return(false);
 			doxydata=getDoxyFileData((char*)uri);
 			if(doxydata==NULL)
 				{
@@ -617,8 +649,18 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 					if((strcmp(page->realFilePath,doxydata->sourceFile)==0) || (strcmp(page->filePath,doxydata->sourceFile)==0))
 						{
 							gtk_notebook_set_current_page(mainNotebook,j);
-							buf->textBuffer=(GtkTextBuffer*)page->buffer;
-							buf->scroll2LineM(page,doxydata->lineNum-1);
+							page=getPageStructPtr(-1);
+							if(doxydata->lineNum!=-1)
+								{
+									//buf->textBuffer=(GtkTextBuffer*)page->buffer;
+									buf->textBuffer=(GtkTextBuffer*)page->buffer;
+									if(page->inTop==true)
+										buf->scroll2Line((GtkTextView*)page->view,doxydata->lineNum-1);
+									else
+										buf->scroll2Line((GtkTextView*)page->view2,doxydata->lineNum-1);
+//
+//									buf->scroll2LineM(page,doxydata->lineNum-1);
+								}
 							ERRDATA debugFree((char**)&doxydata);
 							ERRDATA delete buf;
 							ERRDATA return(false);

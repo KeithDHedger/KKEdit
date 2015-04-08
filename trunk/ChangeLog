@@ -1,4 +1,5 @@
 0.2.7
+Generally improved searching for function definitions.
 Loading files with binary data now loads as much data as it can until an invalid character is encountered.
 Fixed not cancelling quit with unsaved files.
 Updated kkedit-plugins.h so plugins will need updating as well.
