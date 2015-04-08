@@ -595,85 +595,86 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 	ERRDATA
 	int				mod=-1;
 	const char*		uri;
-	pageStruct*		page;
-	TextBuffer*		buf;
-	docFileData*	doxydata;
-
 	StringSlice		slce;
 	char			*htmlpage;
+	FILE			*fp;
+	char			*command;
+	char			line[4096];
+	char			*filep;
+	int				linenum;
 
 	mod=webkit_web_navigation_action_get_modifier_state(navigationAction);
 	if(mod&GDK_SHIFT_MASK)
 		{
 			uri=webkit_network_request_get_uri(request);
-			printf(">>%s<<\n",uri);
 			slce.setReturnDupString(true);
 			htmlpage=slce.sliceBetween((char*)uri,(char*)"file://",(char*)"#");
-			printf("++%s++\n",htmlpage);
-			FILE	*fp;
-			char	*command;
-			char	line[4096];
-			char	*filep;
-
 			memset(line,0,4096);
-			asprintf(&command,"cat %s|grep \"<p>Definition at line \"",htmlpage);
+			asprintf(&command,"cat %s 2>/dev/null|grep \"<p>Definition at line \"",htmlpage);
 			fp=popen(command,"r");
 			free(command);
 			fgets(line,4096,fp);
 			pclose(fp);
-			printf("~~%s~~\n",line);
 			if(strlen(line)>0)
 				{
-					int linenum=atoi(slce.sliceBetween(line,(char*)"#l",(char*)"\">"));
+					linenum=atoi(slce.sliceBetween(line,(char*)"#l",(char*)"\">"));
 					filep=slce.sliceBetween(htmlpage,NULL,(char*)"/html/");
 					slce.setReturnDupString(false);
-					printf("===%s====\n",filep);
-					printf("line %i of file %s/%s\n",linenum,filep,slce.sliceBetween(line,(char*)"html\">",(char*)"</a>"));
 					asprintf(&command,"%s/%s",filep,slce.sliceBetween(line,(char*)"html\">",(char*)"</a>"));
 					if(openFile(command,linenum,false)==true)
 						gotoLine(NULL,(gpointer)(long)linenum);
 					free(command);
-				}
-			ERRDATA return(false);
-			doxydata=getDoxyFileData((char*)uri);
-			if(doxydata==NULL)
-				{
+					free(filep);
+					free(htmlpage);
 					ERRDATA return(false);
 				}
 
-//check in open tabs
-			buf=new TextBuffer;
-			for(int j=0; j<gtk_notebook_get_n_pages(mainNotebook); j++)
+			slce.setReturnDupString(false);
+			if(strstr(uri,(char*)"#l")!=NULL)
 				{
-					page=getPageStructPtr(j);
-					if((strcmp(page->realFilePath,doxydata->sourceFile)==0) || (strcmp(page->filePath,doxydata->sourceFile)==0))
+					linenum=atoi(slce.sliceBetween((char*)uri,(char*)"#l",NULL));
+					command=(char*)slce.sliceBetween((char*)uri,(char*)"file://",(char*)"#l");
+					command=(char*)slce.sliceBetween((char*)uri,(char*)"file://",(char*)".html");
+					command=(char*)slce.sliceBetween((char*)command,NULL,(char*)"_source");
+					command=(char*)slce.deleteSlice((char*)command,(char*)"html/");
+					command=(char*)slce.replaceAllSlice((char*)command,(char*)"_8",(char*)".");
+					if(openFile(command,linenum,true)==true)
+						gotoLine(NULL,(gpointer)(long)linenum);
+				}
+			else
+				{
+					command=(char*)slce.sliceBetween((char*)uri,(char*)"file://",(char*)".html");
+					command=(char*)slce.sliceBetween((char*)command,NULL,(char*)"_source");
+					command=(char*)slce.deleteSlice((char*)command,(char*)"html/");
+					command=(char*)slce.replaceAllSlice((char*)command,(char*)"_8",(char*)".");
+					if(openFile(command,-1,false)==false)
 						{
-							gtk_notebook_set_current_page(mainNotebook,j);
-							page=getPageStructPtr(-1);
-							if(doxydata->lineNum!=-1)
+							slce.setReturnDupString(true);
+							htmlpage=slce.sliceBetween((char*)uri,(char*)"file://",NULL);
+							memset(line,0,4096);
+							asprintf(&command,"cat %s 2>/dev/null|grep \"<p>Definition at line \"",htmlpage);
+							fp=popen(command,"r");
+							free(command);
+							fgets(line,4096,fp);
+							pclose(fp);
+							if(strlen(line)>0)
 								{
-									//buf->textBuffer=(GtkTextBuffer*)page->buffer;
-									buf->textBuffer=(GtkTextBuffer*)page->buffer;
-									if(page->inTop==true)
-										buf->scroll2Line((GtkTextView*)page->view,doxydata->lineNum-1);
-									else
-										buf->scroll2Line((GtkTextView*)page->view2,doxydata->lineNum-1);
-//
-//									buf->scroll2LineM(page,doxydata->lineNum-1);
+									linenum=atoi(slce.sliceBetween(line,(char*)"#l",(char*)"\">"));
+									filep=slce.sliceBetween(htmlpage,NULL,(char*)"/html/");
+									slce.setReturnDupString(false);
+									asprintf(&command,"%s/%s",filep,slce.sliceBetween(line,(char*)"html\">",(char*)"</a>"));
+									if(openFile(command,linenum,false)==true)
+										gotoLine(NULL,(gpointer)(long)linenum);
+									free(command);
+									free(filep);
+									free(htmlpage);
+									ERRDATA return(false);
 								}
-							ERRDATA debugFree((char**)&doxydata);
-							ERRDATA delete buf;
-							ERRDATA return(false);
 						}
 				}
-//try to open file f not in tabs
-			openFile(doxydata->sourceFile,doxydata->lineNum,false);
-			ERRDATA debugFree((char**)&doxydata);
-			ERRDATA delete buf;
 		}
 	ERRDATA return(false);
 }
-
 #endif
 
 //jump to tab
