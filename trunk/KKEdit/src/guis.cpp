@@ -1529,7 +1529,7 @@ void buildMainGui(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(viewMenu),menu);
 
 //show docs
-	menuitem=makeMenuItem(gettext("Show Documentaion"),menu,(void*)doDoxy,0,SHOWDOCSMENUNAME,NORMALMENU,NULL,(void*)2);
+	menuitem=makeMenuItem(gettext("Show Documentation"),menu,(void*)doDoxy,0,SHOWDOCSMENUNAME,NORMALMENU,NULL,(void*)2);
 //toggle bookmark bar
 	if(showBMBar)
 		menuitem=makeMenuItem(gettext("Hide Bookmarks Bar"),menu,(void*)toggleBookMarkBar,0,SHOWBMBARMENUNAME,NORMALMENU,NULL,NULL);
