@@ -354,15 +354,6 @@ char* unEscapeFileNAme(char* name)
 	ERRDATA return(buffer);
 }
 
-struct docFileData
-{
-	char*	fileName;
-	char*	filePath;
-	int		lineNum;
-	char*	hashTag;
-	char*	sourceFile;
-};
-
 char*	filebuffer=NULL;
 
 bool readFile(char *name)
@@ -521,73 +512,6 @@ char* getPathFromXML(char* xml)
 		}
 	ERRDATA delete slice;
 	ERRDATA return(buffer);
-}
-
-docFileData* getDoxyFileData(char* uri)
-{
-	ERRDATA
-	char*	linetag=NULL;
-	bool	gotline=false;
-
-	char*	unhashedline=NULL;
-	char*	filepath=NULL;
-
-	StringSlice*	slice=new StringSlice;
-
-	slice->setReturnDupString(true);
-	docFileData* doxydata=(docFileData*)malloc(sizeof(docFileData));
-
-	doxydata->lineNum=-1;
-	doxydata->fileName=(char*)"";
-	doxydata->filePath=(char*)"";
-	doxydata->hashTag=(char*)"";
-	doxydata->sourceFile=(char*)"";
-
-	linetag=slice->sliceBetween(uri,(char*)"#",NULL);
-	if(slice->getResult()==0)
-		{
-			if(linetag[0]=='l')
-				{
-					doxydata->lineNum=atoi(&linetag[1]);
-					gotline=true;
-				}
-			unhashedline=slice->sliceBetween(uri,NULL,(char*)"#");
-		}
-	else
-		{
-			unhashedline=strdup(uri);
-			linetag=strdup("");
-		}
-
-	filepath=g_filename_from_uri(unhashedline,NULL,NULL);
-	if(readFile(filepath)==true)
-		{
-			doxydata->filePath=slice->sliceBetween(filepath,NULL,(char*)"/html/");
-			doxydata->fileName=getPathFromXML(filebuffer);
-			if(mustBeAClass==false)
-				{
-					asprintf(&doxydata->sourceFile,"%s%s",doxydata->filePath,doxydata->fileName);
-					if(gotline==false)
-						{
-							doxydata->lineNum=getLineFromXML(filebuffer);
-						}
-				}
-			else
-				{
-					doxydata->lineNum=classLineNumber;
-					asprintf(&doxydata->sourceFile,"%s%s",doxydata->filePath,classFileName);
-					
-				}
-		}
-	else
-		{
-			ERRDATA debugFree((char**)&doxydata);
-			doxydata=NULL;
-		}
-	ERRDATA debugFree(&unhashedline);
-	ERRDATA debugFree(&linetag);
-	ERRDATA debugFree(&filepath);
-	ERRDATA return(doxydata);
 }
 
 gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest* request,WebKitWebNavigationAction* navigationAction,WebKitWebPolicyDecision* policy_decision, gpointer user_data)
