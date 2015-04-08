@@ -1,4 +1,5 @@
 0.2.7
+Fixed not cancelling close when clicking window close button with unsaved changes.
 Improved SHIFT clicking a link in generated doxygen documentation, now more accurate.
 Generally improved searching for function definitions.
 Loading files with binary data now loads as much data as it can until an invalid character is encountered.

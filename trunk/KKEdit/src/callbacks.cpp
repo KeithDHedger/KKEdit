@@ -1149,7 +1149,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 			if(selection!=NULL)
 				{
-					fdata=getFunctionByName(selection,false,true);
+					fdata=getFunctionByNameOpenFiles(selection,false,false);
 					if(fdata!=NULL)
 						{
 							temptext=truncateWithElipses(fdata->define,maxFuncDefs);
@@ -1612,7 +1612,10 @@ VISIBLE void doShutdown(GtkWidget* widget,gpointer data)
 	char*	command;
 
 	if(doSaveAll(widget,(void*)true)==false)
-		return;
+		{
+			gtk_widget_show(mainWindow);
+			return;
+		}
 
 	if(onExitSaveSession)
 		saveSession(NULL,NULL);
