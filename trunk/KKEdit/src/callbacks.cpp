@@ -708,8 +708,8 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	pageStruct*	page;
 	char*		functions=NULL;
 	GtkWidget*	menuitem;
-	int			linenum;
-	char*		ts;
+	int			linenum=-1;
+	char*		ts=NULL;
 
 	char*		lineptr=NULL;
 	bool		onefunc=false;
@@ -752,11 +752,21 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 
 	while ((lineptr!=NULL) && (strlen(lineptr)>0))
 		{
+			linenum=-1;
+			correctedstr=NULL;
+			ts=NULL;
 			sscanf (lineptr,"%*s %*s %i %a[^\n]s",&linenum,&ts);
-			if((ts!=NULL) && (strlen(ts)>0))
-				correctedstr=truncateWithElipses(ts,maxFuncDefs);
+			if(linenum==-1)
+				{
+					ERRDATA debugFree(&correctedstr);
+					ERRDATA debugFree(&ts);
+				}
+			else
+				{
+					correctedstr=truncateWithElipses(ts,maxFuncDefs);
+				}
 
-			if((ts!=NULL) && (strlen(ts)>0))
+			if(linenum>0)
 				{
 					if(listFunction==4)
 						{

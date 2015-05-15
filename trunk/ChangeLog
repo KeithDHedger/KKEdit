@@ -1,3 +1,6 @@
+0.2.8
+Fixed segfault when ctags reports rubbish ( ie lua file using "--[[ ... ]]" syntax for long comments.
+
 0.2.7
 Fixed not cancelling close when clicking window close button with unsaved changes.
 Improved SHIFT clicking a link in generated doxygen documentation, now more accurate.
@@ -6,18 +9,18 @@ Loading files with binary data now loads as much data as it can until an invalid
 Fixed not cancelling quit with unsaved files.
 Updated kkedit-plugins.h so plugins will need updating as well.
 Added some debug code ( only for devs ).
-Removed foldernames and backup (*~) files to open from tab popup.
+Removed folder names and backup (*~) files to open from tab popup.
 Added debug level to configure ( defaults to 0 no debug info ).
-When opening file from tab dop down now opens file adjacent to current tab.
+When opening file from tab drop down now opens file adjacent to current tab.
 Fixed errant characters when searching gtk docs.
 Fixed minor bug displaying help in browser.
 Fixed highlight colour when highlighting all in find/replace.
 Now checks for binary data and asks whether to continue loading.
 Fixed d'n'd in prefs, again!
-Seaching for defines now searches for case sensitive then case insensitive.
+Searching for defines now searches for case sensitive then case insensitive.
 Fixed regex find, again!
 Moved 'Sort/Select Tab' menus to Edit menu.
-Added 'Select Tab' to File menu to select a tab by name. 
+Added 'Select Tab' to File menu to select a tab by name.
 Fixed "Open Include" not setting file prefs properly.
 Fixed dragging icons in prefs not working.
 
