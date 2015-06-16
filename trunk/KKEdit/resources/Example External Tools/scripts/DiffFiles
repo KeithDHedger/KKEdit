@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+#©keithhedger Tue 16 Jun 17:00:15 BST 2015 kdhedger68713@gmail.com
+
+echo -e $KKEDIT_FILE_LIST|tr ";" "\n"|yad --title="Diff" --width=600 --height=200 --list --multiple --quoted-output --separator= --column="File"|xargs diff
