@@ -973,6 +973,9 @@ void externalTool(GtkWidget* widget,gpointer data)
 	char*			barcontrol;
 	StringSlice*	slice=new StringSlice;
 	char*			barcommand=NULL;
+	char			*strarray=NULL;
+	unsigned int	buffersize=1000;
+	char			*pagepath;
 
 	if(page==NULL || tool==NULL)
 		return;
@@ -989,11 +992,32 @@ void externalTool(GtkWidget* widget,gpointer data)
 	tooldirname=g_path_get_dirname(tool->filePath);
 	chdir(tooldirname);
 
+	strarray=(char*)calloc(buffersize,1);
+	for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
+		{
+			pagepath=(char*)(pageStruct*)(getPageStructPtr(j))->filePath;
+			if(pagepath!=NULL)
+				{
+					if(buffersize<strlen(strarray)+strlen(pagepath))
+						{
+							buffersize+=1000;
+							strarray=(char*)realloc(strarray,buffersize);
+						}
+					if(pagepath!=NULL)
+						{
+							strcat(strarray,pagepath);
+							strcat(strarray,";");
+						}
+				}
+		}
+
 	setenv("KKEDIT_CURRENTFILE",page->filePath,1);
 	setenv("KKEDIT_HTMLFILE",htmlFile,1);
 	setenv("KKEDIT_CURRENTDIR",docdirname,1);
 	setenv("KKEDIT_DATADIR",DATADIR,1);
 	setenv("KKEDIT_SOURCE_LANG",page->lang,1);
+	setenv("KKEDIT_FILE_LIST",strarray,1);
+	free(strarray);
 
 	asprintf(&barcontrol,"%s/BarControl-%s",tmpFolderName,slice->randomName(6));
 
@@ -1067,6 +1091,7 @@ void externalTool(GtkWidget* widget,gpointer data)
 	unsetenv("KKEDIT_SELECTION");
 	unsetenv("KKEDIT_HTMLFILE");
 	unsetenv("KKEDIT_BAR_CONTROL");
+	unsetenv("KKEDIT_FILE_LIST");
 
 	ERRDATA debugFree(&text);
 	ERRDATA debugFree(&docdirname);

@@ -1,4 +1,6 @@
 0.2.8
+Added 'Diff two files' to example tools.
+Added new envrironment variable exported to external tools 'KKEDIT_FILE_LIST' which is a ';' separated list of ALL open file paths.
 Fixed segfault when ctags reports rubbish ( ie lua file using "--[[ ... ]]" syntax for long comments.
 
 0.2.7

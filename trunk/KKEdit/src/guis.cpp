@@ -812,11 +812,11 @@ void populateDnD(void)
 
 char* makeToolBarList(void)
 {
+
 	ERRDATA
 	GtkTreeIter iter;
 	gboolean	valid;
-	gchar*		str_data;
-	gint		row_count=0;
+	gchar*		str_data=NULL;
 	GString*	str=g_string_new("");
 
 	valid=gtk_tree_model_get_iter_first((GtkTreeModel *)listStore,&iter);
@@ -824,8 +824,16 @@ char* makeToolBarList(void)
 		{
 			gtk_tree_model_get((GtkTreeModel *)listStore,&iter,TEXT_COLUMN,&str_data,-1);
 			g_string_append_c(str,str_data[0]);
-			row_count++;
 			valid=gtk_tree_model_iter_next((GtkTreeModel *)listStore,&iter);
+// 			str_data=(gchar*)12345;
+//			printf("XXXXXXXXXX\n");
+//			try{
+//free(str_data);
+// ERRDATA debugFree(&str_data);  //int oops = *pointer;
+//}/catch(...){
+//			printf("zzzzzzzzzzzzzzz\n");
+//    printf("No problem ;-)\n");
+//}
 			ERRDATA debugFree(&str_data);
 		}
 	ERRDATA return(g_string_free(str,false));
