@@ -1,4 +1,10 @@
 0.2.9
+Added seperators into 'View' menu.
+Added toggle line nubers to 'View' menu.
+Added toggle wrap lines to 'View' menu.
+Added toggle higlight current line to 'View' menu.
+Added toggle syntax highlight to 'View' menu.
+Added toggle auto show completions to 'View' menu.
 Fixed regex search missing first search term if it begins at the cursor position.
 
 0.2.8
