@@ -2107,15 +2107,35 @@ VISIBLE void toggleDocviewer(GtkWidget* widget,gpointer data)
 }
 #endif
 
+#if 0
+//toggle auto indent from view
+VISIBLE void toggleAutoIndent(GtkWidget* widget,gpointer data)
+{
+	indent=!indent;
+	resetAllFilePrefs();
+	if(indent)
+		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Auto Indent Lines"));
+	else
+		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Auto Indent Lines"));
+}
+#endif
+
 //toggle line numbers from view
 VISIBLE void toggleLineNumbers(GtkWidget* widget,gpointer data)
 {
 	lineNumbers=!lineNumbers;
 	resetAllFilePrefs();
-	if(lineNumbers)
-		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Hide Line Numbers"));
+}
+
+//toggle wrap lines
+VISIBLE void toggleWrapLines(GtkWidget* widget,gpointer data)
+{
+	lineWrap=!lineWrap;
+	resetAllFilePrefs();
+	if(lineWrap)
+		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Wrap Lines Off"));
 	else
-		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Show Line Numbers"));
+		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Wrap Lines On"));
 }
 
 void doKeyShortCut(int what)
