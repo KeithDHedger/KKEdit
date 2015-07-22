@@ -2132,10 +2132,27 @@ VISIBLE void toggleWrapLines(GtkWidget* widget,gpointer data)
 {
 	lineWrap=!lineWrap;
 	resetAllFilePrefs();
-	if(lineWrap)
-		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Wrap Lines Off"));
-	else
-		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Wrap Lines On"));
+}
+
+//togle no syntax
+VISIBLE void toggleSyntax(GtkWidget* widget,gpointer data)
+{
+	noSyntax=!noSyntax;
+	resetAllFilePrefs();
+}
+
+//togle no syntax
+VISIBLE void toggleAutoComplete(GtkWidget* widget,gpointer data)
+{
+	autoShowComps=!autoShowComps;
+	resetAllFilePrefs();
+}
+
+//togle hilite current line
+VISIBLE void toggleHighlightCurrent(GtkWidget* widget,gpointer data)
+{
+	highLight=!highLight;
+	resetAllFilePrefs();
 }
 
 void doKeyShortCut(int what)

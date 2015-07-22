@@ -383,6 +383,10 @@ args			kkedit_window_rc[]=
 args			kkedit_rc[]=
 {
 	//bools
+//	{"showbmbar",TYPEBOOL,&showBMBar},
+//	{"showtoolbar",TYPEBOOL,&showToolBar},
+//	{"showstatusbar",TYPEBOOL,&showStatus},
+
 	{"indentcode",TYPEBOOL,&indent},
 	{"showlinenumbers",TYPEBOOL,&lineNumbers},
 	{"wrapline",TYPEBOOL,&lineWrap},

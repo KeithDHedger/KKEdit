@@ -1952,9 +1952,14 @@ void buildMainGui(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(viewMenu),menu);
 
 //show docs
-//		menuitem=makeMenuItem(gettext("Show Line Numbers"),menu,(void*)toggleLineNumbers,0,VIEWSHOWLINENUMERS,CHECKMENU,NULL,(void*)lineNumbers,false);
-//	menuitem=makeMenuItem(gettext("Show Documentation"),menu,(void*)doDoxy,0,SHOWDOCSMENUNAME,NORMALMENU,NULL,(void*)2,false);
 	menuitem=makeMenuItem(gettext("Show Documentation"),menu,(void*)doDoxy,0,SHOWDOCSMENUNAME,NORMALMENU,NULL,(void*)2,false);
+
+//toggle bookmark bar
+	if(showBMBar)
+		menuitem=makeMenuItem(gettext("Hide Bookmarks Bar"),menu,(void*)toggleBookMarkBar,0,SHOWBMBARMENUNAME,NORMALMENU,NULL,NULL,false);
+	else
+		menuitem=makeMenuItem(gettext("Show Bookmarks Bar"),menu,(void*)toggleBookMarkBar,0,SHOWBMBARMENUNAME,NORMALMENU,NULL,NULL,false);
+
 //toggle toolbar bar
 	if(showToolBar)
 		menuitem=makeMenuItem(gettext("Hide Tool Bar"),menu,(void*)toggleToolBar,0,SHOWTOOLBARMENUNAME,NORMALMENU,NULL,NULL,false);
@@ -1979,26 +1984,20 @@ void buildMainGui(void)
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),gtk_separator_menu_item_new());
 
-//toggle bookmark bar
-	if(showBMBar)
-		menuitem=makeMenuItem(gettext("Hide Bookmarks Bar"),menu,(void*)toggleBookMarkBar,0,SHOWBMBARMENUNAME,NORMALMENU,NULL,NULL,false);
-	else
-		menuitem=makeMenuItem(gettext("Show Bookmarks Bar"),menu,(void*)toggleBookMarkBar,0,SHOWBMBARMENUNAME,NORMALMENU,NULL,NULL,false);
-
 //toggle line nubers
 		menuitem=makeMenuItem(gettext("Show Line Numbers"),menu,(void*)toggleLineNumbers,0,VIEWSHOWLINENUMERS,CHECKMENU,NULL,NULL,lineNumbers);
 
 //toggle wrap lines
-	if(lineWrap)
-		menuitem=makeMenuItem(gettext("Wrap Lines Off"),menu,(void*)toggleWrapLines,0,VIEWWRAPLINES,NORMALMENU,NULL,NULL,false);
-	else
-		menuitem=makeMenuItem(gettext("Wrap Lines On"),menu,(void*)toggleWrapLines,0,VIEWWRAPLINES,NORMALMENU,NULL,NULL,false);
+	menuitem=makeMenuItem(gettext("Wrap Lines"),menu,(void*)toggleWrapLines,0,VIEWWRAPLINES,CHECKMENU,NULL,NULL,lineWrap);
 
 //toggle higlight current line
+	menuitem=makeMenuItem(gettext("Hightlght Current Line"),menu,(void*)toggleHighlightCurrent,0,VIEWHIGHLIGHT,CHECKMENU,NULL,NULL,highLight);
 
 //toggle syntax highlight
+	menuitem=makeMenuItem(gettext("No Syntax Highlighting"),menu,(void*)toggleSyntax,0,VIEWNOSYNTAX,CHECKMENU,NULL,NULL,noSyntax);
 
 //toggle auto show comps
+	menuitem=makeMenuItem(gettext("Auto Show Completions"),menu,(void*)toggleAutoComplete,0,VIEWAUTOCOMPLETE,CHECKMENU,NULL,NULL,autoShowComps);
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),gtk_separator_menu_item_new());
 
