@@ -1,6 +1,6 @@
 #
 #
-AC_INIT([KKEdit],[0.2.8],[PROJ],[KKEdit])
+AC_INIT([KKEdit],[0.2.9],[PROJ],[KKEdit])
 
 AC_CONFIG_HEADER([config.h])
 AC_PROG_CXX
@@ -41,12 +41,6 @@ PKG_CHECK_MODULES(GLIB, $GLIB_MODULES)
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
 
-#GTKSPELL_MODULES="gtkspell3-2.0 >= 3.0.0"
-#PKG_CHECK_MODULES(GTKSPELL, $GTKSPELL_MODULES)
-#AC_SUBST(GTKSPELL_CFLAGS)
-#AC_SUBST(GTKSPELL_LIBS)
-
-
 AC_MSG_CHECKING(whether to build gtk-doc viewer)
 AC_ARG_ENABLE(docviewer,AS_HELP_STRING([--enable-docviewer],[Build the Gtk-Doc viewer]),
     [enable_docviewer=$enableval],
@@ -82,7 +76,6 @@ AC_CHECK_PROG(CTAGS, ctags ,true,false)
 if test $CTAGS = false; then
 	AC_MSG_ERROR([No ctags program found!])
 fi
-
 
 AC_CHECK_PROG(GTKSU, gtksu ,true,false)
 if test $GTKSU = false; then

@@ -1,3 +1,6 @@
+0.2.9
+Fixed regex search missing first search term if it begins at the cursor position.
+
 0.2.8
 Added 'Diff two files' to example tools.
 Added new envrironment variable exported to external tools 'KKEDIT_FILE_LIST' which is a ';' separated list of ALL open file paths.

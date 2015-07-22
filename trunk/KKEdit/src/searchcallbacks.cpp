@@ -597,7 +597,7 @@ void regexFind(int dowhat)
 	GtkTextIter				startiter,enditer;
 	int						charstartpos;
 	int						charendpos;
-	int						startpos,endpos;
+	int						startpos=0,endpos=0;
 	char*					text=NULL;
 	char*					reptext=NULL;
 	TextBuffer*				textbuffer=NULL;
@@ -616,6 +616,7 @@ void regexFind(int dowhat)
 			ERRDATA return;
 		}
 
+	
 	gotselection=gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&startiter,&enditer);
 
 	if(gotselection==false || ((fromregexsinglereplace==true) && (gotselection==true)))
@@ -702,7 +703,8 @@ void regexFind(int dowhat)
 //forward search
 			case FINDNEXT:
 				fromregexreplace=false;
-				page->regexMatchNumber=findNextRegex(page,textbuffer->charPos,page->regexMatchNumber);
+				//FIX//
+				page->regexMatchNumber=findNextRegex(page,textbuffer->charPos-1,page->regexMatchNumber);
 				if(page->regexMatchNumber!=-1)
 					{
 						xdata=(regexData*)g_slist_nth_data(page->regexList,page->regexMatchNumber);

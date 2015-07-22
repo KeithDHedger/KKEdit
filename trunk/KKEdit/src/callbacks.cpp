@@ -2107,6 +2107,17 @@ VISIBLE void toggleDocviewer(GtkWidget* widget,gpointer data)
 }
 #endif
 
+//toggle line numbers from view
+VISIBLE void toggleLineNumbers(GtkWidget* widget,gpointer data)
+{
+	lineNumbers=!lineNumbers;
+	resetAllFilePrefs();
+	if(lineNumbers)
+		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Hide Line Numbers"));
+	else
+		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Show Line Numbers"));
+}
+
 void doKeyShortCut(int what)
 {
 	ERRDATA

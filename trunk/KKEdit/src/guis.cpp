@@ -1548,6 +1548,7 @@ void buildMainGui(void)
 		menuitem=makeMenuItem(gettext("Hide Tool Bar"),menu,(void*)toggleToolBar,0,SHOWTOOLBARMENUNAME,NORMALMENU,NULL,NULL);
 	else
 		menuitem=makeMenuItem(gettext("Show Tool Bar"),menu,(void*)toggleToolBar,0,SHOWTOOLBARMENUNAME,NORMALMENU,NULL,NULL);
+
 //tooloutput
 	if(showToolOutWin)
 		toolOutMenu=makeMenuItem(gettext("Hide Tool Output"),menu,(void*)toggleToolOutput,0,SHOWTOOLOUTMENUNAME,NORMALMENU,NULL,NULL);
@@ -1563,6 +1564,25 @@ void buildMainGui(void)
 //toggle docviewer
 	showDocViewWidget=makeMenuItem(gettext("Show Docviewer"),menu,(void*)toggleDocviewer,0,SHOWDOCVIEWERMENUNAME,NORMALMENU,NULL,NULL);
 #endif
+
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),gtk_separator_menu_item_new());
+
+//toggle auto indent
+
+//toggle line nubers
+	if(lineNumbers)
+		menuitem=makeMenuItem(gettext("Hide Line Numbers"),menu,(void*)toggleLineNumbers,0,VIEWSHOWLINENUMERS,NORMALMENU,NULL,NULL);
+	else
+		menuitem=makeMenuItem(gettext("Show Line Numbers"),menu,(void*)toggleLineNumbers,0,VIEWSHOWLINENUMERS,NORMALMENU,NULL,NULL);
+//toggle wrap lines
+
+//toggle higlight current line
+
+//toggle syntax highlight
+
+//toggle auto show comps
+
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),gtk_separator_menu_item_new());
 
 //navigation menu
 	navMenu=gtk_menu_item_new_with_label(gettext("_Navigation"));
