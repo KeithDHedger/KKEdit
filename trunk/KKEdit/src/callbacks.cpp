@@ -1863,7 +1863,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 VISIBLE void doAbout(GtkWidget* widget,gpointer data)
 {
 	ERRDATA
-	const char*	authors[]= {"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,gettext("\nMore by the same author\n"),"Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
+	const char*	authors[]= {"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,"\nBig thanks to Sadi Yumuşak for all his help.",gettext("\nMore by the same author\n"),"Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
 	const char	copyright[] ="Copyright \xc2\xa9 2013 K.D.Hedger";
 	const char*	aboutboxstring=gettext("KKEdit Code Text Editor");
 	char*		licence;
@@ -2104,19 +2104,6 @@ VISIBLE void toggleDocviewer(GtkWidget* widget,gpointer data)
 			gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,gettext("Show Docviewer"));
 			gtk_widget_hide(docView);
 		}
-}
-#endif
-
-#if 0
-//toggle auto indent from view
-VISIBLE void toggleAutoIndent(GtkWidget* widget,gpointer data)
-{
-	indent=!indent;
-	resetAllFilePrefs();
-	if(indent)
-		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Auto Indent Lines"));
-	else
-		gtk_menu_item_set_label((GtkMenuItem*)widget,gettext("Auto Indent Lines"));
 }
 #endif
 
