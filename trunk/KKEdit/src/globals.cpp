@@ -697,7 +697,7 @@ functionData* getFunctionByNameOpenFiles(char* name,bool casesensitive,bool whol
 	char*			functions=NULL;
 	gchar*			stdout=NULL;
 	char			function[1024];
-	int				gotmatch;
+	int				gotmatch=-1;
 	int				loop;
 	int				maxpage=numpages;
 	bool			whileflag;
@@ -716,7 +716,6 @@ functionData* getFunctionByNameOpenFiles(char* name,bool casesensitive,bool whol
 	startpage=loop;
 	checkthispage=true;
 	whileflag=true;
-
 	while(whileflag==true)
 		{
 			page=getPageStructPtr(loop);
@@ -745,7 +744,14 @@ functionData* getFunctionByNameOpenFiles(char* name,bool casesensitive,bool whol
 									if(wholefname==true)
 										gotmatch=strncasecmp(function,name,longest);
 									else
-										gotmatch=strncasecmp(function,name,(int)strlen(name));
+										{
+											char *pstr=NULL;
+											pstr=strcasestr(function,name);
+											if(pstr!=NULL)
+												gotmatch=0;
+											else
+												gotmatch=-1;
+										}
 							}
 
 							if(gotmatch==0)
@@ -828,6 +834,14 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 									else
 										gotmatch=strncasecmp(function,name,(int)strlen(name));
 
+									if(gotmatch!=0)
+										{
+											char *p=NULL;
+											p=strcasestr(function,name);
+											if(p!=NULL)
+												gotmatch=0;
+										}
+										
 									if(strlen(name)==strlen(function))
 										thislen=strlen(name);
 									else
@@ -905,7 +919,6 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 					ERRDATA return(fdata);
 				}
 		}
-
 	ERRDATA return(NULL);
 }
 

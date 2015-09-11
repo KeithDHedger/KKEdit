@@ -33,7 +33,8 @@
 #endif
 
 #define MYEMAIL "kdhedger68713@gmail.com"
-#define MYWEBSITE "https://sites.google.com/site/kkeditlinuxtexteditor/home"
+#define MYWEBSITE "http://kkedit.darktech.org/"
+
 #define PLUGINSLINK "https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins#getplugs"
 #define NAGTIMELINK "https://dl.dropboxusercontent.com/s/xcvp8af3qp7ffxg/NAGTIME"
 #define DBUSNAME "org.keithhedge.kkedit"

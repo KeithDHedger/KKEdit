@@ -264,55 +264,83 @@ VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
 	GtkTextIter	end;
 	char*		selection=NULL;
 	char*		findcommand=NULL;
-	char*		headcommand=NULL;
 	char		line[1024];
-	char		titleline[1024];
 	FILE*		findfile;
-	FILE*		headfile;
+	int			cnt=0;
+	char*		searchdata[2048][2];
+	FILE*		fd;
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 
 	if(selection!=NULL)
 		{
-			showBarberPole(gettext("Searching ..."));
+			for(int loop=0;loop<2048;loop++)
+				{
+					searchdata[loop][0]=NULL;
+					searchdata[loop][1]=NULL;
+				}
 
-			asprintf(&findcommand,"find %s/html -name \"*.html\"",page->dirName);
+			asprintf(&findcommand,"cat %s/searchdata.xml|grep 'name=\"name\".*%s.*field'|sed 's/^[ \\t]*<field name=\"name\">//;s/<\\/field>//'",page->dirName,selection);
 			findfile=popen(findcommand,"r");
 			while(fgets(line,1024,findfile))
 				{
-					gtk_main_iteration_do(false);
-					line[strlen(line)-1]=0;
-					asprintf(&headcommand,"head \"%s\"|grep title",line);
-					headfile=popen(headcommand,"r");
-					while(fgets(titleline,1024,headfile))
-						{
-							if(strstr(titleline,selection)!=NULL)
-								{
-									if(thePage!=NULL)
-										{
-											ERRDATA debugFree(&thePage);
-										}
-									asprintf(&thePage,"file://%s",line);
-									while(fgets(titleline,1024,headfile));
-									while(fgets(titleline,1024,findfile));
-									pclose(headfile);
-									pclose(findfile);
-									ERRDATA debugFree(&headcommand);
-									showDocView(USEURI,thePage,"Doxygen Documentation");
-									killBarberPole();
-									ERRDATA return;
-								}
-						}
-					pclose(headfile);
+					searchdata[cnt][0]=strdup(line);
+					cnt++;
 				}
 			pclose(findfile);
-			if(headcommand!=NULL)
-				{
-					ERRDATA debugFree(&headcommand);
-				}
 			ERRDATA debugFree(&findcommand);
-			killBarberPole();
+
+			cnt=0;
+			asprintf(&findcommand,"cat %s/searchdata.xml|grep -C 2 'name=\"name\".*%s.*field'|grep -i url|sed 's/^[ \\t]*<field name=\"url\">//;s/<\\/field>//'",page->dirName,selection);
+			findfile=popen(findcommand,"r");
+			while(fgets(line,1024,findfile))
+				{
+					asprintf(&searchdata[cnt][1],"%s/html/%s",page->dirName,line);
+					cnt++;
+				}
+			pclose(findfile);
+			ERRDATA debugFree(&findcommand);
+
+			if(cnt>1)
+				{
+					fd=fopen(htmlFile,"w");
+					if(fd!=NULL)
+						{								
+							fprintf(fd,"<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
+							fprintf(fd,"<html>\n");
+							fprintf(fd,"<body>\n");
+
+							for(int loop=0;loop<cnt;loop++)
+								{
+									fprintf(fd,"<a href=\"%s\">%s</a><br>\n",searchdata[loop][1],searchdata[loop][0]);
+								}
+							fprintf(fd,"</body>\n");
+							fprintf(fd,"</html>\n");
+							fclose(fd);
+							thePage=strdup(htmlURI);
+						}
+				}
+			else
+				{
+					if(thePage!=NULL)
+						ERRDATA debugFree(&thePage);
+					asprintf(&thePage,"file://%s",searchdata[0][1]);
+				}
+
+			showDocView(USEURI,selection,gettext("Doxygen Docs"));
+
+			for(int loop=0;loop<cnt;loop++)
+				{
+					if(searchdata[loop][0]!=NULL)
+						ERRDATA debugFree(&searchdata[loop][0]);
+
+					if(searchdata[loop][1]!=NULL)
+						ERRDATA debugFree(&searchdata[loop][1]);
+				}
+
+			if((selection!=NULL) && (data==NULL))
+				ERRDATA debugFree(&selection);
 		}
 }
 

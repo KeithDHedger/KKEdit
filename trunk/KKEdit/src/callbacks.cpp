@@ -1641,7 +1641,7 @@ VISIBLE bool doSaveAll(GtkWidget* widget,gpointer data)
 	return(true);
 }
 
-VISIBLE void doShutdown(GtkWidget* widget,gpointer data)
+bool doShutdown(GtkWidget* widget,GdkEvent *event,gpointer data)
 {
 	ERRDATA
 	char*	command;
@@ -1649,7 +1649,7 @@ VISIBLE void doShutdown(GtkWidget* widget,gpointer data)
 	if(doSaveAll(widget,(void*)true)==false)
 		{
 			gtk_widget_show(mainWindow);
-			return;
+			return(true);
 		}
 
 	if(onExitSaveSession)
@@ -1669,6 +1669,7 @@ VISIBLE void doShutdown(GtkWidget* widget,gpointer data)
 	system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
 
 	g_application_release(mainApp);
+	return(false);
 }
 
 void setPrefs(GtkWidget* widget,gpointer data)
@@ -1864,7 +1865,7 @@ VISIBLE void doAbout(GtkWidget* widget,gpointer data)
 {
 	ERRDATA
 	const char*	authors[]= {"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,"\nBig thanks to Sadi Yumuşak for all his help.",gettext("\nMore by the same author\n"),"Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
-	const char	copyright[] ="Copyright \xc2\xa9 2013 K.D.Hedger";
+	const char	copyright[] ="Copyright \xc2\xa9 2013 K.D.Hedger \n" MYEMAIL;
 	const char*	aboutboxstring=gettext("KKEdit Code Text Editor");
 	char*		licence;
 	char*		translators;
@@ -1872,7 +1873,7 @@ VISIBLE void doAbout(GtkWidget* widget,gpointer data)
 	asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",gettext("French Translation"));
 	g_file_get_contents(DATADIR"/docs/gpl-3.0.txt",&licence,NULL,NULL);
 
-	gtk_show_about_dialog(NULL,"authors",authors,"translator-credits",translators,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",MYWEBSITE,"program-name","KKEdit","logo-icon-name","KKEdit","license",licence,NULL);
+	gtk_show_about_dialog(NULL,"authors",authors,"translator-credits",translators,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",MYWEBSITE,"website-label","KKEdit Homepage","program-name","KKEdit","logo-icon-name","KKEdit","license",licence,NULL);
 
 	ERRDATA debugFree(&licence);
 	ERRDATA debugFree(&translators);

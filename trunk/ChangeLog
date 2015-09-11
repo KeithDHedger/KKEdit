@@ -1,3 +1,14 @@
+0.2.10
+Fixed changed callback definition when closing.
+Fixed toolbar button setsensitive on startup.
+More tweaks for'Search For Define'.
+Added email address to copyright notice in about box.
+Updated about box web site link.
+Tweaked 'Search For Define' to check for partial name.
+Multiple hits now shown in Doxygen documentation.
+Find in Doxygen documentation now MUCH faster.
+Updated docs/Doxyfile.
+
 0.2.9
 Added seperators into 'View' menu.
 Added toggle line nubers to 'View' menu.

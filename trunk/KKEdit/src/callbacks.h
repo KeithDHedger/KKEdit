@@ -24,7 +24,7 @@ void openHelp(GtkWidget* widget,gpointer data);
 void printFile(GtkWidget* widget,gpointer data);
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data);
 bool tabPopUp(GtkWidget *my_widget, GdkEventButton *event,gpointer user_data);
-void doShutdown(GtkWidget* widget,gpointer data);
+bool doShutdown(GtkWidget* widget,GdkEvent *event,gpointer data);
 void setPrefs(GtkWidget* widget,gpointer data);
 void setToolOptions(GtkWidget* widget,gpointer data);
 void doAbout(GtkWidget* widget,gpointer data);

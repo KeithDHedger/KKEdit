@@ -374,6 +374,7 @@ void appStart(GApplication  *application,gpointer data)
 	if(onExitSaveSession==true)
 		restoreSession(NULL,(void*)restoreBookmarks);
 
+	setToobarSensitive();
 	refreshMainWindow();
 
 	buildFindReplace();
