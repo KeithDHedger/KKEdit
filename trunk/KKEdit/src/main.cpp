@@ -335,16 +335,26 @@ void open(GApplication* application,GFile** files,gint n_files,const gchar* hint
 {
 	ERRDATA
 	char*	filepath=NULL;
+	char	*linenum=NULL;
+	int		line=0;
 
 	g_application_hold(application);
 
 	for(int i=0; i<n_files; i++)
 		{
 			filepath=g_file_get_path(files[i]);
+			linenum=strrchr(filepath,'@');
+			if(linenum!=NULL)
+				{
+					*linenum=0;
+					linenum++;
+					line=atoi(linenum);
+				}
+			
 			if(filepath!=NULL)
 				{
-					openFile(filepath,0,true);
-					ERRDATA debugFree(&filepath);
+					openFile(filepath,line,true);
+					ERRDATA g_free(filepath);
 				}
 		}
 

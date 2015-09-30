@@ -866,6 +866,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					if((tpath!=NULL) && (page->realFilePath!=NULL) && (strcmp(page->realFilePath,tpath)==0))
 						{
 							gtk_notebook_set_current_page(mainNotebook,j);
+							gotoLine(NULL,(gpointer)(long)linenumber);
 							busyFlag=false;
 							sessionBusy=false;
 							ERRDATA debugFree(&tpath);

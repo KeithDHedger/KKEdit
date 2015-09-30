@@ -550,7 +550,7 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 					command=(char*)slce.sliceBetween((char*)command,NULL,(char*)"_source");
 					command=(char*)slce.deleteSlice((char*)command,(char*)"html/");
 					command=(char*)slce.replaceAllSlice((char*)command,(char*)"_8",(char*)".");
-					const char *upperdata[]={"_a","A","_b","A","_c","C","_d","D","_e","E","_f","F","_g","G","_h","H","_i","I","_j","J","_k","K","_l","L","_m","M","_n","N","_o","O","_p","P","_q","Q","_r","R","_s","S","_t","T","_u","U","_v","V","_w","W","_x","X","_y","Y","_z","Z"};
+					const char *upperdata[]={"_a","A","_b","B","_c","C","_d","D","_e","E","_f","F","_g","G","_h","H","_i","I","_j","J","_k","K","_l","L","_m","M","_n","N","_o","O","_p","P","_q","Q","_r","R","_s","S","_t","T","_u","U","_v","V","_w","W","_x","X","_y","Y","_z","Z"};
 					for(int j=0;j<52;j+=2)
 						command=(char*)slce.replaceAllSlice((char*)command,(char*)upperdata[j],(char*)upperdata[j+1]);
 					if(openFile(command,linenum,true)==true)
