@@ -113,6 +113,7 @@ extern GApplication*	mainApp;
 extern bool				busyFlag;
 extern bool				autoSeleced;
 extern bool				sessionBusy;
+extern bool				fromGOpen;
 
 //app
 //main window

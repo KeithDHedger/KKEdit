@@ -1,4 +1,5 @@
 0.2.11
+Updated open file with line number to scroll to line num immediately.
 Added optionsal switching to line number when opening file using /path/to/file@LINENUM.
 Minor doxy documentation fix.
 

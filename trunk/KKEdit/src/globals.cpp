@@ -13,6 +13,7 @@ GApplication*	mainApp;
 bool			busyFlag=false;
 bool			autoSeleced=false;
 VISIBLE bool	sessionBusy=false;
+bool			fromGOpen=false;
 
 //app
 //main mainWindow
@@ -224,7 +225,6 @@ GtkToolItem*	findApiButton=NULL;
 GtkToolItem*	findQtApiButton=NULL;
 GtkToolItem*	findFuncDefButton=NULL;
 GtkToolItem*	liveSearchButton=NULL;
-
 
 //find replace
 GtkWidget*		findReplaceDialog;

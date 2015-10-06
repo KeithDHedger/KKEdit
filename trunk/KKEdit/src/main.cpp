@@ -339,6 +339,10 @@ void open(GApplication* application,GFile** files,gint n_files,const gchar* hint
 	int		line=0;
 
 	g_application_hold(application);
+	fromGOpen=true;
+
+	if(mainWindow!=NULL)
+		gtk_window_present((GtkWindow*)mainWindow);
 
 	for(int i=0; i<n_files; i++)
 		{
@@ -358,9 +362,8 @@ void open(GApplication* application,GFile** files,gint n_files,const gchar* hint
 				}
 		}
 
-	if(mainWindow!=NULL)
-		gtk_window_present((GtkWindow*)mainWindow);
 	setSensitive();
+	fromGOpen=false;
 
 	g_application_release(application);
 	ERRDATA

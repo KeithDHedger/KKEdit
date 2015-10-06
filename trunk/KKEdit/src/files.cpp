@@ -1015,15 +1015,31 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"openFile");
 
 	/* move cursor to the linenumber */
-	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,linenum,0);
-	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-	gtk_text_iter_set_line(&iter,linenum);
-	gtk_text_buffer_move_mark((GtkTextBuffer*)page->buffer,page->backMark,&iter);
-	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
+	if(fromGOpen==true)
+	{
+	gtk_widget_show_all((GtkWidget*)(GtkTextView*)page->view);
+//	for(int j=0;j<10;j++)
+//		gtk_main_iteration_do(false);
+
+	if(linenum>0)
+		while (gtk_events_pending ())
+			gtk_main_iteration ();
+}
+
+	gotoLine(NULL,(void*)linenum+1);
+//	gtk_text_buffer_get_iter_at_line_offset((GtkTextBuffer*)page->buffer,&iter,linenum,0);
+//	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
+//	gtk_text_iter_set_line(&iter,linenum);
+//	gtk_text_buffer_move_mark((GtkTextBuffer*)page->buffer,page->backMark,&iter);
+//	gtk_text_view_scroll_to_mark((GtkTextView*)page->view,page->backMark,0,true,0,0.5);
+//	gtk_widget_show_all((GtkWidget*)(GtkTextView*)page->view);
 
 	busyFlag=false;
 	sessionBusy=false;
 	ERRDATA return(TRUE);
+//	for(int j=0;j<100;j++)
+//		gtk_main_iteration_do(false);
+//	 gotoLine(NULL,(void*)linenum);
 }
 
 VISIBLE void newFile(GtkWidget* widget,gpointer data)
