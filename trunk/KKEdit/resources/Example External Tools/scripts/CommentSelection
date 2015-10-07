@@ -2,34 +2,46 @@
 
 #©keithhedger Thu 5 Sep 13:39:19 BST 2013 kdhedger68713@gmail.com
 
+tfile=/tmp/data$$
+:>$tfile
+echo -n "${KKEDIT_SELECTION}" > $tfile
+
 case $KKEDIT_SOURCE_LANG in
-	"sh")
+	"sh" | "Python" | "Makefile" | ".desktop" | "Perl")
 		COMMENTCHARS="#"
 		COMMENTLEN=1
+		if [ "X${KKEDIT_SELECTION:0:$COMMENTLEN}" = "X${COMMENTCHARS}" ];then
+			sed -i "s/^${COMMENTCHARS}\(.*\)/\1/g" $tfile
+		else
+			sed -i "s/\(.*\)/${COMMENTCHARS}\1/g" $tfile
+		fi
 		;;
-	"C++"|"C"|"Objective-C"|"C/C++/ObjC Header")
-		COMMENTCHARS="//"
+
+	"C++" | "C" | "Objective-C" | "C/C++/ObjC Header" | "Java" | "Pascal")
+		COMMENTCHARS='//'
 		COMMENTLEN=2
+		if [ "X${KKEDIT_SELECTION:0:$COMMENTLEN}" = "X${COMMENTCHARS}" ];then
+			sed -i "s@^${COMMENTCHARS}\(.*\)@\1@g" $tfile
+		else
+			sed -i "s@\(.*\)@${COMMENTCHARS}\1@g" $tfile
+		fi
 		;;
+
+	"HTML")
+		COMMENTCHARS='<!--'
+		COMMENTLEN=4
+		if [ "X${KKEDIT_SELECTION:0:$COMMENTLEN}" = "X${COMMENTCHARS}" ];then
+			sed -i 's/^<!--\(.*\)-->$/\1/g' $tfile
+		else
+			sed -i 's/\(.*\)/<!--\1-->/g' $tfile
+		fi
+		;;
+
 	*)
 		echo -n "${KKEDIT_SELECTION}"
 		exit 0
 		;;
 esac
 
-if [ "${KKEDIT_SELECTION:0:$COMMENTLEN}" != "${COMMENTCHARS:0:$COMMENTLEN}" ];then
-	while read
-		do
-			echo "${COMMENTCHARS}${REPLY}"
-
-		done < <(echo -n "${KKEDIT_SELECTION}")
-else
-	while read
-		do
-			if [ ${REPLY:0:$COMMENTLEN} = "${COMMENTCHARS:0:$COMMENTLEN}" ];then
-				echo "${REPLY#"${COMMENTCHARS}"}"
-			else
-				echo $REPLY
-			fi
-		done < <(echo -en "${KKEDIT_SELECTION}")
-fi 
+cat $tfile
+rm $tfile
