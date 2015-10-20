@@ -7,5 +7,5 @@ Terminal=false
 Type=Application
 Categories=Utility;
 MimeType=text/plain
-Icon=KKEdit.png
+Icon=KKEdit
 Exec=kkedit %f

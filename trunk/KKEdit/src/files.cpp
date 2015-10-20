@@ -1022,7 +1022,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_main_iteration ();
 		}
 
-	gotoLine(NULL,(void*)(long)linenum+1);
+	gotoLine(NULL,(void*)(long)(linenum+1));
 
 	busyFlag=false;
 	sessionBusy=false;
