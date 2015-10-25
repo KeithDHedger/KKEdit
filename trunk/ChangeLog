@@ -1,4 +1,5 @@
 0.2.11
+Standardized source file copyright/licence headers.
 Fixed undo/redo all.
 Fixed regex anchors not always working for replace all.
 Corrected icon entry in desktop files.
