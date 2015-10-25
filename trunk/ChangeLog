@@ -1,8 +1,10 @@
 0.2.11
+Fixed undo/redo all.
+Fixed regex anchors not always working for replace all.
 Corrected icon entry in desktop files.
 Updated 'Comment Selection' example tool to include commenting - sh, Python, Makefile, .desktop, Perl, C++, C, Objective-C, C/C++/ObjC Header, Java, Pascal, HTML.
 Updated open file with line number to scroll to line num immediately.
-Added optionsal switching to line number when opening file using /path/to/file@LINENUM.
+Added optional switching to line number when opening file using /path/to/file@LINENUM.
 Minor doxy documentation fix.
 
 0.2.10

@@ -870,10 +870,10 @@ VISIBLE void pasteFromClip(GtkWidget* widget,gpointer data)
 	mainclipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
 	clipdata=gtk_clipboard_wait_for_text(mainclipboard);
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
-	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
-		gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
-	gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)clipdata,-1);
-	gtk_text_buffer_end_user_action   ((GtkTextBuffer*)page->buffer);
+		if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+			gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
+		gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)clipdata,-1);
+	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 	setSensitive();
 }
 
@@ -899,19 +899,30 @@ VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
 {
 	ERRDATA
 	pageStruct*	page=getPageStructPtr(-1);
-
 	if(page!=NULL)
 		{
 		 	doBusy(true,page);
 			if((long)data==0)
 				{
-					while(gtk_source_buffer_can_undo(page->buffer))
-						gtk_source_buffer_undo(page->buffer);
+					if(gtk_source_buffer_can_undo(page->buffer)==true)
+						{
+							while(gtk_source_buffer_can_undo(page->buffer)==true)
+								{
+									if(gtk_source_buffer_can_undo(page->buffer)==true)
+										gtk_source_buffer_undo(page->buffer);
+								}
+						}
 				}
 			else
 				{
-					while(gtk_source_buffer_can_redo(page->buffer))
-						gtk_source_buffer_redo(page->buffer);
+					if(gtk_source_buffer_can_redo(page->buffer)==true)
+						{
+							while(gtk_source_buffer_can_redo(page->buffer)==true)
+								{
+									if(gtk_source_buffer_can_redo(page->buffer)==true)
+										gtk_source_buffer_redo(page->buffer);
+								}
+						}
 				}
 			page->isFirst=true;
 			setSensitive();
@@ -2188,8 +2199,8 @@ void doKeyShortCut(int what)
 			text=buf->getSelectedText();
 			gtk_text_iter_backward_lines(&buf->cursorPos,-1);
 			gtk_text_buffer_begin_user_action(buf->textBuffer);
-			gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
-			ERRDATA debugFree(&text);
+				gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
+				ERRDATA debugFree(&text);
 			gtk_text_buffer_end_user_action(buf->textBuffer);
 			break;
 //select line ^l
@@ -2200,25 +2211,25 @@ void doKeyShortCut(int what)
 		case 7:
 			text=buf->getSelectedText();
 			gtk_text_buffer_begin_user_action(buf->textBuffer);
-			gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
-			buf->getCursorIter();
-			gtk_text_iter_backward_visible_line(&buf->cursorPos);
-			gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
-			gtk_text_iter_backward_visible_line(&buf->cursorPos);
-			gtk_text_buffer_place_cursor(buf->textBuffer,&buf->cursorPos);
+				gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
+				buf->getCursorIter();
+				gtk_text_iter_backward_visible_line(&buf->cursorPos);
+				gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
+				gtk_text_iter_backward_visible_line(&buf->cursorPos);
+				gtk_text_buffer_place_cursor(buf->textBuffer,&buf->cursorPos);
 			gtk_text_buffer_end_user_action(buf->textBuffer);
 			break;
 //Move Current Line Down
 		case 8:
 			text=buf->getSelectedText();
 			gtk_text_buffer_begin_user_action(buf->textBuffer);
-			gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
-			buf->getCursorIter();
-			gtk_text_iter_forward_visible_line(&buf->cursorPos);
-			gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
-			buf->getCursorIter();
-			gtk_text_iter_forward_visible_line(&buf->cursorPos);
-			gtk_text_buffer_place_cursor(buf->textBuffer,&buf->cursorPos);
+				gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
+				buf->getCursorIter();
+				gtk_text_iter_forward_visible_line(&buf->cursorPos);
+				gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
+				buf->getCursorIter();
+				gtk_text_iter_forward_visible_line(&buf->cursorPos);
+				gtk_text_buffer_place_cursor(buf->textBuffer,&buf->cursorPos);
 			gtk_text_buffer_end_user_action(buf->textBuffer);
 			break;
 //Select From Cursor To End Of Line
@@ -2234,22 +2245,22 @@ void doKeyShortCut(int what)
 			if(gtk_text_buffer_get_selection_bounds(buf->textBuffer,&buf->lineStart,&buf->lineEnd))
 				{
 					gtk_text_buffer_begin_user_action(buf->textBuffer);
-					gtk_text_iter_set_line_offset(&buf->lineStart,0);
-					if(!gtk_text_iter_starts_line(&buf->lineEnd))
-						gtk_text_iter_forward_visible_line(&buf->lineEnd);
-					buf->selectRange(&buf->lineStart,&buf->lineEnd);
-					text=gtk_text_buffer_get_text(buf->textBuffer,&buf->lineStart,&buf->lineEnd,true);
-					gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
-					buf->getCursorIter();
-					gtk_text_iter_backward_visible_line(&buf->cursorPos);
-					mark=gtk_text_buffer_create_mark(buf->textBuffer,"moveup",&buf->cursorPos,true);
-					gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
-					gtk_text_buffer_get_iter_at_mark(buf->textBuffer,&buf->cursorPos,mark);
-					buf->lineEnd=buf->cursorPos;
-					gtk_text_buffer_place_cursor(buf->textBuffer,&buf->cursorPos);
-					gtk_text_iter_forward_chars(&buf->lineEnd,strlen(text));
-					buf->selectRange(&buf->cursorPos,&buf->lineEnd);
-					gtk_text_buffer_delete_mark(buf->textBuffer,mark);
+						gtk_text_iter_set_line_offset(&buf->lineStart,0);
+						if(!gtk_text_iter_starts_line(&buf->lineEnd))
+							gtk_text_iter_forward_visible_line(&buf->lineEnd);
+						buf->selectRange(&buf->lineStart,&buf->lineEnd);
+						text=gtk_text_buffer_get_text(buf->textBuffer,&buf->lineStart,&buf->lineEnd,true);
+						gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
+						buf->getCursorIter();
+						gtk_text_iter_backward_visible_line(&buf->cursorPos);
+						mark=gtk_text_buffer_create_mark(buf->textBuffer,"moveup",&buf->cursorPos,true);
+						gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
+						gtk_text_buffer_get_iter_at_mark(buf->textBuffer,&buf->cursorPos,mark);
+						buf->lineEnd=buf->cursorPos;
+						gtk_text_buffer_place_cursor(buf->textBuffer,&buf->cursorPos);
+						gtk_text_iter_forward_chars(&buf->lineEnd,strlen(text));
+						buf->selectRange(&buf->cursorPos,&buf->lineEnd);
+						gtk_text_buffer_delete_mark(buf->textBuffer,mark);
 					gtk_text_buffer_end_user_action(buf->textBuffer);
 				}
 			break;
@@ -2258,21 +2269,21 @@ void doKeyShortCut(int what)
 			if(gtk_text_buffer_get_selection_bounds(buf->textBuffer,&buf->lineStart,&buf->lineEnd))
 				{
 					gtk_text_buffer_begin_user_action(buf->textBuffer);
-					gtk_text_iter_set_line_offset(&buf->lineStart,0);
-					if(!gtk_text_iter_starts_line(&buf->lineEnd))
-						gtk_text_iter_forward_visible_line(&buf->lineEnd);
-					buf->selectRange(&buf->lineStart,&buf->lineEnd);
-					text=gtk_text_buffer_get_text(buf->textBuffer,&buf->lineStart,&buf->lineEnd,true);
-					gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
-					buf->getCursorIter();
-					gtk_text_iter_forward_visible_line(&buf->cursorPos);
-					mark=gtk_text_buffer_create_mark(buf->textBuffer,"movedown",&buf->cursorPos,false);
-					gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
-					gtk_text_buffer_get_iter_at_mark(buf->textBuffer,&buf->lineEnd,mark);
-					buf->cursorPos=buf->lineEnd;
-					gtk_text_iter_backward_chars(&buf->cursorPos,strlen(text));
-					buf->selectRange(&buf->cursorPos,&buf->lineEnd);
-					gtk_text_buffer_delete_mark(buf->textBuffer,mark);
+						gtk_text_iter_set_line_offset(&buf->lineStart,0);
+						if(!gtk_text_iter_starts_line(&buf->lineEnd))
+							gtk_text_iter_forward_visible_line(&buf->lineEnd);
+						buf->selectRange(&buf->lineStart,&buf->lineEnd);
+						text=gtk_text_buffer_get_text(buf->textBuffer,&buf->lineStart,&buf->lineEnd,true);
+						gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
+						buf->getCursorIter();
+						gtk_text_iter_forward_visible_line(&buf->cursorPos);
+						mark=gtk_text_buffer_create_mark(buf->textBuffer,"movedown",&buf->cursorPos,false);
+						gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
+						gtk_text_buffer_get_iter_at_mark(buf->textBuffer,&buf->lineEnd,mark);
+						buf->cursorPos=buf->lineEnd;
+						gtk_text_iter_backward_chars(&buf->cursorPos,strlen(text));
+						buf->selectRange(&buf->cursorPos,&buf->lineEnd);
+						gtk_text_buffer_delete_mark(buf->textBuffer,mark);
 					gtk_text_buffer_end_user_action(buf->textBuffer);
 				}
 			break;

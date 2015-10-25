@@ -619,7 +619,7 @@ void regexFind(int dowhat)
 	GRegex*					regex;
 	GMatchInfo*				match_info=NULL;
 	GRegexCompileFlags		compileflags=(GRegexCompileFlags)(G_REGEX_MULTILINE|G_REGEX_EXTENDED);
-	GRegexMatchFlags		matchflags=(GRegexMatchFlags)(G_REGEX_MATCH_NOTBOL|G_REGEX_MATCH_NOTEOL);
+	GRegexMatchFlags		matchflags=(GRegexMatchFlags)0;
 	pageStruct*				page=NULL;
 	regexData*				xdata;
 	GtkTextIter				startiter,enditer;
@@ -688,7 +688,7 @@ void regexFind(int dowhat)
 		compileflags=(GRegexCompileFlags)(compileflags|G_REGEX_CASELESS);
 
 	regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,matchflags,NULL);
-	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+//	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 
 	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&startiter,&enditer,false);
 
@@ -852,13 +852,14 @@ void regexFind(int dowhat)
 						for(int j=startloop;j<endloop;j++)
 							{
 								page=getPageStructPtr(j);
-								if(findInAllFiles==true)
-									{
+								//if(findInAllFiles==true)
+								//	{
 										gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
 										gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
-									}
+								//	}
 								text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&startiter,&enditer,false);
-								regex=g_regex_new(searchtext,(GRegexCompileFlags)(G_REGEX_CASELESS|G_REGEX_EXTENDED),(GRegexMatchFlags)0,NULL);
+								//regex=g_regex_new(searchtext,(GRegexCompileFlags)(G_REGEX_CASELESS|G_REGEX_EXTENDED),(GRegexMatchFlags)matchflags,NULL);
+								regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,(GRegexMatchFlags)matchflags,NULL);
 								g_regex_match_full(regex,text,-1,0,matchflags,&match_info,NULL);
 								while (g_match_info_matches(match_info))
 									{
@@ -866,13 +867,17 @@ void regexFind(int dowhat)
 										g_match_info_next(match_info,NULL);
 									}
 
-								reptext=g_regex_replace(regex,text,-1,0,replacetext,(GRegexMatchFlags)0,NULL);
+								reptext=g_regex_replace(regex,text,-1,0,replacetext,(GRegexMatchFlags)matchflags,NULL);
+								
 								if((reptext!=NULL) && (strcmp(reptext,text)!=0))
 									{
+									
+									gtk_text_buffer_begin_user_action ((GtkTextBuffer*)page->buffer);
 										gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&startiter,&enditer);
 										gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&startiter,reptext,-1);
 										page->regexMatchNumber=-1;
 										ERRDATA debugFree(&reptext);
+									gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 									}
 								ERRDATA debugFree(&text);
 							}
@@ -1006,7 +1011,7 @@ void basicFind(int dowhat)
 									scrollToIterInPane(page,&page->match_start);
 									page->iter=page->match_end;
 								}
-							gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+							//gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 							ERRDATA debugFree(&searchtext);
 							ERRDATA debugFree(&replacetext);
 							ERRDATA return;
@@ -1037,7 +1042,7 @@ void basicFind(int dowhat)
 										scrollToIterInPane(page,&page->match_start);
 										page->iter=page->match_start;
 									}
-								gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+							//	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 								ERRDATA debugFree(&searchtext);
 								ERRDATA debugFree(&replacetext);
 								ERRDATA return;
