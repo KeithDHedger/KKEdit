@@ -88,7 +88,7 @@ void checkWord(GtkWidget* widget,gpointer data)
 			ERRDATA return;
 		}
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
-	checkTheWord(selection,false);
+		checkTheWord(selection,false);
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 	ERRDATA
 }
