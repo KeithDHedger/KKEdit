@@ -138,9 +138,11 @@ VISIBLE void findFile(GtkWidget* widget,gpointer data)
 void gotoLine(GtkWidget* widget,gpointer data)
 {
 	ERRDATA
+printf(">>%p<<\n",data);
 	int			line=(long)data;
 	pageStruct*	page=getPageStructPtr(-1);
 	TextBuffer*	buf;
+printf(">>--%p--<<\n",data);
 
 	if(page!=NULL)
 		{

@@ -1,4 +1,5 @@
 0.2.11
+Started on remote control using "kkedit @@Xddd" where X=G - goto line, X=S - search for define, and ddd is data ( line number search string.
 Standardized source file copyright/licence headers.
 Fixed undo/redo all.
 Fixed regex anchors not always working for replace all.

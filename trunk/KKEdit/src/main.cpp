@@ -345,12 +345,53 @@ void activate(GApplication* application)
 	ERRDATA
 }
 
+void doKKCommand(const char *command)
+{
+	char		*com;
+//	char		*folder;
+	char		commandname;
+	long		line;
+	pageStruct*	page=getPageStructPtr(-1);
+
+	com=basename((char*)command);
+	com+=2;
+//	folder=dirname((char*)command);
+
+	commandname=com[0];
+	com++;
+
+//	printf(">>command = %s<<\n",com);
+//	printf(">>comnam = %c<<\n",commandname);
+//	printf(">>folder = %s<<\n",folder);
+
+	switch(commandname)
+		{
+//goto line on current page
+			case 'G':
+				line=atoi(com);
+				if(fromGOpen==true)
+					{
+						gtk_widget_show_all((GtkWidget*)(GtkTextView*)page->view);
+						if(line>0)
+						while (gtk_events_pending ())
+							gtk_main_iteration ();
+					}
+				gotoLine(NULL,(void*)line);
+				break;
+//search for define
+			case 'S':
+				defSearchFromBar((GtkWidget*)com,NULL);
+				break;
+		}
+}
+
 void open(GApplication* application,GFile** files,gint n_files,const gchar* hint)
 {
 	ERRDATA
 	char*	filepath=NULL;
 	char	*linenum=NULL;
 	int		line=0;
+	char	*basepart=NULL;
 
 	g_application_hold(application);
 	fromGOpen=true;
@@ -361,6 +402,12 @@ void open(GApplication* application,GFile** files,gint n_files,const gchar* hint
 	for(int i=0; i<n_files; i++)
 		{
 			filepath=g_file_get_path(files[i]);
+			basepart=basename(filepath);
+			if((basepart[0]=='@') && (basepart[1]=='@'))
+				{
+					doKKCommand(filepath);
+					continue;
+				}
 			linenum=strrchr(filepath,'@');
 			if(linenum!=NULL)
 				{
