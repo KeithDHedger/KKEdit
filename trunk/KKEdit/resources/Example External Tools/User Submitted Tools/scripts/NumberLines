@@ -1,0 +1,17 @@
+#!/bin/bash -e
+
+#Submitted by:
+#©Sadi Yumuşak <sadiyumusak@gmail.com>
+#All comments and suggestions to the above.
+#Script and tools options may have been tweaked by me.
+#
+#Removes blank lines in the selection and then numbers them.
+
+
+if [ "X$KKEDIT_SELECTION" != "X" ];then
+	echo -n "$KKEDIT_SELECTION" | sed '/^\s*$/d' | sed '=' | sed '{N;s/\n/\t/}'
+else
+	cat "$KKEDIT_CURRENTFILE"| sed '/^\s*$/d' | sed '=' | sed '{N;s/\n/\t/}' > "/tmp/tfile"
+	mv /tmp/tfile "$KKEDIT_CURRENTFILE"
+fi
+

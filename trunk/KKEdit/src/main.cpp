@@ -343,32 +343,35 @@ void doNagStuff(void)
 void activate(GApplication* application)
 {
 	ERRDATA
+	if(mainWindow!=NULL)
+		gtk_window_present((GtkWindow*)mainWindow);
 }
 
 void doKKCommand(const char *command)
 {
-	char		*com;
+	char		*commanddata;
 //	char		*folder;
 	char		commandname;
 	long		line;
 	pageStruct*	page=getPageStructPtr(-1);
 
-	com=basename((char*)command);
-	com+=2;
-//	folder=dirname((char*)command);
+	commanddata=basename((char*)command);
+	commandname=commanddata[2];
+	commanddata+=2;
 
-	commandname=com[0];
-	com++;
+	commanddata++;
 
-//	printf(">>command = %s<<\n",com);
-//	printf(">>comnam = %c<<\n",commandname);
+//	printf(">>command = %c<<\n",commandname);
+//	printf(">>com data= %s<<\n",commanddata);
 //	printf(">>folder = %s<<\n",folder);
+	if(mainWindow!=NULL)
+		gtk_window_present((GtkWindow*)mainWindow);
 
 	switch(commandname)
 		{
 //goto line on current page
 			case 'G':
-				line=atoi(com);
+				line=atoi(commanddata);
 				if(fromGOpen==true)
 					{
 						gtk_widget_show_all((GtkWidget*)(GtkTextView*)page->view);
@@ -380,9 +383,27 @@ void doKKCommand(const char *command)
 				break;
 //search for define
 			case 'S':
-				defSearchFromBar((GtkWidget*)com,NULL);
+				defSearchFromBar((GtkWidget*)commanddata,NULL);
+				break;
+//switch to tab by name
+			case 'N':
+				for(int j=-0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
+					{
+						page=getPageStructPtr(j);
+						if(strcmp(page->fileName,commanddata)==0)
+							{
+								gtk_notebook_set_current_page(mainNotebook,j);
+								break;
+							}
+					}
+				break;
+//toggle bookmark
+			case 'B':
+				toggleBookmark(NULL,NULL);
 				break;
 		}
+	if(mainWindow!=NULL)
+		gtk_window_present((GtkWindow*)mainWindow);
 }
 
 void open(GApplication* application,GFile** files,gint n_files,const gchar* hint)
