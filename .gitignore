@@ -1,0 +1,14 @@
+gtk-kkedit/.svn
+qt5-kkedit/.svn
+qt5-kkedit/artwork
+qt5-kkedit/KKEdit.LFSBuild
+qt5-kkedit/makepkg
+qt5-kkedit/makepo
+
+gtk-kkedit/artwork
+gtk-kkedit/KKEdit.LFSBuild
+gtk-kkedit/makepkg
+gtk-kkedit/makepo
+gtk-kkedit/NAGTIME
+gtk-kkedit/makenagtime
+
