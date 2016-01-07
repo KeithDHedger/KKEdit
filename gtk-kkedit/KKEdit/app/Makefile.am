@@ -7,12 +7,6 @@ include ../sources
 kkedit_SOURCES = $(COMMONSRC)
 KKEditProgressBar_SOURCES = ../pole/main.cpp
 
-KKEditProgressBar_CFLAGS = -O3
-KKEditProgressBar_CXXFLAGS = -O3
-
-kkedit_CFLAGS = -O3 -fvisibility=hidden
-kkedit_CXXFLAGS = -O3 -fvisibility=hidden
-
 pixfilesdir = $(pkgdatadir)/pixmaps
 pixfiles_DATA = ../resources/pixmaps/*
 

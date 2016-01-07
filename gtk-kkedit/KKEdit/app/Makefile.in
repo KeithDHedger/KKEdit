@@ -107,30 +107,20 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptfilesdir)" \
 	"$(DESTDIR)$(transfilesdir)" "$(DESTDIR)$(includedir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am_KKEditProgressBar_OBJECTS =  \
-	../pole/KKEditProgressBar-main.$(OBJEXT)
+am_KKEditProgressBar_OBJECTS = ../pole/main.$(OBJEXT)
 KKEditProgressBar_OBJECTS = $(am_KKEditProgressBar_OBJECTS)
 KKEditProgressBar_LDADD = $(LDADD)
-KKEditProgressBar_LINK = $(CXXLD) $(KKEditProgressBar_CXXFLAGS) \
-	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-am__objects_1 = ../src/kkedit-backclass.$(OBJEXT) \
-	../src/kkedit-callbacks.$(OBJEXT) \
-	../src/kkedit-completion.$(OBJEXT) \
-	../src/kkedit-encoding.$(OBJEXT) ../src/kkedit-files.$(OBJEXT) \
-	../src/kkedit-globals.$(OBJEXT) ../src/kkedit-guis.$(OBJEXT) \
-	../src/kkedit-main.$(OBJEXT) \
-	../src/kkedit-navcallbacks.$(OBJEXT) \
-	../src/kkedit-pluginclass.$(OBJEXT) \
-	../src/kkedit-plugins.$(OBJEXT) \
-	../src/kkedit-searchcallbacks.$(OBJEXT) \
-	../src/kkedit-sliceclass.$(OBJEXT) \
-	../src/kkedit-spellcheck.$(OBJEXT) \
-	../src/kkedit-textbuffer.$(OBJEXT)
+am__objects_1 = ../src/backclass.$(OBJEXT) ../src/callbacks.$(OBJEXT) \
+	../src/completion.$(OBJEXT) ../src/encoding.$(OBJEXT) \
+	../src/files.$(OBJEXT) ../src/globals.$(OBJEXT) \
+	../src/guis.$(OBJEXT) ../src/main.$(OBJEXT) \
+	../src/navcallbacks.$(OBJEXT) ../src/pluginclass.$(OBJEXT) \
+	../src/plugins.$(OBJEXT) ../src/searchcallbacks.$(OBJEXT) \
+	../src/sliceclass.$(OBJEXT) ../src/spellcheck.$(OBJEXT) \
+	../src/textbuffer.$(OBJEXT)
 am_kkedit_OBJECTS = $(am__objects_1)
 kkedit_OBJECTS = $(am_kkedit_OBJECTS)
 kkedit_LDADD = $(LDADD)
-kkedit_LINK = $(CXXLD) $(kkedit_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -175,10 +165,6 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
-AM_V_lt = $(am__v_lt_@AM_V@)
-am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
-am__v_lt_0 = --silent
-am__v_lt_1 = 
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 AM_V_CXX = $(am__v_CXX_@AM_V@)
@@ -341,6 +327,7 @@ with_debug_level = @with_debug_level@
 with_gsu_path = @with_gsu_path@
 with_qt5_docdir = @with_qt5_docdir@
 AUTOMAKE_OPTIONS = subdir-objects
+AM_CXXFLAGS = -Wall -fvisibility=hidden
 AM_CPPFLAGS = -I$(top_srcdir) \
 			$(GTK_CFLAGS) \
 			$(X11_CFLAGS) \
@@ -359,10 +346,6 @@ AM_CPPFLAGS = -I$(top_srcdir) \
 COMMONSRC = ../src/backclass.cpp ../src/callbacks.cpp ../src/completion.cpp ../src/encoding.cpp ../src/files.cpp ../src/globals.cpp ../src/guis.cpp ../src/main.cpp ../src/navcallbacks.cpp ../src/pluginclass.cpp ../src/plugins.cpp ../src/searchcallbacks.cpp ../src/sliceclass.cpp ../src/spellcheck.cpp ../src/textbuffer.cpp
 kkedit_SOURCES = $(COMMONSRC)
 KKEditProgressBar_SOURCES = ../pole/main.cpp
-KKEditProgressBar_CFLAGS = -O3
-KKEditProgressBar_CXXFLAGS = -O3
-kkedit_CFLAGS = -O3 -fvisibility=hidden
-kkedit_CXXFLAGS = -O3 -fvisibility=hidden
 pixfilesdir = $(pkgdatadir)/pixmaps
 pixfiles_DATA = ../resources/pixmaps/*
 helpfilesdir = $(pkgdatadir)/help
@@ -458,52 +441,52 @@ clean-binPROGRAMS:
 ../pole/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) ../pole/$(DEPDIR)
 	@: > ../pole/$(DEPDIR)/$(am__dirstamp)
-../pole/KKEditProgressBar-main.$(OBJEXT): ../pole/$(am__dirstamp) \
+../pole/main.$(OBJEXT): ../pole/$(am__dirstamp) \
 	../pole/$(DEPDIR)/$(am__dirstamp)
 
 KKEditProgressBar$(EXEEXT): $(KKEditProgressBar_OBJECTS) $(KKEditProgressBar_DEPENDENCIES) $(EXTRA_KKEditProgressBar_DEPENDENCIES) 
 	@rm -f KKEditProgressBar$(EXEEXT)
-	$(AM_V_CXXLD)$(KKEditProgressBar_LINK) $(KKEditProgressBar_OBJECTS) $(KKEditProgressBar_LDADD) $(LIBS)
+	$(AM_V_CXXLD)$(CXXLINK) $(KKEditProgressBar_OBJECTS) $(KKEditProgressBar_LDADD) $(LIBS)
 ../src/$(am__dirstamp):
 	@$(MKDIR_P) ../src
 	@: > ../src/$(am__dirstamp)
 ../src/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) ../src/$(DEPDIR)
 	@: > ../src/$(DEPDIR)/$(am__dirstamp)
-../src/kkedit-backclass.$(OBJEXT): ../src/$(am__dirstamp) \
+../src/backclass.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
-../src/kkedit-callbacks.$(OBJEXT): ../src/$(am__dirstamp) \
+../src/callbacks.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
-../src/kkedit-completion.$(OBJEXT): ../src/$(am__dirstamp) \
+../src/completion.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
-../src/kkedit-encoding.$(OBJEXT): ../src/$(am__dirstamp) \
+../src/encoding.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
-../src/kkedit-files.$(OBJEXT): ../src/$(am__dirstamp) \
+../src/files.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
-../src/kkedit-globals.$(OBJEXT): ../src/$(am__dirstamp) \
+../src/globals.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
-../src/kkedit-guis.$(OBJEXT): ../src/$(am__dirstamp) \
+../src/guis.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
-../src/kkedit-main.$(OBJEXT): ../src/$(am__dirstamp) \
+../src/main.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
-../src/kkedit-navcallbacks.$(OBJEXT): ../src/$(am__dirstamp) \
+../src/navcallbacks.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
-../src/kkedit-pluginclass.$(OBJEXT): ../src/$(am__dirstamp) \
+../src/pluginclass.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
-../src/kkedit-plugins.$(OBJEXT): ../src/$(am__dirstamp) \
+../src/plugins.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
-../src/kkedit-searchcallbacks.$(OBJEXT): ../src/$(am__dirstamp) \
+../src/searchcallbacks.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
-../src/kkedit-sliceclass.$(OBJEXT): ../src/$(am__dirstamp) \
+../src/sliceclass.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
-../src/kkedit-spellcheck.$(OBJEXT): ../src/$(am__dirstamp) \
+../src/spellcheck.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
-../src/kkedit-textbuffer.$(OBJEXT): ../src/$(am__dirstamp) \
+../src/textbuffer.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
 
 kkedit$(EXEEXT): $(kkedit_OBJECTS) $(kkedit_DEPENDENCIES) $(EXTRA_kkedit_DEPENDENCIES) 
 	@rm -f kkedit$(EXEEXT)
-	$(AM_V_CXXLD)$(kkedit_LINK) $(kkedit_OBJECTS) $(kkedit_LDADD) $(LIBS)
+	$(AM_V_CXXLD)$(CXXLINK) $(kkedit_OBJECTS) $(kkedit_LDADD) $(LIBS)
 install-scriptfilesSCRIPTS: $(scriptfiles_SCRIPTS)
 	@$(NORMAL_INSTALL)
 	@list='$(scriptfiles_SCRIPTS)'; test -n "$(scriptfilesdir)" || list=; \
@@ -548,22 +531,22 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@../pole/$(DEPDIR)/KKEditProgressBar-main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkedit-backclass.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkedit-callbacks.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkedit-completion.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkedit-encoding.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkedit-files.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkedit-globals.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkedit-guis.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkedit-main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkedit-navcallbacks.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkedit-pluginclass.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkedit-plugins.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkedit-searchcallbacks.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkedit-sliceclass.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkedit-spellcheck.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkedit-textbuffer.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../pole/$(DEPDIR)/main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/backclass.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/callbacks.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/completion.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/encoding.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/files.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/globals.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/guis.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/navcallbacks.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/pluginclass.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/plugins.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/searchcallbacks.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/sliceclass.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/spellcheck.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/textbuffer.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -580,230 +563,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
-
-../pole/KKEditProgressBar-main.o: ../pole/main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(KKEditProgressBar_CXXFLAGS) $(CXXFLAGS) -MT ../pole/KKEditProgressBar-main.o -MD -MP -MF ../pole/$(DEPDIR)/KKEditProgressBar-main.Tpo -c -o ../pole/KKEditProgressBar-main.o `test -f '../pole/main.cpp' || echo '$(srcdir)/'`../pole/main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../pole/$(DEPDIR)/KKEditProgressBar-main.Tpo ../pole/$(DEPDIR)/KKEditProgressBar-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../pole/main.cpp' object='../pole/KKEditProgressBar-main.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(KKEditProgressBar_CXXFLAGS) $(CXXFLAGS) -c -o ../pole/KKEditProgressBar-main.o `test -f '../pole/main.cpp' || echo '$(srcdir)/'`../pole/main.cpp
-
-../pole/KKEditProgressBar-main.obj: ../pole/main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(KKEditProgressBar_CXXFLAGS) $(CXXFLAGS) -MT ../pole/KKEditProgressBar-main.obj -MD -MP -MF ../pole/$(DEPDIR)/KKEditProgressBar-main.Tpo -c -o ../pole/KKEditProgressBar-main.obj `if test -f '../pole/main.cpp'; then $(CYGPATH_W) '../pole/main.cpp'; else $(CYGPATH_W) '$(srcdir)/../pole/main.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../pole/$(DEPDIR)/KKEditProgressBar-main.Tpo ../pole/$(DEPDIR)/KKEditProgressBar-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../pole/main.cpp' object='../pole/KKEditProgressBar-main.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(KKEditProgressBar_CXXFLAGS) $(CXXFLAGS) -c -o ../pole/KKEditProgressBar-main.obj `if test -f '../pole/main.cpp'; then $(CYGPATH_W) '../pole/main.cpp'; else $(CYGPATH_W) '$(srcdir)/../pole/main.cpp'; fi`
-
-../src/kkedit-backclass.o: ../src/backclass.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-backclass.o -MD -MP -MF ../src/$(DEPDIR)/kkedit-backclass.Tpo -c -o ../src/kkedit-backclass.o `test -f '../src/backclass.cpp' || echo '$(srcdir)/'`../src/backclass.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-backclass.Tpo ../src/$(DEPDIR)/kkedit-backclass.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/backclass.cpp' object='../src/kkedit-backclass.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-backclass.o `test -f '../src/backclass.cpp' || echo '$(srcdir)/'`../src/backclass.cpp
-
-../src/kkedit-backclass.obj: ../src/backclass.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-backclass.obj -MD -MP -MF ../src/$(DEPDIR)/kkedit-backclass.Tpo -c -o ../src/kkedit-backclass.obj `if test -f '../src/backclass.cpp'; then $(CYGPATH_W) '../src/backclass.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/backclass.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-backclass.Tpo ../src/$(DEPDIR)/kkedit-backclass.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/backclass.cpp' object='../src/kkedit-backclass.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-backclass.obj `if test -f '../src/backclass.cpp'; then $(CYGPATH_W) '../src/backclass.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/backclass.cpp'; fi`
-
-../src/kkedit-callbacks.o: ../src/callbacks.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-callbacks.o -MD -MP -MF ../src/$(DEPDIR)/kkedit-callbacks.Tpo -c -o ../src/kkedit-callbacks.o `test -f '../src/callbacks.cpp' || echo '$(srcdir)/'`../src/callbacks.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-callbacks.Tpo ../src/$(DEPDIR)/kkedit-callbacks.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/callbacks.cpp' object='../src/kkedit-callbacks.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-callbacks.o `test -f '../src/callbacks.cpp' || echo '$(srcdir)/'`../src/callbacks.cpp
-
-../src/kkedit-callbacks.obj: ../src/callbacks.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-callbacks.obj -MD -MP -MF ../src/$(DEPDIR)/kkedit-callbacks.Tpo -c -o ../src/kkedit-callbacks.obj `if test -f '../src/callbacks.cpp'; then $(CYGPATH_W) '../src/callbacks.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/callbacks.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-callbacks.Tpo ../src/$(DEPDIR)/kkedit-callbacks.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/callbacks.cpp' object='../src/kkedit-callbacks.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-callbacks.obj `if test -f '../src/callbacks.cpp'; then $(CYGPATH_W) '../src/callbacks.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/callbacks.cpp'; fi`
-
-../src/kkedit-completion.o: ../src/completion.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-completion.o -MD -MP -MF ../src/$(DEPDIR)/kkedit-completion.Tpo -c -o ../src/kkedit-completion.o `test -f '../src/completion.cpp' || echo '$(srcdir)/'`../src/completion.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-completion.Tpo ../src/$(DEPDIR)/kkedit-completion.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/completion.cpp' object='../src/kkedit-completion.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-completion.o `test -f '../src/completion.cpp' || echo '$(srcdir)/'`../src/completion.cpp
-
-../src/kkedit-completion.obj: ../src/completion.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-completion.obj -MD -MP -MF ../src/$(DEPDIR)/kkedit-completion.Tpo -c -o ../src/kkedit-completion.obj `if test -f '../src/completion.cpp'; then $(CYGPATH_W) '../src/completion.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/completion.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-completion.Tpo ../src/$(DEPDIR)/kkedit-completion.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/completion.cpp' object='../src/kkedit-completion.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-completion.obj `if test -f '../src/completion.cpp'; then $(CYGPATH_W) '../src/completion.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/completion.cpp'; fi`
-
-../src/kkedit-encoding.o: ../src/encoding.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-encoding.o -MD -MP -MF ../src/$(DEPDIR)/kkedit-encoding.Tpo -c -o ../src/kkedit-encoding.o `test -f '../src/encoding.cpp' || echo '$(srcdir)/'`../src/encoding.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-encoding.Tpo ../src/$(DEPDIR)/kkedit-encoding.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/encoding.cpp' object='../src/kkedit-encoding.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-encoding.o `test -f '../src/encoding.cpp' || echo '$(srcdir)/'`../src/encoding.cpp
-
-../src/kkedit-encoding.obj: ../src/encoding.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-encoding.obj -MD -MP -MF ../src/$(DEPDIR)/kkedit-encoding.Tpo -c -o ../src/kkedit-encoding.obj `if test -f '../src/encoding.cpp'; then $(CYGPATH_W) '../src/encoding.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/encoding.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-encoding.Tpo ../src/$(DEPDIR)/kkedit-encoding.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/encoding.cpp' object='../src/kkedit-encoding.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-encoding.obj `if test -f '../src/encoding.cpp'; then $(CYGPATH_W) '../src/encoding.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/encoding.cpp'; fi`
-
-../src/kkedit-files.o: ../src/files.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-files.o -MD -MP -MF ../src/$(DEPDIR)/kkedit-files.Tpo -c -o ../src/kkedit-files.o `test -f '../src/files.cpp' || echo '$(srcdir)/'`../src/files.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-files.Tpo ../src/$(DEPDIR)/kkedit-files.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/files.cpp' object='../src/kkedit-files.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-files.o `test -f '../src/files.cpp' || echo '$(srcdir)/'`../src/files.cpp
-
-../src/kkedit-files.obj: ../src/files.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-files.obj -MD -MP -MF ../src/$(DEPDIR)/kkedit-files.Tpo -c -o ../src/kkedit-files.obj `if test -f '../src/files.cpp'; then $(CYGPATH_W) '../src/files.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/files.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-files.Tpo ../src/$(DEPDIR)/kkedit-files.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/files.cpp' object='../src/kkedit-files.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-files.obj `if test -f '../src/files.cpp'; then $(CYGPATH_W) '../src/files.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/files.cpp'; fi`
-
-../src/kkedit-globals.o: ../src/globals.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-globals.o -MD -MP -MF ../src/$(DEPDIR)/kkedit-globals.Tpo -c -o ../src/kkedit-globals.o `test -f '../src/globals.cpp' || echo '$(srcdir)/'`../src/globals.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-globals.Tpo ../src/$(DEPDIR)/kkedit-globals.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/globals.cpp' object='../src/kkedit-globals.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-globals.o `test -f '../src/globals.cpp' || echo '$(srcdir)/'`../src/globals.cpp
-
-../src/kkedit-globals.obj: ../src/globals.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-globals.obj -MD -MP -MF ../src/$(DEPDIR)/kkedit-globals.Tpo -c -o ../src/kkedit-globals.obj `if test -f '../src/globals.cpp'; then $(CYGPATH_W) '../src/globals.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/globals.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-globals.Tpo ../src/$(DEPDIR)/kkedit-globals.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/globals.cpp' object='../src/kkedit-globals.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-globals.obj `if test -f '../src/globals.cpp'; then $(CYGPATH_W) '../src/globals.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/globals.cpp'; fi`
-
-../src/kkedit-guis.o: ../src/guis.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-guis.o -MD -MP -MF ../src/$(DEPDIR)/kkedit-guis.Tpo -c -o ../src/kkedit-guis.o `test -f '../src/guis.cpp' || echo '$(srcdir)/'`../src/guis.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-guis.Tpo ../src/$(DEPDIR)/kkedit-guis.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/guis.cpp' object='../src/kkedit-guis.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-guis.o `test -f '../src/guis.cpp' || echo '$(srcdir)/'`../src/guis.cpp
-
-../src/kkedit-guis.obj: ../src/guis.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-guis.obj -MD -MP -MF ../src/$(DEPDIR)/kkedit-guis.Tpo -c -o ../src/kkedit-guis.obj `if test -f '../src/guis.cpp'; then $(CYGPATH_W) '../src/guis.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/guis.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-guis.Tpo ../src/$(DEPDIR)/kkedit-guis.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/guis.cpp' object='../src/kkedit-guis.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-guis.obj `if test -f '../src/guis.cpp'; then $(CYGPATH_W) '../src/guis.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/guis.cpp'; fi`
-
-../src/kkedit-main.o: ../src/main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-main.o -MD -MP -MF ../src/$(DEPDIR)/kkedit-main.Tpo -c -o ../src/kkedit-main.o `test -f '../src/main.cpp' || echo '$(srcdir)/'`../src/main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-main.Tpo ../src/$(DEPDIR)/kkedit-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/main.cpp' object='../src/kkedit-main.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-main.o `test -f '../src/main.cpp' || echo '$(srcdir)/'`../src/main.cpp
-
-../src/kkedit-main.obj: ../src/main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-main.obj -MD -MP -MF ../src/$(DEPDIR)/kkedit-main.Tpo -c -o ../src/kkedit-main.obj `if test -f '../src/main.cpp'; then $(CYGPATH_W) '../src/main.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/main.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-main.Tpo ../src/$(DEPDIR)/kkedit-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/main.cpp' object='../src/kkedit-main.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-main.obj `if test -f '../src/main.cpp'; then $(CYGPATH_W) '../src/main.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/main.cpp'; fi`
-
-../src/kkedit-navcallbacks.o: ../src/navcallbacks.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-navcallbacks.o -MD -MP -MF ../src/$(DEPDIR)/kkedit-navcallbacks.Tpo -c -o ../src/kkedit-navcallbacks.o `test -f '../src/navcallbacks.cpp' || echo '$(srcdir)/'`../src/navcallbacks.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-navcallbacks.Tpo ../src/$(DEPDIR)/kkedit-navcallbacks.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/navcallbacks.cpp' object='../src/kkedit-navcallbacks.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-navcallbacks.o `test -f '../src/navcallbacks.cpp' || echo '$(srcdir)/'`../src/navcallbacks.cpp
-
-../src/kkedit-navcallbacks.obj: ../src/navcallbacks.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-navcallbacks.obj -MD -MP -MF ../src/$(DEPDIR)/kkedit-navcallbacks.Tpo -c -o ../src/kkedit-navcallbacks.obj `if test -f '../src/navcallbacks.cpp'; then $(CYGPATH_W) '../src/navcallbacks.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/navcallbacks.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-navcallbacks.Tpo ../src/$(DEPDIR)/kkedit-navcallbacks.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/navcallbacks.cpp' object='../src/kkedit-navcallbacks.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-navcallbacks.obj `if test -f '../src/navcallbacks.cpp'; then $(CYGPATH_W) '../src/navcallbacks.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/navcallbacks.cpp'; fi`
-
-../src/kkedit-pluginclass.o: ../src/pluginclass.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-pluginclass.o -MD -MP -MF ../src/$(DEPDIR)/kkedit-pluginclass.Tpo -c -o ../src/kkedit-pluginclass.o `test -f '../src/pluginclass.cpp' || echo '$(srcdir)/'`../src/pluginclass.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-pluginclass.Tpo ../src/$(DEPDIR)/kkedit-pluginclass.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/pluginclass.cpp' object='../src/kkedit-pluginclass.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-pluginclass.o `test -f '../src/pluginclass.cpp' || echo '$(srcdir)/'`../src/pluginclass.cpp
-
-../src/kkedit-pluginclass.obj: ../src/pluginclass.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-pluginclass.obj -MD -MP -MF ../src/$(DEPDIR)/kkedit-pluginclass.Tpo -c -o ../src/kkedit-pluginclass.obj `if test -f '../src/pluginclass.cpp'; then $(CYGPATH_W) '../src/pluginclass.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/pluginclass.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-pluginclass.Tpo ../src/$(DEPDIR)/kkedit-pluginclass.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/pluginclass.cpp' object='../src/kkedit-pluginclass.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-pluginclass.obj `if test -f '../src/pluginclass.cpp'; then $(CYGPATH_W) '../src/pluginclass.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/pluginclass.cpp'; fi`
-
-../src/kkedit-plugins.o: ../src/plugins.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-plugins.o -MD -MP -MF ../src/$(DEPDIR)/kkedit-plugins.Tpo -c -o ../src/kkedit-plugins.o `test -f '../src/plugins.cpp' || echo '$(srcdir)/'`../src/plugins.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-plugins.Tpo ../src/$(DEPDIR)/kkedit-plugins.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/plugins.cpp' object='../src/kkedit-plugins.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-plugins.o `test -f '../src/plugins.cpp' || echo '$(srcdir)/'`../src/plugins.cpp
-
-../src/kkedit-plugins.obj: ../src/plugins.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-plugins.obj -MD -MP -MF ../src/$(DEPDIR)/kkedit-plugins.Tpo -c -o ../src/kkedit-plugins.obj `if test -f '../src/plugins.cpp'; then $(CYGPATH_W) '../src/plugins.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/plugins.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-plugins.Tpo ../src/$(DEPDIR)/kkedit-plugins.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/plugins.cpp' object='../src/kkedit-plugins.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-plugins.obj `if test -f '../src/plugins.cpp'; then $(CYGPATH_W) '../src/plugins.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/plugins.cpp'; fi`
-
-../src/kkedit-searchcallbacks.o: ../src/searchcallbacks.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-searchcallbacks.o -MD -MP -MF ../src/$(DEPDIR)/kkedit-searchcallbacks.Tpo -c -o ../src/kkedit-searchcallbacks.o `test -f '../src/searchcallbacks.cpp' || echo '$(srcdir)/'`../src/searchcallbacks.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-searchcallbacks.Tpo ../src/$(DEPDIR)/kkedit-searchcallbacks.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/searchcallbacks.cpp' object='../src/kkedit-searchcallbacks.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-searchcallbacks.o `test -f '../src/searchcallbacks.cpp' || echo '$(srcdir)/'`../src/searchcallbacks.cpp
-
-../src/kkedit-searchcallbacks.obj: ../src/searchcallbacks.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-searchcallbacks.obj -MD -MP -MF ../src/$(DEPDIR)/kkedit-searchcallbacks.Tpo -c -o ../src/kkedit-searchcallbacks.obj `if test -f '../src/searchcallbacks.cpp'; then $(CYGPATH_W) '../src/searchcallbacks.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/searchcallbacks.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-searchcallbacks.Tpo ../src/$(DEPDIR)/kkedit-searchcallbacks.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/searchcallbacks.cpp' object='../src/kkedit-searchcallbacks.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-searchcallbacks.obj `if test -f '../src/searchcallbacks.cpp'; then $(CYGPATH_W) '../src/searchcallbacks.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/searchcallbacks.cpp'; fi`
-
-../src/kkedit-sliceclass.o: ../src/sliceclass.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-sliceclass.o -MD -MP -MF ../src/$(DEPDIR)/kkedit-sliceclass.Tpo -c -o ../src/kkedit-sliceclass.o `test -f '../src/sliceclass.cpp' || echo '$(srcdir)/'`../src/sliceclass.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-sliceclass.Tpo ../src/$(DEPDIR)/kkedit-sliceclass.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/sliceclass.cpp' object='../src/kkedit-sliceclass.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-sliceclass.o `test -f '../src/sliceclass.cpp' || echo '$(srcdir)/'`../src/sliceclass.cpp
-
-../src/kkedit-sliceclass.obj: ../src/sliceclass.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-sliceclass.obj -MD -MP -MF ../src/$(DEPDIR)/kkedit-sliceclass.Tpo -c -o ../src/kkedit-sliceclass.obj `if test -f '../src/sliceclass.cpp'; then $(CYGPATH_W) '../src/sliceclass.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/sliceclass.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-sliceclass.Tpo ../src/$(DEPDIR)/kkedit-sliceclass.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/sliceclass.cpp' object='../src/kkedit-sliceclass.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-sliceclass.obj `if test -f '../src/sliceclass.cpp'; then $(CYGPATH_W) '../src/sliceclass.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/sliceclass.cpp'; fi`
-
-../src/kkedit-spellcheck.o: ../src/spellcheck.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-spellcheck.o -MD -MP -MF ../src/$(DEPDIR)/kkedit-spellcheck.Tpo -c -o ../src/kkedit-spellcheck.o `test -f '../src/spellcheck.cpp' || echo '$(srcdir)/'`../src/spellcheck.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-spellcheck.Tpo ../src/$(DEPDIR)/kkedit-spellcheck.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/spellcheck.cpp' object='../src/kkedit-spellcheck.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-spellcheck.o `test -f '../src/spellcheck.cpp' || echo '$(srcdir)/'`../src/spellcheck.cpp
-
-../src/kkedit-spellcheck.obj: ../src/spellcheck.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-spellcheck.obj -MD -MP -MF ../src/$(DEPDIR)/kkedit-spellcheck.Tpo -c -o ../src/kkedit-spellcheck.obj `if test -f '../src/spellcheck.cpp'; then $(CYGPATH_W) '../src/spellcheck.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/spellcheck.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-spellcheck.Tpo ../src/$(DEPDIR)/kkedit-spellcheck.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/spellcheck.cpp' object='../src/kkedit-spellcheck.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-spellcheck.obj `if test -f '../src/spellcheck.cpp'; then $(CYGPATH_W) '../src/spellcheck.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/spellcheck.cpp'; fi`
-
-../src/kkedit-textbuffer.o: ../src/textbuffer.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-textbuffer.o -MD -MP -MF ../src/$(DEPDIR)/kkedit-textbuffer.Tpo -c -o ../src/kkedit-textbuffer.o `test -f '../src/textbuffer.cpp' || echo '$(srcdir)/'`../src/textbuffer.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-textbuffer.Tpo ../src/$(DEPDIR)/kkedit-textbuffer.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/textbuffer.cpp' object='../src/kkedit-textbuffer.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-textbuffer.o `test -f '../src/textbuffer.cpp' || echo '$(srcdir)/'`../src/textbuffer.cpp
-
-../src/kkedit-textbuffer.obj: ../src/textbuffer.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkedit-textbuffer.obj -MD -MP -MF ../src/$(DEPDIR)/kkedit-textbuffer.Tpo -c -o ../src/kkedit-textbuffer.obj `if test -f '../src/textbuffer.cpp'; then $(CYGPATH_W) '../src/textbuffer.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/textbuffer.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkedit-textbuffer.Tpo ../src/$(DEPDIR)/kkedit-textbuffer.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/textbuffer.cpp' object='../src/kkedit-textbuffer.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkedit_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkedit-textbuffer.obj `if test -f '../src/textbuffer.cpp'; then $(CYGPATH_W) '../src/textbuffer.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/textbuffer.cpp'; fi`
 install-docfilesDATA: $(docfiles_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(docfiles_DATA)'; test -n "$(docfilesdir)" || list=; \

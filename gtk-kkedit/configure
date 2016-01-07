@@ -4399,17 +4399,6 @@ $as_echo "#define STDC_HEADERS 1" >>confdefs.h
 fi
 
 
-
-
-
-
-
-CXXFLAGS=-Wall
-
-
-CFLAGS=-Wall
-
-
 X11_MODULES="x11 >= 1.0.0"
 
 
