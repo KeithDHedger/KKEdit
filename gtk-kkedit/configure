@@ -5029,7 +5029,7 @@ $as_echo_n "checking whether to include spell checker (aspell)... " >&6; }
 if test "${enable_aspell+set}" = set; then :
   enableval=$enable_aspell; enable_aspell=$enableval
 else
-  enable_aspell="no"
+  enable_aspell="yes"
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_aspell" >&5
