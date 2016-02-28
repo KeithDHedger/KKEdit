@@ -512,7 +512,7 @@ VISIBLE pageStruct* getPageStructPtr(int pagenum)
 {
 	ERRDATA
 	int			thispage;
-	GtkWidget*	pageBox;
+	GtkWidget*	pageBox=NULL;
 
 	if(pagenum==-1)
 		thispage=gtk_notebook_get_current_page(mainNotebook);

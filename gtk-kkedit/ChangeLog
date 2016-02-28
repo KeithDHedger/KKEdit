@@ -1,4 +1,5 @@
 0.2.12
+Fixed occasional bug when runing certain tools on files with no language type.
 Removed forced CFLAGS and CXXFLAGS.
 
 0.2.11
