@@ -25,4 +25,10 @@ Full source code highlighted printing
 
 Started to port to gtk3, editor compiles and runs and 75% working, use -s switch to kkedit when running to disable plugins, 'cos they don't work yet.
 
+Add --enable-gtk3 to your configure  and run with:
+kkedit -s /path/to/a/file
+
+Default is to build for gtk2
+You may need to install gtk3 dev files if your distro splits them off from the main package ( debian etc ).
+
 *** NEW ***
