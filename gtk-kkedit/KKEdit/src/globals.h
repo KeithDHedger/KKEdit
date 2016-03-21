@@ -78,6 +78,7 @@
 #define PLATFORM		"gtk"
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
+enum {NEWVBOX=0,NEWHBOX};
 
 struct toolStruct
 {
@@ -454,6 +455,11 @@ void resetWidgetSenisitive(void);
 void catchSignal(int signal);
 void freeAndNull(char** ptr);
 
+GtkWidget* creatNewBox(int orient,bool homog,int spacing);
+GtkWidget* createNewImageMenuItem(const char* stock,const char* label);
+GtkToolItem* createNewToolItem(const char* stock,const char* label);
+GtkWidget* createNewStockButton(const char* stock,const char* label);
+GdkPixbuf* createNewIcon(const char* stock,GtkWidget* widg);
 
 #endif
 

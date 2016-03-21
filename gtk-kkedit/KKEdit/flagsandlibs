@@ -7,6 +7,10 @@ AM_CPPFLAGS =	-I$(top_srcdir) \
 			$(GTKSRC_CFLAGS) \
 			$(WEBKIT_CFLAGS) \
 			$(GLIB_CFLAGS) \
+			-DGTK_DISABLE_SINGLE_INCLUDES \
+			-DGDK_DISABLE_DEPRECATED \
+			-DGTK_DISABLE_DEPRECATED \
+			-DGSEAL_ENABLE \
 			-DPREFIX=\""${prefix}\"" \
 			-DLOCALEDIR=\""${localedir}"\" \
 			-DDATADIR=\""${pkgdatadir}"\" \

@@ -32,3 +32,6 @@
 
 /* Build gtk-doc viewer */
 #undef _BUILDDOCVIEWER_
+
+/* Use GTK3 */
+#undef _USEGTK3_

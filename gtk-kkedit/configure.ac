@@ -1,6 +1,6 @@
 #
 #
-AC_INIT([KKEdit],[0.2.11],[PROJ],[KKEdit])
+AC_INIT([KKEdit],[0.3.0],[PROJ],[KKEdit])
 
 AC_CONFIG_HEADER([config.h])
 AC_PROG_CXX
@@ -15,13 +15,29 @@ PKG_CHECK_MODULES(X11, $X11_MODULES)
 AC_SUBST(X11_LIBS)
 AC_SUBST(X11_CFLAGS)
 
-GTK_MODULES="gtk+-2.0 >= 2.24.0"
-PKG_CHECK_MODULES(GTK, $GTK_MODULES)
+AC_MSG_CHECKING(whether to use gtk3)
+AC_ARG_ENABLE(gtk3,
+    [  --enable-gtk3           Use GTK3.],
+    [enable_gtk3=$enableval],
+    [enable_gtk3="no"])
+AC_MSG_RESULT($enable_gtk3)
+if test "$enable_gtk3" = "yes"; then
+	AC_DEFINE([_USEGTK3_], [], [Use GTK3])
+	GTK_MODULES="gtk+-3.0 >= 3.10.0"
+	GTKSRC_MODULES="gtksourceview-3.0 >= 3.10.0"
+else
+	GTK_MODULES="gtk+-2.0 >= 2.24.0"
+	GTKSRC_MODULES="gtksourceview-2.0 >= 2.9.9"
+fi
+
+#GTK_MODULES="gtk+-2.0 >= 2.24.0"
+PKG_CHECK_MODULES(GTK,$GTK_MODULES)
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
+#
+#GTKSRC_MODULES="gtksourceview-2.0 >= 2.9.9"
+PKG_CHECK_MODULES(GTKSRC,$GTKSRC_MODULES)
 
-GTKSRC_MODULES="gtksourceview-2.0 >= 2.9.9"
-PKG_CHECK_MODULES(GTKSRC, $GTKSRC_MODULES)
 AC_SUBST(GTKSRC_CFLAGS)
 AC_SUBST(GTKSRC_LIBS)
 
@@ -36,7 +52,11 @@ AC_ARG_ENABLE(docviewer,AS_HELP_STRING([--enable-docviewer],[Build the Gtk-Doc v
     [enable_docviewer="yes"])
 AC_MSG_RESULT($enable_docviewer)
 if test "$enable_docviewer" = "yes"; then
+if test "$enable_gtk3" = "yes"; then
+	WEBKIT_MODULES="webkitgtk-3.0 >= 2.4.0"
+else
 	WEBKIT_MODULES="webkit-1.0 >= 1.6.1"
+fi
 	PKG_CHECK_MODULES(WEBKIT, $WEBKIT_MODULES)
 	AC_SUBST(WEBKIT_CFLAGS)
 	AC_SUBST(WEBKIT_LIBS)

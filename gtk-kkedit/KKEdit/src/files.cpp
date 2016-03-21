@@ -133,13 +133,19 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 {
 	ERRDATA
 	GtkWidget*	evbox=gtk_event_box_new();
-	GtkWidget*	hbox=gtk_hbox_new(false,0);
+	GtkWidget*	hbox;
 	GtkWidget*	label;
-	GtkWidget*	close=gtk_image_new_from_stock(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
+//	GtkWidget*	close=gtk_image_new_from_stock(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
+	GtkWidget*	close=gtk_image_new_from_icon_name(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
+//	GtkWidget*	close==createNewImageMenuItem(GTK_STOCK_CLOSE,);
+
 	GtkWidget*	button=gtk_button_new();
-	GtkRcStyle*	style=gtk_rc_style_new();
+
+//TODO//
+//	GtkRcStyle*	style=gtk_rc_style_new();
 	char*		correctedname;
 
+	hbox=creatNewBox(NEWHBOX,false,0);
 	ERRDATA rebuildTabsMenu();
 
 	correctedname=truncateWithElipses(name,maxTabChars);
@@ -161,9 +167,10 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 
 	page->tabName=label;
 
-	style->xthickness=style->ythickness=0;
-	gtk_widget_modify_style (button, style);
-	g_object_unref(G_OBJECT(style));
+//TODO//
+//	style->xthickness=style->ythickness=0;
+//	gtk_widget_modify_style (button, style);
+//	g_object_unref(G_OBJECT(style));
 
 	gtk_widget_show_all(evbox);
 
@@ -187,8 +194,10 @@ void setFilePrefs(pageStruct* page)
 	gtk_source_view_set_highlight_current_line(page->view,highLight);
 	gtk_source_view_set_show_line_marks(page->view,showBMBar);
 	gdk_color_parse(highlightColour,&color);
+	//TODO//
+#ifndef _USEGTK3_
 	gtk_source_view_set_mark_category_background(page->view,MARK_TYPE_1,&color);
-
+#endif
 	if(lineWrap==true)
 		{
 			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
@@ -205,7 +214,10 @@ void setFilePrefs(pageStruct* page)
 	gtk_source_view_set_tab_width(page->view,tabWidth);
 
 	font_desc=pango_font_description_from_string(fontAndSize);
+//TODO//
+#ifndef _USEGTK3_
 	gtk_widget_modify_font((GtkWidget*)page->view,font_desc);
+#endif
 	pango_font_description_free(font_desc);
 
 	attr=gtk_text_view_get_default_attributes((GtkTextView*)page->view);
@@ -217,10 +229,13 @@ void setFilePrefs(pageStruct* page)
 	else
 		gtk_source_buffer_set_highlight_syntax (page->buffer,true);
 
+//TODO//
+#ifndef _USEGTK3_
 	if(autoShowComps==true)
 		gtk_source_completion_unblock_interactive(page->completion);
 	else
 		gtk_source_completion_block_interactive(page->completion);
+#endif
 
 	ERRDATA
 	createCompletion(page);
@@ -706,9 +721,12 @@ void add_source_mark_pixbufs (GtkSourceView *view)
 	pbuf=gtk_image_get_pixbuf(image);
 
 	gdk_color_parse(highlightColour,&color);
+//TODO//
+#ifndef _USEGTK3_
 	gtk_source_view_set_mark_category_background(view,MARK_TYPE_1,&color);
 	gtk_source_view_set_mark_category_icon_from_pixbuf (view,MARK_TYPE_1,pbuf);
 	gtk_source_view_set_mark_category_priority(view,MARK_TYPE_1,1);
+#endif
 	ERRDATA
 }
 
@@ -744,7 +762,11 @@ pageStruct* makeNewPage(void)
 	page->filePath=NULL;
 	page->realFilePath=NULL;
 
+#ifdef _USEGTK3_
+	page->pane=gtk_paned_new(GTK_ORIENTATION_VERTICAL);
+#else
 	page->pane=gtk_vpaned_new();
+#endif
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
 	page->pageWindow2=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
@@ -917,7 +939,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 		linenum=0;
 
 	page=makeNewPage();
-	page->tabVbox=gtk_vbox_new(true,4);
+	//page->tabVbox=gtk_vbox_new(true,4);
+	page->tabVbox=creatNewBox(NEWVBOX,true,4);
 	page->filePath=strdup(filepathcopy);
 	page->fileName=strdup(filename);
 	page->dirName=g_path_get_dirname(filepathcopy);
@@ -1050,7 +1073,8 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 
 	ERRDATA
 	page=makeNewPage();
-	page->tabVbox=gtk_vbox_new(true,4);
+	//page->tabVbox=gtk_vbox_new(true,4);
+	page->tabVbox=creatNewBox(NEWVBOX,true,4);
 	page->filePath=NULL;
 	page->dirName=NULL;
 

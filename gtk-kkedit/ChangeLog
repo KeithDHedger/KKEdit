@@ -1,3 +1,6 @@
+0.3.0
+Started gtk3 enabled.
+
 0.2.12
 Fixed occasional bug when runing certain tools on files with no language type.
 Removed forced CFLAGS and CXXFLAGS.

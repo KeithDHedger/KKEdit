@@ -937,7 +937,13 @@ void basicFind(int dowhat)
 	pageStruct*				page=NULL;
 	char*					searchtext=NULL;
 	char*					replacetext;
+//	GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
+#ifdef _USEGTK3_
+	GtkTextSearchFlags		flags=GTK_TEXT_SEARCH_TEXT_ONLY;
+#else
 	GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
+#endif
+
 	bool					replaceAllFlag;
 	bool					found=false;
 	GtkTextIter				start_find,end_find;
@@ -968,7 +974,12 @@ void basicFind(int dowhat)
 	doBusy(true,page);
 
 	if(insensitiveSearch==true)
+//		flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
+#ifdef _USEGTK3_
+		flags=(GtkTextSearchFlags)(GTK_TEXT_SEARCH_TEXT_ONLY|GTK_TEXT_SEARCH_CASE_INSENSITIVE);
+#else
 		flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
+#endif
 
 	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)findBox));
 	replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
@@ -985,7 +996,11 @@ void basicFind(int dowhat)
 
 	if(hightlightAll==true)
 		{
+#ifdef _USEGTK3_
+			while(gtk_text_iter_forward_search(&start_find,searchtext,flags,&start_match,&end_match,NULL))
+#else
 			while(gtk_source_iter_forward_search(&start_find,searchtext,flags,&start_match,&end_match,NULL))
+#endif
 				{
 					gtk_text_buffer_apply_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_match,&end_match);
 					offset=gtk_text_iter_get_offset(&end_match);
@@ -1004,7 +1019,11 @@ void basicFind(int dowhat)
 			else
 				autoSeleced=true;
 
+#ifdef _USEGTK3_
+			if(gtk_text_iter_forward_search(&page->match_end,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#else
 			if(gtk_source_iter_forward_search(&page->match_end,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#endif
 				{
 					found=true;
 					gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
@@ -1016,7 +1035,11 @@ void basicFind(int dowhat)
 					if((wrapSearch==true) && (findInAllFiles==false))
 						{
 							gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
+#ifdef _USEGTK3_
+							if(gtk_text_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#else
 							if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#endif
 								{
 									found=true;
 									gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
@@ -1035,7 +1058,11 @@ void basicFind(int dowhat)
 
 		if(dowhat==FINDPREV)
 			{
+#ifdef _USEGTK3_
+				if(gtk_text_iter_backward_search(&page->match_start,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#else
 				if(gtk_source_iter_backward_search(&page->match_start,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#endif
 					{
 						found=true;
 						gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
@@ -1047,7 +1074,11 @@ void basicFind(int dowhat)
 						if((wrapSearch==true) && (findInAllFiles==false))
 							{
 								gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&page->iter);
+#ifdef _USEGTK3_
+								if(gtk_text_iter_backward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#else
 								if(gtk_source_iter_backward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#endif
 									{
 										found=true;
 										gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
@@ -1068,7 +1099,11 @@ void basicFind(int dowhat)
 			{
 				if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
 					{
+#ifdef _USEGTK3_
+						if(gtk_text_iter_forward_search(&page->match_start,searchtext,flags,&page->match_start,&page->match_end,&page->match_end))
+#else
 						if(gtk_source_iter_forward_search(&page->match_start,searchtext,flags,&page->match_start,&page->match_end,&page->match_end))
+#endif
 							{
 								gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 								gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,replacetext,-1);
@@ -1110,7 +1145,11 @@ void basicFind(int dowhat)
 				replaceAllFlag=true;
 				while(replaceAllFlag==true)
 					{
+#ifdef _USEGTK3_
+						if(gtk_text_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#else
 						if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#endif
 							{
 								if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSeleced==false))
 									{
@@ -1275,13 +1314,23 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
 {
 	pageStruct* 			page=getPageStructPtr(-1);
-	GtkSourceSearchFlags	flags;
+//	GtkSourceSearchFlags	flags;
+#ifdef _USEGTK3_
+	GtkTextSearchFlags		flags=GTK_TEXT_SEARCH_TEXT_ONLY;
+#else
+	GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
+#endif
 	char*					searchtext;
 	int						modkey=((GdkEventKey*)event)->state;
 
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 
-	flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
+//	flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
+#ifdef _USEGTK3_
+		flags=(GtkTextSearchFlags)(GTK_TEXT_SEARCH_TEXT_ONLY|GTK_TEXT_SEARCH_CASE_INSENSITIVE);
+#else
+		flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
+#endif
 
 	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)widget));
 
@@ -1290,7 +1339,11 @@ void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
 			if(!gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
 				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 
+#ifdef _USEGTK3_
+			if(gtk_text_iter_forward_search(&page->match_end,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#else
 			if(gtk_source_iter_forward_search(&page->match_end,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#endif
 				{
 					gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 					scrollToIterInPane(page,&page->match_start);
@@ -1299,7 +1352,11 @@ void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
 			else
 				{
 					gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
+#ifdef _USEGTK3_
+					if(gtk_text_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#else
 					if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#endif
 						{
 							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 							scrollToIterInPane(page,&page->match_start);
@@ -1311,7 +1368,11 @@ void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
 		{
 			if(!gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
 				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+#ifdef _USEGTK3_
+			if(gtk_text_iter_backward_search(&page->match_start,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#else
 			if(gtk_source_iter_backward_search(&page->match_start,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#endif
 				{
 					gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 					scrollToIterInPane(page,&page->match_start);
@@ -1320,7 +1381,11 @@ void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
 			else
 				{
 					gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&page->iter);
+#ifdef _USEGTK3_
+					if(gtk_text_iter_backward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#else
 					if(gtk_source_iter_backward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
+#endif
 						{
 							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 							scrollToIterInPane(page,&page->match_start);

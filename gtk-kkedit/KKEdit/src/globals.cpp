@@ -1373,5 +1373,81 @@ void catchSignal(int signal)
     exit(EXIT_FAILURE);
 }
  
+GtkWidget* creatNewBox(int orient,bool homog,int spacing)
+{
+	GtkWidget	*retwidg=NULL;
+
+#ifdef _USEGTK3_
+	if(orient==NEWVBOX)
+		retwidg=gtk_box_new(GTK_ORIENTATION_VERTICAL,spacing);
+	else
+		retwidg=gtk_box_new(GTK_ORIENTATION_HORIZONTAL,spacing);
+	gtk_box_set_homogeneous((GtkBox*)retwidg,homog);
+#else
+	if(orient==NEWVBOX)
+		retwidg=gtk_vbox_new(homog,spacing);
+	else
+		retwidg=gtk_hbox_new(homog,spacing);
+#endif
+
+	return(retwidg);
+}
+
+GtkWidget* createNewImageMenuItem(const char* stock,const char* label)
+{
+	GtkWidget*	item;
+
+#ifdef _USEGTK3_
+	item=gtk_menu_item_new_with_label(label);
+#else
+	GtkWidget*	image;
+	item=gtk_image_menu_item_new_with_label(label);
+	if(stock!=NULL)
+		{
+			image=gtk_image_new_from_icon_name(stock,GTK_ICON_SIZE_MENU);
+			gtk_image_menu_item_set_image((GtkImageMenuItem *)item,image);
+		}
+#endif
+
+	return(item);
+}
+
+GtkToolItem* createNewToolItem(const char* stock,const char* label)
+{
+	GtkToolItem*	button;
+#ifdef _USEGTK3_
+	GtkWidget*		image;
+	image=gtk_image_new_from_icon_name(stock,GTK_ICON_SIZE_LARGE_TOOLBAR);
+	button=gtk_tool_button_new(image,label);
+#else
+	button=gtk_tool_button_new_from_stock(stock);
+#endif
+
+	return(button);
+}
+
+GtkWidget* createNewStockButton(const char* stock,const char* label)
+{
+	GtkWidget*	button;
+#ifdef _USEGTK3_
+	button=gtk_button_new_with_label(label);
+#else
+	button=gtk_button_new_from_stock(stock);
+#endif
+
+	return(button);
+}
+
+GdkPixbuf* createNewIcon(const char* stock,GtkWidget* widg)
+{
+	GdkPixbuf*	icon;
+#ifdef _USEGTK3_
+	icon=gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),stock,GTK_ICON_SIZE_LARGE_TOOLBAR,GTK_ICON_LOOKUP_NO_SVG,NULL);
+#else
+	icon=gtk_widget_render_icon(widg,stock,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
+#endif
+
+	return(icon);
+}
 
 

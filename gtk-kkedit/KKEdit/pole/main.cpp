@@ -10,6 +10,9 @@
 #include <sys/stat.h>
 #include <stdio.h>
 
+#include "config.h"
+#include "../src/kkedit-includes.h"
+
 GtkWidget*	progressWindow;
 GtkWidget*	progressBar;
 bool		doPulse=true;
@@ -17,6 +20,26 @@ int			percent;
 char		*path=NULL;
 
 enum {QUIT,PULSE,PERCENT};
+
+GtkWidget* creatNewBox(int orient,bool homog,int spacing)
+{
+	GtkWidget	*retwidg=NULL;
+
+#ifdef _USEGTK3_
+	if(orient==NEWVBOX)
+		retwidg=gtk_box_new(GTK_ORIENTATION_VERTICAL,spacing);
+	else
+		retwidg=gtk_box_new(GTK_ORIENTATION_HORIZONTAL,spacing);
+	gtk_box_set_homogeneous((GtkBox*)retwidg,homog);
+#else
+	if(orient==NEWVBOX)
+		retwidg=gtk_vbox_new(homog,spacing);
+	else
+		retwidg=gtk_hbox_new(homog,spacing);
+#endif
+
+	return(retwidg);
+}
 
 void shutdown(GtkWidget* widget,gpointer data)
 {
@@ -96,11 +119,15 @@ void showBarberPole(const char* title,char* filepath)
 	gtk_widget_set_size_request(progressWindow,400,40);
 	gtk_window_set_type_hint((GtkWindow*)progressWindow,GDK_WINDOW_TYPE_HINT_NORMAL);
 	gtk_window_set_title((GtkWindow*)progressWindow,title);
-	vbox=gtk_vbox_new(FALSE,0);
+	//vbox=gtk_vbox_new(FALSE,0);
+	vbox=creatNewBox(NEWVBOX,false,0);
 	progressBar=gtk_progress_bar_new();
 	gtk_progress_bar_set_fraction((GtkProgressBar*)progressBar,0);
 
+//TODO//
+#ifndef _USEGTK3_
 	gtk_progress_bar_set_orientation((GtkProgressBar*)progressBar,GTK_PROGRESS_LEFT_TO_RIGHT);
+#endif
 
 	gtk_box_pack_start(GTK_BOX(vbox),progressBar,false,false,8);
 	gtk_container_add(GTK_CONTAINER(progressWindow),vbox);
