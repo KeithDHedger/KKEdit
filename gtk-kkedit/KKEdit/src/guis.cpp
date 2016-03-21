@@ -1118,7 +1118,8 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 			case STOCKMENU:
 				//TODO//
 				//widg=gtk_image_menu_item_new_from_stock(stocklabel,NULL);
-				widg=createNewImageMenuItem(stocklabel,menulabel);
+				//widg=createNewImageMenuItem(stocklabel,menulabel);
+				widg=createNewStockMenuItem(stocklabel,menulabel);
 				break;
 
 			case IMAGEMENU:
@@ -1130,11 +1131,15 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 				break;
 
 			case PIXMAPMENU:
-				//widg=gtk_image_menu_item_new_with_label(menulabel);
-				widg=createNewImageMenuItem(NULL,menulabel);
+#ifdef _USEGTK3_
+				widg=gtk_menu_item_new_with_label(menulabel);
+#else
+				widg=gtk_image_menu_item_new_with_label(menulabel);
+				//widg=createNewImageMenuItem(NULL,menulabel);
 
-				//image=gtk_image_new_from_file(stocklabel);
-				//gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
+				image=gtk_image_new_from_file(stocklabel);
+				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
+#endif
 				break;
 
 			case CHECKMENU:
@@ -1807,9 +1812,9 @@ void buildMainGui(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(helpMenu),menu);
 
 //about
-	menuitem=makeMenuItem(GTK_STOCK_ABOUT,menu,(void*)doAbout,0,ABOUTMENUNAME,STOCKMENU,NULL,NULL,false);
+	menuitem=makeMenuItem(GTK_STOCK_ABOUT,menu,(void*)doAbout,0,ABOUTMENUNAME,STOCKMENU,GTK_STOCK_ABOUT3,NULL,false);
 //help
-	menuitem=makeMenuItem(GTK_STOCK_HELP,menu,(void*)openHelp,0,HELPMENUNAME,STOCKMENU,NULL,NULL,false);
+	menuitem=makeMenuItem(GTK_STOCK_HELP,menu,(void*)openHelp,0,HELPMENUNAME,STOCKMENU,GTK_STOCK_HELP3,NULL,false);
 //get plugins
 	menuitem=makeMenuItem(DATADIR"/pixmaps/KKEditPlugMenu.png",menu,(void*)getPlugins,0,GETPLUGSMENUNAME,PIXMAPMENU,gettext("Get Plugins"),NULL,false);
 

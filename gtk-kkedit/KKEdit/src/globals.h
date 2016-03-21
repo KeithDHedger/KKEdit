@@ -460,6 +460,7 @@ GtkWidget* createNewImageMenuItem(const char* stock,const char* label);
 GtkToolItem* createNewToolItem(const char* stock,const char* label);
 GtkWidget* createNewStockButton(const char* stock,const char* label);
 GdkPixbuf* createNewIcon(const char* stock,GtkWidget* widg);
+GtkWidget* createNewStockMenuItem(const char* stock,const char* label);
 
 #endif
 

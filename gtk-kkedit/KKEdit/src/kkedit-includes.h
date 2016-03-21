@@ -61,11 +61,6 @@
 #define GTK_STOCK_HOME "go-home"
 #define GTK_STOCK_GO_UP "go-up"
 
-
-
-
-
-
 #define GTK_STOCK_YES gettext("_Yes")
 #define GTK_STOCK_NO gettext("_No")
 #define GTK_STOCK_CANCEL gettext("_Cancel")
@@ -73,21 +68,6 @@
 #define GTK_STOCK_APPLY gettext("_Apply")
 #define GTK_STOCK_EDIT gettext("_Edit")
 #define GTK_STOCK_OK gettext("_OK")
-
-//#define GTK_STOCK_DELETE3 gettext("edit-delete")
-//#define GTK_STOCK_DIALOG_QUESTION3 gettext("dialog-question")
-//#define GTK_STOCK_ADD3 gettext("list-add")
-//#define GTK_STOCK_PRINT3 "document-print"
-//#define GTK_STOCK_REVERT_TO_SAVED3 "document-revert"
-////#define GTK_STOCK_SORT_ASCENDING3 "view-sort-ascending"
-//#define GTK_STOCK_GO_DOWN3 "go-down"
-//#define GTK_STOCK_ABOUT3 "help-about"
-//#define GTK_STOCK_HELP3 "help-browser"
-//#define GTK_STOCK_GO_FORWARD3 "go-next"
-//#define GTK_STOCK_FIND_AND_REPLACE3 "edit-find-replace"
-//#define GTK_STOCK_HOME3 "go-home"
-//#define GTK_STOCK_GO_UP3 "go-up"
-
 
 #endif
 
@@ -110,6 +90,8 @@
 #define GTK_STOCK_HOME3 gettext("Home")
 #define GTK_STOCK_PREFERENCES3 "Preferences"
 #define GTK_STOCK_QUIT3 gettext("Quit")
+#define GTK_STOCK_ABOUT3 gettext("About")
+#define GTK_STOCK_HELP3 gettext("Help")
 
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <gtksourceview/gtksourceprintcompositor.h>
