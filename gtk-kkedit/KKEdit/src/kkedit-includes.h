@@ -92,6 +92,9 @@
 #define GTK_STOCK_QUIT3 gettext("Quit")
 #define GTK_STOCK_ABOUT3 gettext("About")
 #define GTK_STOCK_HELP3 gettext("Help")
+#define GTK_STOCK_GO_DOWN3 gettext("Down")
+#define GTK_STOCK_GO_UP3 gettext("Up")
+#define GTK_STOCK_GO_FORWARD3 gettext("Forward")
 
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <gtksourceview/gtksourceprintcompositor.h>

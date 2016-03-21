@@ -1393,15 +1393,6 @@ GtkWidget* creatNewBox(int orient,bool homog,int spacing)
 	return(retwidg);
 }
 
-/*
-				//widg=gtk_image_menu_item_new_with_label(menulabel);
-				widg=createNewImageMenuItem(stocklabel,menulabel);
-
-				//image=gtk_image_new_from_stock(stocklabel,GTK_ICON_SIZE_MENU);
-				//gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
-				break;
-
-*/
 GtkWidget* createNewImageMenuItem(const char* stock,const char* label)
 {
 	GtkWidget	*item;
@@ -1413,22 +1404,11 @@ GtkWidget* createNewImageMenuItem(const char* stock,const char* label)
 	item=gtk_image_menu_item_new_with_label(label);
 	image=gtk_image_new_from_stock(stock,GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)item,image);
-//	GtkWidget*	image;
-//	item=gtk_image_menu_item_new_with_label(label);
-//	if(stock!=NULL)
-//		{
-//			image=gtk_image_new_from_icon_name(stock,GTK_ICON_SIZE_MENU);
-//			gtk_image_menu_item_set_image((GtkImageMenuItem *)item,image);
-//		}
 #endif
 
 	return(item);
 }
-/*
-				//widg=gtk_image_menu_item_new_from_stock(stocklabel,NULL);
-				widg=createNewImageMenuItem(stocklabel,menulabel);
 
-*/
 GtkWidget* createNewStockMenuItem(const char* stock,const char* label)
 {
 	GtkWidget*	item;

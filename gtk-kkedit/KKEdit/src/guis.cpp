@@ -1116,7 +1116,6 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 	switch(setimage)
 		{
 			case STOCKMENU:
-				//TODO//
 				//widg=gtk_image_menu_item_new_from_stock(stocklabel,NULL);
 				//widg=createNewImageMenuItem(stocklabel,menulabel);
 				widg=createNewStockMenuItem(stocklabel,menulabel);
@@ -1858,8 +1857,12 @@ void buildMainGui(void)
 	gtk_scrolled_window_set_policy((GtkScrolledWindow*)mainWindowScrollbox,GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	toolOutputBuffer=gtk_text_buffer_new(NULL);
 	toolOutputView=gtk_text_view_new_with_buffer(toolOutputBuffer);
+
 	gtk_container_add(GTK_CONTAINER(mainWindowScrollbox),(GtkWidget*)toolOutputView);
-	gtk_container_add(GTK_CONTAINER(toolOutVBox),(GtkWidget*)mainWindowScrollbox);
+//	gtk_box_pack_start ((GtkBox*)mainWindowScrollbox,toolOutputView,true,true,10);
+//	gtk_container_add(GTK_CONTAINER(mainWindowScrollbox),(GtkWidget*)toolOutputView);
+	gtk_box_pack_start((GtkBox*)toolOutVBox,mainWindowScrollbox,true,true,0);
+//	gtk_container_add(GTK_CONTAINER(toolOutVBox),(GtkWidget*)mainWindowScrollbox);
 
 //add main vbox to mainWindow
 	gtk_container_add((GtkContainer*)mainWindow,mainWindowVBox);
@@ -2207,10 +2210,12 @@ void buildGtkDocViewer(void)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(scrolledWindow),GTK_WIDGET(webView));
 
-	gtk_container_add(GTK_CONTAINER(vbox),scrolledWindow);
+//	gtk_container_add(GTK_CONTAINER(vbox),scrolledWindow);
+//	gtk_container_add(GTK_CONTAINER(vbox),scrolledWindow);
+	gtk_box_pack_start((GtkBox*)vbox,scrolledWindow,true,true,0);
 
 	//button=gtk_button_new_from_stock(GTK_STOCK_GO_BACK);
-	button=createNewStockButton(GTK_STOCK_GO_BACK,gettext("_Back"));
+	button=createNewStockButton(GTK_STOCK_GO_BACK,GTK_STOCK_GO_BACK3);
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoBack),(void*)webView);	
 
@@ -2218,7 +2223,7 @@ void buildGtkDocViewer(void)
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,false,0);
 
 	//button=gtk_button_new_from_stock(GTK_STOCK_HOME);
-	button=createNewStockButton(GTK_STOCK_HOME,gettext("_Home"));
+	button=createNewStockButton(GTK_STOCK_HOME,GTK_STOCK_HOME3);
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoHome),(void*)webView);	
  
@@ -2227,25 +2232,28 @@ void buildGtkDocViewer(void)
 
 	entry=gtk_entry_new();
 	//findbutton=gtk_button_new_from_stock(GTK_STOCK_FIND);
-	findbutton=createNewStockButton(GTK_STOCK_FIND,gettext("_Find"));
+	findbutton=createNewStockButton(GTK_STOCK_FIND,GTK_STOCK_FIND3);
 	gtk_box_pack_start(GTK_BOX(hbox),findbutton,false,false,0);
 	g_signal_connect(G_OBJECT(findbutton),"clicked",G_CALLBACK(docSearchFromBar),(void*)entry);	
 
 	gtk_box_pack_start(GTK_BOX(hbox),entry,false,true,0);
 	g_signal_connect_after(G_OBJECT(entry),"activate",G_CALLBACK(docSearchFromBar),(void*)entry);
 
-	findnextinpage=gtk_button_new_from_stock(GTK_STOCK_GO_DOWN);
+//	findnextinpage=gtk_button_new_from_stock(GTK_STOCK_GO_DOWN);
+	findnextinpage=createNewStockButton(GTK_STOCK_GO_DOWN,GTK_STOCK_GO_DOWN3);
 	gtk_box_pack_start(GTK_BOX(hbox),findnextinpage,false,false,0);
 	g_signal_connect(G_OBJECT(findnextinpage),"clicked",G_CALLBACK(docSearchInPageFoward),(void*)entry);
 
-	findbutton=gtk_button_new_from_stock(GTK_STOCK_GO_UP);
+//	findbutton=gtk_button_new_from_stock(GTK_STOCK_GO_UP);
+	findbutton=createNewStockButton(GTK_STOCK_GO_UP,GTK_STOCK_GO_UP3);
 	gtk_box_pack_start(GTK_BOX(hbox),findbutton,false,false,0);
 	g_signal_connect(G_OBJECT(findbutton),"clicked",G_CALLBACK(docSearchInPageBack),(void*)entry);
 
 //spacer
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,false,0);
 
-	button=gtk_button_new_from_stock(GTK_STOCK_GO_FORWARD);
+//	button=gtk_button_new_from_stock(GTK_STOCK_GO_FORWARD);
+	button=createNewStockButton(GTK_STOCK_GO_FORWARD,GTK_STOCK_GO_FORWARD3);
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoForward),(void*)webView);	
 
