@@ -23,7 +23,7 @@ Full source code highlighted printing
 
 *** NEW ***
 
-Started to port to gtk3, editor compiles and runs and 75% working, use -s switch to kkedit when running to disable plugins, 'cos they don't work yet.
+Started to port to gtk3, editor compiles and runs and 65% working, use -s switch to kkedit when running to disable plugins, 'cos they don't work yet.
 
 Add --enable-gtk3 to your configure  and run with:
 kkedit -s /path/to/a/file
