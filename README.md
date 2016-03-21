@@ -20,7 +20,6 @@ Find API declarations in installed Gtk-Doc's.
 Full source code highlighted printing
 
 + The usual source view options, line wrap, line numbers etc.
-+ 
 
 *** NEW ***
 
