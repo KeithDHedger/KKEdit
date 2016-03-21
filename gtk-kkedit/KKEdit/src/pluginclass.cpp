@@ -29,7 +29,7 @@ PluginClass::PluginClass(bool loadPlugs)
 	plugCount=-1;
 
 	asprintf(&plugFolderPaths[GLOBALPLUGS],"%s/plugins-%s",DATADIR,PLATFORM);
-	asprintf(&plugFolderPaths[LOCALPLUGS],"%s/.KKEdit/plugins-%s",getenv("HOME"),PLATFORM);
+	asprintf(&plugFolderPaths[LOCALPLUGS],"%s/." KKEDITVERS "/plugins-%s",getenv("HOME"),PLATFORM);
 
 	this->doLoadPlugs=loadPlugs;
 	this->loadPlugins();
@@ -90,7 +90,7 @@ bool PluginClass::checkForEnabled(char* plugname)
 			ERRDATA return(false);
 		}
 
-	asprintf(&filename,"%s/.KKEdit/pluglist",getenv("HOME"));
+	asprintf(&filename,"%s/." KKEDITVERS "/pluglist",getenv("HOME"));
 	fd=fopen(filename,"r");
 	if(fd!=NULL)
 		{
@@ -145,7 +145,7 @@ void PluginClass::deleteBlackList()
 	ERRDATA
 	char*	command;
 
-	asprintf(&command,"rm %s/.KKEdit/pluglist 2>/dev/null",getenv("HOME"));
+	asprintf(&command,"rm %s/." KKEDITVERS "/pluglist 2>/dev/null",getenv("HOME"));
 	system(command);
 	ERRDATA debugFree(&command);
 }
@@ -155,7 +155,7 @@ void PluginClass::appendToBlackList(char* name)
 	ERRDATA
 	char*	command;
 
-	asprintf(&command,"echo %s >> %s/.KKEdit/pluglist",name,getenv("HOME"));
+	asprintf(&command,"echo %s >> %s/." KKEDITVERS "/pluglist",name,getenv("HOME"));
 	system(command);
 	ERRDATA debugFree(&command);
 }

@@ -31,11 +31,11 @@ void readConfig(void)
 	ERRDATA
 	char*	filename;
 
-	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
+	asprintf(&filename,"%s/." KKEDITVERS "/kkedit.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_rc);
 	ERRDATA debugFree(&filename);
 
-	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
+	asprintf(&filename,"%s/." KKEDITVERS "/kkedit.window.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_window_rc);
 	if(windowAllocData!=NULL)
 		sscanf(windowAllocData,"%i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
@@ -123,7 +123,7 @@ void init(void)
 	listFunction=0;
 	showStatus=true;
  
-	asprintf(&filename,"%s/.KKEdit/tools",getenv("HOME"));
+	asprintf(&filename,"%s/." KKEDITVERS "/tools",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	ERRDATA debugFree(&filename);
 	schemeManager=gtk_source_style_scheme_manager_get_default();
@@ -580,7 +580,10 @@ int main (int argc, char **argv)
 			loadPluginsFlag=false; 
 		}
 
-	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
+//	asprintf(&prefsFolder,"%s/.%s",getenv("HOME"),KKEDITVERS);
+//	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
+	asprintf(&filename,"%s/." KKEDITVERS "/kkedit.rc",getenv("HOME"));
+	printf(">>>%s<<<\n",filename);
 	loadVarsFromFile(filename,kkedit_startup_vars);
 	ERRDATA debugFree(&filename);
 

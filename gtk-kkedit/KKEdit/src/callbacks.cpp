@@ -1644,10 +1644,10 @@ void writeExitData(void)
 	bottomVPaneHite=gtk_paned_get_position((GtkPaned*)mainWindowVPane);
 	topVPaneHite=gtk_paned_get_position((GtkPaned*)secondWindowVPane);
 
-	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
+	asprintf(&filename,"%s/." KKEDITVERS,getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	ERRDATA debugFree(&filename);
-	asprintf(&filename,"%s/.KKEdit/kkedit.window.rc",getenv("HOME"));
+	asprintf(&filename,"%s/." KKEDITVERS "/kkedit.window.rc",getenv("HOME"));
 
 	saveVarsToFile(filename,kkedit_window_rc);
 
@@ -1660,11 +1660,11 @@ void writeConfig(void)
 	ERRDATA
 	char*			filename;
 
-	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
+	asprintf(&filename,"%s/." KKEDITVERS,getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	ERRDATA debugFree(&filename);
 
-	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
+	asprintf(&filename,"%s/." KKEDITVERS "/kkedit.rc",getenv("HOME"));
 	saveVarsToFile(filename,kkedit_rc);
 	ERRDATA debugFree(&filename);
 }
@@ -1848,10 +1848,10 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 	char*		toolpath;
 	int			flags;
 
-	asprintf(&dirname,"%s/.KKEdit/tools",getenv("HOME"));
+	asprintf(&dirname,"%s/." KKEDITVERS "/tools",getenv("HOME"));
 	text=strdup(gtk_entry_get_text((GtkEntry*)toolNameWidget));
 	text=g_strdelimit(text," ",'-');
-	asprintf(&toolpath,"%s/.KKEdit/tools/%s",getenv("HOME"),text);
+	asprintf(&toolpath,"%s/." KKEDITVERS "/tools/%s",getenv("HOME"),text);
 
 	if((gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false) || (gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget)==true))
 		{
@@ -2168,6 +2168,8 @@ VISIBLE void toggleDocviewer(GtkWidget* widget,gpointer data)
 		{
 			gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,gettext("Hide Docviewer"));
 			gtk_widget_show_all(docView);
+			if(docWindowX!=-1 && docWindowY!=-1)
+				gtk_window_move((GtkWindow *)docView,docWindowX,docWindowY);
 			gtk_window_present((GtkWindow*)docView);
 		}
 	else
@@ -2361,7 +2363,7 @@ void loadKeybindings(void)
 	ERRDATA
 	char*	filename;
 
-	asprintf(&filename,"%s/.KKEdit/keybindings.rc",getenv("HOME"));
+	asprintf(&filename,"%s/." KKEDITVERS "/keybindings.rc",getenv("HOME"));
 
 	loadVarsFromFile(filename,keybindings_rc);
 	for(int j=0;j<NUMSHORTCUTS;j++)

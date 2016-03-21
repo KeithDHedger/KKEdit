@@ -533,10 +533,10 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 	GList*			ptr;
 
 	ERRDATA
-	asprintf(&filename,"%s/.KKEdit",getenv("HOME"));
+	asprintf(&filename,"%s/." KKEDITVERS,getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	ERRDATA debugFree(&filename);
-	asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
+	asprintf(&filename,"%s/." KKEDITVERS "/session",getenv("HOME"));
 	fd=fopen(filename,"w");
 	if (fd!=NULL)
 		{
@@ -592,7 +592,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	showBarberPole(gettext("Restoring Session ..."));
 
 	if(data==NULL)
-		asprintf(&filename,"%s/.KKEdit/session",getenv("HOME"));
+		asprintf(&filename,"%s/." KKEDITVERS "/session",getenv("HOME"));
 	else
 		asprintf(&filename,"%s",(char*)data);
 

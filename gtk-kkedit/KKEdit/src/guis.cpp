@@ -1010,7 +1010,7 @@ void setKeyCuts(GtkWidget* widget,gpointer data)
 						}
 					asprintf(&shortCutStrings[j],"%i %i - ^%c %s",shortCuts[j][0],shortCuts[j][1],shortCuts[j][0],shortcuttext[j]);
 				}
-			asprintf(&filename,"%s/.KKEdit/keybindings.rc",getenv("HOME"));
+			asprintf(&filename,"%s/." KKEDITVERS "/keybindings.rc",getenv("HOME"));
 			saveVarsToFile(filename,keybindings_rc);
 			gtk_widget_hide(keysWindow);
 		}

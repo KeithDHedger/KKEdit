@@ -25,6 +25,7 @@ bool			busyFlag=false;
 bool			autoSeleced=false;
 VISIBLE bool	sessionBusy=false;
 bool			fromGOpen=false;
+char			*prefsFolder=NULL;
 
 //app
 //main mainWindow
@@ -1080,7 +1081,7 @@ void buildToolsList(void)
 		}
 
 	asprintf(&datafolder[0],"%s/tools/",DATADIR);
-	asprintf(&datafolder[1],"%s/.KKEdit/tools/",getenv("HOME"));
+	asprintf(&datafolder[1],"%s/." KKEDITVERS "/tools/",getenv("HOME"));
 	for(int loop=0; loop<2; loop++)
 		{
 			folder=g_dir_open(datafolder[loop],0,NULL);

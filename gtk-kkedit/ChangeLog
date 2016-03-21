@@ -1,4 +1,5 @@
 0.3.0
+Moved prefs to either ~/.KKEdit or ~/.KKEdit3 depending on build.
 Done doc viewer.
 Open external apps done.
 Basic navigation done.

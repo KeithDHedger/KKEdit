@@ -71,11 +71,19 @@
 #define USEURI			-1
 #define USEFILE			-2
 
+#ifdef _USEGTK3_
+#define KKEDITVERS "KKEdit3"
+#define PLATFORM "gtk3"
+#else
+#define KKEDITVERS "KKEdit"
+#define PLATFORM "gtk"
+#endif
+
 #define	POLEPATH		PREFIX "/bin/KKEditProgressBar"
-#define CUSTOMWORDFILE ".KKEdit/customcompletions"
+#define CUSTOMWORDFILE "." KKEDITVERS "/customcompletions"
 
 #define NUMSHORTCUTS	14
-#define PLATFORM		"gtk"
+//#define PLATFORM		"gtk"
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 enum {NEWVBOX=0,NEWHBOX};
@@ -127,6 +135,7 @@ extern bool				busyFlag;
 extern bool				autoSeleced;
 extern bool				sessionBusy;
 extern bool				fromGOpen;
+extern char				*prefsFolder;
 
 //app
 //main window
