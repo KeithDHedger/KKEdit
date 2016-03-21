@@ -20,3 +20,9 @@ Find API declarations in installed Gtk-Doc's.
 Full source code highlighted printing
 
 + The usual source view options, line wrap, line numbers etc.
+
+*** NEW ***
+
+Started to port to gtk3, editor compiles and runs and 75% working, use -s switch to kkedit when running to disable plugins, 'cos they don't work yet.
+
+*** NEW ***
