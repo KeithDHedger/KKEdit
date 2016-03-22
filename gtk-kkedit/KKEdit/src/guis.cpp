@@ -1490,10 +1490,11 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	label=gtk_label_new(gettext("<b>Be Kind To Poor Programmers</b>"));
 	gtk_label_set_use_markup((GtkLabel*)label,true);
 	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
-	//hbox=gtk_hbox_new(true,0);
-	hbox=creatNewBox(NEWHBOX,true,0);
 
-	makePrefsCheck(BEKIND,gettext("I have donated"),"useplugmenu",nagScreen,-1,-1);
+	hbox=creatNewBox(NEWHBOX,true,0);
+	makePrefsCheckNew(BEKIND,gettext("I have donated"),"useplugmenu",nagScreen,true,false);
+	gtk_container_add(GTK_CONTAINER(hbox),prefHBox1);
+	gtk_box_pack_start((GtkBox*)pagevbox,hbox,false,false,0);
 
 #ifndef _USEGTK3_
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_alignment_new(0,0,1,0),true,true,0);
