@@ -1461,4 +1461,21 @@ GdkPixbuf* createNewIcon(const char* stock,GtkWidget* widg)
 	return(icon);
 }
 
+#ifdef _USEGTK3_
+GtkWidget* createNewTable(int rows,int cols)
+#else
+GtkTable* createNewTable(int rows,int cols)
+#endif
+{
+#ifdef _USEGTK3_
+	GtkWidget	*widg=gtk_grid_new();
+
+	for(int j=0;j<rows;j++)
+		gtk_grid_insert_row((GtkGrid*)widg,0);
+	return(widg);
+//	return(gtk_grid_new());
+#else
+	return((GtkTable*)gtk_table_new(rows,cols,true));
+#endif
+}
 

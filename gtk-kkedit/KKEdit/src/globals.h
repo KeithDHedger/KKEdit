@@ -470,6 +470,11 @@ GtkToolItem* createNewToolItem(const char* stock,const char* label);
 GtkWidget* createNewStockButton(const char* stock,const char* label);
 GdkPixbuf* createNewIcon(const char* stock,GtkWidget* widg);
 GtkWidget* createNewStockMenuItem(const char* stock,const char* label);
+#ifdef _USEGTK3_
+GtkWidget* createNewTable(int rows,int cols);
+#else
+GtkTable* createNewTable(int rows,int cols);
+#endif
 
 #endif
 

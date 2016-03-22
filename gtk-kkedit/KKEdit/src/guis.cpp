@@ -1165,6 +1165,25 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 	ERRDATA return(widg);
 }
 
+GtkWidget*		prefHBox;
+GtkWidget*		prefHBox1;
+GtkWidget*		prefHBox2;
+GtkWidget*		pagevbox;
+
+
+void makePrefsDialNew(int widgnum,const char* label,const char* name,int value,int minvalue,int maxvalue)
+{
+	ERRDATA
+	GtkWidget*	item;
+
+	prefsIntWidgets[widgnum]=(GObject*)gtk_adjustment_new(value,minvalue,maxvalue,1,1,0);
+	item=gtk_spin_button_new((GtkAdjustment*)prefsIntWidgets[widgnum],1,0);
+	gtk_widget_set_name(item,name);
+	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext(label)));
+	gtk_box_pack_start((GtkBox*)prefHBox2,item,true,true,0);
+	gtk_box_pack_start((GtkBox*)pagevbox,prefHBox,false,false,0);
+	ERRDATA
+}
 void makePrefsDial(int widgnum,const char* label,const char* name,int value,int minvalue,int maxvalue,int posy)
 {
 #if 0
@@ -1187,32 +1206,89 @@ void makePrefsDial(int widgnum,const char* label,const char* name,int value,int 
 #endif
 }
 
+/*
+gtk_table_attach_defaults (GtkTable *table,
+                           GtkWidget *widget,
+                           guint left_attach,
+                           guint right_attach,
+                           guint top_attach,
+                           guint bottom_attach);
+*/
 void makePrefsCheck(int widgnum,const char* label,const char* name,bool onoff,int posx,int posy)
 {
-#if 0
+#if 1
 /////////////TODO////////////
 	ERRDATA
 	prefsWidgets[widgnum]=gtk_check_button_new_with_label(label);
 	gtk_widget_set_name(prefsWidgets[widgnum],name);
 	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[widgnum],onoff);
 	if(posx!=-1)
+#ifdef _USEGTK3_
+		gtk_grid_attach((GtkGrid*)table,prefsWidgets[widgnum],posx,posy,1,1);
+#else
 		gtk_table_attach_defaults(table,prefsWidgets[widgnum],posx,posx+1,posy,posy+1);
+#endif
 	ERRDATA
 #endif
 }
 
+void makePrefsCheckNew(int widgnum,const char* label,const char* name,bool onoff,bool left,bool autoadd)
+{
+	ERRDATA
+	prefsWidgets[widgnum]=gtk_check_button_new_with_label(label);
+	gtk_widget_set_name(prefsWidgets[widgnum],name);
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[widgnum],onoff);
+	if(left==true)
+		gtk_container_add(GTK_CONTAINER(prefHBox1),prefsWidgets[widgnum]);
+	else
+		gtk_container_add(GTK_CONTAINER(prefHBox2),prefsWidgets[widgnum]);
+	if(autoadd==true)
+		gtk_box_pack_start((GtkBox*)pagevbox,prefHBox,false,false,0);
+	ERRDATA
+}
+
+void makePrefBox(bool box1,bool box2)
+{
+	prefHBox=creatNewBox(NEWHBOX,true,0);
+#ifdef _USEGTK3_
+	prefHBox1=creatNewBox(NEWHBOX,true,0);
+	prefHBox2=creatNewBox(NEWHBOX,true,0);
+	if(box1==true)
+		gtk_widget_set_halign(prefHBox1,GTK_ALIGN_START);
+	if(box2==true)
+		gtk_widget_set_halign(prefHBox2,GTK_ALIGN_START);
+#else
+	if(box1==true)
+		prefHBox1=(GtkWidget*)gtk_alignment_new(0,0.5,0,0);
+	else
+		prefHBox1=creatNewBox(NEWHBOX,true,0);
+	if(box2==true)
+		prefHBox2=(GtkWidget*)gtk_alignment_new(0,0.5,0,0);
+	else
+		prefHBox2=creatNewBox(NEWHBOX,true,0);
+#endif
+	gtk_box_pack_start((GtkBox*)prefHBox,prefHBox1,true,true,4);
+	gtk_box_pack_start((GtkBox*)prefHBox,prefHBox2,true,true,4);	
+}
+
 VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 {
-#if 0
+#if 1
 /////////////////TODO/////////////
 	ERRDATA
 	GtkWidget*		vbox;
 	GtkWidget*		hbox;
-	GtkWidget*		pagevbox;
+//	GtkWidget*		pagevbox;
 	GtkWidget*		item;
 	GtkWidget*		label;
 	GtkNotebook*	prefsnotebook;
-//TODO//	GtkAlignment*	align;
+//TODO//
+//#if 1
+//#ifndef _USEGTK3_
+//	GtkAlignment	*align;
+//#else
+//	GtkWidget		*align;
+//#endif
 
 	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)prefswin,"Preferences");
@@ -1251,7 +1327,420 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	//pagevbox=gtk_vbox_new(false,0);
 	pagevbox=creatNewBox(NEWVBOX,false,0);
 //appearence 1
-	table=(GtkTable*)gtk_table_new(11,TABLECOLS,true);
+	makePrefBox(true,true);
+//	table=(GtkTable*)gtk_table_new(11,TABLECOLS,true);
+//	table=createNewTable(11,TABLECOLS);
+//indent
+//	makePrefsCheck(AUTOINDENT,gettext("Auto Indent Lines"),"indent",indent,0,0);
+	makePrefsCheckNew(AUTOINDENT,gettext("Auto Indent Lines"),"indent",indent,true,true);
+//	gtk_container_add(GTK_CONTAINER(prefHBox1),prefsWidgets[AUTOINDENT]);
+//	gtk_box_pack_start((GtkBox*)pagevbox,prefHBox,false,false,0);
+//linenumbers
+//	makePrefsCheck(SHOWNUMS,gettext("Show Line Numbers"),"show",lineNumbers,0,1);
+	makePrefBox(true,true);
+	makePrefsCheckNew(SHOWNUMS,gettext("Show Line Numbers"),"show",lineNumbers,true,true);
+//wraplines
+//	makePrefsCheck(WRAP,gettext("Wrap Lines"),"wrap",lineWrap,0,2);
+	makePrefBox(true,true);
+	makePrefsCheckNew(WRAP,gettext("Wrap Lines"),"wrap",lineWrap,true,true);
+//highlite
+	makePrefBox(true,true);
+	//makePrefsCheck(HIGHLIGHT,gettext("Highlight Current Line"),"high",highLight,0,3);
+	makePrefsCheckNew(HIGHLIGHT,gettext("Highlight Current Line"),"high",highLight,true,true);
+//no syntax colour
+	makePrefBox(true,true);
+//	makePrefsCheck(NOSYNTAX,gettext("No Syntax Highlighting"),"nosyntax",noSyntax,0,4);
+	makePrefsCheckNew(NOSYNTAX,gettext("No Syntax Highlighting"),"nosyntax",noSyntax,true,true);
+//single instance
+	makePrefBox(true,true);
+//	makePrefsCheck(USESINGLE,gettext("Use Single Instance"),"single",singleUse,0,5);
+	makePrefsCheckNew(USESINGLE,gettext("Use Single Instance"),"single",singleUse,true,true);
+
+//auto save session
+	makePrefBox(true,true);
+//	makePrefsCheck(AUTOSAVE,gettext("Auto Save/Restore Session"),"save",onExitSaveSession,0,6);
+	makePrefsCheckNew(AUTOSAVE,gettext("Auto Save/Restore Session"),"save",onExitSaveSession,true,false);
+	g_signal_connect(G_OBJECT(prefsWidgets[AUTOSAVE]),"toggled",G_CALLBACK(setPrefs),(void*)prefsWidgets[AUTOSAVE]);
+//auto restore bookmarks
+//	makePrefBox();
+	//makePrefsCheck(AUTOBM,gettext("Restore Session Bookmarks"),"marks",restoreBookmarks,1,6);
+	makePrefsCheckNew(AUTOBM,gettext("Restore Session Bookmarks"),"marks",restoreBookmarks,false,true);
+	gtk_widget_set_sensitive(prefsWidgets[AUTOBM],onExitSaveSession);
+
+//no duplicates
+	makePrefBox(true,true);
+//	makePrefsCheck(NODUPLICATE,gettext("Don't Open Duplicate File"),"duplicates",noDuplicates,0,7);
+	makePrefsCheckNew(NODUPLICATE,gettext("Don't Open Duplicate File"),"duplicates",noDuplicates,true,true);
+//turn off warnings
+	makePrefBox(true,true);
+//	makePrefsCheck(NOWARN,gettext("Don't Warn On File Change"),"warning",noWarnings,0,8);
+	makePrefsCheckNew(NOWARN,gettext("Don't Warn On File Change"),"warning",noWarnings,true,true);
+//do readlink
+	makePrefBox(true,true);
+//	makePrefsCheck(READLINK,gettext("Read Link Before Opening File"),"readlink",readLinkFirst,0,9);
+	makePrefsCheckNew(READLINK,gettext("Read Link Before Opening File"),"readlink",readLinkFirst,true,true);
+//autoshow completion
+	makePrefBox(true,true);
+//	makePrefsCheck(AUTOSHOW,gettext("Auto Show Completions"),"autocomp",autoShowComps,0,10);
+	makePrefsCheckNew(AUTOSHOW,gettext("Auto Show Completions"),"autocomp",autoShowComps,true,true);
+
+//	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
+	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("General Appearance")));
+//
+	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)prefsnotebook,true,true,0);
+
+//page2
+	//pagevbox=gtk_vbox_new(false,0);
+	pagevbox=creatNewBox(NEWVBOX,false,0);
+//text appearence
+//	makePrefBox();
+//	gtk_box_pack_start((GtkBox*)pagevbox,prefHBox,false,false,0);
+//	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext("Theme:")));
+//	gtk_box_pack_start((GtkBox*)prefHBox1,gtk_label_new(gettext("Theme:")),false,false,0);
+
+//	gtk_box_pack_start((GtkBox*)prefHBox2,gtk_label_new(gettext("xxxxxxxxxxxxxx")),false,false,0);
+//	gtk_container_add(GTK_CONTAINER(prefHBox2),gtk_label_new(gettext("xxxxxxxxxxxxxx")));
+//	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext("Theme:")));
+	
+//	gtk_container_add(GTK_CONTAINER(prefHBox2),gtk_label_new(gettext("xxxxxxxxxxxxxx:")));
+//printf("made box\n");
+#if 1
+//	gtk_container_add(GTK_CONTAINER(secondbox),gtk_label_new(gettext("Theme:")));
+//TODO//
+//	table=(GtkTable*)gtk_table_new(5,TABLECOLS,true);
+//	table=createNewTable(5,TABLECOLS);
+//#ifdef _USEGTK3_
+//	align=creatNewBox(NEWHBOX,true,0);
+//#else
+//	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+//#endif
+
+//tabwidth
+	makePrefBox(true,false);
+	makePrefsDialNew(TABWIDTH,gettext("Tab width:"),"tabs",tabWidth,2,64);
+//
+////style
+//#ifdef _USEGTK3_
+//	align=creatNewBox(NEWHBOX,true,0);
+//#else
+//	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+//#endif
+	int cnt=0;
+	int foundname=0;
+	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(schemeManager);
+	makePrefBox(true,false);
+	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext("Theme:")));
+	item=gtk_combo_box_text_new();
+	gtk_widget_set_name(item,"style");
+	g_signal_connect(G_OBJECT(item),"changed",G_CALLBACK(setPrefs),(void*)item);
+	
+	while(ids[cnt]!=NULL)
+		{
+			gtk_combo_box_text_append_text((GtkComboBoxText*)item,ids[cnt]);
+			if(strcmp(ids[cnt],styleName)==0)
+				foundname=cnt;
+			cnt++;
+		}
+	gtk_combo_box_set_active((GtkComboBox*)item,foundname);
+	gtk_box_pack_start((GtkBox*)prefHBox2,item,true,true,0);
+	gtk_box_pack_start((GtkBox*)pagevbox,prefHBox,false,false,0);
+
+//
+//#ifdef _USEGTK3_
+//	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Theme:")));
+//	gtk_grid_attach ((GtkGrid *)table,align,0,1,1,2);
+//	gtk_widget_set_halign(align,GTK_ALIGN_START);
+//#else
+//	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Theme:")));
+//	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,1,2);
+//#endif
+//
+//	item=gtk_combo_box_text_new();
+//	gtk_widget_set_name(item,"style");
+//	g_signal_connect(G_OBJECT(item),"changed",G_CALLBACK(setPrefs),(void*)item);
+//	
+//	while(ids[cnt]!=NULL)
+//	{
+//		gtk_combo_box_text_append_text((GtkComboBoxText*)item,ids[cnt]);
+//		if(strcmp(ids[cnt],styleName)==0)
+//			foundname=cnt;
+//		cnt++;
+//	}
+//	gtk_combo_box_set_active((GtkComboBox*)item,foundname);
+//
+//#ifdef _USEGTK3_
+//	gtk_grid_attach ((GtkGrid *)table,item,1,10,4,8);
+////	gtk_widget_set_halign(item,GTK_ALIGN_END);
+//#else
+//	gtk_table_attach_defaults(table,item,1,2,1,2);
+//#endif
+//#endif
+////font button
+//#ifndef _USEGTK3_
+//	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+//	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Font:")));
+//	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,2,3);
+//#endif
+//
+	makePrefBox(true,false);
+	fontButton=gtk_font_button_new_with_font(fontAndSize);
+	gtk_widget_set_name(fontButton,"fontbutton");
+	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext("Font:")));
+	gtk_box_pack_start((GtkBox*)prefHBox2,fontButton,false,true,0);
+	gtk_box_pack_start((GtkBox*)pagevbox,prefHBox,false,false,0);
+
+//#ifndef _USEGTK3_
+//	gtk_table_attach_defaults(table,fontButton,1,2,2,3);
+//#endif
+//
+////bm highlight colour
+	makePrefBox(true,false);
+	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext("Bookmark Highlight Colour:")));
+
+	GdkColor color;
+	gdk_color_parse ((const gchar *)highlightColour,&color);
+	bmHighlightBox=gtk_color_button_new_with_color(&color);
+	gtk_box_pack_start((GtkBox*)prefHBox2,bmHighlightBox,false,true,0);
+	gtk_box_pack_start((GtkBox*)pagevbox,prefHBox,false,false,0);
+
+//#ifndef _USEGTK3_
+//	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+//	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Bookmark Highlight Colour:")));
+//	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,3,4);
+//#endif
+//
+//	GdkColor color;
+//	gdk_color_parse ((const gchar *)highlightColour,&color);
+//	bmHighlightBox=gtk_color_button_new_with_color(&color);
+//
+//#ifndef _USEGTK3_
+//	gtk_table_attach_defaults(table,bmHighlightBox,1,2,3,4);
+//#endif
+//
+////autoshow completion
+//	makePrefsDial(COMPLETIONSIZE,gettext("Completion Minimum Word Size:"),"minautochars",autoShowMinChars,2,20,4);
+//
+//	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
+//
+////sort functions
+//#ifndef _USEGTK3_
+//	align=(GtkAlignment*)gtk_alignment_new(0.5,1,0,0);
+//#endif
+//
+//	funcListDrop=gtk_combo_box_text_new();
+//	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and alphabetically"));
+//	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and file position"));
+//	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by file position"));
+//	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu alphabetically"));
+//	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu in categorised format"));
+//
+//	gtk_combo_box_set_active((GtkComboBox*)funcListDrop,listFunction);
+//#ifndef _USEGTK3_
+//	gtk_container_add(GTK_CONTAINER(align),(GtkWidget*)funcListDrop);
+//	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,16);
+//#endif
+//
+//	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("Text Style")));
+//
+////show keybindings dialog
+//#ifndef _USEGTK3_
+//	align=(GtkAlignment*)gtk_alignment_new(0.5,1,0,0);
+//#endif
+//	item=gtk_button_new_with_label(gettext("Customize Keyboard Shortcuts"));
+//	gtk_widget_set_name(item,"makekeys");
+//	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
+//#ifndef _USEGTK3_
+//	gtk_container_add(GTK_CONTAINER(align),item);
+//	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,0);
+//#endif
+////end style
+	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("Text Style")));
+//	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)prefsnotebook,true,true,0);
+
+//page 3
+#if 0
+	//pagevbox=gtk_vbox_new(false,0);
+	pagevbox=creatNewBox(NEWVBOX,false,0);
+//admin
+//	table=(GtkTable*)gtk_table_new(10,TABLECOLS,true);
+	table=createNewTable(10,TABLECOLS);
+#ifndef _USEGTK3_
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+#endif
+
+//function search depth
+	makePrefsDial(MAXFUNCDEPTH,gettext("Tag File Search Depth:"),"depth",depth,0,20,0);
+
+//terminalcommand
+#ifndef _USEGTK3_
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Terminal Command:")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,1,2);
+#endif
+
+	terminalBox=gtk_entry_new();
+	gtk_entry_set_text((GtkEntry*)terminalBox,terminalCommand);
+#ifndef _USEGTK3_
+	gtk_table_attach_defaults(table,terminalBox,1,2,1,2);
+#endif
+
+//root command
+#ifndef _USEGTK3_
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Run As Root Command:")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,2,3);
+#endif
+
+	rootCommandBox=gtk_entry_new();
+	if(rootCommand!=NULL)
+		gtk_entry_set_text((GtkEntry*)rootCommandBox,rootCommand);
+#ifndef _USEGTK3_
+	gtk_table_attach_defaults(table,rootCommandBox,1,2,2,3);
+#endif
+
+//set default browser
+#ifndef _USEGTK3_
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Default Browser:")));
+	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,3,4);
+#endif
+
+	defaultBrowserBox=gtk_entry_new();
+	gtk_widget_set_name(defaultBrowserBox,"defaultbrowser");
+	if(browserCommand!=NULL)
+		gtk_entry_set_text((GtkEntry*)defaultBrowserBox,browserCommand);
+#ifndef _USEGTK3_
+	gtk_table_attach_defaults(table,defaultBrowserBox,1,2,3,4);
+#endif
+
+//find replace history max
+	makePrefsDial(MAXHISTORY,gettext("Max Find/Replace History:"),"maxfrhistory",maxFRHistory,0,MAXTEXTWIDTH,4);
+//max tab label width
+	makePrefsDial(MAXTABCHARS,gettext("Max Characters In Tab:"),"maxtabchars",maxTabChars,5,MAXTEXTWIDTH,5);
+//max function strings
+	makePrefsDial(MENUWIDTH,gettext("Max Characters In Function Defs:"),"maxmenuchars",maxFuncDefs,5,MAXTEXTWIDTH,6);
+//max bookmark strings
+	makePrefsDial(MAXBMWIDTH,gettext("Max Characters In Bookmarks:"),"maxbmchars",maxBMChars,5,MAXTEXTWIDTH,7);
+
+//check for update
+	makePrefsCheck(UPDATECHECK,gettext("Check For Updates"),"updatecheck",autoCheck,0,8);
+//use global plug menu
+	makePrefsCheck(GLOBALPLUGMENU,gettext("Use Global Plugins Menu ( Requires Restart )"),"useplugmenu",useGlobalPlugMenu,0,9);
+
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
+	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("Administration")));
+#endif
+//end admin
+#endif
+//nag
+	label=gtk_label_new(gettext("<b>Be Kind To Poor Programmers</b>"));
+	gtk_label_set_use_markup((GtkLabel*)label,true);
+	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
+	//hbox=gtk_hbox_new(true,0);
+	hbox=creatNewBox(NEWHBOX,true,0);
+
+	makePrefsCheck(BEKIND,gettext("I have donated"),"useplugmenu",nagScreen,-1,-1);
+
+#ifndef _USEGTK3_
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_alignment_new(0,0,1,0),true,true,0);
+#endif
+	gtk_box_pack_start(GTK_BOX(hbox),prefsWidgets[BEKIND],true,true,0);
+#ifndef _USEGTK3_
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_alignment_new(0,0,1,0),true,true,0);
+#endif
+	gtk_widget_show_all(hbox);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_label_new(gettext("I have really donated some some money to the author.\nMy conscience is clear and my Karma is squeaky clean :)")),false,false,0);
+
+//buttons
+#ifdef _USEGTK3_
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),true,true,0);
+#else
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
+#endif
+
+	//hbox=gtk_hbox_new(true,4);
+	hbox=creatNewBox(NEWHBOX,true,4);
+	//item=gtk_button_new_from_stock(GTK_STOCK_APPLY);
+	item=createNewStockButton(GTK_STOCK_APPLY,GTK_STOCK_APPLY);
+
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
+	gtk_widget_set_name(item,"apply");
+	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setPrefs),(void*)item);	
+
+	//item=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+	item=createNewStockButton(GTK_STOCK_CANCEL,GTK_STOCK_CANCEL);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
+	gtk_widget_set_name(item,"cancel");
+	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setPrefs),(void*)item);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,2);
+
+//show it
+	gtk_container_add(GTK_CONTAINER(prefswin),(GtkWidget*)vbox);
+	gtk_widget_show_all(prefswin);
+	ERRDATA
+#endif
+}
+VISIBLE void xxxxdoPrefs(GtkWidget* widget,gpointer data)
+{
+#if 0
+/////////////////TODO/////////////
+	ERRDATA
+	GtkWidget*		vbox;
+	GtkWidget*		hbox;
+	GtkWidget*		pagevbox;
+	GtkWidget*		item;
+	GtkWidget*		label;
+	GtkNotebook*	prefsnotebook;
+//TODO//
+#if 1
+#ifndef _USEGTK3_
+	GtkAlignment	*align;
+#else
+	GtkWidget		*align;
+#endif
+
+	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_title((GtkWindow*)prefswin,"Preferences");
+	//vbox=gtk_vbox_new(false,8);
+	vbox=creatNewBox(NEWVBOX,false,8);
+	//hbox=gtk_hbox_new(false,8);
+	hbox=creatNewBox(NEWHBOX,false,8);
+
+//toolbar dnd
+	//iconViewBox=gtk_hbox_new(false,0);
+	//fromHBox=gtk_hbox_new(false,0);
+	iconViewBox=creatNewBox(NEWHBOX,false,0);
+	fromHBox=creatNewBox(NEWHBOX,false,0);
+
+	label=gtk_label_new(gettext("<b>Customize Tool Bar</b>"));
+	gtk_label_set_use_markup((GtkLabel*)label,true);
+	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
+
+	gtk_box_pack_start(GTK_BOX(vbox),iconViewBox,true,false,2);
+	gtk_box_pack_start(GTK_BOX(vbox),fromHBox,true,false,2);
+
+	populateDnD();
+	doIconView();
+
+//end customize
+#ifdef _USEGTK3_
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),true,true,0);
+#else
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
+#endif
+
+	prefsnotebook=(GtkNotebook*)gtk_notebook_new();
+
+//pages
+//page1
+//	makePrefBox();
+	//pagevbox=gtk_vbox_new(false,0);
+	pagevbox=creatNewBox(NEWVBOX,false,0);
+//appearence 1
+//	table=(GtkTable*)gtk_table_new(11,TABLECOLS,true);
+	table=createNewTable(11,TABLECOLS);
 //indent
 	makePrefsCheck(AUTOINDENT,gettext("Auto Indent Lines"),"indent",indent,0,0);
 //linenumbers
@@ -1290,21 +1779,50 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	//pagevbox=gtk_vbox_new(false,0);
 	pagevbox=creatNewBox(NEWVBOX,false,0);
 //text appearence
+printf("making boxes...\n");
+	makePrefBox();
+	printf("got boxes\n");
+	gtk_box_pack_start((GtkBox*)pagevbox,prefHBox,false,false,0);
+//	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext("Theme:")));
+//	gtk_box_pack_start((GtkBox*)prefHBox1,gtk_label_new(gettext("Theme:")),false,false,0);
+
+//	gtk_box_pack_start((GtkBox*)prefHBox2,gtk_label_new(gettext("xxxxxxxxxxxxxx")),false,false,0);
+//	gtk_container_add(GTK_CONTAINER(prefHBox2),gtk_label_new(gettext("xxxxxxxxxxxxxx")));
+	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext("Theme:")));
+	gtk_container_add(GTK_CONTAINER(prefHBox2),gtk_label_new(gettext("xxxxxxxxxxxxxx:")));
+printf("made box\n");
+#if 0
+	gtk_container_add(GTK_CONTAINER(secondbox),gtk_label_new(gettext("Theme:")));
 //TODO//
 //	table=(GtkTable*)gtk_table_new(5,TABLECOLS,true);
-//	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+	table=createNewTable(5,TABLECOLS);
+#ifdef _USEGTK3_
+	align=creatNewBox(NEWHBOX,true,0);
+#else
+	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+#endif
 
 //tabwidth
 	makePrefsDial(TABWIDTH,gettext("Tab width:"),"tabs",tabWidth,2,64,0);
 
 //style
+#ifdef _USEGTK3_
+	align=creatNewBox(NEWHBOX,true,0);
+#else
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+#endif
 	int cnt=0;
 	int foundname=0;
 	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(schemeManager);
 
+#ifdef _USEGTK3_
+	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Theme:")));
+	gtk_grid_attach ((GtkGrid *)table,align,0,1,1,2);
+	gtk_widget_set_halign(align,GTK_ALIGN_START);
+#else
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Theme:")));
 	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,1,2);
+#endif
 
 	item=gtk_combo_box_text_new();
 	gtk_widget_set_name(item,"style");
@@ -1318,27 +1836,41 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 		cnt++;
 	}
 	gtk_combo_box_set_active((GtkComboBox*)item,foundname);
-	gtk_table_attach_defaults(table,item,1,2,1,2);
 
+#ifdef _USEGTK3_
+	gtk_grid_attach ((GtkGrid *)table,item,1,10,4,8);
+//	gtk_widget_set_halign(item,GTK_ALIGN_END);
+#else
+	gtk_table_attach_defaults(table,item,1,2,1,2);
+#endif
+#endif
 //font button
+#ifndef _USEGTK3_
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Font:")));
 	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,2,3);
+#endif
 
 	fontButton=gtk_font_button_new_with_font(fontAndSize);
 	gtk_widget_set_name(fontButton,"fontbutton");
+#ifndef _USEGTK3_
 	gtk_table_attach_defaults(table,fontButton,1,2,2,3);
+#endif
 
 //bm highlight colour
+#ifndef _USEGTK3_
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Bookmark Highlight Colour:")));
 	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,3,4);
+#endif
 
 	GdkColor color;
 	gdk_color_parse ((const gchar *)highlightColour,&color);
 	bmHighlightBox=gtk_color_button_new_with_color(&color);
 
+#ifndef _USEGTK3_
 	gtk_table_attach_defaults(table,bmHighlightBox,1,2,3,4);
+#endif
 
 //autoshow completion
 	makePrefsDial(COMPLETIONSIZE,gettext("Completion Minimum Word Size:"),"minautochars",autoShowMinChars,2,20,4);
@@ -1346,7 +1878,9 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)table,false,false,0);
 
 //sort functions
+#ifndef _USEGTK3_
 	align=(GtkAlignment*)gtk_alignment_new(0.5,1,0,0);
+#endif
 
 	funcListDrop=gtk_combo_box_text_new();
 	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and alphabetically"));
@@ -1356,59 +1890,80 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu in categorised format"));
 
 	gtk_combo_box_set_active((GtkComboBox*)funcListDrop,listFunction);
+#ifndef _USEGTK3_
 	gtk_container_add(GTK_CONTAINER(align),(GtkWidget*)funcListDrop);
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,16);
+#endif
 
 	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("Text Style")));
 
 //show keybindings dialog
+#ifndef _USEGTK3_
 	align=(GtkAlignment*)gtk_alignment_new(0.5,1,0,0);
+#endif
 	item=gtk_button_new_with_label(gettext("Customize Keyboard Shortcuts"));
 	gtk_widget_set_name(item,"makekeys");
 	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
+#ifndef _USEGTK3_
 	gtk_container_add(GTK_CONTAINER(align),item);
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)align,false,false,0);
+#endif
 //end style
 
 //page 3
 	//pagevbox=gtk_vbox_new(false,0);
 	pagevbox=creatNewBox(NEWVBOX,false,0);
 //admin
-	table=(GtkTable*)gtk_table_new(10,TABLECOLS,true);
+//	table=(GtkTable*)gtk_table_new(10,TABLECOLS,true);
+	table=createNewTable(10,TABLECOLS);
+#ifndef _USEGTK3_
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
+#endif
 
 //function search depth
 	makePrefsDial(MAXFUNCDEPTH,gettext("Tag File Search Depth:"),"depth",depth,0,20,0);
 
 //terminalcommand
+#ifndef _USEGTK3_
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Terminal Command:")));
 	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,1,2);
+#endif
 
 	terminalBox=gtk_entry_new();
 	gtk_entry_set_text((GtkEntry*)terminalBox,terminalCommand);
+#ifndef _USEGTK3_
 	gtk_table_attach_defaults(table,terminalBox,1,2,1,2);
+#endif
 
 //root command
+#ifndef _USEGTK3_
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Run As Root Command:")));
 	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,2,3);
+#endif
 
 	rootCommandBox=gtk_entry_new();
 	if(rootCommand!=NULL)
 		gtk_entry_set_text((GtkEntry*)rootCommandBox,rootCommand);
+#ifndef _USEGTK3_
 	gtk_table_attach_defaults(table,rootCommandBox,1,2,2,3);
+#endif
 
 //set default browser
+#ifndef _USEGTK3_
 	align=(GtkAlignment*)gtk_alignment_new(0,0.5,0,0);
 	gtk_container_add(GTK_CONTAINER(align),gtk_label_new(gettext("Default Browser:")));
 	gtk_table_attach_defaults(table,(GtkWidget*)align,0,1,3,4);
+#endif
 
 	defaultBrowserBox=gtk_entry_new();
 	gtk_widget_set_name(defaultBrowserBox,"defaultbrowser");
 	if(browserCommand!=NULL)
 		gtk_entry_set_text((GtkEntry*)defaultBrowserBox,browserCommand);
+#ifndef _USEGTK3_
 	gtk_table_attach_defaults(table,defaultBrowserBox,1,2,3,4);
+#endif
 
 //find replace history max
 	makePrefsDial(MAXHISTORY,gettext("Max Find/Replace History:"),"maxfrhistory",maxFRHistory,0,MAXTEXTWIDTH,4);
@@ -1428,7 +1983,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("Administration")));
 
 //end admin
-
+#endif
 //nag
 	label=gtk_label_new(gettext("<b>Be Kind To Poor Programmers</b>"));
 	gtk_label_set_use_markup((GtkLabel*)label,true);
@@ -1438,9 +1993,13 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 
 	makePrefsCheck(BEKIND,gettext("I have donated"),"useplugmenu",nagScreen,-1,-1);
 
+#ifndef _USEGTK3_
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_alignment_new(0,0,1,0),true,true,0);
+#endif
 	gtk_box_pack_start(GTK_BOX(hbox),prefsWidgets[BEKIND],true,true,0);
+#ifndef _USEGTK3_
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_alignment_new(0,0,1,0),true,true,0);
+#endif
 	gtk_widget_show_all(hbox);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 
