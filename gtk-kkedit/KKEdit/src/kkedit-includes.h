@@ -61,13 +61,13 @@
 #define GTK_STOCK_HOME "go-home"
 #define GTK_STOCK_GO_UP "go-up"
 
-#define GTK_STOCK_YES gettext("_Yes")
-#define GTK_STOCK_NO gettext("_No")
-#define GTK_STOCK_CANCEL gettext("_Cancel")
-#define GTK_STOCK_SELECT_COLOR gettext("Se_lect Colour")
-#define GTK_STOCK_APPLY gettext("_Apply")
-#define GTK_STOCK_EDIT gettext("_Edit")
-#define GTK_STOCK_OK gettext("_OK")
+#define GTK_STOCK_YES gettext("Yes")
+#define GTK_STOCK_NO gettext("No")
+#define GTK_STOCK_CANCEL gettext("Cancel")
+#define GTK_STOCK_SELECT_COLOR gettext("Select Colour")
+#define GTK_STOCK_APPLY gettext("Apply")
+#define GTK_STOCK_EDIT gettext("Edit")
+#define GTK_STOCK_OK gettext("OK")
 
 #endif
 
