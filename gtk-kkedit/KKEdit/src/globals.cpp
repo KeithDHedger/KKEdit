@@ -1415,7 +1415,7 @@ GtkWidget* createNewStockMenuItem(const char* stock,const char* label)
 	GtkWidget*	item;
 
 #ifdef _USEGTK3_
-	item=gtk_menu_item_new_with_label(label);
+	item=gtk_menu_item_new_with_mnemonic(label);
 #else
 	item=gtk_image_menu_item_new_from_stock(stock,NULL);
 #endif

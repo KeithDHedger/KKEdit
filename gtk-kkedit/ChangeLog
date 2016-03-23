@@ -1,4 +1,5 @@
 0.3.0
+Fixed dNd for toolitems in prefs.
 Done prefs.
 Moved prefs to either ~/.KKEdit or ~/.KKEdit3 depending on build.
 Done doc viewer.

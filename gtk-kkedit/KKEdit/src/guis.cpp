@@ -118,8 +118,9 @@ void setUpToolBar(void)
 {
 	ERRDATA
 	GtkToolItem	*toolbutton;
-	GtkWidget	*image=NULL;
-
+#ifdef _USEGTK3_
+	GtkWidget	*image;
+#endif
 //#ifndef _USEGTK3_
 	GtkRecentFilter*	filter;
 
@@ -139,7 +140,6 @@ void setUpToolBar(void)
 				{
 					case 'N':
 //new
-						//newButton=gtk_tool_button_new_from_stock(GTK_STOCK_NEW);
 						newButton=createNewToolItem(GTK_STOCK_NEW,gettext("New"));
 						gtk_toolbar_insert(toolBar,newButton,-1);
 						g_signal_connect(G_OBJECT(newButton),"clicked",G_CALLBACK(newFile),NULL);
@@ -148,19 +148,14 @@ void setUpToolBar(void)
 					case 'O':
 //open+recent
 #ifdef _USEGTK3_
-						//openButton=gtk_menu_tool_button_new_from_stock(GTK_STOCK_OPEN);
-					//	openButton=createNewToolItem(GTK_STOCK_OPEN,GTK_STOCK_OPEN3);
 						image=gtk_image_new_from_icon_name(GTK_STOCK_OPEN,GTK_ICON_SIZE_LARGE_TOOLBAR);
-
 						openButton=gtk_menu_tool_button_new (image,GTK_STOCK_OPEN3);
 						gtk_menu_tool_button_set_menu((GtkMenuToolButton*)openButton,recent);
 						gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(openButton),gettext("Open Recent File"));
 						gtk_toolbar_insert(toolBar,openButton,-1);
 						
 #else
-						//openButton=createNewToolItem(GTK_STOCK_OPEN,GTK_STOCK_OPEN);
 						openButton=gtk_menu_tool_button_new_from_stock(GTK_STOCK_OPEN);
-//TODO//
 						gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(openButton),recent);
 						gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(openButton),gettext("Open Recent File"));
 						g_signal_connect(G_OBJECT(openButton),"clicked",G_CALLBACK(doOpenFile),NULL);
@@ -171,7 +166,6 @@ void setUpToolBar(void)
 						break;
 					case 'S':
 //save
-						//saveButton=gtk_tool_button_new_from_stock(GTK_STOCK_SAVE);
 						saveButton=createNewToolItem(GTK_STOCK_SAVE,gettext("Save"));
 						g_signal_connect(G_OBJECT(saveButton),"clicked",G_CALLBACK(saveFile),NULL);
 						gtk_toolbar_insert(toolBar,saveButton,-1);
@@ -182,7 +176,6 @@ void setUpToolBar(void)
 						break;
 					case 'X':
 //cut
-						//cutButton=gtk_tool_button_new_from_stock(GTK_STOCK_CUT);
 						cutButton=createNewToolItem(GTK_STOCK_CUT,gettext("Cut"));
 						g_signal_connect(G_OBJECT(cutButton),"clicked",G_CALLBACK(cutToClip),NULL);
 						gtk_toolbar_insert(toolBar,cutButton,-1);
@@ -190,7 +183,6 @@ void setUpToolBar(void)
 						break;
 					case 'C':
 //copy
-						//copyButton=gtk_tool_button_new_from_stock(GTK_STOCK_COPY);
 						copyButton=createNewToolItem(GTK_STOCK_COPY,gettext("Copy"));
 						gtk_toolbar_insert(toolBar,copyButton,-1);
 						g_signal_connect(G_OBJECT(copyButton),"clicked",G_CALLBACK(copyToClip),NULL);
@@ -198,54 +190,42 @@ void setUpToolBar(void)
 						break;
 					case 'P':
 //paste
-						//pasteButton=gtk_tool_button_new_from_stock(GTK_STOCK_PASTE);
 						pasteButton=createNewToolItem(GTK_STOCK_PASTE,gettext("Paste"));
-
 						gtk_toolbar_insert(toolBar,pasteButton,-1);
 						g_signal_connect(G_OBJECT(pasteButton),"clicked",G_CALLBACK(pasteFromClip),NULL);
 						gtk_widget_set_tooltip_text((GtkWidget*)pasteButton,gettext("Paste"));
 						break;
 					case 'U':
 //undo
-						//undoButton=gtk_tool_button_new_from_stock(GTK_STOCK_UNDO);
 						undoButton=createNewToolItem(GTK_STOCK_UNDO,gettext("Undo"));
-
 						gtk_toolbar_insert(toolBar,undoButton,-1);
 						g_signal_connect(G_OBJECT(undoButton),"clicked",G_CALLBACK(undo),NULL);
 						gtk_widget_set_tooltip_text((GtkWidget*)undoButton,gettext("Undo"));
 						break;
 					case 'R':
 //redo
-						//redoButton=gtk_tool_button_new_from_stock(GTK_STOCK_REDO);
 						redoButton=createNewToolItem(GTK_STOCK_REDO,gettext("Redo"));
-
 						gtk_toolbar_insert(toolBar,redoButton,-1);
 						g_signal_connect(G_OBJECT(redoButton),"clicked",G_CALLBACK(redo),NULL);
 						gtk_widget_set_tooltip_text((GtkWidget*)redoButton,gettext("Redo"));
 						break;
 					case 'F':
 //find
-						//findButton=gtk_tool_button_new_from_stock(GTK_STOCK_FIND);
 						findButton=createNewToolItem(GTK_STOCK_FIND,gettext("Find"));
-
 						gtk_toolbar_insert(toolBar,findButton,-1);
 						g_signal_connect(G_OBJECT(findButton),"clicked",G_CALLBACK(find),NULL);
 						gtk_widget_set_tooltip_text((GtkWidget*)findButton,gettext("Find"));
 						break;
 					case 'G':
 //navigation
-						//gotoDefButton=gtk_tool_button_new_from_stock(GTK_STOCK_DIALOG_QUESTION);
 						gotoDefButton=createNewToolItem(GTK_STOCK_DIALOG_QUESTION,gettext("Go To Definition"));
-
 						gtk_toolbar_insert(toolBar,gotoDefButton,-1);
 						g_signal_connect(G_OBJECT(gotoDefButton),"clicked",G_CALLBACK(goToDefinition),NULL);
 						gtk_widget_set_tooltip_text((GtkWidget*)gotoDefButton,gettext("Go To Definition"));
 						break;
 //go back
 					case 'B':
-						//backButton=gtk_tool_button_new_from_stock(GTK_STOCK_GO_BACK);
 						backButton=createNewToolItem(GTK_STOCK_GO_BACK,gettext("Back"));
-
 						gtk_toolbar_insert(toolBar,backButton,-1);
 						g_signal_connect(G_OBJECT(backButton),"clicked",G_CALLBACK(goBack),NULL);
 						gtk_widget_set_tooltip_text((GtkWidget*)backButton,gettext("Go Back"));
@@ -517,7 +497,6 @@ void buildTools(void)
 	ERRDATA
 	GtkWidget*		menuitem;
 	GtkWidget*		menu;
-	GtkWidget*		image;
 	GList*			ptr;
 	bool			gotglobal=false;
 	int				keyflags=0;
@@ -919,15 +898,6 @@ char* makeToolBarList(void)
 			gtk_tree_model_get((GtkTreeModel *)listStore,&iter,TEXT_COLUMN,&str_data,-1);
 			g_string_append_c(str,str_data[0]);
 			valid=gtk_tree_model_iter_next((GtkTreeModel *)listStore,&iter);
-// 			str_data=(gchar*)12345;
-//			printf("XXXXXXXXXX\n");
-//			try{
-//free(str_data);
-// ERRDATA debugFree(&str_data);  //int oops = *pointer;
-//}/catch(...){
-//			printf("zzzzzzzzzzzzzzz\n");
-//    printf("No problem ;-)\n");
-//}
 			ERRDATA debugFree(&str_data);
 		}
 	ERRDATA return(g_string_free(str,false));
@@ -938,14 +908,13 @@ bool clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 {
 	ERRDATA
 	GtkTreePath*	path=NULL;
-	GdkModifierType	mask;
 	GtkTreeIter		iter;
 	int				button;
+	int				state=event->button.state;
 
-	gdk_window_get_pointer(NULL,NULL,NULL,&mask);
 	path=gtk_icon_view_get_path_at_pos((GtkIconView *)widget,event->button.x,event->button.y);
 
-	if ((GDK_CONTROL_MASK & mask) && (path!=NULL))
+	if ((GDK_CONTROL_MASK & state) && (path!=NULL))
 		{
 			gtk_tree_model_get_iter((GtkTreeModel*)listStore,&iter,path);
 			gtk_tree_model_get((GtkTreeModel*)listStore,&iter,BUTTON_NUM,&button,-1);
@@ -969,8 +938,7 @@ void doIconView(void)
 	populateStore();
 
 	gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (iconView),GTK_SELECTION_SINGLE);
-//	gtk_icon_view_set_orientation (GTK_ICON_VIEW (iconView),GTK_ORIENTATION_HORIZONTAL);
-	gtk_icon_view_set_item_orientation (GTK_ICON_VIEW (iconView),GTK_ORIENTATION_HORIZONTAL);
+	gtk_icon_view_set_item_orientation(GTK_ICON_VIEW (iconView),GTK_ORIENTATION_HORIZONTAL);
 	gtk_icon_view_set_columns (GTK_ICON_VIEW(iconView),24);
 	gtk_icon_view_set_reorderable(GTK_ICON_VIEW(iconView),TRUE);
 
@@ -1114,17 +1082,11 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 	switch(setimage)
 		{
 			case STOCKMENU:
-				//widg=gtk_image_menu_item_new_from_stock(stocklabel,NULL);
-				//widg=createNewImageMenuItem(stocklabel,menulabel);
 				widg=createNewStockMenuItem(stocklabel,menulabel);
 				break;
 
 			case IMAGEMENU:
-				//widg=gtk_image_menu_item_new_with_label(menulabel);
 				widg=createNewImageMenuItem(stocklabel,menulabel);
-
-				//image=gtk_image_new_from_stock(stocklabel,GTK_ICON_SIZE_MENU);
-				//gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
 				break;
 
 			case PIXMAPMENU:
@@ -1132,8 +1094,6 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 				widg=gtk_menu_item_new_with_label(menulabel);
 #else
 				widg=gtk_image_menu_item_new_with_label(menulabel);
-				//widg=createNewImageMenuItem(NULL,menulabel);
-
 				image=gtk_image_new_from_file(stocklabel);
 				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
 #endif
@@ -1141,13 +1101,11 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 
 			case CHECKMENU:
 				widg=gtk_check_menu_item_new_with_label(stocklabel);
-				//widg=createNewImageMenuItem(NULL,stocklabel);
 				gtk_check_menu_item_set_active((GtkCheckMenuItem*)widg,toggle);
 				break;
 
 			default:
 				widg=createNewImageMenuItem(NULL,stocklabel);
-//				widg=gtk_menu_item_new_with_label(stocklabel);
 		}
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(parent),widg);
@@ -1514,13 +1472,6 @@ void buildMainGui(void)
 	GtkWidget*		menurecent;
 	GtkWidget*		plugsubmenu=NULL;
 
-//	mainWindowVBox=gtk_vbox_new(false,0);
-//	mainTopUserVBox=gtk_vbox_new(false,0);
-//	mainLeftUserVBox=gtk_vbox_new(false,0);
-//	mainNotebookVBox=gtk_vbox_new(false,0);
-//	mainRightUserVBox=gtk_vbox_new(false,0);
-//	mainBottomUserVBox=gtk_vbox_new(false,0);
-
 	mainWindowVBox=creatNewBox(NEWVBOX,false,0);
 	mainTopUserVBox=creatNewBox(NEWVBOX,false,0);
 	mainLeftUserVBox=creatNewBox(NEWVBOX,false,0);
@@ -1687,12 +1638,7 @@ void buildMainGui(void)
 //sort
 	sortTabsMenu=makeMenuItem(GTK_STOCK_SORT_ASCENDING,menu,(void*)sortTabs,0,SORTTABSMENUNAME,IMAGEMENU,gettext("Sort Tabs"),NULL,false);
 //jump to tab
-	GtkWidget*	image;
-	//viewTabMenu=gtk_image_menu_item_new_with_label(gettext("Select Tab"));
 	viewTabMenu=createNewImageMenuItem(GTK_STOCK_EDIT,gettext("Select Tab"));
-
-	//image=gtk_image_new_from_stock(GTK_STOCK_EDIT,GTK_ICON_SIZE_MENU);
-	//gtk_image_menu_item_set_image((GtkImageMenuItem *)viewTabMenu,image);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),viewTabMenu);
 	rebuildTabsMenu();
 
