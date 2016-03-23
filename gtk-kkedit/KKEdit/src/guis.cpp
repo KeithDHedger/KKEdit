@@ -1491,20 +1491,34 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	gtk_label_set_use_markup((GtkLabel*)label,true);
 	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
 
+//	GtkWidget *hbox1=creatNewBox(NEWHBOX,true,0);
+	prefsWidgets[BEKIND]=gtk_check_button_new_with_label(gettext("I have donated"));
+	gtk_widget_set_name(prefsWidgets[BEKIND],"useplugmenu");
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[BEKIND],nagScreen);
+/*
 	hbox=creatNewBox(NEWHBOX,true,0);
-	makePrefsCheckNew(BEKIND,gettext("I have donated"),"useplugmenu",nagScreen,true,false);
-	gtk_container_add(GTK_CONTAINER(hbox),prefHBox1);
-	gtk_box_pack_start((GtkBox*)pagevbox,hbox,false,false,0);
+	gtk_box_pack_start(GTK_BOX(hbox),(GtkWidget*)funcListDrop,false,false,0);
+	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)hbox,false,false,8);
 
-#ifndef _USEGTK3_
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_alignment_new(0,0,1,0),true,true,0);
-#endif
-	gtk_box_pack_start(GTK_BOX(hbox),prefsWidgets[BEKIND],true,true,0);
-#ifndef _USEGTK3_
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_alignment_new(0,0,1,0),true,true,0);
-#endif
-	gtk_widget_show_all(hbox);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
+*/
+//	makePrefsCheckNew(BEKIND,gettext("I have donated"),"useplugmenu",nagScreen,true,false);
+//	gtk_container_add(GTK_CONTAINER(hbox1),prefsWidgets[BEKIND]);
+	hbox=creatNewBox(NEWHBOX,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),(GtkWidget*)prefsWidgets[BEKIND],false,false,0);
+	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)hbox,false,false,0);
+//
+//	gtk_container_add(GTK_CONTAINER(vbox),prefsWidgets[BEKIND]);
+//	gtk_box_pack_start((GtkBox*)vbox,prefsWidgets[BEKIND],false,true,0);
+
+//#ifndef _USEGTK3_
+//	gtk_box_pack_start(GTK_BOX(hbox),gtk_alignment_new(0,0,1,0),true,true,0);
+//#endif
+//	gtk_box_pack_start(GTK_BOX(hbox),prefsWidgets[BEKIND],true,true,0);
+//#ifndef _USEGTK3_
+//	gtk_box_pack_start(GTK_BOX(hbox),gtk_alignment_new(0,0,1,0),true,true,0);
+//#endif
+//	gtk_widget_show_all(hbox);
+//	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_label_new(gettext("I have really donated some some money to the author.\nMy conscience is clear and my Karma is squeaky clean :)")),false,false,0);
 

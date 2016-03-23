@@ -215,7 +215,9 @@ void setFilePrefs(pageStruct* page)
 
 	font_desc=pango_font_description_from_string(fontAndSize);
 //TODO//
-#ifndef _USEGTK3_
+#ifdef _USEGTK3_
+	gtk_widget_override_font((GtkWidget*)page->view,font_desc);
+#else
 	gtk_widget_modify_font((GtkWidget*)page->view,font_desc);
 #endif
 	pango_font_description_free(font_desc);
