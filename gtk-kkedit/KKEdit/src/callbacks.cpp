@@ -520,7 +520,6 @@ void setSensitive(void)
 	if(sessionBusy==true)
 		return;
 
-
 	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
 	text=gtk_label_get_text((GtkLabel*)page->tabName);
 #ifdef _BUGGED_
@@ -536,7 +535,6 @@ void setSensitive(void)
 #endif
 			gtk_widget_set_sensitive((GtkWidget*)saveMenu,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
 			gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
-//gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
 
 //tab
 			if(text[0]=='*')

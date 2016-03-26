@@ -1478,11 +1478,8 @@ void buildMainGui(void)
 	mainRightUserVBox=creatNewBox(NEWVBOX,false,0);
 	mainBottomUserVBox=creatNewBox(NEWVBOX,false,0);
 
-//	mainWindowHBox=gtk_hbox_new(false,0);
 	mainWindowHBox=creatNewBox(NEWHBOX,false,0);
 
-//	mainWindowHPane=gtk_hpaned_new();
-//	secondWindowHPane=gtk_hpaned_new();
 #ifdef _USEGTK3_
 	mainWindowHPane=gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
 	secondWindowHPane=gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
@@ -1508,7 +1505,6 @@ void buildMainGui(void)
 	g_signal_connect(G_OBJECT(mainNotebook),"page-reordered",G_CALLBACK(switchPage),NULL);
 
 	menuBar=gtk_menu_bar_new();
-	//toolBarBox=gtk_hbox_new(true,0);
 	toolBarBox=creatNewBox(NEWHBOX,true,0);
 	toolBar=(GtkToolbar*)gtk_toolbar_new();
 
@@ -1779,7 +1775,6 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),helpMenu);
 
 //tooloutputwindow
-	//mainVPane=gtk_vpaned_new();
 #ifdef _USEGTK3_
 	mainVPane=gtk_paned_new(GTK_ORIENTATION_VERTICAL);
 #else
@@ -1788,7 +1783,6 @@ void buildMainGui(void)
 	gtk_container_set_border_width(GTK_CONTAINER(mainVPane),0);
 	gtk_paned_add1(GTK_PANED(mainVPane),mainNotebookVBox);
 
-	//toolOutVBox=gtk_vbox_new(false,0);
 	toolOutVBox=creatNewBox(NEWVBOX,false,0);
 
 	gtk_paned_add2(GTK_PANED(mainVPane),toolOutVBox);
@@ -1798,10 +1792,7 @@ void buildMainGui(void)
 	toolOutputView=gtk_text_view_new_with_buffer(toolOutputBuffer);
 
 	gtk_container_add(GTK_CONTAINER(mainWindowScrollbox),(GtkWidget*)toolOutputView);
-//	gtk_box_pack_start ((GtkBox*)mainWindowScrollbox,toolOutputView,true,true,10);
-//	gtk_container_add(GTK_CONTAINER(mainWindowScrollbox),(GtkWidget*)toolOutputView);
 	gtk_box_pack_start((GtkBox*)toolOutVBox,mainWindowScrollbox,true,true,0);
-//	gtk_container_add(GTK_CONTAINER(toolOutVBox),(GtkWidget*)mainWindowScrollbox);
 
 //add main vbox to mainWindow
 	gtk_container_add((GtkContainer*)mainWindow,mainWindowVBox);
@@ -1823,8 +1814,6 @@ void buildMainGui(void)
 	gtk_paned_pack2((GtkPaned*)secondWindowHPane,mainRightUserVBox,false,true);
 
 //vpanes top and bottom
-	//mainWindowVPane=gtk_vpaned_new();
-	//secondWindowVPane=gtk_vpaned_new();
 #ifdef _USEGTK3_
 	mainWindowVPane=gtk_paned_new(GTK_ORIENTATION_VERTICAL);
 	secondWindowVPane=gtk_paned_new(GTK_ORIENTATION_VERTICAL);
@@ -1912,15 +1901,12 @@ void buildFindReplace(void)
 	content_area=gtk_dialog_get_content_area(GTK_DIALOG(findReplaceDialog));
 	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,FINDNEXT);
 
-	//vbox=gtk_vbox_new(true,0);
 	vbox=creatNewBox(NEWVBOX,true,0);
-	//hbox=gtk_hbox_new(false,0);
 	hbox=creatNewBox(NEWHBOX,false,0);
 
 	label=gtk_label_new(gettext("Find"));
 	gtk_container_add(GTK_CONTAINER(content_area),label);
 	gtk_widget_show(label);
-
 
 	findDropBox=gtk_combo_box_text_new_with_entry();
 	findBox=gtk_bin_get_child((GtkBin*)findDropBox);
@@ -1956,7 +1942,6 @@ void buildFindReplace(void)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 	gtk_widget_show_all(vbox);
 //line2
-	//hbox=gtk_hbox_new(false,0);
 	hbox=creatNewBox(NEWHBOX,false,0);
 
 	item=gtk_check_button_new_with_label(gettext("Wrap"));
@@ -2019,9 +2004,7 @@ void buildWordCheck(int documentCheck)
 	spellCheckWord=gtk_dialog_new();
 	gtk_window_set_title((GtkWindow*)spellCheckWord,gettext("Spell check word"));
 
-	//vbox=gtk_vbox_new(false,0);
 	vbox=creatNewBox(NEWVBOX,false,0);
-	//hbox=gtk_hbox_new(true,0);
 	hbox=creatNewBox(NEWHBOX,true,0);
 
 	sprintf((char*)&labeltext,gettext("Change <i><b>%s</b></i> to: "),badWord);
@@ -2040,9 +2023,7 @@ void buildWordCheck(int documentCheck)
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,8);
 #endif
 
-	//hbox=gtk_hbox_new(true,0);
 	hbox=creatNewBox(NEWHBOX,true,0);
-	//button=gtk_button_new_from_stock(GTK_STOCK_APPLY);
 	button=createNewStockButton(GTK_STOCK_APPLY,GTK_STOCK_APPLY);
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doChangeWord),(gpointer)(long)docflag);
@@ -2053,12 +2034,10 @@ void buildWordCheck(int documentCheck)
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doAddIgnoreWord),(gpointer)1);
 
-	//button=gtk_button_new_from_stock(GTK_STOCK_ADD);
 	button=createNewStockButton(GTK_STOCK_ADD,gettext("_Add"));
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doAddIgnoreWord),(gpointer)2);
 
-	//button=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
 	button=createNewStockButton(GTK_STOCK_CANCEL,GTK_STOCK_CANCEL);
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doCancelCheck),NULL);
@@ -2129,9 +2108,7 @@ void buildGtkDocViewer(void)
 	if(docWindowX!=-1 && docWindowY!=-1)
 		gtk_window_move((GtkWindow *)docView,docWindowX,docWindowY);
 
-	//vbox=gtk_vbox_new(false,0);
 	vbox=creatNewBox(NEWVBOX,false,0);
-	//hbox=gtk_hbox_new(false,4);
 	hbox=creatNewBox(NEWHBOX,false,4);
 
 	webView=WEBKIT_WEB_VIEW(webkit_web_view_new());
@@ -2149,11 +2126,8 @@ void buildGtkDocViewer(void)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(scrolledWindow),GTK_WIDGET(webView));
 
-//	gtk_container_add(GTK_CONTAINER(vbox),scrolledWindow);
-//	gtk_container_add(GTK_CONTAINER(vbox),scrolledWindow);
 	gtk_box_pack_start((GtkBox*)vbox,scrolledWindow,true,true,0);
 
-	//button=gtk_button_new_from_stock(GTK_STOCK_GO_BACK);
 	button=createNewStockButton(GTK_STOCK_GO_BACK,GTK_STOCK_GO_BACK3);
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoBack),(void*)webView);	
@@ -2161,7 +2135,6 @@ void buildGtkDocViewer(void)
 //spacer
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,false,0);
 
-	//button=gtk_button_new_from_stock(GTK_STOCK_HOME);
 	button=createNewStockButton(GTK_STOCK_HOME,GTK_STOCK_HOME3);
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoHome),(void*)webView);	
@@ -2170,7 +2143,6 @@ void buildGtkDocViewer(void)
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,false,0);
 
 	entry=gtk_entry_new();
-	//findbutton=gtk_button_new_from_stock(GTK_STOCK_FIND);
 	findbutton=createNewStockButton(GTK_STOCK_FIND,GTK_STOCK_FIND3);
 	gtk_box_pack_start(GTK_BOX(hbox),findbutton,false,false,0);
 	g_signal_connect(G_OBJECT(findbutton),"clicked",G_CALLBACK(docSearchFromBar),(void*)entry);	
@@ -2178,12 +2150,10 @@ void buildGtkDocViewer(void)
 	gtk_box_pack_start(GTK_BOX(hbox),entry,false,true,0);
 	g_signal_connect_after(G_OBJECT(entry),"activate",G_CALLBACK(docSearchFromBar),(void*)entry);
 
-//	findnextinpage=gtk_button_new_from_stock(GTK_STOCK_GO_DOWN);
 	findnextinpage=createNewStockButton(GTK_STOCK_GO_DOWN,GTK_STOCK_GO_DOWN3);
 	gtk_box_pack_start(GTK_BOX(hbox),findnextinpage,false,false,0);
 	g_signal_connect(G_OBJECT(findnextinpage),"clicked",G_CALLBACK(docSearchInPageFoward),(void*)entry);
 
-//	findbutton=gtk_button_new_from_stock(GTK_STOCK_GO_UP);
 	findbutton=createNewStockButton(GTK_STOCK_GO_UP,GTK_STOCK_GO_UP3);
 	gtk_box_pack_start(GTK_BOX(hbox),findbutton,false,false,0);
 	g_signal_connect(G_OBJECT(findbutton),"clicked",G_CALLBACK(docSearchInPageBack),(void*)entry);
@@ -2191,7 +2161,6 @@ void buildGtkDocViewer(void)
 //spacer
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,false,0);
 
-//	button=gtk_button_new_from_stock(GTK_STOCK_GO_FORWARD);
 	button=createNewStockButton(GTK_STOCK_GO_FORWARD,GTK_STOCK_GO_FORWARD3);
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoForward),(void*)webView);	
