@@ -1,4 +1,5 @@
 0.3.0
+Added hack to get round weird bug in gtksourceview-3.0 >3.14.0 not always getting correct undo/redo setting, menus for pkgs > 3.14.0 are not dimmed.
 Fixed dNd for toolitems in prefs.
 Done prefs.
 Moved prefs to either ~/.KKEdit or ~/.KKEdit3 depending on build.

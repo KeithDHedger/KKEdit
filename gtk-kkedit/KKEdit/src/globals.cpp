@@ -520,6 +520,9 @@ VISIBLE pageStruct* getPageStructPtr(int pagenum)
 	else
 		thispage=pagenum;
 
+	if(thispage==-1)
+		return(NULL);
+
 	pageBox=gtk_notebook_get_nth_page(mainNotebook,thispage);
 	if(pageBox==NULL)
 		{
@@ -1207,6 +1210,7 @@ VISIBLE void goBack(GtkWidget* widget,gpointer data)
 			if(history->canGoBack()==false)
 				{
 					ERRDATA delete hist;
+					//setSensitive(NULL,NULL);
 					setSensitive();
 					ERRDATA return;
 				}
@@ -1224,6 +1228,7 @@ VISIBLE void goBack(GtkWidget* widget,gpointer data)
 					ERRDATA delete hist;
 				}
 		}
+//	setSensitive(NULL,NULL);
 	setSensitive();
 	ERRDATA
 }
@@ -1291,6 +1296,8 @@ VISIBLE void debugFree(char** ptr)
 
 void doBusy(bool busy,pageStruct* page)
 {
+busyFlag=false;
+#if 0
 	ERRDATA
 	if(page==NULL)
 		{
@@ -1311,6 +1318,7 @@ void doBusy(bool busy,pageStruct* page)
 			busyFlag=false;
 		}
 	ERRDATA
+#endif
 }
 
 VISIBLE bool doUpdateWidgets=false;
@@ -1321,6 +1329,7 @@ VISIBLE void resetWidgetSenisitive(void)
 	if(doUpdateWidgets==true)
 		{
 			resetAllFilePrefs();	
+	//		setSensitive(NULL,NULL);
 			setSensitive();
 			refreshMainWindow();
 		}

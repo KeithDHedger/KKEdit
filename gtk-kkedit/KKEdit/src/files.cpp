@@ -433,6 +433,7 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 	if(page->lang==NULL)
 		setLanguage(page);
 	switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
+	//setSensitive(NULL,NULL);
 	setSensitive();
 
 	ERRDATA
@@ -491,6 +492,7 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 			g_string_free(str,true);
 			ERRDATA debugFree(&filepath);
 			ERRDATA debugFree(&filename);
+			//setSensitive(NULL,NULL);
 			setSensitive();
 		}
 
@@ -644,6 +646,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 		gtk_main_iteration_do(false);
 	currentTabNumber=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)-1;
 	setWidgets();
+	//setSensitive(NULL,NULL);
 	setSensitive();
 	ERRDATA
 	killBarberPole();
@@ -777,6 +780,7 @@ pageStruct* makeNewPage(void)
 	page->buffer=gtk_source_buffer_new(NULL);
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
+gtk_source_buffer_set_max_undo_levels (page->buffer,-1);
 //completion
 	page->completion=gtk_source_view_get_completion(GTK_SOURCE_VIEW(page->view));
 	g_object_set(page->completion,"remember-info-visibility",true,NULL);
@@ -824,7 +828,7 @@ pageStruct* makeNewPage(void)
 	g_signal_connect(G_OBJECT(page->view),"button-press-event",G_CALLBACK(clickInView),NULL);
 
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
-	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setSensitive),NULL);
+	g_signal_connect(G_OBJECT(page->buffer),"changed",G_CALLBACK(setSensitive),NULL);
 	gtk_widget_grab_focus((GtkWidget*)page->view);
 
 	g_signal_connect(page->view, "line-mark-activated",G_CALLBACK(line_mark_activated),page);
@@ -941,7 +945,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 		linenum=0;
 
 	page=makeNewPage();
-	//page->tabVbox=gtk_vbox_new(true,4);
 	page->tabVbox=creatNewBox(NEWVBOX,true,4);
 	page->filePath=strdup(filepathcopy);
 	page->fileName=strdup(filename);
@@ -976,35 +979,35 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	if(dataLen>0)
 		{
 			gtk_source_buffer_begin_not_undoable_action(page->buffer);
-			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
-			gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &enditer);
-			gtk_text_buffer_delete ( GTK_TEXT_BUFFER (page->buffer),&startiter, &enditer);
-			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
-			whattodo=GTK_RESPONSE_YES;
-			if(g_utf8_validate((const gchar*)convertedData,dataLen,&end)==false)
-				whattodo=yesNo(gettext("Contains non text data, continue loading?\n"),(char*)filepath);
-			if(whattodo==GTK_RESPONSE_YES)
-				{
+				gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
+				gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &enditer);
+				gtk_text_buffer_delete ( GTK_TEXT_BUFFER (page->buffer),&startiter, &enditer);
+				gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
+				whattodo=GTK_RESPONSE_YES;
+				if(g_utf8_validate((const gchar*)convertedData,dataLen,&end)==false)
+					whattodo=yesNo(gettext("Contains non text data, continue loading?\n"),(char*)filepath);
+				if(whattodo==GTK_RESPONSE_YES)
+					{
 					//g_utf8_validate(convertedData,dataLen,&end);
-					dataLen=(long)end-(long)convertedData;
-					gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&startiter,convertedData,dataLen);
-				}
-			else
-				{
-					busyFlag=false;
-					sessionBusy=false;
-					gtk_widget_destroy(label);
-					ERRDATA return(false);
-				}
+						dataLen=(long)end-(long)convertedData;
+						gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&startiter,convertedData,dataLen);
+					}
+				else
+					{
+						busyFlag=false;
+						sessionBusy=false;
+						gtk_widget_destroy(label);
+						ERRDATA return(false);
+					}
 			gtk_source_buffer_end_not_undoable_action(page->buffer);
 		}
 	else
 		{
 			gtk_source_buffer_begin_not_undoable_action(page->buffer);
-			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
-			gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &enditer);
-			gtk_text_buffer_delete ( GTK_TEXT_BUFFER (page->buffer),&startiter, &enditer);
-			gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
+				gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
+				gtk_text_buffer_get_end_iter ( GTK_TEXT_BUFFER (page->buffer), &enditer);
+				gtk_text_buffer_delete ( GTK_TEXT_BUFFER (page->buffer),&startiter, &enditer);
+				gtk_text_buffer_get_start_iter ( GTK_TEXT_BUFFER (page->buffer), &startiter);
 			gtk_source_buffer_end_not_undoable_action(page->buffer);
 		}
 	ERRDATA debugFree(&convertedData);

@@ -25,9 +25,12 @@ if test "$enable_gtk3" = "yes"; then
 	AC_DEFINE([_USEGTK3_], [], [Use GTK3])
 	GTK_MODULES="gtk+-3.0 >= 3.10.0"
 	GTKSRC_MODULES="gtksourceview-3.0 >= 3.10.0"
+	GTKSOURCEBUG_MODULES="gtksourceview-3.0 >= 3.14.1"
+	PKG_CHECK_MODULES(GTKSOURCEBUG, $GTKSOURCEBUG_MODULES, AC_DEFINE([_BUGGED_], [], [Got undo bug.]), AC_DEFINE([_NOTBUGGED_], [], [No undo bug]))
 else
 	GTK_MODULES="gtk+-2.0 >= 2.24.0"
 	GTKSRC_MODULES="gtksourceview-2.0 >= 2.9.9"
+	AC_DEFINE([_NOTBUGGED_], [], [No undo bug])
 fi
 
 #GTK_MODULES="gtk+-2.0 >= 2.24.0"

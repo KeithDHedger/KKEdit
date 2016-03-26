@@ -96,7 +96,11 @@ void setToobarSensitive(void)
 					if(undoButton!=NULL)
 						{
 							if(page!=NULL)
+#ifdef _BUGGED_
+								gtk_widget_set_sensitive((GtkWidget*)undoButton,true);
+#else
 								gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
+#endif
 							else
 								gtk_widget_set_sensitive((GtkWidget*)undoButton,false);
 						}
@@ -106,7 +110,11 @@ void setToobarSensitive(void)
 					if(redoButton!=NULL)
 						{
 							if(page!=NULL)
+#ifdef _BUGGED_
+								gtk_widget_set_sensitive((GtkWidget*)redoButton,true);
+#else
 								gtk_widget_set_sensitive((GtkWidget*)redoButton,gtk_source_buffer_can_redo(page->buffer));
+#endif
 							else
 								gtk_widget_set_sensitive((GtkWidget*)redoButton,false);
 						}
@@ -473,6 +481,7 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 	delete buf;
 }
 
+//void setSensitive(GtkTextBuffer *textbuffer,gpointer user_data)
 void setSensitive(void)
 {
 	ERRDATA
@@ -481,14 +490,6 @@ void setSensitive(void)
 	char*			newlabel;
 	int				offset=0;
 	GtkTextIter	start_find,end_find;
-
-	if(page==NULL)
-		return;
-
-	if(sessionBusy==true)
-		return;
-
-	setToobarSensitive();
 
 	if(page==NULL)
 		{
@@ -512,18 +513,31 @@ void setSensitive(void)
 			gtk_widget_set_sensitive((GtkWidget*)revertMenu,false);
 			gtk_widget_set_sensitive((GtkWidget*)goBackMenu,false);
 			gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,0);
+			return;
 		}
-	else
-		{
-			gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
-			text=gtk_label_get_text((GtkLabel*)page->tabName);
-//menu
-			gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));
-			gtk_widget_set_sensitive((GtkWidget*)redoMenu,gtk_source_buffer_can_redo(page->buffer));
-			gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,gtk_source_buffer_can_undo(page->buffer));
-			gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,gtk_source_buffer_can_redo(page->buffer));
+
+	if(sessionBusy==true)
+		return;
+
+	setToobarSensitive();
+
+	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
+	text=gtk_label_get_text((GtkLabel*)page->tabName);
+#ifdef _BUGGED_
+	gtk_widget_set_sensitive((GtkWidget*)undoMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)redoMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,true);
+#else
+	gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));
+	gtk_widget_set_sensitive((GtkWidget*)redoMenu,gtk_source_buffer_can_redo(page->buffer));
+	gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,gtk_source_buffer_can_undo(page->buffer));
+	gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,gtk_source_buffer_can_redo(page->buffer));
+#endif
 			gtk_widget_set_sensitive((GtkWidget*)saveMenu,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
 			gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
+//gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
+
 //tab
 			if(text[0]=='*')
 				offset=1;
@@ -551,7 +565,7 @@ void setSensitive(void)
 			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start_find);
 			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end_find);
 			gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);
-		}
+//		}
 //do plugin sensitive
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"setSensitive");
@@ -673,6 +687,7 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 		{
 			currentTabNumber=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
 			resetWidgetSenisitive();
+//			setSensitive();
 		}
 }
 
@@ -858,6 +873,8 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 
 	rebuildTabsMenu();
 
+	//setSensitive(page->buffer,NULL);
+//	setSensitiveNew(page->buffer,NULL);
 	setSensitive();
 
 	createCompletion(page);
@@ -871,6 +888,9 @@ VISIBLE void copyToClip(GtkWidget* widget,gpointer data)
 {
 	ERRDATA
 	pageStruct*	page=getPageStructPtr(-1);
+
+	if(page==NULL)
+		return;
 	gtk_text_buffer_copy_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD));
 }
 
@@ -878,7 +898,11 @@ VISIBLE void cutToClip(GtkWidget* widget,gpointer data)
 {
 	ERRDATA
 	pageStruct*	page=getPageStructPtr(-1);
+
+	if(page==NULL)
+		return;
 	gtk_text_buffer_cut_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),true);
+//	setSensitive(NULL,NULL);
 	setSensitive();
 }
 
@@ -891,6 +915,8 @@ VISIBLE void pasteFromClip(GtkWidget* widget,gpointer data)
 	GtkTextIter		start;
 	GtkTextIter		end;
 
+	if(page==NULL)
+		return;
 	mainclipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
 	clipdata=gtk_clipboard_wait_for_text(mainclipboard);
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
@@ -898,6 +924,7 @@ VISIBLE void pasteFromClip(GtkWidget* widget,gpointer data)
 			gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
 		gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)clipdata,-1);
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+//	setSensitive(NULL,NULL);
 	setSensitive();
 }
 
@@ -909,10 +936,11 @@ VISIBLE void undo(GtkWidget* widget,gpointer data)
 	if(page!=NULL)
 		{
 			doBusy(true,page);
-			if(gtk_source_buffer_can_undo(page->buffer));
+			if(gtk_source_buffer_can_undo(page->buffer))
 				{
 					gtk_source_buffer_undo(page->buffer);
 					page->isFirst=true;
+				//	setSensitive(NULL,NULL);
 					setSensitive();
 				}
 			doBusy(false,page);
@@ -949,6 +977,7 @@ VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
 						}
 				}
 			page->isFirst=true;
+			//setSensitive(NULL,NULL);
 			setSensitive();
 		 	doBusy(false,page);
 		}
@@ -962,10 +991,11 @@ VISIBLE void redo(GtkWidget* widget,gpointer data)
 	if(page!=NULL)
 		{
 		 	doBusy(true,page);
-			if(gtk_source_buffer_can_redo(page->buffer));
+			if(gtk_source_buffer_can_redo(page->buffer))
 				{
 					gtk_source_buffer_redo(page->buffer);
 					page->isFirst=true;
+					//setSensitive(NULL,NULL);
 					setSensitive();
 				}
 		 	doBusy(false,page);
@@ -1839,6 +1869,7 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			gtk_widget_destroy(prefswin);
 			resetAllFilePrefs();
 			writeConfig();
+		//	setSensitive(NULL,NULL);
 			setSensitive();
 			refreshMainWindow();
 		}

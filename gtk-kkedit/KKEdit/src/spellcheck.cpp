@@ -285,6 +285,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 					gtk_text_buffer_set_modified((GtkTextBuffer*)page->buffer,true);
 				}
 			gtk_text_buffer_set_modified((GtkTextBuffer*)page->buffer,false);
+			//setSensitive(NULL,NULL);
 			setSensitive();
 		}
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);

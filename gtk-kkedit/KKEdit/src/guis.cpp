@@ -692,7 +692,6 @@ void populateStore(void)
 					case 'R':
 //redo
 						gtk_list_store_append (listStore, &iter);
-						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_REDO,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						pbuf=createNewIcon(GTK_STOCK_REDO,image);
 
 						if(pbuf!=NULL)

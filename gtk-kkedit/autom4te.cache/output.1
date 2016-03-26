@@ -603,6 +603,8 @@ GTKSRC_LIBS
 GTKSRC_CFLAGS
 GTK_LIBS
 GTK_CFLAGS
+GTKSOURCEBUG_LIBS
+GTKSOURCEBUG_CFLAGS
 X11_LIBS
 X11_CFLAGS
 PKG_CONFIG_LIBDIR
@@ -728,6 +730,8 @@ PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
 X11_CFLAGS
 X11_LIBS
+GTKSOURCEBUG_CFLAGS
+GTKSOURCEBUG_LIBS
 GTK_CFLAGS
 GTK_LIBS
 GTKSRC_CFLAGS
@@ -1385,6 +1389,10 @@ Some influential environment variables:
               path overriding pkg-config's built-in search path
   X11_CFLAGS  C compiler flags for X11, overriding pkg-config
   X11_LIBS    linker flags for X11, overriding pkg-config
+  GTKSOURCEBUG_CFLAGS 
+              C compiler flags for GTKSOURCEBUG, overriding pkg-config
+  GTKSOURCEBUG_LIBS 
+              linker flags for GTKSOURCEBUG, overriding pkg-config
   GTK_CFLAGS  C compiler flags for GTK, overriding pkg-config
   GTK_LIBS    linker flags for GTK, overriding pkg-config
   GTKSRC_CFLAGS 
@@ -4633,9 +4641,90 @@ $as_echo "@%:@define _USEGTK3_ /**/" >>confdefs.h
 
 	GTK_MODULES="gtk+-3.0 >= 3.10.0"
 	GTKSRC_MODULES="gtksourceview-3.0 >= 3.10.0"
+	GTKSOURCEBUG_MODULES="gtksourceview-3.0 >= 3.14.1"
+	
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTKSOURCEBUG" >&5
+$as_echo_n "checking for GTKSOURCEBUG... " >&6; }
+
+if test -n "$GTKSOURCEBUG_CFLAGS"; then
+    pkg_cv_GTKSOURCEBUG_CFLAGS="$GTKSOURCEBUG_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$GTKSOURCEBUG_MODULES\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "$GTKSOURCEBUG_MODULES") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_GTKSOURCEBUG_CFLAGS=`$PKG_CONFIG --cflags "$GTKSOURCEBUG_MODULES" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes 
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$GTKSOURCEBUG_LIBS"; then
+    pkg_cv_GTKSOURCEBUG_LIBS="$GTKSOURCEBUG_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$GTKSOURCEBUG_MODULES\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "$GTKSOURCEBUG_MODULES") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_GTKSOURCEBUG_LIBS=`$PKG_CONFIG --libs "$GTKSOURCEBUG_MODULES" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes 
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        GTKSOURCEBUG_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$GTKSOURCEBUG_MODULES" 2>&1`
+        else 
+	        GTKSOURCEBUG_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$GTKSOURCEBUG_MODULES" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$GTKSOURCEBUG_PKG_ERRORS" >&5
+
+	
+$as_echo "@%:@define _NOTBUGGED_ /**/" >>confdefs.h
+
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	
+$as_echo "@%:@define _NOTBUGGED_ /**/" >>confdefs.h
+
+else
+	GTKSOURCEBUG_CFLAGS=$pkg_cv_GTKSOURCEBUG_CFLAGS
+	GTKSOURCEBUG_LIBS=$pkg_cv_GTKSOURCEBUG_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	
+$as_echo "@%:@define _BUGGED_ /**/" >>confdefs.h
+
+fi
 else
 	GTK_MODULES="gtk+-2.0 >= 2.24.0"
 	GTKSRC_MODULES="gtksourceview-2.0 >= 2.9.9"
+	
+$as_echo "@%:@define _NOTBUGGED_ /**/" >>confdefs.h
+
 fi
 
 #GTK_MODULES="gtk+-2.0 >= 2.24.0"
