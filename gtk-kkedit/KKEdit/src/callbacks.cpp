@@ -491,6 +491,7 @@ void setSensitive(void)
 	int				offset=0;
 	GtkTextIter	start_find,end_find;
 
+	setToobarSensitive();
 	if(page==NULL)
 		{
 //menu
@@ -519,7 +520,6 @@ void setSensitive(void)
 	if(sessionBusy==true)
 		return;
 
-	setToobarSensitive();
 
 	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
 	text=gtk_label_get_text((GtkLabel*)page->tabName);
