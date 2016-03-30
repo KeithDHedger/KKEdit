@@ -1450,7 +1450,7 @@ GtkWidget* createNewStockButton(const char* stock,const char* label)
 {
 	GtkWidget*	button;
 #ifdef _USEGTK3_
-	button=gtk_button_new_with_label(label);
+	button=gtk_button_new_with_mnemonic(label);
 #else
 	button=gtk_button_new_from_stock(stock);
 #endif

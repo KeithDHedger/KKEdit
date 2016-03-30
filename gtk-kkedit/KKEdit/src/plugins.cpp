@@ -213,7 +213,6 @@ VISIBLE void doPlugPrefs(GtkWidget* widget,gpointer data)
 
 	plugwindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
-//	vbox=gtk_vbox_new(false,4);
 	vbox=creatNewBox(NEWVBOX,false,4);
 
 	store=gtk_list_store_new(NUM_COLUMNS,G_TYPE_BOOLEAN,G_TYPE_STRING);
@@ -239,31 +238,25 @@ VISIBLE void doPlugPrefs(GtkWidget* widget,gpointer data)
 	gtk_tree_view_column_set_sort_column_id(column,COLUMN_PLUGIN);
 	gtk_tree_view_append_column((GtkTreeView*)treeview,column);
 
-	//hbox=gtk_hbox_new(false,4);
-	hbox=creatNewBox(NEWHBOX,false,4);
 
 //plugin prefs
-	//plugPrefsButton=gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
+	hbox=creatNewBox(NEWHBOX,false,4);
 	plugPrefsButton=createNewStockButton(GTK_STOCK_PREFERENCES,GTK_STOCK_PREFERENCES3);
-
 	gtk_box_pack_start((GtkBox*)hbox,plugPrefsButton,false,false,4);
 	g_signal_connect(G_OBJECT(plugPrefsButton),"clicked",G_CALLBACK(setPlugPrefs),(void*)1);
-//plugin about
-	//plugAboutButton=gtk_button_new_from_stock(GTK_STOCK_ABOUT);
-	plugAboutButton=createNewStockButton(GTK_STOCK_ABOUT,GTK_STOCK_ABOUT);
 
+//plugin about
+	plugAboutButton=createNewStockButton(GTK_STOCK_ABOUT,GTK_STOCK_ABOUT3);
 	gtk_box_pack_start((GtkBox*)hbox,plugAboutButton,false,false,4);
 	g_signal_connect(G_OBJECT(plugAboutButton),"clicked",G_CALLBACK(setPlugPrefs),(void*)2);
-//apply
-	//button=gtk_button_new_from_stock(GTK_STOCK_APPLY);
-	button=createNewStockButton(GTK_STOCK_APPLY,GTK_STOCK_APPLY);
 
+//apply
+	button=createNewStockButton(GTK_STOCK_APPLY,GTK_STOCK_APPLY);
 	gtk_box_pack_start((GtkBox*)hbox,button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setPlugPrefs),(void*)3);
-//close
-	//button=gtk_button_new_from_stock(GTK_STOCK_CLOSE);
-	button=createNewStockButton(GTK_STOCK_CLOSE,GTK_STOCK_CLOSE);
 
+//close
+	button=createNewStockButton(GTK_STOCK_CLOSE,GTK_STOCK_CLOSE3);
 	gtk_box_pack_start((GtkBox*)hbox,button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setPlugPrefs),(void*)4);
 

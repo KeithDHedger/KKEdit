@@ -1,4 +1,6 @@
 0.3.0
+Fixed occasional segfault on quiting when certain plugins enabled.
+Added update-icons target to top Makefile.
 Added hack to get round weird bug in gtksourceview-3.0 >3.14.0 not always getting correct undo/redo setting, menus for pkgs > 3.14.0 are not dimmed.
 Fixed dNd for toolitems in prefs.
 Done prefs.

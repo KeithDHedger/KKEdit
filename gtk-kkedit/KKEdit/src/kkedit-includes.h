@@ -79,6 +79,7 @@
 #define GTK_STOCK_CLOSE3 gettext("_Close")
 #define GTK_STOCK_REVERT_TO_SAVED3 gettext("_Revert")
 #define GTK_STOCK_QUIT3 gettext("_Quit")
+#define GTK_STOCK_PREFERENCES3 "_Preferences"
 
 #define GTK_STOCK_CUT3 gettext("Cut")
 #define GTK_STOCK_COPY3 gettext("Copy")
@@ -90,7 +91,6 @@
 #define GTK_STOCK_REFRESH3 gettext("Refresh")
 #define GTK_STOCK_GO_BACK3 gettext("Back")
 #define GTK_STOCK_HOME3 gettext("Home")
-#define GTK_STOCK_PREFERENCES3 "Preferences"
 #define GTK_STOCK_ABOUT3 gettext("About")
 #define GTK_STOCK_HELP3 gettext("Help")
 #define GTK_STOCK_GO_DOWN3 gettext("Down")

@@ -1548,9 +1548,7 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //recent menu
-	//menuitem=gtk_image_menu_item_new_with_label(gettext("Recent Files"));
 	menuitem=createNewImageMenuItem(NULL,gettext("Recent Files"));
-
 	menurecent=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
 	addRecentToMenu((GtkRecentChooser*)recent,menurecent);

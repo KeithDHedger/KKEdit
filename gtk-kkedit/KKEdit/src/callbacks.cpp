@@ -1762,7 +1762,7 @@ bool doShutdown(GtkWidget* widget,GdkEvent *event,gpointer data)
 	delete_aspell_speller(spellChecker);
 #endif
 
-	g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
+	ERRDATA g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
 
 	asprintf(&command,"rm -rf %s",tmpFolderName);
 	system(command);
@@ -1770,7 +1770,7 @@ bool doShutdown(GtkWidget* widget,GdkEvent *event,gpointer data)
 	system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
 
 	g_application_release(mainApp);
-	return(false);
+	ERRDATA return(false);
 }
 
 void setPrefs(GtkWidget* widget,gpointer data)

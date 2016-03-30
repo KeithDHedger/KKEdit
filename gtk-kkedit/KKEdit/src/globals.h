@@ -73,7 +73,7 @@
 
 #ifdef _USEGTK3_
 #define KKEDITVERS "KKEdit3"
-#define PLATFORM "gtk3"
+#define PLATFORM "gtk"
 #else
 #define KKEDITVERS "KKEdit"
 #define PLATFORM "gtk"

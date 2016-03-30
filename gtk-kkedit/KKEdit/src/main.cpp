@@ -585,7 +585,6 @@ int main (int argc, char **argv)
 //	asprintf(&prefsFolder,"%s/.%s",getenv("HOME"),KKEDITVERS);
 //	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	asprintf(&filename,"%s/." KKEDITVERS "/kkedit.rc",getenv("HOME"));
-	printf(">>>%s<<<\n",filename);
 	loadVarsFromFile(filename,kkedit_startup_vars);
 	ERRDATA debugFree(&filename);
 
