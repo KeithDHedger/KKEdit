@@ -117,12 +117,11 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 void setUpToolBar(void)
 {
 	ERRDATA
-	GtkToolItem	*toolbutton;
+	GtkToolItem		*toolbutton;
 #ifdef _USEGTK3_
-	GtkWidget	*image;
+	GtkWidget		*image;
 #endif
-//#ifndef _USEGTK3_
-	GtkRecentFilter*	filter;
+	GtkRecentFilter	*filter;
 
 	recent=gtk_recent_chooser_menu_new();
 	gtk_recent_chooser_set_local_only(GTK_RECENT_CHOOSER(recent),false);
@@ -133,7 +132,7 @@ void setUpToolBar(void)
 	gtk_recent_filter_add_application(filter,"kkedit");
 	gtk_recent_chooser_set_filter(GTK_RECENT_CHOOSER(recent),filter);
 	g_signal_connect(recent,"item_activated",G_CALLBACK(recentFileMenu),NULL);
-//#endif
+
 	for(int j=0;j<(int)strlen(toolBarLayout);j++)
 		{
 			switch(toolBarLayout[j])
@@ -230,14 +229,14 @@ void setUpToolBar(void)
 						g_signal_connect(G_OBJECT(backButton),"clicked",G_CALLBACK(goBack),NULL);
 						gtk_widget_set_tooltip_text((GtkWidget*)backButton,gettext("Go Back"));
 						break;
-
+//jump to line
 					case '9':
 						lineNumberWidget=gtk_entry_new();
 						gotoLineButton=gtk_tool_item_new();
+						gtk_entry_set_width_chars ((GtkEntry *)lineNumberWidget,6);
 						gtk_container_add((GtkContainer *)gotoLineButton,lineNumberWidget);
 						gtk_toolbar_insert(toolBar,gotoLineButton,-1);
 						g_signal_connect_after(G_OBJECT(lineNumberWidget),"key-release-event",G_CALLBACK(jumpToLineFromBar),NULL);
-						gtk_widget_set_size_request((GtkWidget*)gotoLineButton,48,-1);
 						gtk_widget_set_tooltip_text((GtkWidget*)gotoLineButton,gettext("Go To Line"));
 						break;
 					case 'A':
@@ -1471,7 +1470,6 @@ void buildMainGui(void)
 	GtkWidget*		menurecent;
 	GtkWidget*		plugsubmenu=NULL;
 
-
 	mainWindowVBox=createNewBox(NEWVBOX,false,0);
 	mainTopUserVBox=createNewBox(NEWVBOX,false,0);
 	mainLeftUserVBox=createNewBox(NEWVBOX,false,0);
@@ -1494,7 +1492,10 @@ void buildMainGui(void)
 	if(windowX!=-1 && windowY!=-1)
 		gtk_window_move((GtkWindow *)mainWindow,windowX,windowY);
 
-	g_signal_connect(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(doShutdown),NULL);
+//TODO//?
+	g_signal_connect(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(gtk_widget_hide_on_delete),NULL);
+	//g_signal_connect_after(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(doShutdown),NULL);
+	g_signal_connect_after(G_OBJECT(mainWindow),"unmap",G_CALLBACK(doShutdown),NULL);
 	g_signal_connect(G_OBJECT(mainWindow),"key-press-event",G_CALLBACK(keyShortCut),NULL);
 
 	accgroup=gtk_accel_group_new();
@@ -1505,13 +1506,11 @@ void buildMainGui(void)
 	g_signal_connect(G_OBJECT(mainNotebook),"switch-page",G_CALLBACK(switchPage),NULL);
 	g_signal_connect(G_OBJECT(mainNotebook),"page-reordered",G_CALLBACK(switchPage),NULL);
 
-//g_object_set(mainNotebook,"enable-popup",true, NULL);
-
-
 	menuBar=gtk_menu_bar_new();
 	toolBarBox=createNewBox(NEWHBOX,true,0);
 	toolBar=(GtkToolbar*)gtk_toolbar_new();
-//gtk_widget_style_get_property
+//gtk_widget_set_hexpand ((GtkWidget*)toolBar,false);
+//gtk_widget_set_hexpand ((GtkWidget*)toolBarBox,false);
 //dnd
 	gtk_drag_dest_set(mainWindowVBox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets(mainWindowVBox);
