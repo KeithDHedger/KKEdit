@@ -213,7 +213,7 @@ VISIBLE void doPlugPrefs(GtkWidget* widget,gpointer data)
 
 	plugwindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
-	vbox=creatNewBox(NEWVBOX,false,4);
+	vbox=createNewBox(NEWVBOX,false,4);
 
 	store=gtk_list_store_new(NUM_COLUMNS,G_TYPE_BOOLEAN,G_TYPE_STRING);
 
@@ -240,7 +240,7 @@ VISIBLE void doPlugPrefs(GtkWidget* widget,gpointer data)
 
 
 //plugin prefs
-	hbox=creatNewBox(NEWHBOX,false,4);
+	hbox=createNewBox(NEWHBOX,false,4);
 	plugPrefsButton=createNewStockButton(GTK_STOCK_PREFERENCES,GTK_STOCK_PREFERENCES3);
 	gtk_box_pack_start((GtkBox*)hbox,plugPrefsButton,false,false,4);
 	g_signal_connect(G_OBJECT(plugPrefsButton),"clicked",G_CALLBACK(setPlugPrefs),(void*)1);

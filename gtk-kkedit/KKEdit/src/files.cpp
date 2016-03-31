@@ -145,7 +145,7 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 //	GtkRcStyle*	style=gtk_rc_style_new();
 	char*		correctedname;
 
-	hbox=creatNewBox(NEWHBOX,false,0);
+	hbox=createNewBox(NEWHBOX,false,0);
 	ERRDATA rebuildTabsMenu();
 
 	correctedname=truncateWithElipses(name,maxTabChars);
@@ -945,7 +945,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 		linenum=0;
 
 	page=makeNewPage();
-	page->tabVbox=creatNewBox(NEWVBOX,true,4);
+	page->tabVbox=createNewBox(NEWVBOX,true,4);
 	page->filePath=strdup(filepathcopy);
 	page->fileName=strdup(filename);
 	page->dirName=g_path_get_dirname(filepathcopy);
@@ -1079,7 +1079,7 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 	ERRDATA
 	page=makeNewPage();
 	//page->tabVbox=gtk_vbox_new(true,4);
-	page->tabVbox=creatNewBox(NEWVBOX,true,4);
+	page->tabVbox=createNewBox(NEWVBOX,true,4);
 	page->filePath=NULL;
 	page->dirName=NULL;
 
@@ -1099,6 +1099,9 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 
 	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
 	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
+
+//g_object_set(mainNotebook,"show-tabs",false, NULL);
+
 	gtk_notebook_set_current_page(mainNotebook,currentPage);
 	setToobarSensitive();
 	currentPage++;

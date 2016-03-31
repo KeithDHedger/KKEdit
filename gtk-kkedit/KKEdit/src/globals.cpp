@@ -1383,7 +1383,7 @@ void catchSignal(int signal)
     exit(EXIT_FAILURE);
 }
  
-GtkWidget* creatNewBox(int orient,bool homog,int spacing)
+GtkWidget* createNewBox(int orient,bool homog,int spacing)
 {
 	GtkWidget	*retwidg=NULL;
 

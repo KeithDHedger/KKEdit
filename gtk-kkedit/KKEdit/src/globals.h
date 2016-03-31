@@ -464,7 +464,7 @@ void resetWidgetSenisitive(void);
 void catchSignal(int signal);
 void freeAndNull(char** ptr);
 
-GtkWidget* creatNewBox(int orient,bool homog,int spacing);
+GtkWidget* createNewBox(int orient,bool homog,int spacing);
 GtkWidget* createNewImageMenuItem(const char* stock,const char* label);
 GtkToolItem* createNewToolItem(const char* stock,const char* label);
 GtkWidget* createNewStockButton(const char* stock,const char* label);

@@ -335,7 +335,7 @@ void doMakeTool(void)
 	toolwin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)toolwin,gettext("Edit External Tools"));
 	//vbox=gtk_vbox_new(false,8);
-	vbox=creatNewBox(NEWVBOX,false,8);
+	vbox=createNewBox(NEWVBOX,false,8);
 
 //select tool
 	toolSelect=gtk_combo_box_text_new();
@@ -346,7 +346,7 @@ void doMakeTool(void)
 //name
 	toolNameWidget=gtk_entry_new();
 	//hbox=gtk_hbox_new(false,0);
-	hbox=creatNewBox(NEWHBOX,false,0);
+	hbox=createNewBox(NEWHBOX,false,0);
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(gettext("Tool Name:\t")),false,true,0);
 	gtk_box_pack_start(GTK_BOX(hbox),toolNameWidget,true,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
@@ -356,7 +356,7 @@ void doMakeTool(void)
 //command
 	commandLineWidget=gtk_entry_new();
 	//hbox=gtk_hbox_new(false,0);
-	hbox=creatNewBox(NEWHBOX,false,0);
+	hbox=createNewBox(NEWHBOX,false,0);
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(gettext("Command: \t")),false,true,0);
 	gtk_box_pack_start(GTK_BOX(hbox),commandLineWidget,true,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
@@ -366,7 +366,7 @@ void doMakeTool(void)
 	keyWidget=gtk_entry_new();
 	gtk_widget_show(keyWidget);
 	//hbox=gtk_hbox_new(false,0);
-	hbox=creatNewBox(NEWHBOX,false,0);
+	hbox=createNewBox(NEWHBOX,false,0);
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(gettext("Shortcut:\t\t")),false,true,0);
 	gtk_box_pack_start(GTK_BOX(hbox),keyWidget,true,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
@@ -377,7 +377,7 @@ void doMakeTool(void)
 	commentWidget=gtk_entry_new();
 	gtk_widget_show(commentWidget);
 	//hbox=gtk_hbox_new(false,0);
-	hbox=creatNewBox(NEWHBOX,false,0);
+	hbox=createNewBox(NEWHBOX,false,0);
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(gettext("Comment:  \t")),false,true,0);
 	gtk_box_pack_start(GTK_BOX(hbox),commentWidget,true,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
@@ -464,7 +464,7 @@ void doMakeTool(void)
 #endif
 
 	//hbox=gtk_hbox_new(false,0);
-	hbox=creatNewBox(NEWHBOX,false,0);
+	hbox=createNewBox(NEWHBOX,false,0);
 	//button=gtk_button_new_from_stock(GTK_STOCK_APPLY);
 	button=createNewStockButton(GTK_STOCK_APPLY,GTK_STOCK_APPLY);
 
@@ -1012,7 +1012,7 @@ void buildKeys()
 			keysWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 			gtk_window_set_title((GtkWindow*)keysWindow,gettext("Define Keyboard Shortcuts"));
 			//vbox=gtk_vbox_new(false,8);
-			vbox=creatNewBox(NEWVBOX,false,8);
+			vbox=createNewBox(NEWVBOX,false,8);
 
 			asprintf(&keycutsinfo,"%s",gettext("To set a custom shortcut:\nClick in the appropriate box and press CONTROL ( and optionally SHIFT ) plus your custom key.\nJust press 'Delete' to remove the shortcut\nClick 'Apply' to keep changes or 'Cancel' to discard any changes."));
 			item=gtk_label_new(keycutsinfo);
@@ -1024,7 +1024,7 @@ void buildKeys()
 			for(loop=0;loop<NUMSHORTCUTS;loop++)
 				{
 					//hbox=gtk_hbox_new(true,0);
-					hbox=creatNewBox(NEWHBOX,true,0);
+					hbox=createNewBox(NEWHBOX,true,0);
 					shortcuttext[loop]=gettext(shortcuttext[loop]);
 					gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(shortcuttext[loop]),true,true,0);
 					entries[loop]=gtk_entry_new();
@@ -1040,7 +1040,7 @@ void buildKeys()
 #endif
 
 			//hbox=gtk_hbox_new(true,4);
-			hbox=creatNewBox(NEWHBOX,true,4);
+			hbox=createNewBox(NEWHBOX,true,4);
 			//item=gtk_button_new_from_stock(GTK_STOCK_APPLY);
 			item=createNewStockButton(GTK_STOCK_APPLY,GTK_STOCK_APPLY);
 
@@ -1151,10 +1151,10 @@ void makePrefsCheck(int widgnum,const char* label,const char* name,bool onoff,bo
 
 void makePrefBox(bool box1,bool box2)
 {
-	prefHBox=creatNewBox(NEWHBOX,true,0);
+	prefHBox=createNewBox(NEWHBOX,true,0);
 #ifdef _USEGTK3_
-	prefHBox1=creatNewBox(NEWHBOX,true,0);
-	prefHBox2=creatNewBox(NEWHBOX,true,0);
+	prefHBox1=createNewBox(NEWHBOX,true,0);
+	prefHBox2=createNewBox(NEWHBOX,true,0);
 	if(box1==true)
 		gtk_widget_set_halign(prefHBox1,GTK_ALIGN_START);
 	if(box2==true)
@@ -1163,11 +1163,11 @@ void makePrefBox(bool box1,bool box2)
 	if(box1==true)
 		prefHBox1=(GtkWidget*)gtk_alignment_new(0,0.5,0,0);
 	else
-		prefHBox1=creatNewBox(NEWHBOX,true,0);
+		prefHBox1=createNewBox(NEWHBOX,true,0);
 	if(box2==true)
 		prefHBox2=(GtkWidget*)gtk_alignment_new(0,0.5,0,0);
 	else
-		prefHBox2=creatNewBox(NEWHBOX,true,0);
+		prefHBox2=createNewBox(NEWHBOX,true,0);
 #endif
 	gtk_box_pack_start((GtkBox*)prefHBox,prefHBox1,true,true,4);
 	gtk_box_pack_start((GtkBox*)prefHBox,prefHBox2,true,true,4);	
@@ -1184,12 +1184,12 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 
 	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)prefswin,"Preferences");
-	vbox=creatNewBox(NEWVBOX,false,8);
-	hbox=creatNewBox(NEWHBOX,false,8);
+	vbox=createNewBox(NEWVBOX,false,8);
+	hbox=createNewBox(NEWHBOX,false,8);
 
 //toolbar dnd
-	iconViewBox=creatNewBox(NEWHBOX,false,0);
-	fromHBox=creatNewBox(NEWHBOX,false,0);
+	iconViewBox=createNewBox(NEWHBOX,false,0);
+	fromHBox=createNewBox(NEWHBOX,false,0);
 
 	label=gtk_label_new(gettext("<b>Customize Tool Bar</b>"));
 	gtk_label_set_use_markup((GtkLabel*)label,true);
@@ -1212,7 +1212,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 
 //pages
 //page1
-	pagevbox=creatNewBox(NEWVBOX,false,0);
+	pagevbox=createNewBox(NEWVBOX,false,0);
 //appearence 1
 //indent
 	makePrefBox(true,true);
@@ -1258,7 +1258,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)prefsnotebook,true,true,0);
 
 //page2
-	pagevbox=creatNewBox(NEWVBOX,false,0);
+	pagevbox=createNewBox(NEWVBOX,false,0);
 //text appearence
 //tabwidth
 	makePrefBox(true,false);
@@ -1316,12 +1316,12 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu in categorised format"));
 
 	gtk_combo_box_set_active((GtkComboBox*)funcListDrop,listFunction);
-	hbox=creatNewBox(NEWHBOX,true,0);
+	hbox=createNewBox(NEWHBOX,true,0);
 	gtk_box_pack_start(GTK_BOX(hbox),(GtkWidget*)funcListDrop,false,false,0);
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)hbox,false,false,8);
 
 //show keybindings dialog
-	hbox=creatNewBox(NEWHBOX,true,0);
+	hbox=createNewBox(NEWHBOX,true,0);
 	item=gtk_button_new_with_label(gettext("Customize Keyboard Shortcuts"));
 	gtk_widget_set_name(item,"makekeys");
 	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
@@ -1332,7 +1332,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("Text Style")));
 
 //page 3
-	pagevbox=creatNewBox(NEWVBOX,false,0);
+	pagevbox=createNewBox(NEWVBOX,false,0);
 //admin
 //function search depth
 	makePrefBox(true,false);
@@ -1395,7 +1395,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	gtk_widget_set_name(prefsWidgets[BEKIND],"useplugmenu");
 	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[BEKIND],nagScreen);
 
-	hbox=creatNewBox(NEWHBOX,true,0);
+	hbox=createNewBox(NEWHBOX,true,0);
 	gtk_box_pack_start(GTK_BOX(hbox),(GtkWidget*)prefsWidgets[BEKIND],false,false,0);
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)hbox,false,false,0);
 
@@ -1408,7 +1408,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 #endif
 
-	hbox=creatNewBox(NEWHBOX,true,4);
+	hbox=createNewBox(NEWHBOX,true,4);
 	item=createNewStockButton(GTK_STOCK_APPLY,GTK_STOCK_APPLY);
 
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
@@ -1471,14 +1471,15 @@ void buildMainGui(void)
 	GtkWidget*		menurecent;
 	GtkWidget*		plugsubmenu=NULL;
 
-	mainWindowVBox=creatNewBox(NEWVBOX,false,0);
-	mainTopUserVBox=creatNewBox(NEWVBOX,false,0);
-	mainLeftUserVBox=creatNewBox(NEWVBOX,false,0);
-	mainNotebookVBox=creatNewBox(NEWVBOX,false,0);
-	mainRightUserVBox=creatNewBox(NEWVBOX,false,0);
-	mainBottomUserVBox=creatNewBox(NEWVBOX,false,0);
 
-	mainWindowHBox=creatNewBox(NEWHBOX,false,0);
+	mainWindowVBox=createNewBox(NEWVBOX,false,0);
+	mainTopUserVBox=createNewBox(NEWVBOX,false,0);
+	mainLeftUserVBox=createNewBox(NEWVBOX,false,0);
+	mainNotebookVBox=createNewBox(NEWVBOX,false,0);
+	mainRightUserVBox=createNewBox(NEWVBOX,false,0);
+	mainBottomUserVBox=createNewBox(NEWVBOX,false,0);
+
+	mainWindowHBox=createNewBox(NEWHBOX,false,0);
 
 #ifdef _USEGTK3_
 	mainWindowHPane=gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
@@ -1504,10 +1505,13 @@ void buildMainGui(void)
 	g_signal_connect(G_OBJECT(mainNotebook),"switch-page",G_CALLBACK(switchPage),NULL);
 	g_signal_connect(G_OBJECT(mainNotebook),"page-reordered",G_CALLBACK(switchPage),NULL);
 
-	menuBar=gtk_menu_bar_new();
-	toolBarBox=creatNewBox(NEWHBOX,true,0);
-	toolBar=(GtkToolbar*)gtk_toolbar_new();
+//g_object_set(mainNotebook,"enable-popup",true, NULL);
 
+
+	menuBar=gtk_menu_bar_new();
+	toolBarBox=createNewBox(NEWHBOX,true,0);
+	toolBar=(GtkToolbar*)gtk_toolbar_new();
+//gtk_widget_style_get_property
 //dnd
 	gtk_drag_dest_set(mainWindowVBox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets(mainWindowVBox);
@@ -1781,7 +1785,7 @@ void buildMainGui(void)
 	gtk_container_set_border_width(GTK_CONTAINER(mainVPane),0);
 	gtk_paned_add1(GTK_PANED(mainVPane),mainNotebookVBox);
 
-	toolOutVBox=creatNewBox(NEWVBOX,false,0);
+	toolOutVBox=createNewBox(NEWVBOX,false,0);
 
 	gtk_paned_add2(GTK_PANED(mainVPane),toolOutVBox);
 	mainWindowScrollbox=gtk_scrolled_window_new(NULL,NULL);
@@ -1799,9 +1803,36 @@ void buildMainGui(void)
 //add toolbar
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,toolBarBox,false,false,0);
 
+#if 0
+	gtk_container_add((GtkContainer*)mainWindow,mainWindowVBox);
+//	gtk_container_add((GtkContainer*)mainWindow,whbox);
+//	gtk_widget_show_all(whbox);
+//addmenubar
+	gtk_box_pack_start((GtkBox*)mainWindowVBox,menuBar,false,false,0);
+//add toolbar
+	gtk_box_pack_start((GtkBox*)mainWindowVBox,toolBarBox,false,false,0);
+
+//add left user
+	gtk_paned_pack1((GtkPaned*)mainWindowHPane,mainLeftUserVBox,true,true);
+//	gtk_paned_pack2((GtkPaned*)mainWindowHPane,secondWindowHPane,true,true);
+
+//add mainNotebook
+//	gtk_box_pack_start((GtkBox*)mainNotebookVBox,(GtkWidget*)mainNotebook,true,true,0);
+//gtk_paned_pack1((GtkPaned*)secondWindowHPane,mainWindowHBox,true,true);
+//gtk_box_pack_start((GtkBox*)secondWindowHPane,(GtkWidget*)mainNotebookVBox,true,true,0);
+//gtk_widget_show_all(mainWindowHPane);
+gtk_paned_pack2((GtkPaned*)mainWindowHPane,(GtkWidget*)mainNotebook,true,true);
+//	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainVPane,true,true,0);
+//	gtk_paned_pack1((GtkPaned*)secondWindowHPane,mainWindowHBox,true,false);
+ //                                                        
+////addright user
+//	gtk_paned_pack2((GtkPaned*)secondWindowHPane,mainRightUserVBox,false,true);
+
+#endif
+
 //add left user
 	gtk_paned_pack1((GtkPaned*)mainWindowHPane,mainLeftUserVBox,false,true);
-	gtk_paned_pack2((GtkPaned*)mainWindowHPane,secondWindowHPane,true,false);
+	gtk_paned_pack2((GtkPaned*)mainWindowHPane,secondWindowHPane,true,true);
 
 //add mainNotebook
 	gtk_box_pack_start((GtkBox*)mainNotebookVBox,(GtkWidget*)mainNotebook,true,true,0);
@@ -1899,8 +1930,8 @@ void buildFindReplace(void)
 	content_area=gtk_dialog_get_content_area(GTK_DIALOG(findReplaceDialog));
 	gtk_dialog_set_default_response((GtkDialog*)findReplaceDialog,FINDNEXT);
 
-	vbox=creatNewBox(NEWVBOX,true,0);
-	hbox=creatNewBox(NEWHBOX,false,0);
+	vbox=createNewBox(NEWVBOX,true,0);
+	hbox=createNewBox(NEWHBOX,false,0);
 
 	label=gtk_label_new(gettext("Find"));
 	gtk_container_add(GTK_CONTAINER(content_area),label);
@@ -1940,7 +1971,7 @@ void buildFindReplace(void)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 	gtk_widget_show_all(vbox);
 //line2
-	hbox=creatNewBox(NEWHBOX,false,0);
+	hbox=createNewBox(NEWHBOX,false,0);
 
 	item=gtk_check_button_new_with_label(gettext("Wrap"));
 	gtk_toggle_button_set_active((GtkToggleButton*)item,wrapSearch);
@@ -2002,8 +2033,8 @@ void buildWordCheck(int documentCheck)
 	spellCheckWord=gtk_dialog_new();
 	gtk_window_set_title((GtkWindow*)spellCheckWord,gettext("Spell check word"));
 
-	vbox=creatNewBox(NEWVBOX,false,0);
-	hbox=creatNewBox(NEWHBOX,true,0);
+	vbox=createNewBox(NEWVBOX,false,0);
+	hbox=createNewBox(NEWHBOX,true,0);
 
 	sprintf((char*)&labeltext,gettext("Change <i><b>%s</b></i> to: "),badWord);
 	label=gtk_label_new((char*)&labeltext);
@@ -2021,7 +2052,7 @@ void buildWordCheck(int documentCheck)
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,8);
 #endif
 
-	hbox=creatNewBox(NEWHBOX,true,0);
+	hbox=createNewBox(NEWHBOX,true,0);
 	button=createNewStockButton(GTK_STOCK_APPLY,GTK_STOCK_APPLY);
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doChangeWord),(gpointer)(long)docflag);
@@ -2106,8 +2137,8 @@ void buildGtkDocViewer(void)
 	if(docWindowX!=-1 && docWindowY!=-1)
 		gtk_window_move((GtkWindow *)docView,docWindowX,docWindowY);
 
-	vbox=creatNewBox(NEWVBOX,false,0);
-	hbox=creatNewBox(NEWHBOX,false,4);
+	vbox=createNewBox(NEWVBOX,false,0);
+	hbox=createNewBox(NEWHBOX,false,4);
 
 	webView=WEBKIT_WEB_VIEW(webkit_web_view_new());
 	g_signal_connect(G_OBJECT(webView),"navigation-policy-decision-requested",G_CALLBACK(docLinkTrap),NULL);

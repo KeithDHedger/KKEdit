@@ -1762,14 +1762,14 @@ bool doShutdown(GtkWidget* widget,GdkEvent *event,gpointer data)
 	delete_aspell_speller(spellChecker);
 #endif
 
-	ERRDATA g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
 
 	asprintf(&command,"rm -rf %s",tmpFolderName);
 	system(command);
 	ERRDATA debugFree(&command);
 	system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
 
-	g_application_release(mainApp);
+	ERRDATA g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
+	g_application_quit (mainApp);
 	ERRDATA return(false);
 }
 

@@ -21,7 +21,7 @@ char		*path=NULL;
 
 enum {QUIT,PULSE,PERCENT};
 
-GtkWidget* creatNewBox(int orient,bool homog,int spacing)
+GtkWidget* createNewBox(int orient,bool homog,int spacing)
 {
 	GtkWidget	*retwidg=NULL;
 
@@ -120,7 +120,7 @@ void showBarberPole(const char* title,char* filepath)
 	gtk_window_set_type_hint((GtkWindow*)progressWindow,GDK_WINDOW_TYPE_HINT_NORMAL);
 	gtk_window_set_title((GtkWindow*)progressWindow,title);
 	//vbox=gtk_vbox_new(FALSE,0);
-	vbox=creatNewBox(NEWVBOX,false,0);
+	vbox=createNewBox(NEWVBOX,false,0);
 	progressBar=gtk_progress_bar_new();
 	gtk_progress_bar_set_fraction((GtkProgressBar*)progressBar,0);
 
