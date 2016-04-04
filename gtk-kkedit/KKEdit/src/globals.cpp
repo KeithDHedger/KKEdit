@@ -1350,38 +1350,6 @@ bool doBusy(int busy,int what)
 return(false);
 }
 
-VISIBLE bool doUpdateWidgets=false;
-
-VISIBLE void resetWidgetSenisitive(void)
-{
-//TODO//
-//	ERRDATA
-//	if(doUpdateWidgets==true)
-//		{
-//			resetAllFilePrefs();	
-//	//		setSensitive(NULL,NULL);
-////			setSensitive();
-//			refreshMainWindow();
-//		}
-//	ERRDATA
-}
-
-VISIBLE void setWidgets(void)
-{
-return;
-	ERRDATA
-	pageStruct* page;
-
-	doUpdateWidgets=true;
-	page=getPageStructPtr(-1);
-
-	if(page!=NULL)
-		switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
-
-	resetWidgetSenisitive();
-	ERRDATA
-}
-
 int			errLine;
 const char	*errFile;
 const char	*errFunc;
@@ -1500,98 +1468,7 @@ GdkPixbuf* createNewIcon(const char* stock,GtkWidget* widg)
 
 	return(icon);
 }
-#if 0
-//void setSensitive(GtkTextBuffer *textbuffer,gpointer user_data)
-void setSensitive(void)
-{
-	ERRDATA
-	pageStruct*		page=getPageStructPtr(-1);
-	const gchar*	text;
-	char*			newlabel;
-	int				offset=0;
-	GtkTextIter	start_find,end_find;
 
-	setToobarSensitive();
-	if(page==NULL)
-		{
-//menu
-			gtk_widget_set_sensitive((GtkWidget*)undoMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)redoMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)cutMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)copyMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)pasteMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)funcMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)navMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)printMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)closeMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)closeAllMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)saveAllMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)revertMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)goBackMenu,false);
-			gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,0);
-			return;
-		}
-
-	if(sessionBusy==true)
-		return;
-
-	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
-	text=gtk_label_get_text((GtkLabel*)page->tabName);
-#ifdef _BUGGED_
-	gtk_widget_set_sensitive((GtkWidget*)undoMenu,true);
-	gtk_widget_set_sensitive((GtkWidget*)redoMenu,true);
-	gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,true);
-	gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,true);
-#else
-	gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));
-	gtk_widget_set_sensitive((GtkWidget*)redoMenu,gtk_source_buffer_can_redo(page->buffer));
-	gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,gtk_source_buffer_can_undo(page->buffer));
-	gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,gtk_source_buffer_can_redo(page->buffer));
-#endif
-			gtk_widget_set_sensitive((GtkWidget*)saveMenu,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
-			gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
-
-//tab
-			if(text[0]=='*')
-				offset=1;
-
-			if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer))==true)
-				asprintf(&newlabel,"*%s",&text[offset]);
-			else
-				newlabel=strdup(&text[offset]);
-
-			gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)newlabel);
-			ERRDATA debugFree(&newlabel);
-
-
-
-			gtk_widget_set_sensitive((GtkWidget*)cutMenu,true);
-			gtk_widget_set_sensitive((GtkWidget*)copyMenu,true);
-			gtk_widget_set_sensitive((GtkWidget*)pasteMenu,true);
-			gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,true);
-			gtk_widget_set_sensitive((GtkWidget*)navMenu,true);
-			gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
-			gtk_widget_set_sensitive((GtkWidget*)printMenu,true);
-			gtk_widget_set_sensitive((GtkWidget*)closeMenu,true);
-			gtk_widget_set_sensitive((GtkWidget*)closeAllMenu,true);
-			gtk_widget_set_sensitive((GtkWidget*)saveAllMenu,true);
-			gtk_widget_set_sensitive((GtkWidget*)revertMenu,true);
-			gtk_widget_show_all(page->tabName);
-			updateStatusBar((GtkTextBuffer*)page->buffer,NULL,NULL,page);
-			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start_find);
-			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end_find);
-			gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);
-//		}
-//do plugin sensitive
-	globalPlugins->globalPlugData->page=page;
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"setSensitive");
-}
-#endif
 void setToobarWidgetsSensitive(void)
 {
 	ERRDATA
@@ -1719,105 +1596,6 @@ void setToobarWidgetsSensitive(void)
 				}
 		}
 }
-//bool newBusyFlag=false;
-
-void setWidgetsSensitiveXXX(void)
-{
-return;
-	ERRDATA
-	pageStruct*		page;
-	const gchar*	text=NULL;
-	char*			newlabel=NULL;
-	int				offset=0;
-	bool			ismodified=false;
-	bool			hasselection=false;
-
-//	if(busyFlag==true)
-//		{
-//			while(gtk_events_pending())
-//				gtk_main_iteration();
-//			return;
-//		}
-
-	page=getPageStructPtr(-1);
-//printf("void setWidgetsSensitive(void)\n");
-	setToobarWidgetsSensitive();
-	if(page==NULL)
-		{
-//menu
-			gtk_widget_set_sensitive((GtkWidget*)undoMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)redoMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)cutMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)copyMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)pasteMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)funcMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)navMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)printMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)closeMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)closeAllMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)saveAllMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)revertMenu,false);
-			gtk_widget_set_sensitive((GtkWidget*)goBackMenu,false);
-			gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,0);
-			return;
-		}
-
-	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
-	text=gtk_label_get_text((GtkLabel*)page->tabName);
-
-	gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));
-	gtk_widget_set_sensitive((GtkWidget*)redoMenu,gtk_source_buffer_can_redo(page->buffer));
-	gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,gtk_source_buffer_can_undo(page->buffer));
-	gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,gtk_source_buffer_can_redo(page->buffer));
-
-	ismodified=gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer));
-
-	gtk_widget_set_sensitive(saveMenu,ismodified);
-	text=gtk_label_get_text((GtkLabel*)page->tabName);
-
-	if(text[0]=='*')
-		offset=1;
-	else
-		offset=0;
-
-	if(ismodified==true)
-		asprintf(&newlabel,"*%s",&text[offset]);
-	else
-		asprintf(&newlabel,"%s",&text[offset]);
-
-	gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)newlabel);
-	ERRDATA debugFree(&newlabel);
-
-	hasselection=gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer);
-	gtk_widget_set_sensitive((GtkWidget*)cutMenu,hasselection);
-	gtk_widget_set_sensitive((GtkWidget*)copyMenu,hasselection);
-	gtk_widget_set_sensitive((GtkWidget*)pasteMenu,true);
-	gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,true);
-	gtk_widget_set_sensitive((GtkWidget*)navMenu,true);
-	gtk_widget_set_sensitive((GtkWidget*)funcMenu,true);
-	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
-	gtk_widget_set_sensitive((GtkWidget*)printMenu,true);
-	gtk_widget_set_sensitive((GtkWidget*)closeMenu,true);
-	gtk_widget_set_sensitive((GtkWidget*)closeAllMenu,true);
-	gtk_widget_set_sensitive((GtkWidget*)saveAllMenu,true);
-	gtk_widget_set_sensitive((GtkWidget*)revertMenu,true);
-	gtk_widget_show_all(page->tabName);
-
-	updateStatusBar((GtkTextBuffer*)page->buffer,NULL,NULL,page);
-//TODO// what is this?
-//	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start_find);
-//	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end_find);
-//	gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);
-
-//do plugin sensitive
-	globalPlugins->globalPlugData->page=page;
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"setSensitive");
-}
 
 void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 {
@@ -1856,6 +1634,10 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 	gtk_widget_set_sensitive((GtkWidget*)cutMenu,hasselection);
 	gtk_widget_set_sensitive((GtkWidget*)copyMenu,hasselection);
 	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
+
+//do plugin sensitive
+	globalPlugins->globalPlugData->page=page;
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"setSensitive");
 }
 
 void resetSensitive(void)

@@ -432,8 +432,6 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 	if(page->lang==NULL)
 		setLanguage(page);
 	switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
-	//setSensitive(NULL,NULL);
-	//setSensitive();
 	setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 	ERRDATA
 	globalPlugins->globalPlugData->page=page;
@@ -491,8 +489,6 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 			g_string_free(str,true);
 			ERRDATA debugFree(&filepath);
 			ERRDATA debugFree(&filename);
-			//setSensitive(NULL,NULL);
-			//setSensitive();
 			setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 		}
 
@@ -589,10 +585,6 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	ERRDATA
 
 	closeAllTabs(NULL,NULL);
-//	while(gtk_events_pending())
-//		gtk_main_iteration_do(false);
-
-	doUpdateWidgets=false;
 	showBarberPole(gettext("Restoring Session ..."));
 
 	if(data==NULL)
@@ -642,15 +634,8 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 
 	ERRDATA delete buf;
 
-//	while(gtk_events_pending())
-//		gtk_main_iteration_do(false);
 	currentTabNumber=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)-1;
-	setWidgets();
-	//setSensitive(NULL,NULL);
-	//setSensitive();
-	ERRDATA
-	killBarberPole();
-	ERRDATA
+	ERRDATA killBarberPole();
 }
 
 int showFileChanged(char* filename)
@@ -779,12 +764,8 @@ pageStruct* makeNewPage(void)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
 
 	page->buffer=gtk_source_buffer_new(NULL);
-
-//gtk_source_buffer_begin_not_undoable_action((GtkSourceBuffer*)page->buffer);
-
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
-//gtk_source_buffer_set_max_undo_levels(page->buffer,-1);
 //completion
 	page->completion=gtk_source_view_get_completion(GTK_SOURCE_VIEW(page->view));
 	g_object_set(page->completion,"remember-info-visibility",true,NULL);
@@ -835,13 +816,6 @@ pageStruct* makeNewPage(void)
 	g_signal_connect(G_OBJECT(page->view),"button-press-event",G_CALLBACK(clickInView),NULL);
 
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
-//	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(setWidgetsSensitive),NULL);
-//	g_signal_connect(G_OBJECT(page->buffer),"changed",G_CALLBACK(tc),(gpointer)page);
-//	g_signal_connect(G_OBJECT(page->buffer),"highlight-updated",G_CALLBACK(setWidgetsSensitive),NULL);
-//	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(setWidgetsSensitive),NULL);
-//g_signal_connect(G_OBJECT(sBuf),"highlight-updated",G_CALLBACK(setWidgetsSensitive),NULL);
-//	gtk_widget_grab_focus((GtkWidget*)page->view);
-//xxxxxxxxxxxxxx
 	uman=gtk_source_buffer_get_undo_manager(page->buffer);
 	g_signal_connect(G_OBJECT(uman),"can-undo-changed",G_CALLBACK(markUndo),(void*)page);
 	g_signal_connect(G_OBJECT(uman),"can-redo-changed",G_CALLBACK(markRedo),(void*)page);
@@ -853,8 +827,6 @@ pageStruct* makeNewPage(void)
 //status bar
 	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(updateStatusBar),NULL);
 	ERRDATA
-//	setWidgetsSensitive();
-//gtk_source_buffer_end_not_undoable_action((GtkSourceBuffer*)page->buffer);
 	setPageSensitive();
 	ERRDATA return(page);
 }
@@ -1151,6 +1123,7 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"newFile");
 
+	setPageSensitive();
 //	gtk_source_buffer_end_not_undoable_action((GtkSourceBuffer*)page->buffer);
 //	doBusy(false,NULL);
 }

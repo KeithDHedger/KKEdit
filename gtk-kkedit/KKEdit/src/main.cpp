@@ -444,10 +444,7 @@ void open(GApplication* application,GFile** files,gint n_files,const gchar* hint
 				}
 		}
 
-//	setSensitive(NULL,NULL);
-//	setSensitive();
 	fromGOpen=false;
-
 	g_application_release(application);
 	ERRDATA
 }
@@ -501,8 +498,6 @@ void appStart(GApplication  *application,gpointer data)
 			gtk_window_set_default_icon_name(PACKAGE "Root");
 			gtk_window_set_icon_name((GtkWindow*)mainWindow,PACKAGE "Root");
 		}
-//	setSensitive(NULL,NULL);
-//	setSensitive();
 
 	if((timeToNag==true) &&(autoCheck==true))
 		doNagStuff();
@@ -562,7 +557,6 @@ int main(int argc, char **argv)
 
 	singleOverRide=false;
 	loadPluginsFlag=true;
-	doUpdateWidgets=true;
 
 	GOptionEntry	entries[]=
 {

@@ -1911,7 +1911,6 @@ gtk_paned_pack2((GtkPaned*)mainWindowHPane,(GtkWidget*)mainNotebook,true,true);
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
 	ERRDATA
 //	doBusy(false,NULL);
-//	setWidgetsSensitive();	
 	resetSensitive();
 }
 

@@ -72,14 +72,10 @@ bool HistoryClass::savePosition(void)
 			buf->getLineData();
 			gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)savedPage->buffer,"back-mark",&buf->cursorPos);
 			this->goBack=true;
-			//setSensitive(NULL,NULL);
-			//setSensitive();
 			ERRDATA return(true);
 		}
 
 	this->goBack=false;
-//	setSensitive(NULL,NULL);
-//	setSensitive();
 	ERRDATA return(false);
 }
 

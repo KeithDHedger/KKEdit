@@ -430,9 +430,7 @@ extern args				tool_vars[];
 extern args				kkedit_startup_vars[];
 extern args				keybindings_rc[];
 
-
 extern const char*		localeLang;
-extern bool				doUpdateWidgets;
 
 //notebook
 extern int				openInThisTab;
@@ -460,9 +458,6 @@ char* truncateTabNameWithElipses(char* str,unsigned int maxlen);
 //void doBusy(bool busy,pageStruct* page);
 //bool doBusy(int busy,int what);
 
-void setWidgets(void);
-void resetWidgetSenisitive(void);
-
 void catchSignal(int signal);
 void freeAndNull(char** ptr);
 
@@ -473,8 +468,6 @@ GtkWidget* createNewStockButton(const char* stock,const char* label);
 GdkPixbuf* createNewIcon(const char* stock,GtkWidget* widg);
 GtkWidget* createNewStockMenuItem(const char* stock,const char* label);
 
-//void setWidgetsSensitive(void);
-//extern bool newBusyFlag;
 void setToobarWidgetsSensitive(void);
 void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page);
 void resetSensitive(void);
