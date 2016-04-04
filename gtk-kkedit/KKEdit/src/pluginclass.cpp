@@ -2,7 +2,7 @@
  *
  * ©K. D. Hedger. Sun 25 Oct 14:51:48 GMT 2015 kdhedger68713@gmail.com
 
- * This file (pluginclass.cpp) is part of KKEdit.
+ * This file(pluginclass.cpp) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -101,7 +101,7 @@ bool PluginClass::checkForEnabled(char* plugname)
 					fgets(buffer,1024,fd);
 					sscanf(buffer,"%s",(char*)&name);
 
-					if((strlen(name)>0) && (strcasecmp(name,plugname)==0))
+					if((strlen(name)>0) &&(strcasecmp(name,plugname)==0))
 						{
 							fclose(fd);
 							ERRDATA debugFree(&filename);
@@ -172,7 +172,7 @@ void PluginClass::loadPlugins(void)
 
 	if(!g_module_supported())
 		{
-			perror ("modules not supported");
+			perror("modules not supported");
 		}
 	else
 		{

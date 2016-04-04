@@ -2,7 +2,7 @@
  *
  * ©K. D. Hedger. Sun 25 Oct 14:50:07 GMT 2015 kdhedger68713@gmail.com
 
- * This file (guis.cpp) is part of KKEdit.
+ * This file(guis.cpp) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ void selectToolOptions(GtkWidget* widget,gpointer data)
 			if((flags & TOOL_INSERT_MASK)==TOOL_REPLACE_OP)
 				gtk_toggle_button_set_active((GtkToggleButton*)replaceWidget,true);
 
-			if((gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false) || (gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget)==true))
+			if((gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false) ||(gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget)==true))
 				{
 					gtk_widget_set_sensitive(ignoreWidget,false);
 					gtk_widget_set_sensitive(pasteWidget,false);
@@ -148,7 +148,7 @@ void setUpToolBar(void)
 //open+recent
 #ifdef _USEGTK3_
 						image=gtk_image_new_from_icon_name(GTK_STOCK_OPEN,GTK_ICON_SIZE_LARGE_TOOLBAR);
-						openButton=gtk_menu_tool_button_new (image,GTK_STOCK_OPEN3);
+						openButton=gtk_menu_tool_button_new(image,GTK_STOCK_OPEN3);
 						gtk_menu_tool_button_set_menu((GtkMenuToolButton*)openButton,recent);
 						gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(openButton),gettext("Open Recent File"));
 						gtk_toolbar_insert(toolBar,openButton,-1);
@@ -233,7 +233,7 @@ void setUpToolBar(void)
 					case '9':
 						lineNumberWidget=gtk_entry_new();
 						gotoLineButton=gtk_tool_item_new();
-						gtk_entry_set_width_chars ((GtkEntry *)lineNumberWidget,6);
+						gtk_entry_set_width_chars((GtkEntry *)lineNumberWidget,6);
 						gtk_container_add((GtkContainer *)gotoLineButton,lineNumberWidget);
 						gtk_toolbar_insert(toolBar,gotoLineButton,-1);
 						g_signal_connect_after(G_OBJECT(lineNumberWidget),"key-release-event",G_CALLBACK(jumpToLineFromBar),NULL);
@@ -306,13 +306,13 @@ void fillCombo(GtkComboBoxText* combo)
 gboolean getToolKey(GtkEntry* widget,GdkEventKey* event,gpointer data)
 {
 	ERRDATA
-	if((event->type==GDK_KEY_PRESS) && (event->keyval==GDK_KEY_Delete))
+	if((event->type==GDK_KEY_PRESS) &&(event->keyval==GDK_KEY_Delete))
 		{
 			gtk_entry_set_text(widget,"");
 			ERRDATA return(true);
 		}
 
-	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
+	if((event->type==GDK_KEY_PRESS)&&(event->state & GDK_CONTROL_MASK))
 		gtk_entry_set_text(widget,gdk_keyval_name(event->keyval));
 
 	ERRDATA return(true);
@@ -524,7 +524,7 @@ void buildTools(void)
 	ptr=toolsList;
 	while(ptr!=NULL)
 		{
-			if( ((toolStruct*)ptr->data)->global==true)
+			if(((toolStruct*)ptr->data)->global==true)
 				{
 					gotglobal=true;
 					//menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
@@ -555,7 +555,7 @@ void buildTools(void)
 	ptr=toolsList;
 	while(ptr!=NULL)
 		{
-			if( ((toolStruct*)ptr->data)->global==false)
+			if(((toolStruct*)ptr->data)->global==false)
 				{
 					//menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
 					menuitem=createNewImageMenuItem(NULL,((toolStruct*)ptr->data)->menuName);
@@ -600,7 +600,7 @@ void populateStore(void)
 				{
 					case 'N':
 //new
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_NEW,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						pbuf=createNewIcon(GTK_STOCK_NEW,image);
 						if(pbuf!=NULL)
@@ -612,7 +612,7 @@ void populateStore(void)
 						break;
 					case 'O':
 //open+recent
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_OPEN,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						pbuf=createNewIcon(GTK_STOCK_OPEN,image);
 						if(pbuf!=NULL)
@@ -624,7 +624,7 @@ void populateStore(void)
 						break;
 					case 'S':
 //save
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_SAVE,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						pbuf=createNewIcon(GTK_STOCK_SAVE,image);
 
@@ -638,7 +638,7 @@ void populateStore(void)
 
 					case 'X':
 //cut
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_CUT,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						pbuf=createNewIcon(GTK_STOCK_CUT,image);
 
@@ -651,7 +651,7 @@ void populateStore(void)
 						break;
 					case 'C':
 //copy
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_COPY,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						pbuf=createNewIcon(GTK_STOCK_COPY,image);
 
@@ -664,7 +664,7 @@ void populateStore(void)
 						break;
 					case 'P':
 //paste
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_PASTE,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						pbuf=createNewIcon(GTK_STOCK_PASTE,image);
 
@@ -677,7 +677,7 @@ void populateStore(void)
 						break;
 					case 'U':
 //undo
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_UNDO,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						pbuf=createNewIcon(GTK_STOCK_UNDO,image);
 
@@ -690,7 +690,7 @@ void populateStore(void)
 						break;
 					case 'R':
 //redo
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						pbuf=createNewIcon(GTK_STOCK_REDO,image);
 
 						if(pbuf!=NULL)
@@ -702,7 +702,7 @@ void populateStore(void)
 						break;
 					case 'F':
 //find
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_FIND,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						pbuf=createNewIcon(GTK_STOCK_FIND,image);
 
@@ -715,7 +715,7 @@ void populateStore(void)
 						break;
 					case 'G':
 //navigation
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						pbuf=createNewIcon(GTK_STOCK_DIALOG_QUESTION,image);
 
@@ -728,7 +728,7 @@ void populateStore(void)
 						break;
 //go back
 					case 'B':
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_GO_BACK,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
 						pbuf=createNewIcon(GTK_STOCK_GO_BACK,image);
 
@@ -741,7 +741,7 @@ void populateStore(void)
 						break;
 
 					case '9':
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/num.png",NULL);
 						if(pbuf!=NULL)
 							{
@@ -752,7 +752,7 @@ void populateStore(void)
 						break;
 
 					case 'A':
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/api.png",NULL);
 						if(pbuf!=NULL)
 							{
@@ -762,7 +762,7 @@ void populateStore(void)
 						gtk_widget_set_sensitive((GtkWidget*)tool[11],false);
 						break;
 					case 'Q':
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/qtapi.png",NULL);
 						if(pbuf!=NULL)
 							{
@@ -772,7 +772,7 @@ void populateStore(void)
 						gtk_widget_set_sensitive((GtkWidget*)tool[16],false);
 						break;
 					case 'D':
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/finddef.png",NULL);
 						if(pbuf!=NULL)
 							{
@@ -782,7 +782,7 @@ void populateStore(void)
 						gtk_widget_set_sensitive((GtkWidget*)tool[12],false);
 						break;
 					case 'L':
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/live.png",NULL);
 						if(pbuf!=NULL)
 							{
@@ -793,7 +793,7 @@ void populateStore(void)
 						break;
 
 					case 's':
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/sep.png",NULL);
 						if(pbuf!=NULL)
 							{
@@ -804,7 +804,7 @@ void populateStore(void)
 
 					case 'E':
 //expander
-						gtk_list_store_append (listStore, &iter);
+						gtk_list_store_append(listStore, &iter);
 						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/expand.png",NULL);
 						if(pbuf!=NULL)
 							{
@@ -912,7 +912,7 @@ bool clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 
 	path=gtk_icon_view_get_path_at_pos((GtkIconView *)widget,event->button.x,event->button.y);
 
-	if ((GDK_CONTROL_MASK & state) && (path!=NULL))
+	if((GDK_CONTROL_MASK & state) &&(path!=NULL))
 		{
 			gtk_tree_model_get_iter((GtkTreeModel*)listStore,&iter,path);
 			gtk_tree_model_get((GtkTreeModel*)listStore,&iter,BUTTON_NUM,&button,-1);
@@ -935,16 +935,16 @@ void doIconView(void)
 	
 	populateStore();
 
-	gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (iconView),GTK_SELECTION_SINGLE);
-	gtk_icon_view_set_item_orientation(GTK_ICON_VIEW (iconView),GTK_ORIENTATION_HORIZONTAL);
-	gtk_icon_view_set_columns (GTK_ICON_VIEW(iconView),24);
+	gtk_icon_view_set_selection_mode(GTK_ICON_VIEW(iconView),GTK_SELECTION_SINGLE);
+	gtk_icon_view_set_item_orientation(GTK_ICON_VIEW(iconView),GTK_ORIENTATION_HORIZONTAL);
+	gtk_icon_view_set_columns(GTK_ICON_VIEW(iconView),24);
 	gtk_icon_view_set_reorderable(GTK_ICON_VIEW(iconView),TRUE);
 
 	renderer=gtk_cell_renderer_pixbuf_new();
 	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(iconView),renderer,false);
 
 	renderer=gtk_cell_renderer_text_new();
-	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(iconView),renderer,false);
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(iconView),renderer,false);
 
 	gtk_box_pack_start(GTK_BOX(iconViewBox),(GtkWidget*)iconView,false,false,2);
 	g_signal_connect(G_OBJECT(iconView),"button-press-event",G_CALLBACK(clickIt),NULL);
@@ -984,13 +984,13 @@ void setKeyCuts(GtkWidget* widget,gpointer data)
 gboolean setKeyInEntry(GtkEntry* widget,GdkEventKey* event,gpointer data)
 {
 	ERRDATA
-	if((event->type==GDK_KEY_PRESS) && (event->keyval==GDK_KEY_Delete))
+	if((event->type==GDK_KEY_PRESS) &&(event->keyval==GDK_KEY_Delete))
 		{
 			gtk_entry_set_text(widget,"");
 			ERRDATA return(true);
 		}
 
-	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
+	if((event->type==GDK_KEY_PRESS)&&(event->state & GDK_CONTROL_MASK))
 		gtk_entry_set_text(widget,gdk_keyval_name(event->keyval));
 
 	ERRDATA return(true);
@@ -1013,7 +1013,7 @@ void buildKeys()
 			//vbox=gtk_vbox_new(false,8);
 			vbox=createNewBox(NEWVBOX,false,8);
 
-			asprintf(&keycutsinfo,"%s",gettext("To set a custom shortcut:\nClick in the appropriate box and press CONTROL ( and optionally SHIFT ) plus your custom key.\nJust press 'Delete' to remove the shortcut\nClick 'Apply' to keep changes or 'Cancel' to discard any changes."));
+			asprintf(&keycutsinfo,"%s",gettext("To set a custom shortcut:\nClick in the appropriate box and press CONTROL(and optionally SHIFT ) plus your custom key.\nJust press 'Delete' to remove the shortcut\nClick 'Apply' to keep changes or 'Cancel' to discard any changes."));
 			item=gtk_label_new(keycutsinfo);
 			gtk_label_set_justify((GtkLabel*)item,GTK_JUSTIFY_CENTER);
 			gtk_label_set_line_wrap((GtkLabel*)item,true);
@@ -1297,7 +1297,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext("Bookmark Highlight Colour:")));
 
 	GdkColor color;
-	gdk_color_parse ((const gchar *)highlightColour,&color);
+	gdk_color_parse((const gchar *)highlightColour,&color);
 	bmHighlightBox=gtk_color_button_new_with_color(&color);
 	gtk_box_pack_start((GtkBox*)prefHBox2,bmHighlightBox,false,true,0);
 	gtk_box_pack_start((GtkBox*)pagevbox,prefHBox,false,false,0);
@@ -1381,7 +1381,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	makePrefsCheck(UPDATECHECK,gettext("Check For Updates"),"updatecheck",autoCheck,true,true);
 //use global plug menu
 	makePrefBox(true,true);
-	makePrefsCheck(GLOBALPLUGMENU,gettext("Use Global Plugins Menu ( Requires Restart )"),"useplugmenu",useGlobalPlugMenu,true,true);
+	makePrefsCheck(GLOBALPLUGMENU,gettext("Use Global Plugins Menu(Requires Restart )"),"useplugmenu",useGlobalPlugMenu,true,true);
 
 	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("Administration")));
 //end admin
@@ -1438,17 +1438,17 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 
 	itemlist=gtk_recent_chooser_get_items(chooser);
 
-	for (l=itemlist;l !=NULL;l=l->next)
+	for(l=itemlist;l !=NULL;l=l->next)
 		{
 			const gchar *menuname;
-			GtkRecentInfo *info = (GtkRecentInfo*)l->data;
-			if (i >= MAXRECENT)
+			GtkRecentInfo *info =(GtkRecentInfo*)l->data;
+			if(i >= MAXRECENT)
 				break;
 			i++;
 
 			menuname=gtk_recent_info_get_display_name(info);
 			uri=(char*)gtk_recent_info_get_uri(info);
-			if (uri!=NULL)
+			if(uri!=NULL)
 				{
 					filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
 					//menuitem=gtk_image_menu_item_new_with_label(menuname);
@@ -1456,7 +1456,7 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(recentFileMenu),(void*)filename);
-					g_free (uri);
+					g_free(uri);
 				}
 		}
 	ERRDATA
@@ -1505,12 +1505,13 @@ void buildMainGui(void)
 	gtk_notebook_set_scrollable(mainNotebook,true);
 	g_signal_connect(G_OBJECT(mainNotebook),"switch-page",G_CALLBACK(switchPage),NULL);
 	g_signal_connect(G_OBJECT(mainNotebook),"page-reordered",G_CALLBACK(switchPage),NULL);
+	g_signal_connect(G_OBJECT(mainNotebook),"page-removed",G_CALLBACK(realCloseTab),NULL);
 
 	menuBar=gtk_menu_bar_new();
 	toolBarBox=createNewBox(NEWHBOX,true,0);
 	toolBar=(GtkToolbar*)gtk_toolbar_new();
-//gtk_widget_set_hexpand ((GtkWidget*)toolBar,false);
-//gtk_widget_set_hexpand ((GtkWidget*)toolBarBox,false);
+//gtk_widget_set_hexpand((GtkWidget*)toolBar,false);
+//gtk_widget_set_hexpand((GtkWidget*)toolBarBox,false);
 //dnd
 	gtk_drag_dest_set(mainWindowVBox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets(mainWindowVBox);
@@ -1872,9 +1873,8 @@ gtk_paned_pack2((GtkPaned*)mainWindowHPane,(GtkWidget*)mainNotebook,true,true);
 	gtk_widget_hide(mainLeftUserVBox);
 	gtk_widget_hide(mainRightUserVBox);
 
-	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
+//	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
 
-	
 	globalPlugins->globalPlugData->mlist.menuFile=fileMenu;
 	globalPlugins->globalPlugData->mlist.menuEdit=editMenu;
 	globalPlugins->globalPlugData->mlist.menuFunc=funcMenu;
@@ -1905,11 +1905,14 @@ gtk_paned_pack2((GtkPaned*)mainWindowHPane,(GtkWidget*)mainNotebook,true,true);
 	globalPlugins->globalPlugData->toolOutWindow=toolOutputView;
 	globalPlugins->globalPlugData->tabPopUpMenu=NULL;
 	globalPlugins->globalPlugData->contextPopUpMenu=NULL;
+
 //gettext
 	globalPlugins->globalPlugData->locale=LOCALEDIR;
-
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
 	ERRDATA
+//	doBusy(false,NULL);
+//	setWidgetsSensitive();	
+	resetSensitive();
 }
 
 void buildFindReplace(void)

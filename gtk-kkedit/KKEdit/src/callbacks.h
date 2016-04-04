@@ -2,7 +2,7 @@
  *
  * ©K. D. Hedger. Sun 25 Oct 14:49:02 GMT 2015 kdhedger68713@gmail.com
 
- * This file (callbacks.h) is part of KKEdit.
+ * This file(callbacks.h) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 void doOpenFile(GtkWidget* widget,gpointer data);
 void closeTab(GtkWidget* widget,gpointer data);
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint arg2,gpointer user_data);
-void setSensitive(void);
+//void setSensitive(void);
 //void setSensitive(GtkTextBuffer *textbuffer,gpointer user_data);
 void copyToClip(GtkWidget* widget,gpointer data);
 void cutToClip(GtkWidget* widget,gpointer data);
@@ -51,7 +51,7 @@ void newEditor(GtkWidget* widget,gpointer data);
 void changeSourceStyle(GtkWidget* widget,gpointer data);
 int yesNo(char* question,char* file);
 
-void line_mark_activated (GtkSourceGutter *gutter,GtkTextIter *iter,GdkEventButton  *ev,pageStruct* page);
+void line_mark_activated(GtkSourceGutter *gutter,GtkTextIter *iter,GdkEventButton  *ev,pageStruct* page);
 void toggleBookmark(GtkWidget*,GtkTextIter* titer);
 void toggleBookMarkBar(GtkWidget* widget,gpointer data);
 void setToobarSensitive(void);
@@ -77,5 +77,10 @@ void toggleAutoComplete(GtkWidget* widget,gpointer data);
 void toggleHighlightCurrent(GtkWidget* widget,gpointer data);
 
 //void setSensitiveXX(GtkTextBuffer *textbuffer,gpointer user_data);
+void markUndo(GtkSourceUndoManager *manager,pageStruct *page);
+void markRedo(GtkSourceUndoManager *manager,pageStruct *page);
+void markDirty(GtkTextBuffer *textbuffer,pageStruct *page);
+void realCloseTab(GtkNotebook *notebook,GtkWidget *child,guint page_num,gpointer user_data);
+
 
 #endif

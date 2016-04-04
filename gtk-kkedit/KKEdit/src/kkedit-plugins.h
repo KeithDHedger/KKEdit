@@ -101,6 +101,7 @@ struct pageStruct
 	GtkSourceBuffer*	buffer;
 	GtkSourceView*		view;
 	GtkSourceView*		view2;
+	char*				fileName;
 	char*				filePath;
 	char*				realFilePath;
 	char*				dirName;
@@ -111,7 +112,6 @@ struct pageStruct
 	GtkTextIter			match_start;
 	GtkTextIter			match_end;
 	bool				isFirst;
-	char*				fileName;
 	GFile*				gFile; 
 	GFileMonitor*		monitor;
 	bool				itsMe;
@@ -124,10 +124,16 @@ struct pageStruct
 	GtkTextMark*		backMark;
 	GtkTextTag*			highlightTag;
 	GList*				userDataList;
-	GtkSourceCompletion* completion;
+	GtkSourceCompletion	*completion;
 	GSList*				regexList;
 	int					regexMatchNumber;
-	gpointer			reserved4;
+	bool				canUndo;
+	bool				canRedo;
+	bool				isDirty;
+	void				*reserved1;
+	void				*reserved2;
+	void				*reserved3;
+	void				*reserved4;
 };
 #endif
 

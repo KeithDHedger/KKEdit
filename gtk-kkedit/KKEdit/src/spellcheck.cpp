@@ -2,7 +2,7 @@
  *
  * ©K. D. Hedger. Sun 25 Oct 14:52:24 GMT 2015 kdhedger68713@gmail.com
 
- * This file (spellcheck.cpp) is part of KKEdit.
+ * This file(spellcheck.cpp) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  * Parts of this code from aspell-0.60.6.1 example
  * example-c.c
 
- * Copyright (C) 2000-2001 by Kevin Atkinson under the GNU LGPL
+ * Copyright(C) 2000-2001 by Kevin Atkinson under the GNU LGPL
  * license version 2.0 or 2.1.  You should have received a copy of the
  * LGPL license along with this library if you did not you can find it
  * at http://www.gnu.org/. 
@@ -130,7 +130,7 @@ void doChangeWord(GtkWidget* widget,gpointer data)
 	else
 		goodWord=gtk_combo_box_text_get_active_text((GtkComboBoxText*)wordListDropbox);
 
-	if((goodWord!=NULL) && (badWord!=NULL))
+	if((goodWord!=NULL) &&(badWord!=NULL))
 		aspell_speller_store_replacement(spellChecker,badWord,-1,goodWord,-1);
 
 	gtk_widget_destroy(spellCheckWord);
@@ -187,7 +187,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 	asprintf(&tempfile,"%s/KKEditAspell-%s",tmpFolderName,slice->randomName(6));
 	/* Open the file */
 	doc=fopen(filename,"r");
-	if (doc<=0)
+	if(doc<=0)
 		{
 	  		printf("Error: Unable to open the file \"%s\" for reading.",filename);
 	  		ERRDATA return;
@@ -204,7 +204,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 
 	/* Set up the document checker */
 	ret=new_aspell_document_checker(spellChecker);
-	if (aspell_error(ret)!=0)
+	if(aspell_error(ret)!=0)
 		{
 			printf("Error: %s\n",aspell_error_message(ret));
 			fclose(out);
@@ -278,7 +278,7 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 			buffer=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer, &start, &end, FALSE);
 
 			out=fopen(page->filePath,"w");
-			if (out!=NULL)
+			if(out!=NULL)
 				{
 					fputs(buffer,out);
 					fclose(out);
@@ -286,7 +286,8 @@ void doSpellCheckDoc(GtkWidget* widget,gpointer data)
 				}
 			gtk_text_buffer_set_modified((GtkTextBuffer*)page->buffer,false);
 			//setSensitive(NULL,NULL);
-			setSensitive();
+			//setSensitive();
+			setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 		}
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 	ERRDATA

@@ -2,7 +2,7 @@
  *
  * ©K. D. Hedger. Sun 25 Oct 14:51:00 GMT 2015 kdhedger68713@gmail.com
 
- * This file (encoding.cpp) is part of KKEdit.
+ * This file(encoding.cpp) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,9 +85,9 @@ guint get_encoding_code(void)
 			if(!env)
 				env=g_getenv("LANG");
 			if(env && strlen(env) >= 2)
-				while (code==END_CODE && j < END_CODE)
+				while(code==END_CODE && j < END_CODE)
 					{
-						for (i=0; i < MAX_COUNTRY_NUM; i++)
+						for(i=0; i < MAX_COUNTRY_NUM; i++)
 							{
 								if(!country_table[j][i])
 									break;
@@ -114,7 +114,7 @@ EncArray *get_encoding_items(guint code)
 	
 	if(!array) {
 		array=(EncArray*)g_malloc(sizeof(EncArray));
-		for (i=0; i < ENCODING_MAX_ITEM_NUM; i++)
+		for(i=0; i < ENCODING_MAX_ITEM_NUM; i++)
 			array->item[i]=(char*)encoding_table[code][i] ?
 				(char*)encoding_table[code][i] : NULL;
 	}
@@ -143,7 +143,7 @@ char *detect_charset_cylillic(const gchar *text)
 				xef++;
 		}
 	
-	if(!noniso && ((xc + xef) < xd))
+	if(!noniso &&((xc + xef) < xd))
 		charset=(char*)"ISO-8859-5";
 	else if((xc + xd) < xef)
 		charset=(char*)"CP1251";
@@ -168,18 +168,18 @@ char *detect_charset_chinese(const gchar *text)
 			else if(c >= 0x88 && c <= 0xA0)
 				{
 					c=*text++;
-					if((c >= 0x30 && c <= 0x39) || (c >= 0x80 && c <= 0xA0))
+					if((c >= 0x30 && c <= 0x39) ||(c >= 0x80 && c <= 0xA0))
 						{
 							charset="GB18030";
 							break;
 						} //else GBK/Big5-HKSCS cannot determine
 				}
-			else if((c >= 0xA1 && c <= 0xC6) || (c >= 0xC9 && c <= 0xF9))
+			else if((c >= 0xA1 && c <= 0xC6) ||(c >= 0xC9 && c <= 0xF9))
 				{
 					c=*text++;
 					if(c >= 0x40 && c <= 0x7E)
 						charset="BIG5";
-					else if((c >= 0x30 && c <= 0x39) || (c >= 0x80 && c <= 0xA0))
+					else if((c >= 0x30 && c <= 0x39) ||(c >= 0x80 && c <= 0xA0))
 						{
 							charset="GB18030";
 							break;
@@ -188,7 +188,7 @@ char *detect_charset_chinese(const gchar *text)
 			else if(c >= 0xC7)
 				{
 					c=*text++;
-					if((c >= 0x30 && c <= 0x39) || (c >= 0x80 && c <= 0xA0))
+					if((c >= 0x30 && c <= 0x39) ||(c >= 0x80 && c <= 0xA0))
 						{
 							charset="GB18030";
 							break;
@@ -196,7 +196,7 @@ char *detect_charset_chinese(const gchar *text)
 				}
 		}
 	
-	ERRDATA return (char*)charset;
+	ERRDATA return(char*)charset;
 }
 
 char *detect_charset_japanese(const gchar *text)
@@ -205,14 +205,14 @@ char *detect_charset_japanese(const gchar *text)
 	guint8		c=*text;
 	const char*	charset=NULL;
 	
-	while(charset==NULL && (c=*text++) != '\0')
+	while(charset==NULL &&(c=*text++) != '\0')
 		{
 			if(c >= 0x81 && c <= 0x9F)
 				{
 					if(c==0x8E) /* SS2 */
 						{
 							c=*text++;
-							if((c >= 0x40 && c <= 0xA0) || (c >= 0xE0 && c <= 0xFC))
+							if((c >= 0x40 && c <= 0xA0) ||(c >= 0xE0 && c <= 0xFC))
 								charset="CP932";
 						}
 					else if(c==0x8F) /* SS3 */
@@ -249,7 +249,7 @@ char *detect_charset_japanese(const gchar *text)
 	if(charset==NULL)
 		charset="EUC-JP";
 	
-	ERRDATA return (char*)charset;
+	ERRDATA return(char*)charset;
 }
 
 static const gchar *detect_charset_korean(const gchar *text)
@@ -260,7 +260,7 @@ static const gchar *detect_charset_korean(const gchar *text)
 	gboolean	nonjohab=FALSE;
 	const char*	charset=NULL;
 	
-	while(charset==NULL && (c=*text++) != '\0')
+	while(charset==NULL &&(c=*text++) != '\0')
 		{
 			if(c >= 0x81 && c < 0x84)
 				{
@@ -270,9 +270,9 @@ static const gchar *detect_charset_korean(const gchar *text)
 				{
 					noneuc=TRUE;
 					c=*text++;
-					if((c > 0x5A && c < 0x61) || (c > 0x7A && c < 0x81))
+					if((c > 0x5A && c < 0x61) ||(c > 0x7A && c < 0x81))
 						charset="CP1361";
-					else if(c==0x52 || c==0x72 || c==0x92 || (c > 0x9D && c < 0xA1) || c==0xB2 || (c > 0xBD && c < 0xC1) || c==0xD2 || (c > 0xDD && c < 0xE1) || c==0xF2 || c==0xFE)
+					else if(c==0x52 || c==0x72 || c==0x92 ||(c > 0x9D && c < 0xA1) || c==0xB2 ||(c > 0xBD && c < 0xC1) || c==0xD2 ||(c > 0xDD && c < 0xE1) || c==0xF2 || c==0xFE)
 						charset="CP949";
 				}
 			else if(c >= 0xA1 && c <= 0xC6)
@@ -281,11 +281,11 @@ static const gchar *detect_charset_korean(const gchar *text)
 					if(c < 0xA1)
 						{
 							noneuc=TRUE;
-							if((c > 0x5A && c < 0x61) || (c > 0x7A && c < 0x81))
+							if((c > 0x5A && c < 0x61) ||(c > 0x7A && c < 0x81))
 								charset="CP1361";
-							else if(c==0x52 || c==0x72 || c==0x92 || (c > 0x9D && c < 0xA1))
+							else if(c==0x52 || c==0x72 || c==0x92 ||(c > 0x9D && c < 0xA1))
 								charset="CP949";
-						else if(c==0xB2 || (c > 0xBD && c < 0xC1) || c==0xD2 || (c > 0xDD && c < 0xE1) || c==0xF2 || c==0xFE)
+						else if(c==0xB2 ||(c > 0xBD && c < 0xC1) || c==0xD2 ||(c > 0xDD && c < 0xE1) || c==0xF2 || c==0xFE)
 							nonjohab=TRUE;
 						}
 				}
@@ -318,7 +318,7 @@ static const gchar *detect_charset_korean(const gchar *text)
 				charset="EUC-KR";
 		}
 	
-	ERRDATA return (char*)charset;
+	ERRDATA return(char*)charset;
 }
 
 static gboolean detect_noniso(const gchar *text)
@@ -354,7 +354,7 @@ const gchar *detect_charset(const gchar *text)
 	
 	if(g_utf8_validate(text,-1,NULL))
 		{
-			while ((c=*text++) != '\0')
+			while((c=*text++) != '\0')
 				{
 					if(c > 0x7F)
 						{
@@ -367,7 +367,7 @@ const gchar *detect_charset(const gchar *text)
 							if(c=='$')
 								{
 									c=*text++;
-									switch (c)
+									switch(c)
 										{
 											case 'B': // JIS X 0208-1983
 											case '@': // JIS X 0208-1978
@@ -378,7 +378,7 @@ const gchar *detect_charset(const gchar *text)
 												break;
 											case '(':
 												c=*text++;
-													switch (c)
+													switch(c)
 														{
 															case 'C': // KSC5601-1987
 															case 'D': // JIS X 0212-1990
@@ -400,7 +400,7 @@ const gchar *detect_charset(const gchar *text)
 	
 	if(!charset)
 		{
-			switch (get_encoding_code())
+			switch(get_encoding_code())
 				{
 					case LATINC:
 					case LATINC_UA:

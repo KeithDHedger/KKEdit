@@ -2,7 +2,7 @@
  *
  * ©K. D. Hedger. Sun 25 Oct 14:49:41 GMT 2015 kdhedger68713@gmail.com
 
- * This file (globals.h) is part of KKEdit.
+ * This file(globals.h) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@
 #define	TOOL_VIEW_OP 16
 
 #define VALIDFILENAMECHARS "[A-Za-z0-9_-./ <>]"
-#define VALIDFUNCTIONCHARS "[A-Za-z0-9_*:/@ ()-,.#;[\"]"
+#define VALIDFUNCTIONCHARS "[A-Za-z0-9_*:/@()-,.#;[\"]"
 
 #define MAXRECENT 10
 #define MAXTEXTWIDTH 500
@@ -87,6 +87,7 @@
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 enum {NEWVBOX=0,NEWHBOX};
+enum {ISBUSY,NOTBUSY,PUSHBUSY,POPBUSY,QUERYBUSY};
 
 struct toolStruct
 {
@@ -131,9 +132,9 @@ extern const char		*errFunc;
 extern char				*logFile;
 
 extern GApplication*	mainApp;
-extern bool				busyFlag;
+//extern bool				busyFlag[10];
 extern bool				autoSeleced;
-extern bool				sessionBusy;
+//extern bool				sessionBusy;
 extern bool				fromGOpen;
 extern char				*prefsFolder;
 
@@ -456,7 +457,8 @@ void killBarberPole(void);
 void debugFree(char** ptr);
 char* truncateWithElipses(char* str,unsigned int maxlen);
 char* truncateTabNameWithElipses(char* str,unsigned int maxlen);
-void doBusy(bool busy,pageStruct* page);
+//void doBusy(bool busy,pageStruct* page);
+//bool doBusy(int busy,int what);
 
 void setWidgets(void);
 void resetWidgetSenisitive(void);
@@ -470,12 +472,13 @@ GtkToolItem* createNewToolItem(const char* stock,const char* label);
 GtkWidget* createNewStockButton(const char* stock,const char* label);
 GdkPixbuf* createNewIcon(const char* stock,GtkWidget* widg);
 GtkWidget* createNewStockMenuItem(const char* stock,const char* label);
-#ifdef _USEGTK3_
-GtkWidget* createNewTable(int rows,int cols);
-#else
-GtkTable* createNewTable(int rows,int cols);
-#endif
 
+//void setWidgetsSensitive(void);
+//extern bool newBusyFlag;
+void setToobarWidgetsSensitive(void);
+void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page);
+void resetSensitive(void);
+void setPageSensitive(void);
 #endif
 
 

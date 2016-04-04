@@ -2,7 +2,7 @@
  *
  * ©K. D. Hedger. Sun 25 Oct 14:50:31 GMT 2015 kdhedger68713@gmail.com
 
- * This file (searchcallbacks.cpp) is part of KKEdit.
+ * This file(searchcallbacks.cpp) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -158,7 +158,7 @@ VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
 														{
 															foldername=g_path_get_dirname(tempstr);
 															link=globalSlice->sliceBetween(line,(char*)"link=\"",(char*)"\"");
-															if((foldername!=NULL) && (link!=NULL))
+															if((foldername!=NULL) &&(link!=NULL))
 																{
 																	searchdata[cnt][0]=strdup(globalSlice->deleteSlice(funcname,ds));
 																	asprintf(&searchdata[cnt][1],"%s/%s",foldername,link);
@@ -213,7 +213,7 @@ VISIBLE void searchGtkDocs(GtkWidget* widget,gpointer data)
 					ERRDATA debugFree(&searchdata[loop][1]);
 				}
 		}
-	if((selection!=NULL) && (data==NULL))
+	if((selection!=NULL) &&(data==NULL))
 		{
 			ERRDATA debugFree(&selection);
 		}
@@ -351,7 +351,7 @@ VISIBLE void doxyDocs(GtkWidget* widget,gpointer data)
 						ERRDATA debugFree(&searchdata[loop][1]);
 				}
 
-			if((selection!=NULL) && (data==NULL))
+			if((selection!=NULL) &&(data==NULL))
 				ERRDATA debugFree(&selection);
 		}
 }
@@ -403,7 +403,7 @@ VISIBLE void searchQT5Docs(GtkWidget* widget,gpointer data)
 					while(fgets(line,1024,fp))
 						{
 							func=g_path_get_basename(line);
-							if((func !=NULL) && (strcasecmp(func,"")!=0))
+							if((func !=NULL) &&(strcasecmp(func,"")!=0))
 								{
 									cnt++;
 									fprintf(fd,"<a href=\"%s.html\">%s</a><br>\n",line,func);
@@ -514,7 +514,7 @@ void doAllFiles(int dowhat,bool found)
 {
 	pageStruct*	page=NULL;
 
-	if((findInAllFiles==true) && (found==false))
+	if((findInAllFiles==true) &&(found==false))
 		{
 			if(dowhat==FINDNEXT)
 				{
@@ -659,7 +659,7 @@ void regexFind(int dowhat)
 	
 	gotselection=gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&startiter,&enditer);
 
-	if(gotselection==false || ((fromregexsinglereplace==true) && (gotselection==true)))
+	if(gotselection==false ||((fromregexsinglereplace==true) &&(gotselection==true)))
 		{
 			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
 			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
@@ -681,14 +681,14 @@ void regexFind(int dowhat)
 
 	if(searchtext!=NULL)
 		{
-			if((strcmp(searchtext,gtk_entry_get_text((GtkEntry*)findBox))!=0) || (page->regexMatchNumber==-1))
+			if((strcmp(searchtext,gtk_entry_get_text((GtkEntry*)findBox))!=0) ||(page->regexMatchNumber==-1))
 				page->regexMatchNumber=-1;
 			ERRDATA debugFree(&searchtext);
 		}
 
 	if(replacetext!=NULL)
 		{
-			if((strcmp(replacetext,gtk_entry_get_text((GtkEntry*)replaceBox))!=0) || (page->regexMatchNumber==-1))
+			if((strcmp(replacetext,gtk_entry_get_text((GtkEntry*)replaceBox))!=0) ||(page->regexMatchNumber==-1))
 				page->regexMatchNumber=-1;
 			ERRDATA debugFree(&replacetext);
 		}
@@ -714,7 +714,7 @@ void regexFind(int dowhat)
 
 			gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&startiter,&enditer);
 			g_regex_match_full(regex,text,-1,0,matchflags,&match_info,NULL);
-			while (g_match_info_matches(match_info))
+			while(g_match_info_matches(match_info))
 				{
 					if(g_match_info_fetch_pos(match_info,0,&startpos,&endpos))
 						{
@@ -738,7 +738,7 @@ void regexFind(int dowhat)
 			page->regexMatchNumber=0;
 		}
 
-	switch (dowhat)
+	switch(dowhat)
 		{
 //forward search
 			case FINDNEXT:
@@ -873,7 +873,7 @@ void regexFind(int dowhat)
 								//regex=g_regex_new(searchtext,(GRegexCompileFlags)(G_REGEX_CASELESS|G_REGEX_EXTENDED),(GRegexMatchFlags)matchflags,NULL);
 								regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,(GRegexMatchFlags)matchflags,NULL);
 								g_regex_match_full(regex,text,-1,0,matchflags,&match_info,NULL);
-								while (g_match_info_matches(match_info))
+								while(g_match_info_matches(match_info))
 									{
 										itemsReplaced++;
 										g_match_info_next(match_info,NULL);
@@ -881,10 +881,10 @@ void regexFind(int dowhat)
 
 								reptext=g_regex_replace(regex,text,-1,0,replacetext,(GRegexMatchFlags)matchflags,NULL);
 								
-								if((reptext!=NULL) && (strcmp(reptext,text)!=0))
+								if((reptext!=NULL) &&(strcmp(reptext,text)!=0))
 									{
 									
-									gtk_text_buffer_begin_user_action ((GtkTextBuffer*)page->buffer);
+									gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 										gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&startiter,&enditer);
 										gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&startiter,reptext,-1);
 										page->regexMatchNumber=-1;
@@ -908,7 +908,7 @@ void regexFind(int dowhat)
 								regex=g_regex_new(searchtext,(GRegexCompileFlags)(G_REGEX_CASELESS|G_REGEX_EXTENDED),(GRegexMatchFlags)0,NULL);
 								text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&startiter,&enditer,false);
 								reptext=g_regex_replace(regex,text,-1,0,replacetext,(GRegexMatchFlags)0,NULL);
-								if((reptext!=NULL) && (strcmp(reptext,text)!=0))
+								if((reptext!=NULL) &&(strcmp(reptext,text)!=0))
 									{
 										gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&startiter,&enditer);
 										gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&startiter,reptext,-1);
@@ -971,7 +971,7 @@ void basicFind(int dowhat)
 
 	page=getPageStructPtr(currentFindPage);
 
-	doBusy(true,page);
+//	doBusy(true,page);
 
 	if(insensitiveSearch==true)
 //		flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
@@ -1010,7 +1010,7 @@ void basicFind(int dowhat)
 
 	if(dowhat==FINDNEXT)
 		{
-			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSeleced==false))
+			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) &&(autoSeleced==false))
 				{
 					gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 					page->match_end=page->match_start;
@@ -1032,7 +1032,7 @@ void basicFind(int dowhat)
 				}
 			else
 				{
-					if((wrapSearch==true) && (findInAllFiles==false))
+					if((wrapSearch==true) &&(findInAllFiles==false))
 						{
 							gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
 #ifdef _USEGTK3_
@@ -1051,7 +1051,7 @@ void basicFind(int dowhat)
 							ERRDATA debugFree(&replacetext);
 							ERRDATA return;
 						}
-					if((wrapSearch==true) || (findInAllFiles==true))
+					if((wrapSearch==true) ||(findInAllFiles==true))
 						doAllFiles(dowhat,found);
 				}
 		}
@@ -1071,7 +1071,7 @@ void basicFind(int dowhat)
 					}
 				else
 					{
-						if((wrapSearch==true) && (findInAllFiles==false))
+						if((wrapSearch==true) &&(findInAllFiles==false))
 							{
 								gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&page->iter);
 #ifdef _USEGTK3_
@@ -1090,12 +1090,12 @@ void basicFind(int dowhat)
 								ERRDATA debugFree(&replacetext);
 								ERRDATA return;
 							}
-					if((wrapSearch==true) || (findInAllFiles==true))
+					if((wrapSearch==true) ||(findInAllFiles==true))
 						doAllFiles(dowhat,found);
 					}
 			}
 
-		if((dowhat==REPLACE) && (replaceAll==false))
+		if((dowhat==REPLACE) &&(replaceAll==false))
 			{
 				if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
 					{
@@ -1112,7 +1112,7 @@ void basicFind(int dowhat)
 				basicFind(FINDNEXT);
 			}
 
-		if((dowhat==REPLACE) && (findInAllFiles==true) && (replaceAll==true))
+		if((dowhat==REPLACE) &&(findInAllFiles==true) &&(replaceAll==true))
 			{
 				if(yesNo((char*)gettext("Do you want to replace in ALL open files?"),(char*)"")==GTK_RESPONSE_CANCEL)
 					{
@@ -1127,10 +1127,10 @@ void basicFind(int dowhat)
 						findInAllFiles=true;
 			}
 
-		if((dowhat==REPLACE) && (replaceAll==true))
+		if((dowhat==REPLACE) &&(replaceAll==true))
 			{
 
-			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSeleced==false))
+			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) &&(autoSeleced==false))
 				{
 					gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 					page->iter=page->match_start;
@@ -1151,7 +1151,7 @@ void basicFind(int dowhat)
 						if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
 #endif
 							{
-								if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) && (autoSeleced==false))
+								if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) &&(autoSeleced==false))
 									{
 										gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,NULL,&maxlastiter);
 										if(gtk_text_iter_compare(&maxlastiter,&page->match_start)<=0)
@@ -1174,7 +1174,7 @@ void basicFind(int dowhat)
 					}
 			}
 
-	doBusy(false,page);
+//	doBusy(false,page);
 
 	ERRDATA debugFree(&searchtext);
 	ERRDATA debugFree(&replacetext);
@@ -1189,7 +1189,7 @@ void showOnStatus(const char* from,const char* to)
 {
 	char*	message=NULL;
 
-	if( (showStatus==false))
+	if((showStatus==false))
 		{
 			ERRDATA return;
 		}
@@ -1250,7 +1250,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 				}
 		}
 
-	busyFlag=true;
+//	busyFlag=true;
 
 	currentFindPage=gtk_notebook_get_current_page(mainNotebook);
 	pagesChecked=0;
@@ -1265,7 +1265,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	else
 		regexFind(response_id);
 
-	busyFlag=false;
+//	busyFlag=false;
 
 	if(itemsReplaced>-1)
 		showOnStatus(gtk_entry_get_text((GtkEntry*)findBox),gtk_entry_get_text((GtkEntry*)replaceBox));
@@ -1281,7 +1281,7 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 {
 	GtkWidget*	button;
 
-	switch ((long)data)
+	switch((long)data)
 		{
 			case 1:
 				insensitiveSearch=gtk_toggle_button_get_active((GtkToggleButton*)widget);

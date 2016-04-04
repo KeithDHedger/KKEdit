@@ -2,7 +2,7 @@
  *
  * ©K. D. Hedger. Sun 25 Oct 14:48:49 GMT 2015 kdhedger68713@gmail.com
 
- * This file (callbacks.cpp) is part of KKEdit.
+ * This file(callbacks.cpp) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,8 @@ void releasePlugs(gpointer data,gpointer user_data)
 
 void setToobarSensitive(void)
 {
+printf("setToobarSensitive...\n");
+return;
 	ERRDATA
 	pageStruct*	page=getPageStructPtr(currentTabNumber);
 
@@ -258,7 +260,7 @@ VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 		iter=titer;
 
 	mark_list=gtk_source_buffer_get_source_marks_at_line(page->buffer,gtk_text_iter_get_line(iter),mark_type);
-	if (mark_list!=NULL)
+	if(mark_list!=NULL)
 		{
 			//remove entry from bookmark list
 			ptr=newBookMarksList;
@@ -382,7 +384,7 @@ VISIBLE void doOpenFile(GtkWidget* widget,gpointer data)
 
 	dialog=gtk_file_chooser_dialog_new(gettext("Open File"),NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,NULL);
 	gtk_file_chooser_set_select_multiple((GtkFileChooser*)dialog,true);
-	if (gtk_dialog_run(GTK_DIALOG (dialog))==GTK_RESPONSE_ACCEPT)
+	if(gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_ACCEPT)
 		{
 			filenames=gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(dialog));
 			thisnext=filenames;
@@ -390,12 +392,12 @@ VISIBLE void doOpenFile(GtkWidget* widget,gpointer data)
 				{
 					filename=(char*)thisnext->data;
 					openFile(filename,0,true);
-					g_free (filename);
+					g_free(filename);
 					thisnext=thisnext->next;
 				}
 			g_slist_free(filenames);
 		}
-	gtk_widget_destroy (dialog);
+	gtk_widget_destroy(dialog);
 	refreshMainWindow();
 }
 
@@ -425,38 +427,42 @@ int show_question(char* filename)
 
 void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark* mark,gpointer data)
 {
-	pageStruct* page=(pageStruct*)data;
-	TextBuffer*	buf;
-	char*		message=NULL;
-	const char*	path;
-	const char*	lang;
+	pageStruct	*page=NULL;
+	TextBuffer	*buf;
+	char		*message=NULL;
+	const char	*path;
+	const char	*lang;
 
-	if(doUpdateWidgets==false)
+	page=getPageStructPtr(-1);
+	if(page==NULL)
+		return;
+	setChangedSensitive((GtkTextBuffer*)page->buffer,page);
+
+//	if(doUpdateWidgets==false)
+//		return;
+//
+//	if(sessionBusy==true)
+//		return;
+//	if((statusMessage!=NULL) ||(busyFlag==true))
+	if((statusMessage!=NULL))
 		return;
 
-	if(sessionBusy==true)
-		return;
+//	if(busyFlag==true)
+//		return;
 
-	if((statusMessage!=NULL) || (busyFlag==true))
-		return;
+//	pageStruct* pagecheck=getPageStructPtr(currentTabNumber);
+//	if(pagecheck==NULL)
+//		return;
 
-	if(busyFlag==true)
-		return;
-
-	pageStruct* pagecheck=getPageStructPtr(currentTabNumber);
-	if(pagecheck==NULL)
-		return;
-
-
-	if((page==NULL) || (showStatus==false))
+	if((page==NULL) ||(showStatus==false))
 		{
 			gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
 			gtk_statusbar_push((GtkStatusbar*)statusWidget,0,"");
 			return;
 		}
 
-	if(pagecheck!=page)
-		return;
+//	if(pagecheck!=page)
+//		return;
 
 	ERRDATA
 
@@ -479,11 +485,17 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
 	ERRDATA debugFree(&message);
 	delete buf;
+
+//	bool hasselection=gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer);
+//	gtk_widget_set_sensitive((GtkWidget*)cutMenu,hasselection);
+//	gtk_widget_set_sensitive((GtkWidget*)copyMenu,hasselection);
+
 }
 
 //void setSensitive(GtkTextBuffer *textbuffer,gpointer user_data)
-void setSensitive(void)
+void setSensitivexxxx(void)
 {
+return;
 	ERRDATA
 	pageStruct*		page=getPageStructPtr(-1);
 	const gchar*	text;
@@ -517,8 +529,8 @@ void setSensitive(void)
 			return;
 		}
 
-	if(sessionBusy==true)
-		return;
+//	if(sessionBusy==true)
+//		return;
 
 	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
 	text=gtk_label_get_text((GtkLabel*)page->tabName);
@@ -569,59 +581,20 @@ void setSensitive(void)
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"setSensitive");
 }
 
-VISIBLE void closeTab(GtkWidget* widget,gpointer data)
+pageStruct*	stolenPage=NULL;
+
+VISIBLE void realCloseTab(GtkNotebook *notebook,GtkWidget *child,guint page_num,gpointer user_data)
 {
-	ERRDATA
-	long		thispage;
-	int			result;
-	pageStruct*	page;
-	GList*		ptr;
-	bool		changed=false;
-	GtkWidget*	menuitem;
-
-	if(sessionBusy==true)
+	if(stolenPage==NULL)
 		return;
 
-	busyFlag=true;	
-
-	if(closingAll==true)
-		thispage=0;
-	else
-		{
-			if(data==NULL)
-				thispage=gtk_notebook_get_current_page(mainNotebook);
-			else
-				thispage=gtk_notebook_page_num(mainNotebook,(GtkWidget *)data);
-		}
-
-	if((thispage<0) || (thispage>gtk_notebook_get_n_pages(mainNotebook)))
-		return;
-
-	closingAll=false;
-	page=getPageStructPtr(thispage);
-	if(page==NULL)
-		return;
-
-	if(gtk_text_buffer_get_modified((GtkTextBuffer*)page->buffer))
-		{
-			result=show_question(page->fileName);
-			switch(result)
-				{
-				case GTK_RESPONSE_YES:
-					if(saveFile(NULL,NULL)==false)
-						return;
-					break;
-				case GTK_RESPONSE_NO:
-					break;
-				default:
-					return;
-					break;
-				}
-		}
-
-	globalPlugins->globalPlugData->page=page;
+	globalPlugins->globalPlugData->page=stolenPage;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"closeFile");
 
+//TODO//
+#if 0
+	GList*		ptr;
+	bool		changed=false;
 	rebuildBookMarkMenu();
 	while(changed==false)
 		{
@@ -650,43 +623,33 @@ VISIBLE void closeTab(GtkWidget* widget,gpointer data)
 			ptr=g_list_next(ptr);
 		}
 	gtk_widget_show_all(bookMarkMenu);
+#endif
 
-	if(page->filePath!=NULL)
-		ERRDATA debugFree(&(page->filePath));
-	if(page->fileName!=NULL)
-		ERRDATA debugFree(&(page->fileName));
+	ERRDATA debugFree(&(stolenPage->filePath));
+	ERRDATA debugFree(&(stolenPage->fileName));
+	ERRDATA debugFree(&(stolenPage->dirName));
+	ERRDATA debugFree(&(stolenPage->realFilePath));
 
-	ERRDATA debugFree(&(page->dirName));
-	ERRDATA debugFree(&(page->realFilePath));
-	if(page->markList!=NULL)
-		g_list_free_full(page->markList,free);
-	page->markList=NULL;
+	if(stolenPage->markList!=NULL)
+		g_list_free_full(stolenPage->markList,free);
+	if(stolenPage->userDataList!=NULL)
+		g_list_free_full(stolenPage->userDataList,free);
+	stolenPage->userDataList=NULL;
 
-	if(page->userDataList!=NULL)
-		g_list_free_full(page->userDataList,free);
-	page->userDataList=NULL;
+	if(stolenPage->regexList!=NULL)
+		g_slist_free_full(stolenPage->regexList,free);
+	stolenPage->regexList=NULL;
 
-	if(page->regexList!=NULL)
-		g_slist_free_full(page->regexList,free);
-	page->regexList=NULL;
+	if(stolenPage->monitor!=NULL)
+		g_clear_object(&(stolenPage->monitor));
+	if(stolenPage->gFile!=NULL)
+		g_clear_object(&(stolenPage->gFile));
 
-	if(page->monitor!=NULL)
-		g_clear_object(&(page->monitor));
-	if(page->gFile!=NULL)
-		g_clear_object(&(page->gFile));
-
-	currentPage--;
-
-	gtk_notebook_remove_page(mainNotebook,thispage);
-//TODO//
-//	ERRDATA debugFree((char**)&page);
-	busyFlag=false;
+//	ERRDATA debugFree((char**)&stolenPage);
+	ERRDATA debugFree((char**)&stolenPage);
 	if(closingAll==false)
-		{
-			currentTabNumber=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
-			resetWidgetSenisitive();
-//			setSensitive();
-		}
+		setPageSensitive();
+	stolenPage=NULL;
 }
 
 VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
@@ -700,11 +663,66 @@ VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
 			closeTab(NULL,0);
 		}
 
-//rebuild bookmark menu
 	closingAll=false;
-	rebuildBookMarkMenu();
-	gtk_widget_show_all(bookMarkMenu);
-	setWidgets();
+//TODO//
+//	rebuildBookMarkMenu();
+//	gtk_widget_show_all(bookMarkMenu);
+//	setWidgets();
+//	resetSensitive();
+	setPageSensitive();
+}
+
+bool checkBeforeClose(int pagenum)
+{
+	int			result;
+	pageStruct	*page;
+	page=getPageStructPtr(pagenum);
+	if(page==NULL)
+		return(false);
+
+	if(gtk_text_buffer_get_modified((GtkTextBuffer*)page->buffer))
+		{
+			result=show_question(page->fileName);
+			switch(result)
+				{
+				case GTK_RESPONSE_YES:
+					if(saveFile(NULL,NULL)==false)
+						return(true);
+					break;
+				case GTK_RESPONSE_NO:
+					return(true);
+					break;
+				default:
+					return(false);
+					break;
+				}
+		}
+	return(true);
+}
+
+VISIBLE void closeTab(GtkWidget* widget,gpointer data)
+{
+	if(gtk_notebook_page_num(mainNotebook,(GtkWidget*)data)!=-1)
+		{
+			if(checkBeforeClose(gtk_notebook_page_num(mainNotebook,(GtkWidget*)data))==true)
+				{
+					stolenPage=(pageStruct*)g_object_steal_data ((GObject*)data,"pagedata");
+					gtk_notebook_remove_page(mainNotebook,gtk_notebook_page_num(mainNotebook,(GtkWidget*)data));
+				}
+			return;
+		}
+
+	if(gtk_notebook_get_current_page(mainNotebook)!=-1)
+		{
+			GtkWidget	*child;
+			if(checkBeforeClose(gtk_notebook_get_current_page(mainNotebook))==true)
+				{
+					child=gtk_notebook_get_nth_page(mainNotebook,gtk_notebook_get_current_page(mainNotebook));
+					stolenPage=(pageStruct*)g_object_steal_data ((GObject*)child,"pagedata");
+					gtk_notebook_remove_page(mainNotebook,gtk_notebook_get_current_page(mainNotebook));
+				}
+		}
+	return;
 }
 
 void sortTabs(GtkWidget* widget,gpointer data)
@@ -719,7 +737,7 @@ void sortTabs(GtkWidget* widget,gpointer data)
 	while(flag==true)
 		{
 			flag=false;
-			for (int j=0;j<gtk_notebook_get_n_pages(mainNotebook)-1;j++)
+			for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook)-1;j++)
 				{
 					page1=getPageStructPtr(j);
 					page2=getPageStructPtr(j+1);
@@ -756,8 +774,8 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	GtkWidget*	submenu;
 	char*		correctedstr=NULL;
 
-	if(doUpdateWidgets==false)
-		return;
+//	if(doUpdateWidgets==false)
+//		return;
 
 	if(arg1==NULL)
 		return;
@@ -770,7 +788,7 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 		}
 
 	submenu=gtk_menu_item_get_submenu((GtkMenuItem*)funcMenu);
-	if (submenu!=NULL)
+	if(submenu!=NULL)
 		gtk_menu_item_set_submenu((GtkMenuItem*)funcMenu,NULL);
 
 	currentTabNumber=thispage;
@@ -784,12 +802,12 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	page->navSubMenu=(GtkMenuItem*)gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(funcMenu),(GtkWidget*)page->navSubMenu);
 
-	while ((lineptr!=NULL) && (strlen(lineptr)>0))
+	while((lineptr!=NULL) &&(strlen(lineptr)>0))
 		{
 			linenum=-1;
 			correctedstr=NULL;
 			ts=NULL;
-			sscanf (lineptr,"%*s %*s %i %a[^\n]s",&linenum,&ts);
+			sscanf(lineptr,"%*s %*s %i %a[^\n]s",&linenum,&ts);
 			if(linenum==-1)
 				{
 					ERRDATA debugFree(&correctedstr);
@@ -811,7 +829,7 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 									flag=false;
 									for(int j=0; j<numtypes; j++)
 										{
-											if (strcmp(newstr,typenames[j])==0)
+											if(strcmp(newstr,typenames[j])==0)
 												{
 													whattypemenu=typesubmenus[j];
 													flag=true;
@@ -828,7 +846,6 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 											else
 												asprintf(&newstr,"%ss",typenames[numtypes]);
 											newstr[0]=toupper(newstr[0]);
-											//submenu=gtk_image_menu_item_new_with_label(newstr);
 											submenu=createNewImageMenuItem(NULL,newstr);
 											typesubmenus[numtypes]=gtk_menu_new();
 											gtk_menu_item_set_submenu(GTK_MENU_ITEM(submenu),typesubmenus[numtypes]);
@@ -840,7 +857,6 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 									ERRDATA debugFree(&newstr);
 
 									onefunc=true;
-									//menuitem=gtk_image_menu_item_new_with_label(correctedstr);
 									menuitem=createNewImageMenuItem(NULL,correctedstr);
 									gtk_menu_shell_append(GTK_MENU_SHELL(whattypemenu),menuitem);
 									g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
@@ -849,14 +865,13 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 					else
 						{
 							onefunc=true;
-							//menuitem=gtk_image_menu_item_new_with_label(correctedstr);
 							menuitem=createNewImageMenuItem(NULL,correctedstr);
 							gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
 							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
 						}
 				}
 			lineptr=strchr(lineptr,'\n');
-			if (lineptr!=NULL)
+			if(lineptr!=NULL)
 				lineptr++;
 			ERRDATA debugFree(&correctedstr);
 			ERRDATA debugFree(&ts);
@@ -870,10 +885,11 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	gtk_widget_set_sensitive((GtkWidget*)funcMenu,onefunc);
 
 	rebuildTabsMenu();
-
 	//setSensitive(page->buffer,NULL);
 //	setSensitiveNew(page->buffer,NULL);
-	setSensitive();
+//	setSensitive();
+	
+	setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 
 	createCompletion(page);
 //plug switch tab
@@ -901,7 +917,8 @@ VISIBLE void cutToClip(GtkWidget* widget,gpointer data)
 		return;
 	gtk_text_buffer_cut_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),true);
 //	setSensitive(NULL,NULL);
-	setSensitive();
+//	setSensitive();
+	setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 }
 
 VISIBLE void pasteFromClip(GtkWidget* widget,gpointer data)
@@ -923,7 +940,8 @@ VISIBLE void pasteFromClip(GtkWidget* widget,gpointer data)
 		gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)clipdata,-1);
 	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 //	setSensitive(NULL,NULL);
-	setSensitive();
+//	setSensitive();
+	setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 }
 
 VISIBLE void undo(GtkWidget* widget,gpointer data)
@@ -933,15 +951,16 @@ VISIBLE void undo(GtkWidget* widget,gpointer data)
 
 	if(page!=NULL)
 		{
-			doBusy(true,page);
+			//doBusy(true,page);
 			if(gtk_source_buffer_can_undo(page->buffer))
 				{
 					gtk_source_buffer_undo(page->buffer);
 					page->isFirst=true;
 				//	setSensitive(NULL,NULL);
-					setSensitive();
+				//	setSensitive();
+				//	setWidgetsSensitive();
 				}
-			doBusy(false,page);
+			//doBusy(false,page);
 		}
 }
 
@@ -951,7 +970,7 @@ VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
 	pageStruct*	page=getPageStructPtr(-1);
 	if(page!=NULL)
 		{
-		 	doBusy(true,page);
+		 	//doBusy(true,page);
 			if((long)data==0)
 				{
 					if(gtk_source_buffer_can_undo(page->buffer)==true)
@@ -975,9 +994,10 @@ VISIBLE void unRedoAll(GtkWidget* widget,gpointer data)
 						}
 				}
 			page->isFirst=true;
+			//setWidgetsSensitive();
 			//setSensitive(NULL,NULL);
-			setSensitive();
-		 	doBusy(false,page);
+			//setSensitive();
+		 	//doBusy(false,page);
 		}
 }
 
@@ -988,15 +1008,16 @@ VISIBLE void redo(GtkWidget* widget,gpointer data)
 
 	if(page!=NULL)
 		{
-		 	doBusy(true,page);
+		 	//doBusy(true,page);
 			if(gtk_source_buffer_can_redo(page->buffer))
 				{
 					gtk_source_buffer_redo(page->buffer);
 					page->isFirst=true;
 					//setSensitive(NULL,NULL);
-					setSensitive();
+					//setSensitive();
+					//setWidgetsSensitive();
 				}
-		 	doBusy(false,page);
+		 	//doBusy(false,page);
 		}
 }
 
@@ -1142,7 +1163,7 @@ printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>in external\n");
 							gtk_text_buffer_get_bounds((GtkTextBuffer*)page->buffer,&start,&end);
 							gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&start,&end);
 							gtk_text_buffer_delete_selection((GtkTextBuffer*)page->buffer,true,true);
-							gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER (page->buffer),&start);
+							gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&start);
 							gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&start,text,strlen(text));
 						}
 
@@ -1243,8 +1264,8 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	functionData*	fdata;
 	char*			temptext=NULL;
 
-	if(sessionBusy==true)
-		return;
+//	if(sessionBusy==true)
+//		return;
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
@@ -1308,7 +1329,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 
 #ifdef _ASPELL_
 //spell check
-					if((spellChecker!=NULL) && (aspellConfig!=NULL))
+					if((spellChecker!=NULL) &&(aspellConfig!=NULL))
 						{
 							//menuitem=gtk_image_menu_item_new_with_label(gettext("Check Spellling"));
 							menuitem=createNewImageMenuItem(GTK_STOCK_SPELL_CHECK,gettext("Check Spellling"));
@@ -1325,7 +1346,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 					ptr=toolsList;
 					while(ptr!=NULL)
 						{
-							if((((toolStruct*)ptr->data)->inPopUp==true) && (((toolStruct*)ptr->data)->alwaysPopup==false))
+							if((((toolStruct*)ptr->data)->inPopUp==true) &&(((toolStruct*)ptr->data)->alwaysPopup==false))
 								{
 									//menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
 									menuitem=createNewImageMenuItem(NULL,((toolStruct*)ptr->data)->menuName);
@@ -1387,8 +1408,8 @@ gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
 	ERRDATA
 	pageStruct* page=(pageStruct*)getPageStructPtr(-1);
 
-	if(sessionBusy==true)
-		return(true);
+//	if(sessionBusy==true)
+//		return(true);
 
 	if((long)data==1)
 		page->inTop=true;
@@ -1409,7 +1430,7 @@ void doSplitView(GtkWidget *widget,gpointer user_data)
 			page->pageWindow2=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
 			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
-			page->view2 = (GtkSourceView*)gtk_source_view_new_with_buffer (page->buffer);
+			page->view2 =(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 			g_signal_connect(G_OBJECT(page->view2),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
 			setFilePrefs(page);
 
@@ -1475,8 +1496,8 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 	char						line[2048];
 	char*						name;
 
-	if(sessionBusy==true)
-		return(false);
+//	if(sessionBusy==true)
+//		return(false);
 
 	if(event->button==3 && event->type==GDK_BUTTON_PRESS)
 		{
@@ -1510,7 +1531,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 
 #ifdef _ASPELL_
 //check document
-			if((spellChecker!=NULL) && (aspellConfig!=NULL) && (gtk_text_buffer_get_modified((GtkTextBuffer*)page->buffer)==false))
+			if((spellChecker!=NULL) &&(aspellConfig!=NULL) &&(gtk_text_buffer_get_modified((GtkTextBuffer*)page->buffer)==false))
 				{
 					//image=gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK,GTK_ICON_SIZE_MENU);
 					//menuitem=gtk_image_menu_item_new_with_label(gettext("Spell Check Document"));
@@ -1563,7 +1584,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 					flag=false;
 					for(int j=0; j<cnt; j++)
 						{
-							if((idsort[j+1]!=NULL) && (strcmp(idsort[j],idsort[j+1])>0))
+							if((idsort[j+1]!=NULL) &&(strcmp(idsort[j],idsort[j+1])>0))
 								{
 									flag=true;
 									holdstr=idsort[j];
@@ -1583,7 +1604,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 						{
 							langname=gtk_source_language_get_name(lang);
 
-							if((page->lang!=NULL) && (strcmp(page->lang,langname)==0))
+							if((page->lang!=NULL) &&(strcmp(page->lang,langname)==0))
 								{
 									//image=gtk_image_new_from_stock(GTK_STOCK_APPLY,GTK_ICON_SIZE_MENU);
 									//menuids=gtk_image_menu_item_new_with_label(langname);
@@ -1769,7 +1790,7 @@ bool doShutdown(GtkWidget* widget,GdkEvent *event,gpointer data)
 	system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
 
 	ERRDATA g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
-	g_application_quit (mainApp);
+	g_application_quit(mainApp);
 	ERRDATA return(false);
 }
 
@@ -1868,7 +1889,9 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			resetAllFilePrefs();
 			writeConfig();
 		//	setSensitive(NULL,NULL);
-			setSensitive();
+		//	setSensitive();
+		//	resetSensitive();
+			setPageSensitive();
 			refreshMainWindow();
 		}
 }
@@ -1886,7 +1909,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 	text=g_strdelimit(text," ",'-');
 	asprintf(&toolpath,"%s/." KKEDITVERS "/tools/%s",getenv("HOME"),text);
 
-	if((gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false) || (gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget)==true))
+	if((gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false) ||(gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget)==true))
 		{
 			gtk_widget_set_sensitive(ignoreWidget,false);
 			gtk_widget_set_sensitive(pasteWidget,false);
@@ -1948,7 +1971,7 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 
 	if(strcmp(gtk_widget_get_name(widget),"delete")==0)
 		{
-			if((gtk_entry_get_text((GtkEntry*)toolNameWidget)!=NULL) && (yesNo((char*)gettext("Are you sure you want to delete"),(char*)gtk_entry_get_text((GtkEntry*)toolNameWidget))==GTK_RESPONSE_YES))
+			if((gtk_entry_get_text((GtkEntry*)toolNameWidget)!=NULL) &&(yesNo((char*)gettext("Are you sure you want to delete"),(char*)gtk_entry_get_text((GtkEntry*)toolNameWidget))==GTK_RESPONSE_YES))
 				{
 					asprintf(&dirname,"rm \"%s\"",toolpath);
 					system(dirname);
@@ -2024,7 +2047,7 @@ void beginPrint(GtkPrintOperation *operation,GtkPrintContext *context,gpointer u
 	GtkSourcePrintCompositor*	compositor;
 	gint						n_pages;
 
-	compositor=GTK_SOURCE_PRINT_COMPOSITOR (user_data);
+	compositor=GTK_SOURCE_PRINT_COMPOSITOR(user_data);
 
 	while(!gtk_source_print_compositor_paginate(compositor,context));
 
@@ -2040,15 +2063,15 @@ VISIBLE void printFile(GtkWidget* widget,gpointer data)
 	GtkPrintOperation*			print;
 	GtkPrintOperationResult		result;
 
-	print=gtk_print_operation_new ();
-	if (settings != NULL)
+	print=gtk_print_operation_new();
+	if(settings != NULL)
 		gtk_print_operation_set_print_settings(print,settings);
 	g_signal_connect(print,"begin-print",G_CALLBACK(beginPrint),(void*)printview);
-	g_signal_connect(print,"draw-page",G_CALLBACK (drawPage),(void*)printview);
+	g_signal_connect(print,"draw-page",G_CALLBACK(drawPage),(void*)printview);
 	result=gtk_print_operation_run(print,GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW(mainWindow),NULL);
-	if (result==GTK_PRINT_OPERATION_RESULT_APPLY)
+	if(result==GTK_PRINT_OPERATION_RESULT_APPLY)
 		{
-			if (settings != NULL)
+			if(settings != NULL)
 				g_object_unref(settings);
 			settings=(GtkPrintSettings*)g_object_ref((gpointer)gtk_print_operation_get_print_settings(print));
 		}
@@ -2069,11 +2092,11 @@ void recentFileMenu(GtkRecentChooser* chooser,gpointer* data)
 		}
 
 	uri=gtk_recent_chooser_get_current_uri(chooser);
-	if (uri!=NULL)
+	if(uri!=NULL)
 		{
 			filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
 			openFile(filename,0,true);
-			g_free (uri);
+			g_free(uri);
 			ERRDATA debugFree(&filename);
 		}
 }
@@ -2106,8 +2129,8 @@ VISIBLE void newEditor(GtkWidget* widget,gpointer data)
 void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButton* ev,pageStruct* page)
 {
 	ERRDATA
-	if(sessionBusy==true)
-		return;
+//	if(sessionBusy==true)
+//		return;
 
 	if(ev->button!=1)
 		return;
@@ -2121,11 +2144,11 @@ VISIBLE void showToolOutput(bool immediate)
 	showToolOutWin=true;
 	gtk_widget_show(toolOutVBox);
 	gtk_menu_item_set_label((GtkMenuItem*)toolOutMenu,gettext("Hide Tool Output"));
-	if(immediate==true)
-		{
-			while(gtk_events_pending())
-				gtk_main_iteration();
-		}
+//	if(immediate==true)
+//		{
+//			while(gtk_events_pending())
+//				gtk_main_iteration();
+//		}
 }
 
 VISIBLE void hideToolOutput(bool immediate)
@@ -2134,11 +2157,11 @@ VISIBLE void hideToolOutput(bool immediate)
 	showToolOutWin=false;;
 	gtk_widget_show(toolOutVBox);
 	gtk_menu_item_set_label((GtkMenuItem*)toolOutMenu,gettext("Show Tool Output"));
-	if(immediate==true)
-		{
-			while(gtk_events_pending())
-				gtk_main_iteration();
-		}
+//	if(immediate==true)
+//		{
+//			while(gtk_events_pending())
+//				gtk_main_iteration();
+//		}
 }
 
 VISIBLE void toggleToolOutput(GtkWidget* widget,gpointer data)
@@ -2414,7 +2437,7 @@ VISIBLE gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 	bool	gotKey=false;
 
 
-	if ((event->type==GDK_KEY_PRESS)&& (event->state & GDK_CONTROL_MASK))
+	if((event->type==GDK_KEY_PRESS)&&(event->state & GDK_CONTROL_MASK))
 		{
 			for(loop=0; loop<NUMSHORTCUTS; loop++)
 				{
@@ -2446,4 +2469,32 @@ VISIBLE void getPlugins(GtkWidget* widget,gpointer data)
 	system(command);
 	ERRDATA debugFree(&command);
 }
+
+void markUndo(GtkSourceUndoManager *manager,pageStruct *page)
+{
+	if(page==NULL)
+		return;
+
+	page->canUndo=gtk_source_buffer_can_undo(page->buffer);
+	setChangedSensitive((GtkTextBuffer *)page->buffer,page);
+}
+
+void markRedo(GtkSourceUndoManager *manager,pageStruct *page)
+{
+	if(page==NULL)
+		return;
+
+	page->canRedo=gtk_source_buffer_can_redo(page->buffer);
+	setChangedSensitive((GtkTextBuffer *)page->buffer,page);
+}
+
+void markDirty(GtkTextBuffer *textbuffer,pageStruct *page)
+{
+	if(page==NULL)
+		return;
+
+	page->isDirty=gtk_text_buffer_get_modified((GtkTextBuffer *)page->buffer);
+	setChangedSensitive((GtkTextBuffer *)page->buffer,page);
+}
+
 

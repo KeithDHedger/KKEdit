@@ -2,7 +2,7 @@
  *
  * ©K. D. Hedger. Sun 25 Oct 14:52:02 GMT 2015 kdhedger68713@gmail.com
 
- * This file (plugins.cpp) is part of KKEdit.
+ * This file(plugins.cpp) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,23 +32,23 @@ GtkWidget*	treeview;
 void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
 {
 	ERRDATA
-	GtkTreeModel *model = (GtkTreeModel *)data;
+	GtkTreeModel *model =(GtkTreeModel *)data;
 	GtkTreeIter  iter;
-	GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
+	GtkTreePath *path = gtk_tree_path_new_from_string(path_str);
 	gboolean fixed;
 
 	/* get toggled iter */
-	gtk_tree_model_get_iter (model,&iter, path);
-	gtk_tree_model_get (model, &iter, COLUMN_ENABLE, &fixed, -1);
+	gtk_tree_model_get_iter(model,&iter, path);
+	gtk_tree_model_get(model, &iter, COLUMN_ENABLE, &fixed, -1);
 
 	/* do something with the value */
 	fixed ^= 1;
 
 	/* set new value */
-	gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_ENABLE, fixed, -1);
+	gtk_list_store_set(GTK_LIST_STORE(model), &iter, COLUMN_ENABLE, fixed, -1);
 
 	/* clean up */
-	gtk_tree_path_free (path);
+	gtk_tree_path_free(path);
 	ERRDATA
 }
 
@@ -79,7 +79,7 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 
 	pd=globalPlugins->getPluginByName(name);
 
-	if((pd->loaded==true) && (!enabled))
+	if((pd->loaded==true) &&(!enabled))
 			{
 				if(globalPlugins->enablePlugin(name,true)==0)
 					{
@@ -100,7 +100,7 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 					}
 			}
 
-	if((pd->loaded==false) && (enabled))
+	if((pd->loaded==false) &&(enabled))
 		{
 			filepath=globalPlugins->getPluginPathByName(name);
 			if(filepath==NULL)
@@ -152,7 +152,7 @@ void setPlugPrefs(GtkWidget* widget,gpointer data)
 		{
 			case 1:
 				selection=gtk_tree_view_get_selection((GtkTreeView*)treeview);
-				if((selection!=NULL) && (gtk_tree_selection_get_selected(selection,&model,&iter)))
+				if((selection!=NULL) &&(gtk_tree_selection_get_selected(selection,&model,&iter)))
 					{
 						gtk_tree_model_get(model,&iter,COLUMN_PLUGIN,&plugname,-1);
 						globalPlugins->runPlugFunction(globalPlugins->getPluginByName(plugname),"plugPrefs");
@@ -161,7 +161,7 @@ void setPlugPrefs(GtkWidget* widget,gpointer data)
 				break;
 			case 2:
 				selection=gtk_tree_view_get_selection((GtkTreeView*)treeview);
-				if((selection!=NULL) && (gtk_tree_selection_get_selected(selection,&model,&iter)))
+				if((selection!=NULL) &&(gtk_tree_selection_get_selected(selection,&model,&iter)))
 					{
 						gtk_tree_model_get(model,&iter,COLUMN_PLUGIN,&plugname,-1);
 						globalPlugins->runPlugFunction(globalPlugins->getPluginByName(plugname),"doAbout");
@@ -190,7 +190,7 @@ void onRowSelected(GtkTreeView* treeview,gpointer userdata)
 	char*				plugname;
 
 	selection=gtk_tree_view_get_selection((GtkTreeView*)treeview);
-	if((selection!=NULL) && (gtk_tree_selection_get_selected(selection,&model,&iter)))
+	if((selection!=NULL) &&(gtk_tree_selection_get_selected(selection,&model,&iter)))
 		{
 			gtk_tree_model_get(model,&iter,COLUMN_PLUGIN,&plugname,-1);
 			gtk_widget_set_sensitive(plugAboutButton,globalPlugins->checkForFunction(plugname,"doAbout"));
@@ -221,7 +221,7 @@ VISIBLE void doPlugPrefs(GtkWidget* widget,gpointer data)
 
 	model=GTK_TREE_MODEL(store);
 	treeview=gtk_tree_view_new_with_model(model);
-	gtk_container_add (GTK_CONTAINER (vbox),treeview);
+	gtk_container_add(GTK_CONTAINER(vbox),treeview);
 
 //enable
 	renderer=gtk_cell_renderer_toggle_new();
@@ -262,8 +262,8 @@ VISIBLE void doPlugPrefs(GtkWidget* widget,gpointer data)
 
 	g_signal_connect(treeview,"cursor-changed",G_CALLBACK(onRowSelected),NULL);
 
-	gtk_container_add (GTK_CONTAINER(vbox),hbox);
-	gtk_container_add (GTK_CONTAINER(plugwindow),vbox);
+	gtk_container_add(GTK_CONTAINER(vbox),hbox);
+	gtk_container_add(GTK_CONTAINER(plugwindow),vbox);
 	gtk_widget_show_all(plugwindow);
 	ERRDATA
 }

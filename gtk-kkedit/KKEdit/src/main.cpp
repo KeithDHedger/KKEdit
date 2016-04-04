@@ -2,7 +2,7 @@
  *
  * ©K. D. Hedger. Sun 25 Oct 14:49:21 GMT 2015 kdhedger68713@gmail.com
 
- * This file (main.cpp) is part of KKEdit.
+ * This file(main.cpp) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -193,7 +193,7 @@ void init(void)
 //time to nag?
 
 	timeToNag=false;
-	if((lastNagTime==0) || (nagTime-lastNagTime>updateWait))
+	if((lastNagTime==0) ||(nagTime-lastNagTime>updateWait))
 		{
 			timeToNag=true;
 			lastNagTime=nagTime;
@@ -234,7 +234,7 @@ void doNagScreen(void)
 	dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",gettext("Please donate"));
 	gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s\n<b>%s</b>\n%s\n\n%s",gettext("If you have a PayPal account you can donate any amount you like by logging into yor account and click the 'Send Money' tab, enter my email address"),MYEMAIL,gettext("and then send it."),gettext("Thank you for helping to support Free software."));
 
-	gtk_dialog_run(GTK_DIALOG (dialog));
+	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 	ERRDATA
 }
@@ -302,7 +302,7 @@ void doNagStuff(void)
 			if(strlen(t1)>1)
 				{
 					thisupdate=atol(t1);
-					if((thisupdate>lastUpdate) || (strcmp(VERSION,vers)!=0))
+					if((thisupdate>lastUpdate) ||(strcmp(VERSION,vers)!=0))
 						{
 							GtkWidget* dialog;
 
@@ -322,7 +322,7 @@ void doNagStuff(void)
 							dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",gettext("Updates Available"));
 							gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s%s",kkeditupdatemessage,plugupdatemessage);
 
-							gtk_dialog_run(GTK_DIALOG (dialog));
+							gtk_dialog_run(GTK_DIALOG(dialog));
 							gtk_widget_destroy(dialog);
 							ERRDATA debugFree(&kkeditupdatemessage);
 							ERRDATA debugFree(&plugupdatemessage);
@@ -375,9 +375,9 @@ void doKKCommand(const char *command)
 				if(fromGOpen==true)
 					{
 						gtk_widget_show_all((GtkWidget*)(GtkTextView*)page->view);
-						if(line>0)
-						while (gtk_events_pending ())
-							gtk_main_iteration ();
+//						if(line>0)
+//						while(gtk_events_pending())
+//							gtk_main_iteration();
 					}
 				gotoLine(NULL,(void*)line);
 				break;
@@ -424,7 +424,7 @@ void open(GApplication* application,GFile** files,gint n_files,const gchar* hint
 		{
 			filepath=g_file_get_path(files[i]);
 			basepart=basename(filepath);
-			if((basepart[0]=='@') && (basepart[1]=='@'))
+			if((basepart[0]=='@') &&(basepart[1]=='@'))
 				{
 					doKKCommand(filepath);
 					continue;
@@ -445,7 +445,7 @@ void open(GApplication* application,GFile** files,gint n_files,const gchar* hint
 		}
 
 //	setSensitive(NULL,NULL);
-	setSensitive();
+//	setSensitive();
 	fromGOpen=false;
 
 	g_application_release(application);
@@ -502,9 +502,9 @@ void appStart(GApplication  *application,gpointer data)
 			gtk_window_set_icon_name((GtkWindow*)mainWindow,PACKAGE "Root");
 		}
 //	setSensitive(NULL,NULL);
-	setSensitive();
+//	setSensitive();
 
-	if((timeToNag==true) && (autoCheck==true))
+	if((timeToNag==true) &&(autoCheck==true))
 		doNagStuff();
 
 	gtk_widget_set_size_request(mainWindow,100,100);
@@ -527,7 +527,7 @@ int getWorkspaceNumber(void)
 
 	_net_current_desktop=gdk_x11_get_xatom_by_name_for_display(display,"_NET_CURRENT_DESKTOP");
 
-	XGetWindowProperty(GDK_DISPLAY_XDISPLAY(display),GDK_WINDOW_XID (root_win),_net_current_desktop,0,G_MAXLONG,False,XA_CARDINAL,&type,&format,&n_items,&bytes_after,&data_return);
+	XGetWindowProperty(GDK_DISPLAY_XDISPLAY(display),GDK_WINDOW_XID(root_win),_net_current_desktop,0,G_MAXLONG,False,XA_CARDINAL,&type,&format,&n_items,&bytes_after,&data_return);
 
 	if(type==XA_CARDINAL && format==32 && n_items>0)
 		{
@@ -537,7 +537,7 @@ int getWorkspaceNumber(void)
 	ERRDATA return retnum;
 }
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
 	ERRDATA
 	int				status;
@@ -567,7 +567,7 @@ int main (int argc, char **argv)
 	GOptionEntry	entries[]=
 {
     {"multiple",'m',0,G_OPTION_ARG_NONE,&singleOverRide,"Multiple instance mode",NULL},
-    { "safe",'s',0,G_OPTION_ARG_NONE,&safeflag,"Safe mode ( disable all plugins and use new instance )",NULL},
+    { "safe",'s',0,G_OPTION_ARG_NONE,&safeflag,"Safe mode(disable all plugins and use new instance )",NULL},
     { NULL }
 };
 
@@ -591,14 +591,14 @@ int main (int argc, char **argv)
 	gtk_init(&argc,&argv);
 
 	asprintf(&dbusname,"org.keithhedger%i.KKEdit",getWorkspaceNumber());
-	if((singleOverRide==true) || (singleUse==false))
+	if((singleOverRide==true) ||(singleUse==false))
 		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN));
 	else
 		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_HANDLES_OPEN));
 
 	g_signal_connect(mainApp,"activate",G_CALLBACK(activate),NULL);
-	g_signal_connect(mainApp,"startup",G_CALLBACK (appStart),NULL);
-	g_signal_connect(mainApp,"open",G_CALLBACK (open),NULL);
+	g_signal_connect(mainApp,"startup",G_CALLBACK(appStart),NULL);
+	g_signal_connect(mainApp,"open",G_CALLBACK(open),NULL);
 
 	status=g_application_run(mainApp,argc,argv);
 

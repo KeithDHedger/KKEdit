@@ -19,7 +19,7 @@ HistoryClass::HistoryClass()
 
 HistoryClass::~HistoryClass()
 {
-	ERRDATA delete buf;
+	ERRDATA delete this->buf;
 }
 
 void HistoryClass::getThisPoint(void)
@@ -73,13 +73,13 @@ bool HistoryClass::savePosition(void)
 			gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)savedPage->buffer,"back-mark",&buf->cursorPos);
 			this->goBack=true;
 			//setSensitive(NULL,NULL);
-			setSensitive();
+			//setSensitive();
 			ERRDATA return(true);
 		}
 
 	this->goBack=false;
 //	setSensitive(NULL,NULL);
-	setSensitive();
+//	setSensitive();
 	ERRDATA return(false);
 }
 
@@ -92,7 +92,7 @@ int HistoryClass::getTabNumForPage(void)
 	for(int loop=0;loop<numpages;loop++)
 		{
 			page=getPageStructPtr(loop);
-			if (page==savedPage)
+			if(page==savedPage)
 				{
 					this->goBack=true;
 					ERRDATA return(loop);

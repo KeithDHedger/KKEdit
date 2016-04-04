@@ -2,7 +2,7 @@
  *
  * ©K. D. Hedger. Sun 25 Oct 14:50:17 GMT 2015 kdhedger68713@gmail.com
 
- * This file (guis.h) is part of KKEdit.
+ * This file(guis.h) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

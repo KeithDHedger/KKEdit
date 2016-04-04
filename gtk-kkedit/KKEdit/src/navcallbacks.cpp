@@ -2,7 +2,7 @@
  *
  * ©K. D. Hedger. Sun 25 Oct 14:50:25 GMT 2015 kdhedger68713@gmail.com
 
- * This file (navcallbacks.cpp) is part of KKEdit.
+ * This file(navcallbacks.cpp) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ void goToDefine(functionData* fdata)
 	pageStruct*	page;
 	TextBuffer*	buf;
 
+//	doBusy(true,NULL);
 	if(fdata->intab==-1)
 		{
 			openFile(fdata->file,fdata->line-1,true);
@@ -50,6 +51,7 @@ void goToDefine(functionData* fdata)
 
 			ERRDATA delete buf;
 		}
+//	doBusy(false,NULL);
 	ERRDATA
 }
 
@@ -62,17 +64,13 @@ VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
 	char*			selection=NULL;
 
 	if(page==NULL)
-		{
-			ERRDATA return;
-		}
+		ERRDATA return;
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 			if(selection==NULL)
-				{
-					ERRDATA return;
-				}
+				ERRDATA return;
 		}
 	else
 		{
@@ -139,8 +137,8 @@ void gotoLine(GtkWidget* widget,gpointer data)
 {
 	ERRDATA
 	int			line=(long)data;
-	pageStruct*	page=getPageStructPtr(-1);
 	TextBuffer*	buf;
+	pageStruct*	page=getPageStructPtr(-1);
 
 	if(page!=NULL)
 		{
@@ -367,7 +365,7 @@ bool readFile(char *name)
 		}
 	//Open file
 	file=fopen(name,"rb");
-	if (!file)
+	if(!file)
 		{
 			fprintf(stderr,gettext("Unable to open file %s"),name);
 			ERRDATA return(false);
@@ -380,7 +378,7 @@ bool readFile(char *name)
 
 	//Allocate memory
 	filebuffer=(char*)malloc(fileLen+1);
-	if (!filebuffer)
+	if(!filebuffer)
 		{
 			fprintf(stderr,gettext("Memory error!"));
 			fclose(file);

@@ -2,7 +2,7 @@
  *
  * ©K. D. Hedger. Sun 25 Oct 14:49:34 GMT 2015 kdhedger68713@gmail.com
 
- * This file (globals.cpp) is part of KKEdit.
+ * This file(globals.cpp) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@
 #include "kkedit-includes.h"
 
 GApplication*	mainApp;
-bool			busyFlag=false;
+//bool			busyFlag[10]={false,};
 bool			autoSeleced=false;
-VISIBLE bool	sessionBusy=false;
+//VISIBLE bool	sessionBusy=false;
 bool			fromGOpen=false;
 char			*prefsFolder=NULL;
 
@@ -513,7 +513,7 @@ VISIBLE pageStruct* getPageStructPtr(int pagenum)
 {
 	ERRDATA
 	int			thispage;
-	GtkWidget*	pageBox=NULL;
+	GtkWidget	*pageBox=NULL;
 
 	if(pagenum==-1)
 		thispage=gtk_notebook_get_current_page(mainNotebook);
@@ -545,7 +545,7 @@ void getMimeType(char* filepath,void* ptr)
 
 	asprintf(&command,"file -b --mime-type %s",filepath);
 	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
-	if (retval==0)
+	if(retval==0)
 		{
 			stdout[strlen(stdout)-1]=0;
 			*((char**)ptr)=strdup(stdout);
@@ -601,11 +601,11 @@ void setLanguage(pageStruct* page)
 
 	lang=gtk_source_language_manager_guess_language(lm,page->filePath,mimetype);
 
-	if (lang==NULL)
+	if(lang==NULL)
 		{
 			getMimeType((char*)page->filePath,&mimetype);
 			lang=gtk_source_language_manager_guess_language(lm,page->filePath,mimetype);
-			if (lang!=NULL)
+			if(lang!=NULL)
 				gtk_source_buffer_set_language(page->buffer,lang);
 		}
 	else
@@ -677,8 +677,8 @@ VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int u
 							while(fgets(line,1024,fp))
 								{
 									gtk_text_buffer_insert_at_cursor(toolOutputBuffer,line,strlen(line));
-									while(gtk_events_pending())
-										gtk_main_iteration();
+//									while(gtk_events_pending())
+//										gtk_main_iteration();
 									gtk_text_buffer_get_end_iter(toolOutputBuffer,&iter);
 									gtk_text_view_scroll_to_iter((GtkTextView*)toolOutputView,&iter,0,true,0,0);
 								}
@@ -723,9 +723,7 @@ functionData* getFunctionByNameOpenFiles(char* name,bool casesensitive,bool whol
 
 	page=getPageStructPtr(-1);
 	if(page==NULL)
-		{
-			ERRDATA return(NULL);
-		}
+		ERRDATA return(NULL);
 
 	loop=gtk_notebook_get_current_page(mainNotebook);
 	startpage=loop;
@@ -739,9 +737,9 @@ functionData* getFunctionByNameOpenFiles(char* name,bool casesensitive,bool whol
 					getRecursiveTagList(page->filePath,&functions);
 					lineptr=functions;
 
-					while (lineptr!=NULL)
+					while(lineptr!=NULL)
 						{
-							sscanf (lineptr,"%s",function);
+							sscanf(lineptr,"%s",function);
 							if(strlen(function)>=strlen(name))
 								longest=strlen(function);
 							else
@@ -772,21 +770,21 @@ functionData* getFunctionByNameOpenFiles(char* name,bool casesensitive,bool whol
 							if(gotmatch==0)
 								{
 									fdata=(functionData*)malloc(sizeof(functionData));
-									sscanf (lineptr,"%"VALIDFUNCTIONCHARS"s",function);
+									sscanf(lineptr,"%"VALIDFUNCTIONCHARS"s",function);
 									fdata->name=strdup(function);
-									sscanf (lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
+									sscanf(lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
 									fdata->type=strdup(function);
-									sscanf (lineptr,"%*s %*s %i",&fdata->line);
-									sscanf (lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
+									sscanf(lineptr,"%*s %*s %i",&fdata->line);
+									sscanf(lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
 									fdata->file=strdup(function);
-									sscanf (lineptr,"%*s %*s %*i %*s %[^\n]s",function);
+									sscanf(lineptr,"%*s %*s %*i %*s %[^\n]s",function);
 									fdata->define=strdup(function);
 									fdata->intab=loop;
 									ERRDATA return(fdata);
 								}
 
 							lineptr=strchr(lineptr,'\n');
-							if (lineptr!=NULL)
+							if(lineptr!=NULL)
 								lineptr++;
 						}
 				}
@@ -840,9 +838,9 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 							getRecursiveTagListFileName(dirname,&stdout);
 
 							lineptr=stdout;
-							while (lineptr!=NULL)
+							while(lineptr!=NULL)
 								{
-									sscanf (lineptr,"%s",function);
+									sscanf(lineptr,"%s",function);
 
 									if(casesensitive==true)
 										gotmatch=strncmp(function,name,(int)strlen(name));
@@ -867,9 +865,9 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 												thislen=strlen(name);
 										}
 
-									if((gotmatch==0) && (strlen(name)==strlen(function)))
+									if((gotmatch==0) &&(strlen(name)==strlen(function)))
 										{
-											sscanf (lineptr, "%s\t%s\t%i",funcname,filepath,&linenumber);
+											sscanf(lineptr, "%s\t%s\t%i",funcname,filepath,&linenumber);
 											fdata=(functionData*)malloc(sizeof(functionData));
 											fdata->name=strdup(funcname);
 											fdata->file=strdup(filepath);
@@ -880,7 +878,7 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 											ERRDATA return(fdata);
 										}
 
-									if((gotmatch==0) && (bestlen<thislen))
+									if((gotmatch==0) &&(bestlen<thislen))
 										{
 											possmatch=strdup(lineptr);
 											bestlen=thislen;
@@ -889,7 +887,7 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 										}
 
 									lineptr=strchr(lineptr,'\n');
-									if (lineptr!=NULL)
+									if(lineptr!=NULL)
 										lineptr++;
 								}
 							if(stdout!=NULL)
@@ -909,21 +907,21 @@ functionData* getFunctionByName(char* name,bool recurse,bool casesensitive)
 			if(getfromfile==false)
 				{
 					fdata=(functionData*)malloc(sizeof(functionData));
-					sscanf (possmatch,"%"VALIDFUNCTIONCHARS"s",function);
+					sscanf(possmatch,"%"VALIDFUNCTIONCHARS"s",function);
 					fdata->name=strdup(function);
-					sscanf (possmatch,"%*s %"VALIDFUNCTIONCHARS"s",function);
+					sscanf(possmatch,"%*s %"VALIDFUNCTIONCHARS"s",function);
 					fdata->type=strdup(function);
-					sscanf (possmatch,"%*s %*s %i",&fdata->line);
-					sscanf (possmatch,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
+					sscanf(possmatch,"%*s %*s %i",&fdata->line);
+					sscanf(possmatch,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
 					fdata->file=strdup(function);
-					sscanf (possmatch,"%*s %*s %*i %*s %[^\n]s",function);
+					sscanf(possmatch,"%*s %*s %*i %*s %[^\n]s",function);
 					fdata->define=strdup(function);
 					fdata->intab=loophold;
 					ERRDATA return(fdata);
 				}
 			else
 				{
-					sscanf (possmatch, "%s\t%s\t%i",funcname,filepath,&linenumber);
+					sscanf(possmatch, "%s\t%s\t%i",funcname,filepath,&linenumber);
 					fdata=(functionData*)malloc(sizeof(functionData));
 					fdata->name=strdup(funcname);
 					fdata->file=strdup(filepath);
@@ -1002,11 +1000,9 @@ void getRecursiveTagList(char* filepath,void* ptr)
 	char*		sort=NULL;
 
 	if(filepath==NULL)
-		{
-			ERRDATA return;
-		}
+		return;
 
-	switch (listFunction)
+	switch(listFunction)
 		{
 		case 0:
 			asprintf(&sort,"sort -k 2rb,2rb -k 1b,1b");
@@ -1108,7 +1104,7 @@ void buildToolsList(void)
 							asprintf(&filepath,"%s%s",datafolder[loop],entry);
 							loadVarsFromFile(filepath,tool_vars);
 
-							if((menuname!=NULL) && (strlen(menuname)>0) && ( commandarg!=NULL))
+							if((menuname!=NULL) &&(strlen(menuname)>0) &&(commandarg!=NULL))
 								{
 									tool=(toolStruct*)malloc(sizeof(toolStruct));
 									tool->menuName=strdup(menuname);
@@ -1182,6 +1178,8 @@ void rebuildBookMarkMenu(void)
 
 VISIBLE void goBack(GtkWidget* widget,gpointer data)
 {
+//TODO//
+#if 0
 	ERRDATA
 	HistoryClass*	hist=new HistoryClass;
 
@@ -1211,7 +1209,8 @@ VISIBLE void goBack(GtkWidget* widget,gpointer data)
 				{
 					ERRDATA delete hist;
 					//setSensitive(NULL,NULL);
-					setSensitive();
+					//setSensitive();
+					setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 					ERRDATA return;
 				}
 		if(hist->savePosition()==true)
@@ -1229,8 +1228,10 @@ VISIBLE void goBack(GtkWidget* widget,gpointer data)
 				}
 		}
 //	setSensitive(NULL,NULL);
-	setSensitive();
+//	setSensitive();
+	setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 	ERRDATA
+#endif
 }
 
 char	*barControl;
@@ -1262,7 +1263,7 @@ void killBarberPole(void)
 
 VISIBLE void freeAndNull(char** ptr)
 {
-	if (*ptr!=NULL)
+	if(*ptr!=NULL)
 		free(*ptr);
 
 	*ptr=NULL;
@@ -1273,7 +1274,7 @@ VISIBLE void debugFree(char** ptr)
 #if _DEBUGLEVEL_ > DBG0 && _DEBUGLEVEL_ < DBG4
 	FILE*	fp=stderr;
 
-	if((_DEBUGLEVEL_ == DBG1) || (_DEBUGLEVEL_ == DBG3))
+	if((_DEBUGLEVEL_ == DBG1) ||(_DEBUGLEVEL_ == DBG3))
 		fprintf(stderr,"Free: File:%s ,Func:%s, Line:%i\n",errFile,errFunc,errLine);
 
 	if(_DEBUGLEVEL_ == DBG2)
@@ -1294,9 +1295,35 @@ VISIBLE void debugFree(char** ptr)
 	freeAndNull(ptr);
 }
 
-void doBusy(bool busy,pageStruct* page)
+//int busyCnt=0;
+//void doBusy(bool busy,pageStruct* page)
+bool doBusy(int busy,int what)
 {
-busyFlag=false;
+#if 0
+	if(what==QUERYBUSY)
+		return(busyFlag[busyCnt]);
+
+	if(what==PUSHBUSY)
+		{
+			busyCnt++;
+			busyFlag[busyCnt]=busy;
+			return(busyFlag[busyCnt]);
+		}
+
+	if(what==POPBUSY)
+		{
+			busyCnt--;
+			return(busyFlag[busyCnt]);
+		}
+
+	return(false);
+//
+//	if(busy==ISBUSY)
+//		busyFlag[busyCnt]=true;
+//	if(busy==NOTBUSY)
+//		busyFlag[busyCnt]=false;
+
+
 #if 0
 	ERRDATA
 	if(page==NULL)
@@ -1319,25 +1346,29 @@ busyFlag=false;
 		}
 	ERRDATA
 #endif
+#endif
+return(false);
 }
 
 VISIBLE bool doUpdateWidgets=false;
 
 VISIBLE void resetWidgetSenisitive(void)
 {
-	ERRDATA
-	if(doUpdateWidgets==true)
-		{
-			resetAllFilePrefs();	
-	//		setSensitive(NULL,NULL);
-			setSensitive();
-			refreshMainWindow();
-		}
-	ERRDATA
+//TODO//
+//	ERRDATA
+//	if(doUpdateWidgets==true)
+//		{
+//			resetAllFilePrefs();	
+//	//		setSensitive(NULL,NULL);
+////			setSensitive();
+//			refreshMainWindow();
+//		}
+//	ERRDATA
 }
 
 VISIBLE void setWidgets(void)
 {
+return;
 	ERRDATA
 	pageStruct* page;
 
@@ -1366,7 +1397,7 @@ void catchSignal(int signal)
 	if(_DEBUGLEVEL_ == DBG1)
 		fp=stderr;
 
-	if((_DEBUGLEVEL_ == DBG2) || (_DEBUGLEVEL_ == DBG3) || (_DEBUGLEVEL_ == DBG4))
+	if((_DEBUGLEVEL_ == DBG2) ||(_DEBUGLEVEL_ == DBG3) ||(_DEBUGLEVEL_ == DBG4))
 		{
 			if(logFile!=NULL)
 				fp=fopen(logFile,"a");
@@ -1469,22 +1500,413 @@ GdkPixbuf* createNewIcon(const char* stock,GtkWidget* widg)
 
 	return(icon);
 }
-
-#ifdef _USEGTK3_
-GtkWidget* createNewTable(int rows,int cols)
-#else
-GtkTable* createNewTable(int rows,int cols)
-#endif
+#if 0
+//void setSensitive(GtkTextBuffer *textbuffer,gpointer user_data)
+void setSensitive(void)
 {
-#ifdef _USEGTK3_
-	GtkWidget	*widg=gtk_grid_new();
+	ERRDATA
+	pageStruct*		page=getPageStructPtr(-1);
+	const gchar*	text;
+	char*			newlabel;
+	int				offset=0;
+	GtkTextIter	start_find,end_find;
 
-	for(int j=0;j<rows;j++)
-		gtk_grid_insert_row((GtkGrid*)widg,0);
-	return(widg);
-//	return(gtk_grid_new());
+	setToobarSensitive();
+	if(page==NULL)
+		{
+//menu
+			gtk_widget_set_sensitive((GtkWidget*)undoMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)redoMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)cutMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)copyMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)pasteMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)funcMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)navMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)printMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)closeMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)closeAllMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)saveAllMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)revertMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)goBackMenu,false);
+			gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,0);
+			return;
+		}
+
+	if(sessionBusy==true)
+		return;
+
+	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
+	text=gtk_label_get_text((GtkLabel*)page->tabName);
+#ifdef _BUGGED_
+	gtk_widget_set_sensitive((GtkWidget*)undoMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)redoMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,true);
 #else
-	return((GtkTable*)gtk_table_new(rows,cols,true));
+	gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));
+	gtk_widget_set_sensitive((GtkWidget*)redoMenu,gtk_source_buffer_can_redo(page->buffer));
+	gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,gtk_source_buffer_can_undo(page->buffer));
+	gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,gtk_source_buffer_can_redo(page->buffer));
 #endif
+			gtk_widget_set_sensitive((GtkWidget*)saveMenu,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
+			gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
+
+//tab
+			if(text[0]=='*')
+				offset=1;
+
+			if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer))==true)
+				asprintf(&newlabel,"*%s",&text[offset]);
+			else
+				newlabel=strdup(&text[offset]);
+
+			gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)newlabel);
+			ERRDATA debugFree(&newlabel);
+
+
+
+			gtk_widget_set_sensitive((GtkWidget*)cutMenu,true);
+			gtk_widget_set_sensitive((GtkWidget*)copyMenu,true);
+			gtk_widget_set_sensitive((GtkWidget*)pasteMenu,true);
+			gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,true);
+			gtk_widget_set_sensitive((GtkWidget*)navMenu,true);
+			gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
+			gtk_widget_set_sensitive((GtkWidget*)printMenu,true);
+			gtk_widget_set_sensitive((GtkWidget*)closeMenu,true);
+			gtk_widget_set_sensitive((GtkWidget*)closeAllMenu,true);
+			gtk_widget_set_sensitive((GtkWidget*)saveAllMenu,true);
+			gtk_widget_set_sensitive((GtkWidget*)revertMenu,true);
+			gtk_widget_show_all(page->tabName);
+			updateStatusBar((GtkTextBuffer*)page->buffer,NULL,NULL,page);
+			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start_find);
+			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end_find);
+			gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);
+//		}
+//do plugin sensitive
+	globalPlugins->globalPlugData->page=page;
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"setSensitive");
 }
+#endif
+void setToobarWidgetsSensitive(void)
+{
+	ERRDATA
+	pageStruct	*page=getPageStructPtr(-1);
+	bool		ismodified=false;
+	bool		hasselection=false;
+
+	if(page==NULL)
+		{
+			if(newButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)newButton,true);
+			if(openButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)openButton,true);
+			if(saveButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
+			if(cutButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)cutButton,false);
+			if(copyButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)copyButton,false);
+			if(pasteButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)pasteButton,false);
+			if(undoButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)undoButton,false);
+			if(redoButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)redoButton,false);
+			if(findButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)findButton,false);
+			if(gotoDefButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,false);
+			if(backButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)backButton,false);
+			if(gotoLineButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,false);
+			if(findApiButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)findApiButton,false);
+			if(findFuncDefButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,false);
+			if(liveSearchButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,false);
+			return;
+		}
+
+	ismodified=gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer));
+	hasselection=gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer);
+
+	for(int j=0; j<(int)strlen(toolBarLayout); j++)
+		{
+			switch(toolBarLayout[j])
+				{
+//newnewButton
+				case 'N':
+					if(newButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)newButton,true);
+					break;
+//open+recent
+				case 'O':
+					if(openButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)openButton,true);
+					break;
+//save
+				case 'S':
+					if(saveButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)saveButton,ismodified);
+					break;
+//cut
+				case 'X':
+					if(cutButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)cutButton,hasselection);
+					break;
+//copy
+				case 'C':
+					if(copyButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)copyButton,hasselection);
+					break;
+//paste
+				case 'P':
+					if(pasteButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)pasteButton,true);
+					break;
+//undo
+				case 'U':
+					if(undoButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
+					break;
+//redo
+				case 'R':
+					if(redoButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)redoButton,gtk_source_buffer_can_redo(page->buffer));
+					break;
+//find
+				case 'F':
+					if(findButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)findButton,true);
+					break;
+//navigation
+				case 'G':
+					if(gotoDefButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,true);
+					break;
+//go back
+				case 'B':
+					if(backButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)backButton,history->canGoBack());
+					break;
+//find in gtkdoc
+				case '9':
+					if(gotoLineButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,true);
+					break;
+//find in gtkdoc
+				case 'A':
+					if(findApiButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)findApiButton,true);
+					break;
+//find in function def
+				case 'D':
+					if(findFuncDefButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,true);
+					break;
+//livesearch
+				case 'L':
+					if(liveSearchButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,true);
+					break;
+				}
+		}
+}
+//bool newBusyFlag=false;
+
+void setWidgetsSensitiveXXX(void)
+{
+return;
+	ERRDATA
+	pageStruct*		page;
+	const gchar*	text=NULL;
+	char*			newlabel=NULL;
+	int				offset=0;
+	bool			ismodified=false;
+	bool			hasselection=false;
+
+//	if(busyFlag==true)
+//		{
+//			while(gtk_events_pending())
+//				gtk_main_iteration();
+//			return;
+//		}
+
+	page=getPageStructPtr(-1);
+//printf("void setWidgetsSensitive(void)\n");
+	setToobarWidgetsSensitive();
+	if(page==NULL)
+		{
+//menu
+			gtk_widget_set_sensitive((GtkWidget*)undoMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)redoMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)cutMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)copyMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)pasteMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)funcMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)navMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)printMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)closeMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)closeAllMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)saveAllMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)revertMenu,false);
+			gtk_widget_set_sensitive((GtkWidget*)goBackMenu,false);
+			gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,0);
+			return;
+		}
+
+	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
+	text=gtk_label_get_text((GtkLabel*)page->tabName);
+
+	gtk_widget_set_sensitive((GtkWidget*)undoMenu,gtk_source_buffer_can_undo(page->buffer));
+	gtk_widget_set_sensitive((GtkWidget*)redoMenu,gtk_source_buffer_can_redo(page->buffer));
+	gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,gtk_source_buffer_can_undo(page->buffer));
+	gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,gtk_source_buffer_can_redo(page->buffer));
+
+	ismodified=gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer));
+
+	gtk_widget_set_sensitive(saveMenu,ismodified);
+	text=gtk_label_get_text((GtkLabel*)page->tabName);
+
+	if(text[0]=='*')
+		offset=1;
+	else
+		offset=0;
+
+	if(ismodified==true)
+		asprintf(&newlabel,"*%s",&text[offset]);
+	else
+		asprintf(&newlabel,"%s",&text[offset]);
+
+	gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)newlabel);
+	ERRDATA debugFree(&newlabel);
+
+	hasselection=gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer);
+	gtk_widget_set_sensitive((GtkWidget*)cutMenu,hasselection);
+	gtk_widget_set_sensitive((GtkWidget*)copyMenu,hasselection);
+	gtk_widget_set_sensitive((GtkWidget*)pasteMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)navMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)funcMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)printMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)closeMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)closeAllMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)saveAllMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)revertMenu,true);
+	gtk_widget_show_all(page->tabName);
+
+	updateStatusBar((GtkTextBuffer*)page->buffer,NULL,NULL,page);
+//TODO// what is this?
+//	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start_find);
+//	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end_find);
+//	gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);
+
+//do plugin sensitive
+	globalPlugins->globalPlugData->page=page;
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"setSensitive");
+}
+
+void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
+{
+	bool		ismodified;
+	const gchar	*text=NULL;
+	char		*newlabel=NULL;
+	int			offset=0;
+	bool		hasselection;
+
+	if(page==NULL)
+		return;
+
+	setToobarWidgetsSensitive();
+
+	gtk_widget_set_sensitive((GtkWidget*)undoMenu,page->canUndo);
+	gtk_widget_set_sensitive((GtkWidget*)redoMenu,page->canRedo);
+	gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,page->canUndo);
+	gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,page->canRedo);
+
+	ismodified=page->isDirty;
+	gtk_widget_set_sensitive(saveMenu,ismodified);
+	text=gtk_label_get_text((GtkLabel*)page->tabName);
+
+	if(text[0]=='*')
+		offset=1;
+
+	if(ismodified==true)
+		asprintf(&newlabel,"*%s",&text[offset]);
+	else
+		asprintf(&newlabel,"%s",&text[offset]);
+
+	gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)newlabel);
+	ERRDATA debugFree(&newlabel);
+
+	hasselection=gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer);
+	gtk_widget_set_sensitive((GtkWidget*)cutMenu,hasselection);
+	gtk_widget_set_sensitive((GtkWidget*)copyMenu,hasselection);
+	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
+}
+
+void resetSensitive(void)
+{
+	setToobarWidgetsSensitive();
+
+	gtk_widget_set_sensitive((GtkWidget*)undoMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)redoMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)redoAllMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)cutMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)copyMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)pasteMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)funcMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)navMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)printMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)closeMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)closeAllMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)saveAllMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)revertMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,false);
+	gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,0);
+}
+
+void setPageSensitive(void)
+{
+	if(gtk_notebook_get_n_pages(mainNotebook)==0)
+		{
+			resetSensitive();
+			return;
+		}
+	setToobarWidgetsSensitive();
+	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)saveAllMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)closeAllMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)closeMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)pasteMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)navMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)funcMenu,true);
+}
+
+
+
+
+
+
+
+
+
 
