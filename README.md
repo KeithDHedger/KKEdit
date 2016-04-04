@@ -1,5 +1,8 @@
 KKEdit source code editor.
 
+***WARNING WHEN BUILDING FOR GTK3 ***
+Until this notice is removed some functions are disabled/not working, mostly 'go back', 'bookmarks' and 'completion', the gtk2 release is fully functional.
+
 Why another text editor?
 
 Simple, I didn't like any of the others, anyway having used gedit for years it was getting increasingly difficult to keep it compiling without loads of gnome dependencies, looking around linux text editors seem to be VERY simple (leafpad) stupidly complex (GVim,Bluefish), trying to be all things to all people.
