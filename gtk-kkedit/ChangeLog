@@ -1,4 +1,7 @@
 0.3.0
+Moved some routines to widget callbacks.
+Redone setting menus/toolbar items sensitive.
+Fixed some memory leaks when closing tabs.
 Fixed jump to line entry box size.
 Fixed occasional segfault on quiting when certain plugins enabled.
 Added update-icons target to top Makefile.
