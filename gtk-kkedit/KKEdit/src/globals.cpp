@@ -90,6 +90,7 @@ char*			tmpHighlightColour;
 bool			showBMBar;
 GtkWidget*		bmHighlightBox;
 int				bmMarkNumber=0;
+unsigned int	pageID=100;
 
 char*			toolBarLayout=NULL;
 GtkWidget*		toolBarBox;
@@ -292,7 +293,7 @@ const char*		localeLang;
 //notebook
 int				openInThisTab=-1;
 
-HistoryClass*	history;
+HistoryClass*	globalHistory;
 StringSlice*	globalSlice;
 
 unsigned int	shortCuts[NUMSHORTCUTS][2]=
@@ -1178,60 +1179,9 @@ void rebuildBookMarkMenu(void)
 
 VISIBLE void goBack(GtkWidget* widget,gpointer data)
 {
-//TODO//
-#if 0
-	ERRDATA
-	HistoryClass*	hist=new HistoryClass;
-
-	GtkTextIter		iter;
-	pageStruct*		page=history->getPage();
-	TextBuffer*		buf;
-
-	if(page==NULL)
-		{
-			ERRDATA return;
-		}
-
-	buf=history->getTextBuffer();
-
-	if(gtk_notebook_get_current_page(mainNotebook)==history->getTabNumForPage())
-		{
-			buf->textBuffer=(GtkTextBuffer*)page->buffer;
-			buf->getLineData();
-			gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
-			gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-			scrollToIterInPane(page,&iter);
-			gtk_text_buffer_move_mark_by_name((GtkTextBuffer*)page->buffer,"back-mark",&buf->cursorPos);
-		}
-	else
-		{
-			if(history->canGoBack()==false)
-				{
-					ERRDATA delete hist;
-					//setSensitive(NULL,NULL);
-					//setSensitive();
-					setChangedSensitive((GtkTextBuffer*)page->buffer,page);
-					ERRDATA return;
-				}
-		if(hist->savePosition()==true)
-				{
-					gtk_notebook_set_current_page(mainNotebook,history->getTabNumForPage());
-					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,page->backMark);
-					gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
-					scrollToIterInPane(page,&iter);
-					ERRDATA delete history;
-					history=hist;
-				}
-			else
-				{
-					ERRDATA delete hist;
-				}
-		}
-//	setSensitive(NULL,NULL);
-//	setSensitive();
-	setChangedSensitive((GtkTextBuffer*)page->buffer,page);
-	ERRDATA
-#endif
+	globalHistory->saveCurrentPos();
+	globalHistory->goBackToPos();
+	globalHistory->swapPos();
 }
 
 char	*barControl;
@@ -1571,7 +1521,7 @@ void setToobarWidgetsSensitive(void)
 //go back
 				case 'B':
 					if(backButton!=NULL)
-						gtk_widget_set_sensitive((GtkWidget*)backButton,history->canGoBack());
+						gtk_widget_set_sensitive((GtkWidget*)backButton,globalHistory->canGoBack());
 					break;
 //find in gtkdoc
 				case '9':
@@ -1633,7 +1583,7 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 	hasselection=gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer);
 	gtk_widget_set_sensitive((GtkWidget*)cutMenu,hasselection);
 	gtk_widget_set_sensitive((GtkWidget*)copyMenu,hasselection);
-	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,history->canGoBack());
+	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,globalHistory->canGoBack());
 
 //do plugin sensitive
 	globalPlugins->globalPlugData->page=page;

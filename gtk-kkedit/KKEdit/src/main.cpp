@@ -201,7 +201,7 @@ void init(void)
 
 	localeLang=getenv("LANG");
 
-	history=new HistoryClass;
+//	globalHistory=new HistoryClass;
 	globalSlice->setReturnDupString(true);
 
 	funcProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
@@ -597,7 +597,7 @@ int main(int argc, char **argv)
 	status=g_application_run(mainApp,argc,argv);
 
 	g_object_unref(mainApp);
-	ERRDATA delete history;
+	ERRDATA delete globalHistory;
 	ERRDATA delete globalSlice;
 
 	ERRDATA return(status);

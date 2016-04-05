@@ -188,7 +188,7 @@ extern GtkWidget*		helpMenu;
 //status bar message
 extern char*			statusMessage;
 
-extern HistoryClass*	history;
+extern HistoryClass*	globalHistory;
 
 extern GtkAccelGroup*	accgroup;
 
@@ -198,6 +198,7 @@ extern char*			tmpHighlightColour;
 extern bool				showBMBar;
 extern GtkWidget*		bmHighlightBox;
 extern int				bmMarkNumber;
+extern unsigned int		pageID;
 
 extern char*			toolBarLayout;
 extern GtkWidget*		toolBarBox;

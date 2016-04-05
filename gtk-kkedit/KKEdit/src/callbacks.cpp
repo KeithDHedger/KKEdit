@@ -34,6 +34,7 @@ void releasePlugs(gpointer data,gpointer user_data)
 
 void setToobarSensitive(void)
 {
+#if 0
 printf("setToobarSensitive...\n");
 return;
 	ERRDATA
@@ -200,6 +201,7 @@ return;
 					break;
 				}
 		}
+#endif
 }
 
 void destroyBMData(gpointer data)
@@ -757,7 +759,7 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 									onefunc=true;
 									menuitem=createNewImageMenuItem(NULL,correctedstr);
 									gtk_menu_shell_append(GTK_MENU_SHELL(whattypemenu),menuitem);
-									g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
+									g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLineSavePos),(void*)(long)linenum);
 								}
 						}
 					else
@@ -765,7 +767,7 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 							onefunc=true;
 							menuitem=createNewImageMenuItem(NULL,correctedstr);
 							gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
-							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLine),(void*)(long)linenum);
+							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLineSavePos),(void*)(long)linenum);
 						}
 				}
 			lineptr=strchr(lineptr,'\n');

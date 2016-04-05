@@ -33,22 +33,23 @@ void goToDefine(functionData* fdata)
 	if(fdata->intab==-1)
 		{
 			openFile(fdata->file,fdata->line-1,true);
-			page=getPageStructPtr(gtk_notebook_get_n_pages(mainNotebook)-1);
-			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
-			buf->scroll2Line((GtkTextView*)page->view,fdata->line-2);
-			ERRDATA delete buf;
+			page=getPageStructPtr(-1);
+
+		if(page!=NULL)
+			{
+				buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+				while(gtk_events_pending())
+					gtk_main_iteration();
+				buf->scroll2Line((GtkTextView*)page->view,fdata->line-2,true);
+				ERRDATA delete buf;
+			}
 		}
 	else
 		{
 			page=getPageStructPtr(fdata->intab);
 			gtk_notebook_set_current_page(mainNotebook,fdata->intab);
 			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
-
-			if(page->inTop==true)
-				buf->scroll2Line((GtkTextView*)page->view,fdata->line-1);
-			else
-				buf->scroll2Line((GtkTextView*)page->view2,fdata->line-1);
-
+			buf->scroll2Line((GtkTextView*)page->view,fdata->line-1);
 			ERRDATA delete buf;
 		}
 //	doBusy(false,NULL);
@@ -64,17 +65,17 @@ VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
 	char*			selection=NULL;
 
 	if(page==NULL)
-		ERRDATA return;
+		return;
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
 			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 			if(selection==NULL)
-				ERRDATA return;
+				return;
 		}
 	else
 		{
-			ERRDATA return;
+			return;
 		}
 	ERRDATA defSearchFromBar((GtkWidget*)selection,NULL);
 }
@@ -133,6 +134,39 @@ VISIBLE void findFile(GtkWidget* widget,gpointer data)
 	ERRDATA delete slice;
 }
 
+void gotoLineSavePos(GtkWidget* widget,gpointer data)
+{
+	ERRDATA
+	int			line=(long)data;
+	TextBuffer	*buf;
+	pageStruct	*page=getPageStructPtr(-1);
+
+	if(page!=NULL)
+		{
+			globalHistory->saveLastPos();
+			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+			buf->scroll2Line((GtkTextView*)page->view,line-1,true);
+			ERRDATA delete buf;
+		}
+	ERRDATA
+}
+
+void gotoLineNoSavePos(GtkWidget* widget,gpointer data)
+{
+	ERRDATA
+	int			line=(long)data;
+	TextBuffer	*buf;
+	pageStruct	*page=getPageStructPtr(-1);
+
+	if(page!=NULL)
+		{
+			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+			buf->scroll2Line((GtkTextView*)page->view,line-1,true);
+			ERRDATA delete buf;
+		}
+	ERRDATA
+}
+
 void gotoLine(GtkWidget* widget,gpointer data)
 {
 	ERRDATA
@@ -142,12 +176,8 @@ void gotoLine(GtkWidget* widget,gpointer data)
 
 	if(page!=NULL)
 		{
-			history->savePosition();
 			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
-			if(page->inTop==true)
-				buf->scroll2Line((GtkTextView*)page->view,line-1);
-			else
-				buf->scroll2Line((GtkTextView*)page->view2,line-1);
+			buf->scroll2Line((GtkTextView*)page->view,line-1);
 			ERRDATA delete buf;
 		}
 	ERRDATA
@@ -157,7 +187,7 @@ void jumpToLineFromBar(GtkWidget* widget,gpointer data)
 {
 	ERRDATA
 	theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
-	gotoLine(NULL,(gpointer)(long)theLineNum);
+	gotoLineNoSavePos(NULL,(gpointer)(long)theLineNum);
 	ERRDATA
 }
 
@@ -220,8 +250,9 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 	pageStruct*		page;
 	pageStruct*		checkpage;
 	TextBuffer*		buf;
-	history->savePosition();
 
+//	globalHistory->savePosition();
+	globalHistory->saveLastPos();
 	page=(pageStruct*)((bookMarksNew*)data)->page;
 	mark=(GtkTextMark*)((bookMarksNew*)data)->mark;
 	buf=new TextBuffer((GtkTextBuffer*)page->buffer);

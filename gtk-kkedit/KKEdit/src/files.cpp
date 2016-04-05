@@ -164,7 +164,7 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	g_signal_connect(G_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),(void*)page);
 
 	page->tabName=label;
-
+	page->pageID=pageID++;
 //TODO//
 //	style->xthickness=style->ythickness=0;
 //	gtk_widget_modify_style(button,style);
@@ -1112,7 +1112,7 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 //g_object_set(mainNotebook,"show-tabs",false,NULL);
 
 	gtk_notebook_set_current_page(mainNotebook,currentPage);
-	setToobarSensitive();
+//	setToobarSensitive();
 	currentPage++;
 	gtk_widget_show_all((GtkWidget*)mainNotebook);
 	setFilePrefs(page);

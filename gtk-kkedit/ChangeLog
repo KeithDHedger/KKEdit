@@ -1,4 +1,6 @@
 0.3.0
+Fixed minor bug not scrolling to line when jumping to function in file that needs to be opened.
+Redone 'Go Back'.
 Moved some routines to widget callbacks.
 Redone setting menus/toolbar items sensitive.
 Fixed some memory leaks when closing tabs.

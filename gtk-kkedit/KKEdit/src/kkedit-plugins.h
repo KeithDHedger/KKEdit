@@ -130,7 +130,7 @@ struct pageStruct
 	bool				canUndo;
 	bool				canRedo;
 	bool				isDirty;
-	void				*reserved1;
+	unsigned int		pageID;
 	void				*reserved2;
 	void				*reserved3;
 	void				*reserved4;

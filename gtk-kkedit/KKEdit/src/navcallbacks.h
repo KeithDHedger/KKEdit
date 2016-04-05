@@ -24,5 +24,6 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 #endif
 void rebuildTabsMenu(void);
 //v//oid selectTab(GtkWidget* widget,gpointer data);
+void gotoLineSavePos(GtkWidget* widget,gpointer data);
 
 #endif

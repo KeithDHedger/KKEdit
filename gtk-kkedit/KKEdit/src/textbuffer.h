@@ -23,10 +23,10 @@ class TextBuffer
 		GtkTextIter		cursorPos;
 		GtkTextBuffer*	textBuffer;
 
-		int				lineNum;
-		int				numChars;
-		int				column;
-		int				charPos;
+		int lineNum;
+		int numChars;
+		int column;
+		int charPos;
 
 		void getLineData(void);
 
@@ -47,11 +47,10 @@ class TextBuffer
 		void selectToLineStart(void);
 		void selectToLineEnd(void);
 		bool selectWord(void);
-		char* getSelectedText(void);
+		char *getSelectedText(void);
 		void selectRange(GtkTextIter* start,GtkTextIter* end);
 
-		void scroll2Line(GtkTextView* view,int linenum);
-		void scroll2LineM(pageStruct* page,int linenum);
+		void scroll2Line(GtkTextView* view,int linenum,bool doupdate=false);
 		void scroll2Mark(GtkTextView* view,GtkTextMark* mark);
 		void scroll2Iter(GtkTextView* view,GtkTextIter iter);
 

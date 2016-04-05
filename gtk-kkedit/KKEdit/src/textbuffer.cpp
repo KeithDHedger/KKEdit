@@ -178,7 +178,7 @@ void TextBuffer::selectToLineEnd()
 	ERRDATA
 }
 
-void TextBuffer::scroll2Line(GtkTextView* view,int linenum)
+void TextBuffer::scroll2Line(GtkTextView* view,int linenum,bool doupdate)
 {
 	ERRDATA
 	GtkTextMark*	mark;
@@ -186,33 +186,15 @@ void TextBuffer::scroll2Line(GtkTextView* view,int linenum)
 
 	gtk_text_buffer_get_iter_at_line_offset(textBuffer,&iter,linenum,0);
 	gtk_text_buffer_place_cursor(textBuffer,&iter);
-	if(!gtk_text_view_scroll_to_iter(view,&iter,0,true,0,0.5))
+	mark=gtk_text_buffer_get_insert(textBuffer);
+	gtk_text_view_scroll_to_mark(view,mark,0,true,0,0.5);
+	if(doupdate==true)
 		{
-			mark=gtk_text_buffer_get_mark(textBuffer,"insert");
-			this->getCursorIter();
-			if(!gtk_text_view_scroll_to_iter(view,&cursorPos,0,true,0,0.5))
-				gtk_text_view_scroll_to_mark(view,mark,0,true,0,0.5);
+			while(gtk_events_pending())
+				gtk_main_iteration();
 		}
 	ERRDATA
 }
-
-void TextBuffer::scroll2LineM(pageStruct* page,int linenum)
-{
-	ERRDATA
-	GtkTextIter		iter;
-
-	gtk_text_buffer_get_iter_at_line_offset(textBuffer,&iter,linenum,0);
-	gtk_text_buffer_place_cursor(textBuffer,&iter);
-	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
-
-	for(int j=0;j<10;j++)
-		{
-			gtk_text_view_scroll_to_iter((GtkTextView*)page->view,&iter,0,true,0,0.5);
-			gtk_main_iteration_do(false);
-		}
-	ERRDATA
-}
-
 
 void TextBuffer::scroll2Mark(GtkTextView* view,GtkTextMark* mark)
 {

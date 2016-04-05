@@ -9,17 +9,152 @@
 
 #include "kkedit-includes.h"
 
-HistoryClass::HistoryClass()
+HistoryClass::HistoryClass(GtkNotebook *nb)
 {
 	ERRDATA
 	buf=new TextBuffer;
 	this->savedPage=NULL;
+	this->notebook=nb;
+	this->currentPos.pageID=-1;
+	this->lastPos.pageID=-1;
+	this->currentPos.child=NULL;
+	this->lastPos.child=NULL;
+	this->goBack=true;
 	ERRDATA
 }
 
 HistoryClass::~HistoryClass()
 {
 	ERRDATA delete this->buf;
+}
+
+void HistoryClass::swapPos(void)
+{
+	this->lastPos=this->currentPos;
+}
+
+void HistoryClass::saveCurrentPos(void)
+{
+	pageStruct	*page;
+	GtkWidget	*child;
+	TextBuffer	*buf;
+
+	child=gtk_notebook_get_nth_page(mainNotebook,gtk_notebook_get_current_page(mainNotebook));
+	if(child==NULL)
+		return;
+	else
+		page=(pageStruct*)g_object_get_data((GObject*)child,"pagedata");
+
+	if(page==NULL)
+		return;
+
+	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+
+	this->currentPos.pageID=page->pageID;
+	this->currentPos.tabName=page->fileName;
+	this->currentPos.lineNumber=buf->lineNum;
+	this->currentPos.child=child;
+	this->goBack=true;
+
+	delete buf;
+}
+
+void HistoryClass::goBackToPos(void)
+{
+	int	topagenum=-1;
+	TextBuffer	*buf;
+	pageStruct	*page;
+	
+	if(this->lastPos.child==NULL)
+		return;
+
+	page=(pageStruct*)g_object_get_data((GObject*)this->lastPos.child,"pagedata");
+	if(page==NULL)
+		return;
+
+	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+	topagenum=gtk_notebook_page_num(this->notebook,this->lastPos.child);
+	if(topagenum!=-1)
+		{
+			gtk_notebook_set_current_page(this->notebook,topagenum);
+			buf->scroll2Line((GtkTextView*)page->view,this->lastPos.lineNumber-1,true);
+			this->lastPos=this->currentPos;
+		}
+	delete buf;
+}
+
+void HistoryClass::saveLastPos(void)
+{
+	pageStruct	*page;
+	GtkWidget	*child;
+	TextBuffer	*buf;
+
+	child=gtk_notebook_get_nth_page(mainNotebook,gtk_notebook_get_current_page(mainNotebook));
+	if(child==NULL)
+		return;
+	else
+		page=(pageStruct*)g_object_get_data((GObject*)child,"pagedata");
+
+	if(page==NULL)
+		return;
+
+	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+
+	this->lastPos.pageID=page->pageID;
+	this->lastPos.tabName=page->fileName;
+	this->lastPos.lineNumber=buf->lineNum;
+	this->lastPos.child=child;
+	this->goBack=true;
+
+	delete buf;
+}
+
+void HistoryClass::setCurrentPos(void)
+{
+	pageStruct	*page;
+	GtkWidget	*child;
+	TextBuffer	*buf;
+
+	child=gtk_notebook_get_nth_page(mainNotebook,gtk_notebook_get_current_page(mainNotebook));
+	if(child==NULL)
+		return;
+	else
+		page=(pageStruct*)g_object_get_data((GObject*)child,"pagedata");
+
+	if(page==NULL)
+		return;
+
+	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+
+	this->currentPos.pageID=page->pageID;
+	this->currentPos.tabName=page->fileName;
+	this->currentPos.lineNumber=buf->lineNum;
+	this->currentPos.child=child;
+	this->goBack=true;
+	if(this->lastPos.child==NULL)
+		this->lastPos=this->currentPos;
+	printf("currentPos id=%i, filename=%s, line=%i\n",this->currentPos.pageID,this->currentPos.tabName,this->currentPos.lineNumber);
+//	printf("lastpos id=%i, filename=%s, line=%i\n",this->lastPos.pageID,this->lastPos.tabName,this->lastPos.lineNumber);
+//
+//	topagenum=gtk_notebook_page_num(this->notebook,this->lastPos.child);
+//	if(topagenum!=-1)
+//		{
+//			gtk_notebook_set_current_page(this->notebook,topagenum);
+//			buf->scroll2Line((GtkTextView*)page->view,this->lastPos.lineNumber-1);
+//
+//		}
+//	this->lastPos=this->currentPos;
+
+	delete buf;
+//	printf(">>>filenae=%s<<<\n",page->fileName);
+//	printf(">>>page id=%i<<<\n",page->pageID);
+//	
+//	swappos=this->lastPos;
+//
+//	printf(">>lastpos = %i -- ",swappos.pageID);
+//	printf(">>lastpos = %s<<<\n",swappos.tabname);
+//	this->lastPos.pageID=page->pageID;
+
 }
 
 void HistoryClass::getThisPoint(void)
