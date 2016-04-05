@@ -28,7 +28,6 @@ TextBuffer::TextBuffer()
 
 TextBuffer::~TextBuffer()
 {
-	ERRDATA
 }
 
 TextBuffer::TextBuffer(GtkTextBuffer* buffer)

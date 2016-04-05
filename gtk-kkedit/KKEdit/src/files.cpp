@@ -20,6 +20,9 @@
 
 #include "kkedit-includes.h"
 #include <iconv.h>
+#ifdef _USEGTK3_
+#include <gtksourceview/gtksource.h>
+#endif
 
 GtkWidget*	vbox;
 char*		saveFileName=NULL;
@@ -702,7 +705,7 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 void add_source_mark_pixbufs(GtkSourceView *view)
 {
 	ERRDATA
-	GdkColor	color;
+
 	GtkImage*	image;
 	GdkPixbuf*	pbuf;
 
@@ -710,9 +713,18 @@ void add_source_mark_pixbufs(GtkSourceView *view)
 	image=(GtkImage*)gtk_image_new_from_file(DATADIR"/pixmaps/BookMark.png");
 	pbuf=gtk_image_get_pixbuf(image);
 
+#ifdef _USEGTK3_
+	GdkRGBA		color;
+	gdk_rgba_parse (&color,highlightColour);
+
+	GtkSourceMarkAttributes *attr=gtk_source_mark_attributes_new();
+
+	gtk_source_mark_attributes_set_pixbuf(attr,pbuf);
+	gtk_source_mark_attributes_set_background(attr,&color);
+	gtk_source_view_set_mark_attributes(view,MARK_TYPE_1,attr,1);
+#else
+	GdkColor	color;
 	gdk_color_parse(highlightColour,&color);
-//TODO//
-#ifndef _USEGTK3_
 	gtk_source_view_set_mark_category_background(view,MARK_TYPE_1,&color);
 	gtk_source_view_set_mark_category_icon_from_pixbuf(view,MARK_TYPE_1,pbuf);
 	gtk_source_view_set_mark_category_priority(view,MARK_TYPE_1,1);
@@ -753,15 +765,16 @@ pageStruct* makeNewPage(void)
 	page->filePath=NULL;
 	page->realFilePath=NULL;
 
-#ifdef _USEGTK3_
-	page->pane=gtk_paned_new(GTK_ORIENTATION_VERTICAL);
-#else
-	page->pane=gtk_vpaned_new();
-#endif
+//#ifdef _USEGTK3_
+//	page->pane=gtk_paned_new(GTK_ORIENTATION_VERTICAL);
+//#else
+//	page->pane=gtk_vpaned_new();
+//#endif
+
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
-	page->pageWindow2=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL,NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
+//	page->pageWindow2=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL,NULL);
+//	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
 
 	page->buffer=gtk_source_buffer_new(NULL);
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
@@ -776,15 +789,15 @@ pageStruct* makeNewPage(void)
 	createCompletion(page);
 
 	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
-	page->view2=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
+//	page->view2=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
 	attr=gtk_text_view_get_default_attributes((GtkTextView*)page->view);
 	page->highlightTag=gtk_text_buffer_create_tag((GtkTextBuffer*)page->buffer,"highlighttag","background",gdk_color_to_string((const GdkColor*)&attr->appearance.fg_color),"foreground",gdk_color_to_string((const GdkColor*)&attr->appearance.bg_color),NULL);
 	gtk_text_attributes_unref(attr);
 
-	gtk_paned_add1(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow);
+//	gtk_paned_add1(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow);
 	gtk_container_add(GTK_CONTAINER(page->pageWindow),(GtkWidget*)page->view);
-	g_signal_connect(G_OBJECT(page->view),"button-release-event",G_CALLBACK(whatPane),(void*)1);
+//	g_signal_connect(G_OBJECT(page->view),"button-release-event",G_CALLBACK(whatPane),(void*)1);
 
 	page->rebuildMenu=true;
 	page->isFirst=true;
@@ -1025,7 +1038,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	ERRDATA debugFree(&filepathcopy);
 
 //connect to mainNotebook
-	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
+	//gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
+	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pageWindow));
 	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
 
 	if(openInThisTab==-1)
@@ -1103,7 +1117,8 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 
 //connect to ntebook
-	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
+//	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
+	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pageWindow));
 	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
 
 	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);

@@ -285,7 +285,6 @@ VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 			ptr=newBookMarksList;
 			while(ptr!=NULL)
 				{
-					//menuitem=gtk_image_menu_item_new_with_label(((bookMarksNew*)ptr->data)->label);
 					menuitem=createNewImageMenuItem(NULL,((bookMarksNew*)ptr->data)->label);
 					gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)ptr->data);
@@ -435,6 +434,8 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 	const char	*path;
 	const char	*lang;
 
+	if(showStatus==false)
+		return;
 	page=getPageStructPtr(-1);
 	if(page==NULL)
 		return;
@@ -1297,6 +1298,7 @@ gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
 
 void doSplitView(GtkWidget *widget,gpointer user_data)
 {
+#if 0
 	ERRDATA
 	pageStruct* page=(pageStruct*)user_data;
 
@@ -1321,6 +1323,7 @@ void doSplitView(GtkWidget *widget,gpointer user_data)
 		}
 
 	gtk_widget_show_all(page->pane);
+#endif
 }
 
 void changeSourceStyle(GtkWidget* widget,gpointer data)
@@ -1420,16 +1423,16 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 
 //paned view
 			//image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
-			if(page->isSplit==true)
-			//	menuitem=gtk_image_menu_item_new_with_label(gettext("Un-Split View"));
-				menuitem=createNewImageMenuItem(GTK_STOCK_NEW,gettext("Un-Split View"));
-			else
-				//menuitem=gtk_image_menu_item_new_with_label(gettext("Split View"));
-				menuitem=createNewImageMenuItem(GTK_STOCK_NEW,gettext("Split View"));
-
-			//gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
-			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
-			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doSplitView),(void*)page);
+//			if(page->isSplit==true)
+//			//	menuitem=gtk_image_menu_item_new_with_label(gettext("Un-Split View"));
+//				menuitem=createNewImageMenuItem(GTK_STOCK_NEW,gettext("Un-Split View"));
+//			else
+//				//menuitem=gtk_image_menu_item_new_with_label(gettext("Split View"));
+//				menuitem=createNewImageMenuItem(GTK_STOCK_NEW,gettext("Split View"));
+//
+//			//gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
+//			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
+//			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doSplitView),(void*)page);
 
 //source highlighting
 			lm=gtk_source_language_manager_get_default();
@@ -1998,16 +2001,23 @@ VISIBLE void newEditor(GtkWidget* widget,gpointer data)
 		}
 }
 
+#ifdef _USEGTK3_
+void line_mark_activated(GtkSourceView *view,GtkTextIter *iter,GdkEvent *event,gpointer user_data)
+#else
 void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButton* ev,pageStruct* page)
+#endif
 {
-	ERRDATA
 //	if(sessionBusy==true)
 //		return;
 
+#ifdef _USEGTK3_
+	if(event->button.button!=1)
+#else
 	if(ev->button!=1)
+#endif
 		return;
 
-	toggleBookmark(NULL,iter);
+	ERRDATA toggleBookmark(NULL,iter);
 }
 
 VISIBLE void showToolOutput(bool immediate)

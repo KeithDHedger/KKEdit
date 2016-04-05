@@ -95,12 +95,9 @@ enum {TYPEINT=1,TYPESTRING,TYPEBOOL,TYPELIST};
 
 struct pageStruct
 {
-	GtkWidget*			pane;
 	GtkScrolledWindow*	pageWindow;
-	GtkScrolledWindow*	pageWindow2;
 	GtkSourceBuffer*	buffer;
 	GtkSourceView*		view;
-	GtkSourceView*		view2;
 	char*				fileName;
 	char*				filePath;
 	char*				realFilePath;

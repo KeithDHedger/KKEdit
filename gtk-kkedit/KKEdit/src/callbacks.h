@@ -49,7 +49,9 @@ void newEditor(GtkWidget* widget,gpointer data);
 void changeSourceStyle(GtkWidget* widget,gpointer data);
 int yesNo(char* question,char* file);
 
-void line_mark_activated(GtkSourceGutter *gutter,GtkTextIter *iter,GdkEventButton  *ev,pageStruct* page);
+//void line_mark_activated(GtkSourceGutter *gutter,GtkTextIter *iter,GdkEventButton  *ev,pageStruct* page);
+void line_mark_activated(GtkSourceView *view,GtkTextIter   *iter,GdkEvent      *event,gpointer       user_data);
+
 void toggleBookmark(GtkWidget*,GtkTextIter* titer);
 void toggleBookMarkBar(GtkWidget* widget,gpointer data);
 void setToobarSensitive(void);

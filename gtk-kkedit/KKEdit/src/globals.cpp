@@ -503,10 +503,10 @@ void plugRunFunction(gpointer data,gpointer funcname)
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 {
 	ERRDATA
-	if(page->inTop==true)
+//	if(page->inTop==true)
 		gtk_text_view_scroll_to_iter((GtkTextView*)page->view,iter,0,true,0,0.5);
-	else
-		gtk_text_view_scroll_to_iter((GtkTextView*)page->view2,iter,0,true,0,0.5);
+//	else
+//		gtk_text_view_scroll_to_iter((GtkTextView*)page->view2,iter,0,true,0,0.5);
 	ERRDATA
 }
 
