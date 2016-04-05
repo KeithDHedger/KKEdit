@@ -1,7 +1,7 @@
 KKEdit source code editor.
 
 ***WARNING WHEN BUILDING FOR GTK3 ***
-Until this notice is removed some functions are disabled/not working, mostly 'go back', 'bookmarks' and 'completion', the gtk2 release is fully functional.
+Until this notice is removed some functions are disabled/not working, mostly 'bookmarks' and 'completion', the gtk2 release is fully functional.
 
 Why another text editor?
 
