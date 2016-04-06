@@ -59,7 +59,6 @@ void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButto
 
 void toggleBookmark(GtkWidget*,GtkTextIter* titer);
 void toggleBookMarkBar(GtkWidget* widget,gpointer data);
-void setToobarSensitive(void);
 void toggleToolBar(GtkWidget* widget,gpointer data);
 void toggleToolOutput(GtkWidget* widget,gpointer data);
 void removeAllBookmarks(GtkWidget* widget,GtkTextIter* titer);

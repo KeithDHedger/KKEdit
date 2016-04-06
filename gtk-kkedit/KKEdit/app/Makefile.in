@@ -918,15 +918,6 @@ uninstall-am: uninstall-binPROGRAMS uninstall-docfilesDATA \
 .PRECIOUS: Makefile
 
 
-#PROGRAMS = kkedit
-#transform = $(s/kkedit/kkedit-3)
-#install:
-#	mkdir -vp $(DESTDIR)$(bindir)
-#	for p in $(PROGRAMS); do \
-#		$(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p | \
-#		sed 's/\(.*\)/\1xxx/'`; \
-#		done
-
 install-exec-hook:
 	install -D ../resources/pixmaps/KKEditPlug.png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlug.png
 	install -D ../resources/pixmaps/KKEditPlugMenu.png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlugMenu.png
@@ -941,10 +932,6 @@ install-exec-hook:
 	mkdir -vp $(DESTDIR)$(pkgdatadir)/plugins
 	mkdir -vp "$(DESTDIR)$(pkgdatadir)/Example External Tools"
 	cp -r "../resources/Example External Tools" "$(DESTDIR)$(pkgdatadir)"
-
-#	for p in $(PROGRAMS); do \
-#		mv $(DESTDIR)$(bindir)/$$p $(DESTDIR)$(bindir)/$$p$(GTKTYPE)||true; \
-#		done
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

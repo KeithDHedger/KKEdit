@@ -457,9 +457,9 @@ void appStart(GApplication  *application,gpointer data)
 	g_application_hold(application);
 
 	setlocale(LC_ALL,"");
-	bindtextdomain(APPEXECNAME,LOCALEDIR);
-	textdomain(APPEXECNAME);
-	bind_textdomain_codeset(APPEXECNAME,"UTF-8");
+	bindtextdomain("kkedit",LOCALEDIR);
+	textdomain("kkedit");
+	bind_textdomain_codeset("kkedit","UTF-8");
 
 	init();
 	buildMainGui();
@@ -467,7 +467,6 @@ void appStart(GApplication  *application,gpointer data)
 	if(onExitSaveSession==true)
 		restoreSession(NULL,(void*)restoreBookmarks);
 
-	setToobarSensitive();
 	refreshMainWindow();
 
 	buildFindReplace();
@@ -502,7 +501,8 @@ void appStart(GApplication  *application,gpointer data)
 	if((timeToNag==true) &&(autoCheck==true))
 		doNagStuff();
 
-	gtk_widget_set_size_request(mainWindow,100,100);
+	setPageSensitive();
+	gtk_widget_set_size_request(mainWindow,800,400);
 	ERRDATA
 }
 

@@ -1,4 +1,6 @@
 0.3.0
+Find higlighting now stays until a new find or switching tabs.
+Fixed makefile uninstall.
 Done code completion.
 Launches correct version of pprgressbar.
 Launches correct version (gtk2/3) from menu's new editor/new root editor.

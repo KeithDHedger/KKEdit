@@ -32,178 +32,6 @@ void releasePlugs(gpointer data,gpointer user_data)
 		g_module_close((GModule*)((moduleData*)data)->module);
 }
 
-void setToobarSensitive(void)
-{
-#if 0
-printf("setToobarSensitive...\n");
-return;
-	ERRDATA
-	pageStruct*	page=getPageStructPtr(currentTabNumber);
-
-	for(int j=0; j<(int)strlen(toolBarLayout); j++)
-		{
-			switch(toolBarLayout[j])
-				{
-				case 'N':
-//newnewButton
-					if(newButton!=NULL)
-						gtk_widget_set_sensitive((GtkWidget*)newButton,true);
-					break;
-				case 'O':
-//open+recent
-					if(openButton!=NULL)
-						gtk_widget_set_sensitive((GtkWidget*)openButton,true);
-					break;
-				case 'S':
-//save
-					if(saveButton!=NULL)
-						{
-							if(page!=NULL)
-								gtk_widget_set_sensitive((GtkWidget*)saveButton,gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)));
-							else
-								gtk_widget_set_sensitive((GtkWidget*)saveButton,false);
-						}
-					break;
-				case 'X':
-//cut
-					if(cutButton!=NULL)
-						{
-							if(page!=NULL)
-								gtk_widget_set_sensitive((GtkWidget*)cutButton,true);
-							else
-								gtk_widget_set_sensitive((GtkWidget*)cutButton,false);
-						}
-					break;
-				case 'C':
-//copy
-					if(copyButton!=NULL)
-						{
-							if(page!=NULL)
-								gtk_widget_set_sensitive((GtkWidget*)copyButton,true);
-							else
-								gtk_widget_set_sensitive((GtkWidget*)copyButton,false);
-						}
-					break;
-				case 'P':
-//paste
-					if(pasteButton!=NULL)
-						{
-							if(page!=NULL)
-								gtk_widget_set_sensitive((GtkWidget*)pasteButton,true);
-							else
-								gtk_widget_set_sensitive((GtkWidget*)pasteButton,false);
-						}
-					break;
-				case 'U':
-//undo
-					if(undoButton!=NULL)
-						{
-							if(page!=NULL)
-#ifdef _BUGGED_
-								gtk_widget_set_sensitive((GtkWidget*)undoButton,true);
-#else
-								gtk_widget_set_sensitive((GtkWidget*)undoButton,gtk_source_buffer_can_undo(page->buffer));
-#endif
-							else
-								gtk_widget_set_sensitive((GtkWidget*)undoButton,false);
-						}
-					break;
-				case 'R':
-//redo
-					if(redoButton!=NULL)
-						{
-							if(page!=NULL)
-#ifdef _BUGGED_
-								gtk_widget_set_sensitive((GtkWidget*)redoButton,true);
-#else
-								gtk_widget_set_sensitive((GtkWidget*)redoButton,gtk_source_buffer_can_redo(page->buffer));
-#endif
-							else
-								gtk_widget_set_sensitive((GtkWidget*)redoButton,false);
-						}
-					break;
-				case 'F':
-//find
-					if(findButton!=NULL)
-						{
-							if(page!=NULL)
-								gtk_widget_set_sensitive((GtkWidget*)findButton,true);
-							else
-								gtk_widget_set_sensitive((GtkWidget*)findButton,false);
-						}
-					break;
-				case 'G':
-//navigation
-					if(gotoDefButton!=NULL)
-						{
-							if(page!=NULL)
-								gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,true);
-							else
-								gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,false);
-						}
-					break;
-
-				case 'B':
-//go back
-					if(backButton!=NULL)
-						{
-							gtk_widget_set_sensitive((GtkWidget*)backButton,false);
-							if(page!=NULL)
-								{
-									if(history->canGoBack()==true)
-										gtk_widget_set_sensitive((GtkWidget*)backButton,true);
-								}
-						}
-					break;
-
-
-				case '9':
-//find in gtkdoc
-					if(gotoLineButton!=NULL)
-						{
-							if(page!=NULL)
-								gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,true);
-							else
-								gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,false);
-						}
-					break;
-
-				case 'A':
-//find in gtkdoc
-					if(findApiButton!=NULL)
-						{
-							if(page!=NULL)
-								gtk_widget_set_sensitive((GtkWidget*)findApiButton,true);
-							else
-								gtk_widget_set_sensitive((GtkWidget*)findApiButton,false);
-						}
-					break;
-
-				case 'D':
-//find in function def
-					if(findFuncDefButton!=NULL)
-						{
-							if(page!=NULL)
-								gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,true);
-							else
-								gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,false);
-						}
-					break;
-				case 'L':
-//livesearch
-					if(liveSearchButton!=NULL)
-						{
-							if(page!=NULL)
-								gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,true);
-							else
-								gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,false);
-						}
-					break;
-				}
-		}
-#endif
-}
-
 void destroyBMData(gpointer data)
 {
 	ERRDATA debugFree(&((bookMarksNew*)data)->markName);
@@ -503,18 +331,17 @@ VISIBLE void realCloseTab(GtkNotebook *notebook,GtkWidget *child,guint page_num,
 	globalPlugins->globalPlugData->page=stolenPage;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"closeFile");
 
-//TODO//
-#if 0
 	GList*		ptr;
 	bool		changed=false;
 	rebuildBookMarkMenu();
+	GtkWidget	*menuitem;
 	while(changed==false)
 		{
 			changed=true;
 			ptr=newBookMarksList;
 			while(ptr!=NULL)
 				{
-					if(((bookMarksNew*)ptr->data)->page==page)
+					if(((bookMarksNew*)ptr->data)->page==stolenPage)
 						{
 							ERRDATA debugFree(&((bookMarksNew*)ptr->data)->markName);
 							ERRDATA debugFree(&((bookMarksNew*)ptr->data)->label);
@@ -535,7 +362,6 @@ VISIBLE void realCloseTab(GtkNotebook *notebook,GtkWidget *child,guint page_num,
 			ptr=g_list_next(ptr);
 		}
 	gtk_widget_show_all(bookMarkMenu);
-#endif
 
 	ERRDATA debugFree(&(stolenPage->filePath));
 	ERRDATA debugFree(&(stolenPage->fileName));
@@ -576,6 +402,7 @@ VISIBLE void closeAllTabs(GtkWidget* widget,gpointer data)
 
 	closingAll=false;
 //TODO//
+//	remakeBMMenu();
 //	rebuildBookMarkMenu();
 //	gtk_widget_show_all(bookMarkMenu);
 //	resetSensitive();
@@ -679,6 +506,7 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	GtkWidget*	typesubmenus[50]= {NULL,};
 	GtkWidget*	submenu;
 	char*		correctedstr=NULL;
+	GtkTextIter	start_find,end_find;
 
 	if(arg1==NULL)
 		return;
@@ -686,6 +514,10 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	page=(pageStruct*)g_object_get_data((GObject*)arg1,"pagedata");
 	if(page==NULL)
 		return;
+
+	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start_find);
+	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end_find);
+	gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);
 
 	submenu=gtk_menu_item_get_submenu((GtkMenuItem*)funcMenu);
 	if(submenu!=NULL)

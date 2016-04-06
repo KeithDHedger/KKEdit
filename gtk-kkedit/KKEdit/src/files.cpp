@@ -1043,8 +1043,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
 	gtk_widget_show_all((GtkWidget*)mainNotebook);
-//	setToobarSensitive();
-
 	setFilePrefs(page);
 
 	globalPlugins->globalPlugData->page=page;
@@ -1112,7 +1110,6 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 //g_object_set(mainNotebook,"show-tabs",false,NULL);
 
 	gtk_notebook_set_current_page(mainNotebook,currentPage);
-//	setToobarSensitive();
 	currentPage++;
 	gtk_widget_show_all((GtkWidget*)mainNotebook);
 	setFilePrefs(page);

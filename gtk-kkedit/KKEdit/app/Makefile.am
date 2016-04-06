@@ -29,15 +29,6 @@ include_HEADERS = ../src/kkedit-plugins.h
 
 bin_PROGRAMS = kkedit KKEditProgressBar
 
-#PROGRAMS = kkedit
-#transform = $(s/kkedit/kkedit-3)
-#install:
-#	mkdir -vp $(DESTDIR)$(bindir)
-#	for p in $(PROGRAMS); do \
-#		$(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p | \
-#		sed 's/\(.*\)/\1xxx/'`; \
-#		done
-
 install-exec-hook:
 	install -D ../resources/pixmaps/KKEditPlug.png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlug.png
 	install -D ../resources/pixmaps/KKEditPlugMenu.png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlugMenu.png
@@ -53,8 +44,5 @@ install-exec-hook:
 	mkdir -vp "$(DESTDIR)$(pkgdatadir)/Example External Tools"
 	cp -r "../resources/Example External Tools" "$(DESTDIR)$(pkgdatadir)"
 
-#	for p in $(PROGRAMS); do \
-#		mv $(DESTDIR)$(bindir)/$$p $(DESTDIR)$(bindir)/$$p$(GTKTYPE)||true; \
-#		done
 
 
