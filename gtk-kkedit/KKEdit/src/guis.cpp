@@ -129,7 +129,7 @@ void setUpToolBar(void)
 	gtk_recent_chooser_set_limit(GTK_RECENT_CHOOSER(recent),MAXRECENT);
 
 	filter=gtk_recent_filter_new();
-	gtk_recent_filter_add_application(filter,"kkedit");
+	gtk_recent_filter_add_application(filter,APPEXECNAME);
 	gtk_recent_chooser_set_filter(GTK_RECENT_CHOOSER(recent),filter);
 	g_signal_connect(recent,"item_activated",G_CALLBACK(recentFileMenu),NULL);
 
@@ -1510,8 +1510,7 @@ void buildMainGui(void)
 	menuBar=gtk_menu_bar_new();
 	toolBarBox=createNewBox(NEWHBOX,true,0);
 	toolBar=(GtkToolbar*)gtk_toolbar_new();
-//gtk_widget_set_hexpand((GtkWidget*)toolBar,false);
-//gtk_widget_set_hexpand((GtkWidget*)toolBarBox,false);
+
 //dnd
 	gtk_drag_dest_set(mainWindowVBox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets(mainWindowVBox);

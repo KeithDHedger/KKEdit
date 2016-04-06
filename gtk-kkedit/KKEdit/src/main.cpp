@@ -457,9 +457,9 @@ void appStart(GApplication  *application,gpointer data)
 	g_application_hold(application);
 
 	setlocale(LC_ALL,"");
-	bindtextdomain("kkedit",LOCALEDIR);
-	textdomain("kkedit");
-	bind_textdomain_codeset("kkedit","UTF-8");
+	bindtextdomain(APPEXECNAME,LOCALEDIR);
+	textdomain(APPEXECNAME);
+	bind_textdomain_codeset(APPEXECNAME,"UTF-8");
 
 	init();
 	buildMainGui();
@@ -576,15 +576,13 @@ int main(int argc, char **argv)
 			loadPluginsFlag=false; 
 		}
 
-//	asprintf(&prefsFolder,"%s/.%s",getenv("HOME"),KKEDITVERS);
-//	asprintf(&filename,"%s/.KKEdit/kkedit.rc",getenv("HOME"));
 	asprintf(&filename,"%s/." KKEDITVERS "/kkedit.rc",getenv("HOME"));
 	loadVarsFromFile(filename,kkedit_startup_vars);
 	ERRDATA debugFree(&filename);
 
 	gtk_init(&argc,&argv);
 
-	asprintf(&dbusname,"org.keithhedger%i.KKEdit",getWorkspaceNumber());
+	asprintf(&dbusname,"org.keithhedger%i." APPEXECNAME,getWorkspaceNumber());
 	if((singleOverRide==true) ||(singleUse==false))
 		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN));
 	else

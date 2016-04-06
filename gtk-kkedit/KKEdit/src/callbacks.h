@@ -50,7 +50,12 @@ void changeSourceStyle(GtkWidget* widget,gpointer data);
 int yesNo(char* question,char* file);
 
 //void line_mark_activated(GtkSourceGutter *gutter,GtkTextIter *iter,GdkEventButton  *ev,pageStruct* page);
-void line_mark_activated(GtkSourceView *view,GtkTextIter   *iter,GdkEvent      *event,gpointer       user_data);
+//void line_mark_activated(GtkSourceView *view,GtkTextIter   *iter,GdkEvent      *event,gpointer       user_data);
+#ifdef _USEGTK3_
+void line_mark_activated(GtkSourceView *view,GtkTextIter *iter,GdkEvent *event,gpointer user_data);
+#else
+void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButton* ev,pageStruct* page);
+#endif
 
 void toggleBookmark(GtkWidget*,GtkTextIter* titer);
 void toggleBookMarkBar(GtkWidget* widget,gpointer data);

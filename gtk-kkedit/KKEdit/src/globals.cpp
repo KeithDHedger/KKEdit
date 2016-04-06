@@ -21,9 +21,7 @@
 #include "kkedit-includes.h"
 
 GApplication*	mainApp;
-//bool			busyFlag[10]={false,};
 bool			autoSeleced=false;
-//VISIBLE bool	sessionBusy=false;
 bool			fromGOpen=false;
 char			*prefsFolder=NULL;
 
@@ -396,10 +394,6 @@ args			kkedit_window_rc[]=
 args			kkedit_rc[]=
 {
 	//bools
-//	{"showbmbar",TYPEBOOL,&showBMBar},
-//	{"showtoolbar",TYPEBOOL,&showToolBar},
-//	{"showstatusbar",TYPEBOOL,&showStatus},
-
 	{"indentcode",TYPEBOOL,&indent},
 	{"showlinenumbers",TYPEBOOL,&lineNumbers},
 	{"wrapline",TYPEBOOL,&lineWrap},

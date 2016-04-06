@@ -195,28 +195,24 @@ void setFilePrefs(pageStruct* page)
 	gtk_source_view_set_highlight_current_line(page->view,highLight);
 	gtk_source_view_set_show_line_marks(page->view,showBMBar);
 	gdk_color_parse(highlightColour,&color);
-	//TODO//
 #ifndef _USEGTK3_
 	gtk_source_view_set_mark_category_background(page->view,MARK_TYPE_1,&color);
 #endif
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	if(lineWrap==true)
 		{
-		//TODO//
-			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
-			//gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);		
 			gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_WORD_CHAR);
 		}
 	else
 		{
-			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
-			//gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);		
+//			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 			gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_NONE);
 		}
 
 	gtk_source_view_set_tab_width(page->view,tabWidth);
 
 	font_desc=pango_font_description_from_string(fontAndSize);
-//TODO//
+
 #ifdef _USEGTK3_
 	gtk_widget_override_font((GtkWidget*)page->view,font_desc);
 #else
@@ -765,16 +761,8 @@ pageStruct* makeNewPage(void)
 	page->filePath=NULL;
 	page->realFilePath=NULL;
 
-//#ifdef _USEGTK3_
-//	page->pane=gtk_paned_new(GTK_ORIENTATION_VERTICAL);
-//#else
-//	page->pane=gtk_vpaned_new();
-//#endif
-
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
-//	page->pageWindow2=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL,NULL);
-//	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
 
 	page->buffer=gtk_source_buffer_new(NULL);
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
@@ -789,15 +777,12 @@ pageStruct* makeNewPage(void)
 	createCompletion(page);
 
 	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
-//	page->view2=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 
 	attr=gtk_text_view_get_default_attributes((GtkTextView*)page->view);
 	page->highlightTag=gtk_text_buffer_create_tag((GtkTextBuffer*)page->buffer,"highlighttag","background",gdk_color_to_string((const GdkColor*)&attr->appearance.fg_color),"foreground",gdk_color_to_string((const GdkColor*)&attr->appearance.bg_color),NULL);
 	gtk_text_attributes_unref(attr);
 
-//	gtk_paned_add1(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow);
 	gtk_container_add(GTK_CONTAINER(page->pageWindow),(GtkWidget*)page->view);
-//	g_signal_connect(G_OBJECT(page->view),"button-release-event",G_CALLBACK(whatPane),(void*)1);
 
 	page->rebuildMenu=true;
 	page->isFirst=true;

@@ -49,7 +49,6 @@
 
 #define PLUGINSLINK "https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins#getplugs"
 #define NAGTIMELINK "https://dl.dropboxusercontent.com/s/xcvp8af3qp7ffxg/NAGTIME"
-#define DBUSNAME "org.keithhedge.kkedit"
 
 #define TOOL_ASYNC 8
 #define TOOL_IGNORE_OP 0
@@ -79,11 +78,12 @@
 #define PLATFORM "gtk"
 #endif
 
-#define	POLEPATH		PREFIX "/bin/KKEditProgressBar"
+#define	POLEPATH		PREFIX "/bin/KKEditProgressBar" _EXECSUFFIX_
+#define	APPEXECNAME		"kkedit" _EXECSUFFIX_
 #define CUSTOMWORDFILE "." KKEDITVERS "/customcompletions"
+#define DBUSNAME "org.keithhedge." APPEXECNAME
 
 #define NUMSHORTCUTS	14
-//#define PLATFORM		"gtk"
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 enum {NEWVBOX=0,NEWHBOX};

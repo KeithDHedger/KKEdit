@@ -1,4 +1,8 @@
 0.3.0
+Done code completion.
+Launches correct version of pprgressbar.
+Launches correct version (gtk2/3) from menu's new editor/new root editor.
+Auto appends "-3" to name of executable's when installing for gtk3.
 Removed split document view options.
 Done bookmarks.
 Fixed minor bug not scrolling to line when jumping to function in file that needs to be opened.

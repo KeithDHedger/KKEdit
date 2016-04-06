@@ -557,7 +557,6 @@ VISIBLE void realCloseTab(GtkNotebook *notebook,GtkWidget *child,guint page_num,
 	if(stolenPage->gFile!=NULL)
 		g_clear_object(&(stolenPage->gFile));
 
-//	ERRDATA debugFree((char**)&stolenPage);
 	ERRDATA debugFree((char**)&stolenPage);
 	if(closingAll==false)
 		setPageSensitive();
@@ -1985,14 +1984,14 @@ VISIBLE void newEditor(GtkWidget* widget,gpointer data)
 		{
 		case 1:
 			if(strcmp(rootCommand,"")!=0)
-				asprintf(&command,"%s kkedit -m 2>&1 >/dev/null &",rootCommand);
+				asprintf(&command,"%s " APPEXECNAME " -m 2>&1 >/dev/null &",rootCommand);
 			else
-				asprintf(&command,"%s sudo kkedit -m 2>&1 >/dev/null &",terminalCommand);
+				asprintf(&command,"%s sudo " APPEXECNAME " -m 2>&1 >/dev/null &",terminalCommand);
 			system(command);
 			ERRDATA debugFree(&command);
 			break;
 		case 2:
-			system("kkedit -m 2>&1 >/dev/null &");
+			system(APPEXECNAME " -m 2>&1 >/dev/null &");
 			break;
 		case 3:
 			if(gotManEditor==0)

@@ -8,6 +8,9 @@
 ******************************************************/
 
 #include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
+#ifdef _USEGTK3_
+#include <gtksourceview/gtksource.h>
+#endif
 
 #ifndef _COMPLETION_
 #define _COMPLETION_

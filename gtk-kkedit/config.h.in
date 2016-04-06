@@ -30,14 +30,11 @@
 /* Include spellchecker */
 #undef _ASPELL_
 
-/* Got undo bug. */
-#undef _BUGGED_
-
 /* Build gtk-doc viewer */
 #undef _BUILDDOCVIEWER_
 
-/* No undo bug */
-#undef _NOTBUGGED_
+/* Use GTK3 */
+#undef _EXECSUFFIX_
 
 /* Use GTK3 */
 #undef _USEGTK3_

@@ -18,23 +18,18 @@
  * along with KKEdit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
-#include <gtksourceview/gtksourceview.h>
-#include <gtksourceview/gtksourcecompletion.h>
-#include <gtksourceview/gtksourcecompletioninfo.h>
+#ifndef _USEGTK3_
 #include <gtksourceview/gtksourcecompletionitem.h>
-#include <gtksourceview/gtksourcelanguagemanager.h>
+#endif
 
 #include "kkedit-includes.h"
-////////////////TODO//////////////
+
 struct _FunctionProviderClass
 {
 	GObjectClass			parent_class;
 };
 
-#ifdef _USEGTK3_
 #define GTK_TYPE_SOURCE_COMPLETION_PROVIDER (gtk_source_completion_provider_get_type ())
-#endif
 G_DEFINE_TYPE_WITH_CODE(FunctionProvider,function_provider,G_TYPE_OBJECT,G_IMPLEMENT_INTERFACE (GTK_TYPE_SOURCE_COMPLETION_PROVIDER,function_provider_iface_init))
 
 FunctionProvider*			funcProv;
@@ -91,8 +86,6 @@ GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 {
 	ERRDATA
 	GList*	newlist=NULL;
-//TODO//
-#ifndef _USEGTK3_
 	char*	infostr;
 	GList*	customlist=customProv->proposals;
 	char*	text;
@@ -115,14 +108,11 @@ GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 				}
 			customlist=customlist->next;
 		}
-#endif
 	ERRDATA return(newlist);
 }
 
 void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceCompletionContext* context)
 {
-//TODO//
-#ifndef _USEGTK3_
 	ERRDATA
 	GtkTextIter 	iter;
 	gchar*			word=NULL;
@@ -162,13 +152,10 @@ void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceC
 	if(word!=NULL)
 		ERRDATA debugFree(&word);
 	ERRDATA
-#endif
 }
 
 void function_provider_iface_init(GtkSourceCompletionProviderIface* iface)
 {
-//TODO//
-#ifndef _USEGTK3_
 	ERRDATA
 	iface->get_name=function_provider_get_name;
 	iface->populate=function_provider_populate;
@@ -176,15 +163,11 @@ void function_provider_iface_init(GtkSourceCompletionProviderIface* iface)
 	iface->get_priority=function_provider_get_priority;
 	iface->get_icon=function_provider_get_icon;
 	ERRDATA
-#endif
 }
 
 void function_provider_class_init(FunctionProviderClass* klass)
 {
-//TODO//
-#ifndef _USEGTK3_
 	ERRDATA
-#endif
 }
 
 void function_provider_init(FunctionProvider* self)
@@ -197,8 +180,6 @@ void function_provider_init(FunctionProvider* self)
 //completion
 void addProp(pageStruct* page)
 {
-//TODO//
-#ifndef _USEGTK3_
 	ERRDATA
 	char*		functions=NULL;
 	char		tmpstr[1024];
@@ -264,13 +245,10 @@ void addProp(pageStruct* page)
 	if(functions!=NULL)
 		ERRDATA debugFree(&functions);
 	ERRDATA
-#endif
 }
 
 void removeProps(void)
 {
-//TODO//
-#ifndef _USEGTK3_
 	ERRDATA
 	g_list_free_full(funcProv->proposals,g_object_unref);
 	g_list_free_full(varsProv->proposals,g_object_unref);
@@ -279,13 +257,10 @@ void removeProps(void)
 	varsProv->proposals=NULL;
 	customProv->proposals=NULL;
 	ERRDATA
-#endif
 }
 
 void createCompletion(pageStruct* page)
 {
-//TODO//
-#ifndef _USEGTK3_
 	ERRDATA
 	removeProps();
 
@@ -299,13 +274,10 @@ void createCompletion(pageStruct* page)
 
 	addProp(page);
 	ERRDATA
-#endif
 }
 
 void doCompletionPopUp(pageStruct* page)
 {
-//TODO//
-#ifndef _USEGTK3_
 	ERRDATA
 	GtkSourceCompletionContext*	context;
 	GList*						list;
@@ -314,5 +286,4 @@ void doCompletionPopUp(pageStruct* page)
 	list=gtk_source_completion_get_providers(page->completion);
 	gtk_source_completion_show(page->completion,list,context);
 	ERRDATA
-#endif
 }
