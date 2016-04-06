@@ -1,7 +1,11 @@
 KKEdit source code editor.
 
 ***WARNING WHEN BUILDING FOR GTK3 ***
-Until this notice is removed some functions are disabled/not working, mostly 'bookmarks' and 'completion', the gtk2 release is fully functional.
+
+Until this notice is removed some functions are disabled/not working, the gtk2 release is fully functional.
+Should now be mostly fully functional, some text options/visuals need doing.
+
+***WARNING WHEN BUILDING FOR GTK3 ***
 
 Why another text editor?
 

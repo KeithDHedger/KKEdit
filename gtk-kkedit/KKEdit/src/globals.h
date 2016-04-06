@@ -78,8 +78,8 @@
 #define PLATFORM "gtk"
 #endif
 
-#define	POLEPATH		PREFIX "/bin/KKEditProgressBar" _EXECSUFFIX_
-#define	APPEXECNAME		"kkedit" _EXECSUFFIX_
+#define	POLEPATH PREFIX "/bin/KKEditProgressBar" _EXECSUFFIX_
+#define	APPEXECNAME "kkedit" _EXECSUFFIX_
 #define CUSTOMWORDFILE "." KKEDITVERS "/customcompletions"
 #define DBUSNAME "org.keithhedge." APPEXECNAME
 
