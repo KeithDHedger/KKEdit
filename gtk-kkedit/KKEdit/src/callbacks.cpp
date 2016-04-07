@@ -1127,36 +1127,6 @@ gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
 	return(false);
 }
 
-void doSplitView(GtkWidget *widget,gpointer user_data)
-{
-#if 0
-	ERRDATA
-	pageStruct* page=(pageStruct*)user_data;
-
-	if(gtk_paned_get_child2((GtkPaned*)page->pane)==NULL)
-		{
-			page->pageWindow2=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL, NULL);
-			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow2),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-
-			page->view2 =(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
-			g_signal_connect(G_OBJECT(page->view2),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
-			setFilePrefs(page);
-
-			gtk_paned_add2(GTK_PANED(page->pane),(GtkWidget*)page->pageWindow2);
-			gtk_container_add(GTK_CONTAINER((GtkWidget*)page->pageWindow2),(GtkWidget*)page->view2);
-			g_signal_connect(G_OBJECT(page->view2),"button-release-event",G_CALLBACK(whatPane),(void*)2);
-			page->isSplit=true;
-		}
-	else
-		{
-			page->isSplit=false;
-			gtk_widget_destroy(gtk_paned_get_child2((GtkPaned*)page->pane));
-		}
-
-	gtk_widget_show_all(page->pane);
-#endif
-}
-
 void changeSourceStyle(GtkWidget* widget,gpointer data)
 {
 	ERRDATA
@@ -1187,7 +1157,6 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 	ERRDATA
 	pageStruct*					page;
 	GtkWidget*					menuitem;
-//	GtkWidget*					image;
 	GtkWidget*					submenu;
 	GtkWidget*					menuids;
 	GtkSourceLanguageManager*	lm;
@@ -1214,67 +1183,32 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 			page=(pageStruct*)user_data;
 
 //copy dirname
-			//image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
-			//menuitem=gtk_image_menu_item_new_with_label(gettext("Copy Folder Path"));
 			menuitem=createNewImageMenuItem(GTK_STOCK_COPY,gettext("Copy Folder Path"));
-
-			//gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doTabMenu),(void*)page->dirName);
 //copy filepath
-			//image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
-			//menuitem=gtk_image_menu_item_new_with_label(gettext("Copy Filepath"));
 			menuitem=createNewImageMenuItem(GTK_STOCK_COPY,gettext("Copy Filepath"));
-
-			//gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doTabMenu),(void*)page->filePath);
 //copy filename
-			//image=gtk_image_new_from_stock(GTK_STOCK_COPY,GTK_ICON_SIZE_MENU);
-			//menuitem=gtk_image_menu_item_new_with_label(gettext("Copy FileName"));
-			menuitem=createNewImageMenuItem(NULL,gettext("Copy FileName"));
-
-			//gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
+			menuitem=createNewImageMenuItem(GTK_STOCK_COPY,gettext("Copy FileName"));
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doTabMenu),(void*)page->fileName);
-
 #ifdef _ASPELL_
 //check document
 			if((spellChecker!=NULL) &&(aspellConfig!=NULL) &&(gtk_text_buffer_get_modified((GtkTextBuffer*)page->buffer)==false))
 				{
-					//image=gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK,GTK_ICON_SIZE_MENU);
-					//menuitem=gtk_image_menu_item_new_with_label(gettext("Spell Check Document"));
 					menuitem=createNewImageMenuItem(GTK_STOCK_SPELL_CHECK,gettext("Spell Check Document"));
-
-					//gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 					gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doSpellCheckDoc),(void*)page->filePath);
 				}
 #endif
-
-//paned view
-			//image=gtk_image_new_from_stock(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
-//			if(page->isSplit==true)
-//			//	menuitem=gtk_image_menu_item_new_with_label(gettext("Un-Split View"));
-//				menuitem=createNewImageMenuItem(GTK_STOCK_NEW,gettext("Un-Split View"));
-//			else
-//				//menuitem=gtk_image_menu_item_new_with_label(gettext("Split View"));
-//				menuitem=createNewImageMenuItem(GTK_STOCK_NEW,gettext("Split View"));
-//
-//			//gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
-//			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
-//			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doSplitView),(void*)page);
-
 //source highlighting
 			lm=gtk_source_language_manager_get_default();
 			ids=gtk_source_language_manager_get_language_ids(lm);
 
-			//image=gtk_image_new_from_stock(GTK_STOCK_SELECT_COLOR,GTK_ICON_SIZE_MENU);
-			//menuitem=gtk_image_menu_item_new_with_label(gettext("Source Highlight"));
 			menuitem=createNewImageMenuItem(GTK_STOCK_SELECT_COLOR,gettext("Source Highlight"));
-			//gtk_image_menu_item_set_image((GtkImageMenuItem*)menuitem,image);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
-
 			submenu=gtk_menu_new();
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),submenu);
 
@@ -1306,6 +1240,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 						}
 				}
 
+
 			for(int j=0; j<cnt; j++)
 				{
 					lang=gtk_source_language_manager_get_language(lm,idsort[j]);
@@ -1314,26 +1249,16 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 							langname=gtk_source_language_get_name(lang);
 
 							if((page->lang!=NULL) &&(strcmp(page->lang,langname)==0))
-								{
-									//image=gtk_image_new_from_stock(GTK_STOCK_APPLY,GTK_ICON_SIZE_MENU);
-									//menuids=gtk_image_menu_item_new_with_label(langname);
-									menuids=createNewImageMenuItem(GTK_STOCK_APPLY,langname);
-
-									//gtk_image_menu_item_set_image((GtkImageMenuItem *)menuids,image);
-								}
+								menuids=createNewImageMenuItem(GTK_STOCK_APPLY,langname);
 							else
-								{
-									menuids=gtk_menu_item_new_with_label(langname);
-								}
+								menuids=gtk_menu_item_new_with_label(langname);
 
 							g_signal_connect(G_OBJECT(menuids),"activate",G_CALLBACK(changeSourceStyle),(void*)(long)idnum[j]);
 							gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuids);
 						}
 				}
 //add files to tab
-			//menuitem=gtk_image_menu_item_new_from_stock(GTK_STOCK_OPEN,NULL);
-			menuitem=createNewImageMenuItem(GTK_STOCK_OPEN,GTK_STOCK_OPEN);
-
+			menuitem=createNewImageMenuItem(GTK_STOCK_OPEN,GTK_STOCK_OPEN_LABEL);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 
 			submenu=gtk_menu_new();

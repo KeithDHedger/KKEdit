@@ -11,6 +11,8 @@ gtk-kkedit/makepkg
 gtk-kkedit/makepo
 gtk-kkedit/NAGTIME
 gtk-kkedit/makenagtime
+gtk-kkedit/KKEdit/src/html
+gtk-kkedit/KKEdit/src/searchdata.xml
 
 *~
 

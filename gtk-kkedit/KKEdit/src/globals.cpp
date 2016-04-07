@@ -58,8 +58,13 @@ GtkWidget		*viewTabMenu=NULL;
 GtkWidget		*viewTabSubMenu=NULL;
 
 //nav menu
-GtkWidget*		navMenu;
-GtkWidget*		goBackMenu;
+GtkWidget		*navMenu;
+GtkWidget		*goBackMenu;
+GtkWidget		*gotoDefMenu;
+GtkWidget		*searchInGtkDocsMenu;
+GtkWidget		*searchInQTDocsMenu;
+GtkWidget		*searchInDocsMenu;
+
 //func menu
 GtkWidget*		funcMenu;
 //bookmark menu
@@ -1413,10 +1418,9 @@ GdkPixbuf* createNewIcon(const char* stock,GtkWidget* widg)
 	return(icon);
 }
 
-void setToobarWidgetsSensitive(void)
+void setToobarWidgetsSensitive(pageStruct *page)
 {
 	ERRDATA
-	pageStruct	*page=getPageStructPtr(-1);
 	bool		ismodified=false;
 	bool		hasselection=false;
 
@@ -1510,7 +1514,7 @@ void setToobarWidgetsSensitive(void)
 //navigation
 				case 'G':
 					if(gotoDefButton!=NULL)
-						gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,true);
+						gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,hasselection);
 					break;
 //go back
 				case 'B':
@@ -1552,7 +1556,7 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 	if(page==NULL)
 		return;
 
-	setToobarWidgetsSensitive();
+	setToobarWidgetsSensitive(page);
 
 	gtk_widget_set_sensitive((GtkWidget*)undoMenu,page->canUndo);
 	gtk_widget_set_sensitive((GtkWidget*)redoMenu,page->canRedo);
@@ -1577,6 +1581,10 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 	hasselection=gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer);
 	gtk_widget_set_sensitive((GtkWidget*)cutMenu,hasselection);
 	gtk_widget_set_sensitive((GtkWidget*)copyMenu,hasselection);
+	gtk_widget_set_sensitive((GtkWidget*)gotoDefMenu,hasselection);
+	gtk_widget_set_sensitive((GtkWidget*)searchInGtkDocsMenu,hasselection);
+	gtk_widget_set_sensitive((GtkWidget*)searchInQTDocsMenu,hasselection);
+	gtk_widget_set_sensitive((GtkWidget*)searchInDocsMenu,hasselection);
 	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,globalHistory->canGoBack());
 
 //do plugin sensitive
@@ -1586,7 +1594,7 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 
 void resetSensitive(void)
 {
-	setToobarWidgetsSensitive();
+	setToobarWidgetsSensitive(NULL);
 
 	gtk_widget_set_sensitive((GtkWidget*)undoMenu,false);
 	gtk_widget_set_sensitive((GtkWidget*)redoMenu,false);
@@ -1596,6 +1604,7 @@ void resetSensitive(void)
 	gtk_widget_set_sensitive((GtkWidget*)copyMenu,false);
 	gtk_widget_set_sensitive((GtkWidget*)pasteMenu,false);
 	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
+	gtk_widget_set_sensitive((GtkWidget*)gotoDefMenu,false);
 	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
 	gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,false);
 	gtk_widget_set_sensitive((GtkWidget*)funcMenu,false);
@@ -1616,7 +1625,7 @@ void setPageSensitive(void)
 			resetSensitive();
 			return;
 		}
-	setToobarWidgetsSensitive();
+	setToobarWidgetsSensitive(NULL);
 	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)saveAllMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)closeAllMenu,true);

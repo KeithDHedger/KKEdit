@@ -97,9 +97,12 @@
 #define GTK_STOCK_GO_UP3 gettext("Up")
 #define GTK_STOCK_GO_FORWARD3 gettext("Forward")
 
+#define GTK_STOCK_OPEN_LABEL gettext("Open")
+#define GTK_STOCK_OPEN_MNEMONIC gettext("_Open")
 
 #define GTK_STOCK_NO3 gettext("_No")
 #define GTK_STOCK_CANCEL3 gettext("_Cancel")
+
 
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <gtksourceview/gtksourceprintcompositor.h>

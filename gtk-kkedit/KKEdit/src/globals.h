@@ -166,7 +166,12 @@ extern GtkWidget*		cutMenu;
 extern GtkWidget*		copyMenu;
 extern GtkWidget*		pasteMenu;
 //nav menu
-extern GtkWidget*		navMenu;
+extern GtkWidget		*navMenu;
+extern GtkWidget		*gotoDefMenu;
+extern GtkWidget		*searchInGtkDocsMenu;
+extern GtkWidget		*searchInQTDocsMenu;
+extern GtkWidget		*searchInDocsMenu;
+
 //view menu
 extern GtkWidget*		goBackMenu;
 extern GtkWidget*		viewMenu;
@@ -469,7 +474,7 @@ GtkWidget* createNewStockButton(const char* stock,const char* label);
 GdkPixbuf* createNewIcon(const char* stock,GtkWidget* widg);
 GtkWidget* createNewStockMenuItem(const char* stock,const char* label);
 
-void setToobarWidgetsSensitive(void);
+void setToobarWidgetsSensitive(pageStruct *page);
 void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page);
 void resetSensitive(void);
 void setPageSensitive(void);
