@@ -27,7 +27,7 @@ if test "$enable_gtk3" = "yes"; then
 	MAKEFILESUFFIX="-3"
 	GTK_MODULES="gtk+-3.0 >= 3.10.0"
 	GTKSRC_MODULES="gtksourceview-3.0 >= 3.10.0"
-	program_transform_name='s,\(.*\),\1-3,'
+	program_transform_name='s,\(^[[kK]].*t.*\),\1-3,'
 else
 	GTK_MODULES="gtk+-2.0 >= 2.24.0"
 	GTKSRC_MODULES="gtksourceview-2.0 >= 2.9.9"

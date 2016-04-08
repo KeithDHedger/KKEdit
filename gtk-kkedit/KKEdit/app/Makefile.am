@@ -44,6 +44,6 @@ install-exec-hook:
 	mkdir -vp $(DESTDIR)$(pkgdatadir)/plugins
 	mkdir -vp "$(DESTDIR)$(pkgdatadir)/Example External Tools"
 	cp -r "../resources/Example External Tools" "$(DESTDIR)$(pkgdatadir)"
-
+	sed -i 's/kkedit/kkedit$(MAKEFILESUFFIX)/g' $(DESTDIR)$(pkgdatadir)/tools/*
 
 
