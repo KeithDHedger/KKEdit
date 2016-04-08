@@ -148,11 +148,11 @@ void setUpToolBar(void)
 //open+recent
 #ifdef _USEGTK3_
 						image=gtk_image_new_from_icon_name(GTK_STOCK_OPEN,GTK_ICON_SIZE_LARGE_TOOLBAR);
-						openButton=gtk_menu_tool_button_new(image,GTK_STOCK_OPEN3);
+						openButton=gtk_menu_tool_button_new(image,GTK_STOCK_OPEN_LABEL);
 						gtk_menu_tool_button_set_menu((GtkMenuToolButton*)openButton,recent);
 						gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(openButton),gettext("Open Recent File"));
-						gtk_toolbar_insert(toolBar,openButton,-1);
-						
+						gtk_toolbar_insert(toolBar,openButton,-1);	
+						g_signal_connect(G_OBJECT(openButton),"clicked",G_CALLBACK(doOpenFile),NULL);
 #else
 						openButton=gtk_menu_tool_button_new_from_stock(GTK_STOCK_OPEN);
 						gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(openButton),recent);
@@ -583,15 +583,26 @@ void buildTools(void)
 	ERRDATA
 }
 
+void setNewPixbuf(const char *path,int bnum,const char *type)
+{
+	GtkTreeIter iter;
+	GdkPixbuf	*pbuf;
+
+	gtk_list_store_append(listStore, &iter);
+	pbuf=gdk_pixbuf_new_from_file(path,NULL);
+	if(pbuf!=NULL)
+		{
+			gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,bnum,-1);
+			g_object_unref(pbuf);
+		}
+	gtk_widget_set_sensitive((GtkWidget*)tool[bnum],false);
+
+}
+
 void populateStore(void)
 {
 	ERRDATA
-	GdkPixbuf*	pbuf;
-	GtkWidget*	image;
-	GtkTreeIter iter;
 	char*		type;
-
-	image=(GtkWidget*)menuItemOpen;
 
 	for(int j=0;j<(int)strlen(toolBarLayout);j++)
 		{
@@ -600,219 +611,83 @@ void populateStore(void)
 				{
 					case 'N':
 //new
-						gtk_list_store_append(listStore, &iter);
-						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_NEW,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
-						pbuf=createNewIcon(GTK_STOCK_NEW,image);
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,0,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[0],false);
+						setNewPixbuf(PREFSNEW,0,type);
 						break;
 					case 'O':
 //open+recent
-						gtk_list_store_append(listStore, &iter);
-						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_OPEN,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
-						pbuf=createNewIcon(GTK_STOCK_OPEN,image);
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,1,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[1],false);
+						setNewPixbuf(PREFSOPEN,1,type);
 						break;
 					case 'S':
 //save
-						gtk_list_store_append(listStore, &iter);
-						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_SAVE,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
-						pbuf=createNewIcon(GTK_STOCK_SAVE,image);
-
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,2,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[2],false);
+						setNewPixbuf(PREFSSAVE,2,type);
 						break;
 
 					case 'X':
 //cut
-						gtk_list_store_append(listStore, &iter);
-						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_CUT,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
-						pbuf=createNewIcon(GTK_STOCK_CUT,image);
-
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,3,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[3],false);
+						setNewPixbuf(PREFSCUT,3,type);
 						break;
 					case 'C':
 //copy
-						gtk_list_store_append(listStore, &iter);
-						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_COPY,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
-						pbuf=createNewIcon(GTK_STOCK_COPY,image);
-
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,4,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[4],false);
+						setNewPixbuf(PREFSCOPY,4,type);
 						break;
 					case 'P':
 //paste
-						gtk_list_store_append(listStore, &iter);
-						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_PASTE,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
-						pbuf=createNewIcon(GTK_STOCK_PASTE,image);
-
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,5,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[5],false);
+						setNewPixbuf(PREFSPASTE,5,type);
 						break;
 					case 'U':
 //undo
-						gtk_list_store_append(listStore, &iter);
-						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_UNDO,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
-						pbuf=createNewIcon(GTK_STOCK_UNDO,image);
-
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,6,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[6],false);
+						setNewPixbuf(PREFSUNDO,6,type);
 						break;
 					case 'R':
 //redo
-						gtk_list_store_append(listStore, &iter);
-						pbuf=createNewIcon(GTK_STOCK_REDO,image);
-
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,7,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[7],false);
+						setNewPixbuf(PREFSREDO,7,type);
 						break;
 					case 'F':
 //find
-						gtk_list_store_append(listStore, &iter);
-						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_FIND,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
-						pbuf=createNewIcon(GTK_STOCK_FIND,image);
-
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,8,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[8],false);
+						setNewPixbuf(PREFSFIND,8,type);
 						break;
 					case 'G':
 //navigation
-						gtk_list_store_append(listStore, &iter);
-						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
-						pbuf=createNewIcon(GTK_STOCK_DIALOG_QUESTION,image);
-
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,9,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[9],false);
+						setNewPixbuf(PREFSQUESTION,9,type);
 						break;
 //go back
 					case 'B':
-						gtk_list_store_append(listStore, &iter);
-						//pbuf=gtk_widget_render_icon(image,GTK_STOCK_GO_BACK,GTK_ICON_SIZE_LARGE_TOOLBAR,NULL);
-						pbuf=createNewIcon(GTK_STOCK_GO_BACK,image);
-
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,17,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[17],false);
+						setNewPixbuf(PREFSBACK,17,type);
 						break;
 
 					case '9':
-						gtk_list_store_append(listStore, &iter);
-						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/num.png",NULL);
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,10,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[10],false);
+//goto line num
+						setNewPixbuf(PREFSLINENUM,10,type);
 						break;
 
 					case 'A':
-						gtk_list_store_append(listStore, &iter);
-						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/api.png",NULL);
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,11,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[11],false);
+//find api
+						setNewPixbuf(PREFSAPI,11,type);
 						break;
 					case 'Q':
-						gtk_list_store_append(listStore, &iter);
-						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/qtapi.png",NULL);
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,16,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[16],false);
+//find qt api
+						setNewPixbuf(PREFSQTAPI,16,type);
 						break;
 					case 'D':
-						gtk_list_store_append(listStore, &iter);
-						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/finddef.png",NULL);
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,12,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[12],false);
+//find define
+						setNewPixbuf(PREFSFINDDEF,12,type);
 						break;
 					case 'L':
-						gtk_list_store_append(listStore, &iter);
-						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/live.png",NULL);
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,13,-1);
-								g_object_unref(pbuf);
-							}
-						gtk_widget_set_sensitive((GtkWidget*)tool[13],false);
+//live search
+						setNewPixbuf(PREFSLIVE,13,type);
 						break;
 
 					case 's':
-						gtk_list_store_append(listStore, &iter);
-						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/sep.png",NULL);
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,14,-1);
-								g_object_unref(pbuf);
-							}
+//seperator
+						setNewPixbuf(PREFSSEPERATOR,14,type);
+						gtk_widget_set_sensitive((GtkWidget*)tool[14],true);
 					break;
 
 					case 'E':
 //expander
-						gtk_list_store_append(listStore, &iter);
-						pbuf=gdk_pixbuf_new_from_file(DATADIR"/pixmaps/expand.png",NULL);
-						if(pbuf!=NULL)
-							{
-								gtk_list_store_set(listStore,&iter,PIXBUF_COLUMN,pbuf,TEXT_COLUMN,type,BUTTON_NUM,15,-1);
-								g_object_unref(pbuf);
-							}
+						setNewPixbuf(PREFSEXPAND,15,type);
+						gtk_widget_set_sensitive((GtkWidget*)tool[15],true);
 						break;
-
 				}
 			ERRDATA debugFree(&type);
 		}
@@ -832,17 +707,6 @@ void addToToolBar(GtkWidget* widget,gpointer ptr)
 	ERRDATA debugFree(&type);
 }
 
-void addIcon(const char* icon,const char* data,int toolnumber,const char* tooltip)
-{
-	ERRDATA
-	//tool[toolnumber]=gtk_tool_button_new_from_stock(icon);
-	tool[toolnumber]=createNewToolItem(icon,NULL);
-
-	gtk_box_pack_start(GTK_BOX(fromHBox),(GtkWidget*)tool[toolnumber],false,false,2);
-	g_signal_connect(G_OBJECT(tool[toolnumber]),"clicked",G_CALLBACK(addToToolBar),(void*)data);
-	ERRDATA gtk_widget_set_tooltip_text((GtkWidget*)tool[toolnumber],tooltip);
-}
-
 void addPixbuf(const char* pixbuf,const char* data,int toolnumber,const char* tooltip)
 {
 	ERRDATA
@@ -859,31 +723,30 @@ void addPixbuf(const char* pixbuf,const char* data,int toolnumber,const char* to
 void populateDnD(void)
 {
 	ERRDATA
-	addIcon(GTK_STOCK_NEW,"N",0,gettext("New File"));
-	addIcon(GTK_STOCK_OPEN,"O",1,gettext("Open File"));
-	addIcon(GTK_STOCK_SAVE,"S",2,gettext("Save File"));
-	addIcon(GTK_STOCK_CUT,"X",3,gettext("Cut"));
-	addIcon(GTK_STOCK_COPY,"C",4,gettext("Copy"));
-	addIcon(GTK_STOCK_PASTE,"P",5,gettext("Paste"));
-	addIcon(GTK_STOCK_UNDO,"U",6,gettext("Undo"));
-	addIcon(GTK_STOCK_REDO,"R",7,gettext("Redo"));
-	addIcon(GTK_STOCK_FIND,"F",8,gettext("Find"));
-	addIcon(GTK_STOCK_DIALOG_QUESTION,"G",9,gettext("Go To Definition"));
-	addIcon(GTK_STOCK_GO_BACK,"B",17,gettext("Go Back"));
 
-	addPixbuf(DATADIR"/pixmaps/num.png","9",10,gettext("Go To Line"));
-	addPixbuf(DATADIR"/pixmaps/api.png","A",11,gettext("Find API In Gtk Docs"));
-	addPixbuf(DATADIR"/pixmaps/qtapi.png","Q",16,gettext("Find API In Qt5 Docs"));
-	addPixbuf(DATADIR"/pixmaps/finddef.png","D",12,gettext("Search For Define"));
-	addPixbuf(DATADIR"/pixmaps/live.png","L",13,gettext("Live Search"));
-	addPixbuf(DATADIR"/pixmaps/sep.png","s",14,gettext("Separator"));
-	addPixbuf(DATADIR"/pixmaps/expand.png","E",15,gettext("Expander"));
+	addPixbuf(PREFSNEW,"N",0,gettext("New File"));
+	addPixbuf(PREFSOPEN,"O",1,gettext("Open File"));
+	addPixbuf(PREFSSAVE,"S",2,gettext("Save File"));
+	addPixbuf(PREFSCUT,"X",3,gettext("Cut"));
+	addPixbuf(PREFSCOPY,"C",4,gettext("Copy"));
+	addPixbuf(PREFSPASTE,"P",5,gettext("Paste"));
+	addPixbuf(PREFSUNDO,"U",6,gettext("Undo"));
+	addPixbuf(PREFSREDO,"R",7,gettext("Redo"));
+	addPixbuf(PREFSFIND,"F",8,gettext("Find"));
+	addPixbuf(PREFSQUESTION,"G",9,gettext("Go To Definition"));
+	addPixbuf(PREFSBACK,"B",17,gettext("Go Back"));
+	addPixbuf(PREFSLINENUM,"9",10,gettext("Go To Line"));
+	addPixbuf(PREFSAPI,"A",11,gettext("Find API In Gtk Docs"));
+	addPixbuf(PREFSQTAPI,"Q",16,gettext("Find API In Qt5 Docs"));
+	addPixbuf(PREFSFINDDEF,"D",12,gettext("Search For Define"));
+	addPixbuf(PREFSLIVE,"L",13,gettext("Live Search"));
+	addPixbuf(PREFSSEPERATOR,"s",14,gettext("Separator"));
+	addPixbuf(PREFSEXPAND,"E",15,gettext("Expander"));
 	ERRDATA
 }
 
 char* makeToolBarList(void)
 {
-
 	ERRDATA
 	GtkTreeIter iter;
 	gboolean	valid;
@@ -946,7 +809,7 @@ void doIconView(void)
 	renderer=gtk_cell_renderer_text_new();
 	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(iconView),renderer,false);
 
-	gtk_box_pack_start(GTK_BOX(iconViewBox),(GtkWidget*)iconView,false,false,2);
+	gtk_box_pack_start(GTK_BOX(iconViewBox),(GtkWidget*)iconView,true,true,2);
 	g_signal_connect(G_OBJECT(iconView),"button-press-event",G_CALLBACK(clickIt),NULL);
 	ERRDATA
 }
@@ -1194,8 +1057,8 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	gtk_label_set_use_markup((GtkLabel*)label,true);
 	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
 
-	gtk_box_pack_start(GTK_BOX(vbox),iconViewBox,true,false,2);
-	gtk_box_pack_start(GTK_BOX(vbox),fromHBox,true,false,2);
+	gtk_box_pack_start(GTK_BOX(vbox),iconViewBox,true,true,2);
+	gtk_box_pack_start(GTK_BOX(vbox),fromHBox,true,true,2);
 
 	populateDnD();
 	doIconView();
@@ -1432,7 +1295,7 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 	GList*		itemlist=NULL;
 	GList*		l=NULL;
 	GtkWidget*	menuitem;
-	char*		uri=NULL;
+	const char	*uri=NULL;
 	char*		filename=NULL;
 	int			i=0;
 
@@ -1447,16 +1310,13 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 			i++;
 
 			menuname=gtk_recent_info_get_display_name(info);
-			uri=(char*)gtk_recent_info_get_uri(info);
+			uri=gtk_recent_info_get_uri(info);
 			if(uri!=NULL)
 				{
 					filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
-					//menuitem=gtk_image_menu_item_new_with_label(menuname);
 					menuitem=createNewImageMenuItem(NULL,menuname);
-
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(recentFileMenu),(void*)filename);
-					g_free(uri);
 				}
 		}
 	ERRDATA
@@ -1527,9 +1387,9 @@ void buildMainGui(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMenu),menu);
 
 //new
-	menuitem=makeMenuItem(GTK_STOCK_NEW,menu,(void*)newFile,'N',NEWMENUNAME,STOCKMENU,GTK_STOCK_NEW3,NULL,false);
+	menuitem=makeMenuItem(GTK_STOCK_NEW,menu,(void*)newFile,'N',NEWMENUNAME,STOCKMENU,GTK_STOCK_NEW_LABEL,NULL,false);
 //open
-	menuItemOpen=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)doOpenFile,'O',OPENMENUNAME,STOCKMENU,GTK_STOCK_OPEN3,NULL,false);
+	menuItemOpen=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)doOpenFile,'O',OPENMENUNAME,STOCKMENU,GTK_STOCK_OPEN_LABEL,NULL,false);
 //open as hexdump
 	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)openAsHexDump,0,HEXDUMPMENUNAME,IMAGEMENU,gettext("Open As Hexdump"),NULL,false);
 
@@ -1562,11 +1422,11 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //save
-	saveMenu=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveFile,'S',SAVEMENUNAME,STOCKMENU,GTK_STOCK_SAVE3,NULL,false);
+	saveMenu=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveFile,'S',SAVEMENUNAME,STOCKMENU,GTK_STOCK_SAVE_LABEL,NULL,false);
 //savas
-	saveAsMenu=makeMenuItem(GTK_STOCK_SAVE_AS,menu,(void*)saveFile,-'S',SAVEASMENUNAME,STOCKMENU,GTK_STOCK_SAVE_AS3,(void*)1,false);
+	saveAsMenu=makeMenuItem(GTK_STOCK_SAVE_AS,menu,(void*)saveFile,-'S',SAVEASMENUNAME,STOCKMENU,GTK_STOCK_SAVE_AS_LABEL,(void*)1,false);
 //save all
-	saveAllMenu=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)doSaveAll,0,SAVEALLMENUNAME,IMAGEMENU,gettext("Save All"),NULL,false);
+	saveAllMenu=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)doSaveAll,0,SAVEALLMENUNAME,IMAGEMENU,GTK_STOCK_SAVE_ALL_LABEL,NULL,false);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -1577,20 +1437,20 @@ void buildMainGui(void)
 	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONMENUNAME,IMAGEMENU,gettext("Restore Session"),NULL,false);
 
 //printfile
-	printMenu=makeMenuItem(GTK_STOCK_PRINT,menu,(void*)printFile,0,PRINTMENUNAME,STOCKMENU,GTK_STOCK_PRINT3,NULL,false);
+	printMenu=makeMenuItem(GTK_STOCK_PRINT,menu,(void*)printFile,'P',PRINTMENUNAME,STOCKMENU,GTK_STOCK_PRINT_LABEL,NULL,false);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //close
-	closeMenu=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeTab,'W',CLOSEMENUNAME,STOCKMENU,GTK_STOCK_CLOSE3,NULL,false);
+	closeMenu=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeTab,'W',CLOSEMENUNAME,STOCKMENU,GTK_STOCK_CLOSE_LABEL,NULL,false);
 //close-all
 	closeAllMenu=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeAllTabs,0,CLOSEALLMENUNAME,IMAGEMENU,gettext("Close All Tabs"),NULL,false);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //reload file
-	revertMenu=makeMenuItem(GTK_STOCK_REVERT_TO_SAVED,menu,(void*)reloadFile,0,REVERTMENUNAME,STOCKMENU,GTK_STOCK_REVERT_TO_SAVED3,NULL,false);
+	revertMenu=makeMenuItem(GTK_STOCK_REVERT_TO_SAVED,menu,(void*)reloadFile,0,REVERTMENUNAME,STOCKMENU,GTK_STOCK_REVERT_TO_SAVED_LABEL,NULL,false);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);

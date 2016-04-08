@@ -2,9 +2,9 @@
 Version=1.0
 Encoding=UTF-8
 Name=KKEdit - Root
-Comment=A GTK2 text editor inspired ( but not based on ) BBEdit.
+Comment=A GTK2/3 text editor inspired ( but not based on ) BBEdit.
 Terminal=false
 Type=Application
-Categories=System;
+Categories=GTK;GNOME;System;
 MimeType=text/plain
 Icon=KKEditRoot

@@ -3,7 +3,7 @@ KKEdit source code editor.
 ***WARNING WHEN BUILDING FOR GTK3 ***
 
 Until this notice is removed some functions are disabled/not working, the gtk2 release is fully functional.
-Should now be mostly fully functional, some text options/visuals need doing.
+Should now be mostly fully functional, some text options/visuals need doing, find/replace with regex not complete yet.
 
 ***WARNING WHEN BUILDING FOR GTK3 ***
 

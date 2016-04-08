@@ -257,6 +257,7 @@ LIBS = $(GTK_LIBS) \
 	$(ASPELL_LIBS)
 
 LTLIBOBJS = @LTLIBOBJS@
+MAKEFILESUFFIX = @MAKEFILESUFFIX@
 MAKEINFO = @MAKEINFO@
 MANPAGEEDITOR = @MANPAGEEDITOR@
 MKDIR_P = @MKDIR_P@
@@ -925,7 +926,8 @@ install-exec-hook:
 	install -D ../resources/pixmaps/KKEdit.desktop $(DESTDIR)${prefix}/share/applications/KKEdit.desktop
 	install -D ../resources/pixmaps/KKEditRoot.desktop $(DESTDIR)${prefix}/share/applications/KKEditRoot.desktop
 
-	echo "Exec=${with_gsu_path} kkedit -m %f" >> $(DESTDIR)${prefix}/share/applications/KKEditRoot.desktop
+	echo "Exec=${with_gsu_path} kkedit$(MAKEFILESUFFIX) -m %f" >> $(DESTDIR)${prefix}/share/applications/KKEditRoot.desktop
+	echo "Exec=kkedit$(MAKEFILESUFFIX) %f" >> $(DESTDIR)${prefix}/share/applications/KKEdit.desktop
 	install -D ../resources/pixmaps/KKEdit.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEdit.png
 	install -D ../resources/pixmaps/KKEditRoot.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditRoot.png
 	install -D ../resources/pixmaps/KKEditPlug.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditPlug.png

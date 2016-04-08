@@ -1012,8 +1012,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	page->monitor=g_file_monitor_file(page->gFile,(GFileMonitorFlags)G_FILE_MONITOR_NONE,NULL,NULL);
 	g_signal_connect(G_OBJECT(page->monitor),"changed",G_CALLBACK(fileChangedOnDisk),(void*)page);
 
-//	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
-
 	str=g_file_get_path(page->gFile);
 	recenturi=g_filename_to_uri(str,NULL,NULL);
 	gtk_recent_manager_add_item(gtk_recent_manager_get_default(),recenturi);
@@ -1023,7 +1021,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	ERRDATA debugFree(&filepathcopy);
 
 //connect to mainNotebook
-	//gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pageWindow));
 	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
 

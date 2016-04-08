@@ -1,4 +1,6 @@
 0.3.0
+Redone .desktop files.
+Redone prefs toolbar customize.
 Tweaked set menus/toolbar items sensitive.
 Find higlighting now stays until a new find or switching tabs.
 Fixed makefile uninstall.

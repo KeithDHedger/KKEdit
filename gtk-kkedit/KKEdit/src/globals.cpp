@@ -1356,10 +1356,10 @@ GtkWidget* createNewImageMenuItem(const char* stock,const char* label)
 	GtkWidget	*item;
 
 #ifdef _USEGTK3_
-	item=gtk_menu_item_new_with_label(label);
+	item=gtk_menu_item_new_with_mnemonic(label);
 #else
 	GtkWidget	*image;
-	item=gtk_image_menu_item_new_with_label(label);
+	item=gtk_image_menu_item_new_with_mnemonic(label);
 	image=gtk_image_new_from_stock(stock,GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)item,image);
 #endif
@@ -1584,7 +1584,8 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 	gtk_widget_set_sensitive((GtkWidget*)gotoDefMenu,hasselection);
 	gtk_widget_set_sensitive((GtkWidget*)searchInGtkDocsMenu,hasselection);
 	gtk_widget_set_sensitive((GtkWidget*)searchInQTDocsMenu,hasselection);
-	gtk_widget_set_sensitive((GtkWidget*)searchInDocsMenu,hasselection);
+	if(gotDoxygen==0)
+		gtk_widget_set_sensitive((GtkWidget*)searchInDocsMenu,hasselection);
 	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,globalHistory->canGoBack());
 
 //do plugin sensitive
@@ -1634,6 +1635,7 @@ void setPageSensitive(void)
 	gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)navMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)funcMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)printMenu,true);
 }
 
 

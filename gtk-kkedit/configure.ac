@@ -24,17 +24,18 @@ AC_MSG_RESULT($enable_gtk3)
 if test "$enable_gtk3" = "yes"; then
 	AC_DEFINE([_USEGTK3_], [], [Use GTK3])
 	AC_DEFINE([_EXECSUFFIX_], ["-3"], [Use GTK3])
+	MAKEFILESUFFIX="-3"
 	GTK_MODULES="gtk+-3.0 >= 3.10.0"
 	GTKSRC_MODULES="gtksourceview-3.0 >= 3.10.0"
-#	GTKSOURCEBUG_MODULES="gtksourceview-3.0 >= 3.14.1"
-#	PKG_CHECK_MODULES(GTKSOURCEBUG, $GTKSOURCEBUG_MODULES, AC_DEFINE([_BUGGED_], [], [Got undo bug.]), AC_DEFINE([_NOTBUGGED_], [], [No undo bug]))
 	program_transform_name='s,\(.*\),\1-3,'
 else
 	GTK_MODULES="gtk+-2.0 >= 2.24.0"
 	GTKSRC_MODULES="gtksourceview-2.0 >= 2.9.9"
-#//	AC_DEFINE([_NOTBUGGED_], [], [No undo bug])
+	MAKEFILESUFFIX=
 	AC_DEFINE([_EXECSUFFIX_], [""], [Use GTK3])
 fi
+
+AC_SUBST(MAKEFILESUFFIX)
 
 PKG_CHECK_MODULES(GTK,$GTK_MODULES)
 AC_SUBST(GTK_CFLAGS)

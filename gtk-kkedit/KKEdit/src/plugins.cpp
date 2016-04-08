@@ -256,7 +256,7 @@ VISIBLE void doPlugPrefs(GtkWidget* widget,gpointer data)
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setPlugPrefs),(void*)3);
 
 //close
-	button=createNewStockButton(GTK_STOCK_CLOSE,GTK_STOCK_CLOSE3);
+	button=createNewStockButton(GTK_STOCK_CLOSE,GTK_STOCK_CLOSE_LABEL);
 	gtk_box_pack_start((GtkBox*)hbox,button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setPlugPrefs),(void*)4);
 

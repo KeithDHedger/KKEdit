@@ -71,13 +71,13 @@
 
 #endif
 
-#define GTK_STOCK_NEW3 gettext("_New")
-#define GTK_STOCK_OPEN3 gettext("_Open")
-#define GTK_STOCK_SAVE3 gettext("_Save")
-#define GTK_STOCK_SAVE_AS3 gettext("Save As")
-#define GTK_STOCK_PRINT3 gettext("_Print")
-#define GTK_STOCK_CLOSE3 gettext("_Close")
-#define GTK_STOCK_REVERT_TO_SAVED3 gettext("_Revert")
+//#define GTK_STOCK_NEW3 gettext("_New")
+//#define GTK_STOCK_OPEN3 gettext("Open")
+//#define GTK_STOCK_SAVE3 gettext("_Save")
+//#define GTK_STOCK_SAVE_AS3 gettext("Save As")
+//#define GTK_STOCK_PRINT3 gettext("_Print")
+//#define GTK_STOCK_CLOSE3 gettext("_Close")
+//#define GTK_STOCK_REVERT_TO_SAVED3 gettext("_Revert")
 #define GTK_STOCK_QUIT3 gettext("_Quit")
 #define GTK_STOCK_PREFERENCES3 "_Preferences"
 
@@ -97,12 +97,41 @@
 #define GTK_STOCK_GO_UP3 gettext("Up")
 #define GTK_STOCK_GO_FORWARD3 gettext("Forward")
 
-#define GTK_STOCK_OPEN_LABEL gettext("Open")
-#define GTK_STOCK_OPEN_MNEMONIC gettext("_Open")
+#define GTK_STOCK_OPEN_LABEL gettext("_Open")
+#define GTK_STOCK_CLOSE_LABEL gettext("_Close")
+#define GTK_STOCK_NEW_LABEL gettext("_New")
+#define GTK_STOCK_SAVE_LABEL gettext("_Save")
+#define GTK_STOCK_SAVE_AS_LABEL gettext("Save _As...")
+#define GTK_STOCK_SAVE_ALL_LABEL gettext("Save A_ll")
+#define GTK_STOCK_PRINT_LABEL gettext("_Print...")
+#define GTK_STOCK_REVERT_TO_SAVED_LABEL gettext("_Revert")
+
+
+
+
 
 #define GTK_STOCK_NO3 gettext("_No")
 #define GTK_STOCK_CANCEL3 gettext("_Cancel")
 
+
+#define PREFSNEW DATADIR"/pixmaps/new.png"
+#define PREFSOPEN DATADIR"/pixmaps/open.png"
+#define PREFSSAVE DATADIR"/pixmaps/save.png"
+#define PREFSCUT DATADIR"/pixmaps/cut.png"
+#define PREFSCOPY DATADIR"/pixmaps/copy.png"
+#define PREFSPASTE DATADIR"/pixmaps/paste.png"
+#define PREFSUNDO DATADIR"/pixmaps/undo.png"
+#define PREFSREDO DATADIR"/pixmaps/redo.png"
+#define PREFSFIND DATADIR"/pixmaps/find.png"
+#define PREFSQUESTION DATADIR"/pixmaps/question.png"
+#define PREFSBACK DATADIR"/pixmaps/back.png"
+#define PREFSLINENUM DATADIR"/pixmaps/num.png"
+#define PREFSAPI DATADIR"/pixmaps/api.png"
+#define PREFSQTAPI DATADIR"/pixmaps/qtapi.png"
+#define PREFSFINDDEF DATADIR"/pixmaps/finddef.png"
+#define PREFSLIVE DATADIR"/pixmaps/live.png"
+#define PREFSSEPERATOR DATADIR"/pixmaps/sep.png"
+#define PREFSEXPAND DATADIR"/pixmaps/expand.png"
 
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <gtksourceview/gtksourceprintcompositor.h>

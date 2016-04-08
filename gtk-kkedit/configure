@@ -603,6 +603,7 @@ GTKSRC_LIBS
 GTKSRC_CFLAGS
 GTK_LIBS
 GTK_CFLAGS
+MAKEFILESUFFIX
 X11_LIBS
 X11_CFLAGS
 PKG_CONFIG_LIBDIR
@@ -4634,19 +4635,20 @@ $as_echo "#define _USEGTK3_ /**/" >>confdefs.h
 
 $as_echo "#define _EXECSUFFIX_ \"-3\"" >>confdefs.h
 
+	MAKEFILESUFFIX="-3"
 	GTK_MODULES="gtk+-3.0 >= 3.10.0"
 	GTKSRC_MODULES="gtksourceview-3.0 >= 3.10.0"
-#	GTKSOURCEBUG_MODULES="gtksourceview-3.0 >= 3.14.1"
-#	PKG_CHECK_MODULES(GTKSOURCEBUG, $GTKSOURCEBUG_MODULES, AC_DEFINE([_BUGGED_], [], [Got undo bug.]), AC_DEFINE([_NOTBUGGED_], [], [No undo bug]))
 	program_transform_name='s,\(.*\),\1-3,'
 else
 	GTK_MODULES="gtk+-2.0 >= 2.24.0"
 	GTKSRC_MODULES="gtksourceview-2.0 >= 2.9.9"
-#//	AC_DEFINE([_NOTBUGGED_], [], [No undo bug])
+	MAKEFILESUFFIX=
 
 $as_echo "#define _EXECSUFFIX_ \"\"" >>confdefs.h
 
 fi
+
+
 
 
 pkg_failed=no
