@@ -637,7 +637,39 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 void selectTab(GtkWidget* widget,gpointer data)
 {
 	ERRDATA
-	gtk_notebook_set_current_page(mainNotebook,(int)(long)data);
+
+	GdkModifierType	mask;
+	int				newpage;
+	int				thispage;
+	GtkWidget		*child;
+
+#ifdef _USEGTK3_
+	GdkDeviceManager	*device_manager=gdk_display_get_device_manager(gdk_display_get_default());
+	GdkDevice			*device=gdk_device_manager_get_client_pointer(device_manager);
+	GdkWindow			*window;
+
+	window=gdk_screen_get_active_window (gdk_screen_get_default());
+	gdk_window_get_device_position(window,device,NULL,NULL,&mask);
+#else
+	gdk_window_get_pointer(NULL,NULL,NULL,&mask);
+#endif
+
+	if(GDK_SHIFT_MASK & mask)
+		{
+			thispage=gtk_notebook_get_current_page(mainNotebook);
+			child=gtk_notebook_get_nth_page(mainNotebook,(int)(long)data);
+			if((int)(long)data<thispage)
+				newpage=thispage;
+			else
+				newpage=thispage+1;
+				
+			gtk_notebook_reorder_child(mainNotebook,child,newpage);
+			gtk_notebook_set_current_page(mainNotebook,newpage);
+		}
+	else
+		{
+			gtk_notebook_set_current_page(mainNotebook,(int)(long)data);
+		}
 	ERRDATA
 }
 
@@ -671,4 +703,7 @@ void rebuildTabsMenu(void)
 	gtk_widget_show_all(viewTabMenu);
 	ERRDATA
 }
+
+
+
 

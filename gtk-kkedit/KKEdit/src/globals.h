@@ -478,6 +478,7 @@ void setToobarWidgetsSensitive(pageStruct *page);
 void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page);
 void resetSensitive(void);
 void setPageSensitive(void);
+
 #endif
 
 

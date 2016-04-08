@@ -2074,7 +2074,6 @@ VISIBLE gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)
 	int		loop;
 	bool	gotKey=false;
 
-
 	if((event->type==GDK_KEY_PRESS)&&(event->state & GDK_CONTROL_MASK))
 		{
 			for(loop=0; loop<NUMSHORTCUTS; loop++)
