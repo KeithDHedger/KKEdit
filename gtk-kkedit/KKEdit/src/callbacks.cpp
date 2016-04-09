@@ -241,7 +241,7 @@ int show_question(char* filename)
 	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
 
 #ifdef _USEGTK3_
-	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_SAVE_LABEL,GTK_RESPONSE_YES,GTK_STOCK_CANCEL3,GTK_RESPONSE_CANCEL,GTK_STOCK_NO3,GTK_RESPONSE_NO,NULL);
+	gtk_dialog_add_buttons((GtkDialog*)dialog,SAVE_LABEL,GTK_RESPONSE_YES,CANCEL_LABEL,GTK_RESPONSE_CANCEL,NO_LABEL,GTK_RESPONSE_NO,NULL);
 #else
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_SAVE,GTK_RESPONSE_YES,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_NO,GTK_RESPONSE_NO,NULL);
 #endif
@@ -660,11 +660,14 @@ VISIBLE void pasteFromClip(GtkWidget* widget,gpointer data)
 		return;
 	mainclipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
 	clipdata=gtk_clipboard_wait_for_text(mainclipboard);
-	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
-		if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
-			gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
-		gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)clipdata,-1);
-	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+	if(clipdata!=NULL)
+		{
+			gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+				if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+					gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
+				gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)clipdata,-1);
+			gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+		}
 	setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 }
 
@@ -1198,7 +1201,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 //check document
 			if((spellChecker!=NULL) &&(aspellConfig!=NULL) &&(gtk_text_buffer_get_modified((GtkTextBuffer*)page->buffer)==false))
 				{
-					menuitem=createNewImageMenuItem(GTK_STOCK_SPELL_CHECK,gettext("Spell Check Document"));
+					menuitem=createNewImageMenuItem(GTK_STOCK_SPELL_CHECK,SPELL_CHECK_LABEL);
 					gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doSpellCheckDoc),(void*)page->filePath);
 				}
@@ -1258,7 +1261,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 						}
 				}
 //add files to tab
-			menuitem=createNewImageMenuItem(GTK_STOCK_OPEN,GTK_STOCK_OPEN_LABEL);
+			menuitem=createNewImageMenuItem(GTK_STOCK_OPEN,OPEN_LABEL);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 
 			submenu=gtk_menu_new();

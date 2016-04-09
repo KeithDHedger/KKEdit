@@ -637,7 +637,6 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 void selectTab(GtkWidget* widget,gpointer data)
 {
 	ERRDATA
-
 	GdkModifierType	mask;
 	int				newpage;
 	int				thispage;

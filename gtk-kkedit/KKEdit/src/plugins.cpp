@@ -241,12 +241,12 @@ VISIBLE void doPlugPrefs(GtkWidget* widget,gpointer data)
 
 //plugin prefs
 	hbox=createNewBox(NEWHBOX,false,4);
-	plugPrefsButton=createNewStockButton(GTK_STOCK_PREFERENCES,GTK_STOCK_PREFERENCES3);
+	plugPrefsButton=createNewStockButton(GTK_STOCK_PREFERENCES,PREFERENCES_LABEL);
 	gtk_box_pack_start((GtkBox*)hbox,plugPrefsButton,false,false,4);
 	g_signal_connect(G_OBJECT(plugPrefsButton),"clicked",G_CALLBACK(setPlugPrefs),(void*)1);
 
 //plugin about
-	plugAboutButton=createNewStockButton(GTK_STOCK_ABOUT,GTK_STOCK_ABOUT3);
+	plugAboutButton=createNewStockButton(GTK_STOCK_ABOUT,ABOUT_LABEL);
 	gtk_box_pack_start((GtkBox*)hbox,plugAboutButton,false,false,4);
 	g_signal_connect(G_OBJECT(plugAboutButton),"clicked",G_CALLBACK(setPlugPrefs),(void*)2);
 
@@ -256,7 +256,7 @@ VISIBLE void doPlugPrefs(GtkWidget* widget,gpointer data)
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setPlugPrefs),(void*)3);
 
 //close
-	button=createNewStockButton(GTK_STOCK_CLOSE,GTK_STOCK_CLOSE_LABEL);
+	button=createNewStockButton(GTK_STOCK_CLOSE,CLOSE_LABEL);
 	gtk_box_pack_start((GtkBox*)hbox,button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(setPlugPrefs),(void*)4);
 

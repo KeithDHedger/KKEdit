@@ -323,7 +323,11 @@ bool getSaveFile(void)
 	GtkWidget*	dialog;
 	bool		retval=false;
 
+#ifdef _USEGTK3_
+	dialog=gtk_file_chooser_dialog_new(gettext("Save File"),(GtkWindow*)mainWindow,GTK_FILE_CHOOSER_ACTION_SAVE,CANCEL_LABEL,GTK_RESPONSE_CANCEL,SAVE_LABEL,GTK_RESPONSE_ACCEPT,NULL);
+#else
 	dialog=gtk_file_chooser_dialog_new(gettext("Save File"),(GtkWindow*)mainWindow,GTK_FILE_CHOOSER_ACTION_SAVE,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_SAVE,GTK_RESPONSE_ACCEPT,NULL);
+#endif
 
 	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog),TRUE);
 	if(saveFileName!=NULL)

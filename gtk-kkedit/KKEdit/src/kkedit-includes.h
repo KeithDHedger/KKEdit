@@ -29,38 +29,48 @@
 #ifndef _USEGTK3_
 #include <gtksourceview/gtksourceiter.h>
 #else
+
+//documents
 #define GTK_STOCK_NEW "document-new"
 #define GTK_STOCK_OPEN "document-open"
-
 #define GTK_STOCK_SAVE "document-save"
 #define GTK_STOCK_SAVE_AS "document-save-as"
+#define GTK_STOCK_REVERT_TO_SAVED "document-revert"
+#define GTK_STOCK_PRINT "document-print"
+
+//edit
 #define GTK_STOCK_CUT "edit-cut"
 #define GTK_STOCK_COPY "edit-copy"
 #define GTK_STOCK_PASTE "edit-paste"
 #define GTK_STOCK_UNDO "edit-undo"
 #define GTK_STOCK_REDO "edit-redo"
 #define GTK_STOCK_FIND "edit-find"
-#define GTK_STOCK_SPELL_CHECK "tools-check-spelling"
-#define GTK_STOCK_CLOSE "window-close"
-#define GTK_STOCK_REFRESH "view-refresh"
-#define GTK_STOCK_GO_BACK "go-previous"
-#define GTK_STOCK_GO_HOME "go-home"
 #define GTK_STOCK_DELETE "edit-delete"
-#define GTK_STOCK_DIALOG_QUESTION "dialog-question"
-#define GTK_STOCK_ADD "list-add"
+#define GTK_STOCK_FIND_AND_REPLACE "edit-find-replace"
+
+//applications
+#define GTK_STOCK_CLOSE "window-close"
 #define GTK_STOCK_PREFERENCES "preferences-system"
-#define GTK_STOCK_PRINT "document-print"
-#define GTK_STOCK_REVERT_TO_SAVED "document-revert"
 #define GTK_STOCK_QUIT "application-exit"
-#define GTK_STOCK_SORT_ASCENDING "view-sort-ascending"
-#define GTK_STOCK_GO_DOWN "go-down"
 #define GTK_STOCK_ABOUT "help-about"
 #define GTK_STOCK_HELP "help-browser"
+
+//odds
+#define GTK_STOCK_REFRESH "view-refresh"
+#define GTK_STOCK_SPELL_CHECK "tools-check-spelling"
+#define GTK_STOCK_DIALOG_QUESTION "dialog-question"
+#define GTK_STOCK_ADD "list-add"
+#define GTK_STOCK_SORT_ASCENDING "view-sort-ascending"
+
+//navigation
+#define GTK_STOCK_GO_BACK "go-previous"
+#define GTK_STOCK_GO_HOME "go-home"
+#define GTK_STOCK_GO_DOWN "go-down"
 #define GTK_STOCK_GO_FORWARD "go-next"
-#define GTK_STOCK_FIND_AND_REPLACE "edit-find-replace"
 #define GTK_STOCK_HOME "go-home"
 #define GTK_STOCK_GO_UP "go-up"
 
+//gtk stock widget labels
 #define GTK_STOCK_YES gettext("Yes")
 #define GTK_STOCK_NO gettext("No")
 #define GTK_STOCK_CANCEL gettext("Cancel")
@@ -70,48 +80,50 @@
 #define GTK_STOCK_OK gettext("OK")
 
 #endif
+//labels
+//file menu
+#define OPEN_LABEL gettext("_Open")
+#define CLOSE_LABEL gettext("_Close")
+#define NEW_LABEL gettext("_New")
+#define SAVE_LABEL gettext("_Save")
+#define SAVE_AS_LABEL gettext("Save _As...")
+#define SAVE_ALL_LABEL gettext("Save A_ll")
+#define PRINT_LABEL gettext("_Print...")
+#define REVERT_TO_SAVED_LABEL gettext("_Revert")
+#define QUIT_LABEL gettext("_Quit")
 
-//#define GTK_STOCK_NEW3 gettext("_New")
-//#define GTK_STOCK_OPEN3 gettext("Open")
-//#define GTK_STOCK_SAVE3 gettext("_Save")
-//#define GTK_STOCK_SAVE_AS3 gettext("Save As")
-//#define GTK_STOCK_PRINT3 gettext("_Print")
-//#define GTK_STOCK_CLOSE3 gettext("_Close")
-//#define GTK_STOCK_REVERT_TO_SAVED3 gettext("_Revert")
-#define GTK_STOCK_QUIT3 gettext("_Quit")
-#define GTK_STOCK_PREFERENCES3 "_Preferences"
+//edit menu
+#define UNDO_LABEL gettext("_Undo")
+#define REDO_LABEL gettext("_Redo")
+#define CUT_LABEL gettext("Cu_t")
+#define COPY_LABEL gettext("_Copy")
+#define PASTE_LABEL gettext("_Paste")
+#define FIND_LABEL gettext("_Find")
+#define PREFERENCES_LABEL gettext("Pr_eferences")
 
-#define GTK_STOCK_CUT3 gettext("Cut")
-#define GTK_STOCK_COPY3 gettext("Copy")
-#define GTK_STOCK_PASTE3 gettext("Paste")
-#define GTK_STOCK_UNDO3 gettext("Undo")
-#define GTK_STOCK_REDO3 gettext("Redo")
-#define GTK_STOCK_FIND3 gettext("Find")
-#define GTK_STOCK_SPELL_CHECK3 gettext("Spell Check Document")
-#define GTK_STOCK_REFRESH3 gettext("Refresh")
-#define GTK_STOCK_GO_BACK3 gettext("Back")
-#define GTK_STOCK_HOME3 gettext("Home")
-#define GTK_STOCK_ABOUT3 gettext("About")
-#define GTK_STOCK_HELP3 gettext("Help")
-#define GTK_STOCK_GO_DOWN3 gettext("Down")
-#define GTK_STOCK_GO_UP3 gettext("Up")
-#define GTK_STOCK_GO_FORWARD3 gettext("Forward")
+//nav menu
+#define GO_BACK_LABEL gettext("_Back")
+#define GOTO_LINE_LABEL gettext("_Go To Line")
 
-#define GTK_STOCK_OPEN_LABEL gettext("_Open")
-#define GTK_STOCK_CLOSE_LABEL gettext("_Close")
-#define GTK_STOCK_NEW_LABEL gettext("_New")
-#define GTK_STOCK_SAVE_LABEL gettext("_Save")
-#define GTK_STOCK_SAVE_AS_LABEL gettext("Save _As...")
-#define GTK_STOCK_SAVE_ALL_LABEL gettext("Save A_ll")
-#define GTK_STOCK_PRINT_LABEL gettext("_Print...")
-#define GTK_STOCK_REVERT_TO_SAVED_LABEL gettext("_Revert")
+//help menu
+#define ABOUT_LABEL gettext("_About")
+#define HELP_LABEL gettext("_Help")
+
+//odd
+#define SPELL_CHECK_LABEL gettext("Spell Check Document")
+#define REFRESH_LABEL gettext("Refresh")
+#define NO_LABEL gettext("_No")
+#define CANCEL_LABEL gettext("_Cancel")
+
+//docviewer
+#define HOME_LABEL gettext("_Home")
+#define GO_DOWN_LABEL gettext("_Down")
+#define GO_UP_LABEL gettext("_Up")
+#define GO_FORWARD_LABEL gettext("For_ward")
 
 
 
 
-
-#define GTK_STOCK_NO3 gettext("_No")
-#define GTK_STOCK_CANCEL3 gettext("_Cancel")
 
 
 #define PREFSNEW DATADIR"/pixmaps/new.png"
