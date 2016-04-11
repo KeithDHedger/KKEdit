@@ -359,7 +359,7 @@ void doMakeTool(void)
 	keyWidget=gtk_entry_new();
 	gtk_widget_show(keyWidget);
 	hbox=createNewBox(NEWHBOX,false,0);
-	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(TOOLS_SHORTCUT_LABEL),false,true,0);
+	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(TOOLS_SHORT_LABEL),false,true,0);
 	gtk_box_pack_start(GTK_BOX(hbox),keyWidget,true,true,0);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,true,0);
 	gtk_entry_set_text((GtkEntry*)keyWidget,"");
@@ -498,7 +498,7 @@ void buildTools(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(toolsMenu),menu);
 
 //addtool
-	menuitem=createNewImageMenuItem(GTK_STOCK_EDIT,gettext("Manage External Tools"));
+	menuitem=createNewImageMenuItem(GTK_STOCK_EDIT,MENU_EXT_TOOLS_LABEL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doMakeTool),NULL);
 
@@ -852,11 +852,10 @@ void buildKeys()
 	if(keysWindow==NULL)
 		{
 			keysWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-			gtk_window_set_title((GtkWindow*)keysWindow,gettext("Define Keyboard Shortcuts"));
-			//vbox=gtk_vbox_new(false,8);
+			gtk_window_set_title((GtkWindow*)keysWindow,KBSC_DEFINE_KB_LABEL);
 			vbox=createNewBox(NEWVBOX,false,8);
 
-			asprintf(&keycutsinfo,"%s",gettext("To set a custom shortcut:\nClick in the appropriate box and press CONTROL(and optionally SHIFT ) plus your custom key.\nJust press 'Delete' to remove the shortcut\nClick 'Apply' to keep changes or 'Cancel' to discard any changes."));
+			asprintf(&keycutsinfo,"%s",KBSC_INFO_LABEL);
 			item=gtk_label_new(keycutsinfo);
 			gtk_label_set_justify((GtkLabel*)item,GTK_JUSTIFY_CENTER);
 			gtk_label_set_line_wrap((GtkLabel*)item,true);
@@ -865,10 +864,8 @@ void buildKeys()
 //functions
 			for(loop=0;loop<NUMSHORTCUTS;loop++)
 				{
-					//hbox=gtk_hbox_new(true,0);
 					hbox=createNewBox(NEWHBOX,true,0);
-					shortcuttext[loop]=gettext(shortcuttext[loop]);
-					gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(shortcuttext[loop]),true,true,0);
+					gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(gettext(shortcuttext[loop])),true,true,0);
 					entries[loop]=gtk_entry_new();
 					g_signal_connect(G_OBJECT(entries[loop]),"key-press-event",G_CALLBACK(setKeyInEntry),NULL);
 					gtk_box_pack_start(GTK_BOX(hbox),entries[loop],true,true,0);
@@ -881,18 +878,13 @@ void buildKeys()
 			gtk_box_pack_start(GTK_BOX(vbox),gtk_hseparator_new(),true,true,0);
 #endif
 
-			//hbox=gtk_hbox_new(true,4);
 			hbox=createNewBox(NEWHBOX,true,4);
-			//item=gtk_button_new_from_stock(GTK_STOCK_APPLY);
 			item=createNewStockButton(GTK_STOCK_APPLY,GTK_STOCK_APPLY);
-
 			gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
 			gtk_widget_set_name(item,"apply");
 			g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setKeyCuts),(void*)item);	
 
-			//item=gtk_button_new_from_stock(GTK_STOCK_CANCEL);
 			item=createNewStockButton(GTK_STOCK_CANCEL,GTK_STOCK_CANCEL);
-
 			gtk_box_pack_start(GTK_BOX(hbox),item,true,false,2);
 			gtk_widget_set_name(item,"cancel");
 			g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(setKeyCuts),(void*)item);
@@ -932,9 +924,9 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 
 			case PIXMAPMENU:
 #ifdef _USEGTK3_
-				widg=gtk_menu_item_new_with_label(menulabel);
+				widg=gtk_menu_item_new_with_mnemonic(menulabel);
 #else
-				widg=gtk_image_menu_item_new_with_label(menulabel);
+				widg=gtk_image_menu_item_new_with_mnemonic(menulabel);
 				image=gtk_image_new_from_file(stocklabel);
 				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
 #endif
@@ -970,7 +962,7 @@ void makePrefsDial(int widgnum,const char* label,const char* name,int value,int 
 	prefsIntWidgets[widgnum]=(GObject*)gtk_adjustment_new(value,minvalue,maxvalue,1,1,0);
 	item=gtk_spin_button_new((GtkAdjustment*)prefsIntWidgets[widgnum],1,0);
 	gtk_widget_set_name(item,name);
-	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext(label)));
+	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(label));
 	gtk_box_pack_start((GtkBox*)prefHBox2,item,true,true,0);
 	gtk_box_pack_start((GtkBox*)pagevbox,prefHBox,false,false,0);
 	ERRDATA
@@ -1033,7 +1025,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	iconViewBox=createNewBox(NEWHBOX,false,0);
 	fromHBox=createNewBox(NEWHBOX,false,0);
 
-	label=gtk_label_new(gettext("<b>Customize Tool Bar</b>"));
+	label=gtk_label_new(PREFS_CUSTOMIZE_LABEL);
 	gtk_label_set_use_markup((GtkLabel*)label,true);
 	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
 
@@ -1058,45 +1050,45 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 //appearence 1
 //indent
 	makePrefBox(true,true);
-	makePrefsCheck(AUTOINDENT,gettext("Auto Indent Lines"),"indent",indent,true,true);
+	makePrefsCheck(AUTOINDENT,PREFS_AUTO_INDENT_LABEL,"indent",indent,true,true);
 //linenumbers
 	makePrefBox(true,true);
-	makePrefsCheck(SHOWNUMS,gettext("Show Line Numbers"),"show",lineNumbers,true,true);
+	makePrefsCheck(SHOWNUMS,PREFS_SHOWLINE_NUMBERS_LABEL,"show",lineNumbers,true,true);
 //wraplines
 	makePrefBox(true,true);
-	makePrefsCheck(WRAP,gettext("Wrap Lines"),"wrap",lineWrap,true,true);
+	makePrefsCheck(WRAP,PREFS_WRAP_LINES_LABEL,"wrap",lineWrap,true,true);
 //highlite
 	makePrefBox(true,true);
-	makePrefsCheck(HIGHLIGHT,gettext("Highlight Current Line"),"high",highLight,true,true);
+	makePrefsCheck(HIGHLIGHT,PREFS_HIGHLIGHT_LINE_LABEL,"high",highLight,true,true);
 //no syntax colour
 	makePrefBox(true,true);
-	makePrefsCheck(NOSYNTAX,gettext("No Syntax Highlighting"),"nosyntax",noSyntax,true,true);
+	makePrefsCheck(NOSYNTAX,PREFS_NO_SYNTAX_LABEL,"nosyntax",noSyntax,true,true);
 //single instance
 	makePrefBox(true,true);
-	makePrefsCheck(USESINGLE,gettext("Use Single Instance"),"single",singleUse,true,true);
+	makePrefsCheck(USESINGLE,PREFS_USE_SINGLE_LABEL,"single",singleUse,true,true);
 
 //auto save session
 	makePrefBox(true,true);
-	makePrefsCheck(AUTOSAVE,gettext("Auto Save/Restore Session"),"save",onExitSaveSession,true,false);
+	makePrefsCheck(AUTOSAVE,PREFS_AUTO_MENU_SAVE_LABEL,"save",onExitSaveSession,true,false);
 	g_signal_connect(G_OBJECT(prefsWidgets[AUTOSAVE]),"toggled",G_CALLBACK(setPrefs),(void*)prefsWidgets[AUTOSAVE]);
 //auto restore bookmarks
-	makePrefsCheck(AUTOBM,gettext("Restore Session Bookmarks"),"marks",restoreBookmarks,false,true);
+	makePrefsCheck(AUTOBM,PREFS_RESTORE_SESSION_LABEL,"marks",restoreBookmarks,false,true);
 	gtk_widget_set_sensitive(prefsWidgets[AUTOBM],onExitSaveSession);
 
 //no duplicates
 	makePrefBox(true,true);
-	makePrefsCheck(NODUPLICATE,gettext("Don't Open Duplicate File"),"duplicates",noDuplicates,true,true);
+	makePrefsCheck(NODUPLICATE,PREFS_NO_DUPLICATE_LABEL,"duplicates",noDuplicates,true,true);
 //turn off warnings
 	makePrefBox(true,true);
-	makePrefsCheck(NOWARN,gettext("Don't Warn On File Change"),"warning",noWarnings,true,true);
+	makePrefsCheck(NOWARN,PREFS_NO_WARN_LABEL,"warning",noWarnings,true,true);
 //do readlink
 	makePrefBox(true,true);
-	makePrefsCheck(READLINK,gettext("Read Link Before Opening File"),"readlink",readLinkFirst,true,true);
+	makePrefsCheck(READLINK,PREFS_READ_LINK_LABEL,"readlink",readLinkFirst,true,true);
 //autoshow completion
 	makePrefBox(true,true);
-	makePrefsCheck(AUTOSHOW,gettext("Auto Show Completions"),"autocomp",autoShowComps,true,true);
+	makePrefsCheck(AUTOSHOW,PREFS_AUTO_COMPLETE_LABEL,"autocomp",autoShowComps,true,true);
 
-	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("General Appearance")));
+	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(PREFS_GEN_APPEARANCE_LABEL));
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)prefsnotebook,true,true,0);
 
 //page2
@@ -1104,14 +1096,14 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 //text appearence
 //tabwidth
 	makePrefBox(true,false);
-	makePrefsDial(TABWIDTH,gettext("Tab width:"),"tabs",tabWidth,2,64);
+	makePrefsDial(TABWIDTH,PREFS_TAB_WIDTH_LABEL,"tabs",tabWidth,2,64);
 
 //style
 	int cnt=0;
 	int foundname=0;
 	const gchar * const * ids=gtk_source_style_scheme_manager_get_scheme_ids(schemeManager);
 	makePrefBox(true,false);
-	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext("Theme:")));
+	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(PREFS_THEME_LABEL));
 	item=gtk_combo_box_text_new();
 	gtk_widget_set_name(item,"style");
 	g_signal_connect(G_OBJECT(item),"changed",G_CALLBACK(setPrefs),(void*)item);
@@ -1131,13 +1123,13 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	makePrefBox(true,false);
 	fontButton=gtk_font_button_new_with_font(fontAndSize);
 	gtk_widget_set_name(fontButton,"fontbutton");
-	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext("Font:")));
+	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(PREFS_FONT_LABEL));
 	gtk_box_pack_start((GtkBox*)prefHBox2,fontButton,false,true,0);
 	gtk_box_pack_start((GtkBox*)pagevbox,prefHBox,false,false,0);
 
 ////bm highlight colour
 	makePrefBox(true,false);
-	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext("Bookmark Highlight Colour:")));
+	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(PREFS_BM_COLOUR_LABEL));
 
 	GdkColor color;
 	gdk_color_parse((const gchar *)highlightColour,&color);
@@ -1147,15 +1139,15 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 
 //autoshow completion
 	makePrefBox(true,false);
-	makePrefsDial(COMPLETIONSIZE,gettext("Completion Minimum Word Size:"),"minautochars",autoShowMinChars,2,20);
+	makePrefsDial(COMPLETIONSIZE,PREFS_COMPLETION_SIZE_LABEL,"minautochars",autoShowMinChars,2,20);
 
 //sort functions
 	funcListDrop=gtk_combo_box_text_new();
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and alphabetically"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by type and file position"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu by file position"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu alphabetically"));
-	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,gettext("Display functions etc in menu in categorised format"));
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,PREFS_FUNC_TYPE_ALPHA_LABEL);
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,PREFS_FUNC_TYPE_FILE_LABEL);
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,PREFS_FUNC_FILE_LABEL);
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,PREFS_FUNC_ALPHA_LABEL);
+	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,PREFS_FUNC_CAT_LABEL);
 
 	gtk_combo_box_set_active((GtkComboBox*)funcListDrop,listFunction);
 	hbox=createNewBox(NEWHBOX,true,0);
@@ -1164,25 +1156,25 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 
 //show keybindings dialog
 	hbox=createNewBox(NEWHBOX,true,0);
-	item=gtk_button_new_with_label(gettext("Customize Keyboard Shortcuts"));
+	item=gtk_button_new_with_label(PREFS_CUSTOM_KBSC_LABEL);
 	gtk_widget_set_name(item,"makekeys");
 	g_signal_connect(G_OBJECT(item),"clicked",G_CALLBACK(buildKeys),NULL);	
 	gtk_box_pack_start(GTK_BOX(hbox),(GtkWidget*)item,false,false,0);
 	gtk_box_pack_start(GTK_BOX(pagevbox),(GtkWidget*)hbox,false,false,8);
 
 //end style
-	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("Text Style")));
+	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(PREFS_TEXT_STYLE_LABEL));
 
 //page 3
 	pagevbox=createNewBox(NEWVBOX,false,0);
 //admin
 //function search depth
 	makePrefBox(true,false);
-	makePrefsDial(MAXFUNCDEPTH,gettext("Tag File Search Depth:"),"depth",depth,0,20);
+	makePrefsDial(MAXFUNCDEPTH,PREFS_TAG_SEARCH_DEPTH_LABEL,"depth",depth,0,20);
 
 //terminalcommand
 	makePrefBox(true,false);
-	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext("Terminal Command:")));
+	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(PREFS_TERM_COMMAND_LABEL));
 	terminalBox=gtk_entry_new();
 	if(terminalCommand!=NULL)
 		gtk_entry_set_text((GtkEntry*)terminalBox,terminalCommand);
@@ -1191,7 +1183,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 
 //root command
 	makePrefBox(true,false);
-	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext("Run As Root Command:")));
+	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(PREFS_AS_ROOT_COMMAND_LABEL));
 	rootCommandBox=gtk_entry_new();
 	if(rootCommand!=NULL)
 		gtk_entry_set_text((GtkEntry*)rootCommandBox,rootCommand);
@@ -1200,7 +1192,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 
 //set default browser
 	makePrefBox(true,false);
-	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(gettext("Default Browser:")));
+	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(PREFS_BROWSER_LABEL));
 	defaultBrowserBox=gtk_entry_new();
 	if(browserCommand!=NULL)
 		gtk_entry_set_text((GtkEntry*)defaultBrowserBox,browserCommand);
@@ -1209,31 +1201,31 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 
 //find replace history max
 	makePrefBox(true,false);
-	makePrefsDial(MAXHISTORY,gettext("Max Find/Replace History:"),"maxfrhistory",maxFRHistory,0,MAXTEXTWIDTH);
+	makePrefsDial(MAXHISTORY,PREFS_MAX_FIND_HISTORY_LABEL,"maxfrhistory",maxFRHistory,0,MAXTEXTWIDTH);
 //max tab label width
 	makePrefBox(true,false);
-	makePrefsDial(MAXTABCHARS,gettext("Max Characters In Tab:"),"maxtabchars",maxTabChars,5,MAXTEXTWIDTH);
+	makePrefsDial(MAXTABCHARS,PREFS_MAX_CHARS_IN_TAB_LABEL,"maxtabchars",maxTabChars,5,MAXTEXTWIDTH);
 //max function strings
 	makePrefBox(true,false);
-	makePrefsDial(MENUWIDTH,gettext("Max Characters In Function Defs:"),"maxmenuchars",maxFuncDefs,5,MAXTEXTWIDTH);
+	makePrefsDial(MENUWIDTH,PREFS_MAX_CHARS_IN_FUNC_DEFS_LABEL,"maxmenuchars",maxFuncDefs,5,MAXTEXTWIDTH);
 //max bookmark strings
 	makePrefBox(true,false);
-	makePrefsDial(MAXBMWIDTH,gettext("Max Characters In Bookmarks:"),"maxbmchars",maxBMChars,5,MAXTEXTWIDTH);
+	makePrefsDial(MAXBMWIDTH,PREFS_MAX_CHARS_IN_BMS_LABEL,"maxbmchars",maxBMChars,5,MAXTEXTWIDTH);
 //check for update
 	makePrefBox(true,true);
-	makePrefsCheck(UPDATECHECK,gettext("Check For Updates"),"updatecheck",autoCheck,true,true);
+	makePrefsCheck(UPDATECHECK,PREFS_UPDATE_CHECK_LABEL,"updatecheck",autoCheck,true,true);
 //use global plug menu
 	makePrefBox(true,true);
-	makePrefsCheck(GLOBALPLUGMENU,gettext("Use Global Plugins Menu(Requires Restart )"),"useplugmenu",useGlobalPlugMenu,true,true);
+	makePrefsCheck(GLOBALPLUGMENU,PREFS_GLOBAL_PLUG_MENU_LABEL,"useplugmenu",useGlobalPlugMenu,true,true);
 
-	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(gettext("Administration")));
+	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(PREFS_ADMIN_LABEL));
 //end admin
 //nag
-	label=gtk_label_new(gettext("<b>Be Kind To Poor Programmers</b>"));
+	label=gtk_label_new(PREFS_BE_KIND_LABEL);
 	gtk_label_set_use_markup((GtkLabel*)label,true);
 	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
 
-	prefsWidgets[BEKIND]=gtk_check_button_new_with_label(gettext("I have donated"));
+	prefsWidgets[BEKIND]=gtk_check_button_new_with_label(PREFS_I_DONATED_LABEL);
 	gtk_widget_set_name(prefsWidgets[BEKIND],"useplugmenu");
 	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[BEKIND],nagScreen);
 
@@ -1241,7 +1233,7 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	gtk_box_pack_start(GTK_BOX(hbox),(GtkWidget*)prefsWidgets[BEKIND],false,false,0);
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)hbox,false,false,0);
 
-	gtk_box_pack_start(GTK_BOX(vbox),gtk_label_new(gettext("I have really donated some some money to the author.\nMy conscience is clear and my Karma is squeaky clean :)")),false,false,0);
+	gtk_box_pack_start(GTK_BOX(vbox),gtk_label_new(PREFS_KARMA_LABEL),false,false,0);
 
 //buttons
 #ifdef _USEGTK3_
@@ -1361,37 +1353,37 @@ void buildMainGui(void)
 
 //menus
 //file menu
-	fileMenu=gtk_menu_item_new_with_label(gettext("_File"));
+	fileMenu=gtk_menu_item_new_with_label(MENU_FILE_MENU_LABEL);
 	gtk_menu_item_set_use_underline((GtkMenuItem*)fileMenu,true);
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMenu),menu);
 
 //new
-	menuitem=makeMenuItem(GTK_STOCK_NEW,menu,(void*)newFile,'N',NEWMENUNAME,STOCKMENU,NEW_LABEL,NULL,false);
+	menuitem=makeMenuItem(GTK_STOCK_NEW,menu,(void*)newFile,'N',NEWMENUNAME,STOCKMENU,MENU_NEW_LABEL,NULL,false);
 //open
-	menuItemOpen=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)doOpenFile,'O',OPENMENUNAME,STOCKMENU,OPEN_LABEL,NULL,false);
+	menuItemOpen=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)doOpenFile,'O',OPENMENUNAME,STOCKMENU,MENU_OPEN_LABEL,NULL,false);
 //open as hexdump
-	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)openAsHexDump,0,HEXDUMPMENUNAME,IMAGEMENU,gettext("Open As Hexdump"),NULL,false);
+	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)openAsHexDump,0,HEXDUMPMENUNAME,IMAGEMENU,MENU_OPEN_AS_HEXDUMP_LABEL,NULL,false);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //extras
-	menuitem=makeMenuItem(DATADIR"/pixmaps/ROOTKKEdit.png",menu,(void*)newEditor,0,NEWADMINMENUNAME,PIXMAPMENU,gettext("New Admin Editor"),(void*)1,false);
-	menuitem=makeMenuItem(DATADIR"/pixmaps/MenuKKEdit.png",menu,(void*)newEditor,0,NEWEDITORMENUNAME,PIXMAPMENU,gettext("New Editor"),(void*)2,false);
+	menuitem=makeMenuItem(DATADIR"/pixmaps/ROOTKKEdit.png",menu,(void*)newEditor,0,NEWADMINMENUNAME,PIXMAPMENU,MENU_NEW_ADMIN_LABEL,(void*)1,false);
+	menuitem=makeMenuItem(DATADIR"/pixmaps/MenuKKEdit.png",menu,(void*)newEditor,0,NEWEDITORMENUNAME,PIXMAPMENU, MENU_NEW_EDITOR_LABEL,(void*)2,false);
 
 	if(gotManEditor==0)
-		menuitem=makeMenuItem(DATADIR"/pixmaps/ManPageEditor.png",menu,(void*)newEditor,0,MANEDITORMENUNAME,PIXMAPMENU,gettext("Manpage Editor"),(void*)3,false);
+		menuitem=makeMenuItem(DATADIR"/pixmaps/ManPageEditor.png",menu,(void*)newEditor,0,MANEDITORMENUNAME,PIXMAPMENU,MENU_MANPAGE_EDITOR_LABEL,(void*)3,false);
 
 //doxy
 	if(gotDoxygen==0)
-		menuitem=makeMenuItem(GTK_STOCK_COPY,menu,(void*)doDoxy,0,DOXYBUILDMENUNAME,IMAGEMENU,gettext("Build Documentation"),(void*)1,false);
+		menuitem=makeMenuItem(GTK_STOCK_COPY,menu,(void*)doDoxy,0,DOXYBUILDMENUNAME,IMAGEMENU,MENU_BUILD_DOCS_LABEL,(void*)1,false);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //recent menu
-	menuitem=createNewImageMenuItem(NULL,gettext("Recent Files"));
+	menuitem=createNewImageMenuItem(NULL,MENU_RECENT_FILES_LABEL);
 	menurecent=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
 	addRecentToMenu((GtkRecentChooser*)recent,menurecent);
@@ -1402,19 +1394,19 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //save
-	saveMenu=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveFile,'S',SAVEMENUNAME,STOCKMENU,SAVE_LABEL,NULL,false);
+	saveMenu=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveFile,'S',SAVEMENUNAME,STOCKMENU,MENU_SAVE_LABEL,NULL,false);
 //savas
-	saveAsMenu=makeMenuItem(GTK_STOCK_SAVE_AS,menu,(void*)saveFile,-'S',SAVEASMENUNAME,STOCKMENU,SAVE_AS_LABEL,(void*)1,false);
+	saveAsMenu=makeMenuItem(GTK_STOCK_SAVE_AS,menu,(void*)saveFile,-'S',SAVEASMENUNAME,STOCKMENU,MENU_SAVE_AS_LABEL,(void*)1,false);
 //save all
-	saveAllMenu=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)doSaveAll,0,SAVEALLMENUNAME,IMAGEMENU,SAVE_ALL_LABEL,NULL,false);
+	saveAllMenu=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)doSaveAll,0,SAVEALLMENUNAME,IMAGEMENU,MENU_SAVE_ALL_LABEL,NULL,false);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //save session
-	menuitem=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveSession,0,SAVESESSIONMENUNAME,IMAGEMENU,gettext("Save Session"),(void*)false,false);
+	menuitem=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveSession,0,SAVESESSIONMENUNAME,IMAGEMENU,MENU_SAVE_SESSION_LABEL,(void*)false,false);
 //restore session
-	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONMENUNAME,IMAGEMENU,gettext("Restore Session"),NULL,false);
+	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONMENUNAME,IMAGEMENU,MENU_RESTORE_SESSION_LABEL,NULL,false);
 
 //printfile
 	printMenu=makeMenuItem(GTK_STOCK_PRINT,menu,(void*)printFile,'P',PRINTMENUNAME,STOCKMENU,PRINT_LABEL,NULL,false);
@@ -1425,7 +1417,7 @@ void buildMainGui(void)
 //close
 	closeMenu=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeTab,'W',CLOSEMENUNAME,STOCKMENU,CLOSE_LABEL,NULL,false);
 //close-all
-	closeAllMenu=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeAllTabs,0,CLOSEALLMENUNAME,IMAGEMENU,gettext("Close All Tabs"),NULL,false);
+	closeAllMenu=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeAllTabs,0,CLOSEALLMENUNAME,IMAGEMENU,MENU_CLOSE_ALL_LABEL,NULL,false);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -1439,42 +1431,42 @@ void buildMainGui(void)
 	menuitem=makeMenuItem(GTK_STOCK_QUIT,menu,(void*)doShutdown,'Q',QUITMENUNAME,STOCKMENU,QUIT_LABEL,NULL,false);
 
 //edit menu
-	editMenu=gtk_menu_item_new_with_label(gettext("_Edit"));
+	editMenu=gtk_menu_item_new_with_label(MENU_EDIT_MENU_LABEL);
 	gtk_menu_item_set_use_underline((GtkMenuItem*)editMenu,true);
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(editMenu),menu);
 //undo
-	undoMenu=makeMenuItem(GTK_STOCK_UNDO,menu,(void*)undo,'Z',UNDOMENUNAME,STOCKMENU,UNDO_LABEL,NULL,false);
+	undoMenu=makeMenuItem(GTK_STOCK_UNDO,menu,(void*)undo,'Z',UNDOMENUNAME,STOCKMENU,MENU_UNDO_LABEL,NULL,false);
 //redo
-	redoMenu=makeMenuItem(GTK_STOCK_REDO,menu,(void*)redo,-'Z',REDOMENUNAME,STOCKMENU,REDO_LABEL,NULL,false);
+	redoMenu=makeMenuItem(GTK_STOCK_REDO,menu,(void*)redo,-'Z',REDOMENUNAME,STOCKMENU,MENU_REDO_LABEL,NULL,false);
 //undoall
-	undoAllMenu=makeMenuItem(GTK_STOCK_UNDO,menu,(void*)unRedoAll,0,UNDOALLMENUNAME,IMAGEMENU,gettext("Undo All"),(void*)0,false);
+	undoAllMenu=makeMenuItem(GTK_STOCK_UNDO,menu,(void*)unRedoAll,0,UNDOALLMENUNAME,IMAGEMENU,MENU_UNDO_ALL_LABEL,(void*)0,false);
 //redoall
-	redoAllMenu=makeMenuItem(GTK_STOCK_REDO,menu,(void*)unRedoAll,0,REDOALLMENUNAME,IMAGEMENU,gettext("Redo All"),(void*)1,false);
+	redoAllMenu=makeMenuItem(GTK_STOCK_REDO,menu,(void*)unRedoAll,0,REDOALLMENUNAME,IMAGEMENU,MENU_REDO_ALL_LABEL,(void*)1,false);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //cut
-	cutMenu=makeMenuItem(GTK_STOCK_CUT,menu,(void*)cutToClip,'X',CUTMENUNAME,STOCKMENU,CUT_LABEL,NULL,false);
+	cutMenu=makeMenuItem(GTK_STOCK_CUT,menu,(void*)cutToClip,'X',CUTMENUNAME,STOCKMENU,MENU_CUT_LABEL,NULL,false);
 //copy
-	copyMenu=makeMenuItem(GTK_STOCK_COPY,menu,(void*)copyToClip,'C',COPYMENUNAME,STOCKMENU,COPY_LABEL,NULL,false);
+	copyMenu=makeMenuItem(GTK_STOCK_COPY,menu,(void*)copyToClip,'C',COPYMENUNAME,STOCKMENU,MENU_COPY_LABEL,NULL,false);
 //paste
-	pasteMenu=makeMenuItem(GTK_STOCK_PASTE,menu,(void*)pasteFromClip,'V',PASTEMENUNAME,STOCKMENU,PASTE_LABEL,NULL,false);
+	pasteMenu=makeMenuItem(GTK_STOCK_PASTE,menu,(void*)pasteFromClip,'V',PASTEMENUNAME,STOCKMENU,MENU_PASTE_LABEL,NULL,false);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //find
-	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)find,'F',FINDMENUNAME,STOCKMENU,FIND_LABEL,NULL,false);
+	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)find,'F',FINDMENUNAME,STOCKMENU,MENU_FIND_LABEL,NULL,false);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //sort
-	sortTabsMenu=makeMenuItem(GTK_STOCK_SORT_ASCENDING,menu,(void*)sortTabs,0,SORTTABSMENUNAME,IMAGEMENU,gettext("Sort Tabs"),NULL,false);
+	sortTabsMenu=makeMenuItem(GTK_STOCK_SORT_ASCENDING,menu,(void*)sortTabs,0,SORTTABSMENUNAME,IMAGEMENU,MENU_SORT_TABS_LABEL,NULL,false);
 //jump to tab
-	viewTabMenu=createNewImageMenuItem(GTK_STOCK_EDIT,gettext("Select Tab"));
+	viewTabMenu=createNewImageMenuItem(GTK_STOCK_EDIT,MENU_SELECT_TAB_LABEL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),viewTabMenu);
 	rebuildTabsMenu();
 
@@ -1482,61 +1474,61 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //prefs
-	menuitem=makeMenuItem(GTK_STOCK_PREFERENCES,menu,(void*)doPrefs,0,PREFSMENUNAME,STOCKMENU,PREFERENCES_LABEL,NULL,false);
+	menuitem=makeMenuItem(GTK_STOCK_PREFERENCES,menu,(void*)doPrefs,0,PREFSMENUNAME,STOCKMENU,MENU_PREFERENCES_LABEL,NULL,false);
 //plugs
-	menuitem=makeMenuItem(GTK_STOCK_PREFERENCES,menu,(void*)doPlugPrefs,0,PLUGPREFSMENUNAME,IMAGEMENU,gettext("Plugin Prefs"),NULL,false);
+	menuitem=makeMenuItem(GTK_STOCK_PREFERENCES,menu,(void*)doPlugPrefs,0,PLUGPREFSMENUNAME,IMAGEMENU,MENU_PLUG_PREFS_LABEL,NULL,false);
 
 //view menu
-	viewMenu=gtk_menu_item_new_with_label(gettext("_View"));
+	viewMenu=gtk_menu_item_new_with_label(MENU_VIEW_MENU_LABEL);
 	gtk_menu_item_set_use_underline((GtkMenuItem*)viewMenu,true);
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(viewMenu),menu);
 
 //show docs
-	menuitem=makeMenuItem(gettext("Show Documentation"),menu,(void*)doDoxy,0,SHOWDOCSMENUNAME,NORMALMENU,NULL,(void*)2,false);
+	menuitem=makeMenuItem(MENU_SHOW_DOCS_LABEL,menu,(void*)doDoxy,0,SHOWDOCSMENUNAME,NORMALMENU,NULL,(void*)2,false);
 
 //toggle bookmark bar
 	if(showBMBar)
-		menuitem=makeMenuItem(gettext("Hide Bookmarks Bar"),menu,(void*)toggleBookMarkBar,0,SHOWBMBARMENUNAME,NORMALMENU,NULL,NULL,false);
+		menuitem=makeMenuItem(MENU_HIDE_BM_BAR_LABEL,menu,(void*)toggleBookMarkBar,0,SHOWBMBARMENUNAME,NORMALMENU,NULL,NULL,false);
 	else
-		menuitem=makeMenuItem(gettext("Show Bookmarks Bar"),menu,(void*)toggleBookMarkBar,0,SHOWBMBARMENUNAME,NORMALMENU,NULL,NULL,false);
+		menuitem=makeMenuItem(MENU_SHOW_BM_BAR_LABEL,menu,(void*)toggleBookMarkBar,0,SHOWBMBARMENUNAME,NORMALMENU,NULL,NULL,false);
 
 //toggle toolbar bar
 	if(showToolBar)
-		menuitem=makeMenuItem(gettext("Hide Tool Bar"),menu,(void*)toggleToolBar,0,SHOWTOOLBARMENUNAME,NORMALMENU,NULL,NULL,false);
+		menuitem=makeMenuItem(MENU_HIDE_TOOLBAR_LABEL,menu,(void*)toggleToolBar,0,SHOWTOOLBARMENUNAME,NORMALMENU,NULL,NULL,false);
 	else
-		menuitem=makeMenuItem(gettext("Show Tool Bar"),menu,(void*)toggleToolBar,0,SHOWTOOLBARMENUNAME,NORMALMENU,NULL,NULL,false);
+		menuitem=makeMenuItem(MENU_SHOW_TOOLBAR_LABEL,menu,(void*)toggleToolBar,0,SHOWTOOLBARMENUNAME,NORMALMENU,NULL,NULL,false);
 
 //tooloutput
 	if(showToolOutWin)
-		toolOutMenu=makeMenuItem(gettext("Hide Tool Output"),menu,(void*)toggleToolOutput,0,SHOWTOOLOUTMENUNAME,NORMALMENU,NULL,NULL,false);
+		toolOutMenu=makeMenuItem(MENU_HIDE_TOOL_OP_LABEL,menu,(void*)toggleToolOutput,0,SHOWTOOLOUTMENUNAME,NORMALMENU,NULL,NULL,false);
 	else
-		toolOutMenu=makeMenuItem(gettext("Show Tool Output"),menu,(void*)toggleToolOutput,0,SHOWTOOLOUTMENUNAME,NORMALMENU,NULL,NULL,false);
+		toolOutMenu=makeMenuItem(MENU_SHOW_TOOL_OP_LABEL,menu,(void*)toggleToolOutput,0,SHOWTOOLOUTMENUNAME,NORMALMENU,NULL,NULL,false);
 //toggle statusbar
 	if(showStatus)
-		statusBarMenu=makeMenuItem(gettext("Hide Status Bar"),menu,(void*)toggleStatusBar,0,SHOWSTATUSMENUNAME,NORMALMENU,NULL,NULL,false);
+		statusBarMenu=makeMenuItem(MENU_HIDE_STATUS_LABEL,menu,(void*)toggleStatusBar,0,SHOWSTATUSMENUNAME,NORMALMENU,NULL,NULL,false);
 	else
-		statusBarMenu=makeMenuItem(gettext("Show Status Bar"),menu,(void*)toggleStatusBar,0,SHOWSTATUSMENUNAME,NORMALMENU,NULL,NULL,false);
+		statusBarMenu=makeMenuItem(MENU_SHOW_STATUS_LABEL,menu,(void*)toggleStatusBar,0,SHOWSTATUSMENUNAME,NORMALMENU,NULL,NULL,false);
 
 #ifdef _BUILDDOCVIEWER_
 //toggle docviewer
-	showDocViewWidget=makeMenuItem(gettext("Show Docviewer"),menu,(void*)toggleDocviewer,0,SHOWDOCVIEWERMENUNAME,NORMALMENU,NULL,NULL,false);
+	showDocViewWidget=makeMenuItem(MENU_SHOW_DOCVIEWER_LABEL,menu,(void*)toggleDocviewer,0,SHOWDOCVIEWERMENUNAME,NORMALMENU,NULL,NULL,false);
 #endif
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),gtk_separator_menu_item_new());
 //toggle line nubers
-		menuitem=makeMenuItem(gettext("Show Line Numbers"),menu,(void*)toggleLineNumbers,0,VIEWSHOWLINENUMERS,CHECKMENU,NULL,NULL,lineNumbers);
+		menuitem=makeMenuItem(MENU_SHOW_LINE_NUMBERS_LABEL,menu,(void*)toggleLineNumbers,0,VIEWSHOWLINENUMERS,CHECKMENU,NULL,NULL,lineNumbers);
 //toggle wrap lines
-	menuitem=makeMenuItem(gettext("Wrap Lines"),menu,(void*)toggleWrapLines,0,VIEWWRAPLINES,CHECKMENU,NULL,NULL,lineWrap);
+	menuitem=makeMenuItem( MENU_WRAP_LINES_LABEL,menu,(void*)toggleWrapLines,0,VIEWWRAPLINES,CHECKMENU,NULL,NULL,lineWrap);
 
 //toggle higlight current line
-	menuitem=makeMenuItem(gettext("Hightlght Current Line"),menu,(void*)toggleHighlightCurrent,0,VIEWHIGHLIGHT,CHECKMENU,NULL,NULL,highLight);
+	menuitem=makeMenuItem(MENU_HIGHLIGHT_LINE_LABEL,menu,(void*)toggleHighlightCurrent,0,VIEWHIGHLIGHT,CHECKMENU,NULL,NULL,highLight);
 
 //toggle syntax highlight
-	menuitem=makeMenuItem(gettext("No Syntax Highlighting"),menu,(void*)toggleSyntax,0,VIEWNOSYNTAX,CHECKMENU,NULL,NULL,noSyntax);
+	menuitem=makeMenuItem(MENU_NO_SYNTAX_LABEL,menu,(void*)toggleSyntax,0,VIEWNOSYNTAX,CHECKMENU,NULL,NULL,noSyntax);
 
 //toggle auto show comps
-	menuitem=makeMenuItem(gettext("Auto Show Completions"),menu,(void*)toggleAutoComplete,0,VIEWAUTOCOMPLETE,CHECKMENU,NULL,NULL,autoShowComps);
+	menuitem=makeMenuItem(MENU_SHOW_AUTO_COMPLETE,menu,(void*)toggleAutoComplete,0,VIEWAUTOCOMPLETE,CHECKMENU,NULL,NULL,autoShowComps);
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),gtk_separator_menu_item_new());
 
@@ -2019,7 +2011,7 @@ void buildGtkDocViewer(void)
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,false,0);
 
 	entry=gtk_entry_new();
-	findbutton=createNewStockButton(GTK_STOCK_FIND,FIND_LABEL);
+	findbutton=createNewStockButton(GTK_STOCK_FIND,MENU_FIND_LABEL);
 	gtk_box_pack_start(GTK_BOX(hbox),findbutton,false,false,0);
 	g_signal_connect(G_OBJECT(findbutton),"clicked",G_CALLBACK(docSearchFromBar),(void*)entry);	
 

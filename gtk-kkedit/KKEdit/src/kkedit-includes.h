@@ -83,25 +83,58 @@
 
 //menus labels
 //file menu
-#define OPEN_LABEL gettext("_Open")
-#define CLOSE_LABEL gettext("_Close")
-#define NEW_LABEL gettext("_New")
-#define SAVE_LABEL gettext("_Save")
-#define SAVE_AS_LABEL gettext("Save _As...")
-#define SAVE_ALL_LABEL gettext("Save A_ll")
+#define MENU_FILE_MENU_LABEL gettext("_File")
+#define MENU_OPEN_LABEL gettext("_Open")
+#define MENU_OPEN_AS_HEXDUMP_LABEL gettext("Open As He_xdump")
+#define MENU_NEW_LABEL gettext("_New")
+#define MENU_NEW_ADMIN_LABEL gettext("New A_dmin Editor")
+#define MENU_NEW_EDITOR_LABEL gettext("New _Editor")
+#define MENU_MANPAGE_EDITOR_LABEL gettext("_Manpage Editor")
+#define MENU_BUILD_DOCS_LABEL gettext("B_uild Documentation")
+#define MENU_RECENT_FILES_LABEL gettext("_Recent Files")
+#define MENU_SAVE_LABEL gettext("_Save")
+#define MENU_SAVE_AS_LABEL gettext("Save _As...")
+#define MENU_SAVE_ALL_LABEL gettext("Save A_ll")
+#define MENU_SAVE_SESSION_LABEL gettext("Sa_ve Session")
+#define MENU_RESTORE_SESSION_LABEL gettext("Res_tore Session")
 #define PRINT_LABEL gettext("_Print...")
-#define REVERT_TO_SAVED_LABEL gettext("_Revert")
+#define CLOSE_LABEL gettext("_Close")
+#define MENU_CLOSE_ALL_LABEL gettext("Close All Ta_bs")
+#define REVERT_TO_SAVED_LABEL gettext("Re_vert")
 #define QUIT_LABEL gettext("_Quit")
-#define REPLACE_ALL_LABEL gettext("Replace All")
 
 //edit menu
-#define UNDO_LABEL gettext("_Undo")
-#define REDO_LABEL gettext("_Redo")
-#define CUT_LABEL gettext("Cu_t")
-#define COPY_LABEL gettext("_Copy")
-#define PASTE_LABEL gettext("_Paste")
-#define FIND_LABEL gettext("_Find")
-#define PREFERENCES_LABEL gettext("Pr_eferences")
+#define MENU_EDIT_MENU_LABEL gettext("_Edit")
+#define MENU_UNDO_LABEL gettext("_Undo")
+#define MENU_REDO_LABEL gettext("_Redo")
+#define MENU_UNDO_ALL_LABEL gettext("U_ndo All")
+#define MENU_REDO_ALL_LABEL gettext("Re_do All")
+#define MENU_CUT_LABEL gettext("Cu_t")
+#define MENU_COPY_LABEL gettext("_Copy")
+#define MENU_PASTE_LABEL gettext("_Paste")
+#define MENU_FIND_LABEL gettext("_Find")
+#define MENU_SORT_TABS_LABEL gettext("_Sort Tabs")
+#define MENU_SELECT_TAB_LABEL gettext("Se_lect Tab")
+#define MENU_PREFERENCES_LABEL gettext("Pr_eferences")
+#define MENU_PLUG_PREFS_LABEL gettext("Plu_gin Prefs")
+
+//view menu
+#define MENU_VIEW_MENU_LABEL gettext("_View")
+#define MENU_SHOW_DOCS_LABEL gettext("Show Documentation")
+#define MENU_HIDE_BM_BAR_LABEL gettext("Hide Bookmarks Bar")
+#define MENU_SHOW_BM_BAR_LABEL gettext("Show Bookmarks Bar")
+#define MENU_HIDE_TOOLBAR_LABEL gettext("Hide Tool Bar")
+#define MENU_SHOW_TOOLBAR_LABEL gettext("Show Tool Bar")
+#define MENU_HIDE_TOOL_OP_LABEL gettext("Hide Tool Output")
+#define MENU_SHOW_TOOL_OP_LABEL gettext("Show Tool Output")
+#define MENU_HIDE_STATUS_LABEL gettext("Hide Status Bar")
+#define MENU_SHOW_STATUS_LABEL gettext("Show Status Bar")
+#define MENU_SHOW_DOCVIEWER_LABEL gettext("Show Docviewer")
+#define MENU_SHOW_LINE_NUMBERS_LABEL gettext("Show Line Numbers")
+#define MENU_WRAP_LINES_LABEL gettext("Wrap Lines")
+#define MENU_HIGHLIGHT_LINE_LABEL gettext("Hightlght Current Line")
+#define MENU_NO_SYNTAX_LABEL gettext("No Syntax Highlighting")
+#define MENU_SHOW_AUTO_COMPLETE gettext("Auto Show Completions")
 
 //nav menu
 #define GO_BACK_LABEL gettext("_Back")
@@ -110,6 +143,15 @@
 #define FIND_IN_DOCS_LABEL gettext("_Find In Documentation")
 #define FIND_IN_GTKAPI_LABEL gettext("_Search In Gtk Docs")
 #define FIND_IN_QTAPI_LABEL gettext("S_earch In Qt5 Docs")
+#define MENU_ 
+#define MENU_ 
+
+//func menu
+//bookmarks menu
+//tools menu
+#define MENU_EXT_TOOLS_LABEL gettext("Manage External Tools")
+
+//plugins menu
 
 //toolbar labels
 #define GOTO_DEFINE_TOOLBAR_LABEL gettext("Definition")
@@ -128,13 +170,6 @@
 //context labels
 #define CUSTOM_WORD_CONTEXT_LABEL gettext("_Add To Custom Word List")
 #define CHECK_SPELLING_CONTEXT_LABEL gettext("C_heck Spellling")
-
-//#define GTK_STOCK_GO_BACK "go-previous"
-//#define GTK_STOCK_GO_HOME "go-home"
-//#define GTK_STOCK_GO_DOWN "go-down"
-
-//#define GTK_STOCK_HOME "go-home"
-//#define GTK_STOCK_GO_UP "go-up"
 
 //help menu
 #define ABOUT_LABEL gettext("_About")
@@ -156,22 +191,25 @@
 #define HIGHLIGHT_ALL_LABEL gettext("Highlight All")
 #define FIND_TEXT_LABEL gettext("Find Text")
 #define REPLACE_TEXT_LABEL gettext("Replace With")
+#define REPLACE_ALL_LABEL gettext("Replace All")
 
 //kb shortcts
-#define DELETE_LINE_LABEL gettext("Delete Current Line")
-#define DELETE_TO_EOL_LABEL gettext("Delete To End Of Line")
-#define DELETE_TO_BOL_LABEL gettext("Delete To Beginning Of Line")
-#define SELECT_WORD_LABEL gettext("Select Word Under Cursor")
-#define DELETE_WORD_LABEL gettext("Delete Word Under Cursor")
-#define DUPLICATE_LINE_LABEL gettext("Duplicate Current Line")
-#define SELECT_LINE_LABEL gettext("Select Current Line")
-#define LINE_UP_LABEL gettext("Move Current Line Up")
-#define LINE_DOWN_LABEL gettext("Move Current Line Down")
-#define SELECT_TO_EOL_LABEL gettext("Select From Cursor To End Of Line")
-#define SELECT_TO_BOL_LABEL gettext("Select From Beginning Of Line To Cursor")
-#define SELECTION_UP_LABEL gettext("Move Selection Up")
-#define SELECTION_DOWN_LABEL gettext("Move Selection Down")
-#define SHOW_COMPLETION_LABEL gettext("Show Completion")
+#define KBSC_DEFINE_KB_LABEL gettext("Define Keyboard Shortcuts")
+#define KBSC_INFO_LABEL gettext("To set a custom shortcut:\nClick in the appropriate box and press CONTROL(and optionally SHIFT ) plus your custom key.\nJust press 'Delete' to remove the shortcut\nClick 'Apply' to keep changes or 'Cancel' to discard any changes.")
+#define DELETE_LINE_LABEL "Delete Current Line"
+#define DELETE_TO_EOL_LABEL "Delete To End Of Line"
+#define DELETE_TO_BOL_LABEL "Delete To Beginning Of Line"
+#define SELECT_WORD_LABEL "Select Word Under Cursor"
+#define DELETE_WORD_LABEL "Delete Word Under Cursor"
+#define DUPLICATE_LINE_LABEL "Duplicate Current Line"
+#define SELECT_LINE_LABEL "Select Current Line"
+#define LINE_UP_LABEL "Move Current Line Up"
+#define LINE_DOWN_LABEL "Move Current Line Down"
+#define SELECT_TO_EOL_LABEL "Select From Cursor To End Of Line"
+#define SELECT_TO_BOL_LABEL "Select From Beginning Of Line To Cursor"
+#define SELECTION_UP_LABEL "Move Selection Up"
+#define SELECTION_DOWN_LABEL "Move Selection Down"
+#define SHOW_COMPLETION_LABEL "Show Completion"
 
 //tooltips
 #define NEW_TT_LABEL gettext("New File")
@@ -194,14 +232,12 @@
 #define SEPERATOR_TT_LABEL gettext("Separator")
 #define EXPANDER_TT_LABEL gettext("Expander")
 
-
-
 //tools
 #define TOOLS_PLACEHOLDER_LABEL gettext("PLACEHOLDERS:\n%t - Currently selected text. Passed to command as $KKEDIT_SELECTION\n%f - Filepath of the current document. Passed to command as $KKEDIT_CURRENTFILE\n%d - Directory of the current document or $HOME. Passed to command as $KKEDIT_CURRENTDIR\n%i - The location of the globally installed tools. Passed to command as $KKEDIT_DATADIR\n%h - Tempory file for displaying html in doc viewer. Passed to command as $KKEDIT_HTMLFILE\n%l - Highlihting language. Passed to command as $KKEDIT_SOURCE_LANG")
 #define TOOLS_EDIT_LABEL gettext("Edit External Tools")
 #define TOOLS_NAME_LABEL gettext("Tool Name:\t")
 #define TOOLS_COMMAND_LABEL gettext("Command: \t")
-#define TOOLS_SHORTCUT_LABEL gettext("Shortcut:\t\t")
+#define TOOLS_SHORT_LABEL gettext("Shortcut:\t\t")
 #define TOOLS_COMMENT_LABEL gettext("Comment:  \t")
 #define TOOLS_IN_TERM_LABEL gettext("Run Tool In Terminal")
 #define TOOLS_IN_POPUP_LABEL gettext("Show Tool In Pop-Up Menu")
@@ -216,6 +252,48 @@
 #define TOOLS_REPLACE_CONTENTS_LABEL gettext("Replace All Contents")
 #define TOOLS_VIEW_OP_LABEL gettext("View Output")
 #define TOOLS_DELETE_LABEL gettext("Delete")
+
+//prefs dialog
+#define PREFS_CUSTOMIZE_LABEL gettext("<b>Customize Tool Bar</b>")
+#define PREFS_AUTO_INDENT_LABEL gettext("Auto Indent Lines")
+#define PREFS_SHOWLINE_NUMBERS_LABEL gettext("Show Line Numbers")
+#define PREFS_WRAP_LINES_LABEL gettext("Wrap Lines")
+#define PREFS_HIGHLIGHT_LINE_LABEL gettext("Highlight Current Line")
+#define PREFS_NO_SYNTAX_LABEL gettext("No Syntax Highlighting")
+#define PREFS_USE_SINGLE_LABEL gettext("Use Single Instance")
+#define PREFS_AUTO_MENU_SAVE_LABEL gettext("Auto Save/Restore Session")
+#define PREFS_RESTORE_SESSION_LABEL gettext("Restore Session Bookmarks")
+#define PREFS_NO_DUPLICATE_LABEL gettext("Don't Open Duplicate File")
+#define PREFS_NO_WARN_LABEL gettext("Don't Warn On File Change")
+#define PREFS_READ_LINK_LABEL gettext("Read Link Before Opening File")
+#define PREFS_AUTO_COMPLETE_LABEL gettext("Auto Show Completions")
+#define PREFS_GEN_APPEARANCE_LABEL gettext("General Appearance")
+#define PREFS_TAB_WIDTH_LABEL gettext("Tab width:")
+#define PREFS_THEME_LABEL gettext("Theme:")
+#define PREFS_FONT_LABEL gettext("Font:")
+#define PREFS_BM_COLOUR_LABEL gettext("Bookmark Highlight Colour:")
+#define PREFS_COMPLETION_SIZE_LABEL gettext("Completion Minimum Word Size:")
+#define PREFS_FUNC_TYPE_ALPHA_LABEL gettext("Display functions etc in menu by type and alphabetically")
+#define PREFS_FUNC_TYPE_FILE_LABEL gettext("Display functions etc in menu by type and file position")
+#define PREFS_FUNC_FILE_LABEL gettext("Display functions etc in menu by file position")
+#define PREFS_FUNC_ALPHA_LABEL gettext("Display functions etc in menu alphabetically")
+#define PREFS_FUNC_CAT_LABEL gettext("Display functions etc in menu in categorised format")
+#define PREFS_CUSTOM_KBSC_LABEL gettext("Customize Keyboard Shortcuts")
+#define PREFS_TEXT_STYLE_LABEL gettext("Text Style")
+#define PREFS_TAG_SEARCH_DEPTH_LABEL gettext("Tag File Search Depth:")
+#define PREFS_TERM_COMMAND_LABEL gettext("Terminal Command:")
+#define PREFS_AS_ROOT_COMMAND_LABEL gettext("Run As Root Command:")
+#define PREFS_BROWSER_LABEL gettext("Default Browser:")
+#define PREFS_MAX_FIND_HISTORY_LABEL gettext("Max Find/Replace History:")
+#define PREFS_MAX_CHARS_IN_TAB_LABEL gettext("Max Characters In Tab:")
+#define PREFS_MAX_CHARS_IN_FUNC_DEFS_LABEL gettext("Max Characters In Function Defs:")
+#define PREFS_MAX_CHARS_IN_BMS_LABEL gettext("Max Characters In Bookmarks:")
+#define PREFS_UPDATE_CHECK_LABEL gettext("Check For Updates")
+#define PREFS_GLOBAL_PLUG_MENU_LABEL gettext("Use Global Plugins Menu( Requires Restart )")
+#define PREFS_ADMIN_LABEL gettext("Administration")
+#define PREFS_BE_KIND_LABEL gettext("<b>Be Kind To Poor Programmers</b>")
+#define PREFS_I_DONATED_LABEL gettext("I have donated")
+#define PREFS_KARMA_LABEL gettext("I have really donated some some money to the author.\nMy conscience is clear and my Karma is squeaky clean :)")
 
 //docviewer
 #define HOME_LABEL gettext("_Home")

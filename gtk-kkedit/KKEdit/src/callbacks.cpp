@@ -236,7 +236,7 @@ int show_question(char* filename)
 	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
 
 #ifdef _USEGTK3_
-	gtk_dialog_add_buttons((GtkDialog*)dialog,SAVE_LABEL,GTK_RESPONSE_YES,CANCEL_LABEL,GTK_RESPONSE_CANCEL,NO_LABEL,GTK_RESPONSE_NO,NULL);
+	gtk_dialog_add_buttons((GtkDialog*)dialog,MENU_SAVE_LABEL,GTK_RESPONSE_YES,CANCEL_LABEL,GTK_RESPONSE_CANCEL,NO_LABEL,GTK_RESPONSE_NO,NULL);
 #else
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_SAVE,GTK_RESPONSE_YES,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_NO,GTK_RESPONSE_NO,NULL);
 #endif
@@ -1234,7 +1234,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 						}
 				}
 //add files to tab
-			menuitem=createNewImageMenuItem(GTK_STOCK_OPEN,OPEN_LABEL);
+			menuitem=createNewImageMenuItem(GTK_STOCK_OPEN,MENU_OPEN_LABEL);
 			gtk_menu_shell_append(GTK_MENU_SHELL(tabMenu),menuitem);
 
 			submenu=gtk_menu_new();
@@ -1559,8 +1559,12 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 			commentarg=(char*)gtk_entry_get_text((GtkEntry*)commentWidget);
 			menuname=(char*)gtk_entry_get_text((GtkEntry*)toolNameWidget);
 			rootarg=(int)gtk_toggle_button_get_active((GtkToggleButton*)runAsRootWidget);
-			keycode=(int)gdk_keyval_from_name(gtk_entry_get_text((GtkEntry*)keyWidget));
+			if(gtk_entry_get_text_length((GtkEntry*)keyWidget)==0)
+				keycode=GDK_KEY_VoidSymbol;
+			else
+				keycode=(int)gdk_keyval_from_name(gtk_entry_get_text((GtkEntry*)keyWidget));
 			usebar=(int)gtk_toggle_button_get_active((GtkToggleButton*)useBarWidget);
+		
 			saveVarsToFile(toolpath,tool_vars);
 
 			gtk_widget_hide((GtkWidget*)data);

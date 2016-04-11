@@ -1095,7 +1095,7 @@ void buildToolsList(void)
 							alwayspopup=0;
 							rootarg=0;
 							clearview=0;
-							keycode=0;
+							keycode=GDK_KEY_VoidSymbol;
 							menuname=NULL;
 							commandarg=NULL;
 							commentarg=NULL;

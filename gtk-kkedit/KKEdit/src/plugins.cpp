@@ -241,7 +241,7 @@ VISIBLE void doPlugPrefs(GtkWidget* widget,gpointer data)
 
 //plugin prefs
 	hbox=createNewBox(NEWHBOX,false,4);
-	plugPrefsButton=createNewStockButton(GTK_STOCK_PREFERENCES,PREFERENCES_LABEL);
+	plugPrefsButton=createNewStockButton(GTK_STOCK_PREFERENCES,MENU_PREFERENCES_LABEL);
 	gtk_box_pack_start((GtkBox*)hbox,plugPrefsButton,false,false,4);
 	g_signal_connect(G_OBJECT(plugPrefsButton),"clicked",G_CALLBACK(setPlugPrefs),(void*)1);
 
