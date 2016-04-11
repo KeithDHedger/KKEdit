@@ -6,3 +6,4 @@ interm	0
 inpopup	1
 alwayspopup	0
 comment Attempt to open the manpage for the selected text.
+shortcutkey	16777215

@@ -1293,9 +1293,9 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 				replaceAll=gtk_toggle_button_get_active((GtkToggleButton*)widget);
 				button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACE);
 				if(replaceAll==false)
-					gtk_button_set_label((GtkButton*)button,gettext("Replace"));
+					gtk_button_set_label((GtkButton*)button,REPLACE_LABEL);
 				else
-					gtk_button_set_label((GtkButton*)button,gettext("Replace All"));
+					gtk_button_set_label((GtkButton*)button,REPLACE_ALL_MNEMONIC);
 				break;
 			case 4:
 				findInAllFiles=gtk_toggle_button_get_active((GtkToggleButton*)widget);

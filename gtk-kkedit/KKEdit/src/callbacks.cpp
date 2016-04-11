@@ -127,7 +127,7 @@ VISIBLE void toggleBookmark(GtkWidget* widget,GtkTextIter* titer)
 			bookmarkdata=(bookMarksNew*)malloc(sizeof(bookMarksNew));
 			newBookMarksList=g_list_append(newBookMarksList,(gpointer)bookmarkdata);
 			bookmarkdata->page=page;
-			asprintf(&bookmarkdata->markName,"%s-%i",gettext("Bookmark"),bmMarkNumber++);
+			asprintf(&bookmarkdata->markName,"%s-%i",BOOKMARK_LABEL,bmMarkNumber++);
 			bookmarkdata->mark=gtk_source_buffer_create_source_mark(page->buffer,bookmarkdata->markName,mark_type,iter);
 //preview text for menu
 			line=gtk_text_iter_get_line(iter);
@@ -190,13 +190,8 @@ int yesNo(char* question,char* file)
 
 	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,"%s %s",question,file);
 
-//#ifdef _USEGTK3_
-//	gtk_dialog_add_buttons((GtkDialog*)dialog,gettext("Yes",GTK_RESPONSE_YES,gettext("No",GTK_RESPONSE_CANCEL,NULL);
-//#else
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_YES,GTK_RESPONSE_YES,GTK_STOCK_NO,GTK_RESPONSE_CANCEL,NULL);
-//#endif
 	gtk_window_set_title(GTK_WINDOW(dialog),gettext("What Do You Want To Do?"));
-
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 
@@ -996,44 +991,26 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(copyToClipboard),(void*)defineText);
 							destroyData(fdata);
 
-							//image=gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_MENU);
-							//menuitem=gtk_image_menu_item_new_with_label(gettext("Go To Definition"));
-							menuitem=createNewImageMenuItem(GTK_STOCK_DIALOG_QUESTION,gettext("Go To Definition"));
-							//gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+							menuitem=createNewImageMenuItem(GTK_STOCK_DIALOG_QUESTION,GOTO_DEFINE_LABEL);
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(goToDefinition),NULL);
 						}
 
 					if(gotDoxygen==0)
 						{
-							//menuitem=gtk_image_menu_item_new_with_label(gettext("Find In Documentation"));
-							menuitem=createNewImageMenuItem(GTK_STOCK_FIND,gettext("Find In Documentation"));
-							//image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
-							//gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+							menuitem=createNewImageMenuItem(GTK_STOCK_FIND,FIND_IN_DOCS_LABEL);
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doxyDocs),NULL);
 						}
-					//menuitem=gtk_image_menu_item_new_with_label(gettext("Search In Qt5 Docs"));
-					menuitem=createNewImageMenuItem(GTK_STOCK_FIND,gettext("Search In Qt5 Docs"));
-
-					//image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
-					//gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+					menuitem=createNewImageMenuItem(GTK_STOCK_FIND,FIND_IN_QTAPI_LABEL);
 					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(searchQT5Docs),NULL);
 
-					//menuitem=gtk_image_menu_item_new_with_label(gettext("Search In Gtk Docs"));
-					menuitem=createNewImageMenuItem(GTK_STOCK_FIND,gettext("Search In Gtk Docs"));
-
-					//image=gtk_image_new_from_stock(GTK_STOCK_FIND,GTK_ICON_SIZE_MENU);
-					//gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+					menuitem=createNewImageMenuItem(GTK_STOCK_FIND,FIND_IN_GTKAPI_LABEL);
 					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(searchGtkDocs),NULL);
 
-					//menuitem=gtk_image_menu_item_new_with_label(gettext("Add To Custom Word List"));
-					menuitem=createNewImageMenuItem(GTK_STOCK_EDIT,gettext("Add To Custom Word List"));
-
-				//	image=gtk_image_new_from_stock(GTK_STOCK_EDIT,GTK_ICON_SIZE_MENU);
-				//	gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+					menuitem=createNewImageMenuItem(GTK_STOCK_EDIT,CUSTOM_WORD_CONTEXT_LABEL);
 					gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(addtoCustomWordList),(void*)page);
 
@@ -1041,11 +1018,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 //spell check
 					if((spellChecker!=NULL) &&(aspellConfig!=NULL))
 						{
-							//menuitem=gtk_image_menu_item_new_with_label(gettext("Check Spellling"));
-							menuitem=createNewImageMenuItem(GTK_STOCK_SPELL_CHECK,gettext("Check Spellling"));
-
-							//image=gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK,GTK_ICON_SIZE_MENU);
-							//gtk_image_menu_item_set_image((GtkImageMenuItem *)menuitem,image);
+							menuitem=createNewImageMenuItem(GTK_STOCK_SPELL_CHECK,CHECK_SPELLING_CONTEXT_LABEL);
 							gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(checkWord),NULL);
 						}
@@ -1588,7 +1561,6 @@ void setToolOptions(GtkWidget* widget,gpointer data)
 			rootarg=(int)gtk_toggle_button_get_active((GtkToggleButton*)runAsRootWidget);
 			keycode=(int)gdk_keyval_from_name(gtk_entry_get_text((GtkEntry*)keyWidget));
 			usebar=(int)gtk_toggle_button_get_active((GtkToggleButton*)useBarWidget);
-
 			saveVarsToFile(toolpath,tool_vars);
 
 			gtk_widget_hide((GtkWidget*)data);

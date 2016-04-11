@@ -1389,6 +1389,7 @@ GtkToolItem* createNewToolItem(const char* stock,const char* label)
 	button=gtk_tool_button_new(image,label);
 #else
 	button=gtk_tool_button_new_from_stock(stock);
+	gtk_tool_button_set_label((GtkToolButton*)button,label);
 #endif
 
 	return(button);
