@@ -74,6 +74,7 @@
 #define GTK_STOCK_YES gettext("_Yes")
 #define GTK_STOCK_NO gettext("_No")
 #define GTK_STOCK_CANCEL gettext("_Cancel")
+#define GTK_STOCK_OPEN_LABEL gettext("_Open")
 #define GTK_STOCK_SELECT_COLOR gettext("Select Colour")
 #define GTK_STOCK_APPLY gettext("_Apply")
 #define GTK_STOCK_EDIT gettext("_Edit")
