@@ -257,11 +257,13 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 	const char	*path;
 	const char	*lang;
 
-	if(showStatus==false)
-		return;
 	page=getPageStructPtr(-1);
 	if(page==NULL)
 		return;
+
+	if(showStatus==false)
+		return;
+
 	setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 
 //
@@ -287,11 +289,6 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 
 //	if(pagecheck!=page)
 //		return;
-
-	ERRDATA
-
-//	page->regexList=NULL;
-//	page->regexMatchNumber=-1;
 
 	path=page->filePath;
 	lang=page->lang;

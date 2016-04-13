@@ -750,6 +750,16 @@ gboolean clickInView(GtkWidget* widget,gpointer data)
 	ERRDATA return(false);
 }
 
+gboolean resetRegexMark (GtkWidget *widget,GdkEvent *event,pageStruct* page)
+{
+	if(page==NULL)
+		return(false);
+
+	page->regexList=NULL;
+	page->regexMatchNumber=-1;
+	return(false);
+}
+
 pageStruct* makeNewPage(void)
 {
 	ERRDATA
@@ -829,6 +839,7 @@ pageStruct* makeNewPage(void)
 	add_source_mark_pixbufs(GTK_SOURCE_VIEW(page->view));
 //status bar
 	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(updateStatusBar),NULL);
+	g_signal_connect((GtkWidget*)page->view,"button-release-event",G_CALLBACK(resetRegexMark),(void*)page);
 	ERRDATA
 	setPageSensitive();
 	ERRDATA return(page);

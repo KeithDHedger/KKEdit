@@ -34,6 +34,8 @@
 #define FINDNEXT		200
 #define FINDPREV		300
 
+extern bool amBusy;
+
 #if _DEBUGLEVEL_ == DBG0
 #define ERRDATA
 #else
@@ -441,6 +443,11 @@ extern const char*		localeLang;
 //notebook
 extern int				openInThisTab;
 
+//general app
+#define MAXBUSY 100
+extern int				busyCnt;
+extern bool				busyFlag[MAXBUSY];
+
 void plugRunFunction(gpointer data,gpointer funcname);
 pageStruct* getPageStructPtr(int pagenum);
 void getMimeType(char* filepath,void* ptr);
@@ -461,8 +468,8 @@ void killBarberPole(void);
 void debugFree(char** ptr);
 char* truncateWithElipses(char* str,unsigned int maxlen);
 char* truncateTabNameWithElipses(char* str,unsigned int maxlen);
-//void doBusy(bool busy,pageStruct* page);
-//bool doBusy(int busy,int what);
+
+bool doBusy(int what);
 
 void catchSignal(int signal);
 void freeAndNull(char** ptr);

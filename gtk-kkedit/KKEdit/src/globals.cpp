@@ -296,6 +296,11 @@ const char*		localeLang;
 //notebook
 int				openInThisTab=-1;
 
+//general app
+#define MAXBUSY 100
+int				busyCnt=0;
+bool			busyFlag[MAXBUSY]={false,};
+
 HistoryClass*	globalHistory;
 StringSlice*	globalSlice;
 
@@ -1244,59 +1249,27 @@ VISIBLE void debugFree(char** ptr)
 	freeAndNull(ptr);
 }
 
-//int busyCnt=0;
-//void doBusy(bool busy,pageStruct* page)
-bool doBusy(int busy,int what)
+bool doBusy(int what)
 {
-#if 0
-	if(what==QUERYBUSY)
-		return(busyFlag[busyCnt]);
-
-	if(what==PUSHBUSY)
+	switch(what)
 		{
-			busyCnt++;
-			busyFlag[busyCnt]=busy;
-			return(busyFlag[busyCnt]);
-		}
+			case PUSHBUSY:
+				busyCnt++;
+				if(busyCnt>MAXBUSY)
+					busyCnt=MAXBUSY;
+				busyFlag[busyCnt]=true;
+				break;
 
-	if(what==POPBUSY)
-		{
-			busyCnt--;
-			return(busyFlag[busyCnt]);
-		}
+			case POPBUSY:
+				busyFlag[busyCnt]=false;
+				busyCnt--;
+				if(busyCnt<0)
+					busyCnt=0;
+				break;
 
-	return(false);
-//
-//	if(busy==ISBUSY)
-//		busyFlag[busyCnt]=true;
-//	if(busy==NOTBUSY)
-//		busyFlag[busyCnt]=false;
-
-
-#if 0
-	ERRDATA
-	if(page==NULL)
-		{
-			ERRDATA return;
-		}
-
-	if(busy==true)
-		{
-			gtk_source_completion_words_unregister(docWordsProv,(GtkTextBuffer*)page->buffer);
-			gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
-			busyFlag=true;
-		}
-	else
-		{
-			gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
-			if(autoShowComps==true)
-				gtk_source_completion_words_register(docWordsProv,(GtkTextBuffer*)page->buffer);
-			busyFlag=false;
-		}
-	ERRDATA
-#endif
-#endif
-return(false);
+		}	
+		//printf(">>	busyFlag[busyCnt]=%i,busyCnt=%i<<\n",busyFlag[busyCnt],busyCnt);
+	return(busyFlag[busyCnt]);
 }
 
 int			errLine;
@@ -1553,7 +1526,6 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 	char		*newlabel=NULL;
 	int			offset=0;
 	bool		hasselection;
-	GtkTextIter	start_find,end_find;
 
 	if(page==NULL)
 		return;

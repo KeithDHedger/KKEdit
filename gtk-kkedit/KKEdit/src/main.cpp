@@ -107,6 +107,10 @@ void init(void)
 
 	openInThisTab=-1;
 
+	busyCnt=0;
+	for(int j=0;j<MAXBUSY;j++)
+		busyFlag[j]=false;
+
 //runtime deps
 	exitstatus=system("which manpageeditor 2>&1 >/dev/null");
 	gotManEditor=WEXITSTATUS(exitstatus);

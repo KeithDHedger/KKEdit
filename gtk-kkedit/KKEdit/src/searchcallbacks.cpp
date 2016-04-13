@@ -646,6 +646,7 @@ void regexFind(int dowhat)
 	int						testformatch;
 	GtkTextIter				hastart,haend;
 
+
 	page=getPageStructPtr(currentFindPage);
 	if(page==NULL)
 		{
@@ -656,7 +657,6 @@ void regexFind(int dowhat)
 			ERRDATA return;
 		}
 
-	
 	gotselection=gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&startiter,&enditer);
 
 	if(gotselection==false ||((fromregexsinglereplace==true) &&(gotselection==true)))
@@ -825,7 +825,7 @@ void regexFind(int dowhat)
 								dofindprev=true;
 								gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
 								gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&enditer);
-								scrollToIterInPane(page,&startiter);
+								scrollToIterInPane(page,&enditer);
 							}
 						else if(wrapSearch==true)
 							{
@@ -1210,6 +1210,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	GtkWidget*	drop;
 	GSList*		list;
 
+//doBusy(PUSHBUSY);
 	if(response_id!=REPLACE)
 		{
 			drop=findDropBox;
@@ -1269,6 +1270,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 	if(itemsReplaced>-1)
 		showOnStatus(gtk_entry_get_text((GtkEntry*)findBox),gtk_entry_get_text((GtkEntry*)replaceBox));
+//doBusy(POPBUSY);
 }
 
 VISIBLE void find(GtkWidget* widget,gpointer data)
