@@ -1445,11 +1445,17 @@ void setPrefs(GtkWidget* widget,gpointer data)
 
 			if(highlightColour!=NULL)
 				{
-					GdkColor	colour;
 					ERRDATA debugFree(&highlightColour);
-					//TODO//
+#ifdef _USEGTK3_
+					GdkRGBA		colour;
+				
+					gtk_color_chooser_get_rgba((GtkColorChooser*)bmHighlightBox,&colour);
+					highlightColour=gdk_rgba_to_string(&colour);
+#else
+					GdkColor	colour;
 					gtk_color_button_get_color((GtkColorButton*)bmHighlightBox,&colour);
 					highlightColour=gdk_color_to_string(&colour);
+#endif
 				}
 
 			if(terminalCommand!=NULL)

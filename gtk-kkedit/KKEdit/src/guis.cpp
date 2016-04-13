@@ -910,7 +910,9 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 {
 	ERRDATA
 	GtkWidget*	widg;
+#ifndef _USEGTK3_
 	GtkWidget*	image;
+#endif
 
 	switch(setimage)
 		{
@@ -1131,9 +1133,15 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	makePrefBox(true,false);
 	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(PREFS_BM_COLOUR_LABEL));
 
+#ifdef _USEGTK3_
+	GdkRGBA color;
+	gdk_rgba_parse(&color,(const gchar *)highlightColour);
+	bmHighlightBox=gtk_color_button_new_with_rgba(&color);
+#else
 	GdkColor color;
 	gdk_color_parse((const gchar *)highlightColour,&color);
 	bmHighlightBox=gtk_color_button_new_with_color(&color);
+#endif
 	gtk_box_pack_start((GtkBox*)prefHBox2,bmHighlightBox,false,true,0);
 	gtk_box_pack_start((GtkBox*)pagevbox,prefHBox,false,false,0);
 
@@ -1749,7 +1757,9 @@ void buildFindReplace(void)
 	ERRDATA
 	GtkWidget*	content_area;
 	GtkWidget*	replace;
+#ifndef _USEGTK3_
 	GtkWidget*	image;
+#endif
 	GtkWidget*	label;
 	GtkWidget*	vbox;
 	GtkWidget*	hbox;
@@ -1836,9 +1846,10 @@ void buildFindReplace(void)
 	gtk_box_pack_start(GTK_BOX(content_area),vbox,true,true,0);
 
 	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACE);
+#ifndef _USEGTK3_
 	image=gtk_image_new_from_icon_name(GTK_STOCK_FIND_AND_REPLACE,GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image((GtkButton*)replace,image);
-	
+#endif	
 	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACE);
 	if(replaceAll==true)
 		gtk_button_set_label((GtkButton*)replace,FIND_REPLACE_ALL_MNEMONIC);

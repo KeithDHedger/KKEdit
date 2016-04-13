@@ -186,7 +186,7 @@ void setFilePrefs(pageStruct* page)
 {
 	ERRDATA
 	PangoFontDescription*	font_desc;
-	GdkColor				color;
+//	GdkColor				color;
 	GtkTextAttributes*		attr;
 
 	ERRDATA
@@ -194,10 +194,25 @@ void setFilePrefs(pageStruct* page)
 	gtk_source_view_set_show_line_numbers(page->view,lineNumbers);
 	gtk_source_view_set_highlight_current_line(page->view,highLight);
 	gtk_source_view_set_show_line_marks(page->view,showBMBar);
-	gdk_color_parse(highlightColour,&color);
-#ifndef _USEGTK3_
-	gtk_source_view_set_mark_category_background(page->view,MARK_TYPE_1,&color);
-#endif
+
+//#ifdef _USEGTK3_
+//	GdkRGBA		color
+//	gdk_rgba_parse(&color,(const gchar *)highlightColour);
+//	GtkSourceMarkAttributes *attr=gtk_source_mark_attributes_new();
+//
+////	gtk_source_mark_attributes_set_pixbuf(attr,pbuf);
+////	gtk_source_mark_attributes_set_background(attr,&color);
+//	gtk_source_view_set_mark_attributes(view,MARK_TYPE_1,attr,1);
+//
+//#else
+//	GdkColor	color;
+//	gdk_color_parse(highlightColour,&color);
+//	gtk_source_view_set_mark_category_background(page->view,MARK_TYPE_1,&color);
+//#endif
+//
+//#ifndef _USEGTK3_
+//#endif
+
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	if(lineWrap==true)
 		{
@@ -221,7 +236,11 @@ void setFilePrefs(pageStruct* page)
 	pango_font_description_free(font_desc);
 
 	attr=gtk_text_view_get_default_attributes((GtkTextView*)page->view);
+#ifdef _USEGTK3_
+	g_object_set((gpointer)page->highlightTag,"background",gdk_rgba_to_string((const GdkRGBA*)&attr->appearance.fg_color),"foreground",gdk_rgba_to_string((const GdkRGBA*)&attr->appearance.bg_color),NULL);
+#else
 	g_object_set((gpointer)page->highlightTag,"background",gdk_color_to_string((const GdkColor*)&attr->appearance.fg_color),"foreground",gdk_color_to_string((const GdkColor*)&attr->appearance.bg_color),NULL);
+#endif
 	gtk_text_attributes_unref(attr);
 
 	if(noSyntax==true)
@@ -229,7 +248,6 @@ void setFilePrefs(pageStruct* page)
 	else
 		gtk_source_buffer_set_highlight_syntax(page->buffer,true);
 
-//TODO//
 #ifndef _USEGTK3_
 	if(autoShowComps==true)
 		gtk_source_completion_unblock_interactive(page->completion);
@@ -793,7 +811,11 @@ pageStruct* makeNewPage(void)
 	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
 
 	attr=gtk_text_view_get_default_attributes((GtkTextView*)page->view);
+#ifdef _USEGTK3_
+	page->highlightTag=gtk_text_buffer_create_tag((GtkTextBuffer*)page->buffer,"highlighttag","background",gdk_rgba_to_string((const GdkRGBA*)&attr->appearance.fg_color),"foreground",gdk_rgba_to_string((const GdkRGBA*)&attr->appearance.bg_color),NULL);
+#else
 	page->highlightTag=gtk_text_buffer_create_tag((GtkTextBuffer*)page->buffer,"highlighttag","background",gdk_color_to_string((const GdkColor*)&attr->appearance.fg_color),"foreground",gdk_color_to_string((const GdkColor*)&attr->appearance.bg_color),NULL);
+#endif
 	gtk_text_attributes_unref(attr);
 
 	gtk_container_add(GTK_CONTAINER(page->pageWindow),(GtkWidget*)page->view);

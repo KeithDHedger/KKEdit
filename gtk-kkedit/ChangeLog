@@ -1,4 +1,5 @@
 0.3.0
+Done gtk3 colur select buttons etc.
 Fixed gtk3 signals being mucked about with.
 Fixed Regex search again!
 Fixed empty shortcut key in external tools.
