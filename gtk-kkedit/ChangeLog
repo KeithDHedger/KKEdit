@@ -1,4 +1,5 @@
 0.3.0
+Fixed Regex search again!
 Fixed empty shortcut key in external tools.
 More gtk3 widget label nonsense.
 Holding 'SHIFT' key when selecting 'Select Tab' from menu now moves the selected tab next to the current tab and selects it.

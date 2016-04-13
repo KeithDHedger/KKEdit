@@ -200,10 +200,10 @@ int showLineEntry(void)
 	GtkWidget*	entrybox;
 	char		line[48];
 
-	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,gettext("Enter Line Number"));
+	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,DIALOG_ENTER_LINE_LABEL);
 
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OK,GTK_RESPONSE_YES,NULL);
-	gtk_window_set_title(GTK_WINDOW(dialog),gettext("Go To Line"));
+	gtk_window_set_title(GTK_WINDOW(dialog),DIALOG_GOTO_LINE_LABEL);
 
 	content_area=gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 	entrybox=gtk_entry_new();
@@ -398,7 +398,7 @@ bool readFile(char *name)
 	file=fopen(name,"rb");
 	if(!file)
 		{
-			fprintf(stderr,gettext("Unable to open file %s"),name);
+			fprintf(stderr,"Unable to open file %s",name);
 			ERRDATA return(false);
 		}
 
@@ -411,7 +411,7 @@ bool readFile(char *name)
 	filebuffer=(char*)malloc(fileLen+1);
 	if(!filebuffer)
 		{
-			fprintf(stderr,gettext("Memory error!"));
+			fprintf(stderr,"Memory error!");
 			fclose(file);
 			ERRDATA return(false);
 		}

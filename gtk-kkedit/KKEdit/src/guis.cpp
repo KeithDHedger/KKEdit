@@ -34,7 +34,7 @@ GtkWidget*		pagevbox;
 
 GtkWidget*		entries[NUMSHORTCUTS];
 
-const char* 	shortcuttext[NUMSHORTCUTS]={DELETE_LINE_LABEL,DELETE_TO_EOL_LABEL,DELETE_TO_BOL_LABEL,SELECT_WORD_LABEL,DELETE_WORD_LABEL,DUPLICATE_LINE_LABEL,SELECT_LINE_LABEL,LINE_UP_LABEL,LINE_DOWN_LABEL,SELECT_TO_EOL_LABEL,SELECT_TO_BOL_LABEL,SELECTION_UP_LABEL,SELECTION_DOWN_LABEL,SHOW_COMPLETION_LABEL};
+const char		*shortcuttext[NUMSHORTCUTS]={DELETE_LINE_LABEL,DELETE_TO_EOL_LABEL,DELETE_TO_BOL_LABEL,SELECT_WORD_LABEL,DELETE_WORD_LABEL,DUPLICATE_LINE_LABEL,SELECT_LINE_LABEL,LINE_UP_LABEL,LINE_DOWN_LABEL,SELECT_TO_EOL_LABEL,SELECT_TO_BOL_LABEL,SELECTION_UP_LABEL,SELECTION_DOWN_LABEL,SHOW_COMPLETION_LABEL};
 
 GtkWidget*	prefsWidgets[MAXPREFSWIDGETS];
 GObject*	prefsIntWidgets[MAXPREFSINTWIDGETS];
@@ -1533,57 +1533,57 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),gtk_separator_menu_item_new());
 
 //navigation menu
-	navMenu=gtk_menu_item_new_with_label(gettext("_Navigation"));
+	navMenu=gtk_menu_item_new_with_label(MENU_NAV_MENU_LABEL);
 	gtk_menu_item_set_use_underline((GtkMenuItem*)navMenu,true);
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(navMenu),menu);
 
 //goto define
-	gotoDefMenu=makeMenuItem(GTK_STOCK_DIALOG_QUESTION,menu,(void*)goToDefinition,'D',GOTODEFMENUNAME,IMAGEMENU,gettext("Go To _Definition"),NULL,false);
+	gotoDefMenu=makeMenuItem(GTK_STOCK_DIALOG_QUESTION,menu,(void*)goToDefinition,'D',GOTODEFMENUNAME,IMAGEMENU,MENU_GOTO_DEFINE_LABEL,NULL,false);
 //open include
-	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)findFile,'I',OPENINCLUDEMENUNAME,IMAGEMENU,gettext("Open Include File"),NULL,false);
+	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)findFile,'I',OPENINCLUDEMENUNAME,IMAGEMENU,MENU_OPEN_INCLUDE_LABEL,NULL,false);
 //goto line number
-	menuitem=makeMenuItem(GTK_STOCK_GO_DOWN,menu,(void*)jumpToLine,0,GOTOLINEMENUNAME,IMAGEMENU,GOTO_LINE_LABEL,NULL,false);
+	menuitem=makeMenuItem(GTK_STOCK_GO_DOWN,menu,(void*)jumpToLine,0,GOTOLINEMENUNAME,IMAGEMENU,MENU_GOTO_LINE_LABEL,NULL,false);
 //find define
-	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)functionSearch,0,SEARCHFORDEFMENUNAME,IMAGEMENU,gettext("Search For Define"),NULL,false);
+	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)functionSearch,0,SEARCHFORDEFMENUNAME,IMAGEMENU,MENU_FIND_DEFINE_LABEL,NULL,false);
 //find gtkdoc
-	searchInGtkDocsMenu=makeMenuItem(GTK_STOCK_FIND,menu,(void*)searchGtkDocs,0,SEARCHGTKMENUNAME,IMAGEMENU,gettext("Search In Gtk Docs"),NULL,false);
+	searchInGtkDocsMenu=makeMenuItem(GTK_STOCK_FIND,menu,(void*)searchGtkDocs,0,SEARCHGTKMENUNAME,IMAGEMENU,MENU_FIND_IN_GTKAPI_LABEL,NULL,false);
 //find qt5
-	searchInQTDocsMenu=makeMenuItem(GTK_STOCK_FIND,menu,(void*)searchQT5Docs,0,SEARCHQT5MENUNAME,IMAGEMENU,gettext("Search In Qt5 Docs"),NULL,false);
+	searchInQTDocsMenu=makeMenuItem(GTK_STOCK_FIND,menu,(void*)searchQT5Docs,0,SEARCHQT5MENUNAME,IMAGEMENU,MENU_FIND_IN_QTAPI_LABEL,NULL,false);
 
 //goto doxy docs
 	if(gotDoxygen==0)
-		searchInDocsMenu=makeMenuItem(GTK_STOCK_FIND,menu,(void*)doxyDocs,0,SEARCHDOXYMENUNAME,IMAGEMENU,gettext("Find In Documentation"),NULL,false);
+		searchInDocsMenu=makeMenuItem(GTK_STOCK_FIND,menu,(void*)doxyDocs,0,SEARCHDOXYMENUNAME,IMAGEMENU,MENU_FIND_IN_DOCS_LABEL,NULL,false);
 
 //go back
-	goBackMenu=makeMenuItem(GTK_STOCK_GO_BACK,menu,(void*)goBack,0,GOBACKMENUNAME,STOCKMENU,GO_BACK_LABEL,NULL,false);
+	goBackMenu=makeMenuItem(GTK_STOCK_GO_BACK,menu,(void*)goBack,0,GOBACKMENUNAME,STOCKMENU,MENU_GO_BACK_LABEL,NULL,false);
 
 //function menu
-	funcMenu=gtk_menu_item_new_with_label(gettext("Fun_ctions"));
+	funcMenu=gtk_menu_item_new_with_label(MENU_FUNC_MENU_LABEL);
 	gtk_menu_item_set_use_underline((GtkMenuItem*)funcMenu,true);
 
 //newbookmarks
-	bookMarkMenu=gtk_menu_item_new_with_label(gettext("_Bookmarks"));
+	bookMarkMenu=gtk_menu_item_new_with_label(MENU_BM_MENU_LABEL);
 	gtk_menu_item_set_use_underline((GtkMenuItem*)bookMarkMenu,true);
 	rebuildBookMarkMenu();
 
 //external tools
-	toolsMenu=gtk_menu_item_new_with_label(gettext("_Tools"));
+	toolsMenu=gtk_menu_item_new_with_label(MENU_TOOLS_MENU_LABEL);
 	gtk_menu_item_set_use_underline((GtkMenuItem*)toolsMenu,true);
 	buildTools();
 
 //help
-	helpMenu=gtk_menu_item_new_with_label(gettext("_Help"));
+	helpMenu=gtk_menu_item_new_with_label(MENU_HELP_MENU_LABEL);
 	gtk_menu_item_set_use_underline((GtkMenuItem*)helpMenu,true);
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(helpMenu),menu);
 
 //about
-	menuitem=makeMenuItem(GTK_STOCK_ABOUT,menu,(void*)doAbout,0,ABOUTMENUNAME,STOCKMENU,ABOUT_LABEL,NULL,false);
+	menuitem=makeMenuItem(GTK_STOCK_ABOUT,menu,(void*)doAbout,0,ABOUTMENUNAME,STOCKMENU,MENU_ABOUT_LABEL,NULL,false);
 //help
-	menuitem=makeMenuItem(GTK_STOCK_HELP,menu,(void*)openHelp,0,HELPMENUNAME,STOCKMENU,HELP_LABEL,NULL,false);
+	menuitem=makeMenuItem(GTK_STOCK_HELP,menu,(void*)openHelp,0,HELPMENUNAME,STOCKMENU,MENU_HELP_LABEL,NULL,false);
 //get plugins
-	menuitem=makeMenuItem(DATADIR"/pixmaps/KKEditPlugMenu.png",menu,(void*)getPlugins,0,GETPLUGSMENUNAME,PIXMAPMENU,gettext("Get Plugins"),NULL,false);
+	menuitem=makeMenuItem(DATADIR"/pixmaps/KKEditPlugMenu.png",menu,(void*)getPlugins,0,GETPLUGSMENUNAME,PIXMAPMENU,MENU_GET_PLUGS_LABEL,NULL,false);
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),fileMenu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),editMenu);
@@ -1596,7 +1596,7 @@ void buildMainGui(void)
 //global plug menu
 	if(useGlobalPlugMenu==true)
 		{
-			globalPlugMenu=gtk_menu_item_new_with_label(gettext("Plu_gins"));
+			globalPlugMenu=gtk_menu_item_new_with_label(MENU_GET_PLUGS_MENU_LABEL);
 			gtk_menu_item_set_use_underline((GtkMenuItem*)globalPlugMenu,true);
 			plugsubmenu=gtk_menu_new();
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(globalPlugMenu),plugsubmenu);
@@ -1704,8 +1704,6 @@ gtk_paned_pack2((GtkPaned*)mainWindowHPane,(GtkWidget*)mainNotebook,true,true);
 	gtk_widget_hide(mainLeftUserVBox);
 	gtk_widget_hide(mainRightUserVBox);
 
-//	gtk_widget_set_sensitive((GtkWidget*)saveMenu,false);
-
 	globalPlugins->globalPlugData->mlist.menuFile=fileMenu;
 	globalPlugins->globalPlugData->mlist.menuEdit=editMenu;
 	globalPlugins->globalPlugData->mlist.menuFunc=funcMenu;
@@ -1758,9 +1756,9 @@ void buildFindReplace(void)
 	GtkWidget*	item;
 
 #ifdef _USEGTK3_
-	findReplaceDialog=gtk_dialog_new_with_buttons(gettext("Find/Replace"),(GtkWindow*)mainWindow, GTK_DIALOG_DESTROY_WITH_PARENT,GO_FORWARD_LABEL,FINDNEXT,GO_BACK_LABEL,FINDPREV,gettext("Replace"),REPLACE,NULL);
+	findReplaceDialog=gtk_dialog_new_with_buttons(FIND_FIND_REPLACE_LABEL,(GtkWindow*)mainWindow, GTK_DIALOG_DESTROY_WITH_PARENT,DIALOG_GO_FORWARD_LABEL,FINDNEXT,MENU_GO_BACK_LABEL,FINDPREV,FIND_REPLACE_LABEL,REPLACE,NULL);
 #else
-	findReplaceDialog=gtk_dialog_new_with_buttons(gettext("Find/Replace"),(GtkWindow*)mainWindow, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_GO_FORWARD,FINDNEXT,GTK_STOCK_GO_BACK,FINDPREV,gettext("Replace"),REPLACE,NULL);
+	findReplaceDialog=gtk_dialog_new_with_buttons(FIND_FIND_REPLACE_LABEL,(GtkWindow*)mainWindow, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_GO_FORWARD,FINDNEXT,GTK_STOCK_GO_BACK,FINDPREV,FIND_REPLACE_LABEL,REPLACE,NULL);
 #endif
 
 	g_signal_connect(G_OBJECT(findReplaceDialog),"response",G_CALLBACK(doFindReplace),NULL);
@@ -1770,7 +1768,7 @@ void buildFindReplace(void)
 	vbox=createNewBox(NEWVBOX,true,0);
 	hbox=createNewBox(NEWHBOX,false,0);
 
-	label=gtk_label_new(FIND_TEXT_LABEL);
+	label=gtk_label_new(FIND_FIND_TEXT_LABEL);
 	gtk_container_add(GTK_CONTAINER(content_area),label);
 	gtk_widget_show(label);
 
@@ -1781,7 +1779,7 @@ void buildFindReplace(void)
 	gtk_container_add(GTK_CONTAINER(content_area),findDropBox);
 	gtk_widget_show(findDropBox);
 
-	label=gtk_label_new(REPLACE_TEXT_LABEL);
+	label=gtk_label_new(FIND_REPLACE_TEXT_LABEL);
 	gtk_container_add(GTK_CONTAINER(content_area),label);
 	gtk_widget_show(label);
 
@@ -1793,13 +1791,13 @@ void buildFindReplace(void)
 	gtk_widget_show(replaceDropBox);
 
 //line 1
-	item=gtk_check_button_new_with_label(gettext("Case insensitive"));
+	item=gtk_check_button_new_with_label(FIND_INSENSITIVE_LABEL);
 	gtk_toggle_button_set_active((GtkToggleButton*)item,insensitiveSearch);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	gtk_widget_show(item);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)1);
 
-	item=gtk_check_button_new_with_label(gettext("Use Regex"));
+	item=gtk_check_button_new_with_label(FIND_USE_REGEX_LABEL);
 	gtk_toggle_button_set_active((GtkToggleButton*)item,useRegex);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	gtk_widget_show(item);
@@ -1810,25 +1808,25 @@ void buildFindReplace(void)
 //line2
 	hbox=createNewBox(NEWHBOX,false,0);
 
-	item=gtk_check_button_new_with_label(WRAP_LABEL);
+	item=gtk_check_button_new_with_label(FIND_WRAP_LABEL);
 	gtk_toggle_button_set_active((GtkToggleButton*)item,wrapSearch);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	gtk_widget_show(item);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)2);
 
-	item=gtk_check_button_new_with_label(ALL_FILES_LABEL);
+	item=gtk_check_button_new_with_label(FIND_ALL_FILES_LABEL);
 	gtk_toggle_button_set_active((GtkToggleButton*)item,findInAllFiles);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	gtk_widget_show(item);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)4);
 
-	item=gtk_check_button_new_with_label(HIGHLIGHT_ALL_LABEL);
+	item=gtk_check_button_new_with_label(FIND_HIGHLIGHT_ALL_LABEL);
 	gtk_toggle_button_set_active((GtkToggleButton*)item,hightlightAll);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	gtk_widget_show(item);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)6);
 
-	item=gtk_check_button_new_with_label(REPLACE_ALL_LABEL);
+	item=gtk_check_button_new_with_label(FIND_REPLACE_ALL_LABEL);
 	gtk_toggle_button_set_active((GtkToggleButton*)item,replaceAll);
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	gtk_widget_show(item);
@@ -1843,9 +1841,9 @@ void buildFindReplace(void)
 	
 	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACE);
 	if(replaceAll==true)
-		gtk_button_set_label((GtkButton*)replace,REPLACE_ALL_MNEMONIC);
+		gtk_button_set_label((GtkButton*)replace,FIND_REPLACE_ALL_MNEMONIC);
 	else
-		gtk_button_set_label((GtkButton*)replace,REPLACE_LABEL);
+		gtk_button_set_label((GtkButton*)replace,FIND_REPLACE_LABEL);
 
 	gtk_widget_show(findBox);
 	gtk_widget_show(replaceBox);
@@ -1870,12 +1868,12 @@ void buildWordCheck(int documentCheck)
 	int			docflag=documentCheck;
 
 	spellCheckWord=gtk_dialog_new();
-	gtk_window_set_title((GtkWindow*)spellCheckWord,gettext("Spell check word"));
+	gtk_window_set_title((GtkWindow*)spellCheckWord,SPELL_CHECK_WORD_LABEL);
 
 	vbox=createNewBox(NEWVBOX,false,0);
 	hbox=createNewBox(NEWHBOX,true,0);
 
-	sprintf((char*)&labeltext,gettext("Change <i><b>%s</b></i> to: "),badWord);
+	sprintf((char*)&labeltext,SPELL_CHANGE_TO_LABEL,badWord);
 	label=gtk_label_new((char*)&labeltext);
 	gtk_label_set_use_markup((GtkLabel*)label,true);
 	gtk_box_pack_start(GTK_BOX(hbox),label,true,true,0);
@@ -1896,13 +1894,13 @@ void buildWordCheck(int documentCheck)
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doChangeWord),(gpointer)(long)docflag);
 
-	button=gtk_button_new_with_label(gettext("Ignore"));
+	button=gtk_button_new_with_label(SPELL_IGNORE_LABEL);
 	image=gtk_image_new_from_icon_name(GTK_STOCK_ADD,GTK_ICON_SIZE_MENU);
 	gtk_button_set_image((GtkButton*)button,image);
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doAddIgnoreWord),(gpointer)1);
 
-	button=createNewStockButton(GTK_STOCK_ADD,gettext("_Add"));
+	button=createNewStockButton(GTK_STOCK_ADD,SPELL_ADD_LABEL);
 	gtk_box_pack_start(GTK_BOX(hbox),button,true,true,0);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(doAddIgnoreWord),(gpointer)2);
 
@@ -1934,10 +1932,10 @@ int showFunctionEntry(void)
 	GtkWidget*	content_area;
 	GtkWidget*	entrybox;
 
-	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,gettext("Enter Function Name"));
+	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,DIALOG_ENTER_FUNC_NAME_LABEL);
 
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OK,GTK_RESPONSE_YES,NULL);
-	gtk_window_set_title(GTK_WINDOW(dialog),gettext("Find Function"));
+	gtk_window_set_title(GTK_WINDOW(dialog),DIALOG_FIND_FUNC_LABEL);
 
 	content_area=gtk_dialog_get_content_area(GTK_DIALOG(dialog));	
 	entrybox=gtk_entry_new();
@@ -1970,7 +1968,7 @@ void buildGtkDocViewer(void)
 	WebKitWebSettings*	settings;
 
 	docView=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title((GtkWindow*)docView,gettext("Doc Viewer"));
+	gtk_window_set_title((GtkWindow*)docView,DOCVIEW_DOCVIEWER_LABEL);
 
 	gtk_window_set_default_size((GtkWindow*)docView,docWindowWidth,docWindowHeight);
 	if(docWindowX!=-1 && docWindowY!=-1)
@@ -1996,14 +1994,14 @@ void buildGtkDocViewer(void)
 
 	gtk_box_pack_start((GtkBox*)vbox,scrolledWindow,true,true,0);
 
-	button=createNewStockButton(GTK_STOCK_GO_BACK,GO_BACK_LABEL);
+	button=createNewStockButton(GTK_STOCK_GO_BACK,MENU_GO_BACK_LABEL);
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoBack),(void*)webView);	
 
 //spacer
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,false,0);
 
-	button=createNewStockButton(GTK_STOCK_HOME,HOME_LABEL);
+	button=createNewStockButton(GTK_STOCK_HOME,DOCVIEW_HOME_LABEL);
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoHome),(void*)webView);	
  
@@ -2018,18 +2016,18 @@ void buildGtkDocViewer(void)
 	gtk_box_pack_start(GTK_BOX(hbox),entry,false,true,0);
 	g_signal_connect_after(G_OBJECT(entry),"activate",G_CALLBACK(docSearchFromBar),(void*)entry);
 
-	findnextinpage=createNewStockButton(GTK_STOCK_GO_DOWN,GO_DOWN_LABEL);
+	findnextinpage=createNewStockButton(GTK_STOCK_GO_DOWN,DOCVIEW_GO_DOWN_LABEL);
 	gtk_box_pack_start(GTK_BOX(hbox),findnextinpage,false,false,0);
 	g_signal_connect(G_OBJECT(findnextinpage),"clicked",G_CALLBACK(docSearchInPageFoward),(void*)entry);
 
-	findbutton=createNewStockButton(GTK_STOCK_GO_UP,GO_UP_LABEL);
+	findbutton=createNewStockButton(GTK_STOCK_GO_UP,DOCVIEW_GO_UP_LABEL);
 	gtk_box_pack_start(GTK_BOX(hbox),findbutton,false,false,0);
 	g_signal_connect(G_OBJECT(findbutton),"clicked",G_CALLBACK(docSearchInPageBack),(void*)entry);
 
 //spacer
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(" "),true,false,0);
 
-	button=createNewStockButton(GTK_STOCK_GO_FORWARD,GO_FORWARD_LABEL);
+	button=createNewStockButton(GTK_STOCK_GO_FORWARD,DIALOG_GO_FORWARD_LABEL);
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,4);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(webKitGoForward),(void*)webView);	
 

@@ -324,9 +324,9 @@ bool getSaveFile(void)
 	bool		retval=false;
 
 #ifdef _USEGTK3_
-	dialog=gtk_file_chooser_dialog_new(gettext("Save File"),(GtkWindow*)mainWindow,GTK_FILE_CHOOSER_ACTION_SAVE,CANCEL_LABEL,GTK_RESPONSE_CANCEL,MENU_SAVE_LABEL,GTK_RESPONSE_ACCEPT,NULL);
+	dialog=gtk_file_chooser_dialog_new(SAVE_TT_LABEL,(GtkWindow*)mainWindow,GTK_FILE_CHOOSER_ACTION_SAVE,CANCEL_LABEL,GTK_RESPONSE_CANCEL,MENU_SAVE_LABEL,GTK_RESPONSE_ACCEPT,NULL);
 #else
-	dialog=gtk_file_chooser_dialog_new(gettext("Save File"),(GtkWindow*)mainWindow,GTK_FILE_CHOOSER_ACTION_SAVE,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_SAVE,GTK_RESPONSE_ACCEPT,NULL);
+	dialog=gtk_file_chooser_dialog_new(SAVE_TT_LABEL,(GtkWindow*)mainWindow,GTK_FILE_CHOOSER_ACTION_SAVE,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_SAVE,GTK_RESPONSE_ACCEPT,NULL);
 #endif
 
 	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog),TRUE);
@@ -337,7 +337,7 @@ bool getSaveFile(void)
 			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),saveFileName);
 		}
 	else
-		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),gettext("Untitled"));
+		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),UNTITLED_LABEL);
 
 	if(gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_ACCEPT)
 		{
@@ -376,7 +376,7 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 				}
 			else
 				{
-					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Can't save file '%s' :("),page->filePath);
+					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,CANT_SAVE_LABEL,page->filePath);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 					ERRDATA return(false);
@@ -423,7 +423,7 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 				}
 			else
 				{
-					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Can't save file '%s' :("),page->filePath);
+					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,CANT_SAVE_LABEL,page->filePath);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 					ERRDATA return(false);
@@ -459,7 +459,7 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 	char*			convstr=NULL;
 
 	ERRDATA
-	dialog=gtk_file_chooser_dialog_new(gettext("Open File"),NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN,GTK_RESPONSE_ACCEPT,NULL);
+	dialog=gtk_file_chooser_dialog_new(OPEN_TT_LABEL,NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN,GTK_RESPONSE_ACCEPT,NULL);
 	if(gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_ACCEPT)
 		{
 			filepath=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
@@ -588,7 +588,7 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	ERRDATA
 
 	closeAllTabs(NULL,NULL);
-	showBarberPole(gettext("Restoring Session ..."));
+	showBarberPole(DIALOG_POLE_RESTORING);
 
 	if(data==NULL)
 		asprintf(&filename,"%s/." KKEDITVERS "/session",getenv("HOME"));
@@ -649,11 +649,11 @@ int showFileChanged(char* filename)
 	char*		message;
 
 	ERRDATA
-	asprintf(&message,gettext("File %s Has Changed on disk\nDo you want to reload it?"),filename);
+	asprintf(&message,DIALOG_FILE_CHANGED_LABEL,filename);
 	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
 
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_REFRESH,GTK_RESPONSE_YES,NULL);
-	gtk_window_set_title(GTK_WINDOW(dialog),gettext("Warning file changed!"));
+	gtk_window_set_title(GTK_WINDOW(dialog),DIALOG_WARN_CHANGED_LABEL);
 
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
 
@@ -792,10 +792,10 @@ pageStruct* makeNewPage(void)
 	page->isFirst=true;
 	page->itsMe=false;
 	page->markList=NULL;
-	page->inTop=true;
+//	page->inTop=true;
 	page->gFile=NULL;
 	page->monitor=NULL;
-	page->isSplit=false;
+//	page->isSplit=false;
 	page->lang=NULL;
 	page->tabVbox=NULL;
 	page->showingChanged=false;
@@ -805,7 +805,8 @@ pageStruct* makeNewPage(void)
 	page->canUndo=false;
 	page->canRedo=false;
 	page->isDirty=false;
-
+	page->searchString=NULL;
+	page->replaceString=NULL;
 	ERRDATA
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&iter);
 	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),page->backMark,&iter);
@@ -915,7 +916,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 		{
 			if(warn==true)
 				{
-					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("File '%s' doesn't exist :("),filepathcopy);
+					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,DIALOG_NO_FILE_LABEL,filepathcopy);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
@@ -929,7 +930,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 		{
 			if(warn==true)
 				{
-					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Can't open file '%s' :("),filepath);
+					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,DIALOG_CANT_OPEN_LABEL,filepath);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
@@ -962,7 +963,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 		{
 			if(warn==true)
 				{
-					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Can't open file '%s' :("),filepath);
+					dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,DIALOG_CANT_OPEN_LABEL,filepath);
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
@@ -984,7 +985,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 				gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&startiter);
 				whattodo=GTK_RESPONSE_YES;
 				if(g_utf8_validate((const gchar*)convertedData,dataLen,&end)==false)
-					whattodo=yesNo(gettext("Contains non text data,continue loading?\n"),(char*)filepath);
+					whattodo=yesNo(DIALOG_YESNO_NON_TEXT_LABEL,(char*)filepath);
 				if(whattodo==GTK_RESPONSE_YES)
 					{
 					//g_utf8_validate(convertedData,dataLen,&end);
@@ -1090,7 +1091,7 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 	page->filePath=NULL;
 	page->dirName=NULL;
 
-	asprintf(&page->fileName,"%s-%i",gettext("Untitled"),untitledNumber);
+	asprintf(&page->fileName,"%s-%i",UNTITLED_LABEL,untitledNumber);
 	untitledNumber++;
 
 	label=makeNewTab(page->fileName,NULL,page);

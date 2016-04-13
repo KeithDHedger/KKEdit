@@ -206,17 +206,17 @@ void init(void)
 
 	funcProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
 	funcProv->priority=1;
-	funcProv->name=gettext("Functions");
+	funcProv->name=COMPS_FUNCS_LABEL;
 	funcProv->proposals=NULL;
 
 	varsProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
 	varsProv->priority=2;
-	varsProv->name=gettext("Variables");
+	varsProv->name=COMPS_VARS_LABEL;
 	varsProv->proposals=NULL;
 
 	customProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);
 	customProv->priority=11;
-	customProv->name=gettext("Custom Words");
+	customProv->name=COMPS_WORDS_LABEL;
 	customProv->proposals=NULL;
 
 	docWordsProv=gtk_source_completion_words_new(NULL,NULL);
@@ -231,8 +231,8 @@ void doNagScreen(void)
 	ERRDATA
 	GtkWidget* dialog;
 
-	dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",gettext("Please donate"));
-	gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s\n<b>%s</b>\n%s\n\n%s",gettext("If you have a PayPal account you can donate any amount you like by logging into yor account and click the 'Send Money' tab, enter my email address"),MYEMAIL,gettext("and then send it."),gettext("Thank you for helping to support Free software."));
+	dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",DIALOG_PLEASE_DONATE_LABEL);
+	gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s\n<b>%s</b>\n%s\n\n%s",DIALOG_PAYPAL_LABEL,MYEMAIL,DIALOG_SEND_IT_LABEL,DIALOG_THANKS_LABEL);
 
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
@@ -255,7 +255,7 @@ void doNagStuff(void)
 	char*			kkeditupdatemessage=strdup("");
 	char*			plugupdatemessage=strdup("");
 
-	asprintf(&command,"KKEditProgressBar \"%s\" %s/updatecontrol &",gettext("Checking for updates ..."),tmpFolderName);
+	asprintf(&command,"KKEditProgressBar \"%s\" %s/updatecontrol &",CHECKING_LABEL,tmpFolderName);
 	system(command);
 	while(gtk_events_pending())
 		gtk_main_iteration();
@@ -309,17 +309,17 @@ void doNagStuff(void)
 							if(strcmp(VERSION,vers)!=0)
 								{
 									ERRDATA debugFree(&kkeditupdatemessage);
-									asprintf(&kkeditupdatemessage,"%s <b>%s</b> %s <b>%s</b>\n%s:\n<b>%s</b>\n",gettext("KKEdit update available to"),vers,gettext("from"),VERSION,gettext("From here"),MYWEBSITE);
+									asprintf(&kkeditupdatemessage,"%s <b>%s</b> %s <b>%s</b>\n%s:\n<b>%s</b>\n",KKEDIT_UPDATE_AVAILABLE_LABEL,vers,UPDATE_FROM_VERS_LABEL,VERSION,FROM_HERE_LABEL,MYWEBSITE);
 								}
 
 							if(lastPlugUpdate<atol(plugt))
 								{
 									ERRDATA debugFree(&plugupdatemessage);
-									asprintf(&plugupdatemessage,"\n%s:\n<b>https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins</b>",gettext("Plugin updates are available from here"));
+									asprintf(&plugupdatemessage,"\n%s:\n<b>https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins</b>",PLUGIN_UPDATES_LABEL);
 									lastPlugUpdate=thisupdate;
 								}
 
-							dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",gettext("Updates Available"));
+							dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",UPDATES_AVAILABLE_LABEL);
 							gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s%s",kkeditupdatemessage,plugupdatemessage);
 
 							gtk_dialog_run(GTK_DIALOG(dialog));

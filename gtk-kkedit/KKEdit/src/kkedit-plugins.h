@@ -128,8 +128,8 @@ struct pageStruct
 	bool				canRedo;
 	bool				isDirty;
 	unsigned int		pageID;
-	void				*reserved2;
-	void				*reserved3;
+	char				*searchString;
+	char				*replaceString;;
 	void				*reserved4;
 };
 #endif

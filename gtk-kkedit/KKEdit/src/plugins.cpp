@@ -92,7 +92,7 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 					}
 				else
 					{
-						dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,gettext("Plugin '%s' cannot be unloaded yet.\nRestart KKEdit to unload."),name);
+						dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,PLUGS_PLUG_WARN_UNLOAD_LABEL,name);
 						gtk_dialog_run(GTK_DIALOG(dialog));
 						gtk_widget_destroy(dialog);
 						pd->enabled=false;
@@ -227,17 +227,16 @@ VISIBLE void doPlugPrefs(GtkWidget* widget,gpointer data)
 	renderer=gtk_cell_renderer_toggle_new();
 	g_signal_connect(renderer,"toggled",G_CALLBACK(enableToggled),model);
 
-	column=gtk_tree_view_column_new_with_attributes(gettext("Enable"),renderer,"active",COLUMN_ENABLE,NULL);
+	column=gtk_tree_view_column_new_with_attributes(PLUGS_ENABLE_LABEL,renderer,"active",COLUMN_ENABLE,NULL);
 	gtk_tree_view_column_set_sizing(GTK_TREE_VIEW_COLUMN(column),GTK_TREE_VIEW_COLUMN_FIXED);
-	gtk_tree_view_column_set_fixed_width(GTK_TREE_VIEW_COLUMN(column),50);
+	gtk_tree_view_column_set_fixed_width(GTK_TREE_VIEW_COLUMN(column),75);
 	gtk_tree_view_append_column((GtkTreeView*)treeview,column);
 
 //plug
 	renderer=gtk_cell_renderer_text_new();
-	column=gtk_tree_view_column_new_with_attributes(gettext("Plug In"),renderer,"text",COLUMN_PLUGIN,NULL);
+	column=gtk_tree_view_column_new_with_attributes(PLUGS_PLUGIN_LABEL,renderer,"text",COLUMN_PLUGIN,NULL);
 	gtk_tree_view_column_set_sort_column_id(column,COLUMN_PLUGIN);
 	gtk_tree_view_append_column((GtkTreeView*)treeview,column);
-
 
 //plugin prefs
 	hbox=createNewBox(NEWHBOX,false,4);
@@ -246,7 +245,7 @@ VISIBLE void doPlugPrefs(GtkWidget* widget,gpointer data)
 	g_signal_connect(G_OBJECT(plugPrefsButton),"clicked",G_CALLBACK(setPlugPrefs),(void*)1);
 
 //plugin about
-	plugAboutButton=createNewStockButton(GTK_STOCK_ABOUT,ABOUT_LABEL);
+	plugAboutButton=createNewStockButton(GTK_STOCK_ABOUT,MENU_ABOUT_LABEL);
 	gtk_box_pack_start((GtkBox*)hbox,plugAboutButton,false,false,4);
 	g_signal_connect(G_OBJECT(plugAboutButton),"clicked",G_CALLBACK(setPlugPrefs),(void*)2);
 

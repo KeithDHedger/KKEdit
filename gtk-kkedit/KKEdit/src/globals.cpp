@@ -673,7 +673,7 @@ VISIBLE void runCommand(char* commandtorun,void* ptr,bool interm,int flags,int u
 						{
 							showToolOutWin=true;
 							gtk_widget_show(toolOutVBox);
-							gtk_menu_item_set_label((GtkMenuItem*)toolOutMenu,gettext("Hide Tool Output"));
+							gtk_menu_item_set_label((GtkMenuItem*)toolOutMenu,MENU_HIDE_TOOL_OP_LABEL);
 							while(fgets(line,1024,fp))
 								{
 									gtk_text_buffer_insert_at_cursor(toolOutputBuffer,line,strlen(line));
@@ -1163,11 +1163,11 @@ void rebuildBookMarkMenu(void)
 	bookMarkSubMenu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(bookMarkMenu),bookMarkSubMenu);
 
-	menuitem=gtk_menu_item_new_with_label(gettext("Remove All Bookmarks"));
+	menuitem=gtk_menu_item_new_with_label(MENU_BM_REMOVE_BMS);
 	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(removeAllBookmarks),NULL);
 
-	menuitem=gtk_menu_item_new_with_label(gettext("Toggle Bookmark"));
+	menuitem=gtk_menu_item_new_with_label(MENU_BM_TOGGLE_BM_LABEL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);
 
@@ -1553,6 +1553,7 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 	char		*newlabel=NULL;
 	int			offset=0;
 	bool		hasselection;
+	GtkTextIter	start_find,end_find;
 
 	if(page==NULL)
 		return;
@@ -1588,6 +1589,12 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 	if(gotDoxygen==0)
 		gtk_widget_set_sensitive((GtkWidget*)searchInDocsMenu,hasselection);
 	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,globalHistory->canGoBack());
+
+//			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start_find);
+//			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end_find);
+//			gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);
+
+
 
 //do plugin sensitive
 	globalPlugins->globalPlugData->page=page;

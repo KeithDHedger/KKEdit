@@ -130,6 +130,7 @@
 #define MENU_HIDE_STATUS_LABEL gettext("Hide Status Bar")
 #define MENU_SHOW_STATUS_LABEL gettext("Show Status Bar")
 #define MENU_SHOW_DOCVIEWER_LABEL gettext("Show Docviewer")
+#define MENU_HIDE_DOCVIEWER_LABEL gettext("Hide Docviewer")
 #define MENU_SHOW_LINE_NUMBERS_LABEL gettext("Show Line Numbers")
 #define MENU_WRAP_LINES_LABEL gettext("Wrap Lines")
 #define MENU_HIGHLIGHT_LINE_LABEL gettext("Hightlght Current Line")
@@ -137,21 +138,36 @@
 #define MENU_SHOW_AUTO_COMPLETE gettext("Auto Show Completions")
 
 //nav menu
-#define GO_BACK_LABEL gettext("_Back")
-#define GOTO_LINE_LABEL gettext("_Go To Line")
-#define GOTO_DEFINE_LABEL gettext("Go To _Definition")
-#define FIND_IN_DOCS_LABEL gettext("_Find In Documentation")
-#define FIND_IN_GTKAPI_LABEL gettext("_Search In Gtk Docs")
-#define FIND_IN_QTAPI_LABEL gettext("S_earch In Qt5 Docs")
-#define MENU_ 
-#define MENU_ 
+#define MENU_NAV_MENU_LABEL gettext("_Navigation")
+#define MENU_GOTO_DEFINE_LABEL gettext("Go To _Definition")
+#define MENU_OPEN_INCLUDE_LABEL gettext("Open Include File")
+#define MENU_GOTO_LINE_LABEL gettext("_Go To Line")
+#define MENU_FIND_DEFINE_LABEL gettext("Search For Define")
+#define MENU_FIND_IN_GTKAPI_LABEL gettext("_Search In Gtk Docs")
+#define MENU_FIND_IN_QTAPI_LABEL gettext("S_earch In Qt5 Docs")
+#define MENU_FIND_IN_DOCS_LABEL gettext("_Find In Documentation")
+#define MENU_GO_BACK_LABEL gettext("_Back")
 
 //func menu
+#define MENU_FUNC_MENU_LABEL gettext("Fun_ctions")
+
 //bookmarks menu
+#define MENU_BM_MENU_LABEL gettext("_Bookmarks")
+#define MENU_BM_TOGGLE_BM_LABEL gettext("Toggle Bookmark")
+#define MENU_BM_REMOVE_BMS gettext("Remove All Bookmarks")
+
 //tools menu
+#define MENU_TOOLS_MENU_LABEL gettext("_Tools")
 #define MENU_EXT_TOOLS_LABEL gettext("Manage External Tools")
 
 //plugins menu
+#define MENU_GET_PLUGS_MENU_LABEL gettext("Plu_gins")
+
+//help menu
+#define MENU_HELP_MENU_LABEL gettext("_Help")
+#define MENU_ABOUT_LABEL gettext("_About")
+#define MENU_HELP_LABEL gettext("_Help")
+#define MENU_GET_PLUGS_LABEL gettext("Get Plugins")
 
 //toolbar labels
 #define GOTO_DEFINE_TOOLBAR_LABEL gettext("Definition")
@@ -170,10 +186,10 @@
 //context labels
 #define CUSTOM_WORD_CONTEXT_LABEL gettext("_Add To Custom Word List")
 #define CHECK_SPELLING_CONTEXT_LABEL gettext("C_heck Spellling")
-
-//help menu
-#define ABOUT_LABEL gettext("_About")
-#define HELP_LABEL gettext("_Help")
+#define COPY_FOLDER_PATH_LABEL gettext("Copy Folder Path")
+#define COPY_FILE_PATH_LABEL gettext("Copy Filepath")
+#define COPY_FILE_NAME_LABEL gettext("Copy FileName")
+#define SOURCE_HILITE_LABEL gettext("Source Highlight")
 
 //odd
 #define SPELL_CHECK_LABEL gettext("Spell Check Document")
@@ -183,15 +199,18 @@
 
 //kkedit general text
 #define BOOKMARK_LABEL gettext("Bookmark")
-#define REPLACE_ALL_LABEL gettext("Replace All")
-#define REPLACE_ALL_MNEMONIC gettext("_Replace All")
-#define REPLACE_LABEL gettext("_Replace")
-#define WRAP_LABEL gettext("Wrap")
-#define ALL_FILES_LABEL gettext("All Files")
-#define HIGHLIGHT_ALL_LABEL gettext("Highlight All")
-#define FIND_TEXT_LABEL gettext("Find Text")
-#define REPLACE_TEXT_LABEL gettext("Replace With")
-#define REPLACE_ALL_LABEL gettext("Replace All")
+#define CHECKING_LABEL gettext("Checking for updates ...")
+#define KKEDIT_UPDATE_AVAILABLE_LABEL gettext("KKEdit update available to")
+#define UPDATE_FROM_VERS_LABEL gettext("from")
+#define FROM_HERE_LABEL gettext("From here")
+#define PLUGIN_UPDATES_LABEL gettext("Plugin updates are available from here")
+#define UPDATES_AVAILABLE_LABEL gettext("Updates Available")
+#define REPLACE_INFO_LABEL gettext("Replaced %i instances of '%s' with '%s'")
+#define SAVE_BEFORE_CLOSE_LABEL gettext("Save file %s before closing?")
+#define UNSAVED_DATA_LABEL gettext("Warning unsaved data!")
+#define STATUS_LINE_LABEL gettext("Line %i Column %i \t\tSyntax Highlighting %s\t\tFilePath %s")
+#define UNTITLED_LABEL gettext("Untitled")
+#define CANT_SAVE_LABEL gettext("Can't save file '%s' :(")
 
 //kb shortcts
 #define KBSC_DEFINE_KB_LABEL gettext("Define Keyboard Shortcuts")
@@ -295,16 +314,68 @@
 #define PREFS_I_DONATED_LABEL gettext("I have donated")
 #define PREFS_KARMA_LABEL gettext("I have really donated some some money to the author.\nMy conscience is clear and my Karma is squeaky clean :)")
 
+//find dialog
+#define FIND_FIND_REPLACE_LABEL gettext("Find/Replace")
+#define FIND_FIND_TEXT_LABEL gettext("Find Text")
+#define FIND_REPLACE_TEXT_LABEL gettext("Replace With")
+#define FIND_INSENSITIVE_LABEL gettext("Case insensitive")
+#define FIND_USE_REGEX_LABEL gettext("Use Regex")
+#define FIND_WRAP_LABEL gettext("Wrap")
+#define FIND_ALL_FILES_LABEL gettext("All Files")
+#define FIND_HIGHLIGHT_ALL_LABEL gettext("Highlight All")
+#define FIND_REPLACE_ALL_LABEL gettext("Replace All")
+#define FIND_REPLACE_LABEL gettext("_Replace")
+#define FIND_REPLACE_ALL_MNEMONIC gettext("_Replace All")
+
+//aspell
+#define SPELL_CHECK_WORD_LABEL gettext("Spell check word")
+#define SPELL_CHANGE_TO_LABEL gettext("Change <i><b>%s</b></i> to: ")
+#define SPELL_IGNORE_LABEL gettext("Ignore")
+#define SPELL_ADD_LABEL gettext("_Add")
+
+//misc dialogs
+#define DIALOG_ENTER_FUNC_NAME_LABEL gettext("Enter Function Name")
+#define DIALOG_FIND_FUNC_LABEL gettext("Find Function")
+#define DIALOG_GO_FORWARD_LABEL gettext("For_ward")
+#define DIALOG_PLEASE_DONATE_LABEL gettext("Please donate")
+#define DIALOG_PAYPAL_LABEL gettext("If you have a PayPal account you can donate any amount you like by logging into yor account and click the 'Send Money' tab, enter my email address")
+#define DIALOG_SEND_IT_LABEL gettext("and then send it.")
+#define DIALOG_THANKS_LABEL gettext("Thank you for helping to support Free software.")
+#define DIALOG_GOTO_LINE_LABEL gettext("Go To Line")
+#define DIALOG_ENTER_LINE_LABEL gettext("Enter Line Number")
+#define DIALOG_POLE_BUILDING_LABEL gettext("Building Documentaion ...")
+#define DIALOG_YESNO_REPLACE_IN_ALL_FILES gettext("Do you want to replace in ALL open files?")
+#define DIALOG_YESNO_WHAT_LABEL gettext("What Do You Want To Do?")
+#define DIALOG_YESNO_CONFIRM_DELETE_LABEL gettext("Are you sure you want to delete")
+#define DIALOG_ABOUT_MORE_LABEL gettext("\nMore by the same author\n") 
+#define DIALOG_ABOUT_KKEDIT_LABEL gettext("KKEdit Code Text Editor")
+#define DIALOG_ABOUT_FRENCH_LABEL gettext("French Translation")
+#define DIALOG_POLE_RESTORING gettext("Restoring Session ...")
+#define DIALOG_FILE_CHANGED_LABEL gettext("File %s Has Changed on disk\nDo you want to reload it?")
+#define DIALOG_WARN_CHANGED_LABEL gettext("Warning file changed!")
+#define DIALOG_NO_FILE_LABEL gettext("File '%s' doesn't exist :(")
+#define DIALOG_CANT_OPEN_LABEL gettext("Can't open file '%s' :(")
+#define DIALOG_YESNO_NON_TEXT_LABEL gettext("Contains non text data,continue loading?\n")
+
 //docviewer
-#define HOME_LABEL gettext("_Home")
-#define GO_DOWN_LABEL gettext("_Down")
-#define GO_UP_LABEL gettext("_Up")
-#define GO_FORWARD_LABEL gettext("For_ward")
+#define DOCVIEW_DOCVIEWER_LABEL gettext("Doc Viewer")
+#define DOCVIEW_HOME_LABEL gettext("_Home")
+#define DOCVIEW_GO_DOWN_LABEL gettext("_Down")
+#define DOCVIEW_GO_UP_LABEL gettext("_Up")
+#define DOCVIEW_GTK_DOCS_LABEL gettext("Gtk Docs")
+#define DOCVIEW_DOXY_DOCS_LABEL gettext("Doxygen Docs")
+#define DOCVIEW_QT5_DOCS_LABEL gettext("Qt5 Docs")
+#define DOCVIEW_KKEDIT_HELP_LABEL gettext("KKEdit Help")
 
+//plug prefs
+#define PLUGS_PLUG_WARN_UNLOAD_LABEL gettext("Plugin '%s' cannot be unloaded yet.\nRestart KKEdit to unload.")
+#define PLUGS_ENABLE_LABEL gettext("Enable")
+#define PLUGS_PLUGIN_LABEL gettext("Plug In")
 
-
-
-
+//completions
+#define COMPS_FUNCS_LABEL gettext("Functions")
+#define COMPS_VARS_LABEL gettext("Variables")
+#define COMPS_WORDS_LABEL gettext("Custom Words")
 
 #define PREFSNEW DATADIR"/pixmaps/new.png"
 #define PREFSOPEN DATADIR"/pixmaps/open.png"
