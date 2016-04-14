@@ -297,9 +297,6 @@ const char*		localeLang;
 int				openInThisTab=-1;
 
 //general app
-#define MAXBUSY 100
-int				busyCnt=0;
-bool			busyFlag[MAXBUSY]={false,};
 
 HistoryClass*	globalHistory;
 StringSlice*	globalSlice;
@@ -507,10 +504,7 @@ void plugRunFunction(gpointer data,gpointer funcname)
 void scrollToIterInPane(pageStruct* page,GtkTextIter* iter)
 {
 	ERRDATA
-//	if(page->inTop==true)
-		gtk_text_view_scroll_to_iter((GtkTextView*)page->view,iter,0,true,0,0.5);
-//	else
-//		gtk_text_view_scroll_to_iter((GtkTextView*)page->view2,iter,0,true,0,0.5);
+	gtk_text_view_scroll_to_iter((GtkTextView*)page->view,iter,0,true,0,0.5);
 	ERRDATA
 }
 
@@ -615,7 +609,6 @@ void setLanguage(pageStruct* page)
 		}
 	else
 		{
-			//g_print("Language: [%s]\n", gtk_source_language_get_name(lang));
 			gtk_source_buffer_set_language(page->buffer,lang);
 		}
 
@@ -1249,29 +1242,6 @@ VISIBLE void debugFree(char** ptr)
 	freeAndNull(ptr);
 }
 
-bool doBusy(int what)
-{
-	switch(what)
-		{
-			case PUSHBUSY:
-				busyCnt++;
-				if(busyCnt>MAXBUSY)
-					busyCnt=MAXBUSY;
-				busyFlag[busyCnt]=true;
-				break;
-
-			case POPBUSY:
-				busyFlag[busyCnt]=false;
-				busyCnt--;
-				if(busyCnt<0)
-					busyCnt=0;
-				break;
-
-		}	
-		//printf(">>	busyFlag[busyCnt]=%i,busyCnt=%i<<\n",busyFlag[busyCnt],busyCnt);
-	return(busyFlag[busyCnt]);
-}
-
 int			errLine;
 const char	*errFile;
 const char	*errFunc;
@@ -1562,12 +1532,6 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 		gtk_widget_set_sensitive((GtkWidget*)searchInDocsMenu,hasselection);
 	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,globalHistory->canGoBack());
 
-//			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start_find);
-//			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end_find);
-//			gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);
-
-
-
 //do plugin sensitive
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"setSensitive");
@@ -1616,6 +1580,7 @@ void setPageSensitive(void)
 	gtk_widget_set_sensitive((GtkWidget*)navMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)funcMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)printMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)revertMenu,true);
 }
 
 

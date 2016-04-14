@@ -44,13 +44,10 @@ bool doSaveAll(GtkWidget* widget,gpointer data);
 void closeAllTabs(GtkWidget* widget,gpointer data);
 void recentFileMenu(GtkRecentChooser* chooser,gpointer* data);
 void refreshMainWindow(void);
-gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data);
 void newEditor(GtkWidget* widget,gpointer data);
 void changeSourceStyle(GtkWidget* widget,gpointer data);
 int yesNo(char* question,char* file);
 
-//void line_mark_activated(GtkSourceGutter *gutter,GtkTextIter *iter,GdkEventButton  *ev,pageStruct* page);
-//void line_mark_activated(GtkSourceView *view,GtkTextIter   *iter,GdkEvent      *event,gpointer       user_data);
 #ifdef _USEGTK3_
 void line_mark_activated(GtkSourceView *view,GtkTextIter *iter,GdkEvent *event,gpointer user_data);
 #else

@@ -270,19 +270,8 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 
 	setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 
-//
-//	if(sessionBusy==true)
-//		return;
-//	if((statusMessage!=NULL) ||(busyFlag==true))
 	if((statusMessage!=NULL))
 		return;
-
-//	if(busyFlag==true)
-//		return;
-
-//	pageStruct* pagecheck=getPageStructPtr(currentTabNumber);
-//	if(pagecheck==NULL)
-//		return;
 
 	if((page==NULL) ||(showStatus==false))
 		{
@@ -290,9 +279,6 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 			gtk_statusbar_push((GtkStatusbar*)statusWidget,0,"");
 			return;
 		}
-
-//	if(pagecheck!=page)
-//		return;
 
 	path=page->filePath;
 	lang=page->lang;
@@ -310,11 +296,6 @@ void updateStatusBar(GtkTextBuffer* textbuffer,GtkTextIter* location,GtkTextMark
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
 	ERRDATA debugFree(&message);
 	delete buf;
-
-//	bool hasselection=gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer);
-//	gtk_widget_set_sensitive((GtkWidget*)cutMenu,hasselection);
-//	gtk_widget_set_sensitive((GtkWidget*)copyMenu,hasselection);
-
 }
 
 pageStruct*	stolenPage=NULL;
@@ -965,13 +946,9 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 	GtkTextIter		end;
 	char*			selection=NULL;
 	GtkWidget*		menuitem;
-//	GtkWidget*		image;
 	GList*			ptr;
 	functionData*	fdata;
 	char*			temptext=NULL;
-
-//	if(sessionBusy==true)
-//		return;
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
@@ -1032,9 +1009,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 						{
 							if((((toolStruct*)ptr->data)->inPopUp==true) &&(((toolStruct*)ptr->data)->alwaysPopup==false))
 								{
-									//menuitem=gtk_image_menu_item_new_with_label(((toolStruct*)ptr->data)->menuName);
 									menuitem=createNewImageMenuItem(NULL,((toolStruct*)ptr->data)->menuName);
-
 									if(((toolStruct*)ptr->data)->comment!=NULL)
 										gtk_widget_set_tooltip_text((GtkWidget*)menuitem,((toolStruct*)ptr->data)->comment);
 
@@ -1086,23 +1061,6 @@ void doTabMenu(GtkWidget *widget,gpointer user_data)
 	gtk_widget_destroy(tabMenu);
 }
 
-gboolean whatPane(GtkWidget *widget,GdkEvent *event,gpointer data)
-{
-	ERRDATA
-	pageStruct* page=(pageStruct*)getPageStructPtr(-1);
-
-//	if(sessionBusy==true)
-//		return(true);
-
-	if((long)data==1)
-		page->inTop=true;
-	else
-		page->inTop=false;
-
-	autoSeleced=false;
-	return(false);
-}
-
 void changeSourceStyle(GtkWidget* widget,gpointer data)
 {
 	ERRDATA
@@ -1149,9 +1107,6 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 	char*						command;
 	char						line[2048];
 	char*						name;
-
-//	if(sessionBusy==true)
-//		return(false);
 
 	if(event->button==3 && event->type==GDK_BUTTON_PRESS)
 		{
@@ -1248,7 +1203,6 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 						{
 							line[strlen(line)-1]=0;
 							name=basename(line);
-							//menuids=gtk_image_menu_item_new_with_label(strdup(name));
 							menuids=createNewImageMenuItem(NULL,strdup(name));
 
 							gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuids);
@@ -1749,9 +1703,6 @@ void line_mark_activated(GtkSourceView *view,GtkTextIter *iter,GdkEvent *event,g
 void line_mark_activated(GtkSourceGutter* gutter,GtkTextIter* iter,GdkEventButton* ev,pageStruct* page)
 #endif
 {
-//	if(sessionBusy==true)
-//		return;
-
 #ifdef _USEGTK3_
 	if(event->button.button!=1)
 #else

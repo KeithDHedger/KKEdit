@@ -348,7 +348,6 @@ void doMakeTool(void)
 
 //command
 	commandLineWidget=gtk_entry_new();
-	//hbox=gtk_hbox_new(false,0);
 	hbox=createNewBox(NEWHBOX,false,0);
 	gtk_box_pack_start(GTK_BOX(hbox),gtk_label_new(TOOLS_COMMAND_LABEL),false,true,0);
 	gtk_box_pack_start(GTK_BOX(hbox),commandLineWidget,true,true,0);
@@ -743,7 +742,6 @@ char* makeToolBarList(void)
 		}
 	ERRDATA return(g_string_free(str,false));
 }
-
 
 bool clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
 {
@@ -1642,33 +1640,6 @@ void buildMainGui(void)
 //add toolbar
 	gtk_box_pack_start((GtkBox*)mainWindowVBox,toolBarBox,false,false,0);
 
-#if 0
-	gtk_container_add((GtkContainer*)mainWindow,mainWindowVBox);
-//	gtk_container_add((GtkContainer*)mainWindow,whbox);
-//	gtk_widget_show_all(whbox);
-//addmenubar
-	gtk_box_pack_start((GtkBox*)mainWindowVBox,menuBar,false,false,0);
-//add toolbar
-	gtk_box_pack_start((GtkBox*)mainWindowVBox,toolBarBox,false,false,0);
-
-//add left user
-	gtk_paned_pack1((GtkPaned*)mainWindowHPane,mainLeftUserVBox,true,true);
-//	gtk_paned_pack2((GtkPaned*)mainWindowHPane,secondWindowHPane,true,true);
-
-//add mainNotebook
-//	gtk_box_pack_start((GtkBox*)mainNotebookVBox,(GtkWidget*)mainNotebook,true,true,0);
-//gtk_paned_pack1((GtkPaned*)secondWindowHPane,mainWindowHBox,true,true);
-//gtk_box_pack_start((GtkBox*)secondWindowHPane,(GtkWidget*)mainNotebookVBox,true,true,0);
-//gtk_widget_show_all(mainWindowHPane);
-gtk_paned_pack2((GtkPaned*)mainWindowHPane,(GtkWidget*)mainNotebook,true,true);
-//	gtk_box_pack_start((GtkBox*)mainWindowHBox,mainVPane,true,true,0);
-//	gtk_paned_pack1((GtkPaned*)secondWindowHPane,mainWindowHBox,true,false);
- //                                                        
-////addright user
-//	gtk_paned_pack2((GtkPaned*)secondWindowHPane,mainRightUserVBox,false,true);
-
-#endif
-
 //add left user
 	gtk_paned_pack1((GtkPaned*)mainWindowHPane,mainLeftUserVBox,false,true);
 	gtk_paned_pack2((GtkPaned*)mainWindowHPane,secondWindowHPane,true,true);
@@ -1746,8 +1717,6 @@ gtk_paned_pack2((GtkPaned*)mainWindowHPane,(GtkWidget*)mainNotebook,true,true);
 //gettext
 	globalPlugins->globalPlugData->locale=LOCALEDIR;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
-	ERRDATA
-//	doBusy(false,NULL);
 	globalHistory=new HistoryClass(mainNotebook);
 	resetSensitive();
 }

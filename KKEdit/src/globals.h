@@ -34,8 +34,6 @@
 #define FINDNEXT		200
 #define FINDPREV		300
 
-extern bool amBusy;
-
 #if _DEBUGLEVEL_ == DBG0
 #define ERRDATA
 #else
@@ -89,7 +87,6 @@ extern bool amBusy;
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 enum {NEWVBOX=0,NEWHBOX};
-enum {ISBUSY,NOTBUSY,PUSHBUSY,POPBUSY,QUERYBUSY};
 
 struct toolStruct
 {
@@ -134,9 +131,7 @@ extern const char		*errFunc;
 extern char				*logFile;
 
 extern GApplication*	mainApp;
-//extern bool				busyFlag[10];
 extern bool				autoSeleced;
-//extern bool				sessionBusy;
 extern bool				fromGOpen;
 extern char				*prefsFolder;
 
@@ -444,9 +439,6 @@ extern const char*		localeLang;
 extern int				openInThisTab;
 
 //general app
-#define MAXBUSY 100
-extern int				busyCnt;
-extern bool				busyFlag[MAXBUSY];
 
 void plugRunFunction(gpointer data,gpointer funcname);
 pageStruct* getPageStructPtr(int pagenum);
@@ -468,8 +460,6 @@ void killBarberPole(void);
 void debugFree(char** ptr);
 char* truncateWithElipses(char* str,unsigned int maxlen);
 char* truncateTabNameWithElipses(char* str,unsigned int maxlen);
-
-bool doBusy(int what);
 
 void catchSignal(int signal);
 void freeAndNull(char** ptr);

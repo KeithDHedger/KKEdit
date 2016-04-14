@@ -133,28 +133,7 @@ void HistoryClass::setCurrentPos(void)
 	this->goBack=true;
 	if(this->lastPos.child==NULL)
 		this->lastPos=this->currentPos;
-	printf("currentPos id=%i, filename=%s, line=%i\n",this->currentPos.pageID,this->currentPos.tabName,this->currentPos.lineNumber);
-//	printf("lastpos id=%i, filename=%s, line=%i\n",this->lastPos.pageID,this->lastPos.tabName,this->lastPos.lineNumber);
-//
-//	topagenum=gtk_notebook_page_num(this->notebook,this->lastPos.child);
-//	if(topagenum!=-1)
-//		{
-//			gtk_notebook_set_current_page(this->notebook,topagenum);
-//			buf->scroll2Line((GtkTextView*)page->view,this->lastPos.lineNumber-1);
-//
-//		}
-//	this->lastPos=this->currentPos;
-
 	delete buf;
-//	printf(">>>filenae=%s<<<\n",page->fileName);
-//	printf(">>>page id=%i<<<\n",page->pageID);
-//	
-//	swappos=this->lastPos;
-//
-//	printf(">>lastpos = %i -- ",swappos.pageID);
-//	printf(">>lastpos = %s<<<\n",swappos.tabname);
-//	this->lastPos.pageID=page->pageID;
-
 }
 
 void HistoryClass::getThisPoint(void)

@@ -107,10 +107,6 @@ void init(void)
 
 	openInThisTab=-1;
 
-	busyCnt=0;
-	for(int j=0;j<MAXBUSY;j++)
-		busyFlag[j]=false;
-
 //runtime deps
 	exitstatus=system("which manpageeditor 2>&1 >/dev/null");
 	gotManEditor=WEXITSTATUS(exitstatus);
@@ -205,7 +201,6 @@ void init(void)
 
 	localeLang=getenv("LANG");
 
-//	globalHistory=new HistoryClass;
 	globalSlice->setReturnDupString(true);
 
 	funcProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);

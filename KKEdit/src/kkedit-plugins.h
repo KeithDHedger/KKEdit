@@ -113,8 +113,6 @@ struct pageStruct
 	GFileMonitor*		monitor;
 	bool				itsMe;
 	GList*				markList;
-	bool				inTop;
-	bool				isSplit;
 	const char*			lang;
 	GtkWidget*			tabVbox;
 	bool				showingChanged;

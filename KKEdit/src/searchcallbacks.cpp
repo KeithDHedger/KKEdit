@@ -700,8 +700,6 @@ void regexFind(int dowhat)
 		compileflags=(GRegexCompileFlags)(compileflags|G_REGEX_CASELESS);
 
 	regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,matchflags,NULL);
-//	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
-
 	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&startiter,&enditer,false);
 
 	if(page->regexMatchNumber==-1)
@@ -743,7 +741,6 @@ void regexFind(int dowhat)
 //forward search
 			case FINDNEXT:
 				fromregexreplace=false;
-				//FIX//
 				page->regexMatchNumber=findNextRegex(page,textbuffer->charPos-1,page->regexMatchNumber);
 				if(page->regexMatchNumber!=-1)
 					{
@@ -870,7 +867,6 @@ void regexFind(int dowhat)
 										gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
 								//	}
 								text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&startiter,&enditer,false);
-								//regex=g_regex_new(searchtext,(GRegexCompileFlags)(G_REGEX_CASELESS|G_REGEX_EXTENDED),(GRegexMatchFlags)matchflags,NULL);
 								regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,(GRegexMatchFlags)matchflags,NULL);
 								g_regex_match_full(regex,text,-1,0,matchflags,&match_info,NULL);
 								while(g_match_info_matches(match_info))
@@ -937,7 +933,6 @@ void basicFind(int dowhat)
 	pageStruct*				page=NULL;
 	char*					searchtext=NULL;
 	char*					replacetext;
-//	GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
 #ifdef _USEGTK3_
 	GtkTextSearchFlags		flags=GTK_TEXT_SEARCH_TEXT_ONLY;
 #else
@@ -971,10 +966,7 @@ void basicFind(int dowhat)
 
 	page=getPageStructPtr(currentFindPage);
 
-//	doBusy(true,page);
-
 	if(insensitiveSearch==true)
-//		flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
 #ifdef _USEGTK3_
 		flags=(GtkTextSearchFlags)(GTK_TEXT_SEARCH_TEXT_ONLY|GTK_TEXT_SEARCH_CASE_INSENSITIVE);
 #else
@@ -1046,7 +1038,6 @@ void basicFind(int dowhat)
 									scrollToIterInPane(page,&page->match_start);
 									page->iter=page->match_end;
 								}
-							//gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 							ERRDATA debugFree(&searchtext);
 							ERRDATA debugFree(&replacetext);
 							ERRDATA return;
@@ -1173,9 +1164,6 @@ void basicFind(int dowhat)
 							}
 					}
 			}
-
-//	doBusy(false,page);
-
 	ERRDATA debugFree(&searchtext);
 	ERRDATA debugFree(&replacetext);
 }
@@ -1210,7 +1198,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	GtkWidget*	drop;
 	GSList*		list;
 
-//doBusy(PUSHBUSY);
 	if(response_id!=REPLACE)
 		{
 			drop=findDropBox;
@@ -1251,8 +1238,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 				}
 		}
 
-//	busyFlag=true;
-
 	currentFindPage=gtk_notebook_get_current_page(mainNotebook);
 	pagesChecked=0;
 
@@ -1266,11 +1251,8 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	else
 		regexFind(response_id);
 
-//	busyFlag=false;
-
 	if(itemsReplaced>-1)
 		showOnStatus(gtk_entry_get_text((GtkEntry*)findBox),gtk_entry_get_text((GtkEntry*)replaceBox));
-//doBusy(POPBUSY);
 }
 
 VISIBLE void find(GtkWidget* widget,gpointer data)
@@ -1304,8 +1286,6 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 				break;
 			case 5:
 				useRegex=gtk_toggle_button_get_active((GtkToggleButton*)widget);
-				//button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,FINDPREV);
-				//gtk_widget_set_sensitive(button,!useRegex);
 				break;
 			case 6:
 				hightlightAll=gtk_toggle_button_get_active((GtkToggleButton*)widget);
@@ -1316,7 +1296,6 @@ void doSearchPrefs(GtkWidget* widget,gpointer data)
 void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
 {
 	pageStruct* 			page=getPageStructPtr(-1);
-//	GtkSourceSearchFlags	flags;
 #ifdef _USEGTK3_
 	GtkTextSearchFlags		flags=GTK_TEXT_SEARCH_TEXT_ONLY;
 #else
@@ -1327,11 +1306,10 @@ void doLiveSearch(GtkWidget* widget,GdkEvent *event,gpointer data)
 
 	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 
-//	flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
 #ifdef _USEGTK3_
-		flags=(GtkTextSearchFlags)(GTK_TEXT_SEARCH_TEXT_ONLY|GTK_TEXT_SEARCH_CASE_INSENSITIVE);
+	flags=(GtkTextSearchFlags)(GTK_TEXT_SEARCH_TEXT_ONLY|GTK_TEXT_SEARCH_CASE_INSENSITIVE);
 #else
-		flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
+	flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
 #endif
 
 	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)widget));

@@ -29,7 +29,6 @@ void goToDefine(functionData* fdata)
 	pageStruct*	page;
 	TextBuffer*	buf;
 
-//	doBusy(true,NULL);
 	if(fdata->intab==-1)
 		{
 			openFile(fdata->file,fdata->line-1,true);
@@ -52,7 +51,6 @@ void goToDefine(functionData* fdata)
 			buf->scroll2Line((GtkTextView*)page->view,fdata->line-1);
 			ERRDATA delete buf;
 		}
-//	doBusy(false,NULL);
 	ERRDATA
 }
 
@@ -251,7 +249,6 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 	pageStruct*		checkpage;
 	TextBuffer*		buf;
 
-//	globalHistory->savePosition();
 	globalHistory->saveLastPos();
 	page=(pageStruct*)((bookMarksNew*)data)->page;
 	mark=(GtkTextMark*)((bookMarksNew*)data)->mark;

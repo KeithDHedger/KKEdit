@@ -1,3 +1,8 @@
+0.3.1
+Code clean.
+Fixed revert.
+First gtk3 enabled release.
+
 0.3.0
 Fixed saving window on exit for gtk3.
 Fixed 'Open XTerm Here' script.

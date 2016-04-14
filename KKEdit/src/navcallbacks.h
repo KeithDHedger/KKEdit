@@ -23,7 +23,6 @@ void rebuildBookMarkMenu(void);
 gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest* request,WebKitWebNavigationAction* navigation_action,WebKitWebPolicyDecision* policy_decision, gpointer user_data);
 #endif
 void rebuildTabsMenu(void);
-//v//oid selectTab(GtkWidget* widget,gpointer data);
 void gotoLineSavePos(GtkWidget* widget,gpointer data);
 
 #endif

@@ -186,7 +186,6 @@ void setFilePrefs(pageStruct* page)
 {
 	ERRDATA
 	PangoFontDescription*	font_desc;
-//	GdkColor				color;
 	GtkTextAttributes*		attr;
 
 	ERRDATA
@@ -661,7 +660,11 @@ int showFileChanged(char* filename)
 	asprintf(&message,DIALOG_FILE_CHANGED_LABEL,filename);
 	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
 
+#ifdef _USEGTK3_
+	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,REFRESH_LABEL,GTK_RESPONSE_YES,NULL);
+#else
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_REFRESH,GTK_RESPONSE_YES,NULL);
+#endif
 	gtk_window_set_title(GTK_WINDOW(dialog),DIALOG_WARN_CHANGED_LABEL);
 
 	result=gtk_dialog_run(GTK_DIALOG(dialog));
@@ -741,24 +744,6 @@ void add_source_mark_pixbufs(GtkSourceView *view)
 	ERRDATA
 }
 
-gboolean clickInView(GtkWidget* widget,gpointer data)
-{
-	ERRDATA
-//	if(sessionBusy==true)
-//		{
-//			ERRDATA return(false);
-//		}
-
-	ERRDATA
-	if((statusMessage!=NULL))
-		{
-			ERRDATA debugFree(&statusMessage);
-			statusMessage=NULL;
-			
-		}
-	ERRDATA return(false);
-}
-
 gboolean resetRegexMark (GtkWidget *widget,GdkEvent *event,pageStruct* page)
 {
 	if(page==NULL)
@@ -815,10 +800,8 @@ pageStruct* makeNewPage(void)
 	page->isFirst=true;
 	page->itsMe=false;
 	page->markList=NULL;
-//	page->inTop=true;
 	page->gFile=NULL;
 	page->monitor=NULL;
-//	page->isSplit=false;
 	page->lang=NULL;
 	page->tabVbox=NULL;
 	page->showingChanged=false;
@@ -830,7 +813,7 @@ pageStruct* makeNewPage(void)
 	page->isDirty=false;
 	page->searchString=NULL;
 	page->replaceString=NULL;
-	ERRDATA
+
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&iter);
 	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),page->backMark,&iter);
 
@@ -839,7 +822,6 @@ pageStruct* makeNewPage(void)
 	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);
 	gtk_drag_dest_add_text_targets((GtkWidget*)page->view);
 	g_signal_connect_after(G_OBJECT(page->view),"drag-data-received",G_CALLBACK(dropText),(void*)page);
-	g_signal_connect(G_OBJECT(page->view),"button-press-event",G_CALLBACK(clickInView),NULL);
 
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),FALSE);
 	uman=gtk_source_buffer_get_undo_manager(page->buffer);
@@ -853,7 +835,6 @@ pageStruct* makeNewPage(void)
 //status bar
 	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(updateStatusBar),NULL);
 	g_signal_connect((GtkWidget*)page->view,"button-release-event",G_CALLBACK(resetRegexMark),(void*)page);
-	ERRDATA
 	setPageSensitive();
 	ERRDATA return(page);
 }
@@ -904,11 +885,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	int						whattodo;
 	const gchar				*end;
 
-//	busyFlag=true;
-//	sessionBusy=true;
-//	newBusyFlag=true;
-
-//	doBusy(true,NULL);
 	if(readLinkFirst==true)
 		filepathcopy=realpath(filepath,NULL);
 	else
@@ -926,9 +902,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 						{
 							gtk_notebook_set_current_page(mainNotebook,j);
 							gotoLine(NULL,(gpointer)(long)linenumber);
-							//busyFlag=false;
-							//sessionBusy=false;
-							//doBusy(false,NULL);
 							ERRDATA debugFree(&tpath);
 							ERRDATA return(true);
 						}
@@ -944,9 +917,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
-			//busyFlag=false;
-			//sessionBusy=false;
-			//doBusy(false,NULL);
 			ERRDATA return(false);
 		}
 
@@ -958,10 +928,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
-//			busyFlag=false;
-//			sessionBusy=false;
-			//doBusy(false,NULL);
-//			ERRDATA return(false);
 		}
 
 	if(linenum<0)
@@ -991,9 +957,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					gtk_dialog_run(GTK_DIALOG(dialog));
 					gtk_widget_destroy(dialog);
 				}
-//			busyFlag=false;
-//			sessionBusy=false;
-//			doBusy(false,NULL);
 			ERRDATA return(false);
 		}
 
@@ -1012,16 +975,12 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 					whattodo=yesNo(DIALOG_YESNO_NON_TEXT_LABEL,(char*)filepath);
 				if(whattodo==GTK_RESPONSE_YES)
 					{
-					//g_utf8_validate(convertedData,dataLen,&end);
 						dataLen=(long)end-(long)convertedData;
 						gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&startiter,convertedData,dataLen);
 					}
 				else
 					{
-	//					busyFlag=false;
-//						sessionBusy=false;
 						gtk_widget_destroy(label);
-//						doBusy(false,NULL);
 						ERRDATA return(false);
 					}
 			gtk_source_buffer_end_not_undoable_action(page->buffer);
@@ -1088,15 +1047,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	page->canUndo=false;
 	page->canRedo=false;
 	page->isDirty=false;
-//	busyFlag=false;
-//	sessionBusy=false;
-//	while(gtk_events_pending())
-//		gtk_main_iteration();
-//	{
-//printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
-//}
-//	doBusy(false,NULL);
-//	newBusyFlag=false;
 	setPageSensitive();
 	ERRDATA return(TRUE);
 }
@@ -1108,9 +1058,7 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 	GtkWidget*	label;
 	pageStruct*	page;
 
-//	doBusy(true,NULL);
 	page=makeNewPage();
-
 	page->tabVbox=createNewBox(NEWVBOX,true,4);
 	page->filePath=NULL;
 	page->dirName=NULL;
@@ -1126,27 +1074,19 @@ VISIBLE void newFile(GtkWidget* widget,gpointer data)
 	gtk_text_buffer_place_cursor(GTK_TEXT_BUFFER(page->buffer),&iter);
 
 //connect to ntebook
-//	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pane));
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pageWindow));
 	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
 
 	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
 	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
 
-//g_object_set(mainNotebook,"show-tabs",false,NULL);
-
 	gtk_notebook_set_current_page(mainNotebook,currentPage);
 	currentPage++;
 	gtk_widget_show_all((GtkWidget*)mainNotebook);
 	setFilePrefs(page);
 
-//	setWidgetsSensitive();
-
-	ERRDATA
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"newFile");
 
 	setPageSensitive();
-//	gtk_source_buffer_end_not_undoable_action((GtkSourceBuffer*)page->buffer);
-//	doBusy(false,NULL);
 }
