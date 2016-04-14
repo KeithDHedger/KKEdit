@@ -1,4 +1,5 @@
 0.3.0
+Fixed saving window on exit for gtk3.
 Fixed 'Open XTerm Here' script.
 Fixed tag highlight all tag colours.
 Done gtk3 colur select buttons etc.
