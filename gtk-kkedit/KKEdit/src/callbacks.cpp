@@ -1282,11 +1282,12 @@ void writeExitData(void)
 	char*			filename;
 	int				winx;
 	int				winy;
-	
+
 	gtk_widget_get_allocation(mainWindow,&alloc);
 	gtk_window_get_position((GtkWindow*)mainWindow,&winx,&winy);
-	asprintf(&windowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
-
+	if( (alloc.width>10) && (alloc.height>10) )
+		asprintf(&windowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
+		
 #ifdef _BUILDDOCVIEWER_
 	if(gtk_widget_get_realized(docView)==true)
 		{
@@ -1301,7 +1302,8 @@ void writeExitData(void)
 			winy=docWindowY;
 		}
 #endif
-	asprintf(&docWindowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
+	if( (alloc.width>10) && (alloc.height>10) )
+		asprintf(&docWindowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
 
 	toolOutHeight=gtk_paned_get_position((GtkPaned*)mainVPane);
 	bottomVPaneHite=gtk_paned_get_position((GtkPaned*)mainWindowVPane);
@@ -1392,7 +1394,6 @@ bool doShutdown(GtkWidget* widget,GdkEvent *event,gpointer data)
 	delete_aspell_config(aspellConfig);
 	delete_aspell_speller(spellChecker);
 #endif
-
 
 	asprintf(&command,"rm -rf %s",tmpFolderName);
 	system(command);
