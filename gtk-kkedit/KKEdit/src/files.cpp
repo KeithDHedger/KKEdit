@@ -212,6 +212,7 @@ void setFilePrefs(pageStruct* page)
 #endif
 
 	pango_font_description_free(font_desc);
+
 	attr=gtk_text_view_get_default_attributes((GtkTextView*)page->view);
 
 #ifdef _USEGTK3_
