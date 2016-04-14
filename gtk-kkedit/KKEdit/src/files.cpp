@@ -195,34 +195,11 @@ void setFilePrefs(pageStruct* page)
 	gtk_source_view_set_highlight_current_line(page->view,highLight);
 	gtk_source_view_set_show_line_marks(page->view,showBMBar);
 
-//#ifdef _USEGTK3_
-//	GdkRGBA		color
-//	gdk_rgba_parse(&color,(const gchar *)highlightColour);
-//	GtkSourceMarkAttributes *attr=gtk_source_mark_attributes_new();
-//
-////	gtk_source_mark_attributes_set_pixbuf(attr,pbuf);
-////	gtk_source_mark_attributes_set_background(attr,&color);
-//	gtk_source_view_set_mark_attributes(view,MARK_TYPE_1,attr,1);
-//
-//#else
-//	GdkColor	color;
-//	gdk_color_parse(highlightColour,&color);
-//	gtk_source_view_set_mark_category_background(page->view,MARK_TYPE_1,&color);
-//#endif
-//
-//#ifndef _USEGTK3_
-//#endif
-
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	if(lineWrap==true)
-		{
-			gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_WORD_CHAR);
-		}
+		gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_WORD_CHAR);
 	else
-		{
-//			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
-			gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_NONE);
-		}
+		gtk_text_view_set_wrap_mode((GtkTextView *)page->view,GTK_WRAP_NONE);
 
 	gtk_source_view_set_tab_width(page->view,tabWidth);
 
@@ -233,11 +210,26 @@ void setFilePrefs(pageStruct* page)
 #else
 	gtk_widget_modify_font((GtkWidget*)page->view,font_desc);
 #endif
-	pango_font_description_free(font_desc);
 
+	pango_font_description_free(font_desc);
 	attr=gtk_text_view_get_default_attributes((GtkTextView*)page->view);
+
 #ifdef _USEGTK3_
-	g_object_set((gpointer)page->highlightTag,"background",gdk_rgba_to_string((const GdkRGBA*)&attr->appearance.fg_color),"foreground",gdk_rgba_to_string((const GdkRGBA*)&attr->appearance.bg_color),NULL);
+//hack for gtk3 again!
+	GdkRGBA	bcol;
+	GdkRGBA	fcol;
+
+	bcol.red=(double)attr->appearance.fg_color.red / 65535.0 ;
+	bcol.green=(gdouble)attr->appearance.fg_color.green / 65535.0;
+	bcol.blue=(gdouble)attr->appearance.fg_color.blue / 65535.0;
+	bcol.alpha=1.0;
+
+	fcol.red=(gdouble)attr->appearance.bg_color.red / 65535.0 ;
+	fcol.green=(gdouble)attr->appearance.bg_color.green / 65535.0;
+	fcol.blue=(gdouble)attr->appearance.bg_color.blue / 65535.0;
+	fcol.alpha=1.0;
+
+	g_object_set((gpointer)page->highlightTag,"background",gdk_rgba_to_string(&bcol),"foreground",gdk_rgba_to_string(&fcol),NULL);
 #else
 	g_object_set((gpointer)page->highlightTag,"background",gdk_color_to_string((const GdkColor*)&attr->appearance.fg_color),"foreground",gdk_color_to_string((const GdkColor*)&attr->appearance.bg_color),NULL);
 #endif
@@ -255,9 +247,7 @@ void setFilePrefs(pageStruct* page)
 		gtk_source_completion_block_interactive(page->completion);
 #endif
 
-	ERRDATA
-	createCompletion(page);
-	ERRDATA
+	ERRDATA	createCompletion(page);
 }
 
 void resetAllFilePrefs(void)
