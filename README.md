@@ -1,12 +1,5 @@
 KKEdit source code editor.
 
-***WARNING WHEN BUILDING FOR GTK3 ***
-
-Until this notice is removed some functions are disabled/not working, the gtk2 release is fully functional.
-Should now be mostly fully functional, some text options/visuals need doing, find/replace with regex not complete yet.
-
-***WARNING WHEN BUILDING FOR GTK3 ***
-
 Why another text editor?
 
 Simple, I didn't like any of the others, anyway having used gedit for years it was getting increasingly difficult to keep it compiling without loads of gnome dependencies, looking around linux text editors seem to be VERY simple (leafpad) stupidly complex (GVim,Bluefish), trying to be all things to all people.
@@ -30,10 +23,9 @@ Full source code highlighted printing
 
 *** NEW ***
 
-Started to port to gtk3, editor compiles and runs and 65% working, use -s switch to kkedit when running to disable plugins, 'cos they don't work yet.
+Ported to gtk3.
 
-Add --enable-gtk3 to your configure  and run with:
-kkedit -s /path/to/a/file
+Add --enable-gtk3 to your configure to build for gtk3.
 
 Default is to build for gtk2
 You may need to install gtk3 dev files if your distro splits them off from the main package ( debian etc ).
