@@ -78,15 +78,16 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 	ERRDATA
 }
 
-VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
+VISIBLE int loadVarsFromFile(char* filepath,args* dataptr)
 {
 	ERRDATA
-	FILE*	fd=NULL;
-	char	buffer[2048];
-	int		cnt;
-	char*	argname=NULL;
-	char*	strarg=NULL;
-	char*	liststr=NULL;
+	FILE		*fd=NULL;
+	char		buffer[2048];
+	int			cnt;
+	char		*argname=NULL;
+	char		*strarg=NULL;
+	char		*liststr=NULL;
+	int			retval=NOERR;
 
 	fd=fopen(filepath,"r");
 	if(fd!=NULL)
@@ -129,7 +130,12 @@ VISIBLE void loadVarsFromFile(char* filepath,args* dataptr)
 				}
 			fclose(fd);
 		}
-	ERRDATA
+	else
+		{
+			retval=NOOPENFILE;
+		}
+
+	return(retval);
 }
 
 GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)

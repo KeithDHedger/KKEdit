@@ -87,6 +87,7 @@
 
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 enum {NEWVBOX=0,NEWHBOX};
+enum {NOERR=0,NOOPENFILE,NOSAVEFILE};
 
 struct toolStruct
 {
@@ -475,6 +476,7 @@ void setToobarWidgetsSensitive(pageStruct *page);
 void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page);
 void resetSensitive(void);
 void setPageSensitive(void);
+void getOldConfigs(const char *file,args *dataptr);
 
 #endif
 

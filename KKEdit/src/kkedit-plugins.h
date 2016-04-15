@@ -81,6 +81,7 @@
 #define VIEWAUTOCOMPLETE "viewautocomplete"
 #define VIEWHIGHLIGHT "viewhighlight"
 
+
 #ifndef _PAGESTRUCT_
 #define _PAGESTRUCT_
 
@@ -233,6 +234,6 @@ void		debugFree(char** ptr);
 bool		openFile(const gchar *filepath,int linenumber,bool warn);
 bool		saveFile(GtkWidget* widget,gpointer data);
 void		newFile(GtkWidget* widget,gpointer data);
-void		loadVarsFromFile(char* filepath,args* dataptr);
+int			loadVarsFromFile(char* filepath,args* dataptr);
 void		saveVarsToFile(char* filepath,args* dataptr);
 #endif

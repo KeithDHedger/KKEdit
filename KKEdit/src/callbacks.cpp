@@ -1992,17 +1992,12 @@ void doKeyShortCut(int what)
 void loadKeybindings(void)
 {
 	ERRDATA
-	char*	filename;
-
-	asprintf(&filename,"%s/." KKEDITVERS "/keybindings.rc",getenv("HOME"));
-
-	loadVarsFromFile(filename,keybindings_rc);
+	getOldConfigs("keybindings.rc",keybindings_rc);
 	for(int j=0;j<NUMSHORTCUTS;j++)
 		{
 			if(shortCutStrings[j]!=NULL)
 				sscanf(shortCutStrings[j],"%i %i",(int*)&shortCuts[j][0],(int*)&shortCuts[j][1]);
 		}
-	ERRDATA debugFree(&filename);
 }
 
 VISIBLE gboolean keyShortCut(GtkWidget* window,GdkEventKey* event,gpointer data)

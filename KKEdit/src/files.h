@@ -22,7 +22,7 @@
 #define _FILES_
 
 void saveVarsToFile(char* filepath,args* dataptr);
-void loadVarsFromFile(char* filepath,args* dataptr);
+int loadVarsFromFile(char* filepath,args* dataptr);
 bool openFile(const gchar *filepath,int linenumber,bool warn);
 bool saveFile(GtkWidget* widget,gpointer data);
 void newFile(GtkWidget* widget,gpointer data);

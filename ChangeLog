@@ -1,3 +1,7 @@
+0.3.2
+First run of gtk3 version now imports most settings from gtk2 version ( or vice versa ).
+Changed 'Go To Define' toolbar icon.
+
 0.3.1
 Code clean.
 Fixed revert.

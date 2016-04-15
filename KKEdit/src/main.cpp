@@ -29,21 +29,15 @@ bool	loadPluginsFlag=true;
 void readConfig(void)
 {
 	ERRDATA
-	char*	filename;
+	getOldConfigs("kkedit.rc",kkedit_rc);
 
-	asprintf(&filename,"%s/." KKEDITVERS "/kkedit.rc",getenv("HOME"));
-	loadVarsFromFile(filename,kkedit_rc);
-	ERRDATA debugFree(&filename);
-
-	asprintf(&filename,"%s/." KKEDITVERS "/kkedit.window.rc",getenv("HOME"));
-	loadVarsFromFile(filename,kkedit_window_rc);
+	getOldConfigs("kkedit.window.rc",kkedit_window_rc);
 	if(windowAllocData!=NULL)
 		sscanf(windowAllocData,"%i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
 
 	if(docWindowAllocData!=NULL)
 		sscanf(docWindowAllocData,"%i %i %i %i",(int*)&docWindowWidth,(int*)&docWindowHeight,(int*)&docWindowX,(int*)&docWindowY);
-
-	ERRDATA debugFree(&filename);
+	ERRDATA
 }
 
 void init(void)
@@ -535,7 +529,6 @@ int main(int argc, char **argv)
 {
 	ERRDATA
 	int				status;
-	char*			filename;
 	char*			dbusname;
 	bool			safeflag=false;
 	GOptionContext*	context;
@@ -575,9 +568,7 @@ int main(int argc, char **argv)
 			loadPluginsFlag=false; 
 		}
 
-	asprintf(&filename,"%s/." KKEDITVERS "/kkedit.rc",getenv("HOME"));
-	loadVarsFromFile(filename,kkedit_startup_vars);
-	ERRDATA debugFree(&filename);
+	getOldConfigs("kkedit.rc",kkedit_startup_vars);
 
 	gtk_init(&argc,&argv);
 

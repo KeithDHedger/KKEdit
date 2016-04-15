@@ -1583,6 +1583,32 @@ void setPageSensitive(void)
 	gtk_widget_set_sensitive((GtkWidget*)revertMenu,true);
 }
 
+void getOldConfigs(const char *file,args *dataptr)
+{
+	char	*filename;
+	int		retval=NOERR;
+
+	asprintf(&filename,"%s/." KKEDITVERS "/%s",getenv("HOME"),file);
+	retval=loadVarsFromFile(filename,dataptr);
+	ERRDATA debugFree(&filename);
+
+	if(retval!=NOERR)
+		{
+			if(strcmp(KKEDITVERS,"KKEdit3")==0)
+				{
+					asprintf(&filename,"%s/.KKEdit/%s",getenv("HOME"),file);
+					retval=loadVarsFromFile(filename,dataptr);
+					ERRDATA debugFree(&filename);
+				}
+			else
+				{
+					asprintf(&filename,"%s/.KKEdit3/%s",getenv("HOME"),file);
+					retval=loadVarsFromFile(filename,dataptr);
+					ERRDATA debugFree(&filename);
+				}
+		}
+}
+
 
 
 
