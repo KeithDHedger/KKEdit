@@ -213,7 +213,7 @@ void setUpToolBar(void)
 						break;
 					case 'G':
 //navigation
-						gotoDefButton=createNewToolItem(GTK_STOCK_DIALOG_QUESTION,GOTO_DEFINE_TOOLBAR_LABEL);
+						gotoDefButton=createNewToolItem(GTK_STOCK_HELP,GOTO_DEFINE_TOOLBAR_LABEL);
 						gtk_toolbar_insert(toolBar,gotoDefButton,-1);
 						g_signal_connect(G_OBJECT(gotoDefButton),"clicked",G_CALLBACK(goToDefinition),NULL);
 						gtk_widget_set_tooltip_text((GtkWidget*)gotoDefButton,GOTO_DEFINE_TT_LABEL);
