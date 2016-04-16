@@ -33,7 +33,7 @@
 
 bool	cancelCheck=false;
 
-void doCancelCheck(GtkWidget* widget,gpointer data)
+void doCancelCheck(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	gtk_widget_destroy(spellCheckWord);
@@ -45,15 +45,15 @@ void doCancelCheck(GtkWidget* widget,gpointer data)
 	ERRDATA
 }
 
-void checkTheWord(char* word,int checkDoc)
+void checkTheWord(char *word,int checkDoc)
 {
 	ERRDATA
 	int							correct;
-	AspellWordList*				suggestions;
-	AspellStringEnumeration*	elements;
-	const char*					suggestedword;
+	AspellWordList				*suggestions;
+	AspellStringEnumeration	*elements;
+	const char					*suggestedword;
 	int							wordcnt=0;
-	char*						wordlist[100];
+	char						*wordlist[100];
 
 	correct=aspell_speller_check(spellChecker,word,-1);
 	if(!correct)
@@ -77,13 +77,13 @@ void checkTheWord(char* word,int checkDoc)
 	ERRDATA
 }
 
-void checkWord(GtkWidget* widget,gpointer data)
+void checkWord(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
-	char*		selection=NULL;
+	char		*selection=NULL;
 
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		{
@@ -103,10 +103,10 @@ void checkWord(GtkWidget* widget,gpointer data)
 	ERRDATA
 }
 
-void doChangeWord(GtkWidget* widget,gpointer data)
+void doChangeWord(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructPtr(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 
@@ -142,7 +142,7 @@ void doChangeWord(GtkWidget* widget,gpointer data)
 	ERRDATA
 }
 
-void doAddIgnoreWord(GtkWidget* widget,gpointer data)
+void doAddIgnoreWord(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	if((long)data==1)
@@ -161,28 +161,28 @@ void doAddIgnoreWord(GtkWidget* widget,gpointer data)
 	ERRDATA
 }
 
-void doSpellCheckDoc(GtkWidget* widget,gpointer data)
+void doSpellCheckDoc(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct*				page=getPageStructPtr(-1);
-	gchar*					buffer;
+	pageStruct				*page=getPageStructPtr(-1);
+	gchar					*buffer;
 	long					filelen;
 	GtkTextIter				start;
 	GtkTextIter				end;
 
-	AspellCanHaveError*		ret;
-	AspellDocumentChecker*	checker;
+	AspellCanHaveError		*ret;
+	AspellDocumentChecker	*checker;
 	AspellToken				token;
-	FILE*					out;
-	FILE*					doc;
+	FILE					*out;
+	FILE					*doc;
 	char					line[2048];
-	char*					tempfile;
+	char					*tempfile;
 	int						diff;
 	unsigned int			goodwordlen;
-	char*					word_begin;
-	char*					filename=(char*)data;
-	char*					badword;
-	StringSlice*			slice=new StringSlice;
+	char					*word_begin;
+	char					*filename=(char*)data;
+	char					*badword;
+	StringSlice			*slice=new StringSlice;
 
 	asprintf(&tempfile,"%s/KKEditAspell-%s",tmpFolderName,slice->randomName(6));
 	/* Open the file */

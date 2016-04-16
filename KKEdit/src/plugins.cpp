@@ -24,10 +24,10 @@
 #define COLUMN_PLUGIN 1
 #define NUM_COLUMNS 2
 
-GtkWidget*	plugAboutButton;
-GtkWidget*	plugPrefsButton;
-GtkWidget*	plugwindow;
-GtkWidget*	treeview;
+GtkWidget	*plugAboutButton;
+GtkWidget	*plugPrefsButton;
+GtkWidget	*plugwindow;
+GtkWidget	*treeview;
 
 void enableToggled(GtkCellRendererToggle *cell,gchar *path_str,gpointer data)
 {
@@ -56,7 +56,7 @@ void getPlugName(gpointer data,gpointer store)
 {
 	ERRDATA
 	GtkTreeIter		iter;
-	moduleData*		plugdata;
+	moduleData		*plugdata;
 
 	plugdata=(moduleData*)data;
 	gtk_list_store_append((GtkListStore*)store,&iter);
@@ -68,10 +68,10 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 {
 	ERRDATA
 	int			enabled;
-	char*		name=NULL;
-	moduleData*	pd;
-	char*		filepath;
-	GtkWidget*	dialog;
+	char		*name=NULL;
+	moduleData	*pd;
+	char		*filepath;
+	GtkWidget	*dialog;
 
 	gtk_tree_model_get(model,iter,COLUMN_ENABLE,&enabled,COLUMN_PLUGIN,&name,-1);
 	if(!enabled)
@@ -132,7 +132,7 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 void setPlugsEnabled(void)
 {
 	ERRDATA
-	GtkTreeModel*	model;
+	GtkTreeModel	*model;
 
 	globalPlugins->deleteBlackList();
 	model=gtk_tree_view_get_model((GtkTreeView*)treeview);
@@ -140,13 +140,13 @@ void setPlugsEnabled(void)
 	ERRDATA
 }
 
-void setPlugPrefs(GtkWidget* widget,gpointer data)
+void setPlugPrefs(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	GtkTreeModel*		model;
-	GtkTreeSelection*	selection=NULL;
+	GtkTreeModel		*model;
+	GtkTreeSelection	*selection=NULL;
 	GtkTreeIter			iter;
-	char*				plugname;
+	char				*plugname;
 
 	switch(long(data))
 		{
@@ -181,13 +181,13 @@ void setPlugPrefs(GtkWidget* widget,gpointer data)
 	ERRDATA
 }
 
-void onRowSelected(GtkTreeView* treeview,gpointer userdata)
+void onRowSelected(GtkTreeView *treeview,gpointer userdata)
 {
 	ERRDATA
-	GtkTreeModel*		model;
-	GtkTreeSelection*	selection=NULL;
+	GtkTreeModel		*model;
+	GtkTreeSelection	*selection=NULL;
 	GtkTreeIter			iter;
-	char*				plugname;
+	char				*plugname;
 
 	selection=gtk_tree_view_get_selection((GtkTreeView*)treeview);
 	if((selection!=NULL) &&(gtk_tree_selection_get_selected(selection,&model,&iter)))
@@ -200,16 +200,16 @@ void onRowSelected(GtkTreeView* treeview,gpointer userdata)
 	ERRDATA
 }
 
-VISIBLE void doPlugPrefs(GtkWidget* widget,gpointer data)
+VISIBLE void doPlugPrefs(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	GtkWidget*		vbox;
-	GtkListStore*	store;
-	GtkTreeModel*	model=NULL;
+	GtkWidget		*vbox;
+	GtkListStore	*store;
+	GtkTreeModel	*model=NULL;
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
-	GtkWidget*		button;
-	GtkWidget*		hbox;
+	GtkWidget		*button;
+	GtkWidget		*hbox;
 
 	plugwindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 

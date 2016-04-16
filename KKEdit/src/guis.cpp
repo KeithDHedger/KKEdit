@@ -22,24 +22,24 @@
 
 #define TABLECOLS 2
 
-GtkWidget*		recent;
-GtkToolItem*	tool[18]={NULL,};
-GtkIconView*	iconView=NULL;
-GtkListStore*	listStore=NULL;
+GtkWidget		*recent;
+GtkToolItem	*tool[18]={NULL,};
+GtkIconView	*iconView=NULL;
+GtkListStore	*listStore=NULL;
 
-GtkWidget*		prefHBox;
-GtkWidget*		prefHBox1;
-GtkWidget*		prefHBox2;
-GtkWidget*		pagevbox;
+GtkWidget		*prefHBox;
+GtkWidget		*prefHBox1;
+GtkWidget		*prefHBox2;
+GtkWidget		*pagevbox;
 
-GtkWidget*		entries[NUMSHORTCUTS];
+GtkWidget		*entries[NUMSHORTCUTS];
 
 const char		*shortcuttext[NUMSHORTCUTS]={DELETE_LINE_LABEL,DELETE_TO_EOL_LABEL,DELETE_TO_BOL_LABEL,SELECT_WORD_LABEL,DELETE_WORD_LABEL,DUPLICATE_LINE_LABEL,SELECT_LINE_LABEL,LINE_UP_LABEL,LINE_DOWN_LABEL,SELECT_TO_EOL_LABEL,SELECT_TO_BOL_LABEL,SELECTION_UP_LABEL,SELECTION_DOWN_LABEL,SHOW_COMPLETION_LABEL};
 
-GtkWidget*	prefsWidgets[MAXPREFSWIDGETS];
-GObject*	prefsIntWidgets[MAXPREFSINTWIDGETS];
+GtkWidget	*prefsWidgets[MAXPREFSWIDGETS];
+GObject	*prefsIntWidgets[MAXPREFSINTWIDGETS];
 
-void findTool(toolStruct* data,char* toolname)
+void findTool(toolStruct *data,char *toolname)
 {
 	ERRDATA
 	if(strcmp(toolname,data->menuName)==0)
@@ -47,10 +47,10 @@ void findTool(toolStruct* data,char* toolname)
 	ERRDATA
 }
 
-void selectToolOptions(GtkWidget* widget,gpointer data)
+void selectToolOptions(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	char*	text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
+	char	*text=gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget);
 	int		flags=0;
 
 	selectedToolFromDrop=NULL;
@@ -292,14 +292,14 @@ void addToolToDrop(gpointer data,gpointer user_data)
 	ERRDATA
 }
 
-void fillCombo(GtkComboBoxText* combo)
+void fillCombo(GtkComboBoxText *combo)
 {
 	ERRDATA
 	g_list_foreach(toolsList,addToolToDrop,NULL);
 	ERRDATA
 }
 
-gboolean getToolKey(GtkEntry* widget,GdkEventKey* event,gpointer data)
+gboolean getToolKey(GtkEntry *widget,GdkEventKey *event,gpointer data)
 {
 	ERRDATA
 	if((event->type==GDK_KEY_PRESS) &&(event->keyval==GDK_KEY_Delete))
@@ -317,13 +317,13 @@ gboolean getToolKey(GtkEntry* widget,GdkEventKey* event,gpointer data)
 void doMakeTool(void)
 {
 	ERRDATA
-	GtkWidget*	vbox;
-	GtkWidget*	hbox;
-	GtkWidget*	button;
-	GtkWidget*	toolwin;
-	GtkWidget*	infolabel;
+	GtkWidget	*vbox;
+	GtkWidget	*hbox;
+	GtkWidget	*button;
+	GtkWidget	*toolwin;
+	GtkWidget	*infolabel;
 
-	char*		placeholderinfo;
+	char		*placeholderinfo;
 
 	asprintf(&placeholderinfo,"%s",TOOLS_PLACEHOLDER_LABEL);
 
@@ -481,15 +481,15 @@ void doMakeTool(void)
 void buildTools(void)
 {
 	ERRDATA
-	GtkWidget*		menuitem;
-	GtkWidget*		menu;
-	GList*			ptr;
+	GtkWidget		*menuitem;
+	GtkWidget		*menu;
+	GList			*ptr;
 	bool			gotglobal=false;
 	int				keyflags=0;
 
 	buildToolsList();
 
-	GtkWidget* submenu=gtk_menu_item_get_submenu((GtkMenuItem*)toolsMenu);
+	GtkWidget *submenu=gtk_menu_item_get_submenu((GtkMenuItem*)toolsMenu);
 	if(submenu!=NULL)
 		gtk_menu_item_set_submenu((GtkMenuItem*)toolsMenu,NULL);
 
@@ -582,7 +582,7 @@ void setNewPixbuf(const char *path,int bnum,const char *type)
 void populateStore(void)
 {
 	ERRDATA
-	char*		type;
+	char		*type;
 
 	for(int j=0;j<(int)strlen(toolBarLayout);j++)
 		{
@@ -674,11 +674,11 @@ void populateStore(void)
 	ERRDATA
 }
 
-void addToToolBar(GtkWidget* widget,gpointer ptr)
+void addToToolBar(GtkWidget *widget,gpointer ptr)
 {
 	ERRDATA
-	char*	holddata=toolBarLayout;
-	char*	type;
+	char	*holddata=toolBarLayout;
+	char	*type;
 
 	type=strndup((char*)ptr,1);
 	toolBarLayout=type;
@@ -687,10 +687,10 @@ void addToToolBar(GtkWidget* widget,gpointer ptr)
 	ERRDATA debugFree(&type);
 }
 
-void addPixbuf(const char* pixbuf,const char* data,int toolnumber,const char* tooltip)
+void addPixbuf(const char *pixbuf,const char *data,int toolnumber,const char *tooltip)
 {
 	ERRDATA
-	GtkWidget*		image;
+	GtkWidget		*image;
 	image=gtk_image_new_from_file(pixbuf);
 
 	tool[toolnumber]=gtk_tool_button_new(image,NULL);
@@ -724,13 +724,13 @@ void populateDnD(void)
 	ERRDATA
 }
 
-char* makeToolBarList(void)
+char *makeToolBarList(void)
 {
 	ERRDATA
 	GtkTreeIter iter;
 	gboolean	valid;
-	gchar*		str_data=NULL;
-	GString*	str=g_string_new("");
+	gchar		*str_data=NULL;
+	GString	*str=g_string_new("");
 
 	valid=gtk_tree_model_get_iter_first((GtkTreeModel *)listStore,&iter);
 	while(valid)
@@ -743,10 +743,10 @@ char* makeToolBarList(void)
 	ERRDATA return(g_string_free(str,false));
 }
 
-bool clickIt(GtkWidget* widget,GdkEvent* event,gpointer data)
+bool clickIt(GtkWidget *widget,GdkEvent *event,gpointer data)
 {
 	ERRDATA
-	GtkTreePath*	path=NULL;
+	GtkTreePath	*path=NULL;
 	GtkTreeIter		iter;
 	int				button;
 	int				state=event->button.state;
@@ -792,12 +792,12 @@ void doIconView(void)
 	ERRDATA
 }
 
-void setKeyCuts(GtkWidget* widget,gpointer data)
+void setKeyCuts(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 
-	char*	filename;
-	const char*		text;
+	char	*filename;
+	const char		*text;
 
 	if(strcasecmp(gtk_widget_get_name(widget),"cancel")==0)
 		gtk_widget_hide(keysWindow);
@@ -822,7 +822,7 @@ void setKeyCuts(GtkWidget* widget,gpointer data)
 	ERRDATA
 }
 
-gboolean setKeyInEntry(GtkEntry* widget,GdkEventKey* event,gpointer data)
+gboolean setKeyInEntry(GtkEntry *widget,GdkEventKey *event,gpointer data)
 {
 	ERRDATA
 	if((event->type==GDK_KEY_PRESS) &&(event->keyval==GDK_KEY_Delete))
@@ -840,12 +840,12 @@ gboolean setKeyInEntry(GtkEntry* widget,GdkEventKey* event,gpointer data)
 void buildKeys()
 {
 	ERRDATA
-	GtkWidget*	vbox;
-	GtkWidget*	item;
-	GtkWidget*	hbox;
+	GtkWidget	*vbox;
+	GtkWidget	*item;
+	GtkWidget	*hbox;
 	char		keystring[32];
 	int			loop;
-	char*		keycutsinfo;
+	char		*keycutsinfo;
 
 	if(keysWindow==NULL)
 		{
@@ -904,12 +904,12 @@ void buildKeys()
 	ERRDATA
 }
 
-GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,char hotkey,const char* name,int setimage,const char* menulabel,void* userdata,bool toggle)
+GtkWidget	*makeMenuItem(const char *stocklabel,GtkWidget *parent,void *function,char hotkey,const char *name,int setimage,const char *menulabel,void *userdata,bool toggle)
 {
 	ERRDATA
-	GtkWidget*	widg;
+	GtkWidget	*widg;
 #ifndef _USEGTK3_
-	GtkWidget*	image;
+	GtkWidget	*image;
 #endif
 
 	switch(setimage)
@@ -954,10 +954,10 @@ GtkWidget*	makeMenuItem(const char* stocklabel,GtkWidget* parent,void* function,
 	ERRDATA return(widg);
 }
 
-void makePrefsDial(int widgnum,const char* label,const char* name,int value,int minvalue,int maxvalue)
+void makePrefsDial(int widgnum,const char *label,const char *name,int value,int minvalue,int maxvalue)
 {
 	ERRDATA
-	GtkWidget*	item;
+	GtkWidget	*item;
 
 	prefsIntWidgets[widgnum]=(GObject*)gtk_adjustment_new(value,minvalue,maxvalue,1,1,0);
 	item=gtk_spin_button_new((GtkAdjustment*)prefsIntWidgets[widgnum],1,0);
@@ -968,7 +968,7 @@ void makePrefsDial(int widgnum,const char* label,const char* name,int value,int 
 	ERRDATA
 }
 
-void makePrefsCheck(int widgnum,const char* label,const char* name,bool onoff,bool left,bool autoadd)
+void makePrefsCheck(int widgnum,const char *label,const char *name,bool onoff,bool left,bool autoadd)
 {
 	ERRDATA
 	prefsWidgets[widgnum]=gtk_check_button_new_with_label(label);
@@ -1007,14 +1007,14 @@ void makePrefBox(bool box1,bool box2)
 	gtk_box_pack_start((GtkBox*)prefHBox,prefHBox2,true,true,4);	
 }
 
-VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
+VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	GtkWidget*		vbox;
-	GtkWidget*		hbox;
-	GtkWidget*		item;
-	GtkWidget*		label;
-	GtkNotebook*	prefsnotebook;
+	GtkWidget		*vbox;
+	GtkWidget		*hbox;
+	GtkWidget		*item;
+	GtkWidget		*label;
+	GtkNotebook	*prefsnotebook;
 
 	prefswin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)prefswin,"Preferences");
@@ -1267,14 +1267,14 @@ VISIBLE void doPrefs(GtkWidget* widget,gpointer data)
 	ERRDATA
 }
 
-void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
+void addRecentToMenu(GtkRecentChooser *chooser,GtkWidget *menu)
 {
 	ERRDATA
-	GList*		itemlist=NULL;
-	GList*		l=NULL;
-	GtkWidget*	menuitem;
+	GList		*itemlist=NULL;
+	GList		*l=NULL;
+	GtkWidget	*menuitem;
 	const char	*uri=NULL;
-	char*		filename=NULL;
+	char		*filename=NULL;
 	int			i=0;
 
 	itemlist=gtk_recent_chooser_get_items(chooser);
@@ -1303,10 +1303,10 @@ void addRecentToMenu(GtkRecentChooser* chooser,GtkWidget* menu)
 void buildMainGui(void)
 {
 	ERRDATA
-	GtkWidget*		menuitem;
-	GtkWidget*		menu;
-	GtkWidget*		menurecent;
-	GtkWidget*		plugsubmenu=NULL;
+	GtkWidget		*menuitem;
+	GtkWidget		*menu;
+	GtkWidget		*menurecent;
+	GtkWidget		*plugsubmenu=NULL;
 
 	mainWindowVBox=createNewBox(NEWVBOX,false,0);
 	mainTopUserVBox=createNewBox(NEWVBOX,false,0);
@@ -1724,15 +1724,15 @@ void buildMainGui(void)
 void buildFindReplace(void)
 {
 	ERRDATA
-	GtkWidget*	content_area;
-	GtkWidget*	replace;
+	GtkWidget	*content_area;
+	GtkWidget	*replace;
 #ifndef _USEGTK3_
-	GtkWidget*	image;
+	GtkWidget	*image;
 #endif
-	GtkWidget*	label;
-	GtkWidget*	vbox;
-	GtkWidget*	hbox;
-	GtkWidget*	item;
+	GtkWidget	*label;
+	GtkWidget	*vbox;
+	GtkWidget	*hbox;
+	GtkWidget	*item;
 
 #ifdef _USEGTK3_
 	findReplaceDialog=gtk_dialog_new_with_buttons(FIND_FIND_REPLACE_LABEL,(GtkWindow*)mainWindow, GTK_DIALOG_DESTROY_WITH_PARENT,DIALOG_GO_FORWARD_LABEL,FINDNEXT,MENU_GO_BACK_LABEL,FINDPREV,FIND_REPLACE_LABEL,REPLACE,NULL);
@@ -1839,12 +1839,12 @@ void buildFindReplace(void)
 void buildWordCheck(int documentCheck)
 {
 	ERRDATA
-	GtkWidget*	vbox;
-	GtkWidget*	button;
-	GtkWidget*	hbox;
-	GtkWidget*	label;
-	GtkWidget*	image;
-	char*		labeltext[512];
+	GtkWidget	*vbox;
+	GtkWidget	*button;
+	GtkWidget	*hbox;
+	GtkWidget	*label;
+	GtkWidget	*image;
+	char		*labeltext[512];
 	int			docflag=documentCheck;
 
 	spellCheckWord=gtk_dialog_new();
@@ -1895,7 +1895,7 @@ void buildWordCheck(int documentCheck)
 #endif
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 
-	GtkWidget* content=gtk_dialog_get_content_area((GtkDialog *)spellCheckWord);
+	GtkWidget *content=gtk_dialog_get_content_area((GtkDialog *)spellCheckWord);
 	gtk_container_add(GTK_CONTAINER(content),(GtkWidget*)vbox);
 
 	g_signal_connect_object(G_OBJECT(spellCheckWord),"delete_event",G_CALLBACK(gtk_widget_hide),G_OBJECT(spellCheckWord),G_CONNECT_SWAPPED);
@@ -1907,10 +1907,10 @@ void buildWordCheck(int documentCheck)
 int showFunctionEntry(void)
 {
 	ERRDATA
-	GtkWidget*	dialog;
+	GtkWidget	*dialog;
 	gint		result;
-	GtkWidget*	content_area;
-	GtkWidget*	entrybox;
+	GtkWidget	*content_area;
+	GtkWidget	*entrybox;
 
 	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,DIALOG_ENTER_FUNC_NAME_LABEL);
 
@@ -1938,14 +1938,14 @@ int showFunctionEntry(void)
 void buildGtkDocViewer(void)
 {
 	ERRDATA
-	GtkWidget*	vbox;
-	GtkWidget*	hbox;
-	GtkWidget*	button;
-	GtkWidget*	scrolledWindow;
-	GtkWidget*	entry;
-	GtkWidget*	findbutton;
-	GtkWidget*	findnextinpage;
-	WebKitWebSettings*	settings;
+	GtkWidget	*vbox;
+	GtkWidget	*hbox;
+	GtkWidget	*button;
+	GtkWidget	*scrolledWindow;
+	GtkWidget	*entry;
+	GtkWidget	*findbutton;
+	GtkWidget	*findnextinpage;
+	WebKitWebSettings	*settings;
 
 	docView=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)docView,DOCVIEW_DOCVIEWER_LABEL);
@@ -2018,7 +2018,7 @@ void buildGtkDocViewer(void)
 
 	g_signal_connect_object(G_OBJECT(docView),"delete-event",G_CALLBACK(toggleDocviewer),G_OBJECT(docView),G_CONNECT_SWAPPED);
 
-	const char* lang;
+	const char *lang;
 
 	if(strncmp(localeLang,"en",2)==0)
 		lang="en";

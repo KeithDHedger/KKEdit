@@ -49,12 +49,12 @@ void PluginClass::setPlugFolder(void)
 	ERRDATA
 }
 
-char* PluginClass::getNameFromPath(char* path)
+char *PluginClass::getNameFromPath(char *path)
 {
 	ERRDATA
-	char*			name;
-	StringSlice*	slice=new StringSlice;
-	char*			base;
+	char			*name;
+	StringSlice	*slice=new StringSlice;
+	char			*base;
 
 	slice->setReturnDupString(true);	
 	base=strdup(path);
@@ -65,11 +65,11 @@ char* PluginClass::getNameFromPath(char* path)
 	ERRDATA return(name);
 }
 
-char* PluginClass::getNameFromModule(GModule* module)
+char *PluginClass::getNameFromModule(GModule *module)
 {
 	ERRDATA
-	char*		name;
-	StringSlice*	slice=new StringSlice;
+	char		*name;
+	StringSlice	*slice=new StringSlice;
 
 	slice->setReturnDupString(true);	
 	name=slice->sliceBetween((char*)g_module_name(module),(char*)"lib",(char*)".so");
@@ -77,11 +77,11 @@ char* PluginClass::getNameFromModule(GModule* module)
 	ERRDATA return(name);
 }
 
-bool PluginClass::checkForEnabled(char* plugname)
+bool PluginClass::checkForEnabled(char *plugname)
 {
 	ERRDATA
-	FILE*	fd=NULL;
-	char*	filename;
+	FILE	*fd=NULL;
+	char	*filename;
 	char	buffer[1024];
 	char	name[256];
 
@@ -117,7 +117,7 @@ bool PluginClass::checkForEnabled(char* plugname)
 gint compareName(gpointer data,gpointer user_data)
 {
 	ERRDATA
-	moduleData* pd=(moduleData*)data;
+	moduleData *pd=(moduleData*)data;
 
 	if(strcmp(pd->name,(char*)user_data)==0)
 		{
@@ -127,11 +127,11 @@ gint compareName(gpointer data,gpointer user_data)
 	ERRDATA return(1);
 }
 
-moduleData* PluginClass::getPluginByName(char* name)
+moduleData *PluginClass::getPluginByName(char *name)
 {
 	ERRDATA
-	GList*		pl=NULL;
-	moduleData*	pd=NULL;
+	GList		*pl=NULL;
+	moduleData	*pd=NULL;
 
 	pl=g_list_find_custom(this->plugins,(gconstpointer )name,(GCompareFunc)compareName);
 	if(pl!=NULL)
@@ -143,17 +143,17 @@ moduleData* PluginClass::getPluginByName(char* name)
 void PluginClass::deleteBlackList()
 {
 	ERRDATA
-	char*	command;
+	char	*command;
 
 	asprintf(&command,"rm %s/." KKEDITVERS "/pluglist 2>/dev/null",getenv("HOME"));
 	system(command);
 	ERRDATA debugFree(&command);
 }
 
-void PluginClass::appendToBlackList(char* name)
+void PluginClass::appendToBlackList(char *name)
 {
 	ERRDATA
-	char*	command;
+	char	*command;
 
 	asprintf(&command,"echo %s >> %s/." KKEDITVERS "/pluglist",name,getenv("HOME"));
 	system(command);
@@ -163,12 +163,12 @@ void PluginClass::appendToBlackList(char* name)
 void PluginClass::loadPlugins(void)
 {
 	ERRDATA
-	FILE*		pf;
+	FILE		*pf;
 	char		buffer[4096];
-	GModule*	module=NULL;
-	char*		command;
-	moduleData*	pdata;
-	char*		testname;
+	GModule	*module=NULL;
+	char		*command;
+	moduleData	*pdata;
+	char		*testname;
 
 	if(!g_module_supported())
 		{
@@ -234,7 +234,7 @@ void PluginClass::getEnabledList(void)
 	ERRDATA
 }
 
-int PluginClass::runPlugFunction(moduleData* pdata,const char* func)
+int PluginClass::runPlugFunction(moduleData *pdata,const char *func)
 {
 	ERRDATA
 	int retval=-1;
@@ -249,9 +249,9 @@ int PluginClass::runPlugFunction(moduleData* pdata,const char* func)
 	ERRDATA return(retval);
 }
 
-bool PluginClass::enablePlugin(char* name,bool wanttounload)
+bool PluginClass::enablePlugin(char *name,bool wanttounload)
 {	
-	moduleData*	pd=NULL;
+	moduleData	*pd=NULL;
 	pd=getPluginByName(name);
 	if(pd!=NULL)
 		{
@@ -261,13 +261,13 @@ bool PluginClass::enablePlugin(char* name,bool wanttounload)
 	ERRDATA return(false);
 }
 
-char* PluginClass::getPluginPathByName(char* name)
+char *PluginClass::getPluginPathByName(char *name)
 {
 	ERRDATA
-	FILE*		pf;
+	FILE		*pf;
 	char		buffer[4096];
-	char*		command;
-	char*		testname;
+	char		*command;
+	char		*testname;
 
 	for(int j=0;j<2;j++)
 		{
@@ -294,10 +294,10 @@ char* PluginClass::getPluginPathByName(char* name)
 	ERRDATA return(NULL);
 }
 
-bool PluginClass::checkForFunction(char* name,const char* func)
+bool PluginClass::checkForFunction(char *name,const char *func)
 {
 	ERRDATA
-	moduleData* mod=NULL;
+	moduleData *mod=NULL;
 	gpointer	symbol;
 
 	mod=this->getPluginByName(name);

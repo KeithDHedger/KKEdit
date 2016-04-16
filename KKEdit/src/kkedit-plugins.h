@@ -87,41 +87,41 @@
 
 struct args
 {
-	const char*	name;
+	const char	*name;
 	int			type;
-	void*		data;
+	void		*data;
 };
 
 enum {TYPEINT=1,TYPESTRING,TYPEBOOL,TYPELIST};
 
 struct pageStruct
 {
-	GtkScrolledWindow*	pageWindow;
-	GtkSourceBuffer*	buffer;
-	GtkSourceView*		view;
-	char*				fileName;
-	char*				filePath;
-	char*				realFilePath;
-	char*				dirName;
-	GtkMenuItem*		navSubMenu;
+	GtkScrolledWindow	*pageWindow;
+	GtkSourceBuffer		*buffer;
+	GtkSourceView		*view;
+	char				*fileName;
+	char				*filePath;
+	char				*realFilePath;
+	char				*dirName;
+	GtkMenuItem			*navSubMenu;
 	bool				rebuildMenu;
-	GtkWidget*			tabName;
+	GtkWidget			*tabName;
 	GtkTextIter			iter;
 	GtkTextIter			match_start;
 	GtkTextIter			match_end;
 	bool				isFirst;
-	GFile*				gFile; 
-	GFileMonitor*		monitor;
+	GFile				*gFile; 
+	GFileMonitor		*monitor;
 	bool				itsMe;
-	GList*				markList;
-	const char*			lang;
-	GtkWidget*			tabVbox;
+	GList				*markList;
+	const char			*lang;
+	GtkWidget			*tabVbox;
 	bool				showingChanged;
-	GtkTextMark*		backMark;
-	GtkTextTag*			highlightTag;
-	GList*				userDataList;
+	GtkTextMark			*backMark;
+	GtkTextTag			*highlightTag;
+	GList				*userDataList;
 	GtkSourceCompletion	*completion;
-	GSList*				regexList;
+	GSList				*regexList;
 	int					regexMatchNumber;
 	bool				canUndo;
 	bool				canRedo;
@@ -138,102 +138,103 @@ struct pageStruct
 #define _PLUGINDATA_
 struct moduleData
 {
-	char*		name;
-	bool		enabled;
-	GModule*	module;
-	bool		loaded;
-	char*		path;
-	bool		unload;
+	char				*name;
+	bool				enabled;
+	GModule				*module;
+	bool				loaded;
+	char				*path;
+	bool				unload;
 };
 #endif
 
 //plugins
 struct plugMenuList
 {
-	GtkWidget*		menuBar;
-	GtkWidget*		menuFile;
-	GtkWidget*		menuEdit;
-	GtkWidget*		menuFunc;
-	GtkWidget*		menuNav;
-	GtkWidget*		menuTools;
-	GtkWidget*		menuHelp;
-	GtkWidget*		menuBookMark;
-	GtkWidget*		menuView;
+	GtkWidget			*menuBar;
+	GtkWidget			*menuFile;
+	GtkWidget			*menuEdit;
+	GtkWidget			*menuFunc;
+	GtkWidget			*menuNav;
+	GtkWidget			*menuTools;
+	GtkWidget			*menuHelp;
+	GtkWidget			*menuBookMark;
+	GtkWidget			*menuView;
 };
 
 struct plugData
 {
 //menus
-	plugMenuList	mlist;
-	moduleData*		modData;
-//	GList*			plugins;
+	plugMenuList		mlist;
+	moduleData			*modData;
+//	GList			*plugins;
 //install location of KKEdit data
-	const char*		dataDir;
+	const char			*dataDir;
 //global plugin folder defaults to DATADIR/plugins
-	char*			gPlugFolder;
+	char				*gPlugFolder;
 //local plugin folder defaults to ~/.KKEdit/plugins
-	char*			lPlugFolder;
+	char				*lPlugFolder;
 //kkedit version string
-	const char*		kkeditVersion;
+	const char			*kkeditVersion;
 //unused
-	char*			htmlFile;
+	char				*htmlFile;
 //location of variable that holds the uri to be disp[layed by showDoc
-	char**			thePage;
+	char**				thePage;
 //main mainNotebook
-	GtkNotebook*	notebook;
+	GtkNotebook			*notebook;
 //current page MAYBE NULL!!
-	pageStruct*		page;
+	pageStruct			*page;
 //cuurent tab
-	int				currentTab;
+	int					currentTab;
 //KKEdits temp folder
-	char*			tmpFolder;
+	char				*tmpFolder;
 //kkedits main window user box's
 //top
-	GtkWidget*		topUserBox;
-	GtkWidget*		mainWindowVPane;
+	GtkWidget			*topUserBox;
+	GtkWidget			*mainWindowVPane;
 //left
-	GtkWidget*		leftUserBox;
-	GtkWidget*		mainWindowHPane;
+	GtkWidget			*leftUserBox;
+	GtkWidget			*mainWindowHPane;
 //right
-	GtkWidget*		rightUserBox;
-	GtkWidget*		secondWindowHPane;
+	GtkWidget			*rightUserBox;
+	GtkWidget			*secondWindowHPane;
 //bottom
-	GtkWidget*		bottomUserBox;
-	GtkWidget*		secondWindowVPane;
+	GtkWidget			*bottomUserBox;
+	GtkWidget			*secondWindowVPane;
 //kkedit main window
-	GtkWidget*		mainWindow;
+	GtkWidget			*mainWindow;
 //tool output window buffer;
-	GtkTextBuffer*	toolOutBuffer;
+	GtkTextBuffer		*toolOutBuffer;
 //tool output window
-	GtkWidget*		toolOutWindow;
+	GtkWidget			*toolOutWindow;
 //tab popup menu
-	GtkWidget*		tabPopUpMenu;
+	GtkWidget			*tabPopUpMenu;
 //right click popup menu
-	GtkWidget*		contextPopUpMenu;
+	GtkWidget			*contextPopUpMenu;
 
 //leftright user box visiblity ref
-	int				leftShow;
-	int				rightShow;
+	int					leftShow;
+	int					rightShow;
 //topbottom user box visiblity ref
-	int				topShow;
-	int				bottomShow;
+	int					topShow;
+	int					bottomShow;
 //locale dir for gettext
-	const char*		locale;
+	const char			*locale;
 };
 
-void		showDocView(int howtodisplay,char* text,const char* title);
-pageStruct*	getPageStructPtr(int pagenum);
+void		showDocView(int howtodisplay,char *text,const char *title);
+pageStruct	*getPageStructPtr(int pagenum);
 void		showToolOutput(bool immediate);
 void		hideToolOutput(bool immediate);
 void		showSide(bool left);
 void		hideSide(bool left);
 void		showTop(bool top);
 void		hideTop(bool top);
-void		runCommand(char* commandtorun,void* ptr,bool interm,int flags,int useroot,char* title);
+void		runCommand(char *commandtorun,void *ptr,bool interm,int flags,int useroot,char *title);
 void		debugFree(char** ptr);
 bool		openFile(const gchar *filepath,int linenumber,bool warn);
-bool		saveFile(GtkWidget* widget,gpointer data);
-void		newFile(GtkWidget* widget,gpointer data);
-int			loadVarsFromFile(char* filepath,args* dataptr);
-void		saveVarsToFile(char* filepath,args* dataptr);
+bool		saveFile(GtkWidget *widget,gpointer data);
+void		newFile(GtkWidget *widget,gpointer data);
+int			loadVarsFromFile(char *filepath,args *dataptr);
+void		saveVarsToFile(char *filepath,args *dataptr);
+
 #endif

@@ -23,11 +23,11 @@
 int	theLineNum=0;
 int marknum=0;
 
-void goToDefine(functionData* fdata)
+void goToDefine(functionData *fdata)
 {
 	ERRDATA
-	pageStruct*	page;
-	TextBuffer*	buf;
+	pageStruct	*page;
+	TextBuffer	*buf;
 
 	if(fdata->intab==-1)
 		{
@@ -54,13 +54,13 @@ void goToDefine(functionData* fdata)
 	ERRDATA
 }
 
-VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
+VISIBLE void goToDefinition(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct*		page=getPageStructPtr(-1);
+	pageStruct		*page=getPageStructPtr(-1);
 	GtkTextIter		start;
 	GtkTextIter		end;
-	char*			selection=NULL;
+	char			*selection=NULL;
 
 	if(page==NULL)
 		return;
@@ -78,19 +78,19 @@ VISIBLE void goToDefinition(GtkWidget* widget,gpointer data)
 	ERRDATA defSearchFromBar((GtkWidget*)selection,NULL);
 }
 
-VISIBLE void findFile(GtkWidget* widget,gpointer data)
+VISIBLE void findFile(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	char*			command;
+	char			*command;
 	char			buffer[2048];
-	TextBuffer*		buf;
-	char*			selection=NULL;
-	char*			filename=NULL;
-	char*			searchdir=NULL;
-	char*			filepath=NULL;
-	FILE*			fp;
-	StringSlice*	slice;
-	pageStruct*		page=getPageStructPtr(-1);
+	TextBuffer		*buf;
+	char			*selection=NULL;
+	char			*filename=NULL;
+	char			*searchdir=NULL;
+	char			*filepath=NULL;
+	FILE			*fp;
+	StringSlice	*slice;
+	pageStruct		*page=getPageStructPtr(-1);
 
 	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 	slice= new StringSlice;
@@ -132,7 +132,7 @@ VISIBLE void findFile(GtkWidget* widget,gpointer data)
 	ERRDATA delete slice;
 }
 
-void gotoLineSavePos(GtkWidget* widget,gpointer data)
+void gotoLineSavePos(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	int			line=(long)data;
@@ -149,7 +149,7 @@ void gotoLineSavePos(GtkWidget* widget,gpointer data)
 	ERRDATA
 }
 
-void gotoLineNoSavePos(GtkWidget* widget,gpointer data)
+void gotoLineNoSavePos(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	int			line=(long)data;
@@ -165,12 +165,12 @@ void gotoLineNoSavePos(GtkWidget* widget,gpointer data)
 	ERRDATA
 }
 
-void gotoLine(GtkWidget* widget,gpointer data)
+void gotoLine(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	int			line=(long)data;
-	TextBuffer*	buf;
-	pageStruct*	page=getPageStructPtr(-1);
+	TextBuffer	*buf;
+	pageStruct	*page=getPageStructPtr(-1);
 
 	if(page!=NULL)
 		{
@@ -181,7 +181,7 @@ void gotoLine(GtkWidget* widget,gpointer data)
 	ERRDATA
 }
 
-void jumpToLineFromBar(GtkWidget* widget,gpointer data)
+void jumpToLineFromBar(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	theLineNum=atoi(gtk_entry_get_text((GtkEntry*)widget));
@@ -192,10 +192,10 @@ void jumpToLineFromBar(GtkWidget* widget,gpointer data)
 int showLineEntry(void)
 {
 	ERRDATA
-	GtkWidget*	dialog;
+	GtkWidget	*dialog;
 	gint		result;
-	GtkWidget*	content_area;
-	GtkWidget*	entrybox;
+	GtkWidget	*content_area;
+	GtkWidget	*entrybox;
 	char		line[48];
 
 	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_OTHER,GTK_BUTTONS_NONE,DIALOG_ENTER_LINE_LABEL);
@@ -219,7 +219,7 @@ int showLineEntry(void)
 	ERRDATA return(result);
 }
 
-VISIBLE void jumpToLine(GtkWidget* widget,gpointer data)
+VISIBLE void jumpToLine(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	if(showLineEntry()==GTK_RESPONSE_YES)
@@ -227,7 +227,7 @@ VISIBLE void jumpToLine(GtkWidget* widget,gpointer data)
 	ERRDATA
 }
 
-VISIBLE void functionSearch(GtkWidget* widget,gpointer data)
+VISIBLE void functionSearch(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 
@@ -241,13 +241,13 @@ VISIBLE void functionSearch(GtkWidget* widget,gpointer data)
 	ERRDATA
 }
 
-void jumpToMark(GtkWidget* widget,gpointer data)
+void jumpToMark(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	GtkTextMark*	mark;
-	pageStruct*		page;
-	pageStruct*		checkpage;
-	TextBuffer*		buf;
+	GtkTextMark	*mark;
+	pageStruct		*page;
+	pageStruct		*checkpage;
+	TextBuffer		*buf;
 
 	globalHistory->saveLastPos();
 	page=(pageStruct*)((bookMarksNew*)data)->page;
@@ -272,10 +272,10 @@ void jumpToMark(GtkWidget* widget,gpointer data)
 
 #ifdef _BUILDDOCVIEWER_
 
-char* unEscapeFileNAme(char* name)
+char *unEscapeFileNAme(char *name)
 {
 	ERRDATA
-	char*	buffer;
+	char	*buffer;
 	int		charpos;
 	unsigned int		namepos;
 
@@ -379,12 +379,12 @@ char* unEscapeFileNAme(char* name)
 	ERRDATA return(buffer);
 }
 
-char*	filebuffer=NULL;
+char	*filebuffer=NULL;
 
 bool readFile(char *name)
 {
 	ERRDATA
-	FILE*			file;
+	FILE			*file;
 	unsigned long	fileLen;
 
 	if(filebuffer!=NULL)
@@ -419,13 +419,13 @@ bool readFile(char *name)
 	ERRDATA return(true);
 }
 
-int getLineFromXML(char* xml)
+int getLineFromXML(char *xml)
 {
 	ERRDATA
-	StringSlice*	slice=new StringSlice;
+	StringSlice	*slice=new StringSlice;
 
-	char*			data;
-	char*			xmldata=xml;
+	char			*data;
+	char			*xmldata=xml;
 	int				retline=1;
 
 	data=slice->sliceBetween(xmldata,(char*)"Definition at line",(char*)"\">");
@@ -437,18 +437,18 @@ int getLineFromXML(char* xml)
 
 bool	mustBeAClass=false;
 int		classLineNumber=1;
-char*	classFileName=NULL;
+char	*classFileName=NULL;
 
-char* getPathFromXML(char* xml)
+char *getPathFromXML(char *xml)
 {
 	ERRDATA
-	StringSlice*	slice=new StringSlice;
+	StringSlice	*slice=new StringSlice;
 	bool			done=false;
-	char*			data;
+	char			*data;
 	unsigned int	bufferlen=1024;
-	char*			buffer=(char*)calloc(bufferlen,1);
-	char*			xmldata=xml;
-	char*			portion;
+	char			*buffer=(char*)calloc(bufferlen,1);
+	char			*xmldata=xml;
+	char			*portion;
 
 	buffer[0]=0;
 	mustBeAClass=false;
@@ -483,7 +483,7 @@ char* getPathFromXML(char* xml)
 			xmldata=strstr(xml,(char*)"<p>Definition at line ");
 			if(xmldata!=NULL)
 				{
-					char*	tfile;
+					char	*tfile;
 					asprintf(&tfile,"/%s",slice->sliceBetween(xmldata,(char*)".html\">",(char*)"</a>"));					
 					ERRDATA delete slice;
 					ERRDATA return(tfile);
@@ -539,11 +539,11 @@ char* getPathFromXML(char* xml)
 	ERRDATA return(buffer);
 }
 
-gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest* request,WebKitWebNavigationAction* navigationAction,WebKitWebPolicyDecision* policy_decision, gpointer user_data)
+gboolean docLinkTrap(WebKitWebView *web_view,WebKitWebFrame *frame,WebKitNetworkRequest *request,WebKitWebNavigationAction *navigationAction,WebKitWebPolicyDecision *policy_decision, gpointer user_data)
 {
 	ERRDATA
 	int				mod=-1;
-	const char*		uri;
+	const char		*uri;
 	StringSlice		slce;
 	char			*htmlpage;
 	FILE			*fp;
@@ -631,7 +631,7 @@ gboolean docLinkTrap(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetwork
 #endif
 
 //jump to tab
-void selectTab(GtkWidget* widget,gpointer data)
+void selectTab(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	GdkModifierType	mask;

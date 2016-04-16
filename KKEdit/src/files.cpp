@@ -24,19 +24,19 @@
 #include <gtksourceview/gtksource.h>
 #endif
 
-GtkWidget*	vbox;
-char*		saveFileName=NULL;
-char*		saveFilePath=NULL;
+GtkWidget	*vbox;
+char		*saveFileName=NULL;
+char		*saveFilePath=NULL;
 bool		dropTextFile=false;
 char		*convertedData=NULL;
 long		dataLen=0;
 
-VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
+VISIBLE void saveVarsToFile(char *filepath,args *dataptr)
 {
 	ERRDATA
-	FILE*	fd=NULL;
+	FILE	*fd=NULL;
 	int		cnt=0;
-	GSList*	list=NULL;
+	GSList	*list=NULL;
 
 	fd=fopen(filepath,"w");
 	if(fd!=NULL)
@@ -78,7 +78,7 @@ VISIBLE void saveVarsToFile(char* filepath,args* dataptr)
 	ERRDATA
 }
 
-VISIBLE int loadVarsFromFile(char* filepath,args* dataptr)
+VISIBLE int loadVarsFromFile(char *filepath,args *dataptr)
 {
 	ERRDATA
 	FILE		*fd=NULL;
@@ -138,19 +138,19 @@ VISIBLE int loadVarsFromFile(char* filepath,args* dataptr)
 	return(retval);
 }
 
-GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
+GtkWidget *makeNewTab(char *name,char *tooltip,pageStruct *page)
 {
 	ERRDATA
-	GtkWidget*	evbox=gtk_event_box_new();
-	GtkWidget*	hbox;
-	GtkWidget*	label;
-	GtkWidget*	close=gtk_image_new_from_icon_name(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
+	GtkWidget	*evbox=gtk_event_box_new();
+	GtkWidget	*hbox;
+	GtkWidget	*label;
+	GtkWidget	*close=gtk_image_new_from_icon_name(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
 
-	GtkWidget*	button=gtk_button_new();
+	GtkWidget	*button=gtk_button_new();
 
 //TODO//
-//	GtkRcStyle*	style=gtk_rc_style_new();
-	char*		correctedname;
+//	GtkRcStyle	*style=gtk_rc_style_new();
+	char		*correctedname;
 
 	hbox=createNewBox(NEWHBOX,false,0);
 	ERRDATA rebuildTabsMenu();
@@ -188,11 +188,11 @@ GtkWidget* makeNewTab(char* name,char* tooltip,pageStruct* page)
 	ERRDATA return(evbox);
 }
 
-void setFilePrefs(pageStruct* page)
+void setFilePrefs(pageStruct *page)
 {
 	ERRDATA
-	PangoFontDescription*	font_desc;
-	GtkTextAttributes*		attr;
+	PangoFontDescription	*font_desc;
+	GtkTextAttributes		*attr;
 
 	ERRDATA
 	gtk_source_view_set_auto_indent(page->view,indent);
@@ -259,7 +259,7 @@ void setFilePrefs(pageStruct* page)
 void resetAllFilePrefs(void)
 {
 	ERRDATA
-	pageStruct*			page;
+	pageStruct			*page;
 
 	ERRDATA
 	styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
@@ -278,14 +278,14 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 	ERRDATA
 	gchar**			array=NULL;
 	int				cnt;
-	char*			filename;
-	FILE*			fp;
-	char*			command;
-	GString*		str;
+	char			*filename;
+	FILE			*fp;
+	char			*command;
+	GString		*str;
 	char			line[1024];
-	pageStruct*		page=(pageStruct*)user_data;
+	pageStruct		*page=(pageStruct*)user_data;
 	GtkTextIter		iter;
-	GtkTextMark*	mark;
+	GtkTextMark	*mark;
 
 	ERRDATA
 	array=gtk_selection_data_get_uris(selection_data);
@@ -334,7 +334,7 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 bool getSaveFile(void)
 {
 	ERRDATA
-	GtkWidget*	dialog;
+	GtkWidget	*dialog;
 	bool		retval=false;
 
 #ifdef _USEGTK3_
@@ -365,14 +365,14 @@ bool getSaveFile(void)
 	ERRDATA return(retval);
 }
 
-VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
+VISIBLE bool saveFile(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructPtr(-1);
 	GtkTextIter	start,end;
-	gchar*		text;
-	FILE*		fd=NULL;
-	GtkWidget*	dialog;
+	gchar		*text;
+	FILE		*fd=NULL;
+	GtkWidget	*dialog;
 
 	ERRDATA
 	page->itsMe=true;
@@ -460,17 +460,17 @@ VISIBLE bool saveFile(GtkWidget* widget,gpointer data)
 VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 {
 	ERRDATA
-	GtkWidget*		dialog;
-	char*			filepath;
-	char*			filename;
+	GtkWidget		*dialog;
+	char			*filepath;
+	char			*filename;
 	int				pagenum;
-	FILE*			fp;
+	FILE			*fp;
 	char			line[1024];
-	GString*		str=g_string_new(NULL);
-	char*			command;
+	GString		*str=g_string_new(NULL);
+	char			*command;
 	GtkTextIter		iter;
-	pageStruct*		page;
-	char*			convstr=NULL;
+	pageStruct		*page;
+	char			*convstr=NULL;
 
 	ERRDATA
 	dialog=gtk_file_chooser_dialog_new(OPEN_TT_LABEL,NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN,GTK_RESPONSE_ACCEPT,NULL);
@@ -514,11 +514,11 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 	ERRDATA
 }
 
-VISIBLE void reloadFile(GtkWidget* widget,gpointer data)
+VISIBLE void reloadFile(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct*	page=getPageStructPtr(-1);
-	gchar*		buffer;
+	pageStruct	*page=getPageStructPtr(-1);
+	gchar		*buffer;
 	long		filelen;
 	GtkTextIter	start;
 	GtkTextIter	end;
@@ -537,17 +537,17 @@ VISIBLE void reloadFile(GtkWidget* widget,gpointer data)
 	ERRDATA
 }
 
-VISIBLE void saveSession(GtkWidget* widget,gpointer data)
+VISIBLE void saveSession(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct*		page;
-	FILE*			fd=NULL;
-	char*			filename;
-	GtkTextMark*	mark;
+	pageStruct		*page;
+	FILE			*fd=NULL;
+	char			*filename;
+	GtkTextMark	*mark;
 	GtkTextIter		iter;
 	int				linenumber;
 	GtkTextIter		markiter;
-	GList*			ptr;
+	GList			*ptr;
 
 	ERRDATA
 	asprintf(&filename,"%s/." KKEDITVERS,getenv("HOME"));
@@ -586,7 +586,7 @@ VISIBLE void saveSession(GtkWidget* widget,gpointer data)
 	ERRDATA
 }
 
-VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
+VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	FILE			*fd=NULL;
@@ -655,12 +655,12 @@ VISIBLE void restoreSession(GtkWidget* widget,gpointer data)
 	ERRDATA killBarberPole();
 }
 
-int showFileChanged(char* filename)
+int showFileChanged(char *filename)
 {
 	ERRDATA
-	GtkWidget*	dialog;
+	GtkWidget	*dialog;
 	gint		result;
-	char*		message;
+	char		*message;
 
 	ERRDATA
 	asprintf(&message,DIALOG_FILE_CHANGED_LABEL,filename);
@@ -683,10 +683,10 @@ int showFileChanged(char* filename)
 void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data)
 {
 	ERRDATA
-	pageStruct*		page=(pageStruct*)user_data;
+	pageStruct		*page=(pageStruct*)user_data;
 	GtkTextIter		start;
 	GtkTextIter		end;
-	gchar*			buffer;
+	gchar			*buffer;
 	long			filelen;
 	int				answer;
 
@@ -724,8 +724,8 @@ void add_source_mark_pixbufs(GtkSourceView *view)
 {
 	ERRDATA
 
-	GtkImage*	image;
-	GdkPixbuf*	pbuf;
+	GtkImage	*image;
+	GdkPixbuf	*pbuf;
 
 	ERRDATA
 	image=(GtkImage*)gtk_image_new_from_file(DATADIR"/pixmaps/BookMark.png");
@@ -750,7 +750,7 @@ void add_source_mark_pixbufs(GtkSourceView *view)
 	ERRDATA
 }
 
-gboolean resetRegexMark (GtkWidget *widget,GdkEvent *event,pageStruct* page)
+gboolean resetRegexMark (GtkWidget *widget,GdkEvent *event,pageStruct *page)
 {
 	if(page==NULL)
 		return(false);
@@ -760,10 +760,10 @@ gboolean resetRegexMark (GtkWidget *widget,GdkEvent *event,pageStruct* page)
 	return(false);
 }
 
-pageStruct* makeNewPage(void)
+pageStruct *makeNewPage(void)
 {
 	ERRDATA
-	pageStruct*				page;
+	pageStruct				*page;
 	GtkTextIter				iter;
 	GtkTextAttributes		*attr;
 	GtkSourceUndoManager	*uman;
@@ -876,18 +876,18 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	ERRDATA
 	GtkTextIter				startiter;
 	GtkTextIter				enditer;
-	GtkWidget*				label;
-	gchar*					filename;
-	pageStruct*				page;
-	char*					str=NULL;
-	char*					recenturi;
+	GtkWidget				*label;
+	gchar					*filename;
+	pageStruct				*page;
+	char					*str=NULL;
+	char					*recenturi;
 	int						linenum=linenumber-1;
-	gchar*					contents=NULL;
+	gchar					*contents=NULL;
 	gsize					length;
-	GError*					err=NULL;
-	GtkWidget*				dialog;
-	char*					filepathcopy=NULL;
-	char*					tpath;
+	GError					*err=NULL;
+	GtkWidget				*dialog;
+	char					*filepathcopy=NULL;
+	char					*tpath;
 	int						whattodo;
 	const gchar				*end;
 
@@ -1057,12 +1057,12 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	ERRDATA return(TRUE);
 }
 
-VISIBLE void newFile(GtkWidget* widget,gpointer data)
+VISIBLE void newFile(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	GtkTextIter	iter;
-	GtkWidget*	label;
-	pageStruct*	page;
+	GtkWidget	*label;
+	pageStruct	*page;
 
 	page=makeNewPage();
 	page->tabVbox=createNewBox(NEWVBOX,true,4);

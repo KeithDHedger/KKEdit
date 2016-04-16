@@ -28,7 +28,7 @@ class HistoryClass
 		pageStruct	*getPage(void);
 		TextBuffer	*getTextBuffer(void);
 		bool		savePosition(void);
-		void		setPage(pageStruct* page);
+		void		setPage(pageStruct *page);
 		int			getTabNumForPage(void);
 		bool		canGoBack(void);
 		void		setCurrentPos(void);

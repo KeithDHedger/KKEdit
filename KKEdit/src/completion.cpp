@@ -32,33 +32,33 @@ struct _FunctionProviderClass
 #define GTK_TYPE_SOURCE_COMPLETION_PROVIDER (gtk_source_completion_provider_get_type ())
 G_DEFINE_TYPE_WITH_CODE(FunctionProvider,function_provider,G_TYPE_OBJECT,G_IMPLEMENT_INTERFACE (GTK_TYPE_SOURCE_COMPLETION_PROVIDER,function_provider_iface_init))
 
-FunctionProvider*			funcProv;
-FunctionProvider*			varsProv;
-FunctionProvider*			customProv;
+FunctionProvider			*funcProv;
+FunctionProvider			*varsProv;
+FunctionProvider			*customProv;
 
 bool						forcePopup=false;
-GtkSourceCompletionWords*	docWordsProv;
+GtkSourceCompletionWords	*docWordsProv;
 
-gchar* function_provider_get_name(GtkSourceCompletionProvider* provider)
+gchar *function_provider_get_name(GtkSourceCompletionProvider *provider)
 {
 	ERRDATA return g_strdup(((FunctionProvider *)provider)->name);
 }
 
-gint function_provider_get_priority(GtkSourceCompletionProvider* provider)
+gint function_provider_get_priority(GtkSourceCompletionProvider *provider)
 {
 	ERRDATA return((FunctionProvider*)provider)->priority;
 }
 
-gboolean function_provider_match(GtkSourceCompletionProvider* provider,GtkSourceCompletionContext*context)
+gboolean function_provider_match(GtkSourceCompletionProvider *provider,GtkSourceCompletionContext*context)
 {
 	ERRDATA return TRUE;
 }
 
-char* get_word_at_iter(GtkTextIter* iter,GtkTextBuffer *buffer)
+char *get_word_at_iter(GtkTextIter *iter,GtkTextBuffer *buffer)
 {
 	ERRDATA
-	GtkTextIter*	startiter;
-	char*			word;
+	GtkTextIter	*startiter;
+	char			*word;
 
 	if(gtk_text_iter_ends_word(iter)==true)
 		{
@@ -73,22 +73,22 @@ char* get_word_at_iter(GtkTextIter* iter,GtkTextBuffer *buffer)
 	ERRDATA return(NULL);
 }
 
-GdkPixbuf* function_provider_get_icon(GtkSourceCompletionProvider* provider)
+GdkPixbuf *function_provider_get_icon(GtkSourceCompletionProvider *provider)
 {
 	ERRDATA
-	FunctionProvider* tp=(FunctionProvider*)provider;
+	FunctionProvider *tp=(FunctionProvider*)provider;
 
 	ERRDATA return tp->icon;
 }
 
 //completion
-GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
+GList *addPropsFromWord(pageStruct *page,char *theword,FunctionProvider *prov)
 {
 	ERRDATA
-	GList*	newlist=NULL;
-	char*	infostr;
-	GList*	customlist=customProv->proposals;
-	char*	text;
+	GList	*newlist=NULL;
+	char	*infostr;
+	GList	*customlist=customProv->proposals;
+	char	*text;
 
 	if(page->filePath==NULL)
 		{
@@ -111,14 +111,14 @@ GList* addPropsFromWord(pageStruct* page,char* theword,FunctionProvider* prov)
 	ERRDATA return(newlist);
 }
 
-void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceCompletionContext* context)
+void function_provider_populate(GtkSourceCompletionProvider *provider,GtkSourceCompletionContext *context)
 {
 	ERRDATA
 	GtkTextIter 	iter;
-	gchar*			word=NULL;
-	GtkTextBuffer*	buffer;
-	GList*			wordlist;
-	pageStruct*		page;
+	gchar			*word=NULL;
+	GtkTextBuffer	*buffer;
+	GList			*wordlist;
+	pageStruct		*page;
 
 	if(forcePopup==true)
 		{
@@ -154,7 +154,7 @@ void function_provider_populate(GtkSourceCompletionProvider* provider,GtkSourceC
 	ERRDATA
 }
 
-void function_provider_iface_init(GtkSourceCompletionProviderIface* iface)
+void function_provider_iface_init(GtkSourceCompletionProviderIface *iface)
 {
 	ERRDATA
 	iface->get_name=function_provider_get_name;
@@ -165,12 +165,12 @@ void function_provider_iface_init(GtkSourceCompletionProviderIface* iface)
 	ERRDATA
 }
 
-void function_provider_class_init(FunctionProviderClass* klass)
+void function_provider_class_init(FunctionProviderClass *klass)
 {
 	ERRDATA
 }
 
-void function_provider_init(FunctionProvider* self)
+void function_provider_init(FunctionProvider *self)
 {
 	ERRDATA
 	self->icon=function_provider_get_icon(GTK_SOURCE_COMPLETION_PROVIDER(self));
@@ -178,19 +178,19 @@ void function_provider_init(FunctionProvider* self)
 }
 
 //completion
-void addProp(pageStruct* page)
+void addProp(pageStruct *page)
 {
 	ERRDATA
-	char*		functions=NULL;
+	char		*functions=NULL;
 	char		tmpstr[1024];
-	char*		lineptr;
-	char*		correctedstr;
+	char		*lineptr;
+	char		*correctedstr;
 	char		functype[63];
 	char		infostr[1024];
-	char*		holdstr;
-	FILE*		fd=NULL;
+	char		*holdstr;
+	FILE		*fd=NULL;
 	char		buffer[2048];
-	char*		customfile;
+	char		*customfile;
 
 	if(page->filePath==NULL)
 		{
@@ -259,7 +259,7 @@ void removeProps(void)
 	ERRDATA
 }
 
-void createCompletion(pageStruct* page)
+void createCompletion(pageStruct *page)
 {
 	ERRDATA
 	removeProps();
@@ -276,11 +276,11 @@ void createCompletion(pageStruct* page)
 	ERRDATA
 }
 
-void doCompletionPopUp(pageStruct* page)
+void doCompletionPopUp(pageStruct *page)
 {
 	ERRDATA
-	GtkSourceCompletionContext*	context;
-	GList*						list;
+	GtkSourceCompletionContext	*context;
+	GList						*list;
 
 	context=gtk_source_completion_create_context(page->completion,NULL);
 	list=gtk_source_completion_get_providers(page->completion);

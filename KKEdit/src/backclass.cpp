@@ -139,7 +139,7 @@ void HistoryClass::setCurrentPos(void)
 void HistoryClass::getThisPoint(void)
 {
 	ERRDATA
-	GtkWidget*	pageBox;
+	GtkWidget	*pageBox;
 	int			tabNum=gtk_notebook_get_current_page(mainNotebook);
 
 	this->goBack=true;
@@ -154,7 +154,7 @@ void HistoryClass::getThisPoint(void)
 	ERRDATA
 }
 
-pageStruct* HistoryClass::getPage(void)
+pageStruct *HistoryClass::getPage(void)
 {
 	ERRDATA return(savedPage);
 }
@@ -164,13 +164,13 @@ bool HistoryClass::canGoBack(void)
 	ERRDATA return(this->goBack);
 }
 
-void HistoryClass::setPage(pageStruct* page)
+void HistoryClass::setPage(pageStruct *page)
 {
 	ERRDATA
 	savedPage=page;
 }
 
-TextBuffer* HistoryClass::getTextBuffer(void)
+TextBuffer *HistoryClass::getTextBuffer(void)
 {
 	ERRDATA return(buf);
 }
@@ -196,7 +196,7 @@ bool HistoryClass::savePosition(void)
 int HistoryClass::getTabNumForPage(void)
 {
 	ERRDATA
-	pageStruct*	page;
+	pageStruct	*page;
 	int			numpages=gtk_notebook_get_n_pages(mainNotebook);
 
 	for(int loop=0;loop<numpages;loop++)

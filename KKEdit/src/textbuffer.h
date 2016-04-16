@@ -15,13 +15,13 @@ class TextBuffer
 	public:
 		TextBuffer();
 		~TextBuffer();
-		TextBuffer(GtkTextBuffer* buffer);
+		TextBuffer(GtkTextBuffer *buffer);
 
 		GtkTextIter		lineStart;
 		GtkTextIter		lineEnd;
 		GtkTextIter		visibleLineEnd;
 		GtkTextIter		cursorPos;
-		GtkTextBuffer*	textBuffer;
+		GtkTextBuffer	*textBuffer;
 
 		int lineNum;
 		int numChars;
@@ -39,20 +39,20 @@ class TextBuffer
 
 		void getToLineEnd(void);
 		void getToVisibleLineEnd(void);
-		void deleteFromCursor(GtkTextIter* iter);
+		void deleteFromCursor(GtkTextIter *iter);
 
 		void getToLineStart(void);
-		void deleteToCursor(GtkTextIter* iter);
+		void deleteToCursor(GtkTextIter *iter);
 
 		void selectToLineStart(void);
 		void selectToLineEnd(void);
 		bool selectWord(void);
 		char *getSelectedText(void);
-		void selectRange(GtkTextIter* start,GtkTextIter* end);
+		void selectRange(GtkTextIter *start,GtkTextIter *end);
 
-		void scroll2Line(GtkTextView* view,int linenum,bool doupdate=false);
-		void scroll2Mark(GtkTextView* view,GtkTextMark* mark);
-		void scroll2Iter(GtkTextView* view,GtkTextIter iter);
+		void scroll2Line(GtkTextView *view,int linenum,bool doupdate=false);
+		void scroll2Mark(GtkTextView *view,GtkTextMark *mark);
+		void scroll2Iter(GtkTextView *view,GtkTextIter iter);
 
 	private:
 };

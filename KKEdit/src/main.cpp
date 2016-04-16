@@ -43,7 +43,7 @@ void readConfig(void)
 void init(void)
 {
 	ERRDATA
-	char*		filename;
+	char		*filename;
 	int			exitstatus;
 	char		tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
 
@@ -55,7 +55,7 @@ void init(void)
 	nagTime=(long)time(NULL);
 
 #ifdef _ASPELL_
-	AspellCanHaveError*	possible_err;
+	AspellCanHaveError	*possible_err;
 #endif
 	globalSlice=new StringSlice;
 
@@ -172,13 +172,13 @@ void init(void)
 			{
 				struct pluginData
 	{
-		char*		name;
+		char		*name;
 		bool		enabled;
-		GModule*	module;
+		GModule	*module;
 		bool		loaded;
-		char*       path;
+		char       *path;
 	};
-				pluginData* pd=(pluginData*)g_list_nth_data(globalPlugins->plugins,j);
+				pluginData *pd=(pluginData*)g_list_nth_data(globalPlugins->plugins,j);
 				printf("num %i name=%s\n",j,pd->name);
 				printf("num %i enabled=%i\n",j,(int)pd->enabled);
 				printf("num %i path=%s\n",j,pd->path);
@@ -222,7 +222,7 @@ void init(void)
 void doNagScreen(void)
 {
 	ERRDATA
-	GtkWidget* dialog;
+	GtkWidget *dialog;
 
 	dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",DIALOG_PLEASE_DONATE_LABEL);
 	gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s\n<b>%s</b>\n%s\n\n%s",DIALOG_PAYPAL_LABEL,MYEMAIL,DIALOG_SEND_IT_LABEL,DIALOG_THANKS_LABEL);
@@ -235,18 +235,18 @@ void doNagScreen(void)
 void doNagStuff(void)
 {
 	ERRDATA
-	char*			command=NULL;
-	char*			control=NULL;
+	char			*command=NULL;
+	char			*control=NULL;
 	int				gotcurl=-1;
 	int				gotwget=-1;
 	int				exitstatus;
-	FILE*			fp;
+	FILE			*fp;
 	char			t1[1024];
 	char			vers[1024];
 	char			plugt[1024];
 	unsigned int	thisupdate=0;
-	char*			kkeditupdatemessage=strdup("");
-	char*			plugupdatemessage=strdup("");
+	char			*kkeditupdatemessage=strdup("");
+	char			*plugupdatemessage=strdup("");
 
 	asprintf(&command,"KKEditProgressBar \"%s\" %s/updatecontrol &",CHECKING_LABEL,tmpFolderName);
 	system(command);
@@ -297,7 +297,7 @@ void doNagStuff(void)
 					thisupdate=atol(t1);
 					if((thisupdate>lastUpdate) ||(strcmp(VERSION,vers)!=0))
 						{
-							GtkWidget* dialog;
+							GtkWidget *dialog;
 
 							if(strcmp(VERSION,vers)!=0)
 								{
@@ -333,7 +333,7 @@ void doNagStuff(void)
 	ERRDATA debugFree(&control);
 }
 
-void activate(GApplication* application)
+void activate(GApplication *application)
 {
 	ERRDATA
 	if(mainWindow!=NULL)
@@ -346,7 +346,7 @@ void doKKCommand(const char *command)
 //	char		*folder;
 	char		commandname;
 	long		line;
-	pageStruct*	page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructPtr(-1);
 
 	commanddata=basename((char*)command);
 	commandname=commanddata[2];
@@ -399,10 +399,10 @@ void doKKCommand(const char *command)
 		gtk_window_present((GtkWindow*)mainWindow);
 }
 
-void open(GApplication* application,GFile** files,gint n_files,const gchar* hint)
+void open(GApplication *application,GFile** files,gint n_files,const gchar *hint)
 {
 	ERRDATA
-	char*	filepath=NULL;
+	char	*filepath=NULL;
 	char	*linenum=NULL;
 	int		line=0;
 	char	*basepart=NULL;
@@ -502,12 +502,12 @@ void appStart(GApplication  *application,gpointer data)
 int getWorkspaceNumber(void)
 {
 	ERRDATA
-	GdkDisplay*		display;
-	GdkWindow*		root_win;
+	GdkDisplay		*display;
+	GdkWindow		*root_win;
 	Atom			_net_current_desktop,type;
 	int				format;
 	unsigned long	n_items, bytes_after;
-	unsigned char*	data_return=0;
+	unsigned char	*data_return=0;
 	int				retnum=0;
 
 	display=gdk_screen_get_display(gdk_screen_get_default());
@@ -529,9 +529,9 @@ int main(int argc, char **argv)
 {
 	ERRDATA
 	int				status;
-	char*			dbusname;
+	char			*dbusname;
 	bool			safeflag=false;
-	GOptionContext*	context;
+	GOptionContext	*context;
 
 #if _DEBUGLEVEL_ > DBG0
 	int				data[]={SIGSEGV,SIGFPE,SIGILL,SIGBUS,SIGINT,SIGABRT};

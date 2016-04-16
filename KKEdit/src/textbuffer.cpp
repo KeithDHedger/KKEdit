@@ -30,7 +30,7 @@ TextBuffer::~TextBuffer()
 {
 }
 
-TextBuffer::TextBuffer(GtkTextBuffer* buffer)
+TextBuffer::TextBuffer(GtkTextBuffer *buffer)
 {
 	ERRDATA
 	this->textBuffer=buffer;
@@ -86,7 +86,7 @@ void TextBuffer::getToLineStart()
 	ERRDATA
 }
 
-void TextBuffer::deleteFromCursor(GtkTextIter* iter)
+void TextBuffer::deleteFromCursor(GtkTextIter *iter)
 {
 	ERRDATA
 	this->getCursorIter();
@@ -95,7 +95,7 @@ void TextBuffer::deleteFromCursor(GtkTextIter* iter)
 	ERRDATA
 }
 
-void TextBuffer::deleteToCursor(GtkTextIter* iter)
+void TextBuffer::deleteToCursor(GtkTextIter *iter)
 {
 	ERRDATA
 	this->getCursorIter();
@@ -118,12 +118,12 @@ bool TextBuffer::selectWord()
 	ERRDATA return(false);
 }
 
-char* TextBuffer::getSelectedText()
+char *TextBuffer::getSelectedText()
 {
 	ERRDATA return(gtk_text_buffer_get_text(textBuffer,&lineStart,&lineEnd,true));
 }
 
-void TextBuffer::selectRange(GtkTextIter* start,GtkTextIter* end)
+void TextBuffer::selectRange(GtkTextIter *start,GtkTextIter *end)
 {
 	ERRDATA gtk_text_buffer_select_range(textBuffer,start,end);
 }
@@ -177,10 +177,10 @@ void TextBuffer::selectToLineEnd()
 	ERRDATA
 }
 
-void TextBuffer::scroll2Line(GtkTextView* view,int linenum,bool doupdate)
+void TextBuffer::scroll2Line(GtkTextView *view,int linenum,bool doupdate)
 {
 	ERRDATA
-	GtkTextMark*	mark;
+	GtkTextMark	*mark;
 	GtkTextIter		iter;
 
 	gtk_text_buffer_get_iter_at_line_offset(textBuffer,&iter,linenum,0);
@@ -195,7 +195,7 @@ void TextBuffer::scroll2Line(GtkTextView* view,int linenum,bool doupdate)
 	ERRDATA
 }
 
-void TextBuffer::scroll2Mark(GtkTextView* view,GtkTextMark* mark)
+void TextBuffer::scroll2Mark(GtkTextView *view,GtkTextMark *mark)
 {
 	ERRDATA
 	gtk_text_buffer_get_iter_at_mark(textBuffer,&cursorPos,mark);
@@ -204,7 +204,7 @@ void TextBuffer::scroll2Mark(GtkTextView* view,GtkTextMark* mark)
 	ERRDATA
 }
 
-void TextBuffer::scroll2Iter(GtkTextView* view,GtkTextIter iter)
+void TextBuffer::scroll2Iter(GtkTextView *view,GtkTextIter iter)
 {
 	ERRDATA gtk_text_view_scroll_to_iter(view,&iter,0,true,0,0.5);
 }

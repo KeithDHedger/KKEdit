@@ -21,25 +21,25 @@ typedef struct _FunctionProviderClass FunctionProviderClass;
 struct _FunctionProvider
 {
 	GObject						parent;
-	GList*						proposals;
+	GList						*proposals;
 	gint						priority;
-	const char*					name;
-	GtkSourceCompletionContext*	context;
-	GdkPixbuf*					icon;
+	const char					*name;
+	GtkSourceCompletionContext	*context;
+	GdkPixbuf					*icon;
 };
 
-void function_provider_iface_init(GtkSourceCompletionProviderIface* iface);
+void function_provider_iface_init(GtkSourceCompletionProviderIface *iface);
 GType function_provider_get_type(void);
 
-extern FunctionProvider*			funcProv;
-extern FunctionProvider*			varsProv;
-extern GtkSourceCompletionWords*	docWordsProv;
-extern FunctionProvider*			customProv;
+extern FunctionProvider			*funcProv;
+extern FunctionProvider			*varsProv;
+extern GtkSourceCompletionWords	*docWordsProv;
+extern FunctionProvider			*customProv;
 extern bool							forcePopup;
 
-void doCompletionPopUp(pageStruct* page);
-void createCompletion(pageStruct* page);
-void addProp(pageStruct* page);
+void doCompletionPopUp(pageStruct *page);
+void createCompletion(pageStruct *page);
+void addProp(pageStruct *page);
 void removeProps(void);
 
 #endif
