@@ -261,12 +261,16 @@ extern GtkWidget		*fontButton;
 extern GtkWidget		*terminalBox;
 extern GtkWidget		*rootCommandBox;
 extern GtkWidget		*defaultBrowserBox;
-extern char			*browserCommand;
+extern char				*browserCommand;
+
+#ifdef _USEGTK3_
+extern GtkStyleProvider	*provider;
+#endif
 
 //key short cuts
 extern GtkWidget		*keysWindow;
 
-extern char			*tmpStyleName;
+extern char				*tmpStyleName;
 
 extern GtkWidget		*toolNameWidget;
 extern GtkWidget		*commandLineWidget;

@@ -31,10 +31,11 @@ GtkWidget		*mainWindow=NULL;
 GtkWidget		*menuBar=NULL;
 GtkToolbar		*toolBar;
 GtkWidget		*statusBarMenu=NULL;
-GtkNotebook	*mainNotebook=NULL;
+GtkNotebook		*mainNotebook=NULL;
 
 //file menu
 GtkWidget		*fileMenu;
+GtkWidget		*menuItemOpen=NULL;
 GtkWidget		*saveMenu;
 GtkWidget		*saveAsMenu;
 GtkWidget		*saveAllMenu;
@@ -82,10 +83,6 @@ GtkWidget		*helpMenu;
 char			*statusMessage=NULL;
 
 GtkAccelGroup	*accgroup=NULL;
-
-
-GtkWidget		*menuItemOpen=NULL;
-
 
 VISIBLE GList	*newBookMarksList=NULL;
 char			*highlightColour;
@@ -152,6 +149,10 @@ GtkWidget		*terminalBox;
 GtkWidget		*rootCommandBox;
 GtkWidget		*defaultBrowserBox;
 char			*browserCommand=strdup("firefox");
+
+#ifdef _USEGTK3_
+GtkStyleProvider	*provider;
+#endif
 
 //key short cuts
 GtkWidget		*keysWindow=NULL;
@@ -1627,8 +1628,6 @@ int gerrorMessage(GError **err)
 		}
 	return(0);
 }
-
-
 
 
 

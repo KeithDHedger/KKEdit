@@ -394,6 +394,10 @@ void doKKCommand(const char *command)
 			case 'B':
 				toggleBookmark(NULL,NULL);
 				break;
+//close current tab
+			case 'C':
+				closeTab(NULL,(void*)-1);
+				break;
 		}
 	if(mainWindow!=NULL)
 		gtk_window_present((GtkWindow*)mainWindow);
@@ -493,6 +497,10 @@ void appStart(GApplication  *application,gpointer data)
 
 	if((timeToNag==true) &&(autoCheck==true))
 		doNagStuff();
+
+#ifdef _USEGTK3_
+	provider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
+#endif
 
 	setPageSensitive();
 	gtk_widget_set_size_request(mainWindow,800,400);

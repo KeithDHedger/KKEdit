@@ -188,6 +188,85 @@ GtkWidget *makeNewTab(char *name,char *tooltip,pageStruct *page)
 	ERRDATA return(evbox);
 }
 
+#if 0
+
+const char *resetcss=" \
+* { \
+  color: inherit; \
+  font-size: inherit; \
+  background-color: initial; \
+  font-family: inherit; \
+  font-style: inherit; \
+  font-variant: inherit; \
+  font-weight: inherit; \
+  text-shadow: inherit; \
+  icon-shadow: inherit; \
+  box-shadow: initial; \
+  margin-top: initial; \
+  margin-left: initial; \
+  margin-bottom: initial; \
+  margin-right: initial; \
+  padding-top: initial; \
+  padding-left: initial; \
+  padding-bottom: initial; \
+  padding-right: initial; \
+  border-top-style: initial; \
+  border-top-width: initial; \
+  border-left-style: initial; \
+  border-left-width: initial; \
+  border-bottom-style: initial; \
+  border-bottom-width: initial; \
+  border-right-style: initial; \
+  border-right-width: initial; \
+  border-top-left-radius: initial; \
+  border-top-right-radius: initial; \
+  border-bottom-right-radius: initial; \
+  border-bottom-left-radius: initial; \
+  outline-style: initial; \
+  outline-width: initial; \
+  outline-offset: initial; \
+  background-clip: initial; \
+  background-origin: initial; \
+  background-size: initial; \
+  background-position: initial; \
+  border-top-color: initial; \
+  border-right-color: initial; \
+  border-bottom-color: initial; \
+  border-left-color: initial; \
+  outline-color:  initial; \
+  background-repeat: initial; \
+  background-image: initial; \
+  border-image-source: initial; \
+  border-image-repeat: initial; \
+  border-image-slice: initial; \
+  border-image-width: initial; \
+  transition-property: initial; \
+  transition-duration: initial; \
+  transition-timing-function: initial; \
+  transition-delay: initial; \
+  engine: initial; \
+  gtk-key-bindings: initial; \
+ \
+  -GtkWidget-focus-line-width: 0; \
+  -GtkWidget-focus-padding: 0; \
+  -GtkNotebook-initial-gap: 0; \
+} \
+ \
+* { \
+  color: green; \
+  font-family: Monospace; \
+  border: 100px solid; \
+} \
+ \
+:selected { \
+  background-color: darkGreen; \
+  color: black; \
+} \
+ \
+";
+
+#endif
+
 void setFilePrefs(pageStruct *page)
 {
 	ERRDATA
@@ -210,13 +289,9 @@ void setFilePrefs(pageStruct *page)
 
 	font_desc=pango_font_description_from_string(fontAndSize);
 
-#ifdef _USEGTK3_
-	gtk_widget_override_font((GtkWidget*)page->view,font_desc);
-#else
+#ifndef _USEGTK3_
 	gtk_widget_modify_font((GtkWidget*)page->view,font_desc);
 #endif
-
-	pango_font_description_free(font_desc);
 
 	attr=gtk_text_view_get_default_attributes((GtkTextView*)page->view);
 
@@ -254,6 +329,22 @@ void setFilePrefs(pageStruct *page)
 #endif
 
 	ERRDATA	createCompletion(page);
+
+#ifdef _USEGTK3_	
+	char	*fontcss=NULL;
+
+	asprintf(&fontcss,"* {\n \
+  font-family: %s;\n \
+  font-size: %ipx;\n \
+  border: 1px solid;\n \
+}\n",pango_font_description_get_family(font_desc),pango_font_description_get_size(font_desc)/PANGO_SCALE);
+
+	gtk_css_provider_load_from_data((GtkCssProvider*)provider,fontcss,-1,NULL);
+	gtk_style_context_reset_widgets(gdk_screen_get_default());
+	debugFree(&fontcss);
+#endif
+
+	pango_font_description_free(font_desc);
 }
 
 void resetAllFilePrefs(void)
@@ -780,6 +871,7 @@ pageStruct *makeNewPage(void)
 
 	page->buffer=gtk_source_buffer_new(NULL);
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
+	gtk_style_context_add_provider(gtk_widget_get_style_context((GtkWidget*)page->view),provider,GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 //completion
 	page->completion=gtk_source_view_get_completion(GTK_SOURCE_VIEW(page->view));
@@ -834,7 +926,7 @@ pageStruct *makeNewPage(void)
 	g_signal_connect(G_OBJECT(uman),"can-undo-changed",G_CALLBACK(markUndo),(void*)page);
 	g_signal_connect(G_OBJECT(uman),"can-redo-changed",G_CALLBACK(markRedo),(void*)page);
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(markDirty),(void*)page);
-	g_signal_connect(G_OBJECT(page->buffer),"changed",G_CALLBACK(setChangedSensitive),(void*)page);
+	//g_signal_connect(G_OBJECT(page->buffer),"changed",G_CALLBACK(setChangedSensitive),(void*)page);
 
 	g_signal_connect(page->view,"line-mark-activated",G_CALLBACK(line_mark_activated),page);
 	add_source_mark_pixbufs(GTK_SOURCE_VIEW(page->view));
