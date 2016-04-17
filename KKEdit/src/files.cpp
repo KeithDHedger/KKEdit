@@ -871,7 +871,9 @@ pageStruct *makeNewPage(void)
 
 	page->buffer=gtk_source_buffer_new(NULL);
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
+#ifdef _USEGTK3_
 	gtk_style_context_add_provider(gtk_widget_get_style_context((GtkWidget*)page->view),provider,GTK_STYLE_PROVIDER_PRIORITY_USER);
+#endif
 
 //completion
 	page->completion=gtk_source_view_get_completion(GTK_SOURCE_VIEW(page->view));
