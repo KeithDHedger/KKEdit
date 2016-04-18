@@ -1,3 +1,5 @@
+The qt5 version has temporarily stalled, please use the gtkversion.
+
 KKEdit source code editor.
 
 Why another text editor?
