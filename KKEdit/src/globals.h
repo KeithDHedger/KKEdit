@@ -485,6 +485,10 @@ void getOldConfigs(const char *file,args *dataptr);
 void infoMessage(const char *message);
 int gerrorMessage(GError **err);
 
+#ifdef _USEGTK3_
+void applyCSS (GtkWidget *widget, GtkStyleProvider *widgprovider);
+#endif
+
 #endif
 
 

@@ -1345,6 +1345,39 @@ void buildMainGui(void)
 	g_signal_connect(G_OBJECT(mainNotebook),"page-reordered",G_CALLBACK(switchPage),NULL);
 	g_signal_connect(G_OBJECT(mainNotebook),"page-removed",G_CALLBACK(realCloseTab),NULL);
 
+#if 0
+	asprintf(&notebookcss,"GtkNotebook { \n \
+-GtkWidget-focus-line-width: 0;\n \
+-GtkNotebook-tab-overlap: 0;\n \
+padding: 10 20 10 20;\n \
+border-radius: 0; \n \
+border-width: 0; \n \
+    padding: 4px; \n \
+    margin-top: 8px; \n \
+    margin-bottom: 8px; \n \
+    min-width: 18px; \n \
+    min-height: 18px; \n \
+    color: alpha(currentColor,0.3); \n \
+ \n \
+}\n");
+
+#endif
+
+#ifdef _USEGTK3_
+	char	*notebookcss=NULL;
+	GtkStyleProvider	*nbprovider;
+
+	nbprovider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
+	asprintf(&notebookcss,"GtkNotebook {\n \
+    padding: 0px;\n \
+}\n");
+
+	gtk_css_provider_load_from_data((GtkCssProvider*)nbprovider,notebookcss,-1,NULL);
+	applyCSS((GtkWidget*)mainNotebook,nbprovider);
+	gtk_style_context_reset_widgets(gdk_screen_get_default());
+	debugFree(&notebookcss);
+#endif
+
 	menuBar=gtk_menu_bar_new();
 	toolBarBox=createNewBox(NEWHBOX,true,0);
 	toolBar=(GtkToolbar*)gtk_toolbar_new();
@@ -1674,6 +1707,28 @@ void buildMainGui(void)
 
 //add status bar
 	statusWidget=gtk_statusbar_new();
+	gtk_widget_show(statusWidget);
+#ifdef _USEGTK3_
+	char	*statuscss=NULL;
+	GtkStyleProvider	*statusprovider;
+
+	statusprovider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
+	asprintf(&statuscss,"* {\n \
+    padding: 0px;\n \
+    border: 0px;\n \
+  font-size: 8px;\n \
+    margin:10px;\n \
+    margin-top:10px;\n \
+    margin-bottom:0px;\n \
+}\n");
+
+	gtk_css_provider_load_from_data((GtkCssProvider*)statusprovider,statuscss,-1,NULL);
+	applyCSS((GtkWidget*)statusWidget,statusprovider);
+	gtk_style_context_reset_widgets(gdk_screen_get_default());
+	debugFree(&statuscss);
+#endif
+
+
 	gtk_box_pack_end((GtkBox*)mainWindowVBox,statusWidget,false,true,0);
 
 //hide top/bottom user boxes

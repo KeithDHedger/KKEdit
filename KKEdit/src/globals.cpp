@@ -1630,5 +1630,13 @@ int gerrorMessage(GError **err)
 	return(0);
 }
 
+#ifdef _USEGTK3_
+void applyCSS (GtkWidget *widget, GtkStyleProvider *widgprovider)
+{
+	gtk_style_context_add_provider(gtk_widget_get_style_context (widget),widgprovider,GTK_STYLE_PROVIDER_PRIORITY_USER);
+	if (GTK_IS_CONTAINER (widget))
+		gtk_container_forall (GTK_CONTAINER(widget),(GtkCallback)applyCSS,widgprovider);
+}
+#endif
 
 

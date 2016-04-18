@@ -138,13 +138,6 @@ VISIBLE int loadVarsFromFile(char *filepath,args *dataptr)
 	return(retval);
 }
 
-void applyCSS (GtkWidget *widget, GtkStyleProvider *widgprovider)
-{
-	gtk_style_context_add_provider(gtk_widget_get_style_context (widget),widgprovider,G_MAXUINT);
-	if (GTK_IS_CONTAINER (widget))
-		gtk_container_forall (GTK_CONTAINER(widget),(GtkCallback)applyCSS,widgprovider);
-}
-
 GtkWidget *makeNewTab(char *name,char *tooltip,pageStruct *page)
 {
 	ERRDATA
@@ -155,8 +148,6 @@ GtkWidget *makeNewTab(char *name,char *tooltip,pageStruct *page)
 
 	GtkWidget	*button=gtk_button_new();
 
-//TODO//
-//	GtkRcStyle	*style=gtk_rc_style_new();
 	char		*correctedname;
 
 	hbox=createNewBox(NEWHBOX,false,0);
@@ -181,7 +172,7 @@ GtkWidget *makeNewTab(char *name,char *tooltip,pageStruct *page)
 
 	page->tabName=label;
 	page->pageID=pageID++;
-//TODO//
+
 #ifdef _USEGTK3_
 	applyCSS(evbox,tabBoxProvider);
 	gtk_style_context_reset_widgets(gdk_screen_get_default());
@@ -348,7 +339,6 @@ void setFilePrefs(pageStruct *page)
 	asprintf(&fontcss,"* {\n \
   font-family: %s;\n \
   font-size: %ipx;\n \
-  border: 1px solid;\n \
 }\n",pango_font_description_get_family(font_desc),pango_font_description_get_size(font_desc)/PANGO_SCALE);
 
 	gtk_css_provider_load_from_data((GtkCssProvider*)provider,fontcss,-1,NULL);

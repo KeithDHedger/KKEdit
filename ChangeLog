@@ -1,4 +1,5 @@
 0.3.2
+Squeezed tabs in gtk3.
 Fixed setting font properly in gtk 3.
 Added regex error message if badly formed regex search expression.
 First run of gtk3 version now imports most settings from gtk2 version ( or vice versa ).
