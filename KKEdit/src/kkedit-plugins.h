@@ -129,7 +129,7 @@ struct pageStruct
 	unsigned int		pageID;
 	char				*searchString;
 	char				*replaceString;;
-	void				*reserved4;
+	GtkWidget			*tabButton;
 };
 #endif
 

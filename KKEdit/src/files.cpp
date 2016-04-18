@@ -172,7 +172,7 @@ GtkWidget *makeNewTab(char *name,char *tooltip,pageStruct *page)
 
 	page->tabName=label;
 	page->pageID=pageID++;
-
+	page->tabButton=button;
 #ifdef _USEGTK3_
 	applyCSS(button,tabBoxProvider);
 	gtk_style_context_reset_widgets(gdk_screen_get_default());
@@ -292,10 +292,6 @@ void setFilePrefs(pageStruct *page)
 
 	font_desc=pango_font_description_from_string(fontAndSize);
 
-#ifndef _USEGTK3_
-	gtk_widget_modify_font((GtkWidget*)page->view,font_desc);
-#endif
-
 	attr=gtk_text_view_get_default_attributes((GtkTextView*)page->view);
 
 #ifdef _USEGTK3_
@@ -333,6 +329,7 @@ void setFilePrefs(pageStruct *page)
 
 	ERRDATA	createCompletion(page);
 
+//set font
 #ifdef _USEGTK3_	
 	char	*fontcss=NULL;
 
@@ -344,6 +341,16 @@ void setFilePrefs(pageStruct *page)
 	gtk_css_provider_load_from_data((GtkCssProvider*)provider,fontcss,-1,NULL);
 	gtk_style_context_reset_widgets(gdk_screen_get_default());
 	debugFree(&fontcss);
+//set tabs size gtk3
+	applyCSS(page->tabButton,tabBoxProvider);
+	gtk_style_context_reset_widgets(gdk_screen_get_default());
+#else
+	gtk_widget_modify_font((GtkWidget*)page->view,font_desc);
+//set tabs size gtk2
+	GtkRcStyle	*style=gtk_rc_style_new();
+	style->xthickness=style->ythickness=tabsSize;
+	gtk_widget_modify_style(page->tabButton,style);
+	g_object_unref(G_OBJECT(style));
 #endif
 
 	pango_font_description_free(font_desc);

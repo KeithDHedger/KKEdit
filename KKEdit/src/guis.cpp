@@ -1149,7 +1149,7 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 
 //notebook tabs size
 	makePrefBox(true,false);
-	makePrefsDial(NOTETABSSIZE, PREFS_NBTABS_SIZE_LABEL,"nbtabssize",tabsSize,0,20);
+	makePrefsDial(NOTETABSSIZE,PREFS_NBTABS_SIZE_LABEL,"nbtabssize",tabsSize,0,20);
 
 //sort functions
 	funcListDrop=gtk_combo_box_text_new();

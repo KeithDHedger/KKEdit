@@ -1396,6 +1396,13 @@ void setPrefs(GtkWidget *widget,gpointer data)
 			for(int j=0;j<MAXPREFSINTWIDGETS;j++)
 				*ints[j]=gtk_adjustment_get_value((GtkAdjustment*)prefsIntWidgets[j]);
 
+#ifdef _USEGTK3_
+			char	*tabcss=NULL;
+			asprintf(&tabcss,"* {\npadding: %ipx;\n}\n",tabsSize);
+			gtk_css_provider_load_from_data((GtkCssProvider*)tabBoxProvider,tabcss,-1,NULL);
+			debugFree(&tabcss);
+#endif
+
 			if(styleName!=NULL)
 				{
 					ERRDATA debugFree(&styleName);

@@ -293,7 +293,7 @@
 #define PREFS_FONT_LABEL gettext("Font:")
 #define PREFS_BM_COLOUR_LABEL gettext("Bookmark Highlight Colour:")
 #define PREFS_COMPLETION_SIZE_LABEL gettext("Completion Minimum Word Size:")
-#define PREFS_NBTABS_SIZE_LABEL gettext("Notebook Tab Size (Requires Restart):")
+#define PREFS_NBTABS_SIZE_LABEL gettext("Notebook Tab Size:")
 #define PREFS_FUNC_TYPE_ALPHA_LABEL gettext("Display functions etc in menu by type and alphabetically")
 #define PREFS_FUNC_TYPE_FILE_LABEL gettext("Display functions etc in menu by type and file position")
 #define PREFS_FUNC_FILE_LABEL gettext("Display functions etc in menu by file position")
