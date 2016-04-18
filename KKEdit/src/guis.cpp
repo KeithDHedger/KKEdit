@@ -1709,6 +1709,7 @@ border-width: 0; \n \
 	statusWidget=gtk_statusbar_new();
 	gtk_widget_show(statusWidget);
 #ifdef _USEGTK3_
+//TODO//
 	char	*statuscss=NULL;
 	GtkStyleProvider	*statusprovider;
 
@@ -1717,9 +1718,9 @@ border-width: 0; \n \
     padding: 0px;\n \
     border: 0px;\n \
   font-size: 8px;\n \
-    margin:10px;\n \
-    margin-top:10px;\n \
-    margin-bottom:0px;\n \
+    margin: 1px;\n \
+    margin-top: 1px;\n \
+    margin-bottom: 1px;\n \
 }\n");
 
 	gtk_css_provider_load_from_data((GtkCssProvider*)statusprovider,statuscss,-1,NULL);

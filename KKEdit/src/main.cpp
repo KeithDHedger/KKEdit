@@ -507,6 +507,9 @@ void appStart(GApplication  *application,gpointer data)
   font-size: 8px;\n \
   border: 0px solid;\n \
   padding: 4px; \n \
+  padding-top: 2px; \n \
+  padding-left: 2px; \n \
+  padding-bottom: 2px; \n \
 }\n");
 
 	tabBoxProvider=GTK_STYLE_PROVIDER(gtk_css_provider_new());

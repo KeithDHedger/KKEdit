@@ -24,9 +24,7 @@ Add --enable-aspell if you have installed Aspell and want to include the spell c
 
 ******************
 
-When building for gtk3 you should adjust the commands below to suit.
-
-Debian install.
+Debian install gtk2.
 
 sudo apt-get update
 sudo apt-get install build-essential 
@@ -41,6 +39,20 @@ sudo apt-get install man2html-base
 sudo apt-get install xterm
 
 aspell-en is the english dictionary change to suit your needs.
+
+Debian install gtk3.
+
+sudo apt-get update
+sudo apt-get install build-essential 
+sudo apt-get install libglib2.0-dev libgtk-3-dev
+sudo apt-get install libgtksourceview-3.0-dev
+sudo apt-get install exuberant-ctags
+
+Optional installs:
+sudo apt-get install aspell aspell-en libaspell-dev
+sudo apt-get install libwebkitgtk-3.0-dev
+sudo apt-get install man2html-base
+sudo apt-get install xterm
 
 ./configure --prefix=/usr
 make
