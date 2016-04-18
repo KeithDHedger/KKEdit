@@ -126,6 +126,7 @@ bool			highLight;
 bool			noSyntax;
 bool			singleUse;
 unsigned int	tabWidth;
+unsigned int	tabsSize;
 char			*fontAndSize;
 char			*terminalCommand;
 char			*rootCommand;
@@ -435,6 +436,7 @@ args			kkedit_rc[]=
 	{"maxtabchars",TYPEINT,&maxTabChars},
 	{"maxmenuchars",TYPEINT,&maxFuncDefs},
 	{"maxbmchars",TYPEINT,&maxBMChars},
+	{"tabssize",TYPEINT,&tabsSize},
 	{NULL,0,NULL}
 };
 

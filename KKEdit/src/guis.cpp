@@ -1147,6 +1147,10 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 	makePrefBox(true,false);
 	makePrefsDial(COMPLETIONSIZE,PREFS_COMPLETION_SIZE_LABEL,"minautochars",autoShowMinChars,2,20);
 
+//notebook tabs size
+	makePrefBox(true,false);
+	makePrefsDial(NOTETABSSIZE, PREFS_NBTABS_SIZE_LABEL,"nbtabssize",tabsSize,0,20);
+
 //sort functions
 	funcListDrop=gtk_combo_box_text_new();
 	gtk_combo_box_text_append_text((GtkComboBoxText*)funcListDrop,PREFS_FUNC_TYPE_ALPHA_LABEL);

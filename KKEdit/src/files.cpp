@@ -174,11 +174,11 @@ GtkWidget *makeNewTab(char *name,char *tooltip,pageStruct *page)
 	page->pageID=pageID++;
 
 #ifdef _USEGTK3_
-	applyCSS(evbox,tabBoxProvider);
+	applyCSS(button,tabBoxProvider);
 	gtk_style_context_reset_widgets(gdk_screen_get_default());
 #else
 	GtkRcStyle	*style=gtk_rc_style_new();
-	style->xthickness=style->ythickness=0;
+	style->xthickness=style->ythickness=tabsSize;
 	gtk_widget_modify_style(button,style);
 	g_object_unref(G_OBJECT(style));
 #endif

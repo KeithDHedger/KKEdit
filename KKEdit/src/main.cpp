@@ -65,6 +65,11 @@ void init(void)
 	highLight=true;
 	noSyntax=false;
 	tabWidth=4;
+#ifdef _USEGTK3_
+	tabsSize=2;
+#else
+	tabsSize=0;
+#endif
 	depth=1;
 	singleUse=true;
 	fontAndSize=strdup("mono 10");
@@ -498,7 +503,7 @@ void appStart(GApplication  *application,gpointer data)
 	if((timeToNag==true) &&(autoCheck==true))
 		doNagStuff();
 
-#ifdef _USEGTK3_
+/*
 	char	*tabcss=NULL;
 
 	provider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
@@ -507,10 +512,17 @@ void appStart(GApplication  *application,gpointer data)
   font-size: 8px;\n \
   border: 0px solid;\n \
   padding: 4px; \n \
-  padding-top: 2px; \n \
-  padding-left: 2px; \n \
-  padding-bottom: 2px; \n \
 }\n");
+
+*/
+
+#ifdef _USEGTK3_
+	char	*tabcss=NULL;
+
+	provider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
+	asprintf(&tabcss,"* {\n \
+  padding: %ipx; \n \
+}\n",tabsSize);
 
 	tabBoxProvider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
 	gtk_css_provider_load_from_data((GtkCssProvider*)tabBoxProvider,tabcss,-1,NULL);
