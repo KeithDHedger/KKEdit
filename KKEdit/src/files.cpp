@@ -138,6 +138,13 @@ VISIBLE int loadVarsFromFile(char *filepath,args *dataptr)
 	return(retval);
 }
 
+void applyCSS (GtkWidget *widget, GtkStyleProvider *widgprovider)
+{
+	gtk_style_context_add_provider(gtk_widget_get_style_context (widget),widgprovider,G_MAXUINT);
+	if (GTK_IS_CONTAINER (widget))
+		gtk_container_forall (GTK_CONTAINER(widget),(GtkCallback)applyCSS,widgprovider);
+}
+
 GtkWidget *makeNewTab(char *name,char *tooltip,pageStruct *page)
 {
 	ERRDATA
@@ -175,10 +182,15 @@ GtkWidget *makeNewTab(char *name,char *tooltip,pageStruct *page)
 	page->tabName=label;
 	page->pageID=pageID++;
 //TODO//
-//	style->xthickness=style->ythickness=0;
-//	gtk_widget_modify_style(button,style);
-//	g_object_unref(G_OBJECT(style));
-
+#ifdef _USEGTK3_
+	applyCSS(evbox,tabBoxProvider);
+	gtk_style_context_reset_widgets(gdk_screen_get_default());
+#else
+	GtkRcStyle	*style=gtk_rc_style_new();
+	style->xthickness=style->ythickness=0;
+	gtk_widget_modify_style(button,style);
+	g_object_unref(G_OBJECT(style));
+#endif
 	gtk_widget_show_all(evbox);
 
 	ERRDATA
@@ -928,7 +940,7 @@ pageStruct *makeNewPage(void)
 	g_signal_connect(G_OBJECT(uman),"can-undo-changed",G_CALLBACK(markUndo),(void*)page);
 	g_signal_connect(G_OBJECT(uman),"can-redo-changed",G_CALLBACK(markRedo),(void*)page);
 	g_signal_connect(G_OBJECT(page->buffer),"modified-changed",G_CALLBACK(markDirty),(void*)page);
-	//g_signal_connect(G_OBJECT(page->buffer),"changed",G_CALLBACK(setChangedSensitive),(void*)page);
+	g_signal_connect(G_OBJECT(page->buffer),"changed",G_CALLBACK(setChangedSensitive),(void*)page);
 
 	g_signal_connect(page->view,"line-mark-activated",G_CALLBACK(line_mark_activated),page);
 	add_source_mark_pixbufs(GTK_SOURCE_VIEW(page->view));

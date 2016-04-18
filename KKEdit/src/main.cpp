@@ -499,7 +499,21 @@ void appStart(GApplication  *application,gpointer data)
 		doNagStuff();
 
 #ifdef _USEGTK3_
+	char	*tabcss=NULL;
+
 	provider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
+	asprintf(&tabcss,"* {\n \
+  font-family: mono;\n \
+  font-size: 8px;\n \
+  border: 0px solid;\n \
+  padding-top: 0px;\n \
+  padding-bottom: 0px;\n \
+  border-top-left-radius: 500px;\n \
+}\n");
+
+	tabBoxProvider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
+	gtk_css_provider_load_from_data((GtkCssProvider*)tabBoxProvider,tabcss,-1,NULL);
+	debugFree(&tabcss);
 #endif
 
 	setPageSensitive();

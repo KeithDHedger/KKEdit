@@ -152,6 +152,7 @@ char			*browserCommand=strdup("firefox");
 
 #ifdef _USEGTK3_
 GtkStyleProvider	*provider;
+GtkStyleProvider	*tabBoxProvider;
 #endif
 
 //key short cuts

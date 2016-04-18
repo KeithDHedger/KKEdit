@@ -265,6 +265,7 @@ extern char				*browserCommand;
 
 #ifdef _USEGTK3_
 extern GtkStyleProvider	*provider;
+extern GtkStyleProvider	*tabBoxProvider;
 #endif
 
 //key short cuts
