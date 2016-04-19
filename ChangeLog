@@ -4,7 +4,7 @@ Underscores in function/bookmark menu now shown properly.
 Scroll current line on screen works better.
 Adjusing tabs size now doesn't reguire restart.
 Added notebook tab size adjustment to prefs.
-Added extra debian instructions for gtk 3 in INSTALL.
+Added extra debian instructions for gtk 3 in INSTALL ( thanks to Sadi for that ).
 Squeezed tabs in gtk3.
 Fixed setting font properly in gtk 3.
 Added regex error message if badly formed regex search expression.
