@@ -475,7 +475,6 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	GtkWidget	*menuitem;
 	int			linenum=-1;
 	char		*ts=NULL;
-
 	char		*lineptr=NULL;
 	bool		onefunc=false;
 	int			numtypes=0;
@@ -489,7 +488,10 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	GtkTextIter	start_find,end_find;
 
 	if(loadingSession==true)
-		return;
+		{
+			gtk_widget_show_all((GtkWidget*)arg1);
+			return;
+		}
 
 	if(arg1==NULL)
 		return;

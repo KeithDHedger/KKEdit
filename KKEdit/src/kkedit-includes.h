@@ -54,7 +54,7 @@
 #define GTK_STOCK_QUIT "application-exit"
 #define GTK_STOCK_ABOUT "help-about"
 #define GTK_STOCK_HELP "help-browser"
-
+#define GTK_STOCK_CALL_START "call-start"
 //odds
 #define GTK_STOCK_REFRESH "view-refresh"
 #define GTK_STOCK_SPELL_CHECK "tools-check-spelling"
