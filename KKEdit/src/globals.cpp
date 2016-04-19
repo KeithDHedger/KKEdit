@@ -300,9 +300,9 @@ const char		*localeLang;
 int				openInThisTab=-1;
 
 //general app
-
+bool			loadingSession;
 HistoryClass	*globalHistory;
-StringSlice	*globalSlice;
+StringSlice		*globalSlice;
 
 unsigned int	shortCuts[NUMSHORTCUTS][2]=
 {
@@ -1298,15 +1298,21 @@ GtkWidget *createNewBox(int orient,bool homog,int spacing)
 	return(retwidg);
 }
 
-GtkWidget *createNewImageMenuItem(const char *stock,const char *label)
+GtkWidget *createNewImageMenuItem(const char *stock,const char *label,bool useunderline)
 {
 	GtkWidget	*item;
 
 #ifdef _USEGTK3_
-	item=gtk_menu_item_new_with_mnemonic(label);
+	if(useunderline==true)
+		item=gtk_menu_item_new_with_mnemonic(label);
+	else
+		item=gtk_menu_item_new_with_label(label);
 #else
 	GtkWidget	*image;
-	item=gtk_image_menu_item_new_with_mnemonic(label);
+	if(useunderline==true)
+		item=gtk_image_menu_item_new_with_mnemonic(label);
+	else
+		item=gtk_image_menu_item_new_with_label(label);
 	image=gtk_image_new_from_stock(stock,GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)item,image);
 #endif
@@ -1500,6 +1506,9 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 	char		*newlabel=NULL;
 	int			offset=0;
 	bool		hasselection;
+
+	if(loadingSession==true)
+		return;
 
 	if(page==NULL)
 		return;

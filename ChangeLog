@@ -1,4 +1,7 @@
 0.3.2
+Selecting a tab from the menu now centres the current line.
+Underscores in function/bookmark menu now shown properly.
+Scroll current line on screen works better.
 Adjusing tabs size now doesn't reguire restart.
 Added notebook tab size adjustment to prefs.
 Added extra debian instructions for gtk 3 in INSTALL.

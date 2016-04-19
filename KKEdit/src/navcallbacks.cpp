@@ -638,6 +638,8 @@ void selectTab(GtkWidget *widget,gpointer data)
 	int				newpage;
 	int				thispage;
 	GtkWidget		*child;
+	TextBuffer		*buf;
+	pageStruct		*page=NULL;
 
 #ifdef _USEGTK3_
 	GdkDeviceManager	*device_manager=gdk_display_get_device_manager(gdk_display_get_default());
@@ -666,6 +668,15 @@ void selectTab(GtkWidget *widget,gpointer data)
 		{
 			gtk_notebook_set_current_page(mainNotebook,(int)(long)data);
 		}
+
+	page=getPageStructPtr(-1);
+	if(page==NULL)
+		return;
+
+	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+	buf->scroll2CentreScreen((GtkTextView*)page->view,false);
+	delete buf;
+
 	ERRDATA
 }
 

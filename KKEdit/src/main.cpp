@@ -105,6 +105,7 @@ void init(void)
 	maxBMChars=MAXTEXTWIDTH;
 
 	openInThisTab=-1;
+	loadingSession=false;
 
 //runtime deps
 	exitstatus=system("which manpageeditor 2>&1 >/dev/null");
@@ -584,6 +585,7 @@ int main(int argc, char **argv)
 
 	singleOverRide=false;
 	loadPluginsFlag=true;
+	loadingSession=false;
 
 	GOptionEntry	entries[]=
 {

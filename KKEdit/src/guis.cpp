@@ -497,7 +497,7 @@ void buildTools(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(toolsMenu),menu);
 
 //addtool
-	menuitem=createNewImageMenuItem(GTK_STOCK_EDIT,MENU_EXT_TOOLS_LABEL);
+	menuitem=createNewImageMenuItem(GTK_STOCK_EDIT,MENU_EXT_TOOLS_LABEL,true);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doMakeTool),NULL);
 
@@ -510,7 +510,7 @@ void buildTools(void)
 			if(((toolStruct*)ptr->data)->global==true)
 				{
 					gotglobal=true;
-					menuitem=createNewImageMenuItem(NULL,((toolStruct*)ptr->data)->menuName);
+					menuitem=createNewImageMenuItem(NULL,((toolStruct*)ptr->data)->menuName,false);
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
 
@@ -539,7 +539,7 @@ void buildTools(void)
 		{
 			if(((toolStruct*)ptr->data)->global==false)
 				{
-					menuitem=createNewImageMenuItem(NULL,((toolStruct*)ptr->data)->menuName);
+					menuitem=createNewImageMenuItem(NULL,((toolStruct*)ptr->data)->menuName,false);
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
 
@@ -919,7 +919,7 @@ GtkWidget	*makeMenuItem(const char *stocklabel,GtkWidget *parent,void *function,
 				break;
 
 			case IMAGEMENU:
-				widg=createNewImageMenuItem(stocklabel,menulabel);
+				widg=createNewImageMenuItem(stocklabel,menulabel,true);
 				break;
 
 			case PIXMAPMENU:
@@ -938,7 +938,7 @@ GtkWidget	*makeMenuItem(const char *stocklabel,GtkWidget *parent,void *function,
 				break;
 
 			default:
-				widg=createNewImageMenuItem(NULL,stocklabel);
+				widg=createNewImageMenuItem(NULL,stocklabel,true);
 		}
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(parent),widg);
@@ -1296,7 +1296,7 @@ void addRecentToMenu(GtkRecentChooser *chooser,GtkWidget *menu)
 			if(uri!=NULL)
 				{
 					filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
-					menuitem=createNewImageMenuItem(NULL,menuname);
+					menuitem=createNewImageMenuItem(NULL,menuname,false);
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(recentFileMenu),(void*)filename);
 				}
@@ -1426,7 +1426,7 @@ border-width: 0; \n \
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //recent menu
-	menuitem=createNewImageMenuItem(NULL,MENU_RECENT_FILES_LABEL);
+	menuitem=createNewImageMenuItem(NULL,MENU_RECENT_FILES_LABEL,true);
 	menurecent=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
 	addRecentToMenu((GtkRecentChooser*)recent,menurecent);
@@ -1509,7 +1509,7 @@ border-width: 0; \n \
 //sort
 	sortTabsMenu=makeMenuItem(GTK_STOCK_SORT_ASCENDING,menu,(void*)sortTabs,0,SORTTABSMENUNAME,IMAGEMENU,MENU_SORT_TABS_LABEL,NULL,false);
 //jump to tab
-	viewTabMenu=createNewImageMenuItem(GTK_STOCK_EDIT,MENU_SELECT_TAB_LABEL);
+	viewTabMenu=createNewImageMenuItem(GTK_STOCK_EDIT,MENU_SELECT_TAB_LABEL,true);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),viewTabMenu);
 	rebuildTabsMenu();
 

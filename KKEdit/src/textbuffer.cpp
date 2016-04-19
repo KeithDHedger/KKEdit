@@ -177,10 +177,47 @@ void TextBuffer::selectToLineEnd()
 	ERRDATA
 }
 
+void TextBuffer::scroll2CentreScreen(GtkTextView *view,bool doupdate)
+{
+	GtkTextMark		*mark;
+	GtkTextIter		iter;
+
+	mark=gtk_text_buffer_get_insert(this->textBuffer);
+	gtk_text_buffer_get_iter_at_mark(this->textBuffer,&iter,mark);
+	gtk_text_view_scroll_to_iter(view,&iter,0,true,0,0.5);
+	if(doupdate==true)
+		{
+			while(gtk_events_pending())
+				gtk_main_iteration();
+		}
+}
+
+void TextBuffer::scroll2OnScreen(GtkTextView *view,bool doupdate)
+{
+	GtkTextMark		*mark;
+	GtkTextIter		iter;
+	bool			didscroll;
+
+	mark=gtk_text_buffer_get_insert(this->textBuffer);
+	gtk_text_buffer_get_iter_at_mark(this->textBuffer,&iter,mark);
+	didscroll=gtk_text_view_scroll_to_iter(view,&iter,0,false,0,0);
+	if(didscroll==true)
+		{
+		printf("scrolled\n");
+//			gtk_text_view_scroll_mark_onscreen(view,mark);
+			gtk_text_view_scroll_to_mark(view,mark,0,true,0,0.5);
+		}
+	if(doupdate==true)
+		{
+			while(gtk_events_pending())
+				gtk_main_iteration();
+		}
+}
+
 void TextBuffer::scroll2Line(GtkTextView *view,int linenum,bool doupdate)
 {
 	ERRDATA
-	GtkTextMark	*mark;
+	GtkTextMark		*mark;
 	GtkTextIter		iter;
 
 	gtk_text_buffer_get_iter_at_line_offset(textBuffer,&iter,linenum,0);
@@ -198,6 +235,7 @@ void TextBuffer::scroll2Line(GtkTextView *view,int linenum,bool doupdate)
 void TextBuffer::scroll2Mark(GtkTextView *view,GtkTextMark *mark)
 {
 	ERRDATA
+	printf("form bookmark\n");
 	gtk_text_buffer_get_iter_at_mark(textBuffer,&cursorPos,mark);
 	gtk_text_view_scroll_to_iter(view,&cursorPos,0,true,0,0.5);
 	gtk_text_view_scroll_to_mark(view,mark,0,true,0,0.5);

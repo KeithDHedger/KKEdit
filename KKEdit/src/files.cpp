@@ -701,6 +701,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 
 	ERRDATA
 
+	loadingSession=true;
 	closeAllTabs(NULL,NULL);
 	showBarberPole(DIALOG_POLE_RESTORING);
 
@@ -752,7 +753,21 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 	ERRDATA delete buf;
 
 	currentTabNumber=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)-1;
-	ERRDATA killBarberPole();
+
+	for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
+		{
+			pageStruct *page=getPageStructPtr(j);
+			if(page!=NULL)
+				{
+					buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+					buf->scroll2CentreScreen((GtkTextView*)page->view,true);
+					delete buf;
+				}
+		}
+	loadingSession=false;
+	updateStatusBar((GtkTextBuffer*)page->buffer,NULL,NULL,NULL);
+	killBarberPole();
+	ERRDATA
 }
 
 int showFileChanged(char *filename)
@@ -1151,12 +1166,21 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 //					gtk_main_iteration();
 		}
 
-	gotoLine(NULL,(void*)(long)(linenum+1));
-
+	if(loadingSession==false)
+		{
+			TextBuffer	*buf;
+			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+			gotoLine(NULL,(void*)(long)(linenum+1));
+			buf->scroll2CentreScreen((GtkTextView*)page->view,true);
+//yet another gtk3 hack;
+			buf->scroll2CentreScreen((GtkTextView*)page->view,false);
+			delete buf;
+		}
 	page->canUndo=false;
 	page->canRedo=false;
 	page->isDirty=false;
 	setPageSensitive();
+	
 	ERRDATA return(TRUE);
 }
 

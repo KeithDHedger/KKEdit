@@ -191,8 +191,6 @@ extern GtkWidget		*helpMenu;
 //status bar message
 extern char			*statusMessage;
 
-extern HistoryClass	*globalHistory;
-
 extern GtkAccelGroup	*accgroup;
 
 extern GList			*newBookMarksList;
@@ -407,8 +405,6 @@ extern AspellConfig	*aspellConfig;
 extern AspellSpeller	*spellChecker;
 #endif
 
-extern StringSlice		*globalSlice;
-
 extern unsigned int		shortCuts[NUMSHORTCUTS][2];
 extern char			*shortCutStrings[NUMSHORTCUTS];
 
@@ -425,15 +421,15 @@ extern int				flagsarg;
 extern int				inpopup;
 extern int				alwayspopup;
 extern int				clearview;
-extern char			*commandarg;
-extern char			*commentarg;
-extern char			*menuname;
+extern char				*commandarg;
+extern char				*commentarg;
+extern char				*menuname;
 extern int				rootarg;
 extern int				keycode;
 extern int				usebar;
 
-extern char			*windowAllocData;
-extern char			*docWindowAllocData;
+extern char				*windowAllocData;
+extern char				*docWindowAllocData;
 extern args				kkedit_window_rc[];
 extern args				kkedit_rc[];
 extern args				tool_vars[];
@@ -446,6 +442,10 @@ extern const char		*localeLang;
 extern int				openInThisTab;
 
 //general app
+extern bool				loadingSession;
+extern HistoryClass		*globalHistory;
+extern StringSlice		*globalSlice;
+
 
 void plugRunFunction(gpointer data,gpointer funcname);
 pageStruct *getPageStructPtr(int pagenum);
@@ -472,7 +472,7 @@ void catchSignal(int signal);
 void freeAndNull(char** ptr);
 
 GtkWidget *createNewBox(int orient,bool homog,int spacing);
-GtkWidget *createNewImageMenuItem(const char *stock,const char *label);
+GtkWidget *createNewImageMenuItem(const char *stock,const char *label,bool useunderline);
 GtkToolItem *createNewToolItem(const char *stock,const char *label);
 GtkWidget *createNewStockButton(const char *stock,const char *label);
 GdkPixbuf *createNewIcon(const char *stock,GtkWidget *widg);
