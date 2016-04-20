@@ -1337,7 +1337,7 @@ GtkToolItem *createNewToolItem(const char *stock,const char *label)
 {
 	GtkToolItem	*button;
 #ifdef _USEGTK3_
-	GtkWidget		*image;
+	GtkWidget	*image;
 	image=gtk_image_new_from_icon_name(stock,GTK_ICON_SIZE_LARGE_TOOLBAR);
 	button=gtk_tool_button_new(image,label);
 #else

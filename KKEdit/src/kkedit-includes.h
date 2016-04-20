@@ -54,7 +54,7 @@
 #define GTK_STOCK_QUIT "application-exit"
 #define GTK_STOCK_ABOUT "help-about"
 #define GTK_STOCK_HELP "help-browser"
-#define GTK_STOCK_CALL_START "call-start"
+
 //odds
 #define GTK_STOCK_REFRESH "view-refresh"
 #define GTK_STOCK_SPELL_CHECK "tools-check-spelling"
@@ -69,6 +69,7 @@
 #define GTK_STOCK_GO_FORWARD "go-next"
 #define GTK_STOCK_HOME "go-home"
 #define GTK_STOCK_GO_UP "go-up"
+#define GTK_STOCK_EXECUTE "system-run"
 
 //gtk stock widget labels
 #define GTK_STOCK_YES gettext("_Yes")
@@ -81,6 +82,7 @@
 #define GTK_STOCK_OK gettext("_OK")
 
 #endif
+
 
 //menus labels
 //file menu
