@@ -249,6 +249,7 @@ extern bool				noDuplicates;
 extern bool				noWarnings;
 extern bool				readLinkFirst;
 extern bool				autoShowComps;
+extern bool				autoSearchDocs;
 extern bool				autoCheck;
 extern bool				useGlobalPlugMenu;
 extern unsigned int		maxTabChars;
@@ -445,6 +446,7 @@ extern int				openInThisTab;
 extern bool				loadingSession;
 extern HistoryClass		*globalHistory;
 extern StringSlice		*globalSlice;
+extern bool				doGoogleSearch;
 
 
 void plugRunFunction(gpointer data,gpointer funcname);

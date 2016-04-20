@@ -106,6 +106,7 @@ void init(void)
 
 	openInThisTab=-1;
 	loadingSession=false;
+	doGoogleSearch=true;
 
 //runtime deps
 	exitstatus=system("which manpageeditor 2>&1 >/dev/null");

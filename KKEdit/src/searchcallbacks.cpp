@@ -55,8 +55,14 @@ PROTECTED void showDocView(int howtodisplay,char *text,const char *title)
 		{
 			if(strcasecmp(thePage,"file://(null)")==0)
 				{
-					ERRDATA debugFree(&thePage);
-					asprintf(&thePage,"https://www.google.co.uk/search?q=%s",text);
+					if(doGoogleSearch==true)
+						{
+							gtk_window_set_title((GtkWindow*)docView,DOCVIEW_SEARCHING_GOOGLE_LABEL);
+							ERRDATA debugFree(&thePage);
+							asprintf(&thePage,"https://www.google.co.uk/search?q=%s",text);
+						}
+					else
+						return;
 				}
 			webkit_web_view_load_uri(webView,thePage);
 		}
@@ -99,7 +105,7 @@ PROTECTED void showDocView(int howtodisplay,char *text,const char *title)
 	return;
 }
 
-VISIBLE void searchGtkDocs(GtkWidget *widget,gpointer data)
+VISIBLE bool searchGtkDocs(GtkWidget *widget,gpointer data)
 {
 	pageStruct	*page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -117,6 +123,7 @@ VISIBLE void searchGtkDocs(GtkWidget *widget,gpointer data)
 	char		*link;
 	int			cnt=0;
 	char		ds[2];
+	bool		retval=true;
 
 	ERRDATA
 
@@ -198,7 +205,8 @@ VISIBLE void searchGtkDocs(GtkWidget *widget,gpointer data)
 				{
 					asprintf(&thePage,"file://%s",searchdata[0][1]);
 				}
-
+			if(strcmp(thePage,"file://(null)")==0)
+				retval=false;
 			showDocView(USEURI,selection,DOCVIEW_GTK_DOCS_LABEL);
 		}
 
@@ -217,6 +225,8 @@ VISIBLE void searchGtkDocs(GtkWidget *widget,gpointer data)
 		{
 			ERRDATA debugFree(&selection);
 		}
+
+	return(retval);
 }
 
 VISIBLE void doDoxy(GtkWidget *widget,long data)
@@ -363,7 +373,7 @@ void searchQT5Assist(GtkWidget *widget,gpointer data)
 }
 
 //showDocViewWidget
-VISIBLE void searchQT5Docs(GtkWidget *widget,gpointer data)
+VISIBLE bool searchQT5Docs(GtkWidget *widget,gpointer data)
 {
 	pageStruct	*page=getPageStructPtr(-1);
 	GtkTextIter	start;
@@ -372,10 +382,11 @@ VISIBLE void searchQT5Docs(GtkWidget *widget,gpointer data)
 	FILE		*fp;
 	FILE		*fd;
 	char		*command=NULL;
-	GString	*str;
+	GString		*str;
 	char		line[1024];
 	char		*func=NULL;
 	int			cnt=0;
+	bool		retval=true;
 
 	if(data!=NULL)
 		selection=strdup((char*)data);
@@ -416,7 +427,10 @@ VISIBLE void searchQT5Docs(GtkWidget *widget,gpointer data)
 					ERRDATA debugFree(&command);
 				}
 			if(cnt==0)
-				asprintf(&thePage,"file://(null)");
+				{
+					retval=false;
+					asprintf(&thePage,"file://(null)");
+				}
 			else
 				thePage=strdup(htmlURI);
 
@@ -425,9 +439,10 @@ VISIBLE void searchQT5Docs(GtkWidget *widget,gpointer data)
 			g_string_free(str,true);
 			ERRDATA debugFree(&selection);
 		}
+	return(retval);
 }
 
-void defSearchFromBar(GtkWidget *widget,gpointer data)
+bool defSearchFromBar(GtkWidget *widget,gpointer data)
 {
 	functionData	*fdata=NULL;
 	bool			searchcase;
@@ -453,7 +468,7 @@ void defSearchFromBar(GtkWidget *widget,gpointer data)
 									goToDefine(fdata);
 									destroyData(fdata);
 									ERRDATA debugFree(&functionSearchText);
-									ERRDATA return;
+									ERRDATA return(true);
 								}
 							searchcase=false;
 						}
@@ -469,12 +484,13 @@ void defSearchFromBar(GtkWidget *widget,gpointer data)
 							goToDefine(fdata);
 							destroyData(fdata);
 							ERRDATA debugFree(&functionSearchText);
-							ERRDATA return;
+							ERRDATA return(true);
 						}
 					searchcase=false;
 				}
 			ERRDATA debugFree(&functionSearchText);
 		}
+	return(false);
 }
 
 void docSearchFromBar(GtkWidget *widget,gpointer data)

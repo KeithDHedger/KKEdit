@@ -138,6 +138,7 @@ bool			noDuplicates;
 bool			noWarnings;
 bool			readLinkFirst;
 bool			autoShowComps;
+bool			autoSearchDocs;
 bool			autoCheck;
 unsigned int	autoShowMinChars;
 bool			useGlobalPlugMenu;
@@ -303,6 +304,7 @@ int				openInThisTab=-1;
 bool			loadingSession;
 HistoryClass	*globalHistory;
 StringSlice		*globalSlice;
+bool			doGoogleSearch;
 
 unsigned int	shortCuts[NUMSHORTCUTS][2]=
 {
@@ -417,6 +419,7 @@ args			kkedit_rc[]=
 	{"nagscreen",TYPEBOOL,&nagScreen},
 	{"readlink",TYPEBOOL,&readLinkFirst},
 	{"autocomp",TYPEBOOL,&autoShowComps},
+	{"autosearchdocs",TYPEBOOL,&autoSearchDocs},
 	{"updatecheck",TYPEBOOL,&autoCheck},
 	{"useplugmenu",TYPEBOOL,&useGlobalPlugMenu},
 	//strings

@@ -1087,6 +1087,9 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 //autoshow completion
 	makePrefBox(true,true);
 	makePrefsCheck(AUTOSHOW,PREFS_AUTO_COMPLETE_LABEL,"autocomp",autoShowComps,true,true);
+//auto search
+	makePrefBox(true,true);
+	makePrefsCheck(AUTOSEARCH,PREFS_AUTO_SEARCH_LABEL,"autosearchdocs",autoSearchDocs,true,true);
 
 	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(PREFS_GEN_APPEARANCE_LABEL));
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)prefsnotebook,true,true,0);

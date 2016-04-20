@@ -289,6 +289,7 @@
 #define PREFS_NO_WARN_LABEL gettext("Don't Warn On File Change")
 #define PREFS_READ_LINK_LABEL gettext("Read Link Before Opening File")
 #define PREFS_AUTO_COMPLETE_LABEL gettext("Auto Show Completions")
+#define PREFS_AUTO_SEARCH_LABEL gettext("Auto Search Docs")
 #define PREFS_GEN_APPEARANCE_LABEL gettext("General Appearance")
 #define PREFS_TAB_WIDTH_LABEL gettext("Tab width:")
 #define PREFS_THEME_LABEL gettext("Theme:")
@@ -370,6 +371,7 @@
 #define DOCVIEW_DOXY_DOCS_LABEL gettext("Doxygen Docs")
 #define DOCVIEW_QT5_DOCS_LABEL gettext("Qt5 Docs")
 #define DOCVIEW_KKEDIT_HELP_LABEL gettext("KKEdit Help")
+#define DOCVIEW_SEARCHING_GOOGLE_LABEL gettext("Searching Google...")
 
 //plug prefs
 #define PLUGS_PLUG_WARN_UNLOAD_LABEL gettext("Plugin '%s' cannot be unloaded yet.\nRestart KKEdit to unload.")

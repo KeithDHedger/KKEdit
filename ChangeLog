@@ -1,4 +1,6 @@
 0.3.2
+Added Auto search option to prefs, set to on ( defaults to off ) to automatically search function defs/gtk/doc/qt5 docs/google when clicking "Definition" from toolbar.
+Tweaked toolbar icons.
 Selecting a tab from the menu now centres the current line.
 Underscores in function/bookmark menu now shown properly.
 Scroll current line on screen works better.

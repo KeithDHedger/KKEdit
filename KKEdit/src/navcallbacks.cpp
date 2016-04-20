@@ -75,7 +75,23 @@ VISIBLE void goToDefinition(GtkWidget *widget,gpointer data)
 		{
 			return;
 		}
-	ERRDATA defSearchFromBar((GtkWidget*)selection,NULL);
+	doGoogleSearch=false;
+	if(autoSearchDocs==true)
+		{
+			if(defSearchFromBar((GtkWidget*)selection,NULL)==false)
+				{
+					if(searchGtkDocs(NULL,(void*)selection)==false)
+						if(searchQT5Docs(NULL,(void*)selection)==false)
+							{
+								doGoogleSearch=true;
+								showDocView(USEURI,selection,DOCVIEW_SEARCHING_GOOGLE_LABEL);
+							}
+				}
+		}
+	else
+		defSearchFromBar((GtkWidget*)selection,NULL);
+	doGoogleSearch=true;
+	ERRDATA 
 }
 
 VISIBLE void findFile(GtkWidget *widget,gpointer data)
