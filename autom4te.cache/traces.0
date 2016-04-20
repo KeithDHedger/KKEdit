@@ -1078,67 +1078,69 @@ m4trace:configure.ac:15: -1- m4_pattern_allow([^X11_LIBS$])
 m4trace:configure.ac:16: -1- m4_pattern_allow([^X11_CFLAGS$])
 m4trace:configure.ac:25: -1- m4_pattern_allow([^_USEGTK3_$])
 m4trace:configure.ac:26: -1- m4_pattern_allow([^_EXECSUFFIX_$])
-m4trace:configure.ac:35: -1- m4_pattern_allow([^_EXECSUFFIX_$])
-m4trace:configure.ac:38: -1- m4_pattern_allow([^MAKEFILESUFFIX$])
-m4trace:configure.ac:40: -1- PKG_CHECK_MODULES([GTK], [$GTK_MODULES])
-m4trace:configure.ac:40: -1- m4_pattern_allow([^GTK_CFLAGS$])
-m4trace:configure.ac:40: -1- m4_pattern_allow([^GTK_LIBS$])
-m4trace:configure.ac:40: -1- PKG_CHECK_EXISTS([$GTK_MODULES], [pkg_cv_[]GTK_CFLAGS=`$PKG_CONFIG --[]cflags "$GTK_MODULES" 2>/dev/null`
+m4trace:configure.ac:37: -1- m4_pattern_allow([^_EXECSUFFIX_$])
+m4trace:configure.ac:42: -1- m4_pattern_allow([^MAKEFILESUFFIX$])
+m4trace:configure.ac:43: -1- m4_pattern_allow([^PLUGVERSION$])
+m4trace:configure.ac:44: -1- m4_pattern_allow([^DOCSUFFIX$])
+m4trace:configure.ac:46: -1- PKG_CHECK_MODULES([GTK], [$GTK_MODULES])
+m4trace:configure.ac:46: -1- m4_pattern_allow([^GTK_CFLAGS$])
+m4trace:configure.ac:46: -1- m4_pattern_allow([^GTK_LIBS$])
+m4trace:configure.ac:46: -1- PKG_CHECK_EXISTS([$GTK_MODULES], [pkg_cv_[]GTK_CFLAGS=`$PKG_CONFIG --[]cflags "$GTK_MODULES" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
-m4trace:configure.ac:40: -1- PKG_CHECK_EXISTS([$GTK_MODULES], [pkg_cv_[]GTK_LIBS=`$PKG_CONFIG --[]libs "$GTK_MODULES" 2>/dev/null`
+m4trace:configure.ac:46: -1- PKG_CHECK_EXISTS([$GTK_MODULES], [pkg_cv_[]GTK_LIBS=`$PKG_CONFIG --[]libs "$GTK_MODULES" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
-m4trace:configure.ac:40: -1- _PKG_SHORT_ERRORS_SUPPORTED
-m4trace:configure.ac:41: -1- m4_pattern_allow([^GTK_CFLAGS$])
-m4trace:configure.ac:42: -1- m4_pattern_allow([^GTK_LIBS$])
-m4trace:configure.ac:44: -1- PKG_CHECK_MODULES([GTKSRC], [$GTKSRC_MODULES])
-m4trace:configure.ac:44: -1- m4_pattern_allow([^GTKSRC_CFLAGS$])
-m4trace:configure.ac:44: -1- m4_pattern_allow([^GTKSRC_LIBS$])
-m4trace:configure.ac:44: -1- PKG_CHECK_EXISTS([$GTKSRC_MODULES], [pkg_cv_[]GTKSRC_CFLAGS=`$PKG_CONFIG --[]cflags "$GTKSRC_MODULES" 2>/dev/null`
+m4trace:configure.ac:46: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:47: -1- m4_pattern_allow([^GTK_CFLAGS$])
+m4trace:configure.ac:48: -1- m4_pattern_allow([^GTK_LIBS$])
+m4trace:configure.ac:50: -1- PKG_CHECK_MODULES([GTKSRC], [$GTKSRC_MODULES])
+m4trace:configure.ac:50: -1- m4_pattern_allow([^GTKSRC_CFLAGS$])
+m4trace:configure.ac:50: -1- m4_pattern_allow([^GTKSRC_LIBS$])
+m4trace:configure.ac:50: -1- PKG_CHECK_EXISTS([$GTKSRC_MODULES], [pkg_cv_[]GTKSRC_CFLAGS=`$PKG_CONFIG --[]cflags "$GTKSRC_MODULES" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
-m4trace:configure.ac:44: -1- PKG_CHECK_EXISTS([$GTKSRC_MODULES], [pkg_cv_[]GTKSRC_LIBS=`$PKG_CONFIG --[]libs "$GTKSRC_MODULES" 2>/dev/null`
+m4trace:configure.ac:50: -1- PKG_CHECK_EXISTS([$GTKSRC_MODULES], [pkg_cv_[]GTKSRC_LIBS=`$PKG_CONFIG --[]libs "$GTKSRC_MODULES" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
-m4trace:configure.ac:44: -1- _PKG_SHORT_ERRORS_SUPPORTED
-m4trace:configure.ac:45: -1- m4_pattern_allow([^GTKSRC_CFLAGS$])
-m4trace:configure.ac:46: -1- m4_pattern_allow([^GTKSRC_LIBS$])
-m4trace:configure.ac:49: -1- PKG_CHECK_MODULES([GLIB], [$GLIB_MODULES])
-m4trace:configure.ac:49: -1- m4_pattern_allow([^GLIB_CFLAGS$])
-m4trace:configure.ac:49: -1- m4_pattern_allow([^GLIB_LIBS$])
-m4trace:configure.ac:49: -1- PKG_CHECK_EXISTS([$GLIB_MODULES], [pkg_cv_[]GLIB_CFLAGS=`$PKG_CONFIG --[]cflags "$GLIB_MODULES" 2>/dev/null`
+m4trace:configure.ac:50: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:51: -1- m4_pattern_allow([^GTKSRC_CFLAGS$])
+m4trace:configure.ac:52: -1- m4_pattern_allow([^GTKSRC_LIBS$])
+m4trace:configure.ac:55: -1- PKG_CHECK_MODULES([GLIB], [$GLIB_MODULES])
+m4trace:configure.ac:55: -1- m4_pattern_allow([^GLIB_CFLAGS$])
+m4trace:configure.ac:55: -1- m4_pattern_allow([^GLIB_LIBS$])
+m4trace:configure.ac:55: -1- PKG_CHECK_EXISTS([$GLIB_MODULES], [pkg_cv_[]GLIB_CFLAGS=`$PKG_CONFIG --[]cflags "$GLIB_MODULES" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
-m4trace:configure.ac:49: -1- PKG_CHECK_EXISTS([$GLIB_MODULES], [pkg_cv_[]GLIB_LIBS=`$PKG_CONFIG --[]libs "$GLIB_MODULES" 2>/dev/null`
+m4trace:configure.ac:55: -1- PKG_CHECK_EXISTS([$GLIB_MODULES], [pkg_cv_[]GLIB_LIBS=`$PKG_CONFIG --[]libs "$GLIB_MODULES" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
-m4trace:configure.ac:49: -1- _PKG_SHORT_ERRORS_SUPPORTED
-m4trace:configure.ac:50: -1- m4_pattern_allow([^GLIB_CFLAGS$])
-m4trace:configure.ac:51: -1- m4_pattern_allow([^GLIB_LIBS$])
-m4trace:configure.ac:64: -1- PKG_CHECK_MODULES([WEBKIT], [$WEBKIT_MODULES])
-m4trace:configure.ac:64: -1- m4_pattern_allow([^WEBKIT_CFLAGS$])
-m4trace:configure.ac:64: -1- m4_pattern_allow([^WEBKIT_LIBS$])
-m4trace:configure.ac:64: -1- PKG_CHECK_EXISTS([$WEBKIT_MODULES], [pkg_cv_[]WEBKIT_CFLAGS=`$PKG_CONFIG --[]cflags "$WEBKIT_MODULES" 2>/dev/null`
+m4trace:configure.ac:55: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:56: -1- m4_pattern_allow([^GLIB_CFLAGS$])
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GLIB_LIBS$])
+m4trace:configure.ac:70: -1- PKG_CHECK_MODULES([WEBKIT], [$WEBKIT_MODULES])
+m4trace:configure.ac:70: -1- m4_pattern_allow([^WEBKIT_CFLAGS$])
+m4trace:configure.ac:70: -1- m4_pattern_allow([^WEBKIT_LIBS$])
+m4trace:configure.ac:70: -1- PKG_CHECK_EXISTS([$WEBKIT_MODULES], [pkg_cv_[]WEBKIT_CFLAGS=`$PKG_CONFIG --[]cflags "$WEBKIT_MODULES" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
-m4trace:configure.ac:64: -1- PKG_CHECK_EXISTS([$WEBKIT_MODULES], [pkg_cv_[]WEBKIT_LIBS=`$PKG_CONFIG --[]libs "$WEBKIT_MODULES" 2>/dev/null`
+m4trace:configure.ac:70: -1- PKG_CHECK_EXISTS([$WEBKIT_MODULES], [pkg_cv_[]WEBKIT_LIBS=`$PKG_CONFIG --[]libs "$WEBKIT_MODULES" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
-m4trace:configure.ac:64: -1- _PKG_SHORT_ERRORS_SUPPORTED
-m4trace:configure.ac:65: -1- m4_pattern_allow([^WEBKIT_CFLAGS$])
-m4trace:configure.ac:66: -1- m4_pattern_allow([^WEBKIT_LIBS$])
-m4trace:configure.ac:67: -1- m4_pattern_allow([^_BUILDDOCVIEWER_$])
-m4trace:configure.ac:74: -1- m4_pattern_allow([^with_qt5_docdir$])
-m4trace:configure.ac:84: -1- m4_pattern_allow([^ASPELL_LIBS$])
-m4trace:configure.ac:85: -1- m4_pattern_allow([^_ASPELL_$])
-m4trace:configure.ac:88: -1- m4_pattern_allow([^CTAGS$])
-m4trace:configure.ac:93: -1- m4_pattern_allow([^GTKSU$])
-m4trace:configure.ac:100: -1- m4_pattern_allow([^MANPAGEEDITOR$])
-m4trace:configure.ac:111: -1- m4_pattern_allow([^with_gsu_path$])
-m4trace:configure.ac:112: -1- _m4_warn([obsolete], [back quotes and double quotes must not be escaped in: $as_me:${as_lineno-$LINENO}: result: Setting path to graphical su app to \"$with_gsu_path\"], [])
-m4trace:configure.ac:112: -1- _m4_warn([obsolete], [back quotes and double quotes must not be escaped in: Setting path to graphical su app to \"$with_gsu_path\"], [])
-m4trace:configure.ac:117: -1- m4_pattern_allow([^with_debug_level$])
-m4trace:configure.ac:120: -1- _m4_warn([obsolete], [AC_OUTPUT should be used without arguments.
+m4trace:configure.ac:70: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:71: -1- m4_pattern_allow([^WEBKIT_CFLAGS$])
+m4trace:configure.ac:72: -1- m4_pattern_allow([^WEBKIT_LIBS$])
+m4trace:configure.ac:73: -1- m4_pattern_allow([^_BUILDDOCVIEWER_$])
+m4trace:configure.ac:80: -1- m4_pattern_allow([^with_qt5_docdir$])
+m4trace:configure.ac:90: -1- m4_pattern_allow([^ASPELL_LIBS$])
+m4trace:configure.ac:91: -1- m4_pattern_allow([^_ASPELL_$])
+m4trace:configure.ac:94: -1- m4_pattern_allow([^CTAGS$])
+m4trace:configure.ac:99: -1- m4_pattern_allow([^GTKSU$])
+m4trace:configure.ac:106: -1- m4_pattern_allow([^MANPAGEEDITOR$])
+m4trace:configure.ac:117: -1- m4_pattern_allow([^with_gsu_path$])
+m4trace:configure.ac:118: -1- _m4_warn([obsolete], [back quotes and double quotes must not be escaped in: $as_me:${as_lineno-$LINENO}: result: Setting path to graphical su app to \"$with_gsu_path\"], [])
+m4trace:configure.ac:118: -1- _m4_warn([obsolete], [back quotes and double quotes must not be escaped in: Setting path to graphical su app to \"$with_gsu_path\"], [])
+m4trace:configure.ac:123: -1- m4_pattern_allow([^with_debug_level$])
+m4trace:configure.ac:126: -1- _m4_warn([obsolete], [AC_OUTPUT should be used without arguments.
 You should run autoupdate.], [])
-m4trace:configure.ac:120: -1- m4_pattern_allow([^LIB@&t@OBJS$])
-m4trace:configure.ac:120: -1- m4_pattern_allow([^LTLIBOBJS$])
-m4trace:configure.ac:120: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
-m4trace:configure.ac:120: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
-m4trace:configure.ac:120: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
-m4trace:configure.ac:120: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
-m4trace:configure.ac:120: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
-m4trace:configure.ac:120: -1- _AC_AM_CONFIG_HEADER_HOOK(["$ac_file"])
-m4trace:configure.ac:120: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS
+m4trace:configure.ac:126: -1- m4_pattern_allow([^LIB@&t@OBJS$])
+m4trace:configure.ac:126: -1- m4_pattern_allow([^LTLIBOBJS$])
+m4trace:configure.ac:126: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
+m4trace:configure.ac:126: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
+m4trace:configure.ac:126: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
+m4trace:configure.ac:126: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
+m4trace:configure.ac:126: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
+m4trace:configure.ac:126: -1- _AC_AM_CONFIG_HEADER_HOOK(["$ac_file"])
+m4trace:configure.ac:126: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS

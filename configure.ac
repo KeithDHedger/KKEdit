@@ -28,14 +28,20 @@ if test "$enable_gtk3" = "yes"; then
 	GTK_MODULES="gtk+-3.0 >= 3.10.0"
 	GTKSRC_MODULES="gtksourceview-3.0 >= 3.10.0"
 	program_transform_name='s,\(^[[kK]].*t.*\),\1-3,'
+	DOCSUFFIX=3
+	PLUGVERSION=3
 else
 	GTK_MODULES="gtk+-2.0 >= 2.24.0"
 	GTKSRC_MODULES="gtksourceview-2.0 >= 2.9.9"
 	MAKEFILESUFFIX=
 	AC_DEFINE([_EXECSUFFIX_], [""], [Use GTK3])
+	PLUGVERSION=2
+	DOCSUFFIX=
 fi
 
 AC_SUBST(MAKEFILESUFFIX)
+AC_SUBST(PLUGVERSION)
+AC_SUBST(DOCSUFFIX)
 
 PKG_CHECK_MODULES(GTK,$GTK_MODULES)
 AC_SUBST(GTK_CFLAGS)

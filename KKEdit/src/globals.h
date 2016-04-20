@@ -73,9 +73,11 @@
 #ifdef _USEGTK3_
 #define KKEDITVERS "KKEdit3"
 #define PLATFORM "gtk"
+#define GLOBALSUFFIX "3"
 #else
 #define KKEDITVERS "KKEdit"
 #define PLATFORM "gtk"
+#define GLOBALSUFFIX ""
 #endif
 
 #define	POLEPATH PREFIX "/bin/KKEditProgressBar" _EXECSUFFIX_

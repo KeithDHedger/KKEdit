@@ -1,5 +1,8 @@
 
-SUBDIRS = KKEdit/app
+export GLOBAL = 1
+export GTKVERSION = $(PLUGVERSION)
+
+SUBDIRS = KKEdit/app KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager
 
 remake:
 	$(shell ./remakesourcelist)
@@ -13,7 +16,7 @@ uninstall-hook:
 	rm -f $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditPlug.png
 	rm -f $(DESTDIR)${prefix}/share/pixmaps/KKEditPlug.png
 	rm -f $(DESTDIR)${prefix}/share/pixmaps/KKEditPlugMenu.png
-	rm -fr  $(DESTDIR)$(pkgdatadir)
+	rm -fr  $(DESTDIR)$(pkgdatadir)$(DOCSUFFIX)
 
 update-icons:
 	gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor

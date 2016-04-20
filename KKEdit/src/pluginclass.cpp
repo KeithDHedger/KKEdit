@@ -28,7 +28,7 @@ PluginClass::PluginClass(bool loadPlugs)
 	plugins=NULL;
 	plugCount=-1;
 
-	asprintf(&plugFolderPaths[GLOBALPLUGS],"%s/plugins-%s",DATADIR,PLATFORM);
+	asprintf(&plugFolderPaths[GLOBALPLUGS],"%s%s/plugins-%s",DATADIR,GLOBALSUFFIX,PLATFORM);
 	asprintf(&plugFolderPaths[LOCALPLUGS],"%s/." KKEDITVERS "/plugins-%s",getenv("HOME"),PLATFORM);
 
 	this->doLoadPlugs=loadPlugs;

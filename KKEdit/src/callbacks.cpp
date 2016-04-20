@@ -904,7 +904,7 @@ VISIBLE void openHelp(GtkWidget *widget,gpointer data)
 	else
 		lang="fr";
 
-	asprintf(&thePage,"file://%s/help/help.%s.html",DATADIR,lang);
+	asprintf(&thePage,"file://%s%s/help/help.%s.html",DATADIR,GLOBALSUFFIX,lang);
 #ifdef _BUILDDOCVIEWER_
 	showDocView(USEURI,(char*)"KKEdit",DOCVIEW_KKEDIT_HELP_LABEL);
 #else

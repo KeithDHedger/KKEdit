@@ -219,6 +219,7 @@ CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DOCSUFFIX = @DOCSUFFIX@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
@@ -257,6 +258,7 @@ PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
 PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
 PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
+PLUGVERSION = @PLUGVERSION@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -311,7 +313,7 @@ top_srcdir = @top_srcdir@
 with_debug_level = @with_debug_level@
 with_gsu_path = @with_gsu_path@
 with_qt5_docdir = @with_qt5_docdir@
-SUBDIRS = KKEdit/app
+SUBDIRS = KKEdit/app KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
@@ -786,6 +788,9 @@ uninstall-am:
 .PRECIOUS: Makefile
 
 
+export GLOBAL = 1
+export GTKVERSION = $(PLUGVERSION)
+
 remake:
 	$(shell ./remakesourcelist)
 
@@ -798,7 +803,7 @@ uninstall-hook:
 	rm -f $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditPlug.png
 	rm -f $(DESTDIR)${prefix}/share/pixmaps/KKEditPlug.png
 	rm -f $(DESTDIR)${prefix}/share/pixmaps/KKEditPlugMenu.png
-	rm -fr  $(DESTDIR)$(pkgdatadir)
+	rm -fr  $(DESTDIR)$(pkgdatadir)$(DOCSUFFIX)
 
 update-icons:
 	gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor

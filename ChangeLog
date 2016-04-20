@@ -1,4 +1,8 @@
 0.3.2
+Added SessionManager plugin to main build/install.
+Added FileBrowser plugin to main build/install.
+Added ClipboardPlugin plugin to main build/install.
+Added TerminalPane plugin to main build/install.
 Added Auto search option to prefs, set to on ( defaults to off ) to automatically search function defs/gtk/doc/qt5 docs/google when clicking "Definition" from toolbar.
 Tweaked toolbar icons.
 Selecting a tab from the menu now centres the current line.

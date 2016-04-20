@@ -7,19 +7,19 @@ include ../sources
 kkedit_SOURCES = $(COMMONSRC)
 KKEditProgressBar_SOURCES = ../pole/main.cpp
 
-pixfilesdir = $(pkgdatadir)/pixmaps
+pixfilesdir = $(pkgdatadir)$(DOCSUFFIX)/pixmaps
 pixfiles_DATA = ../resources/pixmaps/*
 
-helpfilesdir = $(pkgdatadir)/help
+helpfilesdir = $(pkgdatadir)$(DOCSUFFIX)/help
 helpfiles_DATA = ../resources/help/*
 
-scriptfilesdir = $(pkgdatadir)/tools
+scriptfilesdir = $(pkgdatadir)$(DOCSUFFIX)/tools
 scriptfiles_SCRIPTS = ../resources/tools/*
 
-docfilesdir = $(pkgdatadir)/docs
+docfilesdir = $(pkgdatadir)$(DOCSUFFIX)/docs
 docfiles_DATA = ../resources/docs/*
 
-stylefilesdir = $(pkgdatadir)/styles
+stylefilesdir = $(pkgdatadir)$(DOCSUFFIX)/styles
 stylefiles_DATA = ../resources/styles/*
 
 transfilesdir = $(localedir)/fr_FR/LC_MESSAGES
@@ -41,11 +41,10 @@ install-exec-hook:
 	install -D ../resources/pixmaps/KKEdit.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEdit.png
 	install -D ../resources/pixmaps/KKEditRoot.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditRoot.png
 	install -D ../resources/pixmaps/KKEditPlug.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditPlug.png
-	mkdir -vp $(DESTDIR)$(pkgdatadir)/plugins
-	mkdir -vp "$(DESTDIR)$(pkgdatadir)/Example External Tools"
-	cp -r "../resources/Example External Tools" "$(DESTDIR)$(pkgdatadir)"
+	mkdir -vp "$(DESTDIR)$(pkgdatadir)$(DOCSUFFIX)/Example External Tools"
+	cp -r "../resources/Example External Tools" "$(DESTDIR)$(pkgdatadir)$(DOCSUFFIX)"
 
 install-data-hook:
-	sed -i 's/kkedit/kkedit$(MAKEFILESUFFIX)/g' $(DESTDIR)$(pkgdatadir)/tools/*
+	sed -i 's/kkedit/kkedit$(MAKEFILESUFFIX)/g' $(DESTDIR)$(pkgdatadir)$(DOCSUFFIX)/tools/*
 
 

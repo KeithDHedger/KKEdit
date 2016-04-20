@@ -131,7 +131,7 @@ void init(void)
 	asprintf(&filename,"%s/.gnome2/gedit/styles",getenv("HOME"));
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
 	ERRDATA debugFree(&filename);
-	asprintf(&filename,"%s/styles",DATADIR);
+	asprintf(&filename,"%s%s/styles",DATADIR,GLOBALSUFFIX);
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
 	ERRDATA debugFree(&filename);
 

@@ -229,6 +229,7 @@ CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DOCSUFFIX = @DOCSUFFIX@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
@@ -273,6 +274,7 @@ PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
 PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
 PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
+PLUGVERSION = @PLUGVERSION@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -351,15 +353,15 @@ AM_CPPFLAGS = -I$(top_srcdir) \
 COMMONSRC = ../src/backclass.cpp ../src/callbacks.cpp ../src/completion.cpp ../src/encoding.cpp ../src/files.cpp ../src/globals.cpp ../src/guis.cpp ../src/main.cpp ../src/navcallbacks.cpp ../src/pluginclass.cpp ../src/plugins.cpp ../src/searchcallbacks.cpp ../src/sliceclass.cpp ../src/spellcheck.cpp ../src/textbuffer.cpp
 kkedit_SOURCES = $(COMMONSRC)
 KKEditProgressBar_SOURCES = ../pole/main.cpp
-pixfilesdir = $(pkgdatadir)/pixmaps
+pixfilesdir = $(pkgdatadir)$(DOCSUFFIX)/pixmaps
 pixfiles_DATA = ../resources/pixmaps/*
-helpfilesdir = $(pkgdatadir)/help
+helpfilesdir = $(pkgdatadir)$(DOCSUFFIX)/help
 helpfiles_DATA = ../resources/help/*
-scriptfilesdir = $(pkgdatadir)/tools
+scriptfilesdir = $(pkgdatadir)$(DOCSUFFIX)/tools
 scriptfiles_SCRIPTS = ../resources/tools/*
-docfilesdir = $(pkgdatadir)/docs
+docfilesdir = $(pkgdatadir)$(DOCSUFFIX)/docs
 docfiles_DATA = ../resources/docs/*
-stylefilesdir = $(pkgdatadir)/styles
+stylefilesdir = $(pkgdatadir)$(DOCSUFFIX)/styles
 stylefiles_DATA = ../resources/styles/*
 transfilesdir = $(localedir)/fr_FR/LC_MESSAGES
 transfiles_DATA = ../../po/fr_FR/LC_MESSAGES/kkedit.mo
@@ -932,12 +934,11 @@ install-exec-hook:
 	install -D ../resources/pixmaps/KKEdit.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEdit.png
 	install -D ../resources/pixmaps/KKEditRoot.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditRoot.png
 	install -D ../resources/pixmaps/KKEditPlug.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditPlug.png
-	mkdir -vp $(DESTDIR)$(pkgdatadir)/plugins
-	mkdir -vp "$(DESTDIR)$(pkgdatadir)/Example External Tools"
-	cp -r "../resources/Example External Tools" "$(DESTDIR)$(pkgdatadir)"
+	mkdir -vp "$(DESTDIR)$(pkgdatadir)$(DOCSUFFIX)/Example External Tools"
+	cp -r "../resources/Example External Tools" "$(DESTDIR)$(pkgdatadir)$(DOCSUFFIX)"
 
 install-data-hook:
-	sed -i 's/kkedit/kkedit$(MAKEFILESUFFIX)/g' $(DESTDIR)$(pkgdatadir)/tools/*
+	sed -i 's/kkedit/kkedit$(MAKEFILESUFFIX)/g' $(DESTDIR)$(pkgdatadir)$(DOCSUFFIX)/tools/*
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

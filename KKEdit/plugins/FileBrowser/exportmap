@@ -1,0 +1,15 @@
+{
+global:	addToGui;
+		doAbout;
+		enablePlug;
+		setSensitive;
+		switchTab;
+		plugPrefs;
+		addToTab;
+		addToContext;
+		doTabMenu;
+		g_module_check_init;
+
+local: *;
+
+};
