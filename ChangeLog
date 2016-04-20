@@ -1,4 +1,5 @@
 0.3.2
+Included plugins now built and installed globally with main package.
 Added SessionManager plugin to main build/install.
 Added FileBrowser plugin to main build/install.
 Added ClipboardPlugin plugin to main build/install.
