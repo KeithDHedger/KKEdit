@@ -41,8 +41,8 @@ class PluginClass
 		~PluginClass();
 		void			loadPlugins(void);
 		void			setPlugFolder(void);
-		void			appendToBlackList(char* name);
-		void			deleteBlackList();
+		void			appendToWhiteList(char* name);
+		void			deleteWhiteList();
 		moduleData*		getPluginByName(char* name);
 		char*			getPluginPathByName(char* name);
 		int				runPlugFunction(moduleData* pdata,const char* func);

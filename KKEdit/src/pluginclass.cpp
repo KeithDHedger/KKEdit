@@ -34,7 +34,6 @@ PluginClass::PluginClass(bool loadPlugs)
 	this->doLoadPlugs=loadPlugs;
 	this->loadPlugins();
 
-
 	g_mkdir_with_parents(plugFolderPaths[LOCALPLUGS],493);
 	ERRDATA
 }
@@ -105,13 +104,13 @@ bool PluginClass::checkForEnabled(char *plugname)
 						{
 							fclose(fd);
 							ERRDATA debugFree(&filename);
-							ERRDATA return(false);
+							ERRDATA return(true);
 						}
 				}
 			fclose(fd);
 		}
 	ERRDATA debugFree(&filename);
-	ERRDATA return(true);
+	ERRDATA return(false);
 }
 
 gint compareName(gpointer data,gpointer user_data)
@@ -140,7 +139,7 @@ moduleData *PluginClass::getPluginByName(char *name)
 	ERRDATA return(pd);
 }
 
-void PluginClass::deleteBlackList()
+void PluginClass::deleteWhiteList()
 {
 	ERRDATA
 	char	*command;
@@ -150,7 +149,7 @@ void PluginClass::deleteBlackList()
 	ERRDATA debugFree(&command);
 }
 
-void PluginClass::appendToBlackList(char *name)
+void PluginClass::appendToWhiteList(char *name)
 {
 	ERRDATA
 	char	*command;
@@ -165,7 +164,7 @@ void PluginClass::loadPlugins(void)
 	ERRDATA
 	FILE		*pf;
 	char		buffer[4096];
-	GModule	*module=NULL;
+	GModule		*module=NULL;
 	char		*command;
 	moduleData	*pdata;
 	char		*testname;

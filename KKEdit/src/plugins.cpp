@@ -74,12 +74,12 @@ gboolean doSetPlugData(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter
 	GtkWidget	*dialog;
 
 	gtk_tree_model_get(model,iter,COLUMN_ENABLE,&enabled,COLUMN_PLUGIN,&name,-1);
-	if(!enabled)
-		globalPlugins->appendToBlackList(name);
+	if(enabled)
+		globalPlugins->appendToWhiteList(name);
 
 	pd=globalPlugins->getPluginByName(name);
 
-	if((pd->loaded==true) &&(!enabled))
+	if((pd->loaded==true) && (!enabled))
 			{
 				if(globalPlugins->enablePlugin(name,true)==0)
 					{
@@ -134,7 +134,7 @@ void setPlugsEnabled(void)
 	ERRDATA
 	GtkTreeModel	*model;
 
-	globalPlugins->deleteBlackList();
+	globalPlugins->deleteWhiteList();
 	model=gtk_tree_view_get_model((GtkTreeView*)treeview);
     gtk_tree_model_foreach(model,doSetPlugData,NULL);
 	ERRDATA
