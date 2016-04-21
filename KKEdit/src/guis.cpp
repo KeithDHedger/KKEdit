@@ -23,8 +23,8 @@
 #define TABLECOLS 2
 
 GtkWidget		*recent;
-GtkToolItem	*tool[18]={NULL,};
-GtkIconView	*iconView=NULL;
+GtkToolItem		*tool[19]={NULL,};
+GtkIconView		*iconView=NULL;
 GtkListStore	*listStore=NULL;
 
 GtkWidget		*prefHBox;
@@ -222,9 +222,17 @@ void setUpToolBar(void)
 					case 'B':
 						backButton=createNewToolItem(GTK_STOCK_GO_BACK,BACK_TOOLBAR_LABEL);
 						gtk_toolbar_insert(toolBar,backButton,-1);
-						g_signal_connect(G_OBJECT(backButton),"clicked",G_CALLBACK(goBack),NULL);
+						g_signal_connect(G_OBJECT(backButton),"clicked",G_CALLBACK(navigateHistory),(void*)NAVLAST);
 						gtk_widget_set_tooltip_text((GtkWidget*)backButton,BACK_TT_LABEL);
 						break;
+//go forward
+					case 'W':
+						forwardButton=createNewToolItem(GTK_STOCK_GO_FORWARD,BACK_TOOLBAR_LABEL);
+						gtk_toolbar_insert(toolBar,forwardButton,-1);
+						g_signal_connect(G_OBJECT(forwardButton),"clicked",G_CALLBACK(navigateHistory),(void*)NAVNEXT);
+						gtk_widget_set_tooltip_text((GtkWidget*)forwardButton,FORWARD_TT_LABEL);
+						break;
+
 //jump to line
 					case '9':
 						lineNumberWidget=gtk_entry_new();
@@ -635,6 +643,11 @@ void populateStore(void)
 						setNewPixbuf(PREFSBACK,17,type);
 						break;
 
+//go forward
+					case 'W':
+						setNewPixbuf(PREFSFORWARD,18,type);
+						break;
+
 					case '9':
 //goto line num
 						setNewPixbuf(PREFSLINENUM,10,type);
@@ -714,6 +727,7 @@ void populateDnD(void)
 	addPixbuf(PREFSFIND,"F",8,FIND_TT_LABEL);
 	addPixbuf(PREFSQUESTION,"G",9,GOTO_DEFINE_TT_LABEL);
 	addPixbuf(PREFSBACK,"B",17,BACK_TT_LABEL);
+	addPixbuf(PREFSFORWARD,"W",18,FORWARD_TT_LABEL);
 	addPixbuf(PREFSLINENUM,"9",10,TO_LINE_TT_LABEL);
 	addPixbuf(PREFSAPI,"A",11,TO_API_TT_LABEL);
 	addPixbuf(PREFSQTAPI,"Q",16,TO_QTAPI_TT_LABEL);
@@ -1601,8 +1615,11 @@ border-width: 0; \n \
 	if(gotDoxygen==0)
 		searchInDocsMenu=makeMenuItem(GTK_STOCK_FIND,menu,(void*)doxyDocs,0,SEARCHDOXYMENUNAME,IMAGEMENU,MENU_FIND_IN_DOCS_LABEL,NULL,false);
 
+//*makeMenuItem(const char *stocklabel,GtkWidget *parent,void *function,char hotkey,const char *name,int setimage,const char *menulabel,void *userdata,bool toggle)
 //go back
-	goBackMenu=makeMenuItem(GTK_STOCK_GO_BACK,menu,(void*)goBack,0,GOBACKMENUNAME,STOCKMENU,MENU_GO_BACK_LABEL,NULL,false);
+	goBackMenu=makeMenuItem(GTK_STOCK_GO_BACK,menu,(void*)navigateHistory,0,GOBACKMENUNAME,STOCKMENU,MENU_GO_BACK_LABEL,(void*)NAVLAST,false);
+//go foward
+	goForwardMenu=makeMenuItem(GTK_STOCK_GO_FORWARD,menu,(void*)navigateHistory,0,GOBACKMENUNAME,STOCKMENU,MENU_GO_BACK_LABEL,(void*)NAVNEXT,false);
 
 //function menu
 	funcMenu=gtk_menu_item_new_with_label(MENU_FUNC_MENU_LABEL);

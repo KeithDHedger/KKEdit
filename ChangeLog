@@ -1,4 +1,6 @@
 0.3.2
+'Back and 'Forward' now remember last 10 jumps.
+Added 'Forward' to navigation menu and as extra button to toolbar.
 Plugins are now whitelisted instead of blacklisted so new plugs have to be enabled from the plugin prefs.
 Included plugins now built and installed globally with main package.
 Added SessionManager plugin to main build/install.

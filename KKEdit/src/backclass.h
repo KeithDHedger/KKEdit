@@ -10,13 +10,13 @@
 #ifndef _BACKCLASS_
 #define _BACKCLASS_
 
-struct backData
+struct historyData
 {
-	const char	*tabName;
-	int			lineNumber;
-	int			pageID;
-	GtkWidget	*child;
+	char		*filePath;
+	unsigned	lineNumber;
+	unsigned	pageID;
 };
+
 
 class HistoryClass
 {
@@ -24,27 +24,18 @@ class HistoryClass
 		HistoryClass(GtkNotebook *nb);
 		~HistoryClass();
 
-		void		getThisPoint(void);
-		pageStruct	*getPage(void);
-		TextBuffer	*getTextBuffer(void);
-		bool		savePosition(void);
-		void		setPage(pageStruct *page);
-		int			getTabNumForPage(void);
+		int			getTabNumForPagexx(void);
 		bool		canGoBack(void);
-		void		setCurrentPos(void);
-		void		saveCurrentPos(void);
-		void		goBackToPos(void);
+		void		goBack(void);
+		void		goForward(void);
+		void		goToPos(void);
 		void 		saveLastPos(void);
-		void		swapPos(void);
 
 	private:
-		pageStruct	*savedPage;
-		TextBuffer	*buf;
-		bool		goBack;
+		bool		canReturn;;
 		GtkNotebook	*notebook;
-		backData	currentPos;
-		backData	lastPos;
-		backData	savePos;
+		historyData	savedPages[10];
+		int			saveCnt;		
 };
 
 #endif

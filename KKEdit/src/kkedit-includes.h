@@ -185,6 +185,7 @@
 #define PASTE_TOOLBAR_LABEL gettext("Paste")
 #define FIND_TOOLBAR_LABEL gettext("Find")
 #define BACK_TOOLBAR_LABEL gettext("Back")
+#define FORWARD_TOOLBAR_LABEL gettext("Forward")
 
 //context labels
 #define CUSTOM_WORD_CONTEXT_LABEL gettext("_Add To Custom Word List")
@@ -246,6 +247,7 @@
 #define FIND_TT_LABEL gettext("Find")
 #define GOTO_DEFINE_TT_LABEL gettext("Go To Definition")
 #define BACK_TT_LABEL gettext("Go Back")
+#define FORWARD_TT_LABEL gettext("Go Forward")
 #define TO_LINE_TT_LABEL gettext("Go To Line")
 #define TO_API_TT_LABEL gettext("Find API In Gtk Docs")
 #define TO_QTAPI_TT_LABEL gettext("Find API In Qt5 Docs")
@@ -394,6 +396,7 @@
 #define PREFSFIND DATADIR GLOBALSUFFIX "/pixmaps/find.png"
 #define PREFSQUESTION DATADIR GLOBALSUFFIX "/pixmaps/question.png"
 #define PREFSBACK DATADIR GLOBALSUFFIX "/pixmaps/back.png"
+#define PREFSFORWARD DATADIR GLOBALSUFFIX "/pixmaps/forward.png"
 #define PREFSLINENUM DATADIR GLOBALSUFFIX "/pixmaps/num.png"
 #define PREFSAPI DATADIR GLOBALSUFFIX "/pixmaps/api.png"
 #define PREFSQTAPI DATADIR GLOBALSUFFIX "/pixmaps/qtapi.png"

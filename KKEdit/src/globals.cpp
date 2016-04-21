@@ -61,6 +61,7 @@ GtkWidget		*viewTabSubMenu=NULL;
 //nav menu
 GtkWidget		*navMenu;
 GtkWidget		*goBackMenu;
+GtkWidget		*goForwardMenu;
 GtkWidget		*gotoDefMenu;
 GtkWidget		*searchInGtkDocsMenu;
 GtkWidget		*searchInQTDocsMenu;
@@ -240,6 +241,7 @@ GtkToolItem	*pasteButton=NULL;
 GtkToolItem	*findButton=NULL;
 GtkToolItem	*gotoDefButton=NULL;
 GtkToolItem	*backButton=NULL;
+GtkToolItem	*forwardButton=NULL;
 GtkToolItem	*gotoLineButton=NULL;
 GtkToolItem	*findApiButton=NULL;
 GtkToolItem	*findQtApiButton=NULL;
@@ -1181,11 +1183,17 @@ void rebuildBookMarkMenu(void)
 	ERRDATA
 }
 
-VISIBLE void goBack(GtkWidget *widget,gpointer data)
+VISIBLE void navigateHistory(GtkWidget *widget,gpointer data)
 {
-	globalHistory->saveCurrentPos();
-	globalHistory->goBackToPos();
-	globalHistory->swapPos();
+//	globalHistory->saveCurrentPos();
+//	globalHistory->saveLastPos();
+	if((long)data==NAVLAST)
+		globalHistory->goBack();
+	else
+		globalHistory->goForward();
+		
+//	globalHistory->goToPos();
+//	globalHistory->swapPos();
 }
 
 char	*barControl;

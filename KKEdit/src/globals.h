@@ -90,6 +90,7 @@
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 enum {NEWVBOX=0,NEWHBOX};
 enum {NOERR=0,NOOPENFILE,NOSAVEFILE};
+enum {NAVLAST=0,NAVNEXT};
 
 struct toolStruct
 {
@@ -171,9 +172,10 @@ extern GtkWidget		*gotoDefMenu;
 extern GtkWidget		*searchInGtkDocsMenu;
 extern GtkWidget		*searchInQTDocsMenu;
 extern GtkWidget		*searchInDocsMenu;
+extern GtkWidget		*goBackMenu;
+extern GtkWidget		*goForwardMenu;
 
 //view menu
-extern GtkWidget		*goBackMenu;
 extern GtkWidget		*viewMenu;
 extern GtkWidget		*viewTabMenu;
 extern GtkWidget		*viewTabSubMenu;
@@ -354,6 +356,7 @@ extern GtkToolItem		*pasteButton;
 extern GtkToolItem		*findButton;
 extern GtkToolItem		*gotoDefButton;
 extern GtkToolItem		*backButton;
+extern GtkToolItem		*forwardButton;
 extern GtkToolItem		*gotoLineButton;
 extern GtkToolItem		*findApiButton;
 extern GtkToolItem		*findQtApiButton;
@@ -465,7 +468,7 @@ void getRecursiveTagList(char *filepath,void *ptr);
 void buildToolsList(void);
 void getRecursiveTagListFileName(char *filepath,void *ptr);
 void scrollToIterInPane(pageStruct *page,GtkTextIter *iter);
-void goBack(GtkWidget *widget,gpointer data);
+void navigateHistory(GtkWidget *widget,gpointer data);
 void showBarberPole(const char *title);
 void killBarberPole(void);
 void debugFree(char** ptr);

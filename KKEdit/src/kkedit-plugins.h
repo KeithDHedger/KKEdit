@@ -69,6 +69,7 @@
 #define SEARCHQT5ASSISTMENUNAME "searchqt5assistmenu"
 #define SEARCHDOXYMENUNAME "searchdoxymenu"
 #define GOBACKMENUNAME "gobackmenu"
+#define GOFORWARDMENUNAME "goforwardmenu"
 #define ABOUTMENUNAME "aboutmenu"
 #define HELPMENUNAME "helpmenu"
 #define GETPLUGSMENUNAME "getplugsmenu"
@@ -126,7 +127,7 @@ struct pageStruct
 	bool				canUndo;
 	bool				canRedo;
 	bool				isDirty;
-	unsigned int		pageID;
+	unsigned			pageID;
 	char				*searchString;
 	char				*replaceString;;
 	GtkWidget			*tabButton;

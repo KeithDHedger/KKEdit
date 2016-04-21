@@ -235,7 +235,6 @@ void TextBuffer::scroll2Line(GtkTextView *view,int linenum,bool doupdate)
 void TextBuffer::scroll2Mark(GtkTextView *view,GtkTextMark *mark)
 {
 	ERRDATA
-	printf("form bookmark\n");
 	gtk_text_buffer_get_iter_at_mark(textBuffer,&cursorPos,mark);
 	gtk_text_view_scroll_to_iter(view,&cursorPos,0,true,0,0.5);
 	gtk_text_view_scroll_to_mark(view,mark,0,true,0,0.5);
