@@ -1368,6 +1368,25 @@ bool doShutdown(GtkWidget *widget,GdkEvent *event,gpointer data)
 	ERRDATA return(false);
 }
 
+void clearToolButtons(void)
+{
+	newButton=NULL;
+	openButton=NULL;
+	saveButton=NULL;
+	cutButton=NULL;
+	copyButton=NULL;
+	pasteButton=NULL;
+	undoButton=NULL;
+	redoButton=NULL;
+	findButton=NULL;
+	gotoDefButton=NULL;
+	backButton=NULL;
+	gotoLineButton=NULL;
+	findApiButton=NULL;
+	findFuncDefButton=NULL;
+	liveSearchButton=NULL;
+}
+
 void setPrefs(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
@@ -1462,6 +1481,7 @@ void setPrefs(GtkWidget *widget,gpointer data)
 					ERRDATA debugFree(&toolBarLayout);
 					toolBarLayout=makeToolBarList();
 					gtk_widget_destroy((GtkWidget*)toolBar);
+					clearToolButtons();
 					toolBar=(GtkToolbar*)gtk_toolbar_new();
 					gtk_box_pack_start(GTK_BOX(toolBarBox),(GtkWidget*)toolBar,true,true,0);
 					setUpToolBar();

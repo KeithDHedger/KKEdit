@@ -227,7 +227,7 @@ void setUpToolBar(void)
 						break;
 //go forward
 					case 'W':
-						forwardButton=createNewToolItem(GTK_STOCK_GO_FORWARD,BACK_TOOLBAR_LABEL);
+						forwardButton=createNewToolItem(GTK_STOCK_GO_FORWARD,FORWARD_TOOLBAR_LABEL);
 						gtk_toolbar_insert(toolBar,forwardButton,-1);
 						g_signal_connect(G_OBJECT(forwardButton),"clicked",G_CALLBACK(navigateHistory),(void*)NAVNEXT);
 						gtk_widget_set_tooltip_text((GtkWidget*)forwardButton,FORWARD_TT_LABEL);
@@ -599,86 +599,81 @@ void populateStore(void)
 				{
 					case 'N':
 //new
-						setNewPixbuf(PREFSNEW,0,type);
+						setNewPixbuf(PREFSNEW,ITEMNEW,type);
 						break;
 					case 'O':
 //open+recent
-						setNewPixbuf(PREFSOPEN,1,type);
+						setNewPixbuf(PREFSOPEN,ITEMOPEN,type);
 						break;
 					case 'S':
 //save
-						setNewPixbuf(PREFSSAVE,2,type);
+						setNewPixbuf(PREFSSAVE,ITEMSAVE,type);
 						break;
 
 					case 'X':
 //cut
-						setNewPixbuf(PREFSCUT,3,type);
+						setNewPixbuf(PREFSCUT,ITEMCUT,type);
 						break;
 					case 'C':
 //copy
-						setNewPixbuf(PREFSCOPY,4,type);
+						setNewPixbuf(PREFSCOPY,ITEMCOPY,type);
 						break;
 					case 'P':
 //paste
-						setNewPixbuf(PREFSPASTE,5,type);
+						setNewPixbuf(PREFSPASTE,ITEMPASTE,type);
 						break;
 					case 'U':
 //undo
-						setNewPixbuf(PREFSUNDO,6,type);
+						setNewPixbuf(PREFSUNDO,ITEMUNDO,type);
 						break;
 					case 'R':
 //redo
-						setNewPixbuf(PREFSREDO,7,type);
+						setNewPixbuf(PREFSREDO,ITEMREDO,type);
 						break;
 					case 'F':
 //find
-						setNewPixbuf(PREFSFIND,8,type);
+						setNewPixbuf(PREFSFIND,ITEMFIND,type);
 						break;
 					case 'G':
 //navigation
-						setNewPixbuf(PREFSQUESTION,9,type);
+						setNewPixbuf(PREFSQUESTION,ITEMGOTO,type);
 						break;
 //go back
 					case 'B':
-						setNewPixbuf(PREFSBACK,17,type);
+						setNewPixbuf(PREFSBACK,ITEMBACK,type);
 						break;
-
 //go forward
 					case 'W':
-						setNewPixbuf(PREFSFORWARD,18,type);
+						setNewPixbuf(PREFSFORWARD,ITEMFORWARD,type);
 						break;
-
-					case '9':
 //goto line num
-						setNewPixbuf(PREFSLINENUM,10,type);
+					case '9':
+						setNewPixbuf(PREFSLINENUM,ITEMLINE,type);
 						break;
-
-					case 'A':
 //find api
-						setNewPixbuf(PREFSAPI,11,type);
+					case 'A':
+						setNewPixbuf(PREFSAPI,ITEMAPI,type);
 						break;
-					case 'Q':
 //find qt api
-						setNewPixbuf(PREFSQTAPI,16,type);
+					case 'Q':
+						setNewPixbuf(PREFSQTAPI,ITEMQTAPI,type);
 						break;
 					case 'D':
 //find define
-						setNewPixbuf(PREFSFINDDEF,12,type);
+						setNewPixbuf(PREFSFINDDEF,ITEMDEFINE,type);
 						break;
 					case 'L':
 //live search
-						setNewPixbuf(PREFSLIVE,13,type);
+						setNewPixbuf(PREFSLIVE,ITEMLIVE,type);
 						break;
-
-					case 's':
 //seperator
-						setNewPixbuf(PREFSSEPERATOR,14,type);
+					case 's':
+						setNewPixbuf(PREFSSEPERATOR,ITEMSEPERATOR,type);
 						gtk_widget_set_sensitive((GtkWidget*)tool[14],true);
 					break;
-
-					case 'E':
 //expander
-						setNewPixbuf(PREFSEXPAND,15,type);
+					case 'E':
+						setNewPixbuf(PREFSEXPAND,ITEMEXPANDER,type);
 						gtk_widget_set_sensitive((GtkWidget*)tool[15],true);
 						break;
 				}
@@ -716,25 +711,25 @@ void addPixbuf(const char *pixbuf,const char *data,int toolnumber,const char *to
 void populateDnD(void)
 {
 	ERRDATA
-	addPixbuf(PREFSNEW,"N",0,NEW_TT_LABEL);
-	addPixbuf(PREFSOPEN,"O",1,OPEN_TT_LABEL);
-	addPixbuf(PREFSSAVE,"S",2,SAVE_TT_LABEL);
-	addPixbuf(PREFSCUT,"X",3,CUT_TT_LABEL);
-	addPixbuf(PREFSCOPY,"C",4,COPY_TT_LABEL);
-	addPixbuf(PREFSPASTE,"P",5,PASTE_TT_LABEL);
-	addPixbuf(PREFSUNDO,"U",6,UNDO_TT_LABEL);
-	addPixbuf(PREFSREDO,"R",7,REDO_TT_LABEL);
-	addPixbuf(PREFSFIND,"F",8,FIND_TT_LABEL);
-	addPixbuf(PREFSQUESTION,"G",9,GOTO_DEFINE_TT_LABEL);
-	addPixbuf(PREFSBACK,"B",17,BACK_TT_LABEL);
-	addPixbuf(PREFSFORWARD,"W",18,FORWARD_TT_LABEL);
-	addPixbuf(PREFSLINENUM,"9",10,TO_LINE_TT_LABEL);
-	addPixbuf(PREFSAPI,"A",11,TO_API_TT_LABEL);
-	addPixbuf(PREFSQTAPI,"Q",16,TO_QTAPI_TT_LABEL);
-	addPixbuf(PREFSFINDDEF,"D",12,TO_DEFINE_TT_LABEL);
-	addPixbuf(PREFSLIVE,"L",13,LIVE_TT_LABEL);
-	addPixbuf(PREFSSEPERATOR,"s",14,SEPERATOR_TT_LABEL);
-	addPixbuf(PREFSEXPAND,"E",15,EXPANDER_TT_LABEL);
+	addPixbuf(PREFSNEW,"N",ITEMNEW,NEW_TT_LABEL);
+	addPixbuf(PREFSOPEN,"O",ITEMOPEN,OPEN_TT_LABEL);
+	addPixbuf(PREFSSAVE,"S",ITEMSAVE,SAVE_TT_LABEL);
+	addPixbuf(PREFSCUT,"X",ITEMCUT,CUT_TT_LABEL);
+	addPixbuf(PREFSCOPY,"C",ITEMCOPY,COPY_TT_LABEL);
+	addPixbuf(PREFSPASTE,"P",ITEMPASTE,PASTE_TT_LABEL);
+	addPixbuf(PREFSUNDO,"U",ITEMUNDO,UNDO_TT_LABEL);
+	addPixbuf(PREFSREDO,"R",ITEMREDO,REDO_TT_LABEL);
+	addPixbuf(PREFSFIND,"F",ITEMFIND,FIND_TT_LABEL);
+	addPixbuf(PREFSQUESTION,"G",ITEMGOTO,GOTO_DEFINE_TT_LABEL);
+	addPixbuf(PREFSBACK,"B",ITEMBACK,BACK_TT_LABEL);
+	addPixbuf(PREFSFORWARD,"W",ITEMFORWARD,FORWARD_TT_LABEL);
+	addPixbuf(PREFSLINENUM,"9",ITEMLINE,TO_LINE_TT_LABEL);
+	addPixbuf(PREFSAPI,"A",ITEMAPI,TO_API_TT_LABEL);
+	addPixbuf(PREFSQTAPI,"Q",ITEMQTAPI,TO_QTAPI_TT_LABEL);
+	addPixbuf(PREFSFINDDEF,"D",ITEMDEFINE,TO_DEFINE_TT_LABEL);
+	addPixbuf(PREFSLIVE,"L",ITEMLIVE,LIVE_TT_LABEL);
+	addPixbuf(PREFSSEPERATOR,"s",ITEMSEPERATOR,SEPERATOR_TT_LABEL);
+	addPixbuf(PREFSEXPAND,"E",ITEMEXPANDER,EXPANDER_TT_LABEL);
 	ERRDATA
 }
 
