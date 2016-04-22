@@ -29,6 +29,7 @@ void goToDefine(functionData *fdata)
 	pageStruct	*page;
 	TextBuffer	*buf;
 
+	globalHistory->saveLastPosAndStop();
 	if(fdata->intab==-1)
 		{
 			openFile(fdata->file,fdata->line-1,true);
@@ -51,6 +52,7 @@ void goToDefine(functionData *fdata)
 			buf->scroll2Line((GtkTextView*)page->view,fdata->line-1);
 			ERRDATA delete buf;
 		}
+//	globalHistory->saveLastPos();
 	ERRDATA
 }
 
@@ -157,7 +159,7 @@ void gotoLineSavePos(GtkWidget *widget,gpointer data)
 
 	if(page!=NULL)
 		{
-			globalHistory->saveLastPos();
+			globalHistory->saveLastPosAndStop();
 			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 			buf->scroll2Line((GtkTextView*)page->view,line-1,true);
 			ERRDATA delete buf;
@@ -265,7 +267,7 @@ void jumpToMark(GtkWidget *widget,gpointer data)
 	pageStruct		*checkpage;
 	TextBuffer		*buf;
 
-	globalHistory->saveLastPos();
+	globalHistory->saveLastPosAndStop();
 	page=(pageStruct*)((bookMarksNew*)data)->page;
 	mark=(GtkTextMark*)((bookMarksNew*)data)->mark;
 	buf=new TextBuffer((GtkTextBuffer*)page->buffer);

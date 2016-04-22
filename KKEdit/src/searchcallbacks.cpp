@@ -464,7 +464,7 @@ bool defSearchFromBar(GtkWidget *widget,gpointer data)
 							fdata=getFunctionByNameOpenFiles(functionSearchText,searchcase,searchwhole);
 							if(fdata!=NULL)
 								{
-									globalHistory->saveLastPos();
+									globalHistory->saveLastPosAndStop();
 									goToDefine(fdata);
 									destroyData(fdata);
 									ERRDATA debugFree(&functionSearchText);
@@ -480,7 +480,7 @@ bool defSearchFromBar(GtkWidget *widget,gpointer data)
 					fdata=getFunctionByName(functionSearchText,true,searchcase);
 					if(fdata!=NULL)
 						{
-							globalHistory->saveLastPos();
+							globalHistory->saveLastPosAndStop();
 							goToDefine(fdata);
 							destroyData(fdata);
 							ERRDATA debugFree(&functionSearchText);

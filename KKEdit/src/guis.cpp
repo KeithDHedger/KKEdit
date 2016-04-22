@@ -23,7 +23,7 @@
 #define TABLECOLS 2
 
 GtkWidget		*recent;
-GtkToolItem		*tool[19]={NULL,};
+GtkToolItem		*tool[MAXITEMS]={NULL,};
 GtkIconView		*iconView=NULL;
 GtkListStore	*listStore=NULL;
 

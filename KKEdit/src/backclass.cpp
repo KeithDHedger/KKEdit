@@ -15,7 +15,7 @@ HistoryClass::HistoryClass(GtkNotebook *nb)
 	this->notebook=nb;
 	this->canReturn=true;
 	this->saveCnt=0;
-	for(int j=0;j<10;j++)
+	for(int j=0;j<(MAXHIST+4);j++)
 		{
 			this->savedPages[j].pageID=-1;
 			this->savedPages[j].filePath=NULL;
@@ -26,7 +26,7 @@ HistoryClass::HistoryClass(GtkNotebook *nb)
 
 HistoryClass::~HistoryClass()
 {
-	for(int j=0;j<10;j++)
+	for(int j=0;j<(MAXHIST+4);j++)
 		{
 			if(this->savedPages[j].filePath!=NULL)
 				debugFree(&(this->savedPages[j].filePath));
@@ -38,23 +38,22 @@ void HistoryClass::goBack(void)
 	this->saveCnt--;
 	if(this->saveCnt<0)
 		this->saveCnt=0;
-
-	this->goToPos();
 }
 
 void HistoryClass::goForward(void)
 {
 	this->saveCnt++;
-	if(this->saveCnt>9)
-		this->saveCnt=9;
-
-	this->goToPos();
+	if(this->saveCnt>=MAXHIST)
+		this->saveCnt=MAXHIST-1;
 }
 
 void HistoryClass::goToPos(void)
 {
 	TextBuffer	*buf;
 	pageStruct	*page;
+
+	if(this->savedPages[this->saveCnt].pageID==-1)
+		return;
 
 	for(int j=0;j<gtk_notebook_get_n_pages(this->notebook);j++)
 		{
@@ -73,6 +72,13 @@ void HistoryClass::goToPos(void)
 		}
 }
 
+void HistoryClass::saveLastPosAndStop(void)
+{
+	this->saveLastPos();
+	this->savedPages[this->saveCnt+1].pageID=-1;
+	this->savedPages[this->saveCnt].pageID=-1;
+}
+
 void HistoryClass::saveLastPos(void)
 {
 	pageStruct	*page;
@@ -86,9 +92,16 @@ void HistoryClass::saveLastPos(void)
 
 	if(page==NULL)
 		return;
-
 	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 
+	if(saveCnt>0)
+		{
+			if((this->savedPages[this->saveCnt-1].pageID==page->pageID) && (this->savedPages[this->saveCnt-1].lineNumber==buf->lineNum))
+				{
+					delete buf;
+					return;
+				}
+		}
 
 	this->savedPages[this->saveCnt].pageID=page->pageID;
 	this->savedPages[this->saveCnt].lineNumber=buf->lineNum;
@@ -99,12 +112,8 @@ void HistoryClass::saveLastPos(void)
 				asprintf(&this->savedPages[this->saveCnt].filePath,"%s",page->filePath);
 		}
 
-	this->saveCnt++;
-	if(this->saveCnt>9)
-		this->saveCnt=0;
-
+	this->goForward();
 	this->canReturn=true;
-
 	delete buf;
 }
 

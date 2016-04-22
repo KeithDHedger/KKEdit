@@ -83,7 +83,6 @@
 
 #endif
 
-
 //menus labels
 //file menu
 #define MENU_FILE_MENU_LABEL gettext("_File")
@@ -404,6 +403,8 @@
 #define PREFSLIVE DATADIR GLOBALSUFFIX "/pixmaps/live.png"
 #define PREFSSEPERATOR DATADIR GLOBALSUFFIX "/pixmaps/sep.png"
 #define PREFSEXPAND DATADIR GLOBALSUFFIX "/pixmaps/expand.png"
+
+#define MAXHIST 100
 
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <gtksourceview/gtksourceprintcompositor.h>

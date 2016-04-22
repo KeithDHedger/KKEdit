@@ -1185,15 +1185,24 @@ void rebuildBookMarkMenu(void)
 
 VISIBLE void navigateHistory(GtkWidget *widget,gpointer data)
 {
-//	globalHistory->saveCurrentPos();
-//	globalHistory->saveLastPos();
+	int	tcnt=globalHistory->saveCnt;
 	if((long)data==NAVLAST)
-		globalHistory->goBack();
+		{
+			globalHistory->saveLastPos();
+			globalHistory->goBack();
+			globalHistory->goBack();
+			globalHistory->goToPos();
+		}
 	else
-		globalHistory->goForward();
-		
-//	globalHistory->goToPos();
-//	globalHistory->swapPos();
+		{
+			if(tcnt+1>MAXHIST)
+				tcnt=0;
+			if(globalHistory->savedPages[tcnt].pageID==-1)
+				return;
+			
+			globalHistory->goForward();
+			globalHistory->goToPos();
+		}
 }
 
 char	*barControl;

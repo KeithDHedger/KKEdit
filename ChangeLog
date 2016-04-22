@@ -1,4 +1,6 @@
 0.3.2
+History now works much more like a browser and make sense!
+Increased Forward/Back history.
 Fixed bug when removing certain tool items in prefs dialog.
 'Back and 'Forward' now remember last 10 jumps.
 Added 'Forward' to navigation menu and as extra button to toolbar.

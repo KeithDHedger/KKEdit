@@ -23,10 +23,10 @@ class TextBuffer
 		GtkTextIter		cursorPos;
 		GtkTextBuffer	*textBuffer;
 
-		int lineNum;
-		int numChars;
-		int column;
-		int charPos;
+		unsigned		lineNum;
+		int				numChars;
+		int				column;
+		int				charPos;
 
 		void getLineData(void);
 
