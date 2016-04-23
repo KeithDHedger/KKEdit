@@ -38,21 +38,15 @@ HistoryClass::~HistoryClass()
 
 void HistoryClass::goBack(void)
 {
+	if(this->saveCnt==0)
+		return;
 	this->saveCnt--;
-	if(this->saveCnt<0)
-		this->saveCnt=0;
 }
 
 void HistoryClass::goForward(void)
 {
-if(this->saveCnt<this->maxHist)
-	{
+	if(this->saveCnt<this->maxHist)
 		this->saveCnt++;
-	}
-//	return;
-//	this->saveCnt++;
-//	if(this->saveCnt>=MAXHIST)
-//		this->saveCnt=MAXHIST-1;
 }
 
 void HistoryClass::goToPos(void)

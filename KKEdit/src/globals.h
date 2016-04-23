@@ -366,6 +366,10 @@ extern GtkToolItem		*findQtApiButton;
 extern GtkToolItem		*findFuncDefButton;
 extern GtkToolItem		*liveSearchButton;
 
+//back/forward history
+extern GtkWidget		*backHistoryMenu;
+extern GtkWidget		*backHistorySubMenu;
+
 //find replace
 extern GtkWidget		*findReplaceDialog;
 extern GtkWidget		*findBox;

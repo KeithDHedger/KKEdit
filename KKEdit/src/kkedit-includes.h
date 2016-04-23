@@ -246,6 +246,7 @@
 #define FIND_TT_LABEL gettext("Find")
 #define GOTO_DEFINE_TT_LABEL gettext("Go To Definition")
 #define BACK_TT_LABEL gettext("Go Back")
+#define BACK_MENU_TT_LABEL gettext("Back To")
 #define FORWARD_TT_LABEL gettext("Go Forward")
 #define TO_LINE_TT_LABEL gettext("Go To Line")
 #define TO_API_TT_LABEL gettext("Find API In Gtk Docs")

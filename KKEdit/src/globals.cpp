@@ -234,23 +234,27 @@ GtkWidget		*secondWindowHPane=NULL;
 int				currentTabNumber;
 int 			untitledNumber=1;
 
-GtkToolItem	*newButton=NULL;
-GtkToolItem	*openButton=NULL;
-GtkToolItem	*saveButton=NULL;
-GtkToolItem	*redoButton=NULL;
-GtkToolItem	*undoButton=NULL;
-GtkToolItem	*cutButton=NULL;
-GtkToolItem	*copyButton=NULL;
-GtkToolItem	*pasteButton=NULL;
-GtkToolItem	*findButton=NULL;
-GtkToolItem	*gotoDefButton=NULL;
-GtkToolItem	*backButton=NULL;
-GtkToolItem	*forwardButton=NULL;
-GtkToolItem	*gotoLineButton=NULL;
-GtkToolItem	*findApiButton=NULL;
-GtkToolItem	*findQtApiButton=NULL;
-GtkToolItem	*findFuncDefButton=NULL;
-GtkToolItem	*liveSearchButton=NULL;
+GtkToolItem		*newButton=NULL;
+GtkToolItem		*openButton=NULL;
+GtkToolItem		*saveButton=NULL;
+GtkToolItem		*redoButton=NULL;
+GtkToolItem		*undoButton=NULL;
+GtkToolItem		*cutButton=NULL;
+GtkToolItem		*copyButton=NULL;
+GtkToolItem		*pasteButton=NULL;
+GtkToolItem		*findButton=NULL;
+GtkToolItem		*gotoDefButton=NULL;
+GtkToolItem		*backButton=NULL;
+GtkToolItem		*forwardButton=NULL;
+GtkToolItem		*gotoLineButton=NULL;
+GtkToolItem		*findApiButton=NULL;
+GtkToolItem		*findQtApiButton=NULL;
+GtkToolItem		*findFuncDefButton=NULL;
+GtkToolItem		*liveSearchButton=NULL;
+
+//back/forward history
+GtkWidget		*backHistoryMenu=NULL;
+GtkWidget		*backHistorySubMenu=NULL;
 
 //find replace
 GtkWidget		*findReplaceDialog;

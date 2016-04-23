@@ -224,6 +224,22 @@ void setUpToolBar(void)
 						gtk_toolbar_insert(toolBar,backButton,-1);
 						g_signal_connect(G_OBJECT(backButton),"clicked",G_CALLBACK(navigateHistory),(void*)NAVLAST);
 						gtk_widget_set_tooltip_text((GtkWidget*)backButton,BACK_TT_LABEL);
+
+//back history
+//						backHistorySubMenu=gtk_menu_new();
+//						gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(backButton),backHistorySubMenu);
+//						//gtk_menu_item_set_submenu(GTK_MENU_ITEM(backHistoryMenu),backHistorySubMenu);
+//
+//						gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(backHistorySubMenu),BACK_MENU_TT_LABEL);
+//					//	g_signal_connect(backHistoryMenu,"item_activated",G_CALLBACK(recentFileMenu),NULL);
+//
+//						//gtk_menu_shell_append(GTK_MENU_SHELL(backHistoryMenu),widg);
+//						//g_signal_connect(G_OBJECT(widg),"activate",G_CALLBACK(function),userdata);
+//	
+//						//g_signal_connect(G_OBJECT(backButton),"clicked",G_CALLBACK(doOpenFile),NULL);
+//						//gtk_toolbar_insert(toolBar,openButton,-1);
+//						//gtk_widget_set_tooltip_text((GtkWidget*)openButton,OPEN_TT_LABEL);
+
 						break;
 //go forward
 					case 'W':
