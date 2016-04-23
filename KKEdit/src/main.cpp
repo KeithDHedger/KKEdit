@@ -80,6 +80,7 @@ void init(void)
 	autoCheck=true;
 	useGlobalPlugMenu=true;
 	maxTabChars=20;
+	maxJumpHistory=10;
 
 	windowWidth=800;
 	windowHeight=600;

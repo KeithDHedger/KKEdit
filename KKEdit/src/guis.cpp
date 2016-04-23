@@ -1233,6 +1233,10 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 //max bookmark strings
 	makePrefBox(true,false);
 	makePrefsDial(MAXBMWIDTH,PREFS_MAX_CHARS_IN_BMS_LABEL,"maxbmchars",maxBMChars,5,MAXTEXTWIDTH);
+//max history
+	makePrefBox(true,false);
+	makePrefsDial(MAXJUMPHISTORY,PREFS_MAX_JUMP_HISTORY_LABEL,"maxjumphistory",maxJumpHistory,10,MAXBFHISTORY);
+
 //check for update
 	makePrefBox(true,true);
 	makePrefsCheck(UPDATECHECK,PREFS_UPDATE_CHECK_LABEL,"updatecheck",autoCheck,true,true);
@@ -1792,7 +1796,7 @@ border-width: 0; \n \
 //gettext
 	globalPlugins->globalPlugData->locale=LOCALEDIR;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
-	globalHistory=new HistoryClass(mainNotebook);
+	globalHistory=new HistoryClass(mainNotebook,maxJumpHistory);
 	resetSensitive();
 }
 

@@ -24,20 +24,23 @@ struct historyData
 class HistoryClass
 {
 	public:
-		HistoryClass(GtkNotebook *nb);
+		HistoryClass(GtkNotebook *nb,unsigned maxhist);
 		~HistoryClass();
 
-		int			getTabNumForPagexx(void);
 		bool		canGoBack(void);
 		void		goBack(void);
 		void		goForward(void);
 		void		goToPos(void);
 		void 		saveLastPos(void);
 		void 		saveLastPosAndStop(void);
-		int			saveCnt;		
-		historyData	savedPages[MAXHIST+4];
+		unsigned	getSaveCnt(void);
+		unsigned	getMaxHist(void);
+		historyData	getHistory(int num);
 
 	private:
+		unsigned	maxHist;
+		historyData	*savedPages;
+		unsigned	saveCnt;		
 		bool		canReturn;;
 		GtkNotebook	*notebook;
 };

@@ -9,13 +9,16 @@
 
 #include "kkedit-includes.h"
 
-HistoryClass::HistoryClass(GtkNotebook *nb)
+HistoryClass::HistoryClass(GtkNotebook *nb,unsigned maxhist)
 {
 	ERRDATA
 	this->notebook=nb;
 	this->canReturn=true;
 	this->saveCnt=0;
-	for(int j=0;j<(MAXHIST+4);j++)
+	this->maxHist=maxhist;
+	this->savedPages=new historyData[maxhist+4];
+	printf("--->%i<<<\n",maxhist);
+	for(unsigned j=0;j<(maxhist+4);j++)
 		{
 			this->savedPages[j].pageID=-1;
 			this->savedPages[j].filePath=NULL;
@@ -26,7 +29,7 @@ HistoryClass::HistoryClass(GtkNotebook *nb)
 
 HistoryClass::~HistoryClass()
 {
-	for(int j=0;j<(MAXHIST+4);j++)
+	for(unsigned j=0;j<(this->maxHist+4);j++)
 		{
 			if(this->savedPages[j].filePath!=NULL)
 				debugFree(&(this->savedPages[j].filePath));
@@ -42,9 +45,14 @@ void HistoryClass::goBack(void)
 
 void HistoryClass::goForward(void)
 {
-	this->saveCnt++;
-	if(this->saveCnt>=MAXHIST)
-		this->saveCnt=MAXHIST-1;
+if(this->saveCnt<this->maxHist)
+	{
+		this->saveCnt++;
+	}
+//	return;
+//	this->saveCnt++;
+//	if(this->saveCnt>=MAXHIST)
+//		this->saveCnt=MAXHIST-1;
 }
 
 void HistoryClass::goToPos(void)
@@ -77,6 +85,21 @@ void HistoryClass::saveLastPosAndStop(void)
 	this->saveLastPos();
 	this->savedPages[this->saveCnt+1].pageID=-1;
 	this->savedPages[this->saveCnt].pageID=-1;
+}
+
+historyData HistoryClass::getHistory(int num)
+{
+	return(this->savedPages[num]);
+}
+
+unsigned HistoryClass::getMaxHist(void)
+{
+	return(this->maxHist);
+}
+
+unsigned HistoryClass::getSaveCnt(void)
+{
+	return(this->saveCnt);
 }
 
 void HistoryClass::saveLastPos(void)

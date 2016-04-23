@@ -313,6 +313,7 @@
 #define PREFS_MAX_CHARS_IN_TAB_LABEL gettext("Max Characters In Tab:")
 #define PREFS_MAX_CHARS_IN_FUNC_DEFS_LABEL gettext("Max Characters In Function Defs:")
 #define PREFS_MAX_CHARS_IN_BMS_LABEL gettext("Max Characters In Bookmarks:")
+#define PREFS_MAX_JUMP_HISTORY_LABEL gettext("Max Back/Forward History:")
 #define PREFS_UPDATE_CHECK_LABEL gettext("Check For Updates")
 #define PREFS_GLOBAL_PLUG_MENU_LABEL gettext("Use Global Plugins Menu( Requires Restart )")
 #define PREFS_ADMIN_LABEL gettext("Administration")
@@ -403,8 +404,6 @@
 #define PREFSLIVE DATADIR GLOBALSUFFIX "/pixmaps/live.png"
 #define PREFSSEPERATOR DATADIR GLOBALSUFFIX "/pixmaps/sep.png"
 #define PREFSEXPAND DATADIR GLOBALSUFFIX "/pixmaps/expand.png"
-
-#define MAXHIST 100
 
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <gtksourceview/gtksourceprintcompositor.h>

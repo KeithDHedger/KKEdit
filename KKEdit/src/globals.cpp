@@ -83,6 +83,9 @@ GtkWidget		*helpMenu;
 //status bar message
 char			*statusMessage=NULL;
 
+//barber pole
+char			*barControl;
+
 GtkAccelGroup	*accgroup=NULL;
 
 VISIBLE GList	*newBookMarksList=NULL;
@@ -145,6 +148,7 @@ unsigned int	autoShowMinChars;
 bool			useGlobalPlugMenu;
 unsigned int	maxTabChars=20;
 unsigned int	maxBMChars;
+unsigned int	maxJumpHistory;
 unsigned int	maxFuncDefs;
 
 GtkWidget		*fontButton;
@@ -442,6 +446,7 @@ args			kkedit_rc[]=
 	{"maxmenuchars",TYPEINT,&maxFuncDefs},
 	{"maxbmchars",TYPEINT,&maxBMChars},
 	{"tabssize",TYPEINT,&tabsSize},
+	{"maxjumphistory",TYPEINT,&maxJumpHistory},
 	{NULL,0,NULL}
 };
 
@@ -1185,27 +1190,25 @@ void rebuildBookMarkMenu(void)
 
 VISIBLE void navigateHistory(GtkWidget *widget,gpointer data)
 {
-	int	tcnt=globalHistory->saveCnt;
+	unsigned	tcnt=globalHistory->getSaveCnt();
 	if((long)data==NAVLAST)
 		{
 			globalHistory->saveLastPos();
+//TODO//
+			if(tcnt<globalHistory->getMaxHist())
 			globalHistory->goBack();
 			globalHistory->goBack();
 			globalHistory->goToPos();
 		}
 	else
 		{
-			if(tcnt+1>MAXHIST)
-				tcnt=0;
-			if(globalHistory->savedPages[tcnt].pageID==-1)
+			if(globalHistory->getHistory(tcnt).pageID==-1)
 				return;
 			
 			globalHistory->goForward();
 			globalHistory->goToPos();
 		}
 }
-
-char	*barControl;
 
 void showBarberPole(const char *title)
 {

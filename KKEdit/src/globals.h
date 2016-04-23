@@ -63,6 +63,7 @@
 
 #define MAXRECENT 10
 #define MAXTEXTWIDTH 500
+#define MAXBFHISTORY 100
 
 #define MARK_TYPE_1		"one"
 #define MARK_TYPE_2		"two"
@@ -260,6 +261,7 @@ extern bool				useGlobalPlugMenu;
 extern unsigned int		maxTabChars;
 extern unsigned int		autoShowMinChars;
 extern unsigned int		maxBMChars;
+extern unsigned int		maxJumpHistory;
 extern unsigned int		maxFuncDefs;
 
 extern GtkWidget		*fontButton;
