@@ -43,7 +43,7 @@ AC_MSG_CHECKING(Build/Install plugins)
 AC_ARG_ENABLE(plugins,AS_HELP_STRING([--enable-plugins],[Build/Install plugins]),[enable_plugs=$enableval],[enable_plugs="yes"])
 AC_MSG_RESULT($enable_plugs)
 if test "$enable_plugs" = "yes"; then
-	PLUGINCLUDES="KKEdit/app KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
+	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
 	if test "$enable_gtk3" = "yes"; then
 		VTE_MODULES="vte-2.91 >= 0.40.2"
 	else

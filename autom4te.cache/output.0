@@ -4675,13 +4675,11 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_plugs" >&5
 $as_echo "$enable_plugs" >&6; }
 if test "$enable_plugs" = "yes"; then
-	PLUGINCLUDES="KKEdit/app KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
+	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
 	if test "$enable_gtk3" = "yes"; then
 		VTE_MODULES="vte-2.91 >= 0.40.2"
-		echo "vte 2.91"
 	else
 		VTE_MODULES="vte >= 0.28.2"
-		echo "vte 0.28.2"
 	fi
 	
 pkg_failed=no
