@@ -18,6 +18,7 @@ GtkWidget*	progressBar;
 bool		doPulse=true;
 int			percent;
 char		*path=NULL;
+int			sinkReturn;
 
 enum {QUIT,PULSE,PERCENT};
 
@@ -62,7 +63,7 @@ gboolean idleScroll(gpointer data)
 	char*	command;
 	int		perc;
 
-	asprintf(&command,"cat %s",(char*)data);
+	sinkReturn=asprintf(&command,"cat %s",(char*)data);
 
 	fp=popen(command, "r");
 	while(fgets(line,256,fp))
@@ -149,10 +150,10 @@ int main(int argc,char **argv)
 
 	doPulse=false;
 	if(argc>3)
-		asprintf(&command,"/bin/echo \"%s\" > \"%s\"",argv[3],argv[2]);
+		sinkReturn=asprintf(&command,"/bin/echo \"%s\" > \"%s\"",argv[3],argv[2]);
 	else
-		asprintf(&command,"/bin/echo 0 > \"%s\"",argv[2]);
-	system(command);
+		sinkReturn=asprintf(&command,"/bin/echo 0 > \"%s\"",argv[2]);
+	sinkReturn=system(command);
 	free(command);
 	gtk_init(&argc,&argv);
 	showBarberPole(argv[1],argv[2]);

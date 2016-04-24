@@ -28,8 +28,8 @@ PluginClass::PluginClass(bool loadPlugs)
 	plugins=NULL;
 	plugCount=-1;
 
-	asprintf(&plugFolderPaths[GLOBALPLUGS],"%s%s/plugins-%s",DATADIR,GLOBALSUFFIX,PLATFORM);
-	asprintf(&plugFolderPaths[LOCALPLUGS],"%s/." KKEDITVERS "/plugins-%s",getenv("HOME"),PLATFORM);
+	sinkReturn=asprintf(&plugFolderPaths[GLOBALPLUGS],"%s%s/plugins-%s",DATADIR,GLOBALSUFFIX,PLATFORM);
+	sinkReturn=asprintf(&plugFolderPaths[LOCALPLUGS],"%s/." KKEDITVERS "/plugins-%s",getenv("HOME"),PLATFORM);
 
 	this->doLoadPlugs=loadPlugs;
 	this->loadPlugins();
@@ -89,7 +89,7 @@ bool PluginClass::checkForEnabled(char *plugname)
 			ERRDATA return(false);
 		}
 
-	asprintf(&filename,"%s/." KKEDITVERS "/pluglist",getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/pluglist",getenv("HOME"));
 	fd=fopen(filename,"r");
 	if(fd!=NULL)
 		{
@@ -97,7 +97,7 @@ bool PluginClass::checkForEnabled(char *plugname)
 				{
 					buffer[0]=0;
 					name[0]=0;
-					fgets(buffer,1024,fd);
+					sinkReturnStr=fgets(buffer,1024,fd);
 					sscanf(buffer,"%s",(char*)&name);
 
 					if((strlen(name)>0) &&(strcasecmp(name,plugname)==0))
@@ -144,8 +144,8 @@ void PluginClass::deleteWhiteList()
 	ERRDATA
 	char	*command;
 
-	asprintf(&command,"rm %s/." KKEDITVERS "/pluglist 2>/dev/null",getenv("HOME"));
-	system(command);
+	sinkReturn=asprintf(&command,"rm %s/." KKEDITVERS "/pluglist 2>/dev/null",getenv("HOME"));
+	sinkReturn=system(command);
 	ERRDATA debugFree(&command);
 }
 
@@ -154,8 +154,8 @@ void PluginClass::appendToWhiteList(char *name)
 	ERRDATA
 	char	*command;
 
-	asprintf(&command,"echo %s >> %s/." KKEDITVERS "/pluglist",name,getenv("HOME"));
-	system(command);
+	sinkReturn=asprintf(&command,"echo %s >> %s/." KKEDITVERS "/pluglist",name,getenv("HOME"));
+	sinkReturn=system(command);
 	ERRDATA debugFree(&command);
 }
 
@@ -178,7 +178,7 @@ void PluginClass::loadPlugins(void)
 			this->plugCount=0;
 			for(int j=0;j<2;j++)
 				{
-					asprintf(&command,"find %s -follow -iname \"*.so\" -printf '%%f/%%p\n' 2>/dev/null| sort -n -t /|cut -f2- -d/",plugFolderPaths[j]);
+					sinkReturn=asprintf(&command,"find %s -follow -iname \"*.so\" -printf '%%f/%%p\n' 2>/dev/null| sort -n -t /|cut -f2- -d/",plugFolderPaths[j]);
 					pf=popen(command,"r");
 					if(pf!=NULL)
 						{
@@ -270,7 +270,7 @@ char *PluginClass::getPluginPathByName(char *name)
 
 	for(int j=0;j<2;j++)
 		{
-			asprintf(&command,"find %s -follow -iname \"*.so\" 2>/dev/null",plugFolderPaths[j]);
+			sinkReturn=asprintf(&command,"find %s -follow -iname \"*.so\" 2>/dev/null",plugFolderPaths[j]);
 			pf=popen(command,"r");
 			if(pf!=NULL)
 				{

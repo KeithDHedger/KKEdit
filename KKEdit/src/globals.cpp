@@ -106,6 +106,9 @@ GtkWidget		*findDefWidget;
 GtkWidget		*liveSearchWidget;
 
 int				currentPage=0;
+int				sinkReturn;
+char			*sinkReturnStr;
+
 //nag
 bool			nagScreen;
 unsigned int	nagTime;
@@ -253,8 +256,6 @@ GtkToolItem		*findFuncDefButton=NULL;
 GtkToolItem		*liveSearchButton=NULL;
 
 //back/forward history
-GtkWidget		*backHistoryMenu=NULL;
-GtkWidget		*backHistorySubMenu=NULL;
 
 //find replace
 GtkWidget		*findReplaceDialog;
@@ -499,7 +500,7 @@ char *truncateWithElipses(char *str,unsigned int maxlen)
 					sides=(maxlen-5)/2;
 					front=g_utf8_substring(str,0,sides);
 					back=g_utf8_substring(str,g_utf8_strlen(str,-1)-sides,g_utf8_strlen(str,-1));
-					asprintf(&retstr,"%s ... %s",front,back);
+					sinkReturn=asprintf(&retstr,"%s ... %s",front,back);
 					ERRDATA debugFree(&front);
 					ERRDATA debugFree(&back);
 				}
@@ -560,7 +561,7 @@ void getMimeType(char *filepath,void *ptr)
 	gchar	*stderr=NULL;
 	gint	retval=0;
 
-	asprintf(&command,"file -b --mime-type %s",filepath);
+	sinkReturn=asprintf(&command,"file -b --mime-type %s",filepath);
 	g_spawn_command_line_sync(command,&stdout,&stderr,&retval,NULL);
 	if(retval==0)
 		{
@@ -603,12 +604,12 @@ void setLanguage(pageStruct *page)
 
 			mimetype=NULL;
 
-			asprintf(&command,"xdg-mime query filetype \"%s\"",page->filePath);
+			sinkReturn=asprintf(&command,"xdg-mime query filetype \"%s\"",page->filePath);
 			fp=popen(command,"r");
-			fgets(line,1024,fp);
+			sinkReturnStr=fgets(line,1024,fp);
 			hold=strdup(line);
 			if(strchr(line,';')!=NULL)
-				asprintf(&mimetype,"%s",globalSlice->sliceBetween(line,NULL,(char*)";"));
+				sinkReturn=asprintf(&mimetype,"%s",globalSlice->sliceBetween(line,NULL,(char*)";"));
 			else
 				mimetype=strndup(line,strlen(line)-1);
 
@@ -658,22 +659,22 @@ VISIBLE void runCommand(char *commandtorun,void *ptr,bool interm,int flags,int u
 	if(useroot==true)
 		{
 			if(strcmp(rootCommand,"")!=0)
-				asprintf(&asroot,"%s ",rootCommand);
+				sinkReturn=asprintf(&asroot,"%s ",rootCommand);
 			else
 				{
-					asprintf(&asroot,"sudo ");
+					sinkReturn=asprintf(&asroot,"sudo ");
 					interm=true;
 				}
 		}
 
 	if(interm==true)
 		{
-			asprintf(&command,"%s %s sh -c \"%s\"",terminalCommand,asroot,commandtorun);
+			sinkReturn=asprintf(&command,"%s %s sh -c \"%s\"",terminalCommand,asroot,commandtorun);
 			flags=8;
 		}
 	else
 		{
-			asprintf(&command,"%ssh -c \"%s\"",asroot,commandtorun);
+			sinkReturn=asprintf(&command,"%ssh -c \"%s\"",asroot,commandtorun);
 		}
 
 	if((flags & TOOL_ASYNC)==TOOL_ASYNC)
@@ -990,7 +991,7 @@ void getRecursiveTagListFileName(char *filepath,void *ptr)
 			ERRDATA return;
 		}
 
-	asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - --excmd=number --format=1 -f -",filepath,depth);
+	sinkReturn=asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - --excmd=number --format=1 -f -",filepath,depth);
 	fp=popen(command, "r");
 	while(fgets(line,1024,fp))
 		{
@@ -1021,23 +1022,23 @@ void getRecursiveTagList(char *filepath,void *ptr)
 	switch(listFunction)
 		{
 		case 0:
-			asprintf(&sort,"sort -k 2rb,2rb -k 1b,1b");
+			sinkReturn=asprintf(&sort,"sort -k 2rb,2rb -k 1b,1b");
 			break;
 		case 1:
-			asprintf(&sort,"sort -k 2rb,2rb -k 3n,3n");
+			sinkReturn=asprintf(&sort,"sort -k 2rb,2rb -k 3n,3n");
 			break;
 		case 2:
-			asprintf(&sort,"sort -k 3n");
+			sinkReturn=asprintf(&sort,"sort -k 3n");
 			break;
 		case 4:
-			asprintf(&sort,"sort -k 2rb,2rb -k 1b,1b");
+			sinkReturn=asprintf(&sort,"sort -k 2rb,2rb -k 1b,1b");
 			break;
 		default:
-			asprintf(&sort,"sort");
+			sinkReturn=asprintf(&sort,"sort");
 			break;
 		}
 
-	asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - -x|%s|sed 's@ \\+@ @g'",filepath,depth,sort);
+	sinkReturn=asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - -x|%s|sed 's@ \\+@ @g'",filepath,depth,sort);
 
 	fp=popen(command, "r");
 	while(fgets(line,2048,fp))
@@ -1095,8 +1096,8 @@ void buildToolsList(void)
 			toolsList=NULL;
 		}
 
-	asprintf(&datafolder[0],"%s/tools/",DATADIR);
-	asprintf(&datafolder[1],"%s/." KKEDITVERS "/tools/",getenv("HOME"));
+	sinkReturn=asprintf(&datafolder[0],"%s/tools/",DATADIR);
+	sinkReturn=asprintf(&datafolder[1],"%s/." KKEDITVERS "/tools/",getenv("HOME"));
 	for(int loop=0; loop<2; loop++)
 		{
 			folder=g_dir_open(datafolder[loop],0,NULL);
@@ -1117,7 +1118,7 @@ void buildToolsList(void)
 							commentarg=NULL;
 							usebar=0;
 
-							asprintf(&filepath,"%s%s",datafolder[loop],entry);
+							sinkReturn=asprintf(&filepath,"%s%s",datafolder[loop],entry);
 							loadVarsFromFile(filepath,tool_vars);
 
 							if((menuname!=NULL) &&(strlen(menuname)>0) &&(commandarg!=NULL))
@@ -1220,9 +1221,9 @@ void showBarberPole(const char *title)
 	StringSlice	*slice=new StringSlice;
 	char		*barcommand;
 
-	asprintf(&barControl,"%s/BarControl-%s",tmpFolderName,slice->randomName(6));
-	asprintf(&barcommand,POLEPATH " \"%s\" \"%s\" \"pulse\" &",title,barControl);
-	system(barcommand);
+	sinkReturn=asprintf(&barControl,"%s/BarControl-%s",tmpFolderName,slice->randomName(6));
+	sinkReturn=asprintf(&barcommand,POLEPATH " \"%s\" \"%s\" \"pulse\" &",title,barControl);
+	sinkReturn=system(barcommand);
 	ERRDATA debugFree(&barcommand);
 	ERRDATA
 }
@@ -1233,8 +1234,8 @@ void killBarberPole(void)
 	char		*barcommand;
 
 	usleep(100000);
-	asprintf(&barcommand,"/bin/echo quit > \"%s\"",barControl);
-	system(barcommand);
+	sinkReturn=asprintf(&barcommand,"/bin/echo quit > \"%s\"",barControl);
+	sinkReturn=system(barcommand);
 	ERRDATA debugFree(&barcommand);
 	ERRDATA debugFree(&barControl);
 }
@@ -1555,9 +1556,9 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 		offset=1;
 
 	if(ismodified==true)
-		asprintf(&newlabel,"*%s",&text[offset]);
+		sinkReturn=asprintf(&newlabel,"*%s",&text[offset]);
 	else
-		asprintf(&newlabel,"%s",&text[offset]);
+		sinkReturn=asprintf(&newlabel,"%s",&text[offset]);
 
 	gtk_label_set_text((GtkLabel*)page->tabName,(const gchar*)newlabel);
 	ERRDATA debugFree(&newlabel);
@@ -1628,7 +1629,7 @@ void getOldConfigs(const char *file,args *dataptr)
 	char	*filename;
 	int		retval=NOERR;
 
-	asprintf(&filename,"%s/." KKEDITVERS "/%s",getenv("HOME"),file);
+	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/%s",getenv("HOME"),file);
 	retval=loadVarsFromFile(filename,dataptr);
 	ERRDATA debugFree(&filename);
 
@@ -1636,13 +1637,13 @@ void getOldConfigs(const char *file,args *dataptr)
 		{
 			if(strcmp(KKEDITVERS,"KKEdit3")==0)
 				{
-					asprintf(&filename,"%s/.KKEdit/%s",getenv("HOME"),file);
+					sinkReturn=asprintf(&filename,"%s/.KKEdit/%s",getenv("HOME"),file);
 					retval=loadVarsFromFile(filename,dataptr);
 					ERRDATA debugFree(&filename);
 				}
 			else
 				{
-					asprintf(&filename,"%s/.KKEdit3/%s",getenv("HOME"),file);
+					sinkReturn=asprintf(&filename,"%s/.KKEdit3/%s",getenv("HOME"),file);
 					retval=loadVarsFromFile(filename,dataptr);
 					ERRDATA debugFree(&filename);
 				}

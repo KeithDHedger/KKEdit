@@ -123,6 +123,7 @@ void setUpToolBar(void)
 	GtkWidget		*image;
 #endif
 	GtkRecentFilter	*filter;
+	GtkWidget		*menu;
 
 	recent=gtk_recent_chooser_menu_new();
 	gtk_recent_chooser_set_local_only(GTK_RECENT_CHOOSER(recent),false);
@@ -220,26 +221,52 @@ void setUpToolBar(void)
 						break;
 //go back
 					case 'B':
-						backButton=createNewToolItem(GTK_STOCK_GO_BACK,BACK_TOOLBAR_LABEL);
+//					{
+						//backButton=createNewToolItem(GTK_STOCK_GO_BACK,BACK_TOOLBAR_LABEL);
+						//backButton=gtk_menu_tool_button_new_from_stock(GTK_STOCK_GO_BACK);
+#ifdef _USEGTK3_
+						image=gtk_image_new_from_icon_name(GTK_STOCK_GO_BACK,GTK_ICON_SIZE_LARGE_TOOLBAR);
+						backButton=gtk_menu_tool_button_new(image,BACK_TOOLBAR_LABEL);
+#else
+						backButton=gtk_menu_tool_button_new_from_stock(GTK_STOCK_GO_BACK);
+#endif
+
 						gtk_toolbar_insert(toolBar,backButton,-1);
 						g_signal_connect(G_OBJECT(backButton),"clicked",G_CALLBACK(navigateHistory),(void*)NAVLAST);
 						gtk_widget_set_tooltip_text((GtkWidget*)backButton,BACK_TT_LABEL);
 
 //back history
-//						backHistorySubMenu=gtk_menu_new();
-//						gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(backButton),backHistorySubMenu);
-//						//gtk_menu_item_set_submenu(GTK_MENU_ITEM(backHistoryMenu),backHistorySubMenu);
+						menu=gtk_menu_new();
+						gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(backButton),menu);
+						gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(backButton),BACK_MENU_TT_LABEL);
+						globalHistory->setHistMenu(menu);
+//						tmenu=gtk_menu_item_new_with_label("test menu1");
+//						gtk_menu_shell_append(GTK_MENU_SHELL(globalHistory->getHistMenu()),tmenu);
+//						tmenu=gtk_menu_item_new_with_label("test menu3");
+//						gtk_menu_shell_append(GTK_MENU_SHELL(globalHistory->getHistMenu()),tmenu);
+//						tmenu=gtk_menu_item_new_with_label("wacko jacko");
+//						gtk_menu_shell_append(GTK_MENU_SHELL(globalHistory->getHistMenu()),tmenu);
+//						tmenu=gtk_menu_item_new_with_label("test menu2");
+//						gtk_menu_shell_append(GTK_MENU_SHELL(globalHistory->getHistMenu()),tmenu);
 //
-//						gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(backHistorySubMenu),BACK_MENU_TT_LABEL);
-//					//	g_signal_connect(backHistoryMenu,"item_activated",G_CALLBACK(recentFileMenu),NULL);
-//
-//						//gtk_menu_shell_append(GTK_MENU_SHELL(backHistoryMenu),widg);
-//						//g_signal_connect(G_OBJECT(widg),"activate",G_CALLBACK(function),userdata);
+//						gtk_widget_show_all(globalHistory->getHistMenu());
+////GtkContainer						
+//GList *childs=gtk_container_get_children ((GtkContainer*)globalHistory->getHistMenu());
+//for(int j=0;j<6;j++)
+//{
+//	GtkMenuItem *data=(GtkMenuItem *)g_list_nth_data (childs,j);
+//	if(strcmp(gtk_menu_item_get_label ((GtkMenuItem *)data),"wacko jacko")==0)
+//		{
+//	printf("--->%s<<<\n",gtk_menu_item_get_label((GtkMenuItem *)data));
+//			gtk_container_remove ((GtkContainer*)globalHistory->getHistMenu(),(GtkWidget *)data);
+//			//gtk_widget_destroy((GtkWidget *)data);
+//			gtk_widget_show_all(globalHistory->getHistMenu());
+//			break;
+//		}
 //	
-//						//g_signal_connect(G_OBJECT(backButton),"clicked",G_CALLBACK(doOpenFile),NULL);
-//						//gtk_toolbar_insert(toolBar,openButton,-1);
-//						//gtk_widget_set_tooltip_text((GtkWidget*)openButton,OPEN_TT_LABEL);
-
+//}
+//
+//}						
 						break;
 //go forward
 					case 'W':
@@ -349,7 +376,7 @@ void doMakeTool(void)
 
 	char		*placeholderinfo;
 
-	asprintf(&placeholderinfo,"%s",TOOLS_PLACEHOLDER_LABEL);
+	sinkReturn=asprintf(&placeholderinfo,"%s",TOOLS_PLACEHOLDER_LABEL);
 
 	toolwin=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title((GtkWindow*)toolwin,TOOLS_EDIT_LABEL);
@@ -838,9 +865,9 @@ void setKeyCuts(GtkWidget *widget,gpointer data)
 						{
 							ERRDATA debugFree(&shortCutStrings[j]);
 						}
-					asprintf(&shortCutStrings[j],"%i %i - ^%c %s",shortCuts[j][0],shortCuts[j][1],shortCuts[j][0],shortcuttext[j]);
+					sinkReturn=asprintf(&shortCutStrings[j],"%i %i - ^%c %s",shortCuts[j][0],shortCuts[j][1],shortCuts[j][0],shortcuttext[j]);
 				}
-			asprintf(&filename,"%s/." KKEDITVERS "/keybindings.rc",getenv("HOME"));
+			sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/keybindings.rc",getenv("HOME"));
 			saveVarsToFile(filename,keybindings_rc);
 			gtk_widget_hide(keysWindow);
 		}
@@ -878,7 +905,7 @@ void buildKeys()
 			gtk_window_set_title((GtkWindow*)keysWindow,KBSC_DEFINE_KB_LABEL);
 			vbox=createNewBox(NEWVBOX,false,8);
 
-			asprintf(&keycutsinfo,"%s",KBSC_INFO_LABEL);
+			sinkReturn=asprintf(&keycutsinfo,"%s",KBSC_INFO_LABEL);
 			item=gtk_label_new(keycutsinfo);
 			gtk_label_set_justify((GtkLabel*)item,GTK_JUSTIFY_CENTER);
 			gtk_label_set_line_wrap((GtkLabel*)item,true);
@@ -1381,8 +1408,10 @@ void buildMainGui(void)
 	g_signal_connect(G_OBJECT(mainNotebook),"page-reordered",G_CALLBACK(switchPage),NULL);
 	g_signal_connect(G_OBJECT(mainNotebook),"page-removed",G_CALLBACK(realCloseTab),NULL);
 
+	globalHistory=new HistoryClass(mainNotebook,maxJumpHistory);
+
 #if 0
-	asprintf(&notebookcss,"GtkNotebook { \n \
+	sinkReturn=asprintf(&notebookcss,"GtkNotebook { \n \
 -GtkWidget-focus-line-width: 0;\n \
 -GtkNotebook-tab-overlap: 0;\n \
 padding: 10 20 10 20;\n \
@@ -1404,7 +1433,7 @@ border-width: 0; \n \
 	GtkStyleProvider	*nbprovider;
 
 	nbprovider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
-	asprintf(&notebookcss,"GtkNotebook {\n \
+	sinkReturn=asprintf(&notebookcss,"GtkNotebook {\n \
     padding: 0px;\n \
 }\n");
 
@@ -1753,7 +1782,7 @@ border-width: 0; \n \
 	GtkStyleProvider	*statusprovider;
 
 	statusprovider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
-	asprintf(&statuscss,"* {\n \
+	sinkReturn=asprintf(&statuscss,"* {\n \
     padding: 0px;\n \
     border: 0px;\n \
   font-size: 8px;\n \
@@ -1812,7 +1841,7 @@ border-width: 0; \n \
 //gettext
 	globalPlugins->globalPlugData->locale=LOCALEDIR;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
-	globalHistory=new HistoryClass(mainNotebook,maxJumpHistory);
+//	globalHistory=new HistoryClass(mainNotebook,maxJumpHistory);
 	resetSensitive();
 }
 
@@ -2120,7 +2149,7 @@ void buildGtkDocViewer(void)
 	else
 		lang="fr";
 
-	asprintf(&thePage,"file://%s/help/help.%s.html",DATADIR,lang);
+	sinkReturn=asprintf(&thePage,"file://%s/help/help.%s.html",DATADIR,lang);
 	webkit_web_view_load_uri(webView,thePage);
 	ERRDATA freeAndNull(&thePage);
 	ERRDATA

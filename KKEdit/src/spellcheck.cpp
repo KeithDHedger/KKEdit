@@ -184,7 +184,7 @@ void doSpellCheckDoc(GtkWidget *widget,gpointer data)
 	char					*badword;
 	StringSlice			*slice=new StringSlice;
 
-	asprintf(&tempfile,"%s/KKEditAspell-%s",tmpFolderName,slice->randomName(6));
+	sinkReturn=asprintf(&tempfile,"%s/KKEditAspell-%s",tmpFolderName,slice->randomName(6));
 	/* Open the file */
 	doc=fopen(filename,"r");
 	if(doc<=0)
@@ -224,7 +224,7 @@ void doSpellCheckDoc(GtkWidget *widget,gpointer data)
 	 		 while(token=aspell_document_checker_next_misspelling(checker),token.len!=0)
 				{
 	    /* Pay particular attention to how token.offset and diff is used */
-					asprintf(&badword,"%.*s",token.len,(char*)&line[token.offset+diff]);
+					sinkReturn=asprintf(&badword,"%.*s",token.len,(char*)&line[token.offset+diff]);
 					goodWord=NULL;
 					checkTheWord(badword,1);
 					if(cancelCheck==true)

@@ -198,14 +198,14 @@ void addProp(pageStruct *page)
 		}
 
 //custom
-	asprintf(&customfile,"%s/%s",getenv("HOME"),CUSTOMWORDFILE);
+	sinkReturn=asprintf(&customfile,"%s/%s",getenv("HOME"),CUSTOMWORDFILE);
 	fd=fopen(customfile,"r");
 	if(fd!=NULL)
 		{
 			while(feof(fd)==0)
 				{
 					buffer[0]=0;
-					fgets(buffer,2048,fd);
+					sinkReturnStr=fgets(buffer,2048,fd);
 					if(strlen(buffer)>2)
 						{
 							buffer[strlen(buffer)-1]=0;

@@ -128,10 +128,10 @@ VISIBLE void findFile(GtkWidget *widget,gpointer data)
 			else
 				searchdir=strdup(page->dirName);
 
-			asprintf(&filepath,"%s/%s",searchdir,slice->sliceLen(filename,1,strlen(filename)-3));
+			sinkReturn=asprintf(&filepath,"%s/%s",searchdir,slice->sliceLen(filename,1,strlen(filename)-3));
 			if(openFile(filepath,0,false)==false)
 				{
-					asprintf(&command,"find \"%s\" -name \"%s\"",searchdir,basename(filepath));
+					sinkReturn=asprintf(&command,"find \"%s\" -name \"%s\"",searchdir,basename(filepath));
 					fp=popen(command, "r");
 					if(fp!=NULL)
 						{
@@ -432,7 +432,7 @@ bool readFile(char *name)
 		}
 
 	//Read file contents into buffer
-	fread(filebuffer,fileLen,1,file);
+	sinkReturn=fread(filebuffer,fileLen,1,file);
 	fclose(file);
 	ERRDATA return(true);
 }
@@ -502,7 +502,7 @@ char *getPathFromXML(char *xml)
 			if(xmldata!=NULL)
 				{
 					char	*tfile;
-					asprintf(&tfile,"/%s",slice->sliceBetween(xmldata,(char*)".html\">",(char*)"</a>"));					
+					sinkReturn=asprintf(&tfile,"/%s",slice->sliceBetween(xmldata,(char*)".html\">",(char*)"</a>"));					
 					ERRDATA delete slice;
 					ERRDATA return(tfile);
 				}
@@ -545,7 +545,7 @@ char *getPathFromXML(char *xml)
 									{
 										mustBeAClass=false;
 										classLineNumber=atoi(slice->sliceBetween(xmldata,(char*)"#l",(char*)"\">"));
-										asprintf(&classFileName,"/%s",slice->sliceBetween(xmldata,(char*)".html\">",(char*)"</a>"));
+										sinkReturn=asprintf(&classFileName,"/%s",slice->sliceBetween(xmldata,(char*)".html\">",(char*)"</a>"));
 										ERRDATA delete slice;
 										ERRDATA return(classFileName);
 									}
@@ -577,17 +577,17 @@ gboolean docLinkTrap(WebKitWebView *web_view,WebKitWebFrame *frame,WebKitNetwork
 			slce.setReturnDupString(true);
 			htmlpage=slce.sliceBetween((char*)uri,(char*)"file://",(char*)"#");
 			memset(line,0,4096);
-			asprintf(&command,"cat %s 2>/dev/null|grep \"<p>Definition at line \"",htmlpage);
+			sinkReturn=asprintf(&command,"cat %s 2>/dev/null|grep \"<p>Definition at line \"",htmlpage);
 			fp=popen(command,"r");
 			free(command);
-			fgets(line,4096,fp);
+			sinkReturnStr=fgets(line,4096,fp);
 			pclose(fp);
 			if(strlen(line)>0)
 				{
 					linenum=atoi(slce.sliceBetween(line,(char*)"#l",(char*)"\">"));
 					filep=slce.sliceBetween(htmlpage,NULL,(char*)"/html/");
 					slce.setReturnDupString(false);
-					asprintf(&command,"%s/%s",filep,slce.sliceBetween(line,(char*)"html\">",(char*)"</a>"));
+					sinkReturn=asprintf(&command,"%s/%s",filep,slce.sliceBetween(line,(char*)"html\">",(char*)"</a>"));
 					if(openFile(command,linenum,false)==true)
 						gotoLine(NULL,(gpointer)(long)linenum);
 					free(command);
@@ -623,17 +623,17 @@ gboolean docLinkTrap(WebKitWebView *web_view,WebKitWebFrame *frame,WebKitNetwork
 							slce.setReturnDupString(true);
 							htmlpage=slce.sliceBetween((char*)uri,(char*)"file://",NULL);
 							memset(line,0,4096);
-							asprintf(&command,"cat %s 2>/dev/null|grep \"<p>Definition at line \"",htmlpage);
+							sinkReturn=asprintf(&command,"cat %s 2>/dev/null|grep \"<p>Definition at line \"",htmlpage);
 							fp=popen(command,"r");
 							free(command);
-							fgets(line,4096,fp);
+							sinkReturnStr=fgets(line,4096,fp);
 							pclose(fp);
 							if(strlen(line)>0)
 								{
 									linenum=atoi(slce.sliceBetween(line,(char*)"#l",(char*)"\">"));
 									filep=slce.sliceBetween(htmlpage,NULL,(char*)"/html/");
 									slce.setReturnDupString(false);
-									asprintf(&command,"%s/%s",filep,slce.sliceBetween(line,(char*)"html\">",(char*)"</a>"));
+									sinkReturn=asprintf(&command,"%s/%s",filep,slce.sliceBetween(line,(char*)"html\">",(char*)"</a>"));
 									if(openFile(command,linenum,false)==true)
 										gotoLine(NULL,(gpointer)(long)linenum);
 									free(command);

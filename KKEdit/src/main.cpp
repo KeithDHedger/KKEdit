@@ -48,7 +48,7 @@ void init(void)
 	char		tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
 
 	tmpFolderName=strdup(mkdtemp(tmpfoldertemplate));
-	asprintf(&logFile,"%s.log",tmpFolderName);
+	sinkReturn=asprintf(&logFile,"%s.log",tmpFolderName);
 
 //nag times
 	lastNagTime=-1;
@@ -125,14 +125,14 @@ void init(void)
 	listFunction=0;
 	showStatus=true;
  
-	asprintf(&filename,"%s/." KKEDITVERS "/tools",getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/tools",getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	ERRDATA debugFree(&filename);
 	schemeManager=gtk_source_style_scheme_manager_get_default();
-	asprintf(&filename,"%s/.gnome2/gedit/styles",getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/.gnome2/gedit/styles",getenv("HOME"));
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
 	ERRDATA debugFree(&filename);
-	asprintf(&filename,"%s%s/styles",DATADIR,GLOBALSUFFIX);
+	sinkReturn=asprintf(&filename,"%s%s/styles",DATADIR,GLOBALSUFFIX);
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
 	ERRDATA debugFree(&filename);
 
@@ -147,8 +147,8 @@ void init(void)
 	tmpStyleName=strdup(styleName);
 	tmpHighlightColour=highlightColour;
 
-	asprintf(&htmlFile,"%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
-	asprintf(&htmlURI,"file://%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
+	sinkReturn=asprintf(&htmlFile,"%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
+	sinkReturn=asprintf(&htmlURI,"file://%s/Docview-%s.html",tmpFolderName,globalSlice->randomName(6));
 
 #ifdef _ASPELL_
 	spellChecker=NULL;
@@ -256,28 +256,28 @@ void doNagStuff(void)
 	char			*kkeditupdatemessage=strdup("");
 	char			*plugupdatemessage=strdup("");
 
-	asprintf(&command,"KKEditProgressBar \"%s\" %s/updatecontrol &",CHECKING_LABEL,tmpFolderName);
-	system(command);
+	sinkReturn=asprintf(&command,"KKEditProgressBar \"%s\" %s/updatecontrol &",CHECKING_LABEL,tmpFolderName);
+	sinkReturn=system(command);
 	while(gtk_events_pending())
 		gtk_main_iteration();
 
 	ERRDATA debugFree(&command);
 
-	asprintf(&control,"echo \"pulse\" > \"%s/updatecontrol\"",tmpFolderName);
-	system(control);
+	sinkReturn=asprintf(&control,"echo \"pulse\" > \"%s/updatecontrol\"",tmpFolderName);
+	sinkReturn=system(control);
 	ERRDATA debugFree(&control);
 
 	exitstatus=system("which curl 2>&1 >/dev/null");
 	gotcurl=WEXITSTATUS(exitstatus);
 
 	if(gotcurl==0)
-		asprintf(&command,"curl %s -s -o -",NAGTIMELINK);
+		sinkReturn=asprintf(&command,"curl %s -s -o -",NAGTIMELINK);
 	else
 		{
 			exitstatus=system("which wget 2>&1 >/dev/null");
 			gotwget=WEXITSTATUS(exitstatus);
 			if(gotwget==0)
-				asprintf(&command,"wget %s -O - -q",NAGTIMELINK);
+				sinkReturn=asprintf(&command,"wget %s -O - -q",NAGTIMELINK);
 		}
 
 	if(command!=NULL)
@@ -288,17 +288,17 @@ void doNagStuff(void)
 			fp=popen(command,"r");
 			if(fp!=NULL)
 				{
-					fgets(t1,1024,fp);
-					fgets(vers,1024,fp);
-					fgets(plugt,1024,fp);
+					sinkReturnStr=fgets(t1,1024,fp);
+					sinkReturnStr=fgets(vers,1024,fp);
+					sinkReturnStr=fgets(plugt,1024,fp);
 					pclose(fp);
 				}
 			t1[strlen(t1)-1]=0;
 			vers[strlen(vers)-1]=0;
 			plugt[strlen(plugt)-1]=0;
 
-			asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
-			system(control);
+			sinkReturn=asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
+			sinkReturn=system(control);
 			ERRDATA debugFree(&control);
 			if(strlen(t1)>1)
 				{
@@ -310,13 +310,13 @@ void doNagStuff(void)
 							if(strcmp(VERSION,vers)!=0)
 								{
 									ERRDATA debugFree(&kkeditupdatemessage);
-									asprintf(&kkeditupdatemessage,"%s <b>%s</b> %s <b>%s</b>\n%s:\n<b>%s</b>\n",KKEDIT_UPDATE_AVAILABLE_LABEL,vers,UPDATE_FROM_VERS_LABEL,VERSION,FROM_HERE_LABEL,MYWEBSITE);
+									sinkReturn=asprintf(&kkeditupdatemessage,"%s <b>%s</b> %s <b>%s</b>\n%s:\n<b>%s</b>\n",KKEDIT_UPDATE_AVAILABLE_LABEL,vers,UPDATE_FROM_VERS_LABEL,VERSION,FROM_HERE_LABEL,MYWEBSITE);
 								}
 
 							if(lastPlugUpdate<atol(plugt))
 								{
 									ERRDATA debugFree(&plugupdatemessage);
-									asprintf(&plugupdatemessage,"\n%s:\n<b>https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins</b>",PLUGIN_UPDATES_LABEL);
+									sinkReturn=asprintf(&plugupdatemessage,"\n%s:\n<b>https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins</b>",PLUGIN_UPDATES_LABEL);
 									lastPlugUpdate=thisupdate;
 								}
 
@@ -336,8 +336,8 @@ void doNagStuff(void)
 	if((nagScreen==false))
 		doNagScreen();
 
-	asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
-	system(control);
+	sinkReturn=asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
+	sinkReturn=system(control);
 	ERRDATA debugFree(&control);
 }
 
@@ -510,7 +510,7 @@ void appStart(GApplication  *application,gpointer data)
 	char	*tabcss=NULL;
 
 	provider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
-	asprintf(&tabcss,"* {\n \
+	sinkReturn=asprintf(&tabcss,"* {\n \
   font-family: mono;\n \
   font-size: 8px;\n \
   border: 0px solid;\n \
@@ -523,7 +523,7 @@ void appStart(GApplication  *application,gpointer data)
 	char	*tabcss=NULL;
 
 	provider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
-	asprintf(&tabcss,"* {\n \
+	sinkReturn=asprintf(&tabcss,"* {\n \
   padding: %ipx; \n \
 }\n",tabsSize);
 
@@ -611,7 +611,7 @@ int main(int argc, char **argv)
 
 	gtk_init(&argc,&argv);
 
-	asprintf(&dbusname,"org.keithhedger%i." APPEXECNAME,getWorkspaceNumber());
+	sinkReturn=asprintf(&dbusname,"org.keithhedger%i." APPEXECNAME,getWorkspaceNumber());
 	if((singleOverRide==true) ||(singleUse==false))
 		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN));
 	else

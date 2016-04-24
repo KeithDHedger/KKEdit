@@ -127,7 +127,7 @@ VISIBLE void toggleBookmark(GtkWidget *widget,GtkTextIter *titer)
 			bookmarkdata=(bookMarksNew*)malloc(sizeof(bookMarksNew));
 			newBookMarksList=g_list_append(newBookMarksList,(gpointer)bookmarkdata);
 			bookmarkdata->page=page;
-			asprintf(&bookmarkdata->markName,"%s-%i",BOOKMARK_LABEL,bmMarkNumber++);
+			sinkReturn=asprintf(&bookmarkdata->markName,"%s-%i",BOOKMARK_LABEL,bmMarkNumber++);
 			bookmarkdata->mark=gtk_source_buffer_create_source_mark(page->buffer,bookmarkdata->markName,mark_type,iter);
 //preview text for menu
 			line=gtk_text_iter_get_line(iter);
@@ -236,8 +236,8 @@ int show_question(char *filename)
 	gint		result;
 	char		*message;
 
-	asprintf(&message,SAVE_BEFORE_CLOSE_LABEL,filename);
-	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
+	sinkReturn=asprintf(&message,SAVE_BEFORE_CLOSE_LABEL,filename);
+	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,"%s",message);
 
 #ifdef _USEGTK3_
 	gtk_dialog_add_buttons((GtkDialog*)dialog,MENU_SAVE_LABEL,GTK_RESPONSE_YES,CANCEL_LABEL,GTK_RESPONSE_CANCEL,NO_LABEL,GTK_RESPONSE_NO,NULL);
@@ -295,7 +295,7 @@ void updateStatusBar(GtkTextBuffer *textbuffer,GtkTextIter *location,GtkTextMark
 	buf=new TextBuffer(textbuffer);
 
 	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
-	asprintf(&message,STATUS_LINE_LABEL,buf->lineNum,buf->column,lang,path);
+	sinkReturn=asprintf(&message,STATUS_LINE_LABEL,buf->lineNum,buf->column,lang,path);
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
 	ERRDATA debugFree(&message);
 	delete buf;
@@ -558,9 +558,9 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 											typenames[numtypes]=strdup(newstr);
 											ERRDATA debugFree(&newstr);
 											if(typenames[numtypes][strlen(typenames[numtypes])-1]=='s')
-												asprintf(&newstr,"%s's",typenames[numtypes]);
+												sinkReturn=asprintf(&newstr,"%s's",typenames[numtypes]);
 											else
-												asprintf(&newstr,"%ss",typenames[numtypes]);
+												sinkReturn=asprintf(&newstr,"%ss",typenames[numtypes]);
 											newstr[0]=toupper(newstr[0]);
 											submenu=createNewImageMenuItem(NULL,newstr,false);
 											typesubmenus[numtypes]=gtk_menu_new();
@@ -771,7 +771,7 @@ void externalTool(GtkWidget *widget,gpointer data)
 		docdirname=strdup(getenv("HOME"));
 
 	tooldirname=g_path_get_dirname(tool->filePath);
-	chdir(tooldirname);
+	sinkReturn=chdir(tooldirname);
 
 	strarray=(char*)calloc(buffersize,1);
 	for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
@@ -807,7 +807,7 @@ void externalTool(GtkWidget *widget,gpointer data)
 			if(strarray!=NULL)
 				setenv("KKEDIT_FILE_LIST",strarray,1);
 			free(strarray);
-			asprintf(&barcontrol,"%s/BarControl-%s",tmpFolderName,slice->randomName(6));
+			sinkReturn=asprintf(&barcontrol,"%s/BarControl-%s",tmpFolderName,slice->randomName(6));
 
 			if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 				{
@@ -845,8 +845,8 @@ void externalTool(GtkWidget *widget,gpointer data)
 			if(tool->useBar==true)
 				{
 					setenv("KKEDIT_BAR_CONTROL",barcontrol,1);
-					asprintf(&barcommand,POLEPATH " \"%s\" \"%s\" &",tool->menuName,barcontrol);
-					system(barcommand);
+					sinkReturn=asprintf(&barcommand,POLEPATH " \"%s\" \"%s\" &",tool->menuName,barcontrol);
+					sinkReturn=system(barcommand);
 				}
 
 			runCommand(tempCommand->str,&text,tool->inTerminal,tool->flags,tool->runAsRoot,tool->menuName);
@@ -886,8 +886,8 @@ void externalTool(GtkWidget *widget,gpointer data)
 	if(barcommand!=NULL)
 		{
 			ERRDATA debugFree(&barcommand);
-			asprintf(&barcommand,"echo quit>%s",barcontrol);
-			system(barcommand);
+			sinkReturn=asprintf(&barcommand,"echo quit>%s",barcontrol);
+			sinkReturn=system(barcommand);
 			ERRDATA debugFree(&barcommand);
 		}
 	ERRDATA debugFree(&barcontrol);
@@ -904,11 +904,11 @@ VISIBLE void openHelp(GtkWidget *widget,gpointer data)
 	else
 		lang="fr";
 
-	asprintf(&thePage,"file://%s%s/help/help.%s.html",DATADIR,GLOBALSUFFIX,lang);
+	sinkReturn=asprintf(&thePage,"file://%s%s/help/help.%s.html",DATADIR,GLOBALSUFFIX,lang);
 #ifdef _BUILDDOCVIEWER_
 	showDocView(USEURI,(char*)"KKEdit",DOCVIEW_KKEDIT_HELP_LABEL);
 #else
-	asprintf(&thePage,"%s %s/help/help.%s.html",browserCommand,DATADIR,lang);
+	sinkReturn=asprintf(&thePage,"%s %s/help/help.%s.html",browserCommand,DATADIR,lang);
 	runCommand(thePage,NULL,false,8,0,(char*)DOCVIEW_KKEDIT_HELP_LABEL);
 	ERRDATA debugFree((char**)&thePage);
 	thePage=NULL;
@@ -940,8 +940,8 @@ VISIBLE void addtoCustomWordList(GtkWidget *widget,gpointer data)
 	else
 		return;
 
-	asprintf(&command,"echo '%s'|cat - %s/%s|sort -u -o %s/%s.tmp;mv %s/%s.tmp %s/%s",selection,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE);
-	system(command);
+	sinkReturn=asprintf(&command,"echo '%s'|cat - %s/%s|sort -u -o %s/%s.tmp;mv %s/%s.tmp %s/%s",selection,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE);
+	sinkReturn=system(command);
 	ERRDATA debugFree(&command);
 	ERRDATA debugFree(&selection);
 	createCompletion(page);
@@ -1089,7 +1089,7 @@ void openFromTab(GtkMenuItem *widget,pageStruct *page)
 	char		*filepath=NULL;
 
 	openInThisTab=gtk_notebook_get_current_page(mainNotebook);
-	asprintf(&filepath,"%s/%s",page->dirName,gtk_menu_item_get_label(widget));
+	sinkReturn=asprintf(&filepath,"%s/%s",page->dirName,gtk_menu_item_get_label(widget));
 	openFile(filepath,0,true);
 	openInThisTab=-1;
 	ERRDATA debugFree(&filepath);
@@ -1204,7 +1204,7 @@ bool tabPopUp(GtkWidget *widget, GdkEventButton *event,gpointer user_data)
 			submenu=gtk_menu_new();
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),submenu);
 
-			asprintf(&command,"ls --color=never -Bp  \"%s\" | grep -v /|sort|sed -n '/^.*[^\\.o]$/p'",page->dirName);
+			sinkReturn=asprintf(&command,"ls --color=never -Bp  \"%s\" | grep -v /|sort|sed -n '/^.*[^\\.o]$/p'",page->dirName);
 			fp=popen(command,"r");
 			if(fp!=NULL)
 				{
@@ -1249,7 +1249,7 @@ void writeExitData(void)
 	gtk_widget_get_allocation(mainWindow,&alloc);
 	gtk_window_get_position((GtkWindow*)mainWindow,&winx,&winy);
 	if( (alloc.width>10) && (alloc.height>10) )
-		asprintf(&windowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
+		sinkReturn=asprintf(&windowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
 		
 #ifdef _BUILDDOCVIEWER_
 	if(gtk_widget_get_realized(docView)==true)
@@ -1266,16 +1266,16 @@ void writeExitData(void)
 		}
 #endif
 	if( (alloc.width>10) && (alloc.height>10) )
-		asprintf(&docWindowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
+		sinkReturn=asprintf(&docWindowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
 
 	toolOutHeight=gtk_paned_get_position((GtkPaned*)mainVPane);
 	bottomVPaneHite=gtk_paned_get_position((GtkPaned*)mainWindowVPane);
 	topVPaneHite=gtk_paned_get_position((GtkPaned*)secondWindowVPane);
 
-	asprintf(&filename,"%s/." KKEDITVERS,getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS,getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	ERRDATA debugFree(&filename);
-	asprintf(&filename,"%s/." KKEDITVERS "/kkedit.window.rc",getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/kkedit.window.rc",getenv("HOME"));
 
 	saveVarsToFile(filename,kkedit_window_rc);
 
@@ -1288,11 +1288,11 @@ void writeConfig(void)
 	ERRDATA
 	char			*filename;
 
-	asprintf(&filename,"%s/." KKEDITVERS,getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS,getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	ERRDATA debugFree(&filename);
 
-	asprintf(&filename,"%s/." KKEDITVERS "/kkedit.rc",getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/kkedit.rc",getenv("HOME"));
 	saveVarsToFile(filename,kkedit_rc);
 	ERRDATA debugFree(&filename);
 }
@@ -1358,10 +1358,10 @@ bool doShutdown(GtkWidget *widget,GdkEvent *event,gpointer data)
 	delete_aspell_speller(spellChecker);
 #endif
 
-	asprintf(&command,"rm -rf %s",tmpFolderName);
-	system(command);
+	sinkReturn=asprintf(&command,"rm -rf %s",tmpFolderName);
+	sinkReturn=system(command);
 	ERRDATA debugFree(&command);
-	system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
+	sinkReturn=system("rmdir /tmp/icedteaplugin-* 2>/dev/null");
 
 	ERRDATA g_list_foreach(globalPlugins->plugins,releasePlugs,NULL);
 	g_application_quit(mainApp);
@@ -1426,7 +1426,7 @@ void setPrefs(GtkWidget *widget,gpointer data)
 
 #ifdef _USEGTK3_
 			char	*tabcss=NULL;
-			asprintf(&tabcss,"* {\npadding: %ipx;\n}\n",tabsSize);
+			sinkReturn=asprintf(&tabcss,"* {\npadding: %ipx;\n}\n",tabsSize);
 			gtk_css_provider_load_from_data((GtkCssProvider*)tabBoxProvider,tabcss,-1,NULL);
 			debugFree(&tabcss);
 #endif
@@ -1508,10 +1508,10 @@ void setToolOptions(GtkWidget *widget,gpointer data)
 	char		*toolpath;
 	int			flags;
 
-	asprintf(&dirname,"%s/." KKEDITVERS "/tools",getenv("HOME"));
+	sinkReturn=asprintf(&dirname,"%s/." KKEDITVERS "/tools",getenv("HOME"));
 	text=strdup(gtk_entry_get_text((GtkEntry*)toolNameWidget));
 	text=g_strdelimit(text," ",'-');
-	asprintf(&toolpath,"%s/." KKEDITVERS "/tools/%s",getenv("HOME"),text);
+	sinkReturn=asprintf(&toolpath,"%s/." KKEDITVERS "/tools/%s",getenv("HOME"),text);
 
 	if((gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false) ||(gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget)==true))
 		{
@@ -1580,8 +1580,8 @@ void setToolOptions(GtkWidget *widget,gpointer data)
 		{
 			if((gtk_entry_get_text((GtkEntry*)toolNameWidget)!=NULL) &&(yesNo((char*)DIALOG_YESNO_CONFIRM_DELETE_LABEL,(char*)gtk_entry_get_text((GtkEntry*)toolNameWidget))==GTK_RESPONSE_YES))
 				{
-					asprintf(&dirname,"rm \"%s\"",toolpath);
-					system(dirname);
+					sinkReturn=asprintf(&dirname,"rm \"%s\"",toolpath);
+					sinkReturn=system(dirname);
 					gtk_widget_hide((GtkWidget*)data);
 					gtk_widget_destroy((GtkWidget*)data);
 					buildTools();
@@ -1603,7 +1603,7 @@ VISIBLE void doAbout(GtkWidget *widget,gpointer data)
 	char		*licence;
 	char		*translators;
 
-	asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",DIALOG_ABOUT_FRENCH_LABEL);
+	sinkReturn=asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",DIALOG_ABOUT_FRENCH_LABEL);
 	g_file_get_contents(DATADIR"/docs/gpl-3.0.txt",&licence,NULL,NULL);
 
 	gtk_show_about_dialog(NULL,"authors",authors,"translator-credits",translators,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",MYWEBSITE,"website-label","KKEdit Homepage","program-name","KKEdit","logo-icon-name","KKEdit","license",licence,NULL);
@@ -1717,18 +1717,18 @@ VISIBLE void newEditor(GtkWidget *widget,gpointer data)
 		{
 		case 1:
 			if(strcmp(rootCommand,"")!=0)
-				asprintf(&command,"%s " APPEXECNAME " -m 2>&1 >/dev/null &",rootCommand);
+				sinkReturn=asprintf(&command,"%s " APPEXECNAME " -m 2>&1 >/dev/null &",rootCommand);
 			else
-				asprintf(&command,"%s sudo " APPEXECNAME " -m 2>&1 >/dev/null &",terminalCommand);
-			system(command);
+				sinkReturn=asprintf(&command,"%s sudo " APPEXECNAME " -m 2>&1 >/dev/null &",terminalCommand);
+			sinkReturn=system(command);
 			ERRDATA debugFree(&command);
 			break;
 		case 2:
-			system(APPEXECNAME " -m 2>&1 >/dev/null &");
+			sinkReturn=system(APPEXECNAME " -m 2>&1 >/dev/null &");
 			break;
 		case 3:
 			if(gotManEditor==0)
-				system("manpageeditor 2>&1 >/dev/null &");
+				sinkReturn=system("manpageeditor 2>&1 >/dev/null &");
 			break;
 		}
 }
@@ -2070,8 +2070,8 @@ VISIBLE void getPlugins(GtkWidget *widget,gpointer data)
 	ERRDATA
 	char	*command;
 
-	asprintf(&command,"%s \"%s\" &",browserCommand,PLUGINSLINK);
-	system(command);
+	sinkReturn=asprintf(&command,"%s \"%s\" &",browserCommand,PLUGINSLINK);
+	sinkReturn=system(command);
 	ERRDATA debugFree(&command);
 }
 

@@ -95,7 +95,7 @@ VISIBLE int loadVarsFromFile(char *filepath,args *dataptr)
 			while(feof(fd)==0)
 				{
 					buffer[0]=0;
-					fgets(buffer,2048,fd);
+					sinkReturnStr=fgets(buffer,2048,fd);
 					sscanf(buffer,"%ms %ms",&argname,&strarg);
 					cnt=0;
 					while(dataptr[cnt].name!=NULL)
@@ -333,7 +333,7 @@ void setFilePrefs(pageStruct *page)
 #ifdef _USEGTK3_	
 	char	*fontcss=NULL;
 
-	asprintf(&fontcss,"* {\n \
+	sinkReturn=asprintf(&fontcss,"* {\n \
   font-family: %s;\n \
   font-size: %ipx;\n \
 }\n",pango_font_description_get_family(font_desc),pango_font_description_get_size(font_desc)/PANGO_SCALE);
@@ -405,7 +405,7 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 				{
 					str=g_string_new(NULL);
 					filename=g_filename_from_uri(array[j],NULL,NULL);
-					asprintf(&command,"cat %s",filename);
+					sinkReturn=asprintf(&command,"cat %s",filename);
 					fp=popen(command,"r");
 					while(fgets(line,1024,fp))
 						g_string_append_printf(str,"%s",line);
@@ -581,7 +581,7 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 			newFile(NULL,NULL);
 			pagenum=currentPage-1;
 			page=getPageStructPtr(pagenum);
-			asprintf(&command,"hexdump -C %s",filepath);
+			sinkReturn=asprintf(&command,"hexdump -C %s",filepath);
 			fp=popen(command,"r");
 			while(fgets(line,1024,fp))
 				g_string_append_printf(str,"%s",line);
@@ -650,10 +650,10 @@ VISIBLE void saveSession(GtkWidget *widget,gpointer data)
 	GList			*ptr;
 
 	ERRDATA
-	asprintf(&filename,"%s/." KKEDITVERS,getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS,getenv("HOME"));
 	g_mkdir_with_parents(filename,493);
 	ERRDATA debugFree(&filename);
-	asprintf(&filename,"%s/." KKEDITVERS "/session",getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/session",getenv("HOME"));
 	fd=fopen(filename,"w");
 	if(fd!=NULL)
 		{
@@ -694,7 +694,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 	char			buffer[2048];
 	int				intarg;
 	char			strarg[2048];
-	pageStruct		*page;
+	pageStruct		*page=NULL;
 	GtkTextIter		markiter;
 	int				currentline;
 	TextBuffer		*buf=new TextBuffer;
@@ -706,15 +706,15 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 	showBarberPole(DIALOG_POLE_RESTORING);
 
 	if(data==NULL)
-		asprintf(&filename,"%s/." KKEDITVERS "/session",getenv("HOME"));
+		sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/session",getenv("HOME"));
 	else
-		asprintf(&filename,"%s",(char*)data);
+		sinkReturn=asprintf(&filename,"%s",(char*)data);
 
 	fd=fopen(filename,"r");
 	if(fd!=NULL)
 		{
 			if(data!=NULL)
-				fgets(buffer,2048,fd);
+				sinkReturnStr=fgets(buffer,2048,fd);
 
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
@@ -724,13 +724,13 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 							intarg=999;
 							while(intarg!=-1)
 								{
-									fgets(buffer,2048,fd);
+									sinkReturnStr=fgets(buffer,2048,fd);
 									sscanf(buffer,"%i",(int*)&intarg);
 								}
 						}
 					else
 						{
-							fgets(buffer,2048,fd);
+							sinkReturnStr=fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 							page=getPageStructPtr(currentPage-1);
 							gtk_notebook_set_current_page(mainNotebook,currentPage-1);
@@ -739,7 +739,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 									gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
 									gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
 									toggleBookmark(NULL,&markiter);
-									fgets(buffer,2048,fd);
+									sinkReturnStr=fgets(buffer,2048,fd);
 									sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 								}
 							buf->textBuffer=(GtkTextBuffer*)page->buffer;
@@ -778,8 +778,8 @@ int showFileChanged(char *filename)
 	char		*message;
 
 	ERRDATA
-	asprintf(&message,DIALOG_FILE_CHANGED_LABEL,filename);
-	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,message);
+	sinkReturn=asprintf(&message,DIALOG_FILE_CHANGED_LABEL,filename);
+	dialog=gtk_message_dialog_new(GTK_WINDOW(mainWindow),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_NONE,"%s",message);
 
 #ifdef _USEGTK3_
 	gtk_dialog_add_buttons((GtkDialog*)dialog,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,REFRESH_LABEL,GTK_RESPONSE_YES,NULL);
@@ -1196,7 +1196,7 @@ VISIBLE void newFile(GtkWidget *widget,gpointer data)
 	page->filePath=NULL;
 	page->dirName=NULL;
 
-	asprintf(&page->fileName,"%s-%i",UNTITLED_LABEL,untitledNumber);
+	sinkReturn=asprintf(&page->fileName,"%s-%i",UNTITLED_LABEL,untitledNumber);
 	untitledNumber++;
 
 	label=makeNewTab(page->fileName,NULL,page);

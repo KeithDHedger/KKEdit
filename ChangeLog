@@ -1,4 +1,6 @@
 0.3.2
+Added extra instructions to INSTALL for building with plugins.
+Code clean to remove compile warnings for packagers.
 Max forward/back history can now be set from prefs.
 History now works much more like a browser and makes sense!
 Increased Forward/Back history.

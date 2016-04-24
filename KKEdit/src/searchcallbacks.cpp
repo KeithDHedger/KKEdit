@@ -59,7 +59,7 @@ PROTECTED void showDocView(int howtodisplay,char *text,const char *title)
 						{
 							gtk_window_set_title((GtkWindow*)docView,DOCVIEW_SEARCHING_GOOGLE_LABEL);
 							ERRDATA debugFree(&thePage);
-							asprintf(&thePage,"https://www.google.co.uk/search?q=%s",text);
+							sinkReturn=asprintf(&thePage,"https://www.google.co.uk/search?q=%s",text);
 						}
 					else
 						return;
@@ -82,17 +82,17 @@ PROTECTED void showDocView(int howtodisplay,char *text,const char *title)
 	if(howtodisplay==USEURI)
 		{
 			if(strcasecmp(thePage,"file://(null)")!=0)
-				asprintf(&command,"%s %s &",browserCommand,thePage);
+				sinkReturn=asprintf(&command,"%s %s &",browserCommand,thePage);
 			else
-				asprintf(&command,"%s https://www.google.co.uk/search?q=%s",browserCommand,text);
+				sinkReturn=asprintf(&command,"%s https://www.google.co.uk/search?q=%s",browserCommand,text);
 		}
 
 	if(howtodisplay==USEFILE)
-		asprintf(&command,"%s %s",browserCommand,htmlURI);
+		sinkReturn=asprintf(&command,"%s %s",browserCommand,htmlURI);
 
 	if(command!=NULL)
 		{
-			system(command);
+			sinkReturn=system(command);
 			ERRDATA debugFree(&command);
 		}
 #endif
@@ -146,7 +146,7 @@ VISIBLE bool searchGtkDocs(GtkWidget *widget,gpointer data)
 
 	if(selection!=NULL)
 		{
-			asprintf(&command,"find /usr/share/gtk-doc/html -iname \"*.devhelp2\" -exec grep -iHe %s '{}' \\;",selection);
+			sinkReturn=asprintf(&command,"find /usr/share/gtk-doc/html -iname \"*.devhelp2\" -exec grep -iHe %s '{}' \\;",selection);
 			fp=popen(command,"r");
 			while(fgets(line,1024,fp))
 				{
@@ -168,7 +168,7 @@ VISIBLE bool searchGtkDocs(GtkWidget *widget,gpointer data)
 															if((foldername!=NULL) &&(link!=NULL))
 																{
 																	searchdata[cnt][0]=strdup(globalSlice->deleteSlice(funcname,ds));
-																	asprintf(&searchdata[cnt][1],"%s/%s",foldername,link);
+																	sinkReturn=asprintf(&searchdata[cnt][1],"%s/%s",foldername,link);
 																	ERRDATA debugFree(&foldername);
 																	ERRDATA debugFree(&link);
 																	cnt++;
@@ -203,7 +203,7 @@ VISIBLE bool searchGtkDocs(GtkWidget *widget,gpointer data)
 				}
 			else
 				{
-					asprintf(&thePage,"file://%s",searchdata[0][1]);
+					sinkReturn=asprintf(&thePage,"file://%s",searchdata[0][1]);
 				}
 			if(strcmp(thePage,"file://(null)")==0)
 				retval=false;
@@ -248,7 +248,7 @@ VISIBLE void doDoxy(GtkWidget *widget,long data)
 		}
 
 	showBarberPole(DIALOG_POLE_BUILDING_LABEL);
-	chdir(page->dirName);
+	sinkReturn=chdir(page->dirName);
 
 	stat("./html/index.html",&sb);
 	if(!S_ISREG(sb.st_mode))
@@ -257,7 +257,7 @@ VISIBLE void doDoxy(GtkWidget *widget,long data)
 	stat("Doxyfile",&sb);
 	if(!S_ISREG(sb.st_mode))
 		{
-			system("cp " DATADIR "/docs/Doxyfile .");
+			sinkReturn=system("cp " DATADIR "/docs/Doxyfile .");
 			dorebuild=true;
 		}
 
@@ -266,7 +266,7 @@ VISIBLE void doDoxy(GtkWidget *widget,long data)
 			ERRDATA debugFree(&thePage);
 		}
 
-	asprintf(&thePage,"file://%s/html/index.html",page->dirName);
+	sinkReturn=asprintf(&thePage,"file://%s/html/index.html",page->dirName);
 	if(dorebuild==true)
 		{
 			fp=popen("doxygen Doxyfile","r");
@@ -303,7 +303,7 @@ VISIBLE void doxyDocs(GtkWidget *widget,gpointer data)
 					searchdata[loop][1]=NULL;
 				}
 
-			asprintf(&findcommand,"cat %s/searchdata.xml|grep 'name=\"name\".*%s.*field'|sed 's/^[ \\t]*<field name=\"name\">//;s/<\\/field>//'",page->dirName,selection);
+			sinkReturn=asprintf(&findcommand,"cat %s/searchdata.xml|grep 'name=\"name\".*%s.*field'|sed 's/^[ \\t]*<field name=\"name\">//;s/<\\/field>//'",page->dirName,selection);
 			findfile=popen(findcommand,"r");
 			while(fgets(line,1024,findfile))
 				{
@@ -314,11 +314,11 @@ VISIBLE void doxyDocs(GtkWidget *widget,gpointer data)
 			ERRDATA debugFree(&findcommand);
 
 			cnt=0;
-			asprintf(&findcommand,"cat %s/searchdata.xml|grep -C 2 'name=\"name\".*%s.*field'|grep -i url|sed 's/^[ \\t]*<field name=\"url\">//;s/<\\/field>//'",page->dirName,selection);
+			sinkReturn=asprintf(&findcommand,"cat %s/searchdata.xml|grep -C 2 'name=\"name\".*%s.*field'|grep -i url|sed 's/^[ \\t]*<field name=\"url\">//;s/<\\/field>//'",page->dirName,selection);
 			findfile=popen(findcommand,"r");
 			while(fgets(line,1024,findfile))
 				{
-					asprintf(&searchdata[cnt][1],"%s/html/%s",page->dirName,line);
+					sinkReturn=asprintf(&searchdata[cnt][1],"%s/html/%s",page->dirName,line);
 					cnt++;
 				}
 			pclose(findfile);
@@ -347,7 +347,7 @@ VISIBLE void doxyDocs(GtkWidget *widget,gpointer data)
 				{
 					if(thePage!=NULL)
 						ERRDATA debugFree(&thePage);
-					asprintf(&thePage,"file://%s",searchdata[0][1]);
+					sinkReturn=asprintf(&thePage,"file://%s",searchdata[0][1]);
 				}
 
 			showDocView(USEURI,selection,DOCVIEW_DOXY_DOCS_LABEL);
@@ -401,7 +401,7 @@ VISIBLE bool searchQT5Docs(GtkWidget *widget,gpointer data)
 			str=g_string_new(selection);
 			str=g_string_ascii_down(str);
 
-			asprintf(&command,"find %s -maxdepth 2 -iname \"%s*.html\"|sed 's/.html$//'|sort",QT5DOCSDIR,str->str);
+			sinkReturn=asprintf(&command,"find %s -maxdepth 2 -iname \"%s*.html\"|sed 's/.html$//'|sort",QT5DOCSDIR,str->str);
 
 			fd=fopen(htmlFile,"w");
 			if(fd!=NULL)
@@ -429,7 +429,7 @@ VISIBLE bool searchQT5Docs(GtkWidget *widget,gpointer data)
 			if(cnt==0)
 				{
 					retval=false;
-					asprintf(&thePage,"file://(null)");
+					sinkReturn=asprintf(&thePage,"file://(null)");
 				}
 			else
 				thePage=strdup(htmlURI);
@@ -1213,7 +1213,7 @@ void showOnStatus(const char *from,const char *to)
 		}
 
 	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
-	asprintf(&message,REPLACE_INFO_LABEL,itemsReplaced+1,from,to);
+	sinkReturn=asprintf(&message,REPLACE_INFO_LABEL,itemsReplaced+1,from,to);
 	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
 	statusMessage=message;

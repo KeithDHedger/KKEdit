@@ -219,6 +219,9 @@ extern GtkWidget		*findDefWidget;
 extern GtkWidget		*liveSearchWidget;
 
 extern int				currentPage;
+extern int				sinkReturn;
+extern char				*sinkReturnStr;
+
 //nag
 extern bool				nagScreen;
 extern unsigned int		nagTime;
@@ -367,8 +370,6 @@ extern GtkToolItem		*findFuncDefButton;
 extern GtkToolItem		*liveSearchButton;
 
 //back/forward history
-extern GtkWidget		*backHistoryMenu;
-extern GtkWidget		*backHistorySubMenu;
 
 //find replace
 extern GtkWidget		*findReplaceDialog;

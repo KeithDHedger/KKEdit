@@ -36,6 +36,8 @@ class HistoryClass
 		unsigned	getSaveCnt(void);
 		unsigned	getMaxHist(void);
 		historyData	getHistory(int num);
+		void		setHistMenu(GtkWidget *menu);
+		GtkWidget	*getHistMenu(void);
 
 	private:
 		unsigned	maxHist;
@@ -43,6 +45,7 @@ class HistoryClass
 		unsigned	saveCnt;		
 		bool		canReturn;;
 		GtkNotebook	*notebook;
+		GtkWidget	*historyMenu;
 };
 
 #endif

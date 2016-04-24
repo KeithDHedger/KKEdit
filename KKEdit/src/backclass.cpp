@@ -17,7 +17,6 @@ HistoryClass::HistoryClass(GtkNotebook *nb,unsigned maxhist)
 	this->saveCnt=0;
 	this->maxHist=maxhist;
 	this->savedPages=new historyData[maxhist+4];
-	printf("--->%i<<<\n",maxhist);
 	for(unsigned j=0;j<(maxhist+4);j++)
 		{
 			this->savedPages[j].pageID=-1;
@@ -34,6 +33,16 @@ HistoryClass::~HistoryClass()
 			if(this->savedPages[j].filePath!=NULL)
 				debugFree(&(this->savedPages[j].filePath));
 		}
+}
+
+void HistoryClass::setHistMenu(GtkWidget *menu)
+{
+	this->historyMenu=menu;
+}
+
+GtkWidget* HistoryClass::getHistMenu(void)
+{
+	return(this->historyMenu);
 }
 
 void HistoryClass::goBack(void)
@@ -126,7 +135,7 @@ void HistoryClass::saveLastPos(void)
 		{
 			debugFree(&(this->savedPages[this->saveCnt].filePath));
 			if(page->filePath!=NULL)
-				asprintf(&this->savedPages[this->saveCnt].filePath,"%s",page->filePath);
+				sinkReturn=asprintf(&this->savedPages[this->saveCnt].filePath,"%s",page->filePath);
 		}
 
 	this->goForward();
