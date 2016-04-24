@@ -1,4 +1,5 @@
 0.3.2
+Added --enable-plugins to configure.
 Added extra instructions to INSTALL for building with plugins.
 Code clean to remove compile warnings for packagers.
 Max forward/back history can now be set from prefs.

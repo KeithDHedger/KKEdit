@@ -2,7 +2,7 @@
 export GLOBAL = 1
 export GTKVERSION = $(PLUGVERSION)
 
-SUBDIRS = KKEdit/app KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager
+SUBDIRS = KKEdit/app $(PLUGINCLUDES)
 
 remake:
 	$(shell ./remakesourcelist)

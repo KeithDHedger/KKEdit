@@ -258,11 +258,14 @@ PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
 PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
 PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
+PLUGINCLUDES = @PLUGINCLUDES@
 PLUGVERSION = @PLUGVERSION@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
+VTE_CFLAGS = @VTE_CFLAGS@
+VTE_LIBS = @VTE_LIBS@
 WEBKIT_CFLAGS = @WEBKIT_CFLAGS@
 WEBKIT_LIBS = @WEBKIT_LIBS@
 X11_CFLAGS = @X11_CFLAGS@
@@ -313,7 +316,7 @@ top_srcdir = @top_srcdir@
 with_debug_level = @with_debug_level@
 with_gsu_path = @with_gsu_path@
 with_qt5_docdir = @with_qt5_docdir@
-SUBDIRS = KKEdit/app KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager
+SUBDIRS = KKEdit/app $(PLUGINCLUDES)
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 

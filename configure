@@ -606,6 +606,9 @@ GTK_CFLAGS
 DOCSUFFIX
 PLUGVERSION
 MAKEFILESUFFIX
+PLUGINCLUDES
+VTE_LIBS
+VTE_CFLAGS
 X11_LIBS
 X11_CFLAGS
 PKG_CONFIG_LIBDIR
@@ -708,6 +711,7 @@ enable_option_checking
 enable_dependency_tracking
 enable_silent_rules
 enable_gtk3
+enable_plugins
 enable_docviewer
 with_qt5_docdir
 enable_aspell
@@ -731,6 +735,8 @@ PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
 X11_CFLAGS
 X11_LIBS
+VTE_CFLAGS
+VTE_LIBS
 GTK_CFLAGS
 GTK_LIBS
 GTKSRC_CFLAGS
@@ -1360,6 +1366,7 @@ Optional Features:
   --enable-silent-rules   less verbose build output (undo: "make V=1")
   --disable-silent-rules  verbose build output (undo: "make V=0")
   --enable-gtk3           Use GTK3.
+  --enable-plugins        Build/Install plugins
   --enable-docviewer      Build the Gtk-Doc viewer
   --enable-aspell         Include spellchecker
 
@@ -1388,6 +1395,8 @@ Some influential environment variables:
               path overriding pkg-config's built-in search path
   X11_CFLAGS  C compiler flags for X11, overriding pkg-config
   X11_LIBS    linker flags for X11, overriding pkg-config
+  VTE_CFLAGS  C compiler flags for VTE, overriding pkg-config
+  VTE_LIBS    linker flags for VTE, overriding pkg-config
   GTK_CFLAGS  C compiler flags for GTK, overriding pkg-config
   GTK_LIBS    linker flags for GTK, overriding pkg-config
   GTKSRC_CFLAGS
@@ -4653,6 +4662,122 @@ $as_echo "#define _EXECSUFFIX_ \"\"" >>confdefs.h
 	PLUGVERSION=2
 	DOCSUFFIX=
 fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Build/Install plugins" >&5
+$as_echo_n "checking Build/Install plugins... " >&6; }
+# Check whether --enable-plugins was given.
+if test "${enable_plugins+set}" = set; then :
+  enableval=$enable_plugins; enable_plugs=$enableval
+else
+  enable_plugs="yes"
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_plugs" >&5
+$as_echo "$enable_plugs" >&6; }
+if test "$enable_plugs" = "yes"; then
+	PLUGINCLUDES="KKEdit/app KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
+	if test "$enable_gtk3" = "yes"; then
+		VTE_MODULES="vte-2.91 >= 0.40.2"
+		echo "vte 2.91"
+	else
+		VTE_MODULES="vte >= 0.28.2"
+		echo "vte 0.28.2"
+	fi
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for VTE" >&5
+$as_echo_n "checking for VTE... " >&6; }
+
+if test -n "$VTE_CFLAGS"; then
+    pkg_cv_VTE_CFLAGS="$VTE_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$VTE_MODULES\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "$VTE_MODULES") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_VTE_CFLAGS=`$PKG_CONFIG --cflags "$VTE_MODULES" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$VTE_LIBS"; then
+    pkg_cv_VTE_LIBS="$VTE_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$VTE_MODULES\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "$VTE_MODULES") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_VTE_LIBS=`$PKG_CONFIG --libs "$VTE_MODULES" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        VTE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$VTE_MODULES" 2>&1`
+        else
+	        VTE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$VTE_MODULES" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$VTE_PKG_ERRORS" >&5
+
+	as_fn_error $? "Package requirements ($VTE_MODULES) were not met:
+
+$VTE_PKG_ERRORS
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Alternatively, you may set the environment variables VTE_CFLAGS
+and VTE_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details." "$LINENO" 5
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
+
+Alternatively, you may set the environment variables VTE_CFLAGS
+and VTE_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See \`config.log' for more details" "$LINENO" 5; }
+else
+	VTE_CFLAGS=$pkg_cv_VTE_CFLAGS
+	VTE_LIBS=$pkg_cv_VTE_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+fi
+else
+	PLUGINCLUDES=
+fi
+
 
 
 
