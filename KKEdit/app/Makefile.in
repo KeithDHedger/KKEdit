@@ -16,7 +16,6 @@
 
 
 
-
 VPATH = @srcdir@
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
@@ -95,16 +94,14 @@ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-DIST_COMMON = $(srcdir)/Makefile.am $(include_HEADERS) \
-	$(am__DIST_COMMON)
+DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptfilesdir)" \
 	"$(DESTDIR)$(docfilesdir)" "$(DESTDIR)$(helpfilesdir)" \
-	"$(DESTDIR)$(pixfilesdir)" "$(DESTDIR)$(stylefilesdir)" \
-	"$(DESTDIR)$(transfilesdir)" "$(DESTDIR)$(includedir)"
+	"$(DESTDIR)$(pixfilesdir)" "$(DESTDIR)$(stylefilesdir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
 am_KKEditProgressBar_OBJECTS = ../pole/main.$(OBJEXT)
@@ -186,8 +183,7 @@ am__can_run_installinfo = \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
 DATA = $(docfiles_DATA) $(helpfiles_DATA) $(pixfiles_DATA) \
-	$(stylefiles_DATA) $(transfiles_DATA)
-HEADERS = $(include_HEADERS)
+	$(stylefiles_DATA)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -238,6 +234,7 @@ EXEEXT = @EXEEXT@
 GLIB_CFLAGS = @GLIB_CFLAGS@
 GLIB_LIBS = @GLIB_LIBS@
 GREP = @GREP@
+GTK3SUFFIX = @GTK3SUFFIX@
 GTKSRC_CFLAGS = @GTKSRC_CFLAGS@
 GTKSRC_LIBS = @GTKSRC_LIBS@
 GTKSU = @GTKSU@
@@ -356,19 +353,16 @@ AM_CPPFLAGS = -I$(top_srcdir) \
 COMMONSRC = ../src/backclass.cpp ../src/callbacks.cpp ../src/completion.cpp ../src/encoding.cpp ../src/files.cpp ../src/globals.cpp ../src/guis.cpp ../src/main.cpp ../src/navcallbacks.cpp ../src/pluginclass.cpp ../src/plugins.cpp ../src/searchcallbacks.cpp ../src/sliceclass.cpp ../src/spellcheck.cpp ../src/textbuffer.cpp
 kkedit_SOURCES = $(COMMONSRC)
 KKEditProgressBar_SOURCES = ../pole/main.cpp
-pixfilesdir = $(pkgdatadir)$(DOCSUFFIX)/pixmaps
+pixfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/pixmaps
 pixfiles_DATA = ../resources/pixmaps/*
-helpfilesdir = $(pkgdatadir)$(DOCSUFFIX)/help
+helpfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/help
 helpfiles_DATA = ../resources/help/*
-scriptfilesdir = $(pkgdatadir)$(DOCSUFFIX)/tools
+scriptfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/tools
 scriptfiles_SCRIPTS = ../resources/tools/*
-docfilesdir = $(pkgdatadir)$(DOCSUFFIX)/docs
+docfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/docs
 docfiles_DATA = ../resources/docs/*
-stylefilesdir = $(pkgdatadir)$(DOCSUFFIX)/styles
+stylefilesdir = $(pkgdatadir)$(GTK3SUFFIX)/styles
 stylefiles_DATA = ../resources/styles/*
-transfilesdir = $(localedir)/fr_FR/LC_MESSAGES
-transfiles_DATA = ../../po/fr_FR/LC_MESSAGES/kkedit.mo
-include_HEADERS = ../src/kkedit-plugins.h
 all: all-am
 
 .SUFFIXES:
@@ -657,48 +651,6 @@ uninstall-stylefilesDATA:
 	@list='$(stylefiles_DATA)'; test -n "$(stylefilesdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(stylefilesdir)'; $(am__uninstall_files_from_dir)
-install-transfilesDATA: $(transfiles_DATA)
-	@$(NORMAL_INSTALL)
-	@list='$(transfiles_DATA)'; test -n "$(transfilesdir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(transfilesdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(transfilesdir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(transfilesdir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(transfilesdir)" || exit $$?; \
-	done
-
-uninstall-transfilesDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(transfiles_DATA)'; test -n "$(transfilesdir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(transfilesdir)'; $(am__uninstall_files_from_dir)
-install-includeHEADERS: $(include_HEADERS)
-	@$(NORMAL_INSTALL)
-	@list='$(include_HEADERS)'; test -n "$(includedir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(includedir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(includedir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(includedir)'"; \
-	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(includedir)" || exit $$?; \
-	done
-
-uninstall-includeHEADERS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(include_HEADERS)'; test -n "$(includedir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(includedir)'; $(am__uninstall_files_from_dir)
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -784,9 +736,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS) $(SCRIPTS) $(DATA) $(HEADERS)
+all-am: Makefile $(PROGRAMS) $(SCRIPTS) $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptfilesdir)" "$(DESTDIR)$(docfilesdir)" "$(DESTDIR)$(helpfilesdir)" "$(DESTDIR)$(pixfilesdir)" "$(DESTDIR)$(stylefilesdir)" "$(DESTDIR)$(transfilesdir)" "$(DESTDIR)$(includedir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptfilesdir)" "$(DESTDIR)$(docfilesdir)" "$(DESTDIR)$(helpfilesdir)" "$(DESTDIR)$(pixfilesdir)" "$(DESTDIR)$(stylefilesdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -846,9 +798,8 @@ info: info-am
 info-am:
 
 install-data-am: install-docfilesDATA install-helpfilesDATA \
-	install-includeHEADERS install-pixfilesDATA \
-	install-scriptfilesSCRIPTS install-stylefilesDATA \
-	install-transfilesDATA
+	install-pixfilesDATA install-scriptfilesSCRIPTS \
+	install-stylefilesDATA
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-dvi: install-dvi-am
@@ -896,9 +847,8 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-binPROGRAMS uninstall-docfilesDATA \
-	uninstall-helpfilesDATA uninstall-includeHEADERS \
-	uninstall-pixfilesDATA uninstall-scriptfilesSCRIPTS \
-	uninstall-stylefilesDATA uninstall-transfilesDATA
+	uninstall-helpfilesDATA uninstall-pixfilesDATA \
+	uninstall-scriptfilesSCRIPTS uninstall-stylefilesDATA
 
 .MAKE: install-am install-data-am install-exec-am install-strip
 
@@ -910,38 +860,40 @@ uninstall-am: uninstall-binPROGRAMS uninstall-docfilesDATA \
 	install-data-hook install-docfilesDATA install-dvi \
 	install-dvi-am install-exec install-exec-am install-exec-hook \
 	install-helpfilesDATA install-html install-html-am \
-	install-includeHEADERS install-info install-info-am \
-	install-man install-pdf install-pdf-am install-pixfilesDATA \
-	install-ps install-ps-am install-scriptfilesSCRIPTS \
-	install-strip install-stylefilesDATA install-transfilesDATA \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
-	uninstall-am uninstall-binPROGRAMS uninstall-docfilesDATA \
-	uninstall-helpfilesDATA uninstall-includeHEADERS \
-	uninstall-pixfilesDATA uninstall-scriptfilesSCRIPTS \
-	uninstall-stylefilesDATA uninstall-transfilesDATA
+	install-info install-info-am install-man install-pdf \
+	install-pdf-am install-pixfilesDATA install-ps install-ps-am \
+	install-scriptfilesSCRIPTS install-strip \
+	install-stylefilesDATA installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-compile mostlyclean-generic pdf pdf-am \
+	ps ps-am tags tags-am uninstall uninstall-am \
+	uninstall-binPROGRAMS uninstall-docfilesDATA \
+	uninstall-helpfilesDATA uninstall-pixfilesDATA \
+	uninstall-scriptfilesSCRIPTS uninstall-stylefilesDATA
 
 .PRECIOUS: Makefile
 
 
 install-exec-hook:
-	install -D ../resources/pixmaps/KKEditPlug.png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlug.png
-	install -D ../resources/pixmaps/KKEditPlugMenu.png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlugMenu.png
-	install -D ../resources/pixmaps/KKEdit.png $(DESTDIR)${prefix}/share/pixmaps/KKEdit.png
-	install -D ../resources/pixmaps/KKEdit.desktop $(DESTDIR)${prefix}/share/applications/KKEdit.desktop
-	install -D ../resources/pixmaps/KKEditRoot.desktop $(DESTDIR)${prefix}/share/applications/KKEditRoot.desktop
+	install -D ../resources/pixmaps/KKEditPlug.png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlug$(GTK3SUFFIX).png
+	install -D ../resources/pixmaps/KKEditPlugMenu.png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlugMenu$(GTK3SUFFIX).png
+	install -D ../resources/pixmaps/KKEdit.png $(DESTDIR)${prefix}/share/pixmaps/KKEdit$(GTK3SUFFIX).png
+	install -D ../resources/pixmaps/KKEdit.desktop $(DESTDIR)${prefix}/share/applications/KKEdit$(GTK3SUFFIX).desktop
+	install -D ../resources/pixmaps/KKEditRoot.desktop $(DESTDIR)${prefix}/share/applications/KKEditRoot$(GTK3SUFFIX).desktop
 
-	echo "Exec=${with_gsu_path} kkedit$(MAKEFILESUFFIX) -m %f" >> $(DESTDIR)${prefix}/share/applications/KKEditRoot.desktop
-	echo "Exec=kkedit$(MAKEFILESUFFIX) %f" >> $(DESTDIR)${prefix}/share/applications/KKEdit.desktop
-	install -D ../resources/pixmaps/KKEdit.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEdit.png
-	install -D ../resources/pixmaps/KKEditRoot.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditRoot.png
-	install -D ../resources/pixmaps/KKEditPlug.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditPlug.png
-	mkdir -vp "$(DESTDIR)$(pkgdatadir)$(DOCSUFFIX)/Example External Tools"
-	cp -r "../resources/Example External Tools" "$(DESTDIR)$(pkgdatadir)$(DOCSUFFIX)"
+	install -D ../../po/fr_FR/LC_MESSAGES/kkedit.mo $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES/kkedit$(GTK3SUFFIX).mo
+	install -D ../src/kkedit-plugins.h $(DESTDIR)${includedir}/kkedit-plugins$(GTK3SUFFIX).h
+
+	echo "Exec=${with_gsu_path} kkedit$(GTK3SUFFIX) -m %f" >> $(DESTDIR)${prefix}/share/applications/KKEditRoot$(GTK3SUFFIX).desktop
+	echo "Exec=kkedit$(GTK3SUFFIX) %f" >> $(DESTDIR)${prefix}/share/applications/KKEdit$(GTK3SUFFIX).desktop
+	install -D ../resources/pixmaps/KKEdit.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEdit$(GTK3SUFFIX).png
+	install -D ../resources/pixmaps/KKEditRoot.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditRoot$(GTK3SUFFIX).png
+	install -D ../resources/pixmaps/KKEditPlug.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditPlug$(GTK3SUFFIX).png
+	mkdir -vp "$(DESTDIR)${pkgdatadir}$(GTK3SUFFIX)/Example External Tools"
+	cp -r "../resources/Example External Tools" "$(DESTDIR)${pkgdatadir}$(GTK3SUFFIX)"
 
 install-data-hook:
-	sed -i 's/kkedit/kkedit$(MAKEFILESUFFIX)/g' $(DESTDIR)$(pkgdatadir)$(DOCSUFFIX)/tools/*
+	sed -i 's/kkedit/kkedit$(GTK3SUFFIX)/g' $(DESTDIR)${pkgdatadir}$(GTK3SUFFIX)/tools/*
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

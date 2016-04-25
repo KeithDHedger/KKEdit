@@ -28,8 +28,8 @@ PluginClass::PluginClass(bool loadPlugs)
 	plugins=NULL;
 	plugCount=-1;
 
-	sinkReturn=asprintf(&plugFolderPaths[GLOBALPLUGS],"%s%s/plugins-%s",DATADIR,GLOBALSUFFIX,PLATFORM);
-	sinkReturn=asprintf(&plugFolderPaths[LOCALPLUGS],"%s/." KKEDITVERS "/plugins-%s",getenv("HOME"),PLATFORM);
+	sinkReturn=asprintf(&plugFolderPaths[GLOBALPLUGS],"%s%s/plugins-gtk",DATADIR,_EXECSUFFIX_);
+	sinkReturn=asprintf(&plugFolderPaths[LOCALPLUGS],"%s/%s/plugins-gtk",getenv("HOME"),APPFOLDENAME);
 
 	this->doLoadPlugs=loadPlugs;
 	this->loadPlugins();
@@ -89,7 +89,7 @@ bool PluginClass::checkForEnabled(char *plugname)
 			ERRDATA return(false);
 		}
 
-	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/pluglist",getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/%s/pluglist",getenv("HOME"),APPFOLDENAME);
 	fd=fopen(filename,"r");
 	if(fd!=NULL)
 		{
@@ -144,7 +144,7 @@ void PluginClass::deleteWhiteList()
 	ERRDATA
 	char	*command;
 
-	sinkReturn=asprintf(&command,"rm %s/." KKEDITVERS "/pluglist 2>/dev/null",getenv("HOME"));
+	sinkReturn=asprintf(&command,"rm %s/%s/pluglist 2>/dev/null",getenv("HOME"),APPFOLDENAME);
 	sinkReturn=system(command);
 	ERRDATA debugFree(&command);
 }
@@ -154,7 +154,7 @@ void PluginClass::appendToWhiteList(char *name)
 	ERRDATA
 	char	*command;
 
-	sinkReturn=asprintf(&command,"echo %s >> %s/." KKEDITVERS "/pluglist",name,getenv("HOME"));
+	sinkReturn=asprintf(&command,"echo %s >> %s/%s/pluglist",name,getenv("HOME"),APPFOLDENAME);
 	sinkReturn=system(command);
 	ERRDATA debugFree(&command);
 }

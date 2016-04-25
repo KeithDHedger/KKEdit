@@ -71,19 +71,21 @@
 #define USEURI			-1
 #define USEFILE			-2
 
-#ifdef _USEGTK3_
-#define KKEDITVERS "KKEdit3"
-#define PLATFORM "gtk"
-#define GLOBALSUFFIX "3"
-#else
-#define KKEDITVERS "KKEdit"
-#define PLATFORM "gtk"
-#define GLOBALSUFFIX ""
-#endif
+//#ifdef _USEGTK3_
+//#define KKEDITVERS "KKEdit3"
+//#define PLATFORM "gtk"
+//#define GLOBALSUFFIX "3"
+//#else
+//#define KKEDITVERS "KKEdit"
+//#define PLATFORM "gtk"
+//#define GLOBALSUFFIX ""
+//#endif
 
 #define	POLEPATH PREFIX "/bin/KKEditProgressBar" _EXECSUFFIX_
 #define	APPEXECNAME "kkedit" _EXECSUFFIX_
-#define CUSTOMWORDFILE "." KKEDITVERS "/customcompletions"
+#define APPFOLDENAME ".KKEdit" _EXECSUFFIX_
+//#define CUSTOMWORDFILE "." KKEDITVERS "/customcompletions"
+#define CUSTOMWORDFILE APPFOLDENAME "/customcompletions"
 #define DBUSNAME "org.keithhedge." APPEXECNAME
 
 #define NUMSHORTCUTS	14

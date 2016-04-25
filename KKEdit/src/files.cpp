@@ -650,10 +650,10 @@ VISIBLE void saveSession(GtkWidget *widget,gpointer data)
 	GList			*ptr;
 
 	ERRDATA
-	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS,getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/%s",getenv("HOME"),APPFOLDENAME);
 	g_mkdir_with_parents(filename,493);
 	ERRDATA debugFree(&filename);
-	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/session",getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/%s/session",getenv("HOME"),APPFOLDENAME);
 	fd=fopen(filename,"w");
 	if(fd!=NULL)
 		{
@@ -706,7 +706,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 	showBarberPole(DIALOG_POLE_RESTORING);
 
 	if(data==NULL)
-		sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/session",getenv("HOME"));
+		sinkReturn=asprintf(&filename,"%s/%s/session",getenv("HOME"),APPFOLDENAME);
 	else
 		sinkReturn=asprintf(&filename,"%s",(char*)data);
 

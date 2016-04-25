@@ -10,7 +10,7 @@ DEVELOP?=0
 PREFIX?=/usr
 
 ifeq (3,$(GTKVERSION))
-INSTALLSUFFIX=3
+INSTALLSUFFIX=-3
 endif
 
 ifeq (0,$(GLOBAL))

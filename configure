@@ -603,6 +603,7 @@ GTKSRC_LIBS
 GTKSRC_CFLAGS
 GTK_LIBS
 GTK_CFLAGS
+GTK3SUFFIX
 DOCSUFFIX
 PLUGVERSION
 MAKEFILESUFFIX
@@ -4652,6 +4653,7 @@ $as_echo "#define _EXECSUFFIX_ \"-3\"" >>confdefs.h
 	program_transform_name='s,\(^[kK].*t.*\),\1-3,'
 	DOCSUFFIX=3
 	PLUGVERSION=3
+	GTK3SUFFIX=-3
 else
 	GTK_MODULES="gtk+-2.0 >= 2.24.0"
 	GTKSRC_MODULES="gtksourceview-2.0 >= 2.9.9"
@@ -4775,6 +4777,7 @@ fi
 else
 	PLUGINCLUDES=
 fi
+
 
 
 

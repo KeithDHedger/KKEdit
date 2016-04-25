@@ -1097,7 +1097,7 @@ void buildToolsList(void)
 		}
 
 	sinkReturn=asprintf(&datafolder[0],"%s/tools/",DATADIR);
-	sinkReturn=asprintf(&datafolder[1],"%s/." KKEDITVERS "/tools/",getenv("HOME"));
+	sinkReturn=asprintf(&datafolder[1],"%s/%s/tools/",getenv("HOME"),APPFOLDENAME);
 	for(int loop=0; loop<2; loop++)
 		{
 			folder=g_dir_open(datafolder[loop],0,NULL);
@@ -1629,23 +1629,23 @@ void getOldConfigs(const char *file,args *dataptr)
 	char	*filename;
 	int		retval=NOERR;
 
-	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/%s",getenv("HOME"),file);
+	sinkReturn=asprintf(&filename,"%s/%s/%s",getenv("HOME"),APPFOLDENAME,file);
 	retval=loadVarsFromFile(filename,dataptr);
 	ERRDATA debugFree(&filename);
 
 	if(retval!=NOERR)
 		{
-			if(strcmp(KKEDITVERS,"KKEdit3")==0)
-				{
-					sinkReturn=asprintf(&filename,"%s/.KKEdit/%s",getenv("HOME"),file);
-					retval=loadVarsFromFile(filename,dataptr);
-					ERRDATA debugFree(&filename);
-				}
-			else
+			if(strcmp(APPFOLDENAME,".KKEdit-3")==0)
 				{
 					sinkReturn=asprintf(&filename,"%s/.KKEdit3/%s",getenv("HOME"),file);
 					retval=loadVarsFromFile(filename,dataptr);
 					ERRDATA debugFree(&filename);
+					if(retval!=NOERR)
+						{
+							sinkReturn=asprintf(&filename,"%s/.KKEdit/%s",getenv("HOME"),file);
+							retval=loadVarsFromFile(filename,dataptr);
+							ERRDATA debugFree(&filename);
+						}
 				}
 		}
 }

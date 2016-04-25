@@ -904,7 +904,7 @@ VISIBLE void openHelp(GtkWidget *widget,gpointer data)
 	else
 		lang="fr";
 
-	sinkReturn=asprintf(&thePage,"file://%s%s/help/help.%s.html",DATADIR,GLOBALSUFFIX,lang);
+	sinkReturn=asprintf(&thePage,"file://%s%s/help/help.%s.html",DATADIR,_EXECSUFFIX_,lang);
 #ifdef _BUILDDOCVIEWER_
 	showDocView(USEURI,(char*)"KKEdit",DOCVIEW_KKEDIT_HELP_LABEL);
 #else
@@ -1272,10 +1272,10 @@ void writeExitData(void)
 	bottomVPaneHite=gtk_paned_get_position((GtkPaned*)mainWindowVPane);
 	topVPaneHite=gtk_paned_get_position((GtkPaned*)secondWindowVPane);
 
-	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS,getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/%s",getenv("HOME"),APPFOLDENAME);
 	g_mkdir_with_parents(filename,493);
 	ERRDATA debugFree(&filename);
-	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/kkedit.window.rc",getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/%s/kkedit.window.rc",getenv("HOME"),APPFOLDENAME);
 
 	saveVarsToFile(filename,kkedit_window_rc);
 
@@ -1288,11 +1288,11 @@ void writeConfig(void)
 	ERRDATA
 	char			*filename;
 
-	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS,getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/%s",getenv("HOME"),APPFOLDENAME);
 	g_mkdir_with_parents(filename,493);
 	ERRDATA debugFree(&filename);
 
-	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/kkedit.rc",getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/%s/kkedit.rc",getenv("HOME"),APPFOLDENAME);
 	saveVarsToFile(filename,kkedit_rc);
 	ERRDATA debugFree(&filename);
 }
@@ -1508,10 +1508,10 @@ void setToolOptions(GtkWidget *widget,gpointer data)
 	char		*toolpath;
 	int			flags;
 
-	sinkReturn=asprintf(&dirname,"%s/." KKEDITVERS "/tools",getenv("HOME"));
+	sinkReturn=asprintf(&dirname,"%s/%s/tools",getenv("HOME"),APPFOLDENAME);
 	text=strdup(gtk_entry_get_text((GtkEntry*)toolNameWidget));
 	text=g_strdelimit(text," ",'-');
-	sinkReturn=asprintf(&toolpath,"%s/." KKEDITVERS "/tools/%s",getenv("HOME"),text);
+	sinkReturn=asprintf(&toolpath,"%s/%s/tools/%s",getenv("HOME"),APPFOLDENAME,text);
 
 	if((gtk_toggle_button_get_active((GtkToggleButton*)syncWidget)==false) ||(gtk_toggle_button_get_active((GtkToggleButton*)inTermWidget)==true))
 		{

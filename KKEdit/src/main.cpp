@@ -102,8 +102,8 @@ void init(void)
 	noWarnings=false;
 	readLinkFirst=false;
 	hightlightAll=true;
-	maxFuncDefs=MAXTEXTWIDTH;
-	maxBMChars=MAXTEXTWIDTH;
+	maxFuncDefs=64;
+	maxBMChars=64;
 
 	openInThisTab=-1;
 	loadingSession=false;
@@ -122,17 +122,17 @@ void init(void)
 	nagScreen=false;
 	highlightColour=strdup("#A3ACFF");
 	showBMBar=false;
-	listFunction=0;
+	listFunction=4;
 	showStatus=true;
  
-	sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/tools",getenv("HOME"));
+	sinkReturn=asprintf(&filename,"%s/%s/tools",getenv("HOME"),APPFOLDENAME);
 	g_mkdir_with_parents(filename,493);
 	ERRDATA debugFree(&filename);
 	schemeManager=gtk_source_style_scheme_manager_get_default();
 	sinkReturn=asprintf(&filename,"%s/.gnome2/gedit/styles",getenv("HOME"));
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
 	ERRDATA debugFree(&filename);
-	sinkReturn=asprintf(&filename,"%s%s/styles",DATADIR,GLOBALSUFFIX);
+	sinkReturn=asprintf(&filename,"%s%s/styles",DATADIR,_EXECSUFFIX_);
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
 	ERRDATA debugFree(&filename);
 

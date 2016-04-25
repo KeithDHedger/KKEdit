@@ -867,7 +867,7 @@ void setKeyCuts(GtkWidget *widget,gpointer data)
 						}
 					sinkReturn=asprintf(&shortCutStrings[j],"%i %i - ^%c %s",shortCuts[j][0],shortCuts[j][1],shortCuts[j][0],shortcuttext[j]);
 				}
-			sinkReturn=asprintf(&filename,"%s/." KKEDITVERS "/keybindings.rc",getenv("HOME"));
+			sinkReturn=asprintf(&filename,"%s/%s/keybindings.rc",getenv("HOME"),APPFOLDENAME);
 			saveVarsToFile(filename,keybindings_rc);
 			gtk_widget_hide(keysWindow);
 		}

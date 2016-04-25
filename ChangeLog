@@ -1,4 +1,6 @@
 0.3.2
+More sensible default prefs.
+File/folders renamed to make gtk3 version completly installable side-by-side with gtk2 version.
 Added --enable-plugins to configure.
 Added extra instructions to INSTALL for building with plugins.
 Code clean to remove compile warnings for packagers.
