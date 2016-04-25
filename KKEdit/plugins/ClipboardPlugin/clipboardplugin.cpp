@@ -40,7 +40,11 @@
 #define MAXCLIPMENULEN 43
 #define CLIPENDLEN 20
 #define CLIPENDLENSTR "20"
-#define TEXTDOMAIN "ClipboardPlugin"
+#ifdef _USEGTK3_
+#define TEXTDOMAIN "ClipboardPlugin-3" 
+#else
+#define TEXTDOMAIN "ClipboardPlugin" 
+#endif
 
 struct clips
 {

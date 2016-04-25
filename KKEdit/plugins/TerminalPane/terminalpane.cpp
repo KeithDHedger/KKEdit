@@ -44,7 +44,11 @@
 #define MYEMAIL "kdhedger68713@gmail.com"
 #define MYWEBSITE "http://kkedit.darktech.org"
 #define VERSION "0.3.0"
-#define TEXTDOMAIN "TerminalPane"
+#ifdef _USEGTK3_
+#define TEXTDOMAIN "TerminalPane-3" 
+#else
+#define TEXTDOMAIN "TerminalPane" 
+#endif
 
 int	(*module_plug_function)(gpointer globaldata);
 

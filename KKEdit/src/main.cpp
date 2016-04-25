@@ -462,9 +462,9 @@ void appStart(GApplication  *application,gpointer data)
 	g_application_hold(application);
 
 	setlocale(LC_ALL,"");
-	bindtextdomain("kkedit",LOCALEDIR);
-	textdomain("kkedit");
-	bind_textdomain_codeset("kkedit","UTF-8");
+	bindtextdomain(APPEXECNAME,LOCALEDIR);
+	textdomain(APPEXECNAME);
+	bind_textdomain_codeset(APPEXECNAME,"UTF-8");
 
 	init();
 	buildMainGui();

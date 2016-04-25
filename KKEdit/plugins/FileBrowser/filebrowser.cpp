@@ -44,7 +44,11 @@
 #define COLUMN_FILENAME 1
 #define COLUMN_PATHNAME 2
 #define COLUMN_PIXBUF 0
-#define TEXTDOMAIN "FileBrowser"
+#ifdef _USEGTK3_
+#define TEXTDOMAIN "FileBrowser-3" 
+#else
+#define TEXTDOMAIN "FileBrowser" 
+#endif
 
 int	(*module_plug_function)(gpointer globaldata);
 

@@ -38,7 +38,11 @@
 #define MYWEBSITE "http://kkedit.darktech.org"
 #define PLUGVERSION "0.3.0"
 #define	MAXSESSIONS 16
-#define TEXTDOMAIN "SessionManager"
+#ifdef _USEGTK3_
+#define TEXTDOMAIN "SessionManager-3" 
+#else
+#define TEXTDOMAIN "SessionManager" 
+#endif
 
 extern void restoreSession(GtkWidget* widget,gpointer data);
 
