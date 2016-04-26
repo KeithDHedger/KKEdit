@@ -39,9 +39,11 @@
 #define PLUGVERSION "0.3.0"
 #define	MAXSESSIONS 16
 #ifdef _USEGTK3_
-#define TEXTDOMAIN "SessionManager-3" 
+#define TEXTDOMAIN "SessionManager-3"
+#define ABOUTICON "KKEditPlug-3"
 #else
 #define TEXTDOMAIN "SessionManager" 
+#define ABOUTICON "KKEditPlug"
 #endif
 
 extern void restoreSession(GtkWidget* widget,gpointer data);
@@ -391,7 +393,7 @@ extern "C" int doAbout(gpointer data)
 	gtk_about_dialog_set_copyright(about,copyright);
 	gtk_about_dialog_set_version(about,PLUGVERSION);
 	gtk_about_dialog_set_website(about,MYWEBSITE);
-	gtk_about_dialog_set_logo_icon_name(about,"KKEditPlug");
+	gtk_about_dialog_set_logo_icon_name(about,ABOUTICON);
 	gtk_about_dialog_set_license(about,licence);
 	gtk_about_dialog_set_translator_credits(about,(const gchar*)translators);
 

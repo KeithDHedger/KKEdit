@@ -19,9 +19,10 @@ HistoryClass::HistoryClass(GtkNotebook *nb,unsigned maxhist)
 	this->savedPages=new historyData[maxhist+4];
 	for(unsigned j=0;j<(maxhist+4);j++)
 		{
-			this->savedPages[j].pageID=-1;
+			this->savedPages[j].pageID=0;
 			this->savedPages[j].filePath=NULL;
 			this->savedPages[j].lineNumber=0;
+			this->savedPages[j].tabName=NULL;
 		}
 	ERRDATA
 }
@@ -63,7 +64,7 @@ void HistoryClass::goToPos(void)
 	TextBuffer	*buf;
 	pageStruct	*page;
 
-	if(this->savedPages[this->saveCnt].pageID==-1)
+	if(this->savedPages[this->saveCnt].pageID==0)
 		return;
 
 	for(int j=0;j<gtk_notebook_get_n_pages(this->notebook);j++)
@@ -90,9 +91,9 @@ void HistoryClass::saveLastPosAndStop(void)
 	this->savedPages[this->saveCnt].pageID=-1;
 }
 
-historyData HistoryClass::getHistory(int num)
+historyData* HistoryClass::getHistory(int num)
 {
-	return(this->savedPages[num]);
+	return(&(this->savedPages[num]));
 }
 
 unsigned HistoryClass::getMaxHist(void)
@@ -103,6 +104,55 @@ unsigned HistoryClass::getMaxHist(void)
 unsigned HistoryClass::getSaveCnt(void)
 {
 	return(this->saveCnt);
+}
+
+void HistoryClass::setSaveCnt(int num)
+{
+	this->saveCnt=num;
+}
+
+//void HistoryClass::menuJumpBack(GtkWidget *widget,gpointer data)
+//{
+//	TextBuffer	*buf;
+//	pageStruct	*page=NULL;
+//	pageStruct	*checkpage=NULL;
+//	historyData	*hist=(historyData*)data;
+//	unsigned	pageid;
+//
+//	pageid=hist->pageID;
+//	page=getPageStructByID(pageid);
+//	if(page!=NULL)
+//		{
+//			for(int loop=0;loop<gtk_notebook_get_n_pages(mainNotebook);loop++)
+//				{
+//					checkpage=getPageStructPtr(loop);
+//					if(checkpage==page)
+//						{
+//							buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+//							gtk_notebook_set_current_page(mainNotebook,loop);
+//							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&buf->cursorPos);
+//							buf->scroll2Line((GtkTextView*)page->view,hist->lineNumber,true);
+//							ERRDATA delete buf;
+//							ERRDATA return;
+//				}
+//
+//		}
+//
+//printf("here....%i\n",(int)(long)data);
+//		}
+//}
+
+void HistoryClass::appendLocation(void)
+{
+	GtkWidget	*menu;
+	char		*label;
+
+	sinkReturn=asprintf(&label,"%s - %i",this->savedPages[this->saveCnt].tabName,this->savedPages[this->saveCnt].lineNumber);
+	menu=gtk_menu_item_new_with_label(label);
+	debugFree(&label);
+	gtk_menu_shell_append(GTK_MENU_SHELL(this->historyMenu),menu);
+	g_signal_connect(G_OBJECT(menu),"activate",G_CALLBACK(menuJumpBack),(void*)(long)(this->saveCnt));
+	gtk_widget_show_all(this->historyMenu);
 }
 
 void HistoryClass::saveLastPos(void)
@@ -137,7 +187,10 @@ void HistoryClass::saveLastPos(void)
 			if(page->filePath!=NULL)
 				sinkReturn=asprintf(&this->savedPages[this->saveCnt].filePath,"%s",page->filePath);
 		}
+	if(page->fileName!=NULL)
+		sinkReturn=asprintf(&this->savedPages[this->saveCnt].tabName,"%s",page->fileName);
 
+	this->appendLocation();
 	this->goForward();
 	this->canReturn=true;
 	delete buf;

@@ -10,14 +10,12 @@
 #ifndef _BACKCLASS_
 #define _BACKCLASS_
 
-
-
-
 struct historyData
 {
 	char		*filePath;
 	unsigned	lineNumber;
-	int			pageID;
+	unsigned	pageID;
+	char		*tabName;
 };
 
 
@@ -34,8 +32,9 @@ class HistoryClass
 		void 		saveLastPos(void);
 		void 		saveLastPosAndStop(void);
 		unsigned	getSaveCnt(void);
+		void		setSaveCnt(int num);
 		unsigned	getMaxHist(void);
-		historyData	getHistory(int num);
+		historyData	*getHistory(int num);
 		void		setHistMenu(GtkWidget *menu);
 		GtkWidget	*getHistMenu(void);
 
@@ -46,6 +45,8 @@ class HistoryClass
 		bool		canReturn;;
 		GtkNotebook	*notebook;
 		GtkWidget	*historyMenu;
+		void		appendLocation(void);
+		//static void		menuJumpBack(GtkWidget *widget,gpointer data);
 };
 
 #endif

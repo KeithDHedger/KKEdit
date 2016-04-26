@@ -71,23 +71,12 @@
 #define USEURI			-1
 #define USEFILE			-2
 
-//#ifdef _USEGTK3_
-//#define KKEDITVERS "KKEdit3"
-//#define PLATFORM "gtk"
-//#define GLOBALSUFFIX "3"
-//#else
-//#define KKEDITVERS "KKEdit"
-//#define PLATFORM "gtk"
-//#define GLOBALSUFFIX ""
-//#endif
-
 #define	POLEPATH PREFIX "/bin/KKEditProgressBar" _EXECSUFFIX_
 #define	APPEXECNAME "kkedit" _EXECSUFFIX_
 #define APPFOLDENAME ".KKEdit" _EXECSUFFIX_
-//#define CUSTOMWORDFILE "." KKEDITVERS "/customcompletions"
 #define CUSTOMWORDFILE APPFOLDENAME "/customcompletions"
 #define DBUSNAME "org.keithhedge." APPEXECNAME
-
+#define ABOUTICON "KKEdit" _EXECSUFFIX_
 #define NUMSHORTCUTS	14
 
 
@@ -466,6 +455,8 @@ extern bool				doGoogleSearch;
 
 void plugRunFunction(gpointer data,gpointer funcname);
 pageStruct *getPageStructPtr(int pagenum);
+pageStruct *getPageStructByID(unsigned pageid);
+
 void getMimeType(char *filepath,void *ptr);
 void setLanguage(pageStruct *page);
 void runCommand(char *commandtorun,void *ptr,bool interm,int flags,int useroot,char *title);

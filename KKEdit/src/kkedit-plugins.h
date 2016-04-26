@@ -127,7 +127,7 @@ struct pageStruct
 	bool				canUndo;
 	bool				canRedo;
 	bool				isDirty;
-	int					pageID;
+	unsigned			pageID;
 	char				*searchString;
 	char				*replaceString;;
 	GtkWidget			*tabButton;

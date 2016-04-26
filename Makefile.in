@@ -799,15 +799,17 @@ remake:
 	$(shell ./remakesourcelist)
 
 uninstall-hook:
-	rm -f $(DESTDIR)${prefix}/share/applications/KKEdit$(GTK3SUFFIX).desktop
-	rm -f $(DESTDIR)${prefix}/share/applications/KKEditRoot$(GTK3SUFFIX).desktop
-	rm -f $(DESTDIR)${prefix}/share/pixmaps/KKEdit.png
-	rm -f $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEdit$(GTK3SUFFIX).png
-	rm -f $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditRoot$(GTK3SUFFIX).png
-	rm -f $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditPlug$(GTK3SUFFIX).png
-	rm -f $(DESTDIR)${prefix}/share/pixmaps/KKEditPlug$(GTK3SUFFIX).png
-	rm -f $(DESTDIR)${prefix}/share/pixmaps/KKEditPlugMenu$(GTK3SUFFIX).png
-	rm -fr  $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)
+	rm -f $(DESTDIR)${prefix}/share/applications/KKEdit$(GTK3SUFFIX).desktop||true
+	rm -f $(DESTDIR)${prefix}/share/applications/KKEditRoot$(GTK3SUFFIX).desktop||true
+	rm -f $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEdit$(GTK3SUFFIX).png||true
+	rm -f $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditRoot$(GTK3SUFFIX).png||true
+	rm -f $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditPlug$(GTK3SUFFIX).png||true
+	rm -f $(DESTDIR)${prefix}/share/pixmaps/KKEdit$(GTK3SUFFIX).png||true
+	rm -f $(DESTDIR)${prefix}/share/pixmaps/KKEditRoot$(GTK3SUFFIX).png||true
+	rm -f $(DESTDIR)${prefix}/share/pixmaps/KKEditPlug$(GTK3SUFFIX).png||true
+	rm -f $(DESTDIR)${prefix}/share/pixmaps/KKEditPlugMenu$(GTK3SUFFIX).png||true
+	rm -fr $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)||true
+	rm -fr $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES/kkedit$(GTK3SUFFIX).mo||true
 
 update-icons:
 	gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor

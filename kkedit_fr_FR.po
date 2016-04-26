@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: kkedit 1.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-04-24 18:48+0100\n"
-"PO-Revision-Date: 2016-04-24 18:48-0000\n"
-"Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
+"PO-Revision-Date: 2016-04-25 17:56+0100\n"
+"Last-Translator: Thanh Tung Nguyen <thngtong@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.6.11\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: KKEdit/src/kkedit-includes.h:75
 msgid "_Yes"
@@ -502,9 +502,8 @@ msgid "Go Back"
 msgstr "Vue précédente"
 
 #: KKEdit/src/kkedit-includes.h:249
-#, fuzzy
 msgid "Back To"
-msgstr "Précédent"
+msgstr "Revenir à"
 
 #: KKEdit/src/kkedit-includes.h:250
 msgid "Go Forward"
@@ -763,9 +762,8 @@ msgid "Max Characters In Bookmarks:"
 msgstr "Caractères max dans les signets:"
 
 #: KKEdit/src/kkedit-includes.h:317
-#, fuzzy
 msgid "Max Back/Forward History:"
-msgstr "Max Rechercher / Remplacer Histoire"
+msgstr "Maximum de retours en arrière/avant de l'historique:"
 
 #: KKEdit/src/kkedit-includes.h:318
 msgid "Check For Updates"

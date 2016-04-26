@@ -553,6 +553,20 @@ VISIBLE pageStruct *getPageStructPtr(int pagenum)
 	ERRDATA
 }
 
+VISIBLE pageStruct *getPageStructByID(unsigned pageid)
+{
+	pageStruct	*page=NULL;
+
+	for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
+		{
+			page=getPageStructPtr(j);
+			if(page!=NULL)
+				if(page->pageID==pageid)
+					return(page);
+		}
+	return(NULL);
+}
+
 void getMimeType(char *filepath,void *ptr)
 {
 	ERRDATA
@@ -1196,18 +1210,20 @@ void rebuildBookMarkMenu(void)
 VISIBLE void navigateHistory(GtkWidget *widget,gpointer data)
 {
 	unsigned	tcnt=globalHistory->getSaveCnt();
+			if(tcnt==0)
+				return;
 	if((long)data==NAVLAST)
 		{
 			globalHistory->saveLastPos();
 //TODO//
 			if(tcnt<globalHistory->getMaxHist())
-			globalHistory->goBack();
+				globalHistory->goBack();
 			globalHistory->goBack();
 			globalHistory->goToPos();
 		}
 	else
 		{
-			if(globalHistory->getHistory(tcnt).pageID==-1)
+			if(globalHistory->getHistory(tcnt)->pageID==0)
 				return;
 			
 			globalHistory->goForward();

@@ -1597,16 +1597,17 @@ void setToolOptions(GtkWidget *widget,gpointer data)
 VISIBLE void doAbout(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	const char	*authors[]= {"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,"\nBig thanks to Sadi Yumuşak for all his help.",DIALOG_ABOUT_MORE_LABEL,"Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
+	const char	*authors[]={"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,"\nBig thanks to Sadi Yumuşak for all his help.",DIALOG_ABOUT_MORE_LABEL,"Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
 	const char	copyright[] ="Copyright \xc2\xa9 2013 K.D.Hedger \n" MYEMAIL;
 	const char	*aboutboxstring=DIALOG_ABOUT_KKEDIT_LABEL;
 	char		*licence;
 	char		*translators;
+	const char	*artists[]={"Application Icon's - David Reimer",NULL};
 
 	sinkReturn=asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",DIALOG_ABOUT_FRENCH_LABEL);
 	g_file_get_contents(DATADIR"/docs/gpl-3.0.txt",&licence,NULL,NULL);
 
-	gtk_show_about_dialog(NULL,"authors",authors,"translator-credits",translators,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",MYWEBSITE,"website-label","KKEdit Homepage","program-name","KKEdit","logo-icon-name","KKEdit","license",licence,NULL);
+	gtk_show_about_dialog(NULL,"authors",authors,"translator-credits",translators,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",MYWEBSITE,"website-label","KKEdit Homepage","program-name","KKEdit","logo-icon-name",ABOUTICON,"license",licence,"artists",artists,NULL);
 
 	ERRDATA debugFree(&licence);
 	ERRDATA debugFree(&translators);
@@ -2111,4 +2112,103 @@ void markDirty(GtkTextBuffer *textbuffer,pageStruct *page)
 	setChangedSensitive((GtkTextBuffer *)page->buffer,page);
 }
 
+void menuClear(GtkWidget *widget,gpointer data)
+{
+	printf(">>>menulabel=%s<<<\n",gtk_menu_item_get_label((GtkMenuItem *)data));
+}
+GtkWidget* holdWidget=NULL;
+GtkWidget* findMenu(GtkWidget *parent,const gchar *name)
+{
+	const gchar	*mname=NULL;
+
+	if ( (GTK_IS_MENU_ITEM(parent)) && !(GTK_IS_SEPARATOR_MENU_ITEM(parent)) )
+		{
+			mname=gtk_widget_get_name((GtkWidget*)parent);
+			if(mname!=NULL)
+				{
+					if(strcmp(name,mname)==0)
+						{
+							holdWidget=parent;
+						}
+				}
+		}
+
+	if (GTK_IS_CONTAINER(parent))
+		{
+			GList *children = gtk_container_get_children(GTK_CONTAINER(parent));
+			while ((children = g_list_next(children)) != NULL)
+				{
+					GtkWidget* widget = findMenu((GtkWidget*)children->data, name);
+
+					if (widget != NULL)
+						{
+							return widget;
+						}
+				}
+			g_list_free(children);
+		}
+	return NULL;
+}
+
+void menuJumpBack(GtkWidget *widget,gpointer data)
+{
+	TextBuffer	*buf;
+	pageStruct	*page=NULL;
+	pageStruct	*checkpage=NULL;
+	int			savecnt=(int)((long)data);
+	GtkWidget	*widg=NULL;
+	historyData	*hist=globalHistory->getHistory(savecnt);
+	unsigned	pageid;
+
+	pageid=hist->pageID;
+	page=getPageStructByID(pageid);
+	if(page!=NULL)
+		{
+			for(int loop=0;loop<gtk_notebook_get_n_pages(mainNotebook);loop++)
+				{
+					checkpage=getPageStructPtr(loop);
+					if(checkpage==page)
+						{
+							buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+							gtk_notebook_set_current_page(mainNotebook,loop);
+							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&buf->cursorPos);
+							buf->scroll2Line((GtkTextView*)page->view,hist->lineNumber-1,true);
+							
+							//gtk_container_foreach((GtkContainer*)globalHistory->getHistMenu(),menuClear,NULL);
+							for(unsigned j=savecnt+1;j<maxJumpHistory;j++)
+								{
+									char	*label;
+									hist=globalHistory->getHistory(j);
+									sinkReturn=asprintf(&label,"%s - %i",hist->tabName,hist->lineNumber);
+									GList *childs=gtk_container_get_children ((GtkContainer*)globalHistory->getHistMenu());
+									for(int j=0;j<g_list_length (childs);j++)
+										{
+											GtkMenuItem *data=(GtkMenuItem *)g_list_nth_data (childs,j);
+											if(strcmp(gtk_menu_item_get_label ((GtkMenuItem *)data),label)==0)
+												{
+													//gtk_container_remove ((GtkContainer*)globalHistory->getHistMenu(),(GtkWidget *)data);
+													printf("--->%s<<<\n",gtk_menu_item_get_label((GtkMenuItem *)data));
+													gtk_widget_destroy((GtkWidget *)data);
+													hist->pageID=0;
+													hist->lineNumber=0;
+													break;
+												}
+										}
+									//widg=findMenu(globalHistory->getHistMenu(),label);
+//									if(widg!=NULL)
+//										printf("%s\n",label);
+									free(label);
+								}
+							gtk_widget_show_all(globalHistory->getHistMenu());
+							ERRDATA delete buf;
+							globalHistory->setSaveCnt(savecnt);
+							ERRDATA return;
+						}
+			}
+//
+//printf("here....%i\n",(int)(long)data);
+		}
+
+printf("here....%i\n",(int)(long)data);
+}
 
