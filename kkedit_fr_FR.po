@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: kkedit 1.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-04-27 12:10+0100\n"
-"PO-Revision-Date: 2016-04-27 12:11-0000\n"
-"Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
+"PO-Revision-Date: 2016-04-27 13:42+0100\n"
+"Last-Translator: Thanh Tung Nguyen <thngtong@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.6.11\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: KKEdit/src/kkedit-includes.h:75
 msgid "_Yes"
@@ -313,7 +313,7 @@ msgstr "À _propos"
 
 #: KKEdit/src/kkedit-includes.h:172
 msgid "_Online Help"
-msgstr ""
+msgstr "Aide en _ligne"
 
 #: KKEdit/src/kkedit-includes.h:173
 msgid "_Get Plugins"
@@ -514,9 +514,8 @@ msgid "Go Forward"
 msgstr "Aller en avant"
 
 #: KKEdit/src/kkedit-includes.h:252
-#, fuzzy
 msgid "Forward To"
-msgstr "Suivant"
+msgstr "Avancer à"
 
 #: KKEdit/src/kkedit-includes.h:253 KKEdit/src/kkedit-includes.h:354
 msgid "Go To Line"
@@ -934,7 +933,7 @@ msgstr "Traduction française"
 
 #: KKEdit/src/kkedit-includes.h:363
 msgid "GTK3 Application Icon"
-msgstr ""
+msgstr "Icône de l'application GTK3"
 
 #: KKEdit/src/kkedit-includes.h:364
 msgid "Restoring Session ..."
