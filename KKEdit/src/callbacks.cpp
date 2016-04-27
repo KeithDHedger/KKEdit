@@ -1393,6 +1393,8 @@ void clearToolButtons(void)
 	findApiButton=NULL;
 	findFuncDefButton=NULL;
 	liveSearchButton=NULL;
+	globalHistory->setHistBackMenu(NULL);
+	globalHistory->setHistForwardMenu(NULL);
 }
 
 void setPrefs(GtkWidget *widget,gpointer data)

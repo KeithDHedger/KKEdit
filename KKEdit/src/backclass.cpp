@@ -25,6 +25,9 @@ HistoryClass::HistoryClass(GtkNotebook *nb,unsigned maxhist)
 			this->savedPages[j].tabName=NULL;
 			this->savedPages[j].menuLabel=NULL;
 		}
+	this->historyBackMenu=NULL;
+	this->historyForwardMenu=NULL;
+
 	ERRDATA
 }
 
@@ -147,16 +150,18 @@ void HistoryClass::redoMenus(void)
 			gtk_widget_destroy(widgdata);
 		}
 
-	for(unsigned j=0;j<this->saveCnt;j++)
+	if(this->historyBackMenu!=NULL)
 		{
-			sinkReturn=asprintf(&label,"%i:%s - %s",this->savedPages[j].lineNumber,this->savedPages[j].tabName,this->savedPages[j].menuLabel);
-			menu=gtk_menu_item_new_with_label(label);
-			debugFree(&label);
-			gtk_menu_shell_append(GTK_MENU_SHELL(this->historyBackMenu),menu);
-			g_signal_connect(G_OBJECT(menu),"activate",G_CALLBACK(menuJumpBack),(void*)(long)(j));
+			for(unsigned j=0;j<this->saveCnt;j++)
+				{
+					sinkReturn=asprintf(&label,"%i:%s - %s",this->savedPages[j].lineNumber,this->savedPages[j].tabName,this->savedPages[j].menuLabel);
+					menu=gtk_menu_item_new_with_label(label);
+					debugFree(&label);
+					gtk_menu_shell_append(GTK_MENU_SHELL(this->historyBackMenu),menu);
+					g_signal_connect(G_OBJECT(menu),"activate",G_CALLBACK(menuJumpBack),(void*)(long)(j));
+				}
+			gtk_widget_show_all(this->historyBackMenu);
 		}
-	gtk_widget_show_all(this->historyBackMenu);
-
 //forward menu
 	childs=gtk_container_get_children ((GtkContainer*)this->historyForwardMenu);
 	for(unsigned j=0;j<g_list_length(childs);j++)
@@ -165,17 +170,20 @@ void HistoryClass::redoMenus(void)
 			gtk_widget_destroy(widgdata);
 		}
 
-	cntup=this->saveCnt+1;
-	while(this->savedPages[cntup].pageID!=0)
+	if(this->historyForwardMenu!=NULL)
 		{
-			sinkReturn=asprintf(&label,"%i:%s - %s",this->savedPages[cntup].lineNumber,this->savedPages[cntup].tabName,this->savedPages[cntup].menuLabel);
-			menu=gtk_menu_item_new_with_label(label);
-			debugFree(&label);
-			gtk_menu_shell_append(GTK_MENU_SHELL(this->historyForwardMenu),menu);
-			g_signal_connect(G_OBJECT(menu),"activate",G_CALLBACK(menuJumpBack),(void*)(long)(cntup));
-			cntup++;
+			cntup=this->saveCnt+1;
+			while(this->savedPages[cntup].pageID!=0)
+				{
+					sinkReturn=asprintf(&label,"%i:%s - %s",this->savedPages[cntup].lineNumber,this->savedPages[cntup].tabName,this->savedPages[cntup].menuLabel);
+					menu=gtk_menu_item_new_with_label(label);
+					debugFree(&label);
+					gtk_menu_shell_append(GTK_MENU_SHELL(this->historyForwardMenu),menu);
+					g_signal_connect(G_OBJECT(menu),"activate",G_CALLBACK(menuJumpBack),(void*)(long)(cntup));
+					cntup++;
+				}
+			gtk_widget_show_all(this->historyForwardMenu);
 		}
-	gtk_widget_show_all(this->historyForwardMenu);
 }
 
 void HistoryClass::saveLastPos(void)
