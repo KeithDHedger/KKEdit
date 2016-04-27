@@ -1627,7 +1627,7 @@ void buildMainGui(void)
 //go back
 	goBackMenu=makeMenuItem(GTK_STOCK_GO_BACK,menu,(void*)navigateHistory,0,GOBACKMENUNAME,STOCKMENU,MENU_GO_BACK_LABEL,(void*)NAVLAST,false);
 //go foward
-	goForwardMenu=makeMenuItem(GTK_STOCK_GO_FORWARD,menu,(void*)navigateHistory,0,GOBACKMENUNAME,STOCKMENU,MENU_GO_BACK_LABEL,(void*)NAVNEXT,false);
+	goForwardMenu=makeMenuItem(GTK_STOCK_GO_FORWARD,menu,(void*)navigateHistory,0,GOBACKMENUNAME,STOCKMENU,MENU_GO_FORWARD_LABEL,(void*)NAVNEXT,false);
 
 //function menu
 	funcMenu=gtk_menu_item_new_with_label(MENU_FUNC_MENU_LABEL);

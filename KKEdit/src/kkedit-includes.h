@@ -149,6 +149,7 @@
 #define MENU_FIND_IN_QTAPI_LABEL gettext("S_earch In Qt5 Docs")
 #define MENU_FIND_IN_DOCS_LABEL gettext("_Find In Documentation")
 #define MENU_GO_BACK_LABEL gettext("_Back")
+#define MENU_GO_FORWARD_LABEL DIALOG_GO_FORWARD_LABEL
 
 //func menu
 #define MENU_FUNC_MENU_LABEL gettext("Fun_ctions")
