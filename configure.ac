@@ -46,7 +46,15 @@ AC_MSG_RESULT($enable_plugs)
 if test "$enable_plugs" = "yes"; then
 	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
 	if test "$enable_gtk3" = "yes"; then
-		VTE_MODULES="vte-2.91 >= 0.40.2"
+		PKG_CHECK_EXISTS(vte-2.91,[usevte="91"],[usevte=90])
+		if test $usevte = "91"; then
+			VTE_MODULES="vte-2.91 >= 0.40.2"
+			VTEVERS=2.91
+		else
+			VTE_MODULES="vte-2.90 >= 0.34.0"
+			VTEVERS=2.90
+			AC_DEFINE([_VTEVERS290_], [""], [Use vte-2.90])
+		fi
 	else
 		VTE_MODULES="vte >= 0.28.2"
 	fi
@@ -58,6 +66,7 @@ fi
 AC_SUBST(PLUGINCLUDES)
 AC_SUBST(MAKEFILESUFFIX)
 AC_SUBST(PLUGVERSION)
+AC_SUBST(VTEVERS)
 AC_SUBST(DOCSUFFIX)
 AC_SUBST(GTK3SUFFIX)
 

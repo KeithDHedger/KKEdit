@@ -265,6 +265,7 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
+VTEVERS = @VTEVERS@
 VTE_CFLAGS = @VTE_CFLAGS@
 VTE_LIBS = @VTE_LIBS@
 WEBKIT_CFLAGS = @WEBKIT_CFLAGS@
@@ -794,6 +795,7 @@ uninstall-am:
 
 export GLOBAL = 1
 export GTKVERSION = $(PLUGVERSION)
+export VTEVERSION = $(VTEVERS)
 
 remake:
 	$(shell ./remakesourcelist)

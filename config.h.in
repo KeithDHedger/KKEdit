@@ -38,3 +38,6 @@
 
 /* Use GTK3 */
 #undef _USEGTK3_
+
+/* Use vte-2.90 */
+#undef _VTEVERS290_

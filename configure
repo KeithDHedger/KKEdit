@@ -605,6 +605,7 @@ GTK_LIBS
 GTK_CFLAGS
 GTK3SUFFIX
 DOCSUFFIX
+VTEVERS
 PLUGVERSION
 MAKEFILESUFFIX
 PLUGINCLUDES
@@ -4679,7 +4680,26 @@ $as_echo "$enable_plugs" >&6; }
 if test "$enable_plugs" = "yes"; then
 	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
 	if test "$enable_gtk3" = "yes"; then
-		VTE_MODULES="vte-2.91 >= 0.40.2"
+		if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"vte-2.91\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "vte-2.91") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  usevte="91"
+else
+  usevte=90
+fi
+		if test $usevte = "91"; then
+			VTE_MODULES="vte-2.91 >= 0.40.2"
+			VTEVERS=2.91
+		else
+			VTE_MODULES="vte-2.90 >= 0.34.0"
+			VTEVERS=2.90
+
+$as_echo "#define _VTEVERS290_ \"\"" >>confdefs.h
+
+		fi
 	else
 		VTE_MODULES="vte >= 0.28.2"
 	fi
@@ -4777,6 +4797,7 @@ fi
 else
 	PLUGINCLUDES=
 fi
+
 
 
 

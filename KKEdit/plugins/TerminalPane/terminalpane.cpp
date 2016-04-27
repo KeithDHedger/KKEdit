@@ -260,7 +260,11 @@ extern "C" int addToGui(gpointer data)
 	GtkWidget*	menu;
 	plugData*	plugdata=(plugData*)data;
 #ifdef _USEGTK3_
+//#ifdef _VTEVERS291_
 	GdkRGBA		colour;
+//#else
+//	GdkColor	colour;
+//#endif
 #else
 	GdkColor	colour;
 #endif
@@ -284,9 +288,20 @@ extern "C" int addToGui(gpointer data)
 //gdk_rgba_parse
 #ifdef _USEGTK3_
 	gdk_rgba_parse(&colour,(const gchar*)foreColour);
+
+#ifdef _VTEVERS290_
+	vte_terminal_set_color_foreground_rgba((VteTerminal*)terminal,(const GdkRGBA*)&colour);
+#else
 	vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkRGBA*)&colour);
+#endif
+
 	gdk_rgba_parse(&colour,(const gchar*)backColour);
+#ifdef _VTEVERS290_
+	vte_terminal_set_color_background_rgba((VteTerminal*)terminal,(const GdkRGBA*)&colour);
+#else
 	vte_terminal_set_color_background((VteTerminal*)terminal,(const GdkRGBA*)&colour);
+#endif
+
 #else
 	gdk_color_parse((const gchar*)foreColour,&colour);
 	vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkColor*)&colour);
@@ -304,7 +319,13 @@ extern "C" int addToGui(gpointer data)
 	startterm[0]=vte_get_user_shell();
 
 #ifdef _USEGTK3_
+
+#ifdef _VTEVERS290_
+	vte_terminal_fork_command_full((VteTerminal *)terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&childPid,NULL);
+#else
 	vte_terminal_spawn_sync((VteTerminal *)terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&childPid,NULL,NULL);
+#endif
+
 #else
 	vte_terminal_fork_command_full((VteTerminal *)terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&childPid,NULL);
 #endif
@@ -371,9 +392,21 @@ extern "C" int plugPrefs(gpointer data)
 			vte_terminal_set_default_colors((VteTerminal*)terminal);
 #ifdef _USEGTK3_
 			gdk_rgba_parse(&colour,(const gchar*)foreColour);
+#ifdef _VTEVERS290_
+			vte_terminal_set_color_foreground_rgba((VteTerminal*)terminal,(const GdkRGBA*)&colour);
+#else
 			vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkRGBA*)&colour);
+#endif
+//
+//			vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkRGBA*)&colour);
 			gdk_rgba_parse(&colour,(const gchar*)backColour);
+#ifdef _VTEVERS290_
+			vte_terminal_set_color_background_rgba((VteTerminal*)terminal,(const GdkRGBA*)&colour);
+#else
 			vte_terminal_set_color_background((VteTerminal*)terminal,(const GdkRGBA*)&colour);
+#endif
+
+//			vte_terminal_set_color_background((VteTerminal*)terminal,(const GdkRGBA*)&colour);
 #else
 			gdk_color_parse((const gchar*)foreColour,&colour);
 			vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkColor*)&colour);

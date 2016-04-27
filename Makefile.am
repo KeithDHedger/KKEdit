@@ -1,6 +1,7 @@
 
 export GLOBAL = 1
 export GTKVERSION = $(PLUGVERSION)
+export VTEVERSION = $(VTEVERS)
 
 SUBDIRS = KKEdit/app $(PLUGINCLUDES)
 

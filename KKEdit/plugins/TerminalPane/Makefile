@@ -12,7 +12,7 @@ VTESUFFIX=
 
 ifeq (3,$(GTKVERSION))
 INSTALLSUFFIX=-3
-VTESUFFIX=-2.91
+VTESUFFIX=-$(VTEVERSION)
 endif
 
 ifeq (0,$(GLOBAL))
@@ -31,9 +31,13 @@ ifeq (3,$(GTKVERSION))
 	USEGTK3=-D_USEGTK3_
 endif
 
+ifeq (2.90,$(VTEVERSION))
+	USE290=-D_VTEVERS290_
+endif
+
 all:
-	gcc ${EXTRAMAKEFLAGS} -fPIC -Wall -g -c ${PLUGNAME}.cpp `pkg-config --cflags --libs ${PLATFORM}+-${GTKVERSION}.0 gmodule-2.0 glib-2.0 gtksourceview-${GTKVERSION}.0 vte${VTESUFFIX}` -DLOCALEDIR=\"${LOCALEFOLDER}\" $(DEVMODE) $(USEGTK3) -DGTK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE -o ${PLUGNAME}.o
-	gcc -shared -Wl,--version-script=exportmap,-soname,${PLUGNAME}.so -o lib${PLUGNAME}.so ${PLUGNAME}.o -lc -lvte${VTESUFFIX}
+	gcc ${EXTRAMAKEFLAGS} -fPIC -Wall -g -c ${PLUGNAME}.cpp `pkg-config --cflags --libs ${PLATFORM}+-${GTKVERSION}.0 gmodule-2.0 glib-2.0 gtksourceview-${GTKVERSION}.0 vte${VTESUFFIX}` -DLOCALEDIR=\"${LOCALEFOLDER}\" $(DEVMODE) $(USEGTK3) $(USE290) -DGTK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE -o ${PLUGNAME}.o
+	gcc -shared -Wl,--version-script=exportmap,-soname,${PLUGNAME}.so -o lib${PLUGNAME}.so ${PLUGNAME}.o -lc `pkg-config --libs vte${VTESUFFIX}`
 
 clean: distclean
 
@@ -42,8 +46,8 @@ distclean:
 	rm -f ${PLUGNAME}.o||true
 
 install:
-	gcc ${EXTRAMAKEFLAGS} -fPIC -Wall -g -c ${PLUGNAME}.cpp `pkg-config --cflags --libs ${PLATFORM}+-${GTKVERSION}.0 gmodule-2.0 glib-2.0 gtksourceview-${GTKVERSION}.0 vte${VTESUFFIX}` -DLOCALEDIR=\"${LOCALEFOLDER}\" $(DEVMODE) $(USEGTK3) -DGTK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE -o ${PLUGNAME}.o
-	gcc -shared -Wl,--version-script=exportmap,-soname,${PLUGNAME}.so -o lib${PLUGNAME}.so ${PLUGNAME}.o -lc -lvte${VTESUFFIX}
+	gcc ${EXTRAMAKEFLAGS} -fPIC -Wall -g -c ${PLUGNAME}.cpp `pkg-config --cflags --libs ${PLATFORM}+-${GTKVERSION}.0 gmodule-2.0 glib-2.0 gtksourceview-${GTKVERSION}.0 vte${VTESUFFIX}` -DLOCALEDIR=\"${LOCALEFOLDER}\" $(DEVMODE) $(USEGTK3) $(USE290) -DGTK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE -o ${PLUGNAME}.o
+	gcc -shared -Wl,--version-script=exportmap,-soname,${PLUGNAME}.so -o lib${PLUGNAME}.so ${PLUGNAME}.o -lc `pkg-config --libs vte${VTESUFFIX}`
 	mkdir -vp $(DESTDIR)${INSTALLFOLDER} $(DESTDIR)$(LOCALEFOLDER)/fr_FR/LC_MESSAGES || true
 	cp -v lib${PLUGNAME}.so $(DESTDIR)$(INSTALLFOLDER)	
 	cp po/fr_FR/LC_MESSAGES/$(PACKAGENAME).mo $(DESTDIR)$(LOCALEFOLDER)/fr_FR/LC_MESSAGES/$(PACKAGENAME)$(INSTALLSUFFIX).mo
