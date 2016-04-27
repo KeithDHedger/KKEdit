@@ -169,7 +169,8 @@
 #define MENU_HELP_MENU_LABEL gettext("_Help")
 #define MENU_ABOUT_LABEL gettext("_About")
 #define MENU_HELP_LABEL gettext("_Help")
-#define MENU_GET_PLUGS_LABEL gettext("Get Plugins")
+#define MENU_HELP_ONLINE_LABEL gettext("_Online Help")
+#define MENU_GET_PLUGS_LABEL gettext("_Get Plugins")
 
 //toolbar labels
 #define GOTO_DEFINE_TOOLBAR_LABEL gettext("Definition")
@@ -359,7 +360,7 @@
 #define DIALOG_ABOUT_MORE_LABEL gettext("\nMore by the same author\n") 
 #define DIALOG_ABOUT_KKEDIT_LABEL gettext("KKEdit Code Text Editor")
 #define DIALOG_ABOUT_FRENCH_LABEL gettext("French Translation")
-#define DIALOG_ABOUT_ARTISTS_LABEL gettext("Application Icon's")
+#define DIALOG_ABOUT_ARTISTS_LABEL gettext("GTK3 Application Icon")
 #define DIALOG_POLE_RESTORING gettext("Restoring Session ...")
 #define DIALOG_FILE_CHANGED_LABEL gettext("File %s Has Changed on disk\nDo you want to reload it?")
 #define DIALOG_WARN_CHANGED_LABEL gettext("Warning file changed!")

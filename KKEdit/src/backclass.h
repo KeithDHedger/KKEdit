@@ -16,6 +16,7 @@ struct historyData
 	unsigned	lineNumber;
 	unsigned	pageID;
 	char		*tabName;
+	char		*menuLabel;
 };
 
 

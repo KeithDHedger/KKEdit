@@ -1392,24 +1392,6 @@ void buildMainGui(void)
 
 	globalHistory=new HistoryClass(mainNotebook,maxJumpHistory);
 
-#if 0
-	sinkReturn=asprintf(&notebookcss,"GtkNotebook { \n \
--GtkWidget-focus-line-width: 0;\n \
--GtkNotebook-tab-overlap: 0;\n \
-padding: 10 20 10 20;\n \
-border-radius: 0; \n \
-border-width: 0; \n \
-    padding: 4px; \n \
-    margin-top: 8px; \n \
-    margin-bottom: 8px; \n \
-    min-width: 18px; \n \
-    min-height: 18px; \n \
-    color: alpha(currentColor,0.3); \n \
- \n \
-}\n");
-
-#endif
-
 #ifdef _USEGTK3_
 	char	*notebookcss=NULL;
 	GtkStyleProvider	*nbprovider;
@@ -1669,8 +1651,10 @@ border-width: 0; \n \
 
 //about
 	menuitem=makeMenuItem(GTK_STOCK_ABOUT,menu,(void*)doAbout,0,ABOUTMENUNAME,STOCKMENU,MENU_ABOUT_LABEL,NULL,false);
-//help
-	menuitem=makeMenuItem(GTK_STOCK_HELP,menu,(void*)openHelp,0,HELPMENUNAME,STOCKMENU,MENU_HELP_LABEL,NULL,false);
+//help local
+	menuitem=makeMenuItem(GTK_STOCK_HELP,menu,(void*)openHelp,0,HELPMENUNAME,STOCKMENU,MENU_HELP_LABEL,(void*)0,false);
+//help online
+	menuitem=makeMenuItem(GTK_STOCK_HELP,menu,(void*)openHelp,0,HELPMENUNAME,IMAGEMENU,MENU_HELP_ONLINE_LABEL,(void*)1,false);
 //get plugins
 	menuitem=makeMenuItem(DATADIR"/pixmaps/KKEditPlugMenu.png",menu,(void*)getPlugins,0,GETPLUGSMENUNAME,PIXMAPMENU,MENU_GET_PLUGS_LABEL,NULL,false);
 

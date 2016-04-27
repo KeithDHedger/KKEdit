@@ -64,14 +64,14 @@ VISIBLE void toggleBookmark(GtkWidget *widget,GtkTextIter *titer)
 	ERRDATA
 	pageStruct		*page=getPageStructPtr(-1);
 	GtkWidget		*menuitem;
-	GtkTextMark	*mark;
-	GtkTextIter	*iter;
+	GtkTextMark		*mark;
+	GtkTextIter		*iter;
 	GtkTextIter		siter;
 	int				line;
 	GtkTextIter		startprev,endprev;
 	char			*previewtext;
 	GSList			*mark_list=NULL;
-	const gchar	*mark_type;
+	const gchar		*mark_type;
 	GList			*ptr=NULL;
 	bookMarksNew	*bookmarkdata;
 	char			*correctedpreview;
@@ -904,15 +904,23 @@ VISIBLE void openHelp(GtkWidget *widget,gpointer data)
 	else
 		lang="fr";
 
-	sinkReturn=asprintf(&thePage,"file://%s%s/help/help.%s.html",DATADIR,_EXECSUFFIX_,lang);
+	ERRDATA debugFree((char**)&thePage);
+	
 #ifdef _BUILDDOCVIEWER_
+	if((long)data==0)
+		sinkReturn=asprintf(&thePage,"file://%s%s/help/help.%s.html",DATADIR,_EXECSUFFIX_,lang);
+	else
+		sinkReturn=asprintf(&thePage,"http://kkedit.darktech.org/");
 	showDocView(USEURI,(char*)"KKEdit",DOCVIEW_KKEDIT_HELP_LABEL);
 #else
-	sinkReturn=asprintf(&thePage,"%s %s/help/help.%s.html",browserCommand,DATADIR,lang);
+	if((long)data==0)
+		sinkReturn=asprintf(&thePage,"%s %s/help/help.%s.html",browserCommand,DATADIR,lang);
+	else
+		sinkReturn=asprintf(&thePage,"%s http://kkedit.darktech.org/",browserCommand);
+
 	runCommand(thePage,NULL,false,8,0,(char*)DOCVIEW_KKEDIT_HELP_LABEL);
-	ERRDATA debugFree((char**)&thePage);
-	thePage=NULL;
 #endif
+	ERRDATA debugFree((char**)&thePage);
 }
 
 void copyToClipboard(GtkWidget *widget,gpointer data)

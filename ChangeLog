@@ -1,4 +1,6 @@
 0.3.2
+Back history now shows line:tabname - truncated line, in menu.
+Added 'Online Help' option.
 Added Back/Forward menus to toolbar buttons.
 New icons for gtk3 version ( thanks to David Reimer for that ).
 Supplied plugins are now also side-by-side installable for both versions.

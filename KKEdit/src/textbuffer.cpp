@@ -40,6 +40,12 @@ TextBuffer::TextBuffer(GtkTextBuffer *buffer)
 	ERRDATA
 }
 
+char* TextBuffer::getLineText(void)
+{
+	this->getLineData();
+	return(gtk_text_buffer_get_text(this->textBuffer,&lineStart,&lineEnd,false));
+}
+
 void TextBuffer::getLineData()
 {
 	ERRDATA

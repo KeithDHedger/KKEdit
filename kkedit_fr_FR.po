@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kkedit 1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-26 20:34+0100\n"
-"PO-Revision-Date: 2016-04-26 20:35-0000\n"
+"POT-Creation-Date: 2016-04-27 12:10+0100\n"
+"PO-Revision-Date: 2016-04-27 12:11-0000\n"
 "Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
@@ -23,11 +23,11 @@ msgstr ""
 msgid "_Yes"
 msgstr "_Oui"
 
-#: KKEdit/src/kkedit-includes.h:76 KKEdit/src/kkedit-includes.h:200
+#: KKEdit/src/kkedit-includes.h:76 KKEdit/src/kkedit-includes.h:201
 msgid "_No"
 msgstr "_Non"
 
-#: KKEdit/src/kkedit-includes.h:77 KKEdit/src/kkedit-includes.h:201
+#: KKEdit/src/kkedit-includes.h:77 KKEdit/src/kkedit-includes.h:202
 msgid "_Cancel"
 msgstr "_Annuler"
 
@@ -219,11 +219,11 @@ msgstr "Montrer le visionneur de documents"
 msgid "Hide Docviewer"
 msgstr "Cacher le visionneur de documents"
 
-#: KKEdit/src/kkedit-includes.h:136 KKEdit/src/kkedit-includes.h:284
+#: KKEdit/src/kkedit-includes.h:136 KKEdit/src/kkedit-includes.h:285
 msgid "Show Line Numbers"
 msgstr "Montrer le numéro des lignes"
 
-#: KKEdit/src/kkedit-includes.h:137 KKEdit/src/kkedit-includes.h:285
+#: KKEdit/src/kkedit-includes.h:137 KKEdit/src/kkedit-includes.h:286
 msgid "Wrap Lines"
 msgstr "Activer le retour à la ligne"
 
@@ -231,11 +231,11 @@ msgstr "Activer le retour à la ligne"
 msgid "Hightlght Current Line"
 msgstr "Surligner la ligne en cours"
 
-#: KKEdit/src/kkedit-includes.h:139 KKEdit/src/kkedit-includes.h:287
+#: KKEdit/src/kkedit-includes.h:139 KKEdit/src/kkedit-includes.h:288
 msgid "No Syntax Highlighting"
 msgstr "Désactiver la coloration syntaxique"
 
-#: KKEdit/src/kkedit-includes.h:140 KKEdit/src/kkedit-includes.h:294
+#: KKEdit/src/kkedit-includes.h:140 KKEdit/src/kkedit-includes.h:295
 msgid "Auto Show Completions"
 msgstr "Montrer automatiquement les complétions"
 
@@ -255,7 +255,7 @@ msgstr "Ouvrir l'en-tête"
 msgid "_Go To Line"
 msgstr "Aller à la _ligne..."
 
-#: KKEdit/src/kkedit-includes.h:147 KKEdit/src/kkedit-includes.h:255
+#: KKEdit/src/kkedit-includes.h:147 KKEdit/src/kkedit-includes.h:256
 msgid "Search For Define"
 msgstr "Chercher une définition"
 
@@ -312,157 +312,161 @@ msgid "_About"
 msgstr "À _propos"
 
 #: KKEdit/src/kkedit-includes.h:172
-msgid "Get Plugins"
+msgid "_Online Help"
+msgstr ""
+
+#: KKEdit/src/kkedit-includes.h:173
+msgid "_Get Plugins"
 msgstr "_Obtenir des greffons"
 
-#: KKEdit/src/kkedit-includes.h:175
+#: KKEdit/src/kkedit-includes.h:176
 msgid "Definition"
 msgstr "Aller à la _définition"
 
-#: KKEdit/src/kkedit-includes.h:176
+#: KKEdit/src/kkedit-includes.h:177
 msgid "Open"
 msgstr "Ouvrir"
 
-#: KKEdit/src/kkedit-includes.h:177
+#: KKEdit/src/kkedit-includes.h:178
 msgid "Close"
 msgstr "Fermer"
 
-#: KKEdit/src/kkedit-includes.h:178
+#: KKEdit/src/kkedit-includes.h:179
 msgid "New"
 msgstr "Nouveau"
 
-#: KKEdit/src/kkedit-includes.h:179
+#: KKEdit/src/kkedit-includes.h:180
 msgid "Save"
 msgstr "Enregistrer"
 
-#: KKEdit/src/kkedit-includes.h:180 KKEdit/src/kkedit-includes.h:244
+#: KKEdit/src/kkedit-includes.h:181 KKEdit/src/kkedit-includes.h:245
 msgid "Undo"
 msgstr "Annuler"
 
-#: KKEdit/src/kkedit-includes.h:181 KKEdit/src/kkedit-includes.h:245
+#: KKEdit/src/kkedit-includes.h:182 KKEdit/src/kkedit-includes.h:246
 msgid "Redo"
 msgstr "Rétablir"
 
-#: KKEdit/src/kkedit-includes.h:182 KKEdit/src/kkedit-includes.h:241
+#: KKEdit/src/kkedit-includes.h:183 KKEdit/src/kkedit-includes.h:242
 msgid "Cut"
 msgstr "Couper"
 
-#: KKEdit/src/kkedit-includes.h:183 KKEdit/src/kkedit-includes.h:242
+#: KKEdit/src/kkedit-includes.h:184 KKEdit/src/kkedit-includes.h:243
 msgid "Copy"
 msgstr "Copier"
 
-#: KKEdit/src/kkedit-includes.h:184 KKEdit/src/kkedit-includes.h:243
+#: KKEdit/src/kkedit-includes.h:185 KKEdit/src/kkedit-includes.h:244
 msgid "Paste"
 msgstr "Coller"
 
-#: KKEdit/src/kkedit-includes.h:185 KKEdit/src/kkedit-includes.h:246
+#: KKEdit/src/kkedit-includes.h:186 KKEdit/src/kkedit-includes.h:247
 msgid "Find"
 msgstr "Trouver"
 
-#: KKEdit/src/kkedit-includes.h:186
+#: KKEdit/src/kkedit-includes.h:187
 msgid "Back"
 msgstr "Précédent"
 
-#: KKEdit/src/kkedit-includes.h:187
+#: KKEdit/src/kkedit-includes.h:188
 msgid "Forward"
 msgstr "Suivant"
 
-#: KKEdit/src/kkedit-includes.h:190
+#: KKEdit/src/kkedit-includes.h:191
 msgid "_Add To Custom Word List"
 msgstr "_Ajouter à la liste des mots personnalisés"
 
-#: KKEdit/src/kkedit-includes.h:191
+#: KKEdit/src/kkedit-includes.h:192
 msgid "C_heck Spellling"
 msgstr "_Vérifier l'orthographe"
 
-#: KKEdit/src/kkedit-includes.h:192
+#: KKEdit/src/kkedit-includes.h:193
 msgid "Copy Folder Path"
 msgstr "Copier le chemin du dossier parent"
 
-#: KKEdit/src/kkedit-includes.h:193
+#: KKEdit/src/kkedit-includes.h:194
 msgid "Copy Filepath"
 msgstr "Copier le chemin du fichier"
 
-#: KKEdit/src/kkedit-includes.h:194
+#: KKEdit/src/kkedit-includes.h:195
 msgid "Copy FileName"
 msgstr "Copier le nom du fichier"
 
-#: KKEdit/src/kkedit-includes.h:195
+#: KKEdit/src/kkedit-includes.h:196
 msgid "Source Highlight"
 msgstr "Coloration syntaxique"
 
-#: KKEdit/src/kkedit-includes.h:198
+#: KKEdit/src/kkedit-includes.h:199
 msgid "Spell Check Document"
 msgstr "Vérifier l'orthographe du document"
 
-#: KKEdit/src/kkedit-includes.h:199
+#: KKEdit/src/kkedit-includes.h:200
 msgid "Refresh"
 msgstr "Rafraîchir"
 
-#: KKEdit/src/kkedit-includes.h:204
+#: KKEdit/src/kkedit-includes.h:205
 msgid "Bookmark"
 msgstr "Signet"
 
-#: KKEdit/src/kkedit-includes.h:205
+#: KKEdit/src/kkedit-includes.h:206
 msgid "Checking for updates ..."
 msgstr "Recherche de mises à jour ..."
 
 # it goes with "from"
-#: KKEdit/src/kkedit-includes.h:206
+#: KKEdit/src/kkedit-includes.h:207
 msgid "KKEdit update available to"
 msgstr "Mises à jour pour KKEdit disponibles de"
 
 # it goes with "KKEdit update available to"
-#: KKEdit/src/kkedit-includes.h:207
+#: KKEdit/src/kkedit-includes.h:208
 msgid "from"
 msgstr "vers"
 
-#: KKEdit/src/kkedit-includes.h:208
+#: KKEdit/src/kkedit-includes.h:209
 msgid "From here"
 msgstr "vers"
 
-#: KKEdit/src/kkedit-includes.h:209
+#: KKEdit/src/kkedit-includes.h:210
 msgid "Plugin updates are available from here"
 msgstr "Des mises à jour pour les greffons sont disponibles ici"
 
-#: KKEdit/src/kkedit-includes.h:210
+#: KKEdit/src/kkedit-includes.h:211
 msgid "Updates Available"
 msgstr "Mises à jour disponibles"
 
-#: KKEdit/src/kkedit-includes.h:211
+#: KKEdit/src/kkedit-includes.h:212
 #, c-format
 msgid "Replaced %i instances of '%s' with '%s'"
 msgstr "%i instances de '%s' remplacées par '%s'"
 
-#: KKEdit/src/kkedit-includes.h:212
+#: KKEdit/src/kkedit-includes.h:213
 #, c-format
 msgid "Save file %s before closing?"
 msgstr "Enregistrer le fichier %s avant de fermer?"
 
-#: KKEdit/src/kkedit-includes.h:213
+#: KKEdit/src/kkedit-includes.h:214
 msgid "Warning unsaved data!"
 msgstr "Attention, données non enregistrées"
 
-#: KKEdit/src/kkedit-includes.h:214
+#: KKEdit/src/kkedit-includes.h:215
 #, c-format
 msgid "Line %i Column %i \t\tSyntax Highlighting %s\t\tFilePath %s"
 msgstr ""
 "Ligne %i Colonne %i \t\tColoration syntaxique %s\t\tChemin du fichier %s"
 
-#: KKEdit/src/kkedit-includes.h:215
+#: KKEdit/src/kkedit-includes.h:216
 msgid "Untitled"
 msgstr "Sans nom"
 
-#: KKEdit/src/kkedit-includes.h:216
+#: KKEdit/src/kkedit-includes.h:217
 #, c-format
 msgid "Can't save file '%s' :("
 msgstr "Impossible d'enregistrer le fichier '%s' :("
 
-#: KKEdit/src/kkedit-includes.h:219
+#: KKEdit/src/kkedit-includes.h:220
 msgid "Define Keyboard Shortcuts"
 msgstr "Définir des raccourcis clavier"
 
-#: KKEdit/src/kkedit-includes.h:220
+#: KKEdit/src/kkedit-includes.h:221
 msgid ""
 "To set a custom shortcut:\n"
 "Click in the appropriate box and press CONTROL(and optionally SHIFT ) plus "
@@ -477,68 +481,68 @@ msgstr ""
 "Cliquez sur 'Appliquer' pour garder les changements ou sur 'Annuler' pour "
 "annuler toute modification."
 
-#: KKEdit/src/kkedit-includes.h:237
+#: KKEdit/src/kkedit-includes.h:238
 msgid "New File"
 msgstr "Nouveau"
 
-#: KKEdit/src/kkedit-includes.h:238
+#: KKEdit/src/kkedit-includes.h:239
 msgid "Open File"
 msgstr "Ouvrir"
 
-#: KKEdit/src/kkedit-includes.h:239
+#: KKEdit/src/kkedit-includes.h:240
 msgid "Save File"
 msgstr "Enregistrer"
 
-#: KKEdit/src/kkedit-includes.h:240
+#: KKEdit/src/kkedit-includes.h:241
 msgid "Open Recent File"
 msgstr "Ouvrir un fichier récent"
 
-#: KKEdit/src/kkedit-includes.h:247
+#: KKEdit/src/kkedit-includes.h:248
 msgid "Go To Definition"
 msgstr "Aller à la définition"
 
-#: KKEdit/src/kkedit-includes.h:248
+#: KKEdit/src/kkedit-includes.h:249
 msgid "Go Back"
 msgstr "Vue précédente"
 
-#: KKEdit/src/kkedit-includes.h:249
+#: KKEdit/src/kkedit-includes.h:250
 msgid "Back To"
 msgstr "Revenir à"
 
-#: KKEdit/src/kkedit-includes.h:250
+#: KKEdit/src/kkedit-includes.h:251
 msgid "Go Forward"
 msgstr "Aller en avant"
 
-#: KKEdit/src/kkedit-includes.h:251
+#: KKEdit/src/kkedit-includes.h:252
 #, fuzzy
 msgid "Forward To"
 msgstr "Suivant"
 
-#: KKEdit/src/kkedit-includes.h:252 KKEdit/src/kkedit-includes.h:353
+#: KKEdit/src/kkedit-includes.h:253 KKEdit/src/kkedit-includes.h:354
 msgid "Go To Line"
 msgstr "Aller à la ligne..."
 
-#: KKEdit/src/kkedit-includes.h:253
+#: KKEdit/src/kkedit-includes.h:254
 msgid "Find API In Gtk Docs"
 msgstr "Trouver l'API dans les documents Gtk"
 
-#: KKEdit/src/kkedit-includes.h:254
+#: KKEdit/src/kkedit-includes.h:255
 msgid "Find API In Qt5 Docs"
 msgstr "Trouver l'API dans la documentation Qt5"
 
-#: KKEdit/src/kkedit-includes.h:256
+#: KKEdit/src/kkedit-includes.h:257
 msgid "Live Search"
 msgstr "Recherche rapide"
 
-#: KKEdit/src/kkedit-includes.h:257
+#: KKEdit/src/kkedit-includes.h:258
 msgid "Separator"
 msgstr "Séparateur"
 
-#: KKEdit/src/kkedit-includes.h:258
+#: KKEdit/src/kkedit-includes.h:259
 msgid "Expander"
 msgstr "Étendre"
 
-#: KKEdit/src/kkedit-includes.h:261
+#: KKEdit/src/kkedit-includes.h:262
 msgid ""
 "PLACEHOLDERS:\n"
 "%t - Currently selected text. Passed to command as $KKEDIT_SELECTION\n"
@@ -565,232 +569,232 @@ msgstr ""
 "%l - Langage pour la coloration syntaxique. Passé à la commande par "
 "$KKEDIT_SOURCE_LANG"
 
-#: KKEdit/src/kkedit-includes.h:262
+#: KKEdit/src/kkedit-includes.h:263
 msgid "Edit External Tools"
 msgstr "Éditer les outils externes"
 
-#: KKEdit/src/kkedit-includes.h:263
+#: KKEdit/src/kkedit-includes.h:264
 msgid "Tool Name:\t"
 msgstr "Nom de l'outil:\t"
 
-#: KKEdit/src/kkedit-includes.h:264
+#: KKEdit/src/kkedit-includes.h:265
 msgid "Command: \t"
 msgstr "Commande:    \t"
 
-#: KKEdit/src/kkedit-includes.h:265
+#: KKEdit/src/kkedit-includes.h:266
 msgid "Shortcut:\t\t"
 msgstr "Raccourci:\t\t"
 
-#: KKEdit/src/kkedit-includes.h:266
+#: KKEdit/src/kkedit-includes.h:267
 msgid "Comment:  \t"
 msgstr "Commentaire: \t"
 
-#: KKEdit/src/kkedit-includes.h:267
+#: KKEdit/src/kkedit-includes.h:268
 msgid "Run Tool In Terminal"
 msgstr "Exécuter dans un terminal"
 
-#: KKEdit/src/kkedit-includes.h:268
+#: KKEdit/src/kkedit-includes.h:269
 msgid "Show Tool In Pop-Up Menu"
 msgstr "Montrer l'outil dans le menu pop-up"
 
-#: KKEdit/src/kkedit-includes.h:269
+#: KKEdit/src/kkedit-includes.h:270
 msgid "Always Show Tool In Pop-Up Menu"
 msgstr "Toujours montrer l'outil dans le menu pop-up"
 
-#: KKEdit/src/kkedit-includes.h:270
+#: KKEdit/src/kkedit-includes.h:271
 msgid "Run Tool Synchronously"
 msgstr "Exécuter de manière synchrone"
 
-#: KKEdit/src/kkedit-includes.h:271
+#: KKEdit/src/kkedit-includes.h:272
 msgid "Show HTML Doc"
 msgstr "Montrer la documentation HTML"
 
-#: KKEdit/src/kkedit-includes.h:272
+#: KKEdit/src/kkedit-includes.h:273
 msgid "Clear Tool Output First"
 msgstr "Effacer d'abord la sortie des outils"
 
-#: KKEdit/src/kkedit-includes.h:273
+#: KKEdit/src/kkedit-includes.h:274
 msgid "Run Tool As Root"
 msgstr "Exécuter en tant qu'administrateur"
 
-#: KKEdit/src/kkedit-includes.h:274
+#: KKEdit/src/kkedit-includes.h:275
 msgid "Use Progress Bar"
 msgstr "Utiliser une barre de progression"
 
-#: KKEdit/src/kkedit-includes.h:275
+#: KKEdit/src/kkedit-includes.h:276
 msgid "Ignore Output"
 msgstr "Ignorer la sortie"
 
-#: KKEdit/src/kkedit-includes.h:276
+#: KKEdit/src/kkedit-includes.h:277
 msgid "Paste Output"
 msgstr "Coller la sortie"
 
-#: KKEdit/src/kkedit-includes.h:277
+#: KKEdit/src/kkedit-includes.h:278
 msgid "Replace All Contents"
 msgstr "Remplacer tous les contenus"
 
-#: KKEdit/src/kkedit-includes.h:278
+#: KKEdit/src/kkedit-includes.h:279
 msgid "View Output"
 msgstr "Afficher la sortie"
 
-#: KKEdit/src/kkedit-includes.h:279
+#: KKEdit/src/kkedit-includes.h:280
 msgid "Delete"
 msgstr "Supprimer"
 
-#: KKEdit/src/kkedit-includes.h:282
+#: KKEdit/src/kkedit-includes.h:283
 msgid "<b>Customize Tool Bar</b>"
 msgstr "<b>Personnaliser la barre d'outils</b>"
 
-#: KKEdit/src/kkedit-includes.h:283
+#: KKEdit/src/kkedit-includes.h:284
 msgid "Auto Indent Lines"
 msgstr "Auto-indentation"
 
-#: KKEdit/src/kkedit-includes.h:286
+#: KKEdit/src/kkedit-includes.h:287
 msgid "Highlight Current Line"
 msgstr "Surligner la ligne en cours"
 
-#: KKEdit/src/kkedit-includes.h:288
+#: KKEdit/src/kkedit-includes.h:289
 msgid "Use Single Instance"
 msgstr "Autoriser une seule instance"
 
-#: KKEdit/src/kkedit-includes.h:289
+#: KKEdit/src/kkedit-includes.h:290
 msgid "Auto Save/Restore Session"
 msgstr "Enregistrer/Restaurer automatiquement la session"
 
-#: KKEdit/src/kkedit-includes.h:290
+#: KKEdit/src/kkedit-includes.h:291
 msgid "Restore Session Bookmarks"
 msgstr "Restaurer la session avec les signets"
 
-#: KKEdit/src/kkedit-includes.h:291
+#: KKEdit/src/kkedit-includes.h:292
 msgid "Don't Open Duplicate File"
 msgstr "Ne pas ouvrir deux fois le même fichier"
 
-#: KKEdit/src/kkedit-includes.h:292
+#: KKEdit/src/kkedit-includes.h:293
 msgid "Don't Warn On File Change"
 msgstr "Ne pas avertir lorsqu'un fichier a été modifié"
 
-#: KKEdit/src/kkedit-includes.h:293
+#: KKEdit/src/kkedit-includes.h:294
 msgid "Read Link Before Opening File"
 msgstr "Suivre les liens avant d'ouvrir un fichier"
 
-#: KKEdit/src/kkedit-includes.h:295
+#: KKEdit/src/kkedit-includes.h:296
 msgid "Auto Search Docs"
 msgstr "Chercher automatiquement dans les documents"
 
-#: KKEdit/src/kkedit-includes.h:296
+#: KKEdit/src/kkedit-includes.h:297
 msgid "General Appearance"
 msgstr "Apparence général"
 
-#: KKEdit/src/kkedit-includes.h:297
+#: KKEdit/src/kkedit-includes.h:298
 msgid "Tab width:"
 msgstr "Largeur de tabulation:"
 
-#: KKEdit/src/kkedit-includes.h:298
+#: KKEdit/src/kkedit-includes.h:299
 msgid "Theme:"
 msgstr "Thème:"
 
-#: KKEdit/src/kkedit-includes.h:299
+#: KKEdit/src/kkedit-includes.h:300
 msgid "Font:"
 msgstr "Police:"
 
-#: KKEdit/src/kkedit-includes.h:300
+#: KKEdit/src/kkedit-includes.h:301
 msgid "Bookmark Highlight Colour:"
 msgstr "Couleur de surlignage:"
 
-#: KKEdit/src/kkedit-includes.h:301
+#: KKEdit/src/kkedit-includes.h:302
 msgid "Completion Minimum Word Size:"
 msgstr "Taille minimale des mots pour la complétion:"
 
-#: KKEdit/src/kkedit-includes.h:302
+#: KKEdit/src/kkedit-includes.h:303
 msgid "Notebook Tab Size:"
 msgstr "Taille des onglets:"
 
-#: KKEdit/src/kkedit-includes.h:303
+#: KKEdit/src/kkedit-includes.h:304
 msgid "Display functions etc in menu by type and alphabetically"
 msgstr ""
 "Afficher les fonctions dans le menu selon leur type et par ordre alphabétique"
 
-#: KKEdit/src/kkedit-includes.h:304
+#: KKEdit/src/kkedit-includes.h:305
 msgid "Display functions etc in menu by type and file position"
 msgstr "Afficher les fonctions dans le menu selon leur type et leur position"
 
-#: KKEdit/src/kkedit-includes.h:305
+#: KKEdit/src/kkedit-includes.h:306
 msgid "Display functions etc in menu by file position"
 msgstr "Afficher les fonctions dans le menu selon leur position"
 
-#: KKEdit/src/kkedit-includes.h:306
+#: KKEdit/src/kkedit-includes.h:307
 msgid "Display functions etc in menu alphabetically"
 msgstr "Afficher les fonctions dans le menu par ordre alphabétique"
 
-#: KKEdit/src/kkedit-includes.h:307
+#: KKEdit/src/kkedit-includes.h:308
 msgid "Display functions etc in menu in categorised format"
 msgstr "Afficher les fonctions dans le menu par catégorie"
 
-#: KKEdit/src/kkedit-includes.h:308
+#: KKEdit/src/kkedit-includes.h:309
 msgid "Customize Keyboard Shortcuts"
 msgstr "Personnaliser les raccourcis clavier"
 
-#: KKEdit/src/kkedit-includes.h:309
+#: KKEdit/src/kkedit-includes.h:310
 msgid "Text Style"
 msgstr "Style du texte"
 
-#: KKEdit/src/kkedit-includes.h:310
+#: KKEdit/src/kkedit-includes.h:311
 msgid "Tag File Search Depth:"
 msgstr "Profondeur de recherche dans les sous-répertoires:"
 
-#: KKEdit/src/kkedit-includes.h:311
+#: KKEdit/src/kkedit-includes.h:312
 msgid "Terminal Command:"
 msgstr "Commande de terminal:"
 
-#: KKEdit/src/kkedit-includes.h:312
+#: KKEdit/src/kkedit-includes.h:313
 msgid "Run As Root Command:"
 msgstr "Commande d’exécution en tant qu'administrateur:"
 
-#: KKEdit/src/kkedit-includes.h:313
+#: KKEdit/src/kkedit-includes.h:314
 msgid "Default Browser:"
 msgstr "Navigateur web par défaut:"
 
-#: KKEdit/src/kkedit-includes.h:314
+#: KKEdit/src/kkedit-includes.h:315
 msgid "Max Find/Replace History:"
 msgstr "Max Rechercher / Remplacer Histoire"
 
-#: KKEdit/src/kkedit-includes.h:315
+#: KKEdit/src/kkedit-includes.h:316
 msgid "Max Characters In Tab:"
 msgstr "Max Caractères dans Tab:"
 
-#: KKEdit/src/kkedit-includes.h:316
+#: KKEdit/src/kkedit-includes.h:317
 msgid "Max Characters In Function Defs:"
 msgstr "Caractères max de la fonction Defs:"
 
-#: KKEdit/src/kkedit-includes.h:317
+#: KKEdit/src/kkedit-includes.h:318
 msgid "Max Characters In Bookmarks:"
 msgstr "Caractères max dans les signets:"
 
-#: KKEdit/src/kkedit-includes.h:318
+#: KKEdit/src/kkedit-includes.h:319
 msgid "Max Back/Forward History:"
 msgstr "Maximum de retours en arrière/avant de l'historique:"
 
-#: KKEdit/src/kkedit-includes.h:319
+#: KKEdit/src/kkedit-includes.h:320
 msgid "Check For Updates"
 msgstr "Rechercher des mises à jour"
 
-#: KKEdit/src/kkedit-includes.h:320
+#: KKEdit/src/kkedit-includes.h:321
 msgid "Use Global Plugins Menu( Requires Restart )"
 msgstr "Utilisez le menu général des greffons ( Nécessite un redémarrage )"
 
-#: KKEdit/src/kkedit-includes.h:321
+#: KKEdit/src/kkedit-includes.h:322
 msgid "Administration"
 msgstr "Administration"
 
-#: KKEdit/src/kkedit-includes.h:322
+#: KKEdit/src/kkedit-includes.h:323
 msgid "<b>Be Kind To Poor Programmers</b>"
 msgstr "<b>Soyez gentil envers les programmeurs pauvres</b>"
 
-#: KKEdit/src/kkedit-includes.h:323
+#: KKEdit/src/kkedit-includes.h:324
 msgid "I have donated"
 msgstr "J'ai déjà fait un don"
 
-#: KKEdit/src/kkedit-includes.h:324
+#: KKEdit/src/kkedit-includes.h:325
 msgid ""
 "I have really donated some some money to the author.\n"
 "My conscience is clear and my Karma is squeaky clean :)"
@@ -798,84 +802,84 @@ msgstr ""
 "J'ai vraiment déjà fait un don à l'auteur.\n"
 "Ma conscience est tranquille et mon Karma est irréprochable :)"
 
-#: KKEdit/src/kkedit-includes.h:327
+#: KKEdit/src/kkedit-includes.h:328
 msgid "Find/Replace"
 msgstr "Trouver/Remplacer"
 
-#: KKEdit/src/kkedit-includes.h:328
+#: KKEdit/src/kkedit-includes.h:329
 msgid "Find Text"
 msgstr "Trouver"
 
-#: KKEdit/src/kkedit-includes.h:329
+#: KKEdit/src/kkedit-includes.h:330
 msgid "Replace With"
 msgstr "Remplacer par"
 
-#: KKEdit/src/kkedit-includes.h:330
+#: KKEdit/src/kkedit-includes.h:331
 msgid "Case insensitive"
 msgstr "Casse insensible"
 
-#: KKEdit/src/kkedit-includes.h:331
+#: KKEdit/src/kkedit-includes.h:332
 msgid "Use Regex"
 msgstr "Expression régulière"
 
-#: KKEdit/src/kkedit-includes.h:332
+#: KKEdit/src/kkedit-includes.h:333
 msgid "Wrap"
 msgstr "Recherche circulaire"
 
-#: KKEdit/src/kkedit-includes.h:333
+#: KKEdit/src/kkedit-includes.h:334
 msgid "All Files"
 msgstr "Tous les fichiers"
 
-#: KKEdit/src/kkedit-includes.h:334
+#: KKEdit/src/kkedit-includes.h:335
 msgid "Highlight All"
 msgstr "Tout surligner"
 
-#: KKEdit/src/kkedit-includes.h:335
+#: KKEdit/src/kkedit-includes.h:336
 msgid "Replace All"
 msgstr "Tout remplacer"
 
-#: KKEdit/src/kkedit-includes.h:336
+#: KKEdit/src/kkedit-includes.h:337
 msgid "_Replace"
 msgstr "_Remplacer"
 
-#: KKEdit/src/kkedit-includes.h:337
+#: KKEdit/src/kkedit-includes.h:338
 msgid "_Replace All"
 msgstr "Tout re_mplacer"
 
-#: KKEdit/src/kkedit-includes.h:340
+#: KKEdit/src/kkedit-includes.h:341
 msgid "Spell check word"
 msgstr "Vérifier l'orthographe du mot"
 
-#: KKEdit/src/kkedit-includes.h:341
+#: KKEdit/src/kkedit-includes.h:342
 #, c-format
 msgid "Change <i><b>%s</b></i> to: "
 msgstr "Changer <i><b>%s</b></i> en:"
 
-#: KKEdit/src/kkedit-includes.h:342
+#: KKEdit/src/kkedit-includes.h:343
 msgid "Ignore"
 msgstr "Ignorer"
 
-#: KKEdit/src/kkedit-includes.h:343
+#: KKEdit/src/kkedit-includes.h:344
 msgid "_Add"
 msgstr "_Ajouter"
 
-#: KKEdit/src/kkedit-includes.h:346
+#: KKEdit/src/kkedit-includes.h:347
 msgid "Enter Function Name"
 msgstr "Donnez le nom d'une fonction"
 
-#: KKEdit/src/kkedit-includes.h:347
+#: KKEdit/src/kkedit-includes.h:348
 msgid "Find Function"
 msgstr "Trouver une fonction"
 
-#: KKEdit/src/kkedit-includes.h:348
+#: KKEdit/src/kkedit-includes.h:349
 msgid "For_ward"
 msgstr "_Suivant"
 
-#: KKEdit/src/kkedit-includes.h:349
+#: KKEdit/src/kkedit-includes.h:350
 msgid "Please donate"
 msgstr "Faites un don, s'il vous plaît"
 
-#: KKEdit/src/kkedit-includes.h:350
+#: KKEdit/src/kkedit-includes.h:351
 msgid ""
 "If you have a PayPal account you can donate any amount you like by logging "
 "into yor account and click the 'Send Money' tab, enter my email address"
@@ -884,35 +888,35 @@ msgstr ""
 "quel montant en vous connectant à votre compte et en allant dans l'onglet "
 "'Envoi d'argent'. Entrez mon adresse courriel"
 
-#: KKEdit/src/kkedit-includes.h:351
+#: KKEdit/src/kkedit-includes.h:352
 msgid "and then send it."
 msgstr " et envoyez."
 
-#: KKEdit/src/kkedit-includes.h:352
+#: KKEdit/src/kkedit-includes.h:353
 msgid "Thank you for helping to support Free software."
 msgstr "Merci d'aider à soutenir le logiciel libre."
 
-#: KKEdit/src/kkedit-includes.h:354
+#: KKEdit/src/kkedit-includes.h:355
 msgid "Enter Line Number"
 msgstr "Donnez le numéro d'une ligne"
 
-#: KKEdit/src/kkedit-includes.h:355
+#: KKEdit/src/kkedit-includes.h:356
 msgid "Building Documentaion ..."
 msgstr "Documentation en construction ..."
 
-#: KKEdit/src/kkedit-includes.h:356
+#: KKEdit/src/kkedit-includes.h:357
 msgid "Do you want to replace in ALL open files?"
 msgstr "Voulez-vous remplacer dans TOUS les fichiers ouverts ?"
 
-#: KKEdit/src/kkedit-includes.h:357
+#: KKEdit/src/kkedit-includes.h:358
 msgid "What Do You Want To Do?"
 msgstr "Que voulez-vous faire?"
 
-#: KKEdit/src/kkedit-includes.h:358
+#: KKEdit/src/kkedit-includes.h:359
 msgid "Are you sure you want to delete"
 msgstr "Êtes-vous sûr de vouloir supprimer"
 
-#: KKEdit/src/kkedit-includes.h:359
+#: KKEdit/src/kkedit-includes.h:360
 msgid ""
 "\n"
 "More by the same author\n"
@@ -920,23 +924,23 @@ msgstr ""
 "\n"
 "Plus du même auteur\n"
 
-#: KKEdit/src/kkedit-includes.h:360
+#: KKEdit/src/kkedit-includes.h:361
 msgid "KKEdit Code Text Editor"
 msgstr "Éditeur de code source KKEdit"
 
-#: KKEdit/src/kkedit-includes.h:361
+#: KKEdit/src/kkedit-includes.h:362
 msgid "French Translation"
 msgstr "Traduction française"
 
-#: KKEdit/src/kkedit-includes.h:362
-msgid "Application Icon's"
+#: KKEdit/src/kkedit-includes.h:363
+msgid "GTK3 Application Icon"
 msgstr ""
 
-#: KKEdit/src/kkedit-includes.h:363
+#: KKEdit/src/kkedit-includes.h:364
 msgid "Restoring Session ..."
 msgstr "Restaurer la session ..."
 
-#: KKEdit/src/kkedit-includes.h:364
+#: KKEdit/src/kkedit-includes.h:365
 #, c-format
 msgid ""
 "File %s Has Changed on disk\n"
@@ -945,61 +949,61 @@ msgstr ""
 "Le fichier %s a été modifié\n"
 "Voulez-vous le recharger?"
 
-#: KKEdit/src/kkedit-includes.h:365
+#: KKEdit/src/kkedit-includes.h:366
 msgid "Warning file changed!"
 msgstr "Attention le fichier a été modifié!"
 
-#: KKEdit/src/kkedit-includes.h:366
+#: KKEdit/src/kkedit-includes.h:367
 #, c-format
 msgid "File '%s' doesn't exist :("
 msgstr "Le fichier '%s' n'existe pas :("
 
-#: KKEdit/src/kkedit-includes.h:367
+#: KKEdit/src/kkedit-includes.h:368
 #, c-format
 msgid "Can't open file '%s' :("
 msgstr "Impossible d'ouvrir le fichier '%s' :("
 
-#: KKEdit/src/kkedit-includes.h:368
+#: KKEdit/src/kkedit-includes.h:369
 msgid "Contains non text data,continue loading?\n"
 msgstr "Contient des données non textuelles, continuer le chargement?\n"
 
-#: KKEdit/src/kkedit-includes.h:371
+#: KKEdit/src/kkedit-includes.h:372
 msgid "Doc Viewer"
 msgstr "Visionneur de documents"
 
-#: KKEdit/src/kkedit-includes.h:372
+#: KKEdit/src/kkedit-includes.h:373
 msgid "_Home"
 msgstr "_Accueil"
 
-#: KKEdit/src/kkedit-includes.h:373
+#: KKEdit/src/kkedit-includes.h:374
 msgid "_Down"
 msgstr "_Descendre"
 
-#: KKEdit/src/kkedit-includes.h:374
+#: KKEdit/src/kkedit-includes.h:375
 msgid "_Up"
 msgstr "En haut"
 
-#: KKEdit/src/kkedit-includes.h:375
+#: KKEdit/src/kkedit-includes.h:376
 msgid "Gtk Docs"
 msgstr "Documents Gtk"
 
-#: KKEdit/src/kkedit-includes.h:376
+#: KKEdit/src/kkedit-includes.h:377
 msgid "Doxygen Docs"
 msgstr "Documents Doxygen"
 
-#: KKEdit/src/kkedit-includes.h:377
+#: KKEdit/src/kkedit-includes.h:378
 msgid "Qt5 Docs"
 msgstr "Documentation Qt5"
 
-#: KKEdit/src/kkedit-includes.h:378
+#: KKEdit/src/kkedit-includes.h:379
 msgid "KKEdit Help"
 msgstr "_Aide"
 
-#: KKEdit/src/kkedit-includes.h:379
+#: KKEdit/src/kkedit-includes.h:380
 msgid "Searching Google..."
 msgstr "Recherche sur Google en cours ..."
 
-#: KKEdit/src/kkedit-includes.h:382
+#: KKEdit/src/kkedit-includes.h:383
 #, c-format
 msgid ""
 "Plugin '%s' cannot be unloaded yet.\n"
@@ -1008,23 +1012,23 @@ msgstr ""
 "Le greffon '%s' ne peut pas être décharger maintenant.\n"
 "Relancer KKEdit pour ce faire."
 
-#: KKEdit/src/kkedit-includes.h:383
+#: KKEdit/src/kkedit-includes.h:384
 msgid "Enable"
 msgstr "Activer"
 
-#: KKEdit/src/kkedit-includes.h:384
+#: KKEdit/src/kkedit-includes.h:385
 msgid "Plug In"
 msgstr "Greffon"
 
-#: KKEdit/src/kkedit-includes.h:387
+#: KKEdit/src/kkedit-includes.h:388
 msgid "Functions"
 msgstr "Fonctions"
 
-#: KKEdit/src/kkedit-includes.h:388
+#: KKEdit/src/kkedit-includes.h:389
 msgid "Variables"
 msgstr "Variables"
 
-#: KKEdit/src/kkedit-includes.h:389
+#: KKEdit/src/kkedit-includes.h:390
 msgid "Custom Words"
 msgstr "Mots personnalisés"
 

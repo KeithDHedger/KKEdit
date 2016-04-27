@@ -23,6 +23,7 @@ HistoryClass::HistoryClass(GtkNotebook *nb,unsigned maxhist)
 			this->savedPages[j].filePath=NULL;
 			this->savedPages[j].lineNumber=0;
 			this->savedPages[j].tabName=NULL;
+			this->savedPages[j].menuLabel=NULL;
 		}
 	ERRDATA
 }
@@ -98,7 +99,12 @@ void HistoryClass::saveLastPosAndStop(void)
 {
 	this->saveLastPos();
 	for(unsigned j=this->saveCnt;j<this->maxHist;j++)
-		this->savedPages[j].pageID=0;
+		{
+			this->savedPages[j].pageID=0;
+			debugFree(&(this->savedPages[j].menuLabel));
+			debugFree(&(this->savedPages[j].tabName));
+			debugFree(&(this->savedPages[j].filePath));
+		}
 	this->redoMenus();
 }
 
@@ -143,14 +149,13 @@ void HistoryClass::redoMenus(void)
 
 	for(unsigned j=0;j<this->saveCnt;j++)
 		{
-			sinkReturn=asprintf(&label,"%s - %i",this->savedPages[j].tabName,this->savedPages[j].lineNumber);
+			sinkReturn=asprintf(&label,"%i:%s - %s",this->savedPages[j].lineNumber,this->savedPages[j].tabName,this->savedPages[j].menuLabel);
 			menu=gtk_menu_item_new_with_label(label);
 			debugFree(&label);
 			gtk_menu_shell_append(GTK_MENU_SHELL(this->historyBackMenu),menu);
 			g_signal_connect(G_OBJECT(menu),"activate",G_CALLBACK(menuJumpBack),(void*)(long)(j));
 		}
 	gtk_widget_show_all(this->historyBackMenu);
-
 
 //forward menu
 	childs=gtk_container_get_children ((GtkContainer*)this->historyForwardMenu);
@@ -163,7 +168,7 @@ void HistoryClass::redoMenus(void)
 	cntup=this->saveCnt+1;
 	while(this->savedPages[cntup].pageID!=0)
 		{
-			sinkReturn=asprintf(&label,"%s - %i",this->savedPages[cntup].tabName,this->savedPages[cntup].lineNumber);
+			sinkReturn=asprintf(&label,"%i:%s - %s",this->savedPages[cntup].lineNumber,this->savedPages[cntup].tabName,this->savedPages[cntup].menuLabel);
 			menu=gtk_menu_item_new_with_label(label);
 			debugFree(&label);
 			gtk_menu_shell_append(GTK_MENU_SHELL(this->historyForwardMenu),menu);
@@ -178,6 +183,8 @@ void HistoryClass::saveLastPos(void)
 	pageStruct	*page;
 	GtkWidget	*child;
 	TextBuffer	*buf;
+	char		*linetext;
+
 	child=gtk_notebook_get_nth_page(mainNotebook,gtk_notebook_get_current_page(mainNotebook));
 	if(child==NULL)
 		return;
@@ -199,15 +206,24 @@ void HistoryClass::saveLastPos(void)
 
 	this->savedPages[this->saveCnt].pageID=page->pageID;
 	this->savedPages[this->saveCnt].lineNumber=buf->lineNum;
+	debugFree(&(this->savedPages[this->saveCnt].menuLabel));
+	debugFree(&(this->savedPages[this->saveCnt].tabName));
+	debugFree(&(this->savedPages[this->saveCnt].filePath));
+
 	if(this->savedPages[this->saveCnt].filePath!=NULL)
 		{
-			debugFree(&(this->savedPages[this->saveCnt].filePath));
 			if(page->filePath!=NULL)
 				sinkReturn=asprintf(&this->savedPages[this->saveCnt].filePath,"%s",page->filePath);
 		}
 	if(page->fileName!=NULL)
 		sinkReturn=asprintf(&this->savedPages[this->saveCnt].tabName,"%s",page->fileName);
 
+	linetext=buf->getLineText();
+	linetext[strlen(linetext)-1]=0;
+	g_strchug(linetext);
+	g_strchomp(linetext);
+	this->savedPages[this->saveCnt].menuLabel=truncateWithElipses(linetext,32);
+	debugFree(&linetext);
 	this->goForward();
 	this->redoMenus();
 	this->canReturn=true;
@@ -218,6 +234,3 @@ bool HistoryClass::canGoBack(void)
 {
 	ERRDATA return(this->canReturn);
 }
-
-
-

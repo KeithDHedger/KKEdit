@@ -489,7 +489,7 @@ args			tool_vars[]=
 char *truncateWithElipses(char *str,unsigned int maxlen)
 {
 	ERRDATA
-	char	*retstr;
+	char	*retstr=NULL;
 	char	*front,*back;
 	int		sides;
 

@@ -55,6 +55,8 @@ class TextBuffer
 		void scroll2Iter(GtkTextView *view,GtkTextIter iter);
 		void scroll2OnScreen(GtkTextView *view,bool doupdate);
 		void scroll2CentreScreen(GtkTextView *view,bool doupdate);
+
+		char *getLineText(void);
 	private:
 };
 
