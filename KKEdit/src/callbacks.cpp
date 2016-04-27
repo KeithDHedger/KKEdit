@@ -1602,7 +1602,7 @@ VISIBLE void doAbout(GtkWidget *widget,gpointer data)
 	const char	*aboutboxstring=DIALOG_ABOUT_KKEDIT_LABEL;
 	char		*licence;
 	char		*translators;
-	const char	*artists[]={"Application Icon's - David Reimer",NULL};
+	const char	*artists[]={DIALOG_ABOUT_ARTISTS_LABEL,"David Reimer","http://github.com/dajare",NULL};
 
 	sinkReturn=asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",DIALOG_ABOUT_FRENCH_LABEL);
 	g_file_get_contents(DATADIR"/docs/gpl-3.0.txt",&licence,NULL,NULL);
@@ -2155,10 +2155,9 @@ void menuJumpBack(GtkWidget *widget,gpointer data)
 	TextBuffer	*buf;
 	pageStruct	*page=NULL;
 	pageStruct	*checkpage=NULL;
-	int			savecnt=(int)((long)data);
-	GtkWidget	*widg=NULL;
-	historyData	*hist=globalHistory->getHistory(savecnt);
 	unsigned	pageid;
+	int			savecnt=(int)((long)data);
+	historyData	*hist=globalHistory->getHistory(savecnt);
 
 	pageid=hist->pageID;
 	page=getPageStructByID(pageid);
@@ -2169,46 +2168,18 @@ void menuJumpBack(GtkWidget *widget,gpointer data)
 					checkpage=getPageStructPtr(loop);
 					if(checkpage==page)
 						{
+							globalHistory->saveLastPos();
 							buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 							gtk_notebook_set_current_page(mainNotebook,loop);
 							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&buf->cursorPos);
 							buf->scroll2Line((GtkTextView*)page->view,hist->lineNumber-1,true);
-							
-							//gtk_container_foreach((GtkContainer*)globalHistory->getHistMenu(),menuClear,NULL);
-							for(unsigned j=savecnt+1;j<maxJumpHistory;j++)
-								{
-									char	*label;
-									hist=globalHistory->getHistory(j);
-									sinkReturn=asprintf(&label,"%s - %i",hist->tabName,hist->lineNumber);
-									GList *childs=gtk_container_get_children ((GtkContainer*)globalHistory->getHistMenu());
-									for(int j=0;j<g_list_length (childs);j++)
-										{
-											GtkMenuItem *data=(GtkMenuItem *)g_list_nth_data (childs,j);
-											if(strcmp(gtk_menu_item_get_label ((GtkMenuItem *)data),label)==0)
-												{
-													//gtk_container_remove ((GtkContainer*)globalHistory->getHistMenu(),(GtkWidget *)data);
-													printf("--->%s<<<\n",gtk_menu_item_get_label((GtkMenuItem *)data));
-													gtk_widget_destroy((GtkWidget *)data);
-													hist->pageID=0;
-													hist->lineNumber=0;
-													break;
-												}
-										}
-									//widg=findMenu(globalHistory->getHistMenu(),label);
-//									if(widg!=NULL)
-//										printf("%s\n",label);
-									free(label);
-								}
-							gtk_widget_show_all(globalHistory->getHistMenu());
+
 							ERRDATA delete buf;
-							globalHistory->setSaveCnt(savecnt);
+							globalHistory->setSaveCnt((unsigned)((long)data));
+							globalHistory->redoMenus();
 							ERRDATA return;
 						}
-			}
-//
-//printf("here....%i\n",(int)(long)data);
+				}
 		}
-
-printf("here....%i\n",(int)(long)data);
 }
 

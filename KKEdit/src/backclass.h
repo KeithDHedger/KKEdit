@@ -35,8 +35,11 @@ class HistoryClass
 		void		setSaveCnt(int num);
 		unsigned	getMaxHist(void);
 		historyData	*getHistory(int num);
-		void		setHistMenu(GtkWidget *menu);
-		GtkWidget	*getHistMenu(void);
+		void		setHistBackMenu(GtkWidget *menu);
+		GtkWidget	*getHistBackMenu(void);
+		void		setHistForwardMenu(GtkWidget *menu);
+		GtkWidget	*getHistForwardMenu(void);
+		void		redoMenus(void);
 
 	private:
 		unsigned	maxHist;
@@ -44,9 +47,8 @@ class HistoryClass
 		unsigned	saveCnt;		
 		bool		canReturn;;
 		GtkNotebook	*notebook;
-		GtkWidget	*historyMenu;
-		void		appendLocation(void);
-		//static void		menuJumpBack(GtkWidget *widget,gpointer data);
+		GtkWidget	*historyBackMenu;
+		GtkWidget	*historyForwardMenu;
 };
 
 #endif

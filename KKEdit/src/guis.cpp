@@ -222,8 +222,6 @@ void setUpToolBar(void)
 //go back
 					case 'B':
 //					{
-						//backButton=createNewToolItem(GTK_STOCK_GO_BACK,BACK_TOOLBAR_LABEL);
-						//backButton=gtk_menu_tool_button_new_from_stock(GTK_STOCK_GO_BACK);
 #ifdef _USEGTK3_
 						image=gtk_image_new_from_icon_name(GTK_STOCK_GO_BACK,GTK_ICON_SIZE_LARGE_TOOLBAR);
 						backButton=gtk_menu_tool_button_new(image,BACK_TOOLBAR_LABEL);
@@ -234,46 +232,30 @@ void setUpToolBar(void)
 						gtk_toolbar_insert(toolBar,backButton,-1);
 						g_signal_connect(G_OBJECT(backButton),"clicked",G_CALLBACK(navigateHistory),(void*)NAVLAST);
 						gtk_widget_set_tooltip_text((GtkWidget*)backButton,BACK_TT_LABEL);
-
 //back history
 						menu=gtk_menu_new();
 						gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(backButton),menu);
 						gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(backButton),BACK_MENU_TT_LABEL);
-						globalHistory->setHistMenu(menu);
-//						tmenu=gtk_menu_item_new_with_label("test menu1");
-//						gtk_menu_shell_append(GTK_MENU_SHELL(globalHistory->getHistMenu()),tmenu);
-//						tmenu=gtk_menu_item_new_with_label("test menu3");
-//						gtk_menu_shell_append(GTK_MENU_SHELL(globalHistory->getHistMenu()),tmenu);
-//						tmenu=gtk_menu_item_new_with_label("wacko jacko");
-//						gtk_menu_shell_append(GTK_MENU_SHELL(globalHistory->getHistMenu()),tmenu);
-//						tmenu=gtk_menu_item_new_with_label("test menu2");
-//						gtk_menu_shell_append(GTK_MENU_SHELL(globalHistory->getHistMenu()),tmenu);
-//
-//						gtk_widget_show_all(globalHistory->getHistMenu());
-////GtkContainer						
-//GList *childs=gtk_container_get_children ((GtkContainer*)globalHistory->getHistMenu());
-//for(int j=0;j<6;j++)
-//{
-//	GtkMenuItem *data=(GtkMenuItem *)g_list_nth_data (childs,j);
-//	if(strcmp(gtk_menu_item_get_label ((GtkMenuItem *)data),"wacko jacko")==0)
-//		{
-//	printf("--->%s<<<\n",gtk_menu_item_get_label((GtkMenuItem *)data));
-//			gtk_container_remove ((GtkContainer*)globalHistory->getHistMenu(),(GtkWidget *)data);
-//			//gtk_widget_destroy((GtkWidget *)data);
-//			gtk_widget_show_all(globalHistory->getHistMenu());
-//			break;
-//		}
-//	
-//}
-//
-//}						
+
+						globalHistory->setHistBackMenu(menu);		
 						break;
 //go forward
 					case 'W':
-						forwardButton=createNewToolItem(GTK_STOCK_GO_FORWARD,FORWARD_TOOLBAR_LABEL);
+#ifdef _USEGTK3_
+						image=gtk_image_new_from_icon_name(GTK_STOCK_GO_FORWARD,GTK_ICON_SIZE_LARGE_TOOLBAR);
+						forwardButton=gtk_menu_tool_button_new(image,FORWARD_TOOLBAR_LABEL);
+#else
+						forwardButton=gtk_menu_tool_button_new_from_stock(GTK_STOCK_GO_FORWARD);
+#endif
 						gtk_toolbar_insert(toolBar,forwardButton,-1);
 						g_signal_connect(G_OBJECT(forwardButton),"clicked",G_CALLBACK(navigateHistory),(void*)NAVNEXT);
 						gtk_widget_set_tooltip_text((GtkWidget*)forwardButton,FORWARD_TT_LABEL);
+//foward history
+						menu=gtk_menu_new();
+						gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(forwardButton),menu);
+						gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(forwardButton),FORWARD_MENU_TT_LABEL);
+
+						globalHistory->setHistForwardMenu(menu);		
 						break;
 
 //jump to line
@@ -565,7 +547,7 @@ void buildTools(void)
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
 
-					if(((toolStruct*)ptr->data)->keyCode!=GDK_KEY_VoidSymbol)
+					if( (((toolStruct*)ptr->data)->keyCode!=GDK_KEY_VoidSymbol) && (((toolStruct*)ptr->data)->keyCode!=0) )
 						{
 							keyflags=0;
 							if(gdk_keyval_is_upper(((toolStruct*)ptr->data)->keyCode))
@@ -594,7 +576,7 @@ void buildTools(void)
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
 
-					if(((toolStruct*)ptr->data)->keyCode!=GDK_KEY_VoidSymbol)
+					if( (((toolStruct*)ptr->data)->keyCode!=GDK_KEY_VoidSymbol) && (((toolStruct*)ptr->data)->keyCode!=0) )
 						{
 							keyflags=0;
 							if(gdk_keyval_is_upper(((toolStruct*)ptr->data)->keyCode))

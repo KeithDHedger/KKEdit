@@ -36,8 +36,8 @@ all:
 clean: distclean
 
 distclean:
-	rm lib${PLUGNAME}.so||true
-	rm ${PLUGNAME}.o||true
+	rm -f lib${PLUGNAME}.so||true
+	rm -f ${PLUGNAME}.o||true
 
 install:
 	gcc ${EXTRAMAKEFLAGS} -fPIC -Wall -g -c ${PLUGNAME}.cpp `pkg-config --cflags --libs ${PLATFORM}+-${GTKVERSION}.0 gmodule-2.0 glib-2.0 gtksourceview-${GTKVERSION}.0` -DLOCALEDIR=\"${LOCALEFOLDER}\" $(DEVMODE) $(USEGTK3) -DGTK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE -o ${PLUGNAME}.o

@@ -1210,12 +1210,10 @@ void rebuildBookMarkMenu(void)
 VISIBLE void navigateHistory(GtkWidget *widget,gpointer data)
 {
 	unsigned	tcnt=globalHistory->getSaveCnt();
-			if(tcnt==0)
-				return;
+
 	if((long)data==NAVLAST)
 		{
 			globalHistory->saveLastPos();
-//TODO//
 			if(tcnt<globalHistory->getMaxHist())
 				globalHistory->goBack();
 			globalHistory->goBack();
@@ -1223,12 +1221,13 @@ VISIBLE void navigateHistory(GtkWidget *widget,gpointer data)
 		}
 	else
 		{
-			if(globalHistory->getHistory(tcnt)->pageID==0)
+			if(globalHistory->getHistory(tcnt+1)->pageID==0)
 				return;
 			
 			globalHistory->goForward();
 			globalHistory->goToPos();
 		}
+	globalHistory->redoMenus();
 }
 
 void showBarberPole(const char *title)
