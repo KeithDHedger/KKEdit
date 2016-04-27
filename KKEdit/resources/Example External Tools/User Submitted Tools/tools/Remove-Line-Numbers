@@ -1,6 +1,0 @@
-name	Remove Line Numbers
-command	../scripts/RemoveLineNumbers
-flags	1
-interm	0
-inpopup	1
-alwayspopup	0
