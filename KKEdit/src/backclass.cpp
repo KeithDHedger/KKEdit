@@ -17,7 +17,6 @@ HistoryClass::HistoryClass(GtkNotebook *nb,unsigned maxhist)
 	this->forwardOK=false;
 	this->saveCnt=0;
 	this->maxHist=maxhist;
-	this->maxHist=4;
 	this->savedPages=new historyData[maxhist+4];
 	for(unsigned j=0;j<(maxhist+4);j++)
 		{
