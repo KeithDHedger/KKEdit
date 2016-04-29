@@ -173,15 +173,15 @@ void HistoryClass::redoMenus(void)
 	unsigned	cntup;
 
 //back menu
-	childs=gtk_container_get_children ((GtkContainer*)this->historyBackMenu);
-	for(unsigned j=0;j<g_list_length(childs);j++)
-		{
-			widgdata=(GtkWidget*)g_list_nth_data(childs,j);
-			gtk_widget_destroy(widgdata);
-		}
-
 	if(this->historyBackMenu!=NULL)
 		{
+			childs=gtk_container_get_children ((GtkContainer*)this->historyBackMenu);
+			for(unsigned j=0;j<g_list_length(childs);j++)
+				{
+					widgdata=(GtkWidget*)g_list_nth_data(childs,j);
+					gtk_widget_destroy(widgdata);
+				}
+
 			for(unsigned j=0;j<this->saveCnt;j++)
 				{
 					sinkReturn=asprintf(&label,"%i:%s - %s",this->savedPages[j].lineNumber,this->savedPages[j].tabName,this->savedPages[j].menuLabel);
@@ -194,15 +194,15 @@ void HistoryClass::redoMenus(void)
 		}
 
 //forward menu
-	childs=gtk_container_get_children ((GtkContainer*)this->historyForwardMenu);
-	for(unsigned j=0;j<g_list_length(childs);j++)
-		{
-			widgdata=(GtkWidget*)g_list_nth_data(childs,j);
-			gtk_widget_destroy(widgdata);
-		}
-
 	if(this->historyForwardMenu!=NULL)
 		{
+			childs=gtk_container_get_children ((GtkContainer*)this->historyForwardMenu);
+			for(unsigned j=0;j<g_list_length(childs);j++)
+				{
+					widgdata=(GtkWidget*)g_list_nth_data(childs,j);
+					gtk_widget_destroy(widgdata);
+				}
+
 			cntup=this->saveCnt+1;
 			while(this->savedPages[cntup].pageID!=0)
 				{
@@ -226,8 +226,10 @@ void HistoryClass::redoMenus(void)
 	else
 		this->forwardOK=true;
 
-	gtk_widget_set_sensitive((GtkWidget*)backButton,this->backOK);
-	gtk_widget_set_sensitive((GtkWidget*)forwardButton,this->forwardOK);
+	if(backButton!=NULL)
+		gtk_widget_set_sensitive((GtkWidget*)backButton,this->backOK);
+	if(forwardButton!=NULL)
+		gtk_widget_set_sensitive((GtkWidget*)forwardButton,this->forwardOK);
 	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,this->backOK);
 	gtk_widget_set_sensitive((GtkWidget*)goForwardMenu,this->forwardOK);
 }
