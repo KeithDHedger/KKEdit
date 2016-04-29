@@ -27,6 +27,7 @@ class HistoryClass
 		~HistoryClass();
 
 		bool		canGoBack(void);
+		bool		canGoForward(void);
 		void		goBack(void);
 		void		goForward(void);
 		void		goToPos(void);
@@ -46,10 +47,13 @@ class HistoryClass
 		unsigned	maxHist;
 		historyData	*savedPages;
 		unsigned	saveCnt;		
-		bool		canReturn;;
+		bool		backOK;
+		bool		forwardOK;
 		GtkNotebook	*notebook;
 		GtkWidget	*historyBackMenu;
 		GtkWidget	*historyForwardMenu;
+
+		void		copyPage(int topage,int frompage);
 };
 
 #endif

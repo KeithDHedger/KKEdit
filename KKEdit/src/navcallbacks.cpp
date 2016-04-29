@@ -52,8 +52,7 @@ void goToDefine(functionData *fdata)
 			buf->scroll2Line((GtkTextView*)page->view,fdata->line-1);
 			ERRDATA delete buf;
 		}
-//	globalHistory->saveLastPos();
-	ERRDATA
+	globalHistory->redoMenus();
 }
 
 VISIBLE void goToDefinition(GtkWidget *widget,gpointer data)
@@ -165,6 +164,7 @@ void gotoLineSavePos(GtkWidget *widget,gpointer data)
 			ERRDATA delete buf;
 		}
 	ERRDATA
+	globalHistory->redoMenus();
 }
 
 void gotoLineNoSavePos(GtkWidget *widget,gpointer data)
@@ -282,10 +282,12 @@ void jumpToMark(GtkWidget *widget,gpointer data)
 					gtk_notebook_set_current_page(mainNotebook,loop);
 					gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&buf->cursorPos);
 					ERRDATA delete buf;
+					globalHistory->redoMenus();
 					ERRDATA return;
 				}
 		}
 	ERRDATA delete buf;
+	globalHistory->redoMenus();
 }
 
 #ifdef _BUILDDOCVIEWER_

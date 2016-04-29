@@ -1,5 +1,5 @@
 0.3.2
-Back history now shows line:tabname - truncated line, in menu.
+Back history now shows line:tabname - truncated line ( length of line is same as func def length ), in menu.
 Added 'Online Help' option.
 Added Back/Forward menus to toolbar buttons.
 New icons for gtk3 version ( thanks to David Reimer for that ).

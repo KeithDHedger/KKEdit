@@ -1389,6 +1389,7 @@ void clearToolButtons(void)
 	findButton=NULL;
 	gotoDefButton=NULL;
 	backButton=NULL;
+	forwardButton=NULL;
 	gotoLineButton=NULL;
 	findApiButton=NULL;
 	findFuncDefButton=NULL;
@@ -2168,6 +2169,7 @@ void menuJumpBack(GtkWidget *widget,gpointer data)
 	unsigned	pageid;
 	int			savecnt=(int)((long)data);
 	historyData	*hist=globalHistory->getHistory(savecnt);
+	unsigned	line=hist->lineNumber;
 
 	pageid=hist->pageID;
 	page=getPageStructByID(pageid);
@@ -2176,13 +2178,13 @@ void menuJumpBack(GtkWidget *widget,gpointer data)
 			for(int loop=0;loop<gtk_notebook_get_n_pages(mainNotebook);loop++)
 				{
 					checkpage=getPageStructPtr(loop);
-					if(checkpage==page)
+					if(checkpage->pageID==pageid)
 						{
 							globalHistory->saveLastPos();
 							buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 							gtk_notebook_set_current_page(mainNotebook,loop);
 							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&buf->cursorPos);
-							buf->scroll2Line((GtkTextView*)page->view,hist->lineNumber-1,true);
+							buf->scroll2Line((GtkTextView*)page->view,line-1,true);
 
 							ERRDATA delete buf;
 							globalHistory->setSaveCnt((unsigned)((long)data));

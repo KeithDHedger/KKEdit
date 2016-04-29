@@ -468,6 +468,7 @@ bool defSearchFromBar(GtkWidget *widget,gpointer data)
 									goToDefine(fdata);
 									destroyData(fdata);
 									ERRDATA debugFree(&functionSearchText);
+									globalHistory->redoMenus();
 									ERRDATA return(true);
 								}
 							searchcase=false;
@@ -484,12 +485,14 @@ bool defSearchFromBar(GtkWidget *widget,gpointer data)
 							goToDefine(fdata);
 							destroyData(fdata);
 							ERRDATA debugFree(&functionSearchText);
+							globalHistory->redoMenus();
 							ERRDATA return(true);
 						}
 					searchcase=false;
 				}
 			ERRDATA debugFree(&functionSearchText);
 		}
+	globalHistory->redoMenus();
 	return(false);
 }
 

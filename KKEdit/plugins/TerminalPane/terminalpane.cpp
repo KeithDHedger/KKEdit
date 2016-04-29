@@ -397,16 +397,12 @@ extern "C" int plugPrefs(gpointer data)
 #else
 			vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkRGBA*)&colour);
 #endif
-//
-//			vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkRGBA*)&colour);
 			gdk_rgba_parse(&colour,(const gchar*)backColour);
 #ifdef _VTEVERS290_
 			vte_terminal_set_color_background_rgba((VteTerminal*)terminal,(const GdkRGBA*)&colour);
 #else
 			vte_terminal_set_color_background((VteTerminal*)terminal,(const GdkRGBA*)&colour);
 #endif
-
-//			vte_terminal_set_color_background((VteTerminal*)terminal,(const GdkRGBA*)&colour);
 #else
 			gdk_color_parse((const gchar*)foreColour,&colour);
 			vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkColor*)&colour);

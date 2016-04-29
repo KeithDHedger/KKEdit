@@ -13,9 +13,11 @@ HistoryClass::HistoryClass(GtkNotebook *nb,unsigned maxhist)
 {
 	ERRDATA
 	this->notebook=nb;
-	this->canReturn=true;
+	this->backOK=false;
+	this->forwardOK=false;
 	this->saveCnt=0;
 	this->maxHist=maxhist;
+	this->maxHist=4;
 	this->savedPages=new historyData[maxhist+4];
 	for(unsigned j=0;j<(maxhist+4);j++)
 		{
@@ -27,8 +29,6 @@ HistoryClass::HistoryClass(GtkNotebook *nb,unsigned maxhist)
 		}
 	this->historyBackMenu=NULL;
 	this->historyForwardMenu=NULL;
-
-	ERRDATA
 }
 
 HistoryClass::~HistoryClass()
@@ -67,10 +67,42 @@ void HistoryClass::goBack(void)
 	this->saveCnt--;
 }
 
+void HistoryClass::copyPage(int topage,int frompage)
+{
+	this->savedPages[topage].filePath=this->savedPages[frompage].filePath;
+	this->savedPages[topage].tabName=this->savedPages[frompage].tabName;
+	this->savedPages[topage].menuLabel=this->savedPages[frompage].menuLabel;
+	this->savedPages[topage].pageID=this->savedPages[frompage].pageID;
+	this->savedPages[topage].lineNumber=this->savedPages[frompage].lineNumber;
+
+	this->savedPages[frompage].pageID=0;
+	this->savedPages[frompage].lineNumber=0;
+	this->savedPages[frompage].filePath=NULL;
+	this->savedPages[frompage].tabName=NULL;
+	this->savedPages[frompage].menuLabel=NULL;
+}
+
 void HistoryClass::goForward(void)
 {
-	if(this->saveCnt<this->maxHist)
-		this->saveCnt++;
+	unsigned	j;
+
+	this->saveCnt++;
+	if(this->saveCnt>this->maxHist)
+		{
+			debugFree(&(this->savedPages[0].filePath));
+			debugFree(&(this->savedPages[0].tabName));
+			debugFree(&(this->savedPages[0].menuLabel));
+			for(j=1;j<this->maxHist+2;j++)
+				this->copyPage(j-1,j);
+
+			this->savedPages[j].pageID=0;
+			this->savedPages[j].lineNumber=0;
+			this->savedPages[j].filePath=NULL;
+			this->savedPages[j].tabName=NULL;
+			this->savedPages[j].menuLabel=NULL;
+
+			this->saveCnt=this->maxHist;
+		}
 }
 
 void HistoryClass::goToPos(void)
@@ -101,14 +133,13 @@ void HistoryClass::goToPos(void)
 void HistoryClass::saveLastPosAndStop(void)
 {
 	this->saveLastPos();
-	for(unsigned j=this->saveCnt;j<this->maxHist;j++)
+	for(unsigned j=this->saveCnt;j<this->maxHist+2;j++)
 		{
 			this->savedPages[j].pageID=0;
 			debugFree(&(this->savedPages[j].menuLabel));
 			debugFree(&(this->savedPages[j].tabName));
 			debugFree(&(this->savedPages[j].filePath));
 		}
-	this->redoMenus();
 }
 
 historyData* HistoryClass::getHistory(int num)
@@ -162,6 +193,7 @@ void HistoryClass::redoMenus(void)
 				}
 			gtk_widget_show_all(this->historyBackMenu);
 		}
+
 //forward menu
 	childs=gtk_container_get_children ((GtkContainer*)this->historyForwardMenu);
 	for(unsigned j=0;j<g_list_length(childs);j++)
@@ -184,6 +216,21 @@ void HistoryClass::redoMenus(void)
 				}
 			gtk_widget_show_all(this->historyForwardMenu);
 		}
+
+	if(this->saveCnt==0)
+		this->backOK=false;
+	else
+		this->backOK=true;
+
+	if(this->savedPages[this->saveCnt+1].pageID==0)
+		this->forwardOK=false;
+	else
+		this->forwardOK=true;
+
+	gtk_widget_set_sensitive((GtkWidget*)backButton,this->backOK);
+	gtk_widget_set_sensitive((GtkWidget*)forwardButton,this->forwardOK);
+	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,this->backOK);
+	gtk_widget_set_sensitive((GtkWidget*)goForwardMenu,this->forwardOK);
 }
 
 void HistoryClass::saveLastPos(void)
@@ -218,6 +265,7 @@ void HistoryClass::saveLastPos(void)
 	debugFree(&(this->savedPages[this->saveCnt].tabName));
 	debugFree(&(this->savedPages[this->saveCnt].filePath));
 
+//TODO//
 	if(this->savedPages[this->saveCnt].filePath!=NULL)
 		{
 			if(page->filePath!=NULL)
@@ -230,15 +278,19 @@ void HistoryClass::saveLastPos(void)
 	linetext[strlen(linetext)-1]=0;
 	g_strchug(linetext);
 	g_strchomp(linetext);
-	this->savedPages[this->saveCnt].menuLabel=truncateWithElipses(linetext,32);
+	this->savedPages[this->saveCnt].menuLabel=truncateWithElipses(linetext,maxFuncDefs);
 	debugFree(&linetext);
+
 	this->goForward();
-	this->redoMenus();
-	this->canReturn=true;
 	delete buf;
 }
 
 bool HistoryClass::canGoBack(void)
 {
-	ERRDATA return(this->canReturn);
+	return(this->backOK);
+}
+
+bool HistoryClass::canGoForward(void)
+{
+	return(this->forwardOK);
 }

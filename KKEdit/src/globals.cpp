@@ -1214,8 +1214,7 @@ VISIBLE void navigateHistory(GtkWidget *widget,gpointer data)
 	if((long)data==NAVLAST)
 		{
 			globalHistory->saveLastPos();
-			if(tcnt<globalHistory->getMaxHist())
-				globalHistory->goBack();
+			globalHistory->goBack();
 			globalHistory->goBack();
 			globalHistory->goToPos();
 		}
@@ -1445,9 +1444,13 @@ void setToobarWidgetsSensitive(pageStruct *page)
 				gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,false);
 			if(backButton!=NULL)
 				gtk_widget_set_sensitive((GtkWidget*)backButton,false);
+			if(forwardButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)forwardButton,false);
 			if(gotoLineButton!=NULL)
 				gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,false);
 			if(findApiButton!=NULL)
+				gtk_widget_set_sensitive((GtkWidget*)findApiButton,false);
+			if(findQtApiButton!=NULL)
 				gtk_widget_set_sensitive((GtkWidget*)findApiButton,false);
 			if(findFuncDefButton!=NULL)
 				gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,false);
@@ -1513,12 +1516,19 @@ void setToobarWidgetsSensitive(pageStruct *page)
 					if(gotoDefButton!=NULL)
 						gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,hasselection);
 					break;
+//now handled from history class
 //go back
-				case 'B':
-					if(backButton!=NULL)
-						gtk_widget_set_sensitive((GtkWidget*)backButton,globalHistory->canGoBack());
-					break;
-//find in gtkdoc
+//				case 'B':
+//					if(backButton!=NULL)
+//						gtk_widget_set_sensitive((GtkWidget*)backButton,globalHistory->canGoBack());
+//					break;
+////go forward
+//				case 'W':
+//					if(forwardButton!=NULL)
+//						gtk_widget_set_sensitive((GtkWidget*)forwardButton,globalHistory->canGoForward());
+//					break;
+//
+//go to line
 				case '9':
 					if(gotoLineButton!=NULL)
 						gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,true);
@@ -1527,6 +1537,11 @@ void setToobarWidgetsSensitive(pageStruct *page)
 				case 'A':
 					if(findApiButton!=NULL)
 						gtk_widget_set_sensitive((GtkWidget*)findApiButton,true);
+					break;
+//find in qtdoc
+				case 'Q':
+					if(findQtApiButton!=NULL)
+						gtk_widget_set_sensitive((GtkWidget*)findQtApiButton,true);
 					break;
 //find in function def
 				case 'D':
@@ -1587,6 +1602,7 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 	if(gotDoxygen==0)
 		gtk_widget_set_sensitive((GtkWidget*)searchInDocsMenu,hasselection);
 	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,globalHistory->canGoBack());
+	gtk_widget_set_sensitive((GtkWidget*)goForwardMenu,globalHistory->canGoForward());
 
 //do plugin sensitive
 	globalPlugins->globalPlugData->page=page;
