@@ -1750,27 +1750,23 @@ void buildMainGui(void)
 	statusWidget=gtk_statusbar_new();
 	gtk_widget_show(statusWidget);
 #ifdef _USEGTK3_
-//TODO//
 	char	*statuscss=NULL;
 	GtkStyleProvider	*statusprovider;
 
 	statusprovider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
 	sinkReturn=asprintf(&statuscss,"* {\n \
-    padding: 0px;\n \
-    border: 0px;\n \
-  font-size: 8px;\n \
-    margin: 1px;\n \
-    margin-top: 1px;\n \
-    margin-bottom: 1px;\n \
+	font-size: 8px;\n \
 }\n");
 
 	gtk_css_provider_load_from_data((GtkCssProvider*)statusprovider,statuscss,-1,NULL);
 	applyCSS((GtkWidget*)statusWidget,statusprovider);
 	gtk_style_context_reset_widgets(gdk_screen_get_default());
 	debugFree(&statuscss);
+
+	gtk_widget_set_margin_top(GTK_WIDGET(statusWidget),0);
+	gtk_widget_set_margin_bottom(GTK_WIDGET(statusWidget),0);
+
 #endif
-
-
 	gtk_box_pack_end((GtkBox*)mainWindowVBox,statusWidget,false,true,0);
 
 //hide top/bottom user boxes
