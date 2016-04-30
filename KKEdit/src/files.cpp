@@ -281,6 +281,7 @@ void setFilePrefs(pageStruct *page)
 	gtk_source_view_set_show_line_numbers(page->view,lineNumbers);
 	gtk_source_view_set_highlight_current_line(page->view,highLight);
 	gtk_source_view_set_show_line_marks(page->view,showBMBar);
+	gtk_source_view_set_draw_spaces(page->view,(GtkSourceDrawSpacesFlags)(showWhiteSpace * GTK_SOURCE_DRAW_SPACES_ALL));
 
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	if(lineWrap==true)
@@ -959,6 +960,7 @@ pageStruct *makeNewPage(void)
 //status bar
 	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(updateStatusBar),NULL);
 	g_signal_connect((GtkWidget*)page->view,"button-release-event",G_CALLBACK(resetRegexMark),(void*)page);
+
 	setPageSensitive();
 	ERRDATA return(page);
 }

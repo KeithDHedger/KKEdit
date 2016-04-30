@@ -235,6 +235,7 @@ extern bool				lineNumbers;
 extern bool				lineWrap;
 extern bool				highLight;
 extern bool				noSyntax;
+extern bool				showWhiteSpace;
 extern bool				singleUse;
 extern unsigned int		tabWidth;
 extern unsigned int		tabsSize;

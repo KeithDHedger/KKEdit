@@ -1,6 +1,6 @@
 #
 #
-AC_INIT([KKEdit],[0.3.2],[PROJ],[KKEdit])
+AC_INIT([KKEdit],[0.3.3],[PROJ],[KKEdit])
 
 AC_CONFIG_HEADER([config.h])
 AC_PROG_CXX
@@ -24,20 +24,16 @@ AC_MSG_RESULT($enable_gtk3)
 if test "$enable_gtk3" = "yes"; then
 	AC_DEFINE([_USEGTK3_], [], [Use GTK3])
 	AC_DEFINE([_EXECSUFFIX_], ["-3"], [Use GTK3])
-	MAKEFILESUFFIX="-3"
 	GTK_MODULES="gtk+-3.0 >= 3.10.0"
 	GTKSRC_MODULES="gtksourceview-3.0 >= 3.10.0"
 	program_transform_name='s,\(^[[kK]].*t.*\),\1-3,'
-	DOCSUFFIX=3
 	PLUGVERSION=3
 	GTK3SUFFIX=-3
 else
 	GTK_MODULES="gtk+-2.0 >= 2.24.0"
 	GTKSRC_MODULES="gtksourceview-2.0 >= 2.9.9"
-	MAKEFILESUFFIX=
 	AC_DEFINE([_EXECSUFFIX_], [""], [Use GTK3])
 	PLUGVERSION=2
-	DOCSUFFIX=
 fi
 
 AC_MSG_CHECKING(Build/Install plugins)
@@ -58,16 +54,14 @@ if test "$enable_plugs" = "yes"; then
 	else
 		VTE_MODULES="vte >= 0.28.2"
 	fi
-	PKG_CHECK_MODULES(VTE,$VTE_MODULES)
+	PKG_CHECK_MODULES(VTE,$VTE_MODULES,[],[AC_MSG_ERROR([No VTE dev files found ... For debian install either libvte-2.91-dev or libvte-2.90-dev])])
 else
 	PLUGINCLUDES=
 fi
 
 AC_SUBST(PLUGINCLUDES)
-AC_SUBST(MAKEFILESUFFIX)
 AC_SUBST(PLUGVERSION)
 AC_SUBST(VTEVERS)
-AC_SUBST(DOCSUFFIX)
 AC_SUBST(GTK3SUFFIX)
 
 PKG_CHECK_MODULES(GTK,$GTK_MODULES)

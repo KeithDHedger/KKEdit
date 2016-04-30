@@ -1097,6 +1097,10 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 //no syntax colour
 	makePrefBox(true,true);
 	makePrefsCheck(NOSYNTAX,PREFS_NO_SYNTAX_LABEL,"nosyntax",noSyntax,true,true);
+//show whitespace
+	makePrefBox(true,true);
+	makePrefsCheck(SHOWWHITESPACE,PREFS_SHOW_WHITESPACE_LABEL,"showspaces",showWhiteSpace,true,true);
+
 //single instance
 	makePrefBox(true,true);
 	makePrefsCheck(USESINGLE,PREFS_USE_SINGLE_LABEL,"single",singleUse,true,true);
@@ -1594,6 +1598,9 @@ void buildMainGui(void)
 
 //toggle syntax highlight
 	menuitem=makeMenuItem(MENU_NO_SYNTAX_LABEL,menu,(void*)toggleSyntax,0,VIEWNOSYNTAX,CHECKMENU,NULL,NULL,noSyntax);
+
+//toggle show spaces
+	menuitem=makeMenuItem(MENU_SHOW_SPACES_LABEL,menu,(void*)toggleWhitespace,0,VIEWWHITESPACE,CHECKMENU,NULL,NULL,showWhiteSpace);
 
 //toggle auto show comps
 	menuitem=makeMenuItem(MENU_SHOW_AUTO_COMPLETE,menu,(void*)toggleAutoComplete,0,VIEWAUTOCOMPLETE,CHECKMENU,NULL,NULL,autoShowComps);

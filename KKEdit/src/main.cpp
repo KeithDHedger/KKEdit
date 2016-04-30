@@ -64,6 +64,7 @@ void init(void)
 	lineWrap=true;
 	highLight=true;
 	noSyntax=false;
+	showWhiteSpace=false;
 	tabWidth=4;
 #ifdef _USEGTK3_
 	tabsSize=2;

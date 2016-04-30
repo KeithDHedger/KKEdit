@@ -74,6 +74,7 @@ void sortTabs(GtkWidget *widget,gpointer data);
 void toggleLineNumbers(GtkWidget *widget,gpointer data);
 void toggleWrapLines(GtkWidget *widget,gpointer data);
 void toggleSyntax(GtkWidget *widget,gpointer data);
+void toggleWhitespace(GtkWidget *widget,gpointer data);
 void toggleAutoComplete(GtkWidget *widget,gpointer data);
 void toggleHighlightCurrent(GtkWidget *widget,gpointer data);
 

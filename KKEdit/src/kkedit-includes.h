@@ -137,6 +137,7 @@
 #define MENU_WRAP_LINES_LABEL gettext("Wrap Lines")
 #define MENU_HIGHLIGHT_LINE_LABEL gettext("Hightlght Current Line")
 #define MENU_NO_SYNTAX_LABEL gettext("No Syntax Highlighting")
+#define MENU_SHOW_SPACES_LABEL gettext("Show Whitespace")
 #define MENU_SHOW_AUTO_COMPLETE gettext("Auto Show Completions")
 
 //nav menu
@@ -287,6 +288,7 @@
 #define PREFS_WRAP_LINES_LABEL gettext("Wrap Lines")
 #define PREFS_HIGHLIGHT_LINE_LABEL gettext("Highlight Current Line")
 #define PREFS_NO_SYNTAX_LABEL gettext("No Syntax Highlighting")
+#define PREFS_SHOW_WHITESPACE_LABEL gettext("Show Whitespace")
 #define PREFS_USE_SINGLE_LABEL gettext("Use Single Instance")
 #define PREFS_AUTO_MENU_SAVE_LABEL gettext("Auto Save/Restore Session")
 #define PREFS_RESTORE_SESSION_LABEL gettext("Restore Session Bookmarks")

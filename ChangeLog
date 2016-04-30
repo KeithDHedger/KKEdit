@@ -1,3 +1,9 @@
+0.3.3
+Tweaked installed styles to show 'whitespace' better.
+Added 'Show Whitespace' to prefs and view menu.
+Added 'Show Whitspace' option.
+VTE dev files failure in configure now gives more details.
+
 0.3.2
 Back history now shows line:tabname - truncated line ( length of line is same as func def length ), in menu.
 Added 'Online Help' option.

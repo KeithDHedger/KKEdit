@@ -131,6 +131,7 @@ bool			lineNumbers;
 bool			lineWrap;
 bool			highLight;
 bool			noSyntax;
+bool			showWhiteSpace;
 bool			singleUse;
 unsigned int	tabWidth;
 unsigned int	tabsSize;
@@ -422,6 +423,7 @@ args			kkedit_rc[]=
 	{"wrapline",TYPEBOOL,&lineWrap},
 	{"highlightcurrentline",TYPEBOOL,&highLight},
 	{"nosyntax",TYPEBOOL,&noSyntax},
+	{"showspaces",TYPEBOOL,&showWhiteSpace},
 	{"singleuse",TYPEBOOL,&singleUse},
 	{"noduplicates",TYPEBOOL,&noDuplicates},
 	{"warning",TYPEBOOL,&noWarnings},

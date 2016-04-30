@@ -23,6 +23,7 @@
 	<style name="current-line" background="line_highlight"/>
 	<style name="line-numbers" foreground="text_bg" background="keyword_color"/>
 	<style name="selection" foreground="#ffffff" background="keyword_color"/>
+	<style name="draw-spaces" foreground="#ffffff"/>
 
 <!-- Bracket Matching -->
 	<style name="bracket-match" foreground="text_bg" background="keyword_color"/>

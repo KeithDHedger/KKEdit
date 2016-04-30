@@ -25,6 +25,7 @@
 	<style name="current-line" background="line_highlight"/>
 	<style name="line-numbers" foreground="text_bg" background="keyword_color"/>
 	<style name="selection" foreground="text_fg" background="select_colour" bold="true"/>
+	<style name="draw-spaces" foreground="text_fg"/>
 
 <!-- Bracket Matching -->
 	<style name="bracket-match" foreground="text_bg" background="keyword_color" bold="true"/>

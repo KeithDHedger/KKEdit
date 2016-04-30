@@ -79,6 +79,7 @@
 #define VIEWAUTOINDENT "viewautoindent"
 #define VIEWWRAPLINES "viewwraplines"
 #define VIEWNOSYNTAX "viewnosyntax"
+#define VIEWWHITESPACE "viewwhitespace"
 #define VIEWAUTOCOMPLETE "viewautocomplete"
 #define VIEWHIGHLIGHT "viewhighlight"
 

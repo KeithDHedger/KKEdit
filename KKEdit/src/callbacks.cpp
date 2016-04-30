@@ -1402,7 +1402,7 @@ void setPrefs(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	pageStruct	*tpage=getPageStructPtr(-1);
-	bool		*bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&restoreBookmarks,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen,&useGlobalPlugMenu,&autoSearchDocs};
+	bool		*bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&restoreBookmarks,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen,&useGlobalPlugMenu,&autoSearchDocs,&showWhiteSpace};
 	unsigned	*ints[MAXPREFSINTWIDGETS]={&maxTabChars,&maxFRHistory,&depth,&autoShowMinChars,&tabWidth,&maxFuncDefs,&maxBMChars,&tabsSize,&maxJumpHistory};
 
 	if(strcmp(gtk_widget_get_name(widget),"style")==0)
@@ -1879,6 +1879,14 @@ VISIBLE void toggleSyntax(GtkWidget *widget,gpointer data)
 	noSyntax=!noSyntax;
 	resetAllFilePrefs();
 }
+
+//togle whitspace
+VISIBLE void toggleWhitespace(GtkWidget *widget,gpointer data)
+{
+	showWhiteSpace=!showWhiteSpace;
+	resetAllFilePrefs();
+}
+
 
 //togle no syntax
 VISIBLE void toggleAutoComplete(GtkWidget *widget,gpointer data)
