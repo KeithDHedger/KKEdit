@@ -381,11 +381,6 @@ VISIBLE void closeAllTabs(GtkWidget *widget,gpointer data)
 		}
 
 	closingAll=false;
-//TODO//
-//	remakeBMMenu();
-//	rebuildBookMarkMenu();
-//	gtk_widget_show_all(bookMarkMenu);
-//	resetSensitive();
 	setPageSensitive();
 }
 

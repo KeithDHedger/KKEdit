@@ -1167,6 +1167,8 @@ void basicFind(int dowhat)
 				}
 
 				replaceAllFlag=true;
+				loadingSession=true;
+				gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 				while(replaceAllFlag==true)
 					{
 #ifdef _USEGTK3_
@@ -1196,6 +1198,8 @@ void basicFind(int dowhat)
 								replaceAllFlag=false;
 							}
 					}
+				loadingSession=false;
+				gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 			}
 	ERRDATA debugFree(&searchtext);
 	ERRDATA debugFree(&replacetext);
