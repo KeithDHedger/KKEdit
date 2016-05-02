@@ -273,12 +273,9 @@ void updateStatusBar(GtkTextBuffer *textbuffer,GtkTextIter *location,GtkTextMark
 
 	setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 
-	if((statusMessage!=NULL))
-		return;
-
 	if((page==NULL) ||(showStatus==false))
 		{
-			gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
+			gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,0);
 			gtk_statusbar_push((GtkStatusbar*)statusWidget,0,"");
 			return;
 		}
@@ -294,8 +291,8 @@ void updateStatusBar(GtkTextBuffer *textbuffer,GtkTextIter *location,GtkTextMark
 
 	buf=new TextBuffer(textbuffer);
 
-	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
 	sinkReturn=asprintf(&message,STATUS_LINE_LABEL,buf->lineNum,buf->column,lang,path);
+	gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,0);
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
 	ERRDATA debugFree(&message);
 	delete buf;

@@ -185,9 +185,6 @@ extern GtkWidget		*globalPlugMenu;
 //help menu
 extern GtkWidget		*helpMenu;
 
-//status bar message
-extern char			*statusMessage;
-
 extern GtkAccelGroup	*accgroup;
 
 extern GList			*newBookMarksList;

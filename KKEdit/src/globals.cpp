@@ -80,9 +80,6 @@ GtkWidget		*globalPlugMenu=NULL;
 //help menu
 GtkWidget		*helpMenu;
 
-//status bar message
-char			*statusMessage=NULL;
-
 //barber pole
 char			*barControl;
 

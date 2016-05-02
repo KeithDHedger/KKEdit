@@ -1,4 +1,5 @@
 0.3.3
+Fixed not updating status bar after showing all instances replaced.
 Speeded up replace all.
 Status bar in gtk3 version now smaller.
 Tweaked installed styles to show 'whitespace' better.

@@ -1175,11 +1175,12 @@ void basicFind(int dowhat)
 				mystr=new StringSlice;
 				mystr->setCaseless(insensitiveSearch);
 				newtxt=mystr->replaceAllSlice(txt,searchtext,replacetext);
+				itemsReplaced=mystr->getResult()*-1;
+				itemsReplaced--;
 				gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->iter,&maxlastiter);
 				gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->iter,newtxt,-1);
 				delete mystr;
 				debugFree(&txt);
-
 				gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 				loadingSession=false;
 			}
@@ -1201,11 +1202,10 @@ void showOnStatus(const char *from,const char *to)
 			ERRDATA return;
 		}
 
-	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
+	loadingSession=true;
+	gtk_statusbar_remove_all ((GtkStatusbar*)statusWidget,0);
 	sinkReturn=asprintf(&message,REPLACE_INFO_LABEL,itemsReplaced+1,from,to);
-	gtk_statusbar_pop((GtkStatusbar*)statusWidget,0);
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
-	statusMessage=message;
 }
 
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)

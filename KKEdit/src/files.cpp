@@ -873,6 +873,7 @@ gboolean resetRegexMark (GtkWidget *widget,GdkEvent *event,pageStruct *page)
 
 	page->regexList=NULL;
 	page->regexMatchNumber=-1;
+	loadingSession=false;
 	return(false);
 }
 
