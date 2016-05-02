@@ -917,8 +917,8 @@ pageStruct *makeNewPage(void)
 #else
 	page->highlightTag=gtk_text_buffer_create_tag((GtkTextBuffer*)page->buffer,"highlighttag","background",gdk_color_to_string((const GdkColor*)&attr->appearance.fg_color),"foreground",gdk_color_to_string((const GdkColor*)&attr->appearance.bg_color),NULL);
 #endif
-	gtk_text_attributes_unref(attr);
 
+	gtk_text_attributes_unref(attr);
 	gtk_container_add(GTK_CONTAINER(page->pageWindow),(GtkWidget*)page->view);
 
 	page->rebuildMenu=true;

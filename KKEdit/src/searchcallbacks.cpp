@@ -972,12 +972,14 @@ void basicFind(int dowhat)
 	GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
 #endif
 
-	bool					replaceAllFlag;
 	bool					found=false;
 	GtkTextIter				start_find,end_find;
 	GtkTextIter				start_match,end_match;
 	int						offset;
 	GtkTextIter				maxlastiter;
+	StringSlice				*mystr;
+	char					*txt;
+	const char				*newtxt;
 
 	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
 		{
@@ -1166,40 +1168,20 @@ void basicFind(int dowhat)
 					maxlastiter=end_find;
 				}
 
-				replaceAllFlag=true;
 				loadingSession=true;
 				gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
-				while(replaceAllFlag==true)
-					{
-#ifdef _USEGTK3_
-						if(gtk_text_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
-#else
-						if(gtk_source_iter_forward_search(&page->iter,searchtext,flags,&page->match_start,&page->match_end,NULL))
-#endif
-							{
-								if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) &&(autoSeleced==false))
-									{
-										gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,NULL,&maxlastiter);
-										if(gtk_text_iter_compare(&maxlastiter,&page->match_start)<=0)
-											{
-												replaceAllFlag=false;
-												continue;
-											}
-									}
-								itemsReplaced++;
-								gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
-								gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->match_start,replacetext,-1);
-								page->iter=page->match_start;
 
-							}
-						else
-							{
-								autoSeleced=false;
-								replaceAllFlag=false;
-							}
-					}
-				loadingSession=false;
+				txt=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&page->iter,&maxlastiter,false);
+				mystr=new StringSlice;
+				mystr->setCaseless(insensitiveSearch);
+				newtxt=mystr->replaceAllSlice(txt,searchtext,replacetext);
+				gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&page->iter,&maxlastiter);
+				gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->iter,newtxt,-1);
+				delete mystr;
+				debugFree(&txt);
+
 				gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+				loadingSession=false;
 			}
 	ERRDATA debugFree(&searchtext);
 	ERRDATA debugFree(&replacetext);

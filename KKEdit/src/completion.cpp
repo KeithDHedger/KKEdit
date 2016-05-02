@@ -276,6 +276,7 @@ void createCompletion(pageStruct *page)
 	ERRDATA
 }
 
+
 void doCompletionPopUp(pageStruct *page)
 {
 	ERRDATA
