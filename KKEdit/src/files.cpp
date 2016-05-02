@@ -627,6 +627,7 @@ VISIBLE void reloadFile(GtkWidget *widget,gpointer data)
 	ERRDATA
 	if(page->filePath!=NULL)
 		{
+			moveBMsForPage(page,1);
 			g_file_get_contents(page->filePath,&buffer,(gsize*)&filelen,NULL);
 			gtk_text_buffer_get_bounds((GtkTextBuffer*)page->buffer,&start,&end);
 			gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&start,&end);
@@ -634,6 +635,7 @@ VISIBLE void reloadFile(GtkWidget *widget,gpointer data)
 			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 			gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,buffer,filelen);
 			ERRDATA debugFree(&buffer);
+			moveBMsForPage(page,0);
 		}
 	ERRDATA
 }

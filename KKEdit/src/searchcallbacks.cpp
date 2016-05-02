@@ -888,6 +888,7 @@ void regexFind(int dowhat)
 										gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
 										gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
 								//	}
+								moveBMsForPage(page,1);
 								text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&startiter,&enditer,false);
 								regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,(GRegexMatchFlags)matchflags,&regexError);
 								if(gerrorMessage(&regexError)!=0)
@@ -906,7 +907,6 @@ void regexFind(int dowhat)
 
 								if((reptext!=NULL) &&(strcmp(reptext,text)!=0))
 									{
-									
 									gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
 										gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&startiter,&enditer);
 										gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&startiter,reptext,-1);
@@ -915,6 +915,7 @@ void regexFind(int dowhat)
 									gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 									}
 								ERRDATA debugFree(&text);
+								moveBMsForPage(page,0);
 							}
 					}
 				else
@@ -1170,6 +1171,7 @@ void basicFind(int dowhat)
 
 				loadingSession=true;
 				gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+				moveBMsForPage(page,1);
 
 				txt=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&page->iter,&maxlastiter,false);
 				mystr=new StringSlice;
@@ -1181,6 +1183,7 @@ void basicFind(int dowhat)
 				gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&page->iter,newtxt,-1);
 				delete mystr;
 				debugFree(&txt);
+				moveBMsForPage(page,0);
 				gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
 				loadingSession=false;
 			}

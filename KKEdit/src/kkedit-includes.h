@@ -422,12 +422,13 @@
 #include <libintl.h>
 #include <locale.h>
 
-//#include "config.h"
 #include "sliceclass.h"
 #include "kkedit-plugins.h"
 
 #include "textbuffer.h"
 #include "backclass.h"
+
+#include "bookmarks.h"
 
 #ifdef _ASPELL_
 #include <aspell.h>

@@ -119,6 +119,7 @@ struct bookMarksNew
 	GtkSourceMark		*mark;
 	char				*markName;
 	int					line;
+	unsigned			pageID;
 };
 
 extern int				errno;

@@ -129,6 +129,7 @@ VISIBLE void toggleBookmark(GtkWidget *widget,GtkTextIter *titer)
 			bookmarkdata->page=page;
 			sinkReturn=asprintf(&bookmarkdata->markName,"%s-%i",BOOKMARK_LABEL,bmMarkNumber++);
 			bookmarkdata->mark=gtk_source_buffer_create_source_mark(page->buffer,bookmarkdata->markName,mark_type,iter);
+			bookmarkdata->pageID=page->pageID;
 //preview text for menu
 			line=gtk_text_iter_get_line(iter);
 			gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&startprev,line);
