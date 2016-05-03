@@ -22,6 +22,23 @@
 #ifndef _BOOKMARKS_
 #define _BOOKMARKS_
 
+struct bookMarksNew
+{
+	pageStruct			*page;
+	char				*label;
+	GtkSourceMark		*mark;
+	char				*markName;
+	int					line;
+	unsigned			pageID;
+};
+
 void moveBMsForPage(pageStruct *page,unsigned dowhat);
+void destroyBMData(gpointer data);
+void toggleBookmark(GtkWidget*,GtkTextIter *titer);
+void removeAllBookmarks(GtkWidget *widget,GtkTextIter *titer);
+void toggleBookMarkBar(GtkWidget *widget,gpointer data);
+
+
+
 
 #endif

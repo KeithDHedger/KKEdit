@@ -32,127 +32,6 @@ void releasePlugs(gpointer data,gpointer user_data)
 		g_module_close((GModule*)((moduleData*)data)->module);
 }
 
-void destroyBMData(gpointer data)
-{
-	ERRDATA debugFree(&((bookMarksNew*)data)->markName);
-}
-
-VISIBLE void removeAllBookmarks(GtkWidget *widget,GtkTextIter *titer)
-{
-	ERRDATA
-	pageStruct	*page=NULL;
-	int			numpages;
-	GtkTextIter	startiter;
-	GtkTextIter	enditer;
-
-	numpages=gtk_notebook_get_n_pages(mainNotebook);
-	for(int j=0; j<numpages; j++)
-		{
-			page=getPageStructPtr(j);
-			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
-			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
-			gtk_source_buffer_remove_source_marks(page->buffer,&startiter,&enditer,NULL);
-		}
-	g_list_free_full(newBookMarksList,destroyBMData);
-	newBookMarksList=NULL;
-	rebuildBookMarkMenu();
-	gtk_widget_show_all(bookMarkMenu);
-}
-
-VISIBLE void toggleBookmark(GtkWidget *widget,GtkTextIter *titer)
-{
-	ERRDATA
-	pageStruct		*page=getPageStructPtr(-1);
-	GtkWidget		*menuitem;
-	GtkTextMark		*mark;
-	GtkTextIter		*iter;
-	GtkTextIter		siter;
-	int				line;
-	GtkTextIter		startprev,endprev;
-	char			*previewtext;
-	GSList			*mark_list=NULL;
-	const gchar		*mark_type;
-	GList			*ptr=NULL;
-	bookMarksNew	*bookmarkdata;
-	char			*correctedpreview;
-
-	if(page==NULL)
-		return;
-
-	mark_type=MARK_TYPE_1;
-	if(titer==NULL)
-		{
-			mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
-			gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&siter,mark);
-			iter=&siter;
-		}
-	else
-		iter=titer;
-
-	mark_list=gtk_source_buffer_get_source_marks_at_line(page->buffer,gtk_text_iter_get_line(iter),mark_type);
-	if(mark_list!=NULL)
-		{
-			//remove entry from bookmark list
-			ptr=newBookMarksList;
-			while(ptr!=NULL)
-				{
-					if((gpointer)((bookMarksNew*)ptr->data)->mark==(gpointer)GTK_TEXT_MARK(mark_list->data))
-						{
-							ERRDATA debugFree(&((bookMarksNew*)ptr->data)->markName);
-							newBookMarksList=g_list_remove(newBookMarksList,ptr->data);
-							gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(page->buffer),GTK_TEXT_MARK(mark_list->data));
-							break;
-						}
-					ptr=g_list_next(ptr);
-				}
-
-			/* just take the first and delete it */
-//rebuild bookmark menu
-			rebuildBookMarkMenu();
-
-			ptr=newBookMarksList;
-			while(ptr!=NULL)
-				{
-					menuitem=createNewImageMenuItem(NULL,((bookMarksNew*)ptr->data)->label,false);
-					gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
-					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)ptr->data);
-					ptr=g_list_next(ptr);
-				}
-			gtk_widget_show_all(bookMarkMenu);
-			g_slist_free(mark_list);
-		}
-	else
-		{
-			/* no mark found: create one */
-			bookmarkdata=(bookMarksNew*)malloc(sizeof(bookMarksNew));
-			newBookMarksList=g_list_append(newBookMarksList,(gpointer)bookmarkdata);
-			bookmarkdata->page=page;
-			sinkReturn=asprintf(&bookmarkdata->markName,"%s-%i",BOOKMARK_LABEL,bmMarkNumber++);
-			bookmarkdata->mark=gtk_source_buffer_create_source_mark(page->buffer,bookmarkdata->markName,mark_type,iter);
-			bookmarkdata->pageID=page->pageID;
-//preview text for menu
-			line=gtk_text_iter_get_line(iter);
-			gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&startprev,line);
-			gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&endprev,line+1);
-			previewtext=gtk_text_iter_get_text(&startprev,&endprev);
-
-			previewtext[strlen(previewtext)-1]=0;
-			g_strchug(previewtext);
-			g_strchomp(previewtext);
-
-			correctedpreview=truncateWithElipses(previewtext,maxBMChars);
-			ERRDATA debugFree(&previewtext);
-			previewtext=correctedpreview;
-
-			bookmarkdata->label=previewtext;
-			bookmarkdata->line=line;
-			menuitem=gtk_menu_item_new_with_label(bookmarkdata->label);
-			gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
-			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)bookmarkdata);
-			gtk_widget_show_all(bookMarkMenu);
-		}
-}
-
 void refreshMainWindow(void)
 {
 	ERRDATA
@@ -754,7 +633,7 @@ void externalTool(GtkWidget *widget,gpointer data)
 	if(page==NULL || tool==NULL)
 		return;
 
-	const char		*varData[]= {NULL,page->filePath,NULL,DATADIR,htmlFile,page->lang};
+	const char		*varData[]= {NULL,page->filePath,NULL,GAPPFOLDER,htmlFile,page->lang};
 
 	tempCommand=g_string_new(tool->command);
 
@@ -793,8 +672,8 @@ void externalTool(GtkWidget *widget,gpointer data)
 				setenv("KKEDIT_HTMLFILE",htmlFile,1);
 			if(docdirname!=NULL)
 				setenv("KKEDIT_CURRENTDIR",docdirname,1);
-			if(DATADIR!=NULL)
-				setenv("KKEDIT_DATADIR",DATADIR,1);
+			if(GAPPFOLDER!=NULL)
+				setenv("KKEDIT_DATADIR",GAPPFOLDER,1);
 			if(page->lang!=NULL)
 				setenv("KKEDIT_SOURCE_LANG",page->lang,1);
 			if(strarray!=NULL)
@@ -901,13 +780,13 @@ VISIBLE void openHelp(GtkWidget *widget,gpointer data)
 	
 #ifdef _BUILDDOCVIEWER_
 	if((long)data==0)
-		sinkReturn=asprintf(&thePage,"file://%s%s/help/help.%s.html",DATADIR,_EXECSUFFIX_,lang);
+		sinkReturn=asprintf(&thePage,"file://%s/help.%s.html",GHELPFOLDER,lang);
 	else
 		sinkReturn=asprintf(&thePage,"http://kkedit.darktech.org/");
 	showDocView(USEURI,(char*)"KKEdit",DOCVIEW_KKEDIT_HELP_LABEL);
 #else
 	if((long)data==0)
-		sinkReturn=asprintf(&thePage,"%s %s/help/help.%s.html",browserCommand,DATADIR,lang);
+		sinkReturn=asprintf(&thePage,"%s %s/help.%s.html",browserCommand,GHELPFOLDER,lang);
 	else
 		sinkReturn=asprintf(&thePage,"%s http://kkedit.darktech.org/",browserCommand);
 
@@ -1609,7 +1488,7 @@ VISIBLE void doAbout(GtkWidget *widget,gpointer data)
 	const char	*artists[]={DIALOG_ABOUT_ARTISTS_LABEL,"David Reimer","http://github.com/dajare",NULL};
 
 	sinkReturn=asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",DIALOG_ABOUT_FRENCH_LABEL);
-	g_file_get_contents(DATADIR"/docs/gpl-3.0.txt",&licence,NULL,NULL);
+	g_file_get_contents(GDOCSFOLDER "/gpl-3.0.txt",&licence,NULL,NULL);
 
 	gtk_show_about_dialog(NULL,"authors",authors,"translator-credits",translators,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",MYWEBSITE,"website-label","KKEdit Homepage","program-name","KKEdit","logo-icon-name",ABOUTICON,"license",licence,"artists",artists,NULL);
 
@@ -1796,17 +1675,17 @@ VISIBLE void toggleToolOutput(GtkWidget *widget,gpointer data)
 		}
 }
 
-VISIBLE void toggleBookMarkBar(GtkWidget *widget,gpointer data)
-{
-	ERRDATA
-	showBMBar=!showBMBar;
-	if(showBMBar)
-		gtk_menu_item_set_label((GtkMenuItem*)widget,MENU_HIDE_BM_BAR_LABEL);
-	else
-		gtk_menu_item_set_label((GtkMenuItem*)widget,MENU_SHOW_BM_BAR_LABEL);
-	resetAllFilePrefs();
-}
-
+//VISIBLE void toggleBookMarkBar(GtkWidget *widget,gpointer data)
+//{
+//	ERRDATA
+//	showBMBar=!showBMBar;
+//	if(showBMBar)
+//		gtk_menu_item_set_label((GtkMenuItem*)widget,MENU_HIDE_BM_BAR_LABEL);
+//	else
+//		gtk_menu_item_set_label((GtkMenuItem*)widget,MENU_SHOW_BM_BAR_LABEL);
+//	resetAllFilePrefs();
+//}
+//
 VISIBLE void toggleToolBar(GtkWidget *widget,gpointer data)
 {
 	ERRDATA

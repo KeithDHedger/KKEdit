@@ -392,6 +392,7 @@
 #define COMPS_VARS_LABEL gettext("Variables")
 #define COMPS_WORDS_LABEL gettext("Custom Words")
 
+//pixmaps
 #define PREFSNEW DATADIR _EXECSUFFIX_ "/pixmaps/new.png"
 #define PREFSOPEN DATADIR _EXECSUFFIX_ "/pixmaps/open.png"
 #define PREFSSAVE DATADIR _EXECSUFFIX_ "/pixmaps/save.png"
@@ -411,6 +412,23 @@
 #define PREFSLIVE DATADIR _EXECSUFFIX_ "/pixmaps/live.png"
 #define PREFSSEPERATOR DATADIR _EXECSUFFIX_ "/pixmaps/sep.png"
 #define PREFSEXPAND DATADIR _EXECSUFFIX_ "/pixmaps/expand.png"
+
+#define BOOKMARKPNG DATADIR _EXECSUFFIX_ "/pixmaps/BookMark.png"
+#define ROOTEDITPNG DATADIR _EXECSUFFIX_ "/pixmaps/ROOTKKEdit.png"
+#define MENUKKEDITPNG DATADIR _EXECSUFFIX_  "/pixmaps/MenuKKEdit.png"
+#define MANPAGEEDITPNG DATADIR _EXECSUFFIX_  "/pixmaps/ManPageEditor.png"
+#define PLUGMENUPNG DATADIR _EXECSUFFIX_  "/pixmaps/KKEditPlugMenu.png"
+
+//folders
+#define GHELPFOLDER DATADIR _EXECSUFFIX_ "/help"
+#define GSTYLESFOLDER DATADIR _EXECSUFFIX_ "/styles"
+#define GPLUGSFOLDER DATADIR _EXECSUFFIX_ "/plugins-gtk"
+#define GAPPFOLDER DATADIR _EXECSUFFIX_
+#define GDOCSFOLDER  DATADIR _EXECSUFFIX_ "/docs"
+#define GTOOLSFOLDER DATADIR _EXECSUFFIX_ "/tools"
+
+//files
+#define DOXYDOCFILE DATADIR _EXECSUFFIX_ "/docs/Doxyfile"
 
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <gtksourceview/gtksourceprintcompositor.h>

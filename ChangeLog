@@ -1,5 +1,7 @@
 0.3.3
-Fixed losing bookmark positiosn when replace all, replace all ( regex) and revert file.
+Lowered version numbers for vte lib for older distros.
+Fixed some minor gtk2/3 filename clashes.
+Fixed losing bookmark positions when replace all, replace all ( regex ) and revert file.
 Fixed not updating status bar after showing all instances replaced.
 Speeded up replace all.
 Status bar in gtk3 version now smaller.

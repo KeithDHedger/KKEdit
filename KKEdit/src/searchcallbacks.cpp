@@ -257,7 +257,7 @@ VISIBLE void doDoxy(GtkWidget *widget,long data)
 	stat("Doxyfile",&sb);
 	if(!S_ISREG(sb.st_mode))
 		{
-			sinkReturn=system("cp " DATADIR "/docs/Doxyfile .");
+			sinkReturn=system("cp " DOXYDOCFILE " .");
 			dorebuild=true;
 		}
 

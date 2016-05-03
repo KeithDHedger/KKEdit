@@ -1109,7 +1109,7 @@ void buildToolsList(void)
 			toolsList=NULL;
 		}
 
-	sinkReturn=asprintf(&datafolder[0],"%s/tools/",DATADIR);
+	sinkReturn=asprintf(&datafolder[0],"%s/",GTOOLSFOLDER);
 	sinkReturn=asprintf(&datafolder[1],"%s/%s/tools/",getenv("HOME"),APPFOLDENAME);
 	for(int loop=0; loop<2; loop++)
 		{

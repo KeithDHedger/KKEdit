@@ -28,7 +28,7 @@ PluginClass::PluginClass(bool loadPlugs)
 	plugins=NULL;
 	plugCount=-1;
 
-	sinkReturn=asprintf(&plugFolderPaths[GLOBALPLUGS],"%s%s/plugins-gtk",DATADIR,_EXECSUFFIX_);
+	sinkReturn=asprintf(&plugFolderPaths[GLOBALPLUGS],"%s",GPLUGSFOLDER);
 	sinkReturn=asprintf(&plugFolderPaths[LOCALPLUGS],"%s/%s/plugins-gtk",getenv("HOME"),APPFOLDENAME);
 
 	this->doLoadPlugs=loadPlugs;

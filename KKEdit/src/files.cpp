@@ -846,7 +846,7 @@ void add_source_mark_pixbufs(GtkSourceView *view)
 	GdkPixbuf	*pbuf;
 
 	ERRDATA
-	image=(GtkImage*)gtk_image_new_from_file(DATADIR"/pixmaps/BookMark.png");
+	image=(GtkImage*)gtk_image_new_from_file(BOOKMARKPNG);
 	pbuf=gtk_image_get_pixbuf(image);
 
 #ifdef _USEGTK3_

@@ -1441,11 +1441,11 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //extras
-	menuitem=makeMenuItem(DATADIR"/pixmaps/ROOTKKEdit.png",menu,(void*)newEditor,0,NEWADMINMENUNAME,PIXMAPMENU,MENU_NEW_ADMIN_LABEL,(void*)1,false);
-	menuitem=makeMenuItem(DATADIR"/pixmaps/MenuKKEdit.png",menu,(void*)newEditor,0,NEWEDITORMENUNAME,PIXMAPMENU, MENU_NEW_EDITOR_LABEL,(void*)2,false);
+	menuitem=makeMenuItem(ROOTEDITPNG,menu,(void*)newEditor,0,NEWADMINMENUNAME,PIXMAPMENU,MENU_NEW_ADMIN_LABEL,(void*)1,false);
+	menuitem=makeMenuItem(MENUKKEDITPNG,menu,(void*)newEditor,0,NEWEDITORMENUNAME,PIXMAPMENU, MENU_NEW_EDITOR_LABEL,(void*)2,false);
 
 	if(gotManEditor==0)
-		menuitem=makeMenuItem(DATADIR"/pixmaps/ManPageEditor.png",menu,(void*)newEditor,0,MANEDITORMENUNAME,PIXMAPMENU,MENU_MANPAGE_EDITOR_LABEL,(void*)3,false);
+		menuitem=makeMenuItem(MANPAGEEDITPNG,menu,(void*)newEditor,0,MANEDITORMENUNAME,PIXMAPMENU,MENU_MANPAGE_EDITOR_LABEL,(void*)3,false);
 
 //doxy
 	if(gotDoxygen==0)
@@ -1663,7 +1663,7 @@ void buildMainGui(void)
 //help online
 	menuitem=makeMenuItem(GTK_STOCK_HELP,menu,(void*)openHelp,0,HELPMENUNAME,IMAGEMENU,MENU_HELP_ONLINE_LABEL,(void*)1,false);
 //get plugins
-	menuitem=makeMenuItem(DATADIR"/pixmaps/KKEditPlugMenu.png",menu,(void*)getPlugins,0,GETPLUGSMENUNAME,PIXMAPMENU,MENU_GET_PLUGS_LABEL,NULL,false);
+	menuitem=makeMenuItem(PLUGMENUPNG,menu,(void*)getPlugins,0,GETPLUGSMENUNAME,PIXMAPMENU,MENU_GET_PLUGS_LABEL,NULL,false);
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),fileMenu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),editMenu);
@@ -2118,7 +2118,7 @@ void buildGtkDocViewer(void)
 	else
 		lang="fr";
 
-	sinkReturn=asprintf(&thePage,"file://%s/help/help.%s.html",DATADIR,lang);
+	sinkReturn=asprintf(&thePage,"file://%s/help.%s.html",GHELPFOLDER,lang);
 	webkit_web_view_load_uri(webView,thePage);
 	ERRDATA freeAndNull(&thePage);
 	ERRDATA

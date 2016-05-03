@@ -4674,25 +4674,31 @@ $as_echo "$enable_plugs" >&6; }
 if test "$enable_plugs" = "yes"; then
 	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
 	if test "$enable_gtk3" = "yes"; then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Finding vte version" >&5
+$as_echo_n "checking Finding vte version... " >&6; }
 		if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"vte-2.91\""; } >&5
   ($PKG_CONFIG --exists --print-errors "vte-2.91") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  usevte="91"
+  usevte=91
 else
   usevte=90
 fi
-		if test $usevte = "91"; then
-			VTE_MODULES="vte-2.91 >= 0.40.2"
+		if test $usevte = 91; then
+			VTE_MODULES="vte-2.91 >= 0.40.0"
 			VTEVERS=2.91
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: using $VTEVERS" >&5
+$as_echo "using $VTEVERS" >&6; }
 		else
-			VTE_MODULES="vte-2.90 >= 0.34.0"
+			VTE_MODULES="vte-2.90 >= 0.29.1"
 			VTEVERS=2.90
 			
 $as_echo "@%:@define _VTEVERS290_ \"\"" >>confdefs.h
 
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: using $VTEVERS" >&5
+$as_echo "using $VTEVERS" >&6; }
 		fi
 	else
 		VTE_MODULES="vte >= 0.28.2"

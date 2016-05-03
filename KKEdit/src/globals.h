@@ -112,16 +112,6 @@ struct functionData
 	int					intab;
 };
 
-struct bookMarksNew
-{
-	pageStruct			*page;
-	char				*label;
-	GtkSourceMark		*mark;
-	char				*markName;
-	int					line;
-	unsigned			pageID;
-};
-
 extern int				errno;
 extern int				errLine;
 extern const char		*errFile;

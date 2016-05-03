@@ -133,12 +133,12 @@ void init(void)
 	sinkReturn=asprintf(&filename,"%s/.gnome2/gedit/styles",getenv("HOME"));
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
 	ERRDATA debugFree(&filename);
-	sinkReturn=asprintf(&filename,"%s%s/styles",DATADIR,_EXECSUFFIX_);
+	sinkReturn=asprintf(&filename,"%s",GSTYLESFOLDER);
 	gtk_source_style_scheme_manager_append_search_path(schemeManager,filename);
 	ERRDATA debugFree(&filename);
 
 //toolbar layout
-	toolBarLayout=strdup("NOSsXCPsURsFGsE9ADL");
+	toolBarLayout=strdup("NOSsXCPsURBWsFGsE9ADL");
 
 	readConfig();
 	loadKeybindings();
@@ -167,7 +167,7 @@ void init(void)
 	globalPlugins=new PluginClass(loadPluginsFlag);
 //set up plugin data
 	globalPlugins->globalPlugData=(plugData*)malloc(sizeof(plugData));
-	globalPlugins->globalPlugData->dataDir=DATADIR;
+	globalPlugins->globalPlugData->dataDir=GAPPFOLDER;
 	globalPlugins->globalPlugData->gPlugFolder=globalPlugins->plugFolderPaths[GLOBALPLUGS];
 	globalPlugins->globalPlugData->lPlugFolder=globalPlugins->plugFolderPaths[LOCALPLUGS];
 	globalPlugins->globalPlugData->htmlFile=htmlFile;
@@ -257,7 +257,7 @@ void doNagStuff(void)
 	char			*kkeditupdatemessage=strdup("");
 	char			*plugupdatemessage=strdup("");
 
-	sinkReturn=asprintf(&command,"KKEditProgressBar \"%s\" %s/updatecontrol &",CHECKING_LABEL,tmpFolderName);
+	sinkReturn=asprintf(&command,"%s \"%s\" %s/updatecontrol &",POLEPATH,CHECKING_LABEL,tmpFolderName);
 	sinkReturn=system(command);
 	while(gtk_events_pending())
 		gtk_main_iteration();
