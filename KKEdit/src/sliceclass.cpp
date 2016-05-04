@@ -600,6 +600,7 @@ char* StringSlice::replaceSlice(char* src,char* findstr,char* replacestr)
 	int		finalseglen;
 	int		fullsize;
 	char*	copyofstr;
+	unsigned long	offset=0;
 
 	this->error=NOERROR;
 
@@ -612,10 +613,11 @@ char* StringSlice::replaceSlice(char* src,char* findstr,char* replacestr)
 	copyofstr=strdup(src);
 
 	if(caseless==true)
-		ptr=strcasestr(copyofstr,findstr);
+		ptr=strcasestr(&copyofstr[this->replaceAllOffset],findstr);
 	else
-		ptr=strstr(copyofstr,findstr);
+		ptr=strstr(&copyofstr[this->replaceAllOffset],findstr);
 
+	
 	if(ptr==NULL)
 		{
 			this->error=NOMATCH;
@@ -626,6 +628,7 @@ char* StringSlice::replaceSlice(char* src,char* findstr,char* replacestr)
 
 	startreplace=(long)ptr-(long)copyofstr;
 	finalseglen=strlen(copyofstr)-startreplace-strlen(findstr);
+	this->replaceAllOffset=startreplace+strlen(findstr);
 
 	fullsize=finalseglen+startreplace+strlen(replacestr);
 	this->checkBufferLen(fullsize);
@@ -651,6 +654,8 @@ char* StringSlice::replaceAllSlice(char* src,char* findstr,char* replacestr)
 	int			numresults=0;
 
 	this->error=NOERROR;
+	this->replaceAllOffset=0;
+
 	result=this->replaceSlice(src,findstr,replacestr);
 	if(this->error==NOERROR)
 		numresults--;

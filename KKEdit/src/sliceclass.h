@@ -32,30 +32,31 @@ class StringSlice
 		StringSlice();
 		~StringSlice();
 
-		char* 	sliceBetween(char* src,char* startstr,char* endstr);
-		char* 	sliceInclude(char* src,char* startstr,char* endstr);
-		char* 	sliceLen(char* src,int start,int len);
-		char* 	slice(char* src,int start,int end);
-		char* 	sliceStrLen(char* src,char* startstr,int len);
-		char* 	deleteSlice(char* src,char* delstr);
-		char* 	replaceSlice(char* src,char* findstr,char* replacestr);
-		char*	replaceAllSlice(char* src,char* findstr,char* replacestr);
-		void	setCaseless(bool caseval);
-		void	copyToBuffer(const char* str);
-		int		getResult(void);
-		void	setReturnDupString(bool want);
-		char*	decodeHtml(char* src);
-		char*	randomName(int len);
-		bool	getDuplicate(void);
+		char		*sliceBetween(char* src,char* startstr,char* endstr);
+		char		*sliceInclude(char* src,char* startstr,char* endstr);
+		char		*sliceLen(char* src,int start,int len);
+		char		*slice(char* src,int start,int end);
+		char		*sliceStrLen(char* src,char* startstr,int len);
+		char		*deleteSlice(char* src,char* delstr);
+		char		*replaceSlice(char* src,char* findstr,char* replacestr);
+		char		*replaceAllSlice(char* src,char* findstr,char* replacestr);
+		void		setCaseless(bool caseval);
+		void		copyToBuffer(const char* str);
+		int			getResult(void);
+		void		setReturnDupString(bool want);
+		char		*decodeHtml(char* src);
+		char		*randomName(int len);
+		bool		getDuplicate(void);
 	private:
-		void	checkBufferLen(char* str);
-		void	checkBufferLen(int size);
-		char*	returnData(char* str);
-		char*	buffer;
-		bool	caseless;
-		int		error;
-		bool	duplicate;
-		unsigned int	bufferlen;
+		void		checkBufferLen(char* str);
+		void		checkBufferLen(int size);
+		char		*returnData(char* str);
+		char		*buffer;
+		bool		caseless;
+		int			error;
+		bool		duplicate;
+		unsigned	bufferlen;
+		unsigned	replaceAllOffset;
 };
 
 #endif

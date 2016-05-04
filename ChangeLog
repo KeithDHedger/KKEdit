@@ -1,4 +1,5 @@
 0.3.3
+Fixed replace all when replace string contains find string.
 Lowered version numbers for vte lib for older distros.
 Fixed some minor gtk2/3 filename clashes.
 Fixed losing bookmark positions when replace all, replace all ( regex ) and revert file.

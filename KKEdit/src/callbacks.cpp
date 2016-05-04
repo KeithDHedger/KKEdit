@@ -1497,7 +1497,7 @@ VISIBLE void doAbout(GtkWidget *widget,gpointer data)
 }
 
 GtkSourceBuffer	*printBuffer;
-GtkSourceView		*printView;
+GtkSourceView	*printView;
 
 void doCombineBuffers(void)
 {
@@ -1521,7 +1521,6 @@ void doCombineBuffers(void)
 			gtk_text_buffer_get_end_iter((GtkTextBuffer*)printBuffer,&iter);
 		}
 }
-
 
 void drawPage(GtkPrintOperation *operation,GtkPrintContext *context,gint page_nr,gpointer user_data)
 {
