@@ -263,9 +263,9 @@ void jumpToMark(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	GtkTextMark	*mark;
-	pageStruct		*page;
-	pageStruct		*checkpage;
-	TextBuffer		*buf;
+	pageStruct	*page;
+	pageStruct	*checkpage;
+	TextBuffer	*buf;
 
 	globalHistory->saveLastPosAndStop();
 	page=(pageStruct*)((bookMarksNew*)data)->page;

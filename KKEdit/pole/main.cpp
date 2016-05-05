@@ -42,7 +42,7 @@ GtkWidget* createNewBox(int orient,bool homog,int spacing)
 	return(retwidg);
 }
 
-void shutdown(GtkWidget* widget,gpointer data)
+void shutDownPole(GtkWidget* widget,gpointer data)
 {
 	gtk_main_quit();
 }
@@ -52,7 +52,7 @@ void killBarberPole(void)
 	gtk_widget_destroy(progressWindow);
 	progressBar=NULL;
 	remove(path);
-	shutdown(NULL,NULL);
+	shutDownPole(NULL,NULL);
 }
 
 gboolean idleScroll(gpointer data)

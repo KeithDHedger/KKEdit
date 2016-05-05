@@ -600,7 +600,6 @@ char* StringSlice::replaceSlice(char* src,char* findstr,char* replacestr)
 	int		finalseglen;
 	int		fullsize;
 	char*	copyofstr;
-	unsigned long	offset=0;
 
 	this->error=NOERROR;
 

@@ -32,6 +32,8 @@ struct bookMarksNew
 	unsigned			pageID;
 };
 
+enum {UPDATEBMLINE=0,MOVEBM};
+
 void moveBMsForPage(pageStruct *page,unsigned dowhat);
 void destroyBMData(gpointer data);
 void toggleBookmark(GtkWidget*,GtkTextIter *titer);
