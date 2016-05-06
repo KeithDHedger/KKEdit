@@ -1438,7 +1438,7 @@ void setToobarWidgetsSensitive(pageStruct *page)
 			if(redoButton!=NULL)
 				gtk_widget_set_sensitive((GtkWidget*)redoButton,false);
 			if(findButton!=NULL)
-				gtk_widget_set_sensitive((GtkWidget*)findButton,false);
+				gtk_widget_set_sensitive((GtkWidget*)findButton,true);
 			if(gotoDefButton!=NULL)
 				gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,false);
 			if(backButton!=NULL)
@@ -1446,15 +1446,15 @@ void setToobarWidgetsSensitive(pageStruct *page)
 			if(forwardButton!=NULL)
 				gtk_widget_set_sensitive((GtkWidget*)forwardButton,false);
 			if(gotoLineButton!=NULL)
-				gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,false);
+				gtk_widget_set_sensitive((GtkWidget*)gotoLineButton,true);
 			if(findApiButton!=NULL)
-				gtk_widget_set_sensitive((GtkWidget*)findApiButton,false);
+				gtk_widget_set_sensitive((GtkWidget*)findApiButton,true);
 			if(findQtApiButton!=NULL)
-				gtk_widget_set_sensitive((GtkWidget*)findApiButton,false);
+				gtk_widget_set_sensitive((GtkWidget*)findApiButton,true);
 			if(findFuncDefButton!=NULL)
-				gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,false);
+				gtk_widget_set_sensitive((GtkWidget*)findFuncDefButton,true);
 			if(liveSearchButton!=NULL)
-				gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,false);
+				gtk_widget_set_sensitive((GtkWidget*)liveSearchButton,true);
 			return;
 		}
 

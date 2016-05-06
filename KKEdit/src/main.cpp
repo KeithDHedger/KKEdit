@@ -138,7 +138,7 @@ void init(void)
 	ERRDATA debugFree(&filename);
 
 //toolbar layout
-	toolBarLayout=strdup("NOSsXCPsURBWsFGsE9ADL");
+	toolBarLayout=strdup("NOSsXCPsURBWsFGsE9AQDL");
 
 	readConfig();
 	loadKeybindings();
