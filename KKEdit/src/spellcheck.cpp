@@ -1,8 +1,8 @@
 /*
  *
- * ©K. D. Hedger. Sun 25 Oct 14:52:24 GMT 2015 kdhedger68713@gmail.com
+ * ©K. D. Hedger. Fri  6 May 10:52:35 BST 2016 kdhedger68713@gmail.com
 
- * This file(spellcheck.cpp) is part of KKEdit.
+ * This file (spellcheck.cpp) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,16 +16,7 @@
 
  * You should have received a copy of the GNU General Public License
  * along with KKEdit.  If not, see <http://www.gnu.org/licenses/>.
-
- * Parts of this code from aspell-0.60.6.1 example
- * example-c.c
-
- * Copyright(C) 2000-2001 by Kevin Atkinson under the GNU LGPL
- * license version 2.0 or 2.1.  You should have received a copy of the
- * LGPL license along with this library if you did not you can find it
- * at http://www.gnu.org/. 
- *
-*/
+ */
 
 #include "kkedit-includes.h"
 

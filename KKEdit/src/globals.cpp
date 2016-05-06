@@ -1,8 +1,8 @@
 /*
  *
- * ©K. D. Hedger. Sun 25 Oct 14:49:34 GMT 2015 kdhedger68713@gmail.com
+ * ©K. D. Hedger. Fri  6 May 10:51:45 BST 2016 kdhedger68713@gmail.com
 
- * This file(globals.cpp) is part of KKEdit.
+ * This file (globals.cpp) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

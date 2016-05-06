@@ -1,12 +1,12 @@
 /*
  *
- * ©K. D. Hedger. Sun 25 Oct 14:49:15 GMT 2015 kdhedger68713@gmail.com
+ * ©K. D. Hedger. Fri  6 May 10:52:00 BST 2016 kdhedger68713@gmail.com
 
- * This file(files.cpp) is part of KKEdit.
+ * This file (files.cpp) is part of KKEdit.
 
  * KKEdit is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation,either version 3 of the License,or
+ * the Free Software Foundation, either version 3 of the License, or
  * at your option) any later version.
 
  * KKEdit is distributed in the hope that it will be useful,
@@ -15,7 +15,7 @@
    GNU General Public License for more details.
 
  * You should have received a copy of the GNU General Public License
- * along with KKEdit.  If not,see <http://www.gnu.org/licenses/>.
+ * along with KKEdit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "kkedit-includes.h"
