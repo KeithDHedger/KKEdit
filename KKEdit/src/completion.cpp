@@ -288,3 +288,29 @@ void doCompletionPopUp(pageStruct *page)
 	gtk_source_completion_show(page->completion,list,context);
 	ERRDATA
 }
+
+VISIBLE void addtoCustomWordList(GtkWidget *widget,gpointer data)
+{
+	ERRDATA
+	pageStruct		*page=(pageStruct*)data;
+	GtkTextIter		start;
+	GtkTextIter		end;
+	char			*selection=NULL;
+	char			*command;
+
+	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
+		{
+			selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
+			if(selection==NULL)
+				return;
+		}
+	else
+		return;
+
+	sinkReturn=asprintf(&command,"echo '%s'|cat - %s/%s|sort -u -o %s/%s.tmp;mv %s/%s.tmp %s/%s",selection,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE,getenv("HOME"),CUSTOMWORDFILE);
+	sinkReturn=system(command);
+	ERRDATA debugFree(&command);
+	ERRDATA debugFree(&selection);
+	createCompletion(page);
+}
+

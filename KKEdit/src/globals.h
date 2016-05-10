@@ -140,7 +140,7 @@ extern GtkWidget		*closeMenu;
 extern GtkWidget		*closeAllMenu;
 extern GtkWidget		*revertMenu;
 extern GtkWidget		*printMenu;
-extern GtkWidget		*sortTabsMenu;
+
 //edit menu
 extern GtkWidget		*editMenu;
 extern GtkWidget		*redoMenu;
@@ -150,6 +150,9 @@ extern GtkWidget		*undoAllMenu;
 extern GtkWidget		*cutMenu;
 extern GtkWidget		*copyMenu;
 extern GtkWidget		*pasteMenu;
+extern GtkWidget		*sortTabsMenu;
+extern GtkWidget		*showAllTabsMenu;
+
 //nav menu
 extern GtkWidget		*navMenu;
 extern GtkWidget		*gotoDefMenu;

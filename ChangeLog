@@ -1,4 +1,6 @@
 0.3.3
+Added 'Show All Tabs' to edit menu.
+Added 'Hide Tab' to tab popup menu.
 Search boxes on toolbar now always active.
 Fixed replace all when replace string contains find string.
 Lowered version numbers for vte lib for older distros.

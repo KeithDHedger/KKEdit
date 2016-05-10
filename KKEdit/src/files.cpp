@@ -607,11 +607,12 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 			g_string_free(str,true);
 			ERRDATA debugFree(&filepath);
 			ERRDATA debugFree(&filename);
+			gtk_widget_show_all((GtkWidget*)page->tabVbox);
 			setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 		}
 
 	gtk_widget_destroy(dialog);
-	refreshMainWindow();
+	//refreshMainWindow();
 	ERRDATA
 }
 
@@ -941,6 +942,7 @@ pageStruct *makeNewPage(void)
 	page->isDirty=false;
 	page->searchString=NULL;
 	page->replaceString=NULL;
+	page->hidden=false;
 
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&iter);
 	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),page->backMark,&iter);
@@ -1156,7 +1158,9 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
-	gtk_widget_show_all((GtkWidget*)mainNotebook);
+//	gtk_widget_show_all((GtkWidget*)mainNotebook);
+	gtk_widget_show_all((GtkWidget*)page->tabVbox);
+
 	setFilePrefs(page);
 
 	globalPlugins->globalPlugData->page=page;
@@ -1220,7 +1224,8 @@ VISIBLE void newFile(GtkWidget *widget,gpointer data)
 
 	gtk_notebook_set_current_page(mainNotebook,currentPage);
 	currentPage++;
-	gtk_widget_show_all((GtkWidget*)mainNotebook);
+//	gtk_widget_show_all((GtkWidget*)mainNotebook);
+	gtk_widget_show_all((GtkWidget*)page->tabVbox);
 	setFilePrefs(page);
 
 	globalPlugins->globalPlugData->page=page;
@@ -1228,3 +1233,84 @@ VISIBLE void newFile(GtkWidget *widget,gpointer data)
 
 	setPageSensitive();
 }
+
+VISIBLE void doOpenFile(GtkWidget *widget,gpointer data)
+{
+	ERRDATA
+	GtkWidget	*dialog;
+	char		*filename;
+	GSList		*filenames;
+	GSList		*thisnext;
+
+#ifdef _USEGTK3_
+	dialog=gtk_file_chooser_dialog_new(OPEN_TT_LABEL,NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN_LABEL, GTK_RESPONSE_ACCEPT,NULL);
+#else
+	dialog=gtk_file_chooser_dialog_new(OPEN_TT_LABEL,NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,NULL);
+#endif
+	gtk_file_chooser_set_select_multiple((GtkFileChooser*)dialog,true);
+	if(gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_ACCEPT)
+		{
+			filenames=gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(dialog));
+			thisnext=filenames;
+			while(thisnext!=NULL)
+				{
+					filename=(char*)thisnext->data;
+					openFile(filename,0,true);
+					g_free(filename);
+					thisnext=thisnext->next;
+				}
+			g_slist_free(filenames);
+		}
+	gtk_widget_destroy(dialog);
+	refreshMainWindow();
+}
+
+VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
+{
+	ERRDATA
+	gchar**	array=gtk_selection_data_get_uris(selection_data);
+	int		cnt=g_strv_length(array);
+	char	*filename;
+
+	for(int j=0; j<cnt; j++)
+		{
+			filename=g_filename_from_uri(array[j],NULL,NULL);
+			openFile(filename,0,true);
+		}
+	g_strfreev(array);
+}
+
+void recentFileMenu(GtkRecentChooser *chooser,gpointer *data)
+{
+	ERRDATA
+	gchar	*uri=NULL;
+	char	*filename;
+
+	if(data!=NULL)
+		{
+			openFile((char*)data,0,true);
+			return;
+		}
+
+	uri=gtk_recent_chooser_get_current_uri(chooser);
+	if(uri!=NULL)
+		{
+			filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
+			openFile(filename,0,true);
+			g_free(uri);
+			ERRDATA debugFree(&filename);
+		}
+}
+
+void openFromTab(GtkMenuItem *widget,pageStruct *page)
+{
+	ERRDATA
+	char		*filepath=NULL;
+
+	openInThisTab=gtk_notebook_get_current_page(mainNotebook);
+	sinkReturn=asprintf(&filepath,"%s/%s",page->dirName,gtk_menu_item_get_label(widget));
+	openFile(filepath,0,true);
+	openInThisTab=-1;
+	ERRDATA debugFree(&filepath);
+}
+

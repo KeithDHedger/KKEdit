@@ -1441,11 +1441,11 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //extras
-	menuitem=makeMenuItem(ROOTEDITPNG,menu,(void*)newEditor,0,NEWADMINMENUNAME,PIXMAPMENU,MENU_NEW_ADMIN_LABEL,(void*)1,false);
-	menuitem=makeMenuItem(MENUKKEDITPNG,menu,(void*)newEditor,0,NEWEDITORMENUNAME,PIXMAPMENU, MENU_NEW_EDITOR_LABEL,(void*)2,false);
+	menuitem=makeMenuItem(ROOTEDITPNG,menu,(void*)newEditor,0,NEWADMINMENUNAME,PIXMAPMENU,MENU_NEW_ADMIN_LABEL,(void*)NEWROOTEDITOR,false);
+	menuitem=makeMenuItem(MENUKKEDITPNG,menu,(void*)newEditor,0,NEWEDITORMENUNAME,PIXMAPMENU, MENU_NEW_EDITOR_LABEL,(void*)NEWEDITOR,false);
 
 	if(gotManEditor==0)
-		menuitem=makeMenuItem(MANPAGEEDITPNG,menu,(void*)newEditor,0,MANEDITORMENUNAME,PIXMAPMENU,MENU_MANPAGE_EDITOR_LABEL,(void*)3,false);
+		menuitem=makeMenuItem(MANPAGEEDITPNG,menu,(void*)newEditor,0,MANEDITORMENUNAME,PIXMAPMENU,MENU_MANPAGE_EDITOR_LABEL,(void*)NEWMANPAGEEDITOR,false);
 
 //doxy
 	if(gotDoxygen==0)
@@ -1537,6 +1537,10 @@ void buildMainGui(void)
 
 //sort
 	sortTabsMenu=makeMenuItem(GTK_STOCK_SORT_ASCENDING,menu,(void*)sortTabs,0,SORTTABSMENUNAME,IMAGEMENU,MENU_SORT_TABS_LABEL,NULL,false);
+
+//show all tabs
+	showAllTabsMenu=makeMenuItem(GTK_STOCK_ADD,menu,(void*)showAllTabs,0,SORTTABSMENUNAME,IMAGEMENU,MENU_SHOW_ALL_TABS_LABEL,NULL,false);
+
 //jump to tab
 	viewTabMenu=createNewImageMenuItem(GTK_STOCK_EDIT,MENU_SELECT_TAB_LABEL,true);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),viewTabMenu);

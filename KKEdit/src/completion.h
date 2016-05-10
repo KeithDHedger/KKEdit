@@ -52,5 +52,6 @@ void doCompletionPopUp(pageStruct *page);
 void createCompletion(pageStruct *page);
 void addProp(pageStruct *page);
 void removeProps(void);
+void addtoCustomWordList(GtkWidget *widget,gpointer data);
 
 #endif

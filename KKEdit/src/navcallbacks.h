@@ -36,5 +36,6 @@ gboolean docLinkTrap(WebKitWebView *web_view,WebKitWebFrame *frame,WebKitNetwork
 #endif
 void rebuildTabsMenu(void);
 void gotoLineSavePos(GtkWidget *widget,gpointer data);
+void menuJumpBack(GtkWidget *widget,gpointer data);
 
 #endif

@@ -33,5 +33,9 @@ void saveSession(GtkWidget *widget,gpointer data);
 void restoreSession(GtkWidget *widget,gpointer data);
 void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data);
 void setFilePrefs(pageStruct *page);
+void doOpenFile(GtkWidget *widget,gpointer data);
+void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data);
+void recentFileMenu(GtkRecentChooser *chooser,gpointer *data);
+void openFromTab(GtkMenuItem *widget,pageStruct *page);
 
 #endif

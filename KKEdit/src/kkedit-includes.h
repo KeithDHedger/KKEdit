@@ -59,7 +59,7 @@
 #define GTK_STOCK_FIND "edit-find"
 #define GTK_STOCK_DELETE "edit-delete"
 #define GTK_STOCK_FIND_AND_REPLACE "edit-find-replace"
-
+#define GTK_STOCK_REMOVE "list-remove"
 //applications
 #define GTK_STOCK_CLOSE "window-close"
 #define GTK_STOCK_PREFERENCES "preferences-system"
@@ -128,6 +128,8 @@
 #define MENU_PASTE_LABEL gettext("_Paste")
 #define MENU_FIND_LABEL gettext("_Find")
 #define MENU_SORT_TABS_LABEL gettext("_Sort Tabs")
+#define MENU_SHOW_ALL_TABS_LABEL gettext("S_how All Tabs")
+#define MENU_HIDE_TAB_LABEL gettext("_Hide Tab")
 #define MENU_SELECT_TAB_LABEL gettext("Se_lect Tab")
 #define MENU_PREFERENCES_LABEL gettext("Pr_eferences")
 #define MENU_PLUG_PREFS_LABEL gettext("Plu_gin Prefs")

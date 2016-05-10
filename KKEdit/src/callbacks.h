@@ -21,7 +21,8 @@
 #ifndef _CALLBACKS_
 #define _CALLBACKS_
 
-void doOpenFile(GtkWidget *widget,gpointer data);
+enum {NEWROOTEDITOR=1,NEWEDITOR,NEWMANPAGEEDITOR};
+
 void closeTab(GtkWidget *widget,gpointer data);
 void switchPage(GtkNotebook *notebook,gpointer arg1,guint arg2,gpointer user_data);
 void copyToClip(GtkWidget *widget,gpointer data);
@@ -29,7 +30,6 @@ void cutToClip(GtkWidget *widget,gpointer data);
 void pasteFromClip(GtkWidget *widget,gpointer data);
 void undo(GtkWidget *widget,gpointer data);
 void redo(GtkWidget *widget,gpointer data);
-void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data);
 void externalTool(GtkWidget *widget,gpointer data);
 void openHelp(GtkWidget *widget,gpointer data);
 void printFile(GtkWidget *widget,gpointer data);
@@ -42,7 +42,6 @@ void doAbout(GtkWidget *widget,gpointer data);
 void writeExitData(void);
 bool doSaveAll(GtkWidget *widget,gpointer data);
 void closeAllTabs(GtkWidget *widget,gpointer data);
-void recentFileMenu(GtkRecentChooser *chooser,gpointer *data);
 void refreshMainWindow(void);
 void newEditor(GtkWidget *widget,gpointer data);
 void changeSourceStyle(GtkWidget *widget,gpointer data);
@@ -67,6 +66,7 @@ void getPlugins(GtkWidget *widget,gpointer data);
 void showToolOutput(bool immediate);
 void hideToolOutput(bool immediate);
 void sortTabs(GtkWidget *widget,gpointer data);
+void showAllTabs(GtkWidget *widget,gpointer data);
 
 void toggleLineNumbers(GtkWidget *widget,gpointer data);
 void toggleWrapLines(GtkWidget *widget,gpointer data);
@@ -79,6 +79,5 @@ void markUndo(GtkSourceUndoManager *manager,pageStruct *page);
 void markRedo(GtkSourceUndoManager *manager,pageStruct *page);
 void markDirty(GtkTextBuffer *textbuffer,pageStruct *page);
 void realCloseTab(GtkNotebook *notebook,GtkWidget *child,guint page_num,gpointer user_data);
-void menuJumpBack(GtkWidget *widget,gpointer data);
 
 #endif

@@ -43,7 +43,7 @@ GtkWidget		*closeMenu;
 GtkWidget		*closeAllMenu;
 GtkWidget		*revertMenu;
 GtkWidget		*printMenu;
-GtkWidget		*sortTabsMenu=NULL;
+
 //edit menu
 GtkWidget		*editMenu;
 GtkWidget		*redoMenu;
@@ -53,6 +53,9 @@ GtkWidget		*undoAllMenu;
 GtkWidget		*cutMenu;
 GtkWidget		*copyMenu;
 GtkWidget		*pasteMenu;
+GtkWidget		*sortTabsMenu=NULL;
+GtkWidget		*showAllTabsMenu=NULL;
+
 //view menu
 GtkWidget		*viewMenu=NULL;
 GtkWidget		*viewTabMenu=NULL;

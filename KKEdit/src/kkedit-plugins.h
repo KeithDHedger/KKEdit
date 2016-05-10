@@ -54,6 +54,7 @@
 #define CLOSEMENUNAME "closemenu"
 #define CLOSEALLMENUNAME "closeallmenu"
 #define SORTTABSMENUNAME "sorttabsmenu"
+#define SHOWTABSMENUNAME "showalltabsmenu"
 #define REVERTMENUNAME "revertmenu"
 #define QUITMENUNAME "quitmenu"
 #define UNDOMENUNAME "undomenu"
@@ -144,6 +145,7 @@ struct pageStruct
 	char				*searchString;
 	char				*replaceString;;
 	GtkWidget			*tabButton;
+	bool				hidden;
 };
 #endif
 
