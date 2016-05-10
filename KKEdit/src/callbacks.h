@@ -67,6 +67,7 @@ void showToolOutput(bool immediate);
 void hideToolOutput(bool immediate);
 void sortTabs(GtkWidget *widget,gpointer data);
 void showAllTabs(GtkWidget *widget,gpointer data);
+void hideTab(GtkWidget *widget,gpointer data);
 
 void toggleLineNumbers(GtkWidget *widget,gpointer data);
 void toggleWrapLines(GtkWidget *widget,gpointer data);

@@ -695,6 +695,7 @@ void selectTab(GtkWidget *widget,gpointer data)
 
 	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 	buf->scroll2CentreScreen((GtkTextView*)page->view,false);
+	page->hidden=false;
 	delete buf;
 
 	ERRDATA

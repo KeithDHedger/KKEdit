@@ -667,7 +667,8 @@ VISIBLE void saveSession(GtkWidget *widget,gpointer data)
 					mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
 					linenumber=gtk_text_iter_get_line(&iter);
-					fprintf(fd,"%i %s\n",linenumber,page->filePath);
+					fprintf(fd,"%i %i %s\n",linenumber,(int)page->hidden,page->filePath);
+					fprintf(stderr,"%i %i %s\n",linenumber,(int)page->hidden,page->filePath);
 
 					ptr=newBookMarksList;
 					while(ptr!=NULL)
@@ -702,6 +703,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 	GtkTextIter		markiter;
 	int				currentline;
 	TextBuffer		*buf=new TextBuffer;
+	int				hidden;
 
 	ERRDATA
 
@@ -722,7 +724,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
-					sscanf(buffer,"%i %[^\n]s",(int*)&currentline,(char*)&strarg);
+					sscanf(buffer,"%i %i %[^\n]s",(int*)&currentline,(int*)&hidden,(char*)&strarg);
 					if(openFile(strarg,currentline,true)==false)
 						{
 							intarg=999;
@@ -738,6 +740,11 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 							page=getPageStructPtr(currentPage-1);
 							gtk_notebook_set_current_page(mainNotebook,currentPage-1);
+							//page->hidden=(bool)hidden;
+							if(hidden==true)
+								hideTab(NULL,(void*)page);
+							else
+								page->hidden=false;
 							while(intarg!=-1)
 								{
 									gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);

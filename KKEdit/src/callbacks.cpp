@@ -467,7 +467,7 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 
 	gtk_widget_show_all(page->tabVbox);
 	gtk_widget_set_visible(page->tabVbox,true);
-	page->hidden=true;
+	page->hidden=false;
 	gtk_window_set_title((GtkWindow*)mainWindow,page->fileName);
 //	refreshMainWindow();
 //	gtk_widget_show(mainWindow);
