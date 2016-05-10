@@ -470,6 +470,16 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	page->hidden=true;
 	gtk_window_set_title((GtkWindow*)mainWindow,page->fileName);
 //	refreshMainWindow();
+//	gtk_widget_show(mainWindow);
+//	gtk_widget_show_all((GtkWidget*)mainNotebook);
+//	gtk_widget_show(mainWindowVBox);
+//	gtk_widget_show(mainVPane);
+//	gtk_widget_show(mainWindowHPane);
+//	gtk_widget_show(secondWindowHPane);
+	gtk_widget_show_all(menuBar);
+//	gtk_widget_show_all(toolBarBox);
+//	gtk_widget_show_all(mainWindowHBox);
+
 	if(functions!=NULL)
 		ERRDATA debugFree(&functions);
 

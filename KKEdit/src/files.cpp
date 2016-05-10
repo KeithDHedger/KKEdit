@@ -1160,7 +1160,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 //	gtk_widget_show_all((GtkWidget*)mainNotebook);
 	gtk_widget_show_all((GtkWidget*)page->tabVbox);
-
+	gtk_widget_show_all(menuBar);
 	setFilePrefs(page);
 
 	globalPlugins->globalPlugData->page=page;
@@ -1262,7 +1262,7 @@ VISIBLE void doOpenFile(GtkWidget *widget,gpointer data)
 			g_slist_free(filenames);
 		}
 	gtk_widget_destroy(dialog);
-	refreshMainWindow();
+//	refreshMainWindow();
 }
 
 VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
