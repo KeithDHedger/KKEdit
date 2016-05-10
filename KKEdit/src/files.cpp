@@ -612,7 +612,6 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 		}
 
 	gtk_widget_destroy(dialog);
-	//refreshMainWindow();
 	ERRDATA
 }
 
@@ -740,11 +739,6 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 							page=getPageStructPtr(currentPage-1);
 							gtk_notebook_set_current_page(mainNotebook,currentPage-1);
-							//page->hidden=(bool)hidden;
-							if(hidden==true)
-								hideTab(NULL,(void*)page);
-							else
-								page->hidden=false;
 							while(intarg!=-1)
 								{
 									gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
@@ -755,6 +749,11 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 								}
 							buf->textBuffer=(GtkTextBuffer*)page->buffer;
 							buf->scroll2Line((GtkTextView*)page->view,currentline);					
+
+							if(hidden==true)
+								hideTab(NULL,(void*)page);
+							else
+								page->hidden=false;
 						}
 				}
 			fclose(fd);
@@ -1269,7 +1268,6 @@ VISIBLE void doOpenFile(GtkWidget *widget,gpointer data)
 			g_slist_free(filenames);
 		}
 	gtk_widget_destroy(dialog);
-//	refreshMainWindow();
 }
 
 VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)

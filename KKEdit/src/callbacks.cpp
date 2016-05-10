@@ -469,16 +469,7 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	gtk_widget_set_visible(page->tabVbox,true);
 	page->hidden=false;
 	gtk_window_set_title((GtkWindow*)mainWindow,page->fileName);
-//	refreshMainWindow();
-//	gtk_widget_show(mainWindow);
-//	gtk_widget_show_all((GtkWidget*)mainNotebook);
-//	gtk_widget_show(mainWindowVBox);
-//	gtk_widget_show(mainVPane);
-//	gtk_widget_show(mainWindowHPane);
-//	gtk_widget_show(secondWindowHPane);
 	gtk_widget_show_all(menuBar);
-//	gtk_widget_show_all(toolBarBox);
-//	gtk_widget_show_all(mainWindowHBox);
 
 	if(functions!=NULL)
 		ERRDATA debugFree(&functions);
@@ -1628,17 +1619,6 @@ VISIBLE void toggleToolOutput(GtkWidget *widget,gpointer data)
 		}
 }
 
-//VISIBLE void toggleBookMarkBar(GtkWidget *widget,gpointer data)
-//{
-//	ERRDATA
-//	showBMBar=!showBMBar;
-//	if(showBMBar)
-//		gtk_menu_item_set_label((GtkMenuItem*)widget,MENU_HIDE_BM_BAR_LABEL);
-//	else
-//		gtk_menu_item_set_label((GtkMenuItem*)widget,MENU_SHOW_BM_BAR_LABEL);
-//	resetAllFilePrefs();
-//}
-//
 VISIBLE void toggleToolBar(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
