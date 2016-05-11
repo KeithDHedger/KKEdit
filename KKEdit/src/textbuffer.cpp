@@ -198,26 +198,22 @@ void TextBuffer::scroll2CentreScreen(GtkTextView *view,bool doupdate)
 		}
 }
 
-void TextBuffer::scroll2OnScreen(GtkTextView *view,bool doupdate)
+void TextBuffer::scroll2OnScreen(GtkTextView *view)
 {
 	GtkTextMark		*mark;
 	GtkTextIter		iter;
-	bool			didscroll;
 
 	mark=gtk_text_buffer_get_insert(this->textBuffer);
 	gtk_text_buffer_get_iter_at_mark(this->textBuffer,&iter,mark);
+
+#ifndef _USEGTK3_
+	bool			didscroll;
 	didscroll=gtk_text_view_scroll_to_iter(view,&iter,0,false,0,0);
 	if(didscroll==true)
-		{
-		printf("scrolled\n");
-//			gtk_text_view_scroll_mark_onscreen(view,mark);
-			gtk_text_view_scroll_to_mark(view,mark,0,true,0,0.5);
-		}
-	if(doupdate==true)
-		{
-			while(gtk_events_pending())
-				gtk_main_iteration();
-		}
+#else
+	gtk_text_view_scroll_to_iter(view,&iter,0,false,0,0);
+#endif
+		gtk_text_view_scroll_mark_onscreen(view,mark);
 }
 
 void TextBuffer::scroll2Line(GtkTextView *view,int linenum,bool doupdate)

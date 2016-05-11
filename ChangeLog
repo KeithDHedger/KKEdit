@@ -1,4 +1,5 @@
 0.3.3
+Moving a line or selection with keyboard now keeps line/selection on screen.
 Session restore and session manager now remember visibilty of tabs.
 Fixed refresh bug.
 Added 'Show All Tabs' to edit menu.

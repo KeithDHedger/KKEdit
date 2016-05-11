@@ -20,6 +20,8 @@
 
 #include "kkedit-includes.h"
 
+enum {DELTELINE=0,DELETETOEOL,DELETETOBOL,SELECTWORD,DELETEWORD,DUPLINE,SELECTLINE,MOVELINEUP,MOVELINEDOWN,SELECTTOEOL,SELECTTOBOL,MOVELSELECTIONUP,MOVESELECTIONDOWN,FORCECOMPLETE};
+
 GtkWidget			*tabMenu;
 char				defineText[1024];
 GtkPrintSettings	*settings=NULL;
@@ -1710,9 +1712,9 @@ VISIBLE void toggleHighlightCurrent(GtkWidget *widget,gpointer data)
 void doKeyShortCut(int what)
 {
 	ERRDATA
-	TextBuffer		*buf;
-	char			*text;
-	pageStruct		*page=getPageStructPtr(-1);
+	TextBuffer	*buf;
+	char		*text;
+	pageStruct	*page=getPageStructPtr(-1);
 	GtkTextMark	*mark;
 
 	if(page==NULL)
@@ -1723,31 +1725,31 @@ void doKeyShortCut(int what)
 	switch(what)
 		{
 //delete line ^Y
-		case 0:
+		case DELTELINE:
 			gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
 			break;
 //delete from cursor to end of line ^k
-		case 1:
+		case DELETETOEOL:
 			buf->getToVisibleLineEnd();
 			buf->deleteFromCursor(&buf->visibleLineEnd);
 			break;
 //delete from cursor to beginning of line ^?
-		case 2:
+		case DELETETOBOL:
 			buf->getToLineStart();
 			buf->deleteToCursor(&buf->lineStart);
 			break;
 //Select Word Under Cursor
-		case 3:
+		case SELECTWORD:
 			if(buf->selectWord())
 				buf->selectRange(&buf->lineStart,&buf->cursorPos);
 			break;
 //delete word under cursor ^h
-		case 4:
+		case DELETEWORD:
 			if(buf->selectWord())
 				gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->cursorPos);
 			break;
 //duplictae line ^D
-		case 5:
+		case DUPLINE:
 			buf->getCursorIter();
 			text=buf->getSelectedText();
 			gtk_text_iter_backward_lines(&buf->cursorPos,-1);
@@ -1757,11 +1759,11 @@ void doKeyShortCut(int what)
 			gtk_text_buffer_end_user_action(buf->textBuffer);
 			break;
 //select line ^l
-		case 6:
+		case SELECTLINE:
 			buf->selectVisibleLine();
 			break;
 //Move Current Line Up ^m
-		case 7:
+		case MOVELINEUP:
 			text=buf->getSelectedText();
 			gtk_text_buffer_begin_user_action(buf->textBuffer);
 				gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
@@ -1770,10 +1772,11 @@ void doKeyShortCut(int what)
 				gtk_text_buffer_insert(buf->textBuffer,&buf->cursorPos,text,-1);
 				gtk_text_iter_backward_visible_line(&buf->cursorPos);
 				gtk_text_buffer_place_cursor(buf->textBuffer,&buf->cursorPos);
+				buf->scroll2OnScreen((GtkTextView*)page->view);
 			gtk_text_buffer_end_user_action(buf->textBuffer);
 			break;
 //Move Current Line Down
-		case 8:
+		case MOVELINEDOWN:
 			text=buf->getSelectedText();
 			gtk_text_buffer_begin_user_action(buf->textBuffer);
 				gtk_text_buffer_delete(buf->textBuffer,&buf->lineStart,&buf->lineEnd);
@@ -1783,18 +1786,19 @@ void doKeyShortCut(int what)
 				buf->getCursorIter();
 				gtk_text_iter_forward_visible_line(&buf->cursorPos);
 				gtk_text_buffer_place_cursor(buf->textBuffer,&buf->cursorPos);
+				buf->scroll2OnScreen((GtkTextView*)page->view);
 			gtk_text_buffer_end_user_action(buf->textBuffer);
 			break;
 //Select From Cursor To End Of Line
-		case 9:
+		case SELECTTOEOL:
 			buf->selectToLineEnd();
 			break;
 //Select From Beginning Of Line To Cursor
-		case 10:
+		case SELECTTOBOL:
 			buf->selectToLineStart();
 			break;
 //Move Selection Up
-		case 11:
+		case MOVELSELECTIONUP:
 			if(gtk_text_buffer_get_selection_bounds(buf->textBuffer,&buf->lineStart,&buf->lineEnd))
 				{
 					gtk_text_buffer_begin_user_action(buf->textBuffer);
@@ -1814,11 +1818,12 @@ void doKeyShortCut(int what)
 						gtk_text_iter_forward_chars(&buf->lineEnd,strlen(text));
 						buf->selectRange(&buf->cursorPos,&buf->lineEnd);
 						gtk_text_buffer_delete_mark(buf->textBuffer,mark);
+						buf->scroll2OnScreen((GtkTextView*)page->view);
 					gtk_text_buffer_end_user_action(buf->textBuffer);
 				}
 			break;
 //Move Selection Down
-		case 12:
+		case MOVESELECTIONDOWN:
 			if(gtk_text_buffer_get_selection_bounds(buf->textBuffer,&buf->lineStart,&buf->lineEnd))
 				{
 					gtk_text_buffer_begin_user_action(buf->textBuffer);
@@ -1837,11 +1842,13 @@ void doKeyShortCut(int what)
 						gtk_text_iter_backward_chars(&buf->cursorPos,strlen(text));
 						buf->selectRange(&buf->cursorPos,&buf->lineEnd);
 						gtk_text_buffer_delete_mark(buf->textBuffer,mark);
+						buf->scroll2OnScreen((GtkTextView*)page->view);
 					gtk_text_buffer_end_user_action(buf->textBuffer);
 				}
 			break;
+
 //completion
-		case 13:
+		case FORCECOMPLETE:
 			forcePopup=true;
 			doCompletionPopUp(page);
 			forcePopup=false;
