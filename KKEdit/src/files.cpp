@@ -719,7 +719,10 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 	if(fd!=NULL)
 		{
 			if(data!=NULL)
-				sinkReturnStr=fgets(buffer,2048,fd);
+				{
+					sinkReturnStr=fgets(buffer,2048,fd);
+					sinkReturnStr=fgets(buffer,2048,fd);
+				}
 
 			while(fgets(buffer,2048,fd)!=NULL)
 				{

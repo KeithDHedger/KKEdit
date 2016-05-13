@@ -235,20 +235,21 @@
 //kb shortcts
 #define KBSC_DEFINE_KB_LABEL gettext("Define Keyboard Shortcuts")
 #define KBSC_INFO_LABEL gettext("To set a custom shortcut:\nClick in the appropriate box and press CONTROL(and optionally SHIFT ) plus your custom key.\nJust press 'Delete' to remove the shortcut\nClick 'Apply' to keep changes or 'Cancel' to discard any changes.")
-#define DELETE_LINE_LABEL "Delete Current Line"
-#define DELETE_TO_EOL_LABEL "Delete To End Of Line"
-#define DELETE_TO_BOL_LABEL "Delete To Beginning Of Line"
-#define SELECT_WORD_LABEL "Select Word Under Cursor"
-#define DELETE_WORD_LABEL "Delete Word Under Cursor"
-#define DUPLICATE_LINE_LABEL "Duplicate Current Line"
-#define SELECT_LINE_LABEL "Select Current Line"
-#define LINE_UP_LABEL "Move Current Line Up"
-#define LINE_DOWN_LABEL "Move Current Line Down"
-#define SELECT_TO_EOL_LABEL "Select From Cursor To End Of Line"
-#define SELECT_TO_BOL_LABEL "Select From Beginning Of Line To Cursor"
-#define SELECTION_UP_LABEL "Move Selection Up"
-#define SELECTION_DOWN_LABEL "Move Selection Down"
-#define SHOW_COMPLETION_LABEL "Show Completion"
+#define DELETE_LINE_LABEL gettext("Delete Current Line")
+#define DELETE_TO_EOL_LABEL gettext("Delete To End Of Line")
+#define DELETE_TO_BOL_LABEL gettext("Delete To Beginning Of Line")
+#define SELECT_WORD_LABEL gettext("Select Word Under Cursor")
+#define DELETE_WORD_LABEL gettext("Delete Word Under Cursor")
+#define DUPLICATE_LINE_LABEL gettext("Duplicate Current Line")
+#define SELECT_LINE_LABEL gettext("Select Current Line")
+#define LINE_UP_LABEL gettext("Move Current Line Up")
+#define LINE_DOWN_LABEL gettext("Move Current Line Down")
+#define SELECT_TO_EOL_LABEL gettext("Select From Cursor To End Of Line")
+#define SELECT_TO_BOL_LABEL gettext("Select From Beginning Of Line To Cursor")
+#define SELECTION_UP_LABEL gettext("Move Selection Up")
+#define SELECTION_DOWN_LABEL gettext("Move Selection Down")
+#define SHOW_COMPLETION_LABEL gettext("Show Completion")
+#define HIDE_TAB_LABEL gettext("Hide Tab")
 
 //tooltips
 #define NEW_TT_LABEL gettext("New File")

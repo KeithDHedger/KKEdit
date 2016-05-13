@@ -34,7 +34,7 @@ GtkWidget		*pagevbox;
 
 GtkWidget		*entries[NUMSHORTCUTS];
 
-const char		*shortcuttext[NUMSHORTCUTS]={DELETE_LINE_LABEL,DELETE_TO_EOL_LABEL,DELETE_TO_BOL_LABEL,SELECT_WORD_LABEL,DELETE_WORD_LABEL,DUPLICATE_LINE_LABEL,SELECT_LINE_LABEL,LINE_UP_LABEL,LINE_DOWN_LABEL,SELECT_TO_EOL_LABEL,SELECT_TO_BOL_LABEL,SELECTION_UP_LABEL,SELECTION_DOWN_LABEL,SHOW_COMPLETION_LABEL};
+const char		*shortcuttext[NUMSHORTCUTS]={DELETE_LINE_LABEL,DELETE_TO_EOL_LABEL,DELETE_TO_BOL_LABEL,SELECT_WORD_LABEL,DELETE_WORD_LABEL,DUPLICATE_LINE_LABEL,SELECT_LINE_LABEL,LINE_UP_LABEL,LINE_DOWN_LABEL,SELECT_TO_EOL_LABEL,SELECT_TO_BOL_LABEL,SELECTION_UP_LABEL,SELECTION_DOWN_LABEL,SHOW_COMPLETION_LABEL,HIDE_TAB_LABEL};
 
 GtkWidget	*prefsWidgets[MAXPREFSWIDGETS];
 GObject	*prefsIntWidgets[MAXPREFSINTWIDGETS];
@@ -1443,7 +1443,6 @@ void buildMainGui(void)
 //extras
 	menuitem=makeMenuItem(ROOTEDITPNG,menu,(void*)newEditor,0,NEWADMINMENUNAME,PIXMAPMENU,MENU_NEW_ADMIN_LABEL,(void*)NEWROOTEDITOR,false);
 	menuitem=makeMenuItem(MENUKKEDITPNG,menu,(void*)newEditor,0,NEWEDITORMENUNAME,PIXMAPMENU, MENU_NEW_EDITOR_LABEL,(void*)NEWEDITOR,false);
-
 	if(gotManEditor==0)
 		menuitem=makeMenuItem(MANPAGEEDITPNG,menu,(void*)newEditor,0,MANEDITORMENUNAME,PIXMAPMENU,MENU_MANPAGE_EDITOR_LABEL,(void*)NEWMANPAGEEDITOR,false);
 
@@ -1479,7 +1478,6 @@ void buildMainGui(void)
 	menuitem=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveSession,0,SAVESESSIONMENUNAME,IMAGEMENU,MENU_SAVE_SESSION_LABEL,(void*)false,false);
 //restore session
 	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONMENUNAME,IMAGEMENU,MENU_RESTORE_SESSION_LABEL,NULL,false);
-
 //printfile
 	printMenu=makeMenuItem(GTK_STOCK_PRINT,menu,(void*)printFile,'P',PRINTMENUNAME,STOCKMENU,PRINT_LABEL,NULL,false);
 
@@ -1537,10 +1535,8 @@ void buildMainGui(void)
 
 //sort
 	sortTabsMenu=makeMenuItem(GTK_STOCK_SORT_ASCENDING,menu,(void*)sortTabs,0,SORTTABSMENUNAME,IMAGEMENU,MENU_SORT_TABS_LABEL,NULL,false);
-
 //show all tabs
 	showAllTabsMenu=makeMenuItem(GTK_STOCK_ADD,menu,(void*)showAllTabs,0,SORTTABSMENUNAME,IMAGEMENU,MENU_SHOW_ALL_TABS_LABEL,NULL,false);
-
 //jump to tab
 	viewTabMenu=createNewImageMenuItem(GTK_STOCK_EDIT,MENU_SELECT_TAB_LABEL,true);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),viewTabMenu);
@@ -1562,19 +1558,16 @@ void buildMainGui(void)
 
 //show docs
 	menuitem=makeMenuItem(MENU_SHOW_DOCS_LABEL,menu,(void*)doDoxy,0,SHOWDOCSMENUNAME,NORMALMENU,NULL,(void*)2,false);
-
 //toggle bookmark bar
 	if(showBMBar)
 		menuitem=makeMenuItem(MENU_HIDE_BM_BAR_LABEL,menu,(void*)toggleBookMarkBar,0,SHOWBMBARMENUNAME,NORMALMENU,NULL,NULL,false);
 	else
 		menuitem=makeMenuItem(MENU_SHOW_BM_BAR_LABEL,menu,(void*)toggleBookMarkBar,0,SHOWBMBARMENUNAME,NORMALMENU,NULL,NULL,false);
-
 //toggle toolbar bar
 	if(showToolBar)
 		menuitem=makeMenuItem(MENU_HIDE_TOOLBAR_LABEL,menu,(void*)toggleToolBar,0,SHOWTOOLBARMENUNAME,NORMALMENU,NULL,NULL,false);
 	else
 		menuitem=makeMenuItem(MENU_SHOW_TOOLBAR_LABEL,menu,(void*)toggleToolBar,0,SHOWTOOLBARMENUNAME,NORMALMENU,NULL,NULL,false);
-
 //tooloutput
 	if(showToolOutWin)
 		toolOutMenu=makeMenuItem(MENU_HIDE_TOOL_OP_LABEL,menu,(void*)toggleToolOutput,0,SHOWTOOLOUTMENUNAME,NORMALMENU,NULL,NULL,false);
@@ -1596,16 +1589,12 @@ void buildMainGui(void)
 		menuitem=makeMenuItem(MENU_SHOW_LINE_NUMBERS_LABEL,menu,(void*)toggleLineNumbers,0,VIEWSHOWLINENUMERS,CHECKMENU,NULL,NULL,lineNumbers);
 //toggle wrap lines
 	menuitem=makeMenuItem( MENU_WRAP_LINES_LABEL,menu,(void*)toggleWrapLines,0,VIEWWRAPLINES,CHECKMENU,NULL,NULL,lineWrap);
-
 //toggle higlight current line
 	menuitem=makeMenuItem(MENU_HIGHLIGHT_LINE_LABEL,menu,(void*)toggleHighlightCurrent,0,VIEWHIGHLIGHT,CHECKMENU,NULL,NULL,highLight);
-
 //toggle syntax highlight
 	menuitem=makeMenuItem(MENU_NO_SYNTAX_LABEL,menu,(void*)toggleSyntax,0,VIEWNOSYNTAX,CHECKMENU,NULL,NULL,noSyntax);
-
 //toggle show spaces
 	menuitem=makeMenuItem(MENU_SHOW_SPACES_LABEL,menu,(void*)toggleWhitespace,0,VIEWWHITESPACE,CHECKMENU,NULL,NULL,showWhiteSpace);
-
 //toggle auto show comps
 	menuitem=makeMenuItem(MENU_SHOW_AUTO_COMPLETE,menu,(void*)toggleAutoComplete,0,VIEWAUTOCOMPLETE,CHECKMENU,NULL,NULL,autoShowComps);
 
@@ -1629,12 +1618,9 @@ void buildMainGui(void)
 	searchInGtkDocsMenu=makeMenuItem(GTK_STOCK_FIND,menu,(void*)searchGtkDocs,0,SEARCHGTKMENUNAME,IMAGEMENU,MENU_FIND_IN_GTKAPI_LABEL,NULL,false);
 //find qt5
 	searchInQTDocsMenu=makeMenuItem(GTK_STOCK_FIND,menu,(void*)searchQT5Docs,0,SEARCHQT5MENUNAME,IMAGEMENU,MENU_FIND_IN_QTAPI_LABEL,NULL,false);
-
 //goto doxy docs
 	if(gotDoxygen==0)
 		searchInDocsMenu=makeMenuItem(GTK_STOCK_FIND,menu,(void*)doxyDocs,0,SEARCHDOXYMENUNAME,IMAGEMENU,MENU_FIND_IN_DOCS_LABEL,NULL,false);
-
-//*makeMenuItem(const char *stocklabel,GtkWidget *parent,void *function,char hotkey,const char *name,int setimage,const char *menulabel,void *userdata,bool toggle)
 //go back
 	goBackMenu=makeMenuItem(GTK_STOCK_GO_BACK,menu,(void*)navigateHistory,0,GOBACKMENUNAME,STOCKMENU,MENU_GO_BACK_LABEL,(void*)NAVLAST,false);
 //go foward
@@ -1814,7 +1800,6 @@ void buildMainGui(void)
 //gettext
 	globalPlugins->globalPlugData->locale=LOCALEDIR;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
-//	globalHistory=new HistoryClass(mainNotebook,maxJumpHistory);
 	resetSensitive();
 }
 

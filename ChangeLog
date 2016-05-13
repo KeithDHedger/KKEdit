@@ -1,4 +1,6 @@
 0.3.3
+Added 'Hide Tab' to keyboard shortcuts ( defaults to ^h, 'Delete Word Under Cursor' now defaults to ^d ).
+Restored missing translations.
 Moving a line or selection with keyboard now keeps line/selection on screen.
 Session restore and session manager now remember visibilty of tabs.
 Fixed refresh bug.

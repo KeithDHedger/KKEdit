@@ -48,13 +48,13 @@
 
 extern void restoreSession(GtkWidget* widget,gpointer data);
 
-char*		prefsPath;
+char		*prefsPath;
 GtkWidget*	menuPlug;
 GtkWidget*	saveSessionMenu=NULL;
 GtkWidget*	restoreSessionMenu=NULL;
 GtkWidget*	holdWidget=NULL;
 GtkWidget*	menusm;
-char*		currentdomain=NULL;
+char		*currentdomain=NULL;
 
 int	(*module_plug_function)(gpointer globaldata);
 
@@ -68,13 +68,13 @@ extern GList*			newBookMarksList;
 struct bookMarksNew
 {
 	pageStruct*			page;
-	char*				label;
+	char				*label;
 	GtkSourceMark*		mark;
-	char*				markName;
+	char				*markName;
 	int					line;
 };
 
-char*		sessionNames[MAXSESSIONS]= {NULL,};
+char* sessionNames[MAXSESSIONS]= {NULL,};
 
 void setTextDomain(bool plugdomain,plugData* pdata)
 {
@@ -96,7 +96,7 @@ void setTextDomain(bool plugdomain,plugData* pdata)
 
 GtkWidget* findMenu(GtkWidget* parent, const gchar* name)
 {
-	const gchar* mname=NULL;
+	const gchar	*mname=NULL;
 
 	if ( (GTK_IS_MENU_ITEM(parent)) && !(GTK_IS_SEPARATOR_MENU_ITEM(parent)) )
 		{
@@ -146,7 +146,7 @@ char* getNewSessionName(int sessionnumber,plugData* plugdata)
 	GtkWidget*	prefs;
 	GtkWidget*	vbox;
 	int			response;
-	char*		command;
+	char		*command;
 
 	vbox=createNewBox(NEWVBOX,false,0);
 
@@ -178,18 +178,26 @@ void saveSessionPlug(char* name,plugData* plugdata,int snum)
 {
 	pageStruct*		page;
 	FILE*			fd=NULL;
-	char*			filename;
+	char			*filename;
 	GtkTextMark*	mark;
 	GtkTextIter		iter;
 	int				linenumber;
 	GtkTextIter		markiter;
 	GList*			ptr;
+	GtkAllocation	alloc;
+	int				winx;
+	int				winy;
 
 	asprintf(&filename,"%s/session-%i",plugdata->lPlugFolder,snum);
 	fd=fopen(filename,"w");
 	if (fd!=NULL)
 		{
 			fprintf(fd,"%s\n",name);
+			gtk_widget_get_allocation(plugdata->mainWindow,&alloc);
+			gtk_window_get_position((GtkWindow*)plugdata->mainWindow,&winx,&winy);
+			if( (alloc.width>10) && (alloc.height>10) )
+				fprintf(fd,"%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
+
 			for(int loop=0; loop<gtk_notebook_get_n_pages(plugdata->notebook); loop++)
 				{
 					page=getPageStructPtr(loop);
@@ -219,11 +227,13 @@ void saveSessionPlug(char* name,plugData* plugdata,int snum)
 
 void restoreSessionNum(GtkWidget* widget,gpointer data)
 {
-	char*		sessionfile;
-	char*		sname=NULL;
-	FILE*		fd=NULL;
+	char		*sessionfile;
+	char		*sname=NULL;
+	FILE		*fd=NULL;
 	const char	*widgetname=NULL;
 	plugData	*plugdata=(plugData*)data;
+	int			winx=0,winy=0;
+	int			width=800,hite=600;
 
 	widgetname=gtk_widget_get_name(widget);
 	for(int j=0; j<MAXSESSIONS; j++)
@@ -235,6 +245,10 @@ void restoreSessionNum(GtkWidget* widget,gpointer data)
 					fscanf(fd,"%a[^\n]s",&sname);
 					if(strcmp(sname,widgetname)==0)
 						{
+							fscanf(fd,"%i %i %i %i\n",&width,&hite,&winx,&winy);
+							gtk_window_resize((GtkWindow*)plugdata->mainWindow,width,hite);
+							if(winx!=-1 && winy!=-1)
+								gtk_window_move((GtkWindow *)plugdata->mainWindow,winx,winy);
 							restoreSession(NULL,sessionfile);
 							free(sessionfile);
 							free(sname);
@@ -250,7 +264,7 @@ void restoreSessionNum(GtkWidget* widget,gpointer data)
 void rebuildMainMenu(GtkWidget* menu,plugData*	plugdata,GCallback* func)
 {
 	GtkWidget*	menuitem;
-	char*		sessionname;
+	char		*sessionname;
 	GtkWidget*	submenu;
 
 	submenu=gtk_menu_item_get_submenu(GTK_MENU_ITEM(menu));
@@ -272,7 +286,7 @@ void rebuildMainMenu(GtkWidget* menu,plugData*	plugdata,GCallback* func)
 
 void saveSessionNum(GtkWidget* widget,gpointer data)
 {
-	char*		sname=NULL;
+	char		*sname=NULL;
 	int			snum=0;
 	plugData*	plugdata=(plugData*)data;
 
@@ -297,12 +311,12 @@ extern "C" int addToGui(gpointer data)
 {
 
 	GtkWidget*	menuitem;
-	char*		sessionname;
+	char		*sessionname;
 	GtkWidget*	menu;
 
 	plugData*	plugdata=(plugData*)data;
 
-	char*	sessionfile;
+	char	*sessionfile;
 	FILE*	fd=NULL;
 
 	setTextDomain(true,plugdata);
@@ -371,16 +385,16 @@ extern "C" int addToGui(gpointer data)
 extern "C" int doAbout(gpointer data)
 {
 	plugData*		plugdata=(plugData*)data;
-	char*			licencepath;
+	char			*licencepath;
 	const char		copyright[] ="Copyright \xc2\xa9 2014 K.D.Hedger";
-	char*			licence;
+	char			*licence;
 	GtkAboutDialog*	about;
-	char*			translators;
+	char			*translators;
 
 	setTextDomain(true,plugdata);
 
-	const char*		aboutboxstring=gettext("Session Manager - Adds multiple named sessions to KKEdit");
-	const char*	authors[]= {"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,gettext("\nMore by the same author\n"),"Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
+	const char		*aboutboxstring=gettext("Session Manager - Adds multiple named sessions to KKEdit");
+	const char	*authors[]= {"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,gettext("\nMore by the same author\n"),"Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
 
 	asprintf(&licencepath,"%s/docs/gpl-3.0.txt",plugdata->dataDir);
 	asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",gettext("French Translation"));

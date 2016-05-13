@@ -324,7 +324,7 @@ unsigned int	shortCuts[NUMSHORTCUTS][2]=
 	{63,1},
 	{107,2},
 	{72,3},
-	{104,4},
+	{100,4},
 	{68,5},
 	{108,6},
 	{109,7},
@@ -333,7 +333,8 @@ unsigned int	shortCuts[NUMSHORTCUTS][2]=
 	{91,10},
 	{39,11},
 	{64,12},
-	{32,0}
+	{32,0},
+	{104,14}
 };
 
 char			*shortCutStrings[NUMSHORTCUTS]={NULL,};
@@ -355,22 +356,9 @@ args			keybindings_rc[]=
 		{"selectionup",TYPESTRING,&shortCutStrings[11]},
 		{"selectiondown",TYPESTRING,&shortCutStrings[12]},
 		{"complete",TYPESTRING,&shortCutStrings[13]},
+		{"hidetabkey",TYPESTRING,&shortCutStrings[14]},
 		{NULL,0,NULL}
 	};
-
-//121 0 ^y Delete Current Line
-//63 1 ^? Delete To End Of Line
-//107 2 ^k Delete To Beginning Of Line
-//72 3 ^H Select Word Under Cursor
-//104 4 ^h Delete Word Under Cursor
-//68 5 ^D Duplicate Current Line
-//108 6 ^l Select Current Line
-//109 7 ^m Move Current Line Up
-//77 8 ^M Move Current Line Down
-//93 9 ^] Select From Cursor To End Of Line
-//91 10 ^[ Select From Beginning Of Line To Cursor
-//39 11 ^' Move Selection Up
-//64 12 ^@ Move Selection Down
 
 GtkWidget		*progressWindow;
 GtkWidget		*progressBar;
