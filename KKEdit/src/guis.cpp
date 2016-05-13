@@ -1475,7 +1475,7 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //save session
-	menuitem=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveSession,0,SAVESESSIONMENUNAME,IMAGEMENU,MENU_SAVE_SESSION_LABEL,(void*)false,false);
+	menuitem=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveSession,0,SAVESESSIONMENUNAME,IMAGEMENU,MENU_SAVE_SESSION_LABEL,NULL,false);
 //restore session
 	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONMENUNAME,IMAGEMENU,MENU_RESTORE_SESSION_LABEL,NULL,false);
 //printfile

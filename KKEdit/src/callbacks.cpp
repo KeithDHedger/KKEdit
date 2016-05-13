@@ -236,7 +236,7 @@ VISIBLE void closeAllTabs(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	int	numtabs=gtk_notebook_get_n_pages(mainNotebook);
-
+	showAllTabs(NULL,NULL);
 	for(int loop=0; loop<numtabs; loop++)
 		{
 			closingAll=true;
@@ -244,6 +244,7 @@ VISIBLE void closeAllTabs(GtkWidget *widget,gpointer data)
 		}
 
 	closingAll=false;
+	currentPage=0;
 	setPageSensitive();
 }
 

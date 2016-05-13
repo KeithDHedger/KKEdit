@@ -29,7 +29,7 @@ void newFile(GtkWidget *widget,gpointer data);
 void resetAllFilePrefs(void);
 void openAsHexDump(GtkWidget *widget,gpointer user_data);
 void reloadFile(GtkWidget *widget,gpointer data);
-void saveSession(GtkWidget *widget,gpointer data);
+void saveSession(const char *filename,const char *path);
 void restoreSession(GtkWidget *widget,gpointer data);
 void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFileMonitorEvent event_type,gpointer user_data);
 void setFilePrefs(pageStruct *page);

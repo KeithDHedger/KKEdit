@@ -1,4 +1,6 @@
 0.3.3
+Save/Restore session now saves/restores main window size and position.
+Session manager now uses kkedit's save/restore session routines.
 Added 'Hide Tab' to keyboard shortcuts ( defaults to ^h, 'Delete Word Under Cursor' now defaults to ^d ).
 Restored missing translations.
 Moving a line or selection with keyboard now keeps line/selection on screen.

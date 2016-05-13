@@ -640,26 +640,47 @@ VISIBLE void reloadFile(GtkWidget *widget,gpointer data)
 	ERRDATA
 }
 
-VISIBLE void saveSession(GtkWidget *widget,gpointer data)
+VISIBLE void saveSession(const char *filename,const char *path)
 {
 	ERRDATA
 	pageStruct		*page;
 	FILE			*fd=NULL;
-	char			*filename;
-	GtkTextMark	*mark;
+	char			*filepath;
+	GtkTextMark		*mark;
 	GtkTextIter		iter;
 	int				linenumber;
 	GtkTextIter		markiter;
 	GList			*ptr;
+	const char		*name;
+	GtkAllocation	alloc;
+	int				winx;
+	int				winy;
 
 	ERRDATA
-	sinkReturn=asprintf(&filename,"%s/%s",getenv("HOME"),APPFOLDENAME);
-	g_mkdir_with_parents(filename,493);
-	ERRDATA debugFree(&filename);
-	sinkReturn=asprintf(&filename,"%s/%s/session",getenv("HOME"),APPFOLDENAME);
-	fd=fopen(filename,"w");
+
+	if(path==NULL)
+		{
+			sinkReturn=asprintf(&filepath,"%s/%s",getenv("HOME"),APPFOLDENAME);
+			g_mkdir_with_parents(filepath,493);
+			ERRDATA debugFree(&filepath);
+			sinkReturn=asprintf(&filepath,"%s/%s/session",getenv("HOME"),APPFOLDENAME);
+			name="session";
+		}
+	else
+		{
+			sinkReturn=asprintf(&filepath,"%s",path);
+			name=filename;
+		}
+
+	fd=fopen(filepath,"w");
 	if(fd!=NULL)
 		{
+			fprintf(fd,"%s\n",name);
+			gtk_widget_get_allocation(mainWindow,&alloc);
+			gtk_window_get_position((GtkWindow*)mainWindow,&winx,&winy);
+			if( (alloc.width>10) && (alloc.height>10) )
+				fprintf(fd,"%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
+
 			for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 				{
 					page=getPageStructPtr(loop);
@@ -667,7 +688,6 @@ VISIBLE void saveSession(GtkWidget *widget,gpointer data)
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
 					linenumber=gtk_text_iter_get_line(&iter);
 					fprintf(fd,"%i %i %s\n",linenumber,(int)page->hidden,page->filePath);
-					fprintf(stderr,"%i %i %s\n",linenumber,(int)page->hidden,page->filePath);
 
 					ptr=newBookMarksList;
 					while(ptr!=NULL)
@@ -685,7 +705,7 @@ VISIBLE void saveSession(GtkWidget *widget,gpointer data)
 
 			ERRDATA
 			fclose(fd);
-			ERRDATA debugFree(&filename);
+			ERRDATA debugFree(&filepath);
 		}
 	ERRDATA
 }
@@ -693,19 +713,20 @@ VISIBLE void saveSession(GtkWidget *widget,gpointer data)
 VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	FILE			*fd=NULL;
-	char			*filename;
-	char			buffer[2048];
-	int				intarg;
-	char			strarg[2048];
-	pageStruct		*page=NULL;
-	GtkTextIter		markiter;
-	int				currentline;
-	TextBuffer		*buf=new TextBuffer;
-	int				hidden;
+	FILE		*fd=NULL;
+	char		*filename;
+	char		buffer[2048];
+	int			intarg;
+	char		strarg[2048];
+	pageStruct	*page=NULL;
+	GtkTextIter	markiter;
+	int			currentline;
+	TextBuffer	*buf=new TextBuffer;
+	int			hidden;
+	int			winx=0,winy=0;
+	int			width=800,hite=600;
 
 	ERRDATA
-
 	loadingSession=true;
 	closeAllTabs(NULL,NULL);
 	showBarberPole(DIALOG_POLE_RESTORING);
@@ -718,11 +739,11 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 	fd=fopen(filename,"r");
 	if(fd!=NULL)
 		{
-			if(data!=NULL)
-				{
-					sinkReturnStr=fgets(buffer,2048,fd);
-					sinkReturnStr=fgets(buffer,2048,fd);
-				}
+			sinkReturnStr=fgets(buffer,2048,fd);
+			sinkReturn=fscanf(fd,"%i %i %i %i\n",&width,&hite,&winx,&winy);
+			gtk_window_resize((GtkWindow*)mainWindow,width,hite);
+			if(winx!=-1 && winy!=-1)
+				gtk_window_move((GtkWindow *)mainWindow,winx,winy);
 
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
@@ -764,7 +785,6 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 		}
 
 	ERRDATA delete buf;
-
 	currentTabNumber=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)-1;
 
 	for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)

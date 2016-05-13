@@ -58,7 +58,7 @@ char		*currentdomain=NULL;
 
 int	(*module_plug_function)(gpointer globaldata);
 
-extern void saveSession(GtkWidget* widget,gpointer data);
+extern void saveSession(const char* name,const char* filepath);
 extern void restoreSession(GtkWidget* widget,gpointer data);
 extern void closeAllTabs(GtkWidget* widget,gpointer data);
 extern void toggleBookmark(GtkWidget* widget,GtkTextIter* titer);
@@ -176,53 +176,11 @@ char* getNewSessionName(int sessionnumber,plugData* plugdata)
 
 void saveSessionPlug(char* name,plugData* plugdata,int snum)
 {
-	pageStruct*		page;
-	FILE*			fd=NULL;
 	char			*filename;
-	GtkTextMark*	mark;
-	GtkTextIter		iter;
-	int				linenumber;
-	GtkTextIter		markiter;
-	GList*			ptr;
-	GtkAllocation	alloc;
-	int				winx;
-	int				winy;
 
 	asprintf(&filename,"%s/session-%i",plugdata->lPlugFolder,snum);
-	fd=fopen(filename,"w");
-	if (fd!=NULL)
-		{
-			fprintf(fd,"%s\n",name);
-			gtk_widget_get_allocation(plugdata->mainWindow,&alloc);
-			gtk_window_get_position((GtkWindow*)plugdata->mainWindow,&winx,&winy);
-			if( (alloc.width>10) && (alloc.height>10) )
-				fprintf(fd,"%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
-
-			for(int loop=0; loop<gtk_notebook_get_n_pages(plugdata->notebook); loop++)
-				{
-					page=getPageStructPtr(loop);
-					mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
-					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
-					linenumber=gtk_text_iter_get_line(&iter);
-					fprintf(fd,"%i %i %s\n",linenumber,page->hidden,page->filePath);
-
-					ptr=newBookMarksList;
-					while(ptr!=NULL)
-						{
-							if(((bookMarksNew*)ptr->data)->page==page)
-								{
-									gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&markiter,(GtkTextMark*)((bookMarksNew*)ptr->data)->mark);
-									fprintf(fd,"%i ",gtk_text_iter_get_line(&markiter));
-									fprintf(fd,"%s\n",((bookMarksNew*)ptr->data)->label);
-								}
-							ptr=g_list_next(ptr);
-						}
-					fprintf(fd,"-1 endmarks\n");
-				}
-
-			fclose(fd);
-			debugFree(&filename);
-		}
+	saveSession(name,(const char*)filename);
+	debugFree(&filename);
 }
 
 void restoreSessionNum(GtkWidget* widget,gpointer data)
@@ -232,8 +190,6 @@ void restoreSessionNum(GtkWidget* widget,gpointer data)
 	FILE		*fd=NULL;
 	const char	*widgetname=NULL;
 	plugData	*plugdata=(plugData*)data;
-	int			winx=0,winy=0;
-	int			width=800,hite=600;
 
 	widgetname=gtk_widget_get_name(widget);
 	for(int j=0; j<MAXSESSIONS; j++)
@@ -245,10 +201,6 @@ void restoreSessionNum(GtkWidget* widget,gpointer data)
 					fscanf(fd,"%a[^\n]s",&sname);
 					if(strcmp(sname,widgetname)==0)
 						{
-							fscanf(fd,"%i %i %i %i\n",&width,&hite,&winx,&winy);
-							gtk_window_resize((GtkWindow*)plugdata->mainWindow,width,hite);
-							if(winx!=-1 && winy!=-1)
-								gtk_window_move((GtkWindow *)plugdata->mainWindow,winx,winy);
 							restoreSession(NULL,sessionfile);
 							free(sessionfile);
 							free(sname);
