@@ -40,10 +40,11 @@
 
 #include "../common.h"
 #include "../kkedit-plugins.h"
+#include "../config.h"
 
 #define MYEMAIL "kdhedger68713@gmail.com"
 #define MYWEBSITE "http://kkedit.darktech.org"
-#define VERSION "0.3.0"
+#define PLUGVERSION VERSION
 #ifdef _USEGTK3_
 #define TEXTDOMAIN "TerminalPane-3" 
 #define ABOUTICON "KKEditPlug-3"
@@ -440,7 +441,7 @@ extern "C" int doAbout(gpointer data)
 	gtk_about_dialog_set_authors(about,authors);
 	gtk_about_dialog_set_comments(about,aboutboxstring);
 	gtk_about_dialog_set_copyright(about,copyright);
-	gtk_about_dialog_set_version(about,VERSION);
+	gtk_about_dialog_set_version(about,PLUGVERSION);
 	gtk_about_dialog_set_website(about,MYWEBSITE);
 	gtk_about_dialog_set_logo_icon_name(about,ABOUTICON);
 	gtk_about_dialog_set_license(about,licence);

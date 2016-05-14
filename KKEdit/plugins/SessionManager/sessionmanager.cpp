@@ -33,10 +33,11 @@
 
 #include "../common.h"
 #include "../kkedit-plugins.h"
+#include "../config.h"
 
 #define MYEMAIL "kdhedger68713@gmail.com"
 #define MYWEBSITE "http://kkedit.darktech.org"
-#define PLUGVERSION "0.3.0"
+#define PLUGVERSION VERSION
 #define	MAXSESSIONS 16
 #ifdef _USEGTK3_
 #define TEXTDOMAIN "SessionManager-3"
