@@ -71,7 +71,7 @@ void checkTheWord(char *word,int checkDoc)
 void checkWord(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char		*selection=NULL;
@@ -97,7 +97,7 @@ void checkWord(GtkWidget *widget,gpointer data)
 void doChangeWord(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 
@@ -155,7 +155,7 @@ void doAddIgnoreWord(GtkWidget *widget,gpointer data)
 void doSpellCheckDoc(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct				*page=getPageStructPtr(-1);
+	pageStruct				*page=getPageStructByIDFromPage(-1);
 	gchar					*buffer;
 	long					filelen;
 	GtkTextIter				start;

@@ -71,7 +71,7 @@ VISIBLE void removeAllBookmarks(GtkWidget *widget,GtkTextIter *titer)
 	numpages=gtk_notebook_get_n_pages(mainNotebook);
 	for(int j=0; j<numpages; j++)
 		{
-			page=getPageStructPtr(j);
+			page=getPageStructByIDFromPage(j);
 			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
 			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
 			gtk_source_buffer_remove_source_marks(page->buffer,&startiter,&enditer,NULL);
@@ -85,7 +85,7 @@ VISIBLE void removeAllBookmarks(GtkWidget *widget,GtkTextIter *titer)
 VISIBLE void toggleBookmark(GtkWidget *widget,GtkTextIter *titer)
 {
 	ERRDATA
-	pageStruct		*page=getPageStructPtr(-1);
+	pageStruct		*page=getPageStructByIDFromPage(-1);
 	GtkWidget		*menuitem;
 	GtkTextMark		*mark;
 	GtkTextIter		*iter;

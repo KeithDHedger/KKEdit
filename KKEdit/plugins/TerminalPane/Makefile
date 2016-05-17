@@ -27,10 +27,6 @@ ifeq (1,$(DEVELOP))
 	DEVMODE=-D_DEVMODE_
 endif
 
-ifeq (3,$(GTKVERSION))
-	USEGTK3=-D_USEGTK3_
-endif
-
 ifeq (2.90,$(VTEVERSION))
 	USE290=-D_VTEVERS290_
 endif

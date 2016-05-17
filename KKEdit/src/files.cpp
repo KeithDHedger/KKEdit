@@ -367,7 +367,7 @@ void resetAllFilePrefs(void)
 
 	for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 		{
-			page=getPageStructPtr(loop);
+			page=getPageStructByIDFromPage(loop);
 			gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 			setFilePrefs(page);
 		}
@@ -469,7 +469,7 @@ bool getSaveFile(void)
 VISIBLE bool saveFile(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 	GtkTextIter	start,end;
 	gchar		*text;
 	FILE		*fd=NULL;
@@ -581,7 +581,7 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 			filename=g_path_get_basename(filepath);
 			newFile(NULL,NULL);
 			pagenum=currentPage-1;
-			page=getPageStructPtr(pagenum);
+			page=getPageStructByIDFromPage(pagenum);
 			sinkReturn=asprintf(&command,"hexdump -C %s",filepath);
 			fp=popen(command,"r");
 			while(fgets(line,1024,fp))
@@ -618,7 +618,7 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 VISIBLE void reloadFile(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 	gchar		*buffer;
 	long		filelen;
 	GtkTextIter	start;
@@ -683,7 +683,7 @@ VISIBLE void saveSession(const char *filename,const char *path)
 
 			for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 				{
-					page=getPageStructPtr(loop);
+					page=getPageStructByIDFromPage(loop);
 					mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
 					linenumber=gtk_text_iter_get_line(&iter);
@@ -761,7 +761,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 						{
 							sinkReturnStr=fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
-							page=getPageStructPtr(currentPage-1);
+							page=getPageStructByIDFromPage(currentPage-1);
 							gtk_notebook_set_current_page(mainNotebook,currentPage-1);
 							while(intarg!=-1)
 								{
@@ -789,7 +789,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 
 	for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
 		{
-			pageStruct *page=getPageStructPtr(j);
+			pageStruct *page=getPageStructByIDFromPage(j);
 			if(page!=NULL)
 				{
 					buf=new TextBuffer((GtkTextBuffer*)page->buffer);
@@ -996,6 +996,7 @@ pageStruct *makeNewPage(void)
 	g_signal_connect((GtkWidget*)page->view,"button-release-event",G_CALLBACK(resetRegexMark),(void*)page);
 
 	setPageSensitive();
+	pages=g_list_prepend(pages,(gpointer)page);
 	ERRDATA return(page);
 }
 
@@ -1054,7 +1055,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	for(int j=0; j<gtk_notebook_get_n_pages(mainNotebook); j++)
 		{
-			page=getPageStructPtr(j);
+			page=getPageStructByIDFromPage(j);
 			if(noDuplicates==true)
 				{
 					tpath=realpath(filepath,NULL);
@@ -1170,7 +1171,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 //connect to mainNotebook
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pageWindow));
-	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
+	g_object_set_data(G_OBJECT(page->tabVbox),"pageid",(gpointer)(long)page->pageID);
 
 	if(openInThisTab==-1)
 		currentPage=gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
@@ -1187,7 +1188,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
-//	gtk_widget_show_all((GtkWidget*)mainNotebook);
 	gtk_widget_show_all((GtkWidget*)page->tabVbox);
 	gtk_widget_show_all(menuBar);
 	setFilePrefs(page);
@@ -1197,12 +1197,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	/* move cursor to the linenumber */
 	if(fromGOpen==true)
-		{
-			gtk_widget_show_all((GtkWidget*)(GtkTextView*)page->view);
-//			if(linenum>0)
-//				while(gtk_events_pending())
-//					gtk_main_iteration();
-		}
+		gtk_widget_show_all((GtkWidget*)(GtkTextView*)page->view);
 
 	if(loadingSession==false)
 		{
@@ -1246,14 +1241,13 @@ VISIBLE void newFile(GtkWidget *widget,gpointer data)
 
 //connect to ntebook
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pageWindow));
-	g_object_set_data(G_OBJECT(page->tabVbox),"pagedata",(gpointer)page);
+	g_object_set_data(G_OBJECT(page->tabVbox),"pageid",(gpointer)(long)page->pageID);
 
 	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
 	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
 
 	gtk_notebook_set_current_page(mainNotebook,currentPage);
 	currentPage++;
-//	gtk_widget_show_all((GtkWidget*)mainNotebook);
 	gtk_widget_show_all((GtkWidget*)page->tabVbox);
 	setFilePrefs(page);
 

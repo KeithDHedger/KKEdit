@@ -107,7 +107,7 @@ PROTECTED void showDocView(int howtodisplay,char *text,const char *title)
 
 VISIBLE bool searchGtkDocs(GtkWidget *widget,gpointer data)
 {
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char		*selection=NULL;
@@ -231,7 +231,7 @@ VISIBLE bool searchGtkDocs(GtkWidget *widget,gpointer data)
 
 VISIBLE void doDoxy(GtkWidget *widget,long data)
 {
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 	struct stat	sb;
 	bool		dorebuild;
 	FILE		*fp;
@@ -281,7 +281,7 @@ VISIBLE void doDoxy(GtkWidget *widget,long data)
 //find in doxy docs
 VISIBLE void doxyDocs(GtkWidget *widget,gpointer data)
 {
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char		*selection=NULL;
@@ -375,7 +375,7 @@ void searchQT5Assist(GtkWidget *widget,gpointer data)
 //showDocViewWidget
 VISIBLE bool searchQT5Docs(GtkWidget *widget,gpointer data)
 {
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 	GtkTextIter	start;
 	GtkTextIter	end;
 	char		*selection=NULL;
@@ -559,7 +559,7 @@ void doAllFiles(int dowhat,bool found)
 		}
 
 	gtk_notebook_set_current_page(mainNotebook,currentFindPage);
-	page=getPageStructPtr(currentFindPage);
+	page=getPageStructByIDFromPage(currentFindPage);
 
 	if(dowhat==FINDNEXT)
 		{
@@ -666,7 +666,7 @@ void regexFind(int dowhat)
 	GtkTextIter				hastart,haend;
 	GError					*regexError=NULL;
 
-	page=getPageStructPtr(currentFindPage);
+	page=getPageStructByIDFromPage(currentFindPage);
 	if(page==NULL)
 		{
 			ERRDATA return;
@@ -788,7 +788,7 @@ void regexFind(int dowhat)
 								if(currentFindPage>=gtk_notebook_get_n_pages(mainNotebook))
 									currentFindPage=0;
 								gtk_notebook_set_current_page(mainNotebook,currentFindPage);
-								page=getPageStructPtr(currentFindPage);
+								page=getPageStructByIDFromPage(currentFindPage);
 								page->regexMatchNumber=-1;
 								dofindnext=true;
 								gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
@@ -839,7 +839,7 @@ void regexFind(int dowhat)
 								if(currentFindPage<0)
 									currentFindPage=gtk_notebook_get_n_pages(mainNotebook)-1;
 								gtk_notebook_set_current_page(mainNotebook,currentFindPage);
-								page=getPageStructPtr(currentFindPage);
+								page=getPageStructByIDFromPage(currentFindPage);
 								page->regexMatchNumber=-1;
 								dofindprev=true;
 								gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
@@ -882,7 +882,7 @@ void regexFind(int dowhat)
 
 						for(int j=startloop;j<endloop;j++)
 							{
-								page=getPageStructPtr(j);
+								page=getPageStructByIDFromPage(j);
 								//if(findInAllFiles==true)
 								//	{
 										gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
@@ -1000,7 +1000,7 @@ void basicFind(int dowhat)
 				pagesChecked=0;
 		}
 
-	page=getPageStructPtr(currentFindPage);
+	page=getPageStructByIDFromPage(currentFindPage);
 
 	if(insensitiveSearch==true)
 #ifdef _USEGTK3_
@@ -1320,7 +1320,7 @@ void doSearchPrefs(GtkWidget *widget,gpointer data)
 
 void doLiveSearch(GtkWidget *widget,GdkEvent *event,gpointer data)
 {
-	pageStruct 			*page=getPageStructPtr(-1);
+	pageStruct 			*page=getPageStructByIDFromPage(-1);
 #ifdef _USEGTK3_
 	GtkTextSearchFlags		flags=GTK_TEXT_SEARCH_TEXT_ONLY;
 #else

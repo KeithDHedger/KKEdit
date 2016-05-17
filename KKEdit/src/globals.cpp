@@ -94,7 +94,7 @@ char			*tmpHighlightColour;
 bool			showBMBar;
 GtkWidget		*bmHighlightBox;
 int				bmMarkNumber=0;
-unsigned int	pageID=100;
+unsigned		pageID=100;
 
 char			*toolBarLayout=NULL;
 GtkWidget		*toolBarBox;
@@ -517,46 +517,6 @@ void scrollToIterInPane(pageStruct *page,GtkTextIter *iter)
 	ERRDATA
 }
 
-VISIBLE pageStruct *getPageStructPtr(int pagenum)
-{
-	ERRDATA
-	int			thispage;
-	GtkWidget	*pageBox=NULL;
-
-	if(pagenum==-1)
-		thispage=gtk_notebook_get_current_page(mainNotebook);
-	else
-		thispage=pagenum;
-
-	if(thispage==-1)
-		return(NULL);
-
-	pageBox=gtk_notebook_get_nth_page(mainNotebook,thispage);
-	if(pageBox==NULL)
-		{
-			ERRDATA return(NULL);
-		}
-	else
-		{
-			ERRDATA return((pageStruct*)g_object_get_data((GObject*)pageBox,"pagedata"));
-		}
-	ERRDATA
-}
-
-VISIBLE pageStruct *getPageStructByID(unsigned pageid)
-{
-	pageStruct	*page=NULL;
-
-	for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
-		{
-			page=getPageStructPtr(j);
-			if(page!=NULL)
-				if(page->pageID==pageid)
-					return(page);
-		}
-	return(NULL);
-}
-
 void getMimeType(char *filepath,void *ptr)
 {
 	ERRDATA
@@ -742,7 +702,7 @@ functionData *getFunctionByNameOpenFiles(char *name,bool casesensitive,bool whol
 	functionData	*fdata;
 	int				longest;
 
-	page=getPageStructPtr(-1);
+	page=getPageStructByIDFromPage(-1);
 	if(page==NULL)
 		ERRDATA return(NULL);
 
@@ -752,7 +712,7 @@ functionData *getFunctionByNameOpenFiles(char *name,bool casesensitive,bool whol
 	whileflag=true;
 	while(whileflag==true)
 		{
-			page=getPageStructPtr(loop);
+			page=getPageStructByIDFromPage(loop);
 			if(page->filePath!=NULL)
 				{
 					getRecursiveTagList(page->filePath,&functions);
@@ -852,7 +812,7 @@ functionData *getFunctionByName(char *name,bool recurse,bool casesensitive)
 //dont do this from popup for speed reasons
 			for(int loop=0; loop<numpages; loop++)
 				{
-					page=getPageStructPtr(loop);
+					page=getPageStructByIDFromPage(loop);
 					if(page->filePath!=NULL)
 						{
 							dirname=strdup(g_path_get_dirname(page->filePath));

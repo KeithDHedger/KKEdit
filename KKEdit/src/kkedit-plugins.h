@@ -238,7 +238,7 @@ struct plugData
 };
 
 void		showDocView(int howtodisplay,char *text,const char *title);
-pageStruct	*getPageStructPtr(int pagenum);
+pageStruct	*getPageStructByIDFromPage(int pagenum);
 void		showToolOutput(bool immediate);
 void		hideToolOutput(bool immediate);
 void		showSide(bool left);

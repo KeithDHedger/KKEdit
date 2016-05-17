@@ -125,7 +125,7 @@ void HistoryClass::goToPos(void)
 
 	for(int j=0;j<gtk_notebook_get_n_pages(this->notebook);j++)
 		{
-			page=(pageStruct*)g_object_get_data((GObject*)gtk_notebook_get_nth_page(this->notebook,j),"pagedata");
+			page=getPageStructByIDFromPage(j);
 			if(page!=NULL)
 				{
 					if(page->pageID==this->savedPages[this->saveCnt].pageID)
@@ -256,7 +256,7 @@ void HistoryClass::saveLastPos(void)
 	if(child==NULL)
 		return;
 	else
-		page=(pageStruct*)g_object_get_data((GObject*)child,"pagedata");
+		page=getPageStructByIDFromPage(gtk_notebook_get_current_page(mainNotebook));
 
 	if(page==NULL)
 		return;
@@ -277,7 +277,6 @@ void HistoryClass::saveLastPos(void)
 	debugFree(&(this->savedPages[this->saveCnt].tabName));
 	debugFree(&(this->savedPages[this->saveCnt].filePath));
 
-//TODO//
 	if(this->savedPages[this->saveCnt].filePath!=NULL)
 		{
 			if(page->filePath!=NULL)

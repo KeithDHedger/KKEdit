@@ -355,7 +355,7 @@ void doKKCommand(const char *command)
 //	char		*folder;
 	char		commandname;
 	long		line;
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 
 	commanddata=basename((char*)command);
 	commandname=commanddata[2];
@@ -391,7 +391,7 @@ void doKKCommand(const char *command)
 			case 'N':
 				for(int j=-0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
 					{
-						page=getPageStructPtr(j);
+						page=getPageStructByIDFromPage(j);
 						if(strcmp(page->fileName,commanddata)==0)
 							{
 								gtk_notebook_set_current_page(mainNotebook,j);

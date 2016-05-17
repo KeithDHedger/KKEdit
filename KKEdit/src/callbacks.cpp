@@ -27,6 +27,7 @@ char				defineText[1024];
 GtkPrintSettings	*settings=NULL;
 bool				closingAll=false;
 GtkWidget			*holdWidget=NULL;
+unsigned			stolenPage=0;
 
 void releasePlugs(gpointer data,gpointer user_data)
 {
@@ -67,7 +68,7 @@ void refreshMainWindow(void)
 
 	for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
 		{
-			page=getPageStructPtr(j);
+			page=getPageStructByIDFromPage(j);
 			if(page!=NULL)
 				{
 					if(page->hidden==true)
@@ -130,7 +131,7 @@ void updateStatusBar(GtkTextBuffer *textbuffer,GtkTextIter *location,GtkTextMark
 	if(loadingSession==true)
 		return;
 
-	page=getPageStructPtr(currentTabNumber);
+	page=getPageStructByIDFromPage(currentTabNumber);
 	if(page==NULL)
 		return;
 
@@ -164,27 +165,28 @@ void updateStatusBar(GtkTextBuffer *textbuffer,GtkTextIter *location,GtkTextMark
 	delete buf;
 }
 
-pageStruct	*stolenPage=NULL;
 
 VISIBLE void realCloseTab(GtkNotebook *notebook,GtkWidget *child,guint page_num,gpointer user_data)
 {
-	if(stolenPage==NULL)
-		return;
-
-	globalPlugins->globalPlugData->page=stolenPage;
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"closeFile");
-
 	GList		*ptr;
 	bool		changed=false;
-	rebuildBookMarkMenu();
 	GtkWidget	*menuitem;
+	pageStruct	*pp=getPageStructByIDFromList(stolenPage);
+
+	if(pp==NULL)
+		return;
+
+	globalPlugins->globalPlugData->page=pp;
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"closeFile");
+
+	rebuildBookMarkMenu();
 	while(changed==false)
 		{
 			changed=true;
 			ptr=newBookMarksList;
 			while(ptr!=NULL)
 				{
-					if(((bookMarksNew*)ptr->data)->page==stolenPage)
+					if(((bookMarksNew*)ptr->data)->page->pageID==stolenPage)
 						{
 							ERRDATA debugFree(&((bookMarksNew*)ptr->data)->markName);
 							ERRDATA debugFree(&((bookMarksNew*)ptr->data)->label);
@@ -206,30 +208,27 @@ VISIBLE void realCloseTab(GtkNotebook *notebook,GtkWidget *child,guint page_num,
 		}
 	gtk_widget_show_all(bookMarkMenu);
 
-	ERRDATA debugFree(&(stolenPage->filePath));
-	ERRDATA debugFree(&(stolenPage->fileName));
-	ERRDATA debugFree(&(stolenPage->dirName));
-	ERRDATA debugFree(&(stolenPage->realFilePath));
+	ERRDATA debugFree(&(pp->filePath));
+	ERRDATA debugFree(&(pp->fileName));
+	ERRDATA debugFree(&(pp->dirName));
+	ERRDATA debugFree(&(pp->realFilePath));
 
-	if(stolenPage->markList!=NULL)
-		g_list_free_full(stolenPage->markList,free);
-	if(stolenPage->userDataList!=NULL)
-		g_list_free_full(stolenPage->userDataList,free);
-	stolenPage->userDataList=NULL;
+	if(pp->markList!=NULL)
+		g_list_free_full(pp->markList,free);
+	if(pp->userDataList!=NULL)
+		g_list_free_full(pp->userDataList,free);
+	if(pp->regexList!=NULL)
+		g_slist_free_full(pp->regexList,free);
+	if(pp->monitor!=NULL)
+		g_clear_object(&(pp->monitor));
+	if(pp->gFile!=NULL)
+		g_clear_object(&(pp->gFile));
 
-	if(stolenPage->regexList!=NULL)
-		g_slist_free_full(stolenPage->regexList,free);
-	stolenPage->regexList=NULL;
-
-	if(stolenPage->monitor!=NULL)
-		g_clear_object(&(stolenPage->monitor));
-	if(stolenPage->gFile!=NULL)
-		g_clear_object(&(stolenPage->gFile));
-
-	ERRDATA debugFree((char**)&stolenPage);
+	pages=g_list_remove(pages,(gconstpointer)pp);
+	ERRDATA debugFree((char**)&pp);
 	if(closingAll==false)
 		setPageSensitive();
-	stolenPage=NULL;
+	stolenPage=0;
 }
 
 VISIBLE void closeAllTabs(GtkWidget *widget,gpointer data)
@@ -252,7 +251,7 @@ bool checkBeforeClose(int pagenum)
 {
 	int			result;
 	pageStruct	*page;
-	page=getPageStructPtr(pagenum);
+	page=getPageStructByIDFromPage(pagenum);
 	if(page==NULL)
 		return(false);
 
@@ -278,14 +277,17 @@ bool checkBeforeClose(int pagenum)
 
 VISIBLE void closeTab(GtkWidget *widget,gpointer data)
 {
-	if(gtk_notebook_page_num(mainNotebook,(GtkWidget*)data)!=-1)
+	if(data!=NULL)
 		{
-			if(checkBeforeClose(gtk_notebook_page_num(mainNotebook,(GtkWidget*)data))==true)
+			if(gtk_notebook_page_num(mainNotebook,(GtkWidget*)data)!=-1)
 				{
-					stolenPage=(pageStruct*)g_object_steal_data ((GObject*)data,"pagedata");
-					gtk_notebook_remove_page(mainNotebook,gtk_notebook_page_num(mainNotebook,(GtkWidget*)data));
+					if(checkBeforeClose(gtk_notebook_page_num(mainNotebook,(GtkWidget*)data))==true)
+						{
+							stolenPage=(unsigned)(long)g_object_steal_data((GObject*)data,"pageid");
+							gtk_notebook_remove_page(mainNotebook,gtk_notebook_page_num(mainNotebook,(GtkWidget*)data));
+						}
+					return;
 				}
-			return;
 		}
 
 	if(gtk_notebook_get_current_page(mainNotebook)!=-1)
@@ -294,11 +296,10 @@ VISIBLE void closeTab(GtkWidget *widget,gpointer data)
 			if(checkBeforeClose(gtk_notebook_get_current_page(mainNotebook))==true)
 				{
 					child=gtk_notebook_get_nth_page(mainNotebook,gtk_notebook_get_current_page(mainNotebook));
-					stolenPage=(pageStruct*)g_object_steal_data ((GObject*)child,"pagedata");
+					stolenPage=(unsigned)(long)g_object_steal_data((GObject*)child,"pageid");
 					gtk_notebook_remove_page(mainNotebook,gtk_notebook_get_current_page(mainNotebook));
 				}
 		}
-	return;
 }
 
 void showAllTabs(GtkWidget *widget,gpointer data)
@@ -306,7 +307,7 @@ void showAllTabs(GtkWidget *widget,gpointer data)
 	pageStruct	*page=NULL;
 	for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
 		{
-			page=getPageStructPtr(j);
+			page=getPageStructByIDFromPage(j);
 			if(page!=NULL)
 				{
 					page->hidden=false;
@@ -329,8 +330,8 @@ void sortTabs(GtkWidget *widget,gpointer data)
 			flag=false;
 			for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook)-1;j++)
 				{
-					page1=getPageStructPtr(j);
-					page2=getPageStructPtr(j+1);
+					page1=getPageStructByIDFromPage(j);
+					page2=getPageStructByIDFromPage(j+1);
 					if(strcmp(page2->fileName,page1->fileName)<0)
 						{
 							flag=true;
@@ -371,7 +372,7 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	if(arg1==NULL)
 		return;
 
-	page=(pageStruct*)g_object_get_data((GObject*)arg1,"pagedata");
+	page=getPageStructByIDFromPage(thispage);
 	if(page==NULL)
 		return;
 
@@ -495,7 +496,7 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 VISIBLE void copyToClip(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 
 	if(page==NULL)
 		return;
@@ -505,7 +506,7 @@ VISIBLE void copyToClip(GtkWidget *widget,gpointer data)
 VISIBLE void cutToClip(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 
 	if(page==NULL)
 		return;
@@ -516,7 +517,7 @@ VISIBLE void cutToClip(GtkWidget *widget,gpointer data)
 VISIBLE void pasteFromClip(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct		*page=getPageStructPtr(-1);
+	pageStruct		*page=getPageStructByIDFromPage(-1);
 	char			*clipdata=NULL;
 	GtkClipboard	*mainclipboard;
 	GtkTextIter		start;
@@ -540,7 +541,7 @@ VISIBLE void pasteFromClip(GtkWidget *widget,gpointer data)
 VISIBLE void undo(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 
 	if(page!=NULL)
 		{
@@ -555,7 +556,7 @@ VISIBLE void undo(GtkWidget *widget,gpointer data)
 VISIBLE void unRedoAll(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 	if(page!=NULL)
 		{
 			if((long)data==0)
@@ -587,7 +588,7 @@ VISIBLE void unRedoAll(GtkWidget *widget,gpointer data)
 VISIBLE void redo(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 
 	if(page!=NULL)
 		{
@@ -603,7 +604,7 @@ void externalTool(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	toolStruct		*tool=(toolStruct*)data;
-	pageStruct		*page=getPageStructPtr(-1);
+	pageStruct		*page=getPageStructByIDFromPage(-1);
 	char			*docdirname=NULL;
 	char			*tooldirname=NULL;
 	char			*text=NULL;
@@ -641,7 +642,7 @@ void externalTool(GtkWidget *widget,gpointer data)
 	strarray=(char*)calloc(buffersize,1);
 	for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
 		{
-			pagepath=(char*)(pageStruct*)(getPageStructPtr(j))->filePath;
+			pagepath=(char*)(pageStruct*)(getPageStructByIDFromPage(j))->filePath;
 			if(pagepath!=NULL)
 				{
 					if(buffersize<strlen(strarray)+strlen(pagepath))
@@ -798,7 +799,7 @@ void copyToClipboard(GtkWidget *widget,gpointer data)
 void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 {
 	ERRDATA
-	pageStruct		*page=getPageStructPtr(-1);
+	pageStruct		*page=getPageStructByIDFromPage(-1);
 	GtkTextIter		start;
 	GtkTextIter		end;
 	char			*selection=NULL;
@@ -921,7 +922,7 @@ void doTabMenu(GtkWidget *widget,gpointer user_data)
 void changeSourceStyle(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct					*page=getPageStructPtr(-1);
+	pageStruct					*page=getPageStructByIDFromPage(-1);
 	GtkSourceLanguageManager	*lm=gtk_source_language_manager_get_default();
 	const gchar *const			*ids=gtk_source_language_manager_get_language_ids(lm);
 	GtkSourceLanguage			*lang=gtk_source_language_manager_get_language(lm,ids[(long)data]);
@@ -1156,7 +1157,7 @@ VISIBLE bool doSaveAll(GtkWidget *widget,gpointer data)
 
 	for(int loop=0; loop<numpages; loop++)
 		{
-			page=getPageStructPtr(loop);
+			page=getPageStructByIDFromPage(loop);
 			if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)))
 				{
 					if((bool)data==true)
@@ -1243,7 +1244,7 @@ void clearToolButtons(void)
 void setPrefs(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct	*tpage=getPageStructPtr(-1);
+	pageStruct	*tpage=getPageStructByIDFromPage(-1);
 	bool		*bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&restoreBookmarks,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen,&useGlobalPlugMenu,&autoSearchDocs,&showWhiteSpace};
 	unsigned	*ints[MAXPREFSINTWIDGETS]={&maxTabChars,&maxFRHistory,&depth,&autoShowMinChars,&tabWidth,&maxFuncDefs,&maxBMChars,&tabsSize,&maxJumpHistory};
 
@@ -1484,7 +1485,7 @@ void doCombineBuffers(void)
 
 	for(int j=0; j<gtk_notebook_get_n_pages(mainNotebook); j++)
 		{
-			page=getPageStructPtr(j);
+			page=getPageStructByIDFromPage(j);
 			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&fromstart);
 			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&fromend);
 			gtk_text_buffer_insert((GtkTextBuffer*)printBuffer,&iter,gtk_text_buffer_get_text((GtkTextBuffer *)page->buffer,&fromstart,&fromend,true),-1);
@@ -1715,7 +1716,7 @@ void doKeyShortCut(int what)
 	ERRDATA
 	TextBuffer	*buf;
 	char		*text;
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 	GtkTextMark	*mark;
 
 	if(page==NULL)

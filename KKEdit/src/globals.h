@@ -181,14 +181,14 @@ extern GtkWidget		*helpMenu;
 extern GtkAccelGroup	*accgroup;
 
 extern GList			*newBookMarksList;
-extern char			*highlightColour;
-extern char			*tmpHighlightColour;
+extern char				*highlightColour;
+extern char				*tmpHighlightColour;
 extern bool				showBMBar;
 extern GtkWidget		*bmHighlightBox;
 extern int				bmMarkNumber;
-extern unsigned int		pageID;
+extern unsigned			pageID;
 
-extern char			*toolBarLayout;
+extern char				*toolBarLayout;
 extern GtkWidget		*toolBarBox;
 
 extern GtkWidget		*menuItemOpen;
@@ -445,8 +445,6 @@ extern bool				doGoogleSearch;
 
 
 void plugRunFunction(gpointer data,gpointer funcname);
-pageStruct *getPageStructPtr(int pagenum);
-pageStruct *getPageStructByID(unsigned pageid);
 
 void getMimeType(char *filepath,void *ptr);
 void setLanguage(pageStruct *page);

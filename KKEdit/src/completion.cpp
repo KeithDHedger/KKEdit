@@ -140,7 +140,7 @@ void function_provider_populate(GtkSourceCompletionProvider *provider,GtkSourceC
 
 	if(word!=NULL)
 		{
-			page=getPageStructPtr(-1);
+			page=getPageStructByIDFromPage(-1);
 			if(page!=NULL)
 				{
 					wordlist=addPropsFromWord(page,word,(FunctionProvider*)provider);

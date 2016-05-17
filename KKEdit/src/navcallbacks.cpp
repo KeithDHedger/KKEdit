@@ -33,7 +33,7 @@ void goToDefine(functionData *fdata)
 	if(fdata->intab==-1)
 		{
 			openFile(fdata->file,fdata->line-1,true);
-			page=getPageStructPtr(-1);
+			page=getPageStructByIDFromPage(-1);
 
 		if(page!=NULL)
 			{
@@ -46,7 +46,7 @@ void goToDefine(functionData *fdata)
 		}
 	else
 		{
-			page=getPageStructPtr(fdata->intab);
+			page=getPageStructByIDFromPage(fdata->intab);
 			gtk_notebook_set_current_page(mainNotebook,fdata->intab);
 			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 			buf->scroll2Line((GtkTextView*)page->view,fdata->line-1);
@@ -58,7 +58,7 @@ void goToDefine(functionData *fdata)
 VISIBLE void goToDefinition(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	pageStruct		*page=getPageStructPtr(-1);
+	pageStruct		*page=getPageStructByIDFromPage(-1);
 	GtkTextIter		start;
 	GtkTextIter		end;
 	char			*selection=NULL;
@@ -107,7 +107,7 @@ VISIBLE void findFile(GtkWidget *widget,gpointer data)
 	char			*filepath=NULL;
 	FILE			*fp;
 	StringSlice	*slice;
-	pageStruct		*page=getPageStructPtr(-1);
+	pageStruct		*page=getPageStructByIDFromPage(-1);
 
 	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 	slice= new StringSlice;
@@ -154,7 +154,7 @@ void gotoLineSavePos(GtkWidget *widget,gpointer data)
 	ERRDATA
 	int			line=(long)data;
 	TextBuffer	*buf;
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 
 	if(page!=NULL)
 		{
@@ -172,7 +172,7 @@ void gotoLineNoSavePos(GtkWidget *widget,gpointer data)
 	ERRDATA
 	int			line=(long)data;
 	TextBuffer	*buf;
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 
 	if(page!=NULL)
 		{
@@ -188,7 +188,7 @@ void gotoLine(GtkWidget *widget,gpointer data)
 	ERRDATA
 	int			line=(long)data;
 	TextBuffer	*buf;
-	pageStruct	*page=getPageStructPtr(-1);
+	pageStruct	*page=getPageStructByIDFromPage(-1);
 
 	if(page!=NULL)
 		{
@@ -276,7 +276,7 @@ void jumpToMark(GtkWidget *widget,gpointer data)
 
 	for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 		{
-			checkpage=getPageStructPtr(loop);
+			checkpage=getPageStructByIDFromPage(loop);
 			if(checkpage==page)
 				{
 					gtk_notebook_set_current_page(mainNotebook,loop);
@@ -689,7 +689,7 @@ void selectTab(GtkWidget *widget,gpointer data)
 			gtk_notebook_set_current_page(mainNotebook,(int)(long)data);
 		}
 
-	page=getPageStructPtr(-1);
+	page=getPageStructByIDFromPage(-1);
 	if(page==NULL)
 		return;
 
@@ -720,7 +720,7 @@ void rebuildTabsMenu(void)
 
 	for(int j=0;j<numtabs;j++)
 		{
-			page=getPageStructPtr(j);
+			page=getPageStructByIDFromPage(j);
 			if(page!=NULL)
 				{
 					menuitem=gtk_menu_item_new_with_label(gtk_label_get_text((GtkLabel *)page->tabName));
@@ -743,12 +743,12 @@ void menuJumpBack(GtkWidget *widget,gpointer data)
 	unsigned	line=hist->lineNumber;
 
 	pageid=hist->pageID;
-	page=getPageStructByID(pageid);
+	page=getPageStructByIDFromList(pageid);
 	if(page!=NULL)
 		{
 			for(int loop=0;loop<gtk_notebook_get_n_pages(mainNotebook);loop++)
 				{
-					checkpage=getPageStructPtr(loop);
+					checkpage=getPageStructByIDFromPage(loop);
 					if(checkpage->pageID==pageid)
 						{
 							globalHistory->saveLastPos();

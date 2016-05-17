@@ -31,9 +31,9 @@
 #include <libintl.h>
 #include <locale.h>
 
+#include "../config.h"
 #include "../common.h"
 #include "../kkedit-plugins.h"
-#include "../config.h"
 
 #define MYEMAIL "kdhedger68713@gmail.com"
 #define MYWEBSITE "http://kkedit.darktech.org"

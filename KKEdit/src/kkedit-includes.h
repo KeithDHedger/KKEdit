@@ -472,6 +472,7 @@
 #endif
 
 #include "globals.h"
+#include "pages.h"
 #include "navcallbacks.h"
 
 #include "plugins.h"
