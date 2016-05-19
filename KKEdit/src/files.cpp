@@ -680,7 +680,8 @@ VISIBLE void saveSession(const char *filename,const char *path)
 			gtk_window_get_position((GtkWindow*)mainWindow,&winx,&winy);
 			if( (alloc.width>10) && (alloc.height>10) )
 				fprintf(fd,"%i %i %i %i\n",alloc.width,alloc.height,winx,winy);
-
+//reseve space for expansion
+			fprintf(fd,"#RESERVED\n#RESERVED\n");
 			for(int loop=0; loop<gtk_notebook_get_n_pages(mainNotebook); loop++)
 				{
 					page=getPageStructByIDFromPage(loop);
@@ -688,7 +689,8 @@ VISIBLE void saveSession(const char *filename,const char *path)
 					gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
 					linenumber=gtk_text_iter_get_line(&iter);
 					fprintf(fd,"%i %i %s\n",linenumber,(int)page->hidden,page->filePath);
-
+//reseve space for expansion
+					fprintf(fd,"#RESERVED\n#RESERVED\n");
 					ptr=newBookMarksList;
 					while(ptr!=NULL)
 						{
@@ -744,10 +746,17 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 			gtk_window_resize((GtkWindow*)mainWindow,width,hite);
 			if(winx!=-1 && winy!=-1)
 				gtk_window_move((GtkWindow *)mainWindow,winx,winy);
+//skip reserved
+			fgets(buffer,2048,fd);
+			fgets(buffer,2048,fd);
 
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
+
 					sscanf(buffer,"%i %i %[^\n]s",(int*)&currentline,(int*)&hidden,(char*)&strarg);
+//skip reserved
+					if(strcmp(buffer,"#RESERVED")==0)
+						continue;
 					if(openFile(strarg,currentline,true)==false)
 						{
 							intarg=999;
@@ -769,6 +778,9 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 									gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
 									toggleBookmark(NULL,&markiter);
 									sinkReturnStr=fgets(buffer,2048,fd);
+//skip reserved
+//									if(strcmp(buffer,"#RESERVED")==0)
+//										continue;
 									sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 								}
 							buf->textBuffer=(GtkTextBuffer*)page->buffer;

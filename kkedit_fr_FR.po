@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: kkedit 1.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-17 11:46+0100\n"
-"PO-Revision-Date: 2016-05-17 11:47-0000\n"
-"Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
+"PO-Revision-Date: 2016-05-18 11:04+0100\n"
+"Last-Translator: Thanh Tung Nguyen <thngtong@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.6.11\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: KKEdit/src/kkedit-includes.h:87
 msgid "_Yes"
@@ -160,14 +160,12 @@ msgid "_Sort Tabs"
 msgstr "_Trier les onglets"
 
 #: KKEdit/src/kkedit-includes.h:131
-#, fuzzy
 msgid "S_how All Tabs"
-msgstr "Fermer tous les ong_lets"
+msgstr "_Afficher tous les onglets"
 
 #: KKEdit/src/kkedit-includes.h:132
-#, fuzzy
 msgid "_Hide Tab"
-msgstr "Cacher la barre d'outils"
+msgstr "_Cacher l'onglet"
 
 #: KKEdit/src/kkedit-includes.h:133
 msgid "Se_lect Tab"
@@ -520,9 +518,8 @@ msgid "Duplicate Current Line"
 msgstr "Dupliquer la ligne"
 
 #: KKEdit/src/kkedit-includes.h:244
-#, fuzzy
 msgid "Select Current Line"
-msgstr "Supprimer la ligne en cours"
+msgstr "Sélectionner la ligne en cours"
 
 #: KKEdit/src/kkedit-includes.h:245
 msgid "Move Current Line Up"
@@ -553,9 +550,8 @@ msgid "Show Completion"
 msgstr "Montrer la complétion"
 
 #: KKEdit/src/kkedit-includes.h:252
-#, fuzzy
 msgid "Hide Tab"
-msgstr "Cacher la barre d'outils"
+msgstr "Cacher l'onglet"
 
 #: KKEdit/src/kkedit-includes.h:255
 msgid "New File"

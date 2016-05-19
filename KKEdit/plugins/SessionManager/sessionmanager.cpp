@@ -47,7 +47,6 @@
 #define ABOUTICON "KKEditPlug"
 #endif
 
-extern void restoreSession(GtkWidget* widget,gpointer data);
 
 char		*prefsPath;
 GtkWidget*	menuPlug;
