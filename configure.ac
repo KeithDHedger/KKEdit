@@ -57,7 +57,7 @@ if test "$enable_plugs" = "yes"; then
 	else
 		VTE_MODULES="vte >= 0.28.2"
 	fi
-	PKG_CHECK_MODULES(VTE,$VTE_MODULES,[],[AC_MSG_ERROR([No VTE dev files found ... For debian install either libvte-2.91-dev or libvte-2.90-dev, see INSTALL file for details.])])
+	PKG_CHECK_MODULES(VTE,$VTE_MODULES,[],[AC_MSG_ERROR([No VTE dev files found ... For debian install either libvte-dev for gtk2 build or for gtk3 build libvte-2.91-dev or libvte-2.90-dev, see INSTALL file for details.])])
 else
 	PLUGINCLUDES=
 fi

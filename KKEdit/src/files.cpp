@@ -747,8 +747,8 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 			if(winx!=-1 && winy!=-1)
 				gtk_window_move((GtkWindow *)mainWindow,winx,winy);
 //skip reserved
-			fgets(buffer,2048,fd);
-			fgets(buffer,2048,fd);
+			sinkReturnStr=fgets(buffer,2048,fd);
+			sinkReturnStr=fgets(buffer,2048,fd);
 
 			while(fgets(buffer,2048,fd)!=NULL)
 				{

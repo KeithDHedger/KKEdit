@@ -1081,7 +1081,7 @@ m4trace:configure.ac:26: -1- m4_pattern_allow([^_EXECSUFFIX_$])
 m4trace:configure.ac:35: -1- m4_pattern_allow([^_EXECSUFFIX_$])
 m4trace:configure.ac:46: -1- PKG_CHECK_EXISTS([vte-2.91], [usevte=91], [usevte=90])
 m4trace:configure.ac:54: -1- m4_pattern_allow([^_VTEVERS290_$])
-m4trace:configure.ac:60: -1- PKG_CHECK_MODULES([VTE], [$VTE_MODULES], [], [AC_MSG_ERROR([No VTE dev files found ... For debian install either libvte-2.91-dev or libvte-2.90-dev, see INSTALL file for details.])])
+m4trace:configure.ac:60: -1- PKG_CHECK_MODULES([VTE], [$VTE_MODULES], [], [AC_MSG_ERROR([No VTE dev files found ... For debian install either libvte-dev for gtk2 build or for gtk3 build libvte-2.91-dev or libvte-2.90-dev, see INSTALL file for details.])])
 m4trace:configure.ac:60: -1- m4_pattern_allow([^VTE_CFLAGS$])
 m4trace:configure.ac:60: -1- m4_pattern_allow([^VTE_LIBS$])
 m4trace:configure.ac:60: -1- PKG_CHECK_EXISTS([$VTE_MODULES], [pkg_cv_[]VTE_CFLAGS=`$PKG_CONFIG --[]cflags "$VTE_MODULES" 2>/dev/null`

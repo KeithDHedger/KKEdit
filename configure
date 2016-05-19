@@ -4762,11 +4762,11 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$VTE_PKG_ERRORS" >&5
 
-	as_fn_error $? "No VTE dev files found ... For debian install either libvte-2.91-dev or libvte-2.90-dev, see INSTALL file for details." "$LINENO" 5
+	as_fn_error $? "No VTE dev files found ... For debian install either libvte-dev for gtk2 build or for gtk3 build libvte-2.91-dev or libvte-2.90-dev, see INSTALL file for details." "$LINENO" 5
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	as_fn_error $? "No VTE dev files found ... For debian install either libvte-2.91-dev or libvte-2.90-dev, see INSTALL file for details." "$LINENO" 5
+	as_fn_error $? "No VTE dev files found ... For debian install either libvte-dev for gtk2 build or for gtk3 build libvte-2.91-dev or libvte-2.90-dev, see INSTALL file for details." "$LINENO" 5
 else
 	VTE_CFLAGS=$pkg_cv_VTE_CFLAGS
 	VTE_LIBS=$pkg_cv_VTE_LIBS
