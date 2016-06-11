@@ -455,6 +455,8 @@
 #include <libintl.h>
 #include <locale.h>
 
+//#include "../src/links.h"
+
 #include "sliceclass.h"
 #include "kkedit-plugins.h"
 
@@ -483,6 +485,7 @@
 #include "files.h"
 #include "encoding.h"
 #include "completion.h"
+
 
 #define VISIBLE __attribute__((visibility("default")))
 #define PROTECTED __attribute__((visibility("protected")))

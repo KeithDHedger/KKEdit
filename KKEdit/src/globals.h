@@ -44,8 +44,8 @@
 #endif
 #endif
 
-#define MYEMAIL "kdhedger68713@gmail.com"
-#define MYWEBSITE "http://kkedit.darktech.org/"
+#define MYEMAIL "keithhedger@keithhedger.darktech.org"
+#define MYWEBSITE "http://kkedit.darktech.org"
 
 #define PLUGINSLINK "https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins#getplugs"
 #define NAGTIMELINK "https://dl.dropboxusercontent.com/s/xcvp8af3qp7ffxg/NAGTIME"
@@ -79,10 +79,16 @@
 #define ABOUTICON "KKEdit" _EXECSUFFIX_
 #define NUMSHORTCUTS	15
 
+#ifndef _ENUMS_
+#define _ENUMS_
 enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 enum {NEWVBOX=0,NEWHBOX};
 enum {NOERR=0,NOOPENFILE,NOSAVEFILE};
 enum {NAVLAST=0,NAVNEXT};
+#endif
+
+extern const char	*moreapps[];
+extern const char	*authors[];
 
 struct toolStruct
 {

@@ -1451,7 +1451,6 @@ void setToolOptions(GtkWidget *widget,gpointer data)
 VISIBLE void doAbout(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	const char	*authors[]={"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,"\nBig thanks to Sadi Yumuşak for all his help.",DIALOG_ABOUT_MORE_LABEL,"Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
 	const char	copyright[] ="Copyright \xc2\xa9 2013 K.D.Hedger \n" MYEMAIL;
 	const char	*aboutboxstring=DIALOG_ABOUT_KKEDIT_LABEL;
 	char		*licence;

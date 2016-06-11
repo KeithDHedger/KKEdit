@@ -1,3 +1,8 @@
+0.3.4
+Added requested manpage.
+Fixed defunct links in about box's for plugin's.
+Fixed defunct links in about box.
+
 0.3.3
 Changed format of session files, made future proof.
 Code clean.

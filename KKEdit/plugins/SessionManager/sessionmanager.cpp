@@ -35,8 +35,6 @@
 #include "../common.h"
 #include "../kkedit-plugins.h"
 
-#define MYEMAIL "kdhedger68713@gmail.com"
-#define MYWEBSITE "http://kkedit.darktech.org"
 #define PLUGVERSION VERSION
 #define	MAXSESSIONS 16
 #ifdef _USEGTK3_
@@ -336,7 +334,7 @@ extern "C" int addToGui(gpointer data)
 
 extern "C" int doAbout(gpointer data)
 {
-	plugData*		plugdata=(plugData*)data;
+	plugData		*plugdata=(plugData*)data;
 	char			*licencepath;
 	const char		copyright[] ="Copyright \xc2\xa9 2014 K.D.Hedger";
 	char			*licence;
@@ -346,8 +344,6 @@ extern "C" int doAbout(gpointer data)
 	setTextDomain(true,plugdata);
 
 	const char		*aboutboxstring=gettext("Session Manager - Adds multiple named sessions to KKEdit");
-	const char	*authors[]= {"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,gettext("\nMore by the same author\n"),"Xfce-Theme-Manager\nhttp://xfce-look.org/content/show.php?content=149647\n","Xfce4-Composite-Editor\nhttp://gtk-apps.org/content/show.php/Xfce4-Composite-Editor?content=149523\n","Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n","GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n","ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n","Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667",NULL};
-
 	asprintf(&licencepath,"%s/docs/gpl-3.0.txt",plugdata->dataDir);
 	asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",gettext("French Translation"));
 

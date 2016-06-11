@@ -22,6 +22,7 @@
 #include <gdk/gdkx.h>
 
 #include "kkedit-includes.h"
+//#include "../src/links.h"
 
 bool	singleOverRide=false;
 bool	loadPluginsFlag=true;

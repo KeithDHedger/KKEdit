@@ -22,6 +22,8 @@ docfiles_DATA = ../resources/docs/*
 stylefilesdir = $(pkgdatadir)$(GTK3SUFFIX)/styles
 stylefiles_DATA = ../resources/styles/*
 
+man1_MANS = ../resources/man/kkedit.1
+
 bin_PROGRAMS = kkedit KKEditProgressBar
 
 install-exec-hook:
