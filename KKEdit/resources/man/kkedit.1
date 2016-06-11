@@ -1,0 +1,89 @@
+.TH "kkedit" "1" "0.3.4" "K.D.Hedger" ""
+.SH "NAME"
+KKEdit — Source code text editor.
+.br
+.SH "SYNTAX"
+kkedit [\fIoption\fR] <file>
+.br
+.SH "DESCRIPTION"
+KKEdit is NOT a word processor or a web page editor, it is NOT
+.br
+and IDE! It won't right code for you, it wont insist on inserting
+.br
+brackets ( REALLY annoying! ), it wont force you to use any
+.br
+particular style, it doesn't need you to break all your fingers
+.br
+trying to hit weird and wonderful key combo's and it is not tied
+.br
+to one particular distro, oh yes and it won't cost you a penny!
+.br
+
+KKEdit is a deceptively simple text editor with syntax colouring.
+.br
+It also has a function menu which allows you to jump instantly to
+.br
+a function definition, a navigation menu which will look in all
+.br
+open files for a function definition and then switch to that tab
+.br
+and go to the relevant line if it can't find a definition in any
+.br
+open files it will do a recursive search from the folder of the
+.br
+currently selected document, you can also highlight a #include
+.br
+directive and it will search for and try to open the file,
+.br
+include files surrounded by <> will be looked for in /usr/include,
+.br
+files surrounded by "" will be looked for in the current folder.
+.br
+External tools can be added either globally or locally and when
+.br
+run can either replace the currently select text with their
+.br
+output, replace all the files text, be run in a terminal or you
+.br
+can choose to ignore the output form the script, BASH, python and
+.br
+perl can be used for the script language or any interpretor that
+.br
+uses '#' as a comment marker.
+.br
+
+You can drag and drop a file onto the main toolbar/menu to open a
+.br
+file. Session can be saved and reloaded. Any amount of bookmarks can
+.br
+be added anywhere, selecting a bookmark from the menu will switch to
+.br
+that tab and move to the appropriate line. Just type a line number
+.br
+into the edit box on the toolbar to jump straight to that line.
+.br
+.SH "OPTIONS"
+\fB-h, --help\fR
+.br
+		Show help options.
+.br
+
+\fB-m, --multiple\fR
+.br
+		Multiple instance mode.
+.br
+
+\fB-s, --safe\fR
+.br
+		Safe mode (disable all plugins and use new instance).
+.br
+
+<\fIfile\fR>
+.br
+		Opens specified <\fIfile\fR>.
+.br
+.SH "AUTHORS"
+Bugs, suggestions etc to:
+.br
+<apply_tag id="0"><apply_tag id="1">keithhedger@keithhedger.darktech.org\fR\fR
+.br
