@@ -2,8 +2,9 @@
 Version=1.0
 Encoding=UTF-8
 Name=KKEdit
+GenericName=Advanced Text Editor
 Comment=A GTK2/3 text editor inspired ( but not based on ) BBEdit.
 Terminal=false
 Type=Application
-Categories=GTK;GNOME;Utility;
+Categories=Utility;TextEditor;
 MimeType=text/plain
