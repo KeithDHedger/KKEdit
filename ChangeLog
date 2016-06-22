@@ -1,4 +1,7 @@
 0.3.4
+Application icons now symlinked instead of installed.
+Corrected installed icon sizes.
+Tweaked .desktop files for compatability.
 Added requested manpage.
 Fixed defunct links in about box's for plugin's.
 Fixed defunct links in about box.

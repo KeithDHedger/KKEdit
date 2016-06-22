@@ -6,5 +6,5 @@ GenericName=Advanced Text Editor
 Comment=A GTK2/3 text editor inspired ( but not based on ) BBEdit.
 Terminal=false
 Type=Application
-Categories=Utility;TextEditor;
+Categories=Utility;GTK;TextEditor;
 MimeType=text/plain
