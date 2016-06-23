@@ -20,6 +20,6 @@ uninstall-hook:
 	rm -f $(DESTDIR)${prefix}/share/pixmaps/KKEditPlugMenu$(GTK3SUFFIX).png||true
 	rm -fr $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)||true
 	rm -fr $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES/kkedit$(GTK3SUFFIX).mo||true
-
+	rm -f $(DESTDIR)${includedir}/kkedit-plugins$(GTK3SUFFIX).h||true
 update-icons:
-	gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor
+	gtk-update-icon-cache -q -t -f ${prefix}/share/icons/hicolor

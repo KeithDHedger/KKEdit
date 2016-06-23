@@ -86,6 +86,31 @@ sudo yum install automake autoconf
 make
 sudo make install
 
+******************
+
+OpenSuse ( Leap 42.x ) gtk2.
+
+sudo zypper install make gcc gcc-c++
+sudo zypper install xorg-x11-devel ctags gtksourceview2-devel gtk2-devel vte2-devel
+
+Optional installs
+sudo zypper install aspell-devel aspell aspell-en
+sudo zypper install libwebkitgtk-devel
+sudo zypper install hxtools-scripts
+
+OpenSuse ( Leap 42.x ) gtk3.
+
+sudo zypper install make gcc gcc-c++
+sudo zypper install xorg-x11-devel ctags gtksourceview-devel gtk3-devel vte-devel
+
+Optional installs
+sudo zypper install aspell-devel aspell aspell-en
+sudo zypper install libwebkitgtk3-devel
+sudo zypper install hxtools-scripts
+
+
+******************
+
 You may need to adjust package names slightly depending on the version of debian/fedora that you have installed.
 
 Bugs and suggestions welcome please email to kdhedger68713@gmail.com

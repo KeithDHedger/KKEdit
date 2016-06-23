@@ -29,11 +29,10 @@ bin_PROGRAMS = kkedit KKEditProgressBar
 install-exec-hook:
 
 	mkdir -p $(DESTDIR)${prefix}/share/pixmaps
-	ln -sf ${pkgdatadir}/pixmaps/KKEditPlug$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlug$(GTK3SUFFIX).png
-	ln -sf ${pkgdatadir}/pixmaps/KKEditPlugMenu$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlugMenu$(GTK3SUFFIX).png
-	ln -sf ${pkgdatadir}/pixmaps/KKEdit$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/pixmaps/KKEdit$(GTK3SUFFIX).png
-	ln -sf ${pkgdatadir}/pixmaps/KKEditRoot$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/pixmaps/KKEditRoot$(GTK3SUFFIX).png
-
+	ln -sf ${pkgdatadir}$(GTK3SUFFIX)/pixmaps/KKEditPlug$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlug$(GTK3SUFFIX).png
+	ln -sf ${pkgdatadir}$(GTK3SUFFIX)/pixmaps/KKEditPlugMenu$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlugMenu$(GTK3SUFFIX).png
+	ln -sf ${pkgdatadir}$(GTK3SUFFIX)/pixmaps/KKEdit$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/pixmaps/KKEdit$(GTK3SUFFIX).png
+	ln -sf ${pkgdatadir}$(GTK3SUFFIX)/pixmaps/KKEditRoot$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/pixmaps/KKEditRoot$(GTK3SUFFIX).png
 
 	install -D ../resources/pixmaps/KKEdit.desktop $(DESTDIR)${prefix}/share/applications/KKEdit$(GTK3SUFFIX).desktop
 	install -D ../resources/pixmaps/KKEditRoot.desktop $(DESTDIR)${prefix}/share/applications/KKEditRoot$(GTK3SUFFIX).desktop
@@ -47,9 +46,9 @@ install-exec-hook:
 	echo "Exec=kkedit$(GTK3SUFFIX) %f" >> $(DESTDIR)${prefix}/share/applications/KKEdit$(GTK3SUFFIX).desktop
 
 	mkdir -p $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps
-	ln -sf ${prefix}/share/icons/hicolor/128x128/apps/KKEdit$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEdit$(GTK3SUFFIX).png
-	ln -sf ${prefix}/share/icons/hicolor/128x128/apps/KKEditRoot$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditRoot$(GTK3SUFFIX).png
-	ln -sf ${prefix}/share/icons/hicolor/128x128/apps/KKEditPlug$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditPlug$(GTK3SUFFIX).png
+	ln -sf ${pkgdatadir}$(GTK3SUFFIX)/pixmaps/KKEdit$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEdit$(GTK3SUFFIX).png
+	ln -sf ${pkgdatadir}$(GTK3SUFFIX)/pixmaps/KKEditRoot$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditRoot$(GTK3SUFFIX).png
+	ln -sf ${pkgdatadir}$(GTK3SUFFIX)/pixmaps/KKEditPlug$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKEditPlug$(GTK3SUFFIX).png
 
 	mkdir -vp "$(DESTDIR)${pkgdatadir}$(GTK3SUFFIX)/Example External Tools"
 	cp -r "../resources/Example External Tools" "$(DESTDIR)${pkgdatadir}$(GTK3SUFFIX)"
