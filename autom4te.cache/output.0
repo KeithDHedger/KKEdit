@@ -4672,7 +4672,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_plugs" >&5
 $as_echo "$enable_plugs" >&6; }
 if test "$enable_plugs" = "yes"; then
-	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
+	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager KKEdit/plugins/MacroPlugin"
 	if test "$enable_gtk3" = "yes"; then
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Finding vte version" >&5
 $as_echo_n "checking Finding vte version... " >&6; }

@@ -235,6 +235,11 @@ struct plugData
 	int					bottomShow;
 //locale dir for gettext
 	const char			*locale;
+
+//user data passed to plugins.
+	void				*userDataPtr;
+	int					userDataInt;
+	const char			*userDataStr;
 };
 
 void		showDocView(int howtodisplay,char *text,const char *title);

@@ -1277,6 +1277,9 @@ VISIBLE void doOpenFile(GtkWidget *widget,gpointer data)
 	GSList		*filenames;
 	GSList		*thisnext;
 
+	globalPlugins->globalPlugData->userDataStr=OPENMENUNAME;
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+
 #ifdef _USEGTK3_
 	dialog=gtk_file_chooser_dialog_new(OPEN_TT_LABEL,NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN_LABEL, GTK_RESPONSE_ACCEPT,NULL);
 #else
