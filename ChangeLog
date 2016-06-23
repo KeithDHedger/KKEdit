@@ -1,4 +1,7 @@
 0.3.4
+Install instructions for OpenSuse added to INSTALL file.
+Fixed symlinking to wrong files.
+Fixed some files not being uninstalled properly.
 Application icons now symlinked instead of installed.
 Corrected installed icon sizes.
 Tweaked .desktop files for compatability.

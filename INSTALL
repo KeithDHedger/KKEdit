@@ -108,10 +108,9 @@ sudo zypper install aspell-devel aspell aspell-en
 sudo zypper install libwebkitgtk3-devel
 sudo zypper install hxtools-scripts
 
-
 ******************
 
-You may need to adjust package names slightly depending on the version of debian/fedora that you have installed.
+You may need to adjust package names slightly depending on the version of debian/fedora/opensuse that you have installed.
 
 Bugs and suggestions welcome please email to kdhedger68713@gmail.com
 For general info on compiling/installing software on your disro see the relevant forums.
