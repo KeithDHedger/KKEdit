@@ -48,6 +48,7 @@ GtkNotebook		*mainNotebook=NULL;
 
 //file menu
 GtkWidget		*fileMenu;
+GtkWidget		*menuItemNew=NULL;
 GtkWidget		*menuItemOpen=NULL;
 GtkWidget		*saveMenu;
 GtkWidget		*saveAsMenu;

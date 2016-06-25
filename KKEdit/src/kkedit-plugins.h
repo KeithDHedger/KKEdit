@@ -100,7 +100,9 @@
 #ifndef _PAGESTRUCT_
 #define _PAGESTRUCT_
 
-struct args
+enum {NOTYPE=0,FROMFILEMENU,FROMEDITMENU,FROMNAVMENU,FROMFUNCMENU,FROMBOOKMARKMENU,FROMTOOLSMENU,FROMHELPMENU,FROMSELECTION};
+
+struct	args
 {
 	const char	*name;
 	int			type;
@@ -164,7 +166,7 @@ struct moduleData
 #endif
 
 //plugins
-struct plugMenuList
+struct	plugMenuList
 {
 	GtkWidget			*menuBar;
 	GtkWidget			*menuFile;
@@ -177,7 +179,18 @@ struct plugMenuList
 	GtkWidget			*menuView;
 };
 
-struct plugData
+struct	plugUserData
+{
+	plugUserData():type(NOTYPE),userStr(NULL),userInt(0),userData(NULL),userStart(-1),userEnd(-1) {}
+	int			type;
+	const char	*userStr;
+	int			userInt;
+	void		*userData;
+	int			userStart;
+	int			userEnd;
+};
+
+struct	plugData
 {
 //menus
 	plugMenuList		mlist;
@@ -237,9 +250,7 @@ struct plugData
 	const char			*locale;
 
 //user data passed to plugins.
-	void				*userDataPtr;
-	int					userDataInt;
-	const char			*userDataStr;
+	plugUserData		userData;
 };
 
 void		showDocView(int howtodisplay,char *text,const char *title);

@@ -43,12 +43,7 @@
 #define ABOUTICON "KKEditPlug"
 #endif
 
-struct	macroData
-{
-	unsigned	command;
-	const void	*data;
-	int			intData;
-};
+typedef plugUserData macroData;
 
 enum {STARTRECORDING=1,STOPRECORDING,PAUSERECORDING,PLAYBACK};
 enum {DOOPEN=1};
@@ -57,17 +52,50 @@ macroData	recording[100];
 unsigned	commandNum=0;
 bool		paused=false;
 unsigned	commandCnt=0;
+bool		isRecording=false;
 
 GtkWidget	*menuStart;
 GtkWidget	*menuStop;
 GtkWidget	*menuPause;
 GtkWidget	*menuPlayback;
+GtkWidget	*holdWidget=NULL;
 
 GtkWidget	*menuPlug;
-plugData	*plugdata;
+plugData	*globalPlugData;
 char		*currentdomain=NULL;
 
 int	(*module_plug_function)(gpointer globaldata);
+
+GtkWidget* findMenu(GtkWidget* parent, const gchar* name)
+{
+	const gchar	*mname=NULL;
+
+	if ( (GTK_IS_MENU_ITEM(parent)) && !(GTK_IS_SEPARATOR_MENU_ITEM(parent)) )
+		{
+			mname=gtk_widget_get_name((GtkWidget*)parent);
+			if(mname!=NULL)
+				{
+			//printf("name=%s,mname=%s\n",name,mname);
+					if(strcmp(name,mname)==0)
+						holdWidget=parent;
+				}
+		}
+
+	if (GTK_IS_CONTAINER(parent))
+		{
+			GList	*children=gtk_container_get_children(GTK_CONTAINER(parent));
+			while(children != NULL)
+				{
+					GtkWidget	*widget=findMenu((GtkWidget*)children->data, name);
+
+					if (widget!=NULL)
+						return widget;
+					children=g_list_next(children);
+				}
+			g_list_free(children);
+		}
+	return NULL;
+}
 
 void recordMacro(GtkMenuItem *menuitem,gpointer what)
 {
@@ -76,30 +104,65 @@ void recordMacro(GtkMenuItem *menuitem,gpointer what)
 			case STARTRECORDING:
 				commandNum=0;
 				commandCnt=0;
-printf("--->STARTRECORDING=%i<--\n",(long)what);
+				isRecording=true;
+printf("--->STARTRECORDING<--\n");
 				break;
 			case STOPRECORDING:
 				commandCnt=commandNum;
 				commandNum=0;
-printf("--->STOPRECORDING=%i<--\n",(long)what);
+				isRecording=false;
+printf("--->STOPRECORDING=<--\n");
 				break;
 			case PAUSERECORDING:
 				commandCnt=commandNum;
 				paused=!paused;
-printf("--->PAUSERECORDING=%i<--\n",(long)what);
+printf("--->PAUSERECORDING<--\n");
 				break;
 			case PLAYBACK:
+				printf("Playing back %i commands ..\n",commandCnt);
 				for(unsigned j=0;j<commandCnt;j++)
-					printf("--->PLAYBACK command num=%i data=%s<--\n",j,recording[j].data);
+					{
+						holdWidget=NULL;
+						switch(recording[j].type)
+							{
+								case FROMFILEMENU:
+									findMenu(gtk_menu_item_get_submenu((GtkMenuItem*)globalPlugData->mlist.menuFile),recording[j].userStr);
+									if(holdWidget!=NULL)
+										g_signal_emit_by_name((gpointer)holdWidget,"activate",recording[j].userData,NULL);
+									break;
+
+								case FROMEDITMENU:
+									findMenu(gtk_menu_item_get_submenu((GtkMenuItem*)globalPlugData->mlist.menuEdit),recording[j].userStr);
+									if(holdWidget!=NULL)
+										g_signal_emit_by_name((gpointer)holdWidget,"activate",NULL,NULL);
+									break;
+
+								case FROMSELECTION:
+									if((recording[j].userStart!=-1) && (recording[j].userEnd!=-1))
+										{
+											pageStruct	*page=getPageStructByIDFromPage(-1);
+											if(page!=NULL)
+												{
+													GtkTextIter sc,ec;
+													gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&sc);
+													gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&ec);
+													gtk_text_iter_set_offset(&sc,recording[j].userStart);
+													gtk_text_iter_set_offset(&ec,recording[j].userEnd);
+													gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&sc,&ec);
+												}
+										}
+									break;
+							}
+					}
+				printf("Finished.\n");
 				break;
 		}
 }
 
 extern "C" int informPlugin(plugData *plugdata)
 {
-	recording[commandNum++].data=plugdata->userDataStr;
-//	recording[commandNum].command=DOOPEN
-printf("---->%s<---\n",plugdata->userDataStr);
+	if(isRecording && !paused)
+		recording[commandNum++]=plugdata->userData;
 	return(0);
 }
              
@@ -136,8 +199,8 @@ extern "C" int addToGui(gpointer data)
 {
 	GtkWidget*	menu;
 
-	plugdata=(plugData*)data;
-	setTextDomain(true,plugdata);
+	globalPlugData=(plugData*)data;
+	setTextDomain(true,globalPlugData);
 
 	menuPlug=gtk_menu_item_new_with_label(gettext("_Macro"));
 	gtk_menu_item_set_use_underline((GtkMenuItem*)menuPlug,true);
@@ -157,16 +220,9 @@ extern "C" int addToGui(gpointer data)
 	g_signal_connect(G_OBJECT(menuPlayback),"activate",G_CALLBACK(recordMacro),(void*)(long)PLAYBACK);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuPlayback);
 
-	gtk_menu_shell_append(GTK_MENU_SHELL(plugdata->mlist.menuBar),menuPlug);					
+	gtk_menu_shell_append(GTK_MENU_SHELL(globalPlugData->mlist.menuBar),menuPlug);					
 
-	for(unsigned j=0;j<100;j++)
-		{
-			recording[j].command=0;
-			recording[j].data=NULL;
-			recording[j].intData=0;
-		}
-
-	setTextDomain(false,plugdata);
+	setTextDomain(false,globalPlugData);
 	return(0);
 }
 

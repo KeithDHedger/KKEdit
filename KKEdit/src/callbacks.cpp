@@ -234,9 +234,14 @@ VISIBLE void realCloseTab(GtkNotebook *notebook,GtkWidget *child,guint page_num,
 VISIBLE void closeAllTabs(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	int	numtabs=gtk_notebook_get_n_pages(mainNotebook);
+
+	int numpages=gtk_notebook_get_n_pages(mainNotebook);
+
+	globalPlugins->setUserData("tsd",FROMFILEMENU,CLOSEALLMENUNAME,data);
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+
 	showAllTabs(NULL,NULL);
-	for(int loop=0; loop<numtabs; loop++)
+	for(int loop=0;loop<numpages;loop++)
 		{
 			closingAll=true;
 			closeTab(NULL,0);
@@ -277,6 +282,12 @@ bool checkBeforeClose(int pagenum)
 
 VISIBLE void closeTab(GtkWidget *widget,gpointer data)
 {
+	if(closingAll==false)
+		{
+			globalPlugins->setUserData("tsd",FROMFILEMENU,CLOSEMENUNAME,data);
+			g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+		}
+
 	if(data!=NULL)
 		{
 			if(gtk_notebook_page_num(mainNotebook,(GtkWidget*)data)!=-1)
@@ -500,6 +511,8 @@ VISIBLE void copyToClip(GtkWidget *widget,gpointer data)
 
 	if(page==NULL)
 		return;
+	globalPlugins->setUserData("ts",FROMEDITMENU,COPYMENUNAME);
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 	gtk_text_buffer_copy_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD));
 }
 
@@ -510,6 +523,10 @@ VISIBLE void cutToClip(GtkWidget *widget,gpointer data)
 
 	if(page==NULL)
 		return;
+
+	globalPlugins->setUserData("ts",FROMEDITMENU,CUTMENUNAME);
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+
 	gtk_text_buffer_cut_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),true);
 	setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 }
@@ -525,6 +542,9 @@ VISIBLE void pasteFromClip(GtkWidget *widget,gpointer data)
 
 	if(page==NULL)
 		return;
+
+	globalPlugins->setUserData("ts",FROMEDITMENU,PASTEMENUNAME);
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 	mainclipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
 	clipdata=gtk_clipboard_wait_for_text(mainclipboard);
 	if(clipdata!=NULL)
@@ -1154,6 +1174,9 @@ VISIBLE bool doSaveAll(GtkWidget *widget,gpointer data)
 	int			numpages=gtk_notebook_get_n_pages(mainNotebook);
 	int			result;
 	pageStruct	*page;
+
+	globalPlugins->setUserData("ts",FROMFILEMENU,SAVEALLMENUNAME);
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 
 	for(int loop=0; loop<numpages; loop++)
 		{

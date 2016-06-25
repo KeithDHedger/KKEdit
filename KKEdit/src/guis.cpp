@@ -1431,7 +1431,7 @@ void buildMainGui(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMenu),menu);
 
 //new
-	menuitem=makeMenuItem(GTK_STOCK_NEW,menu,(void*)newFile,'N',NEWMENUNAME,STOCKMENU,MENU_NEW_LABEL,NULL,false);
+	menuItemNew=makeMenuItem(GTK_STOCK_NEW,menu,(void*)newFile,'N',NEWMENUNAME,STOCKMENU,MENU_NEW_LABEL,NULL,false);
 //open
 	menuItemOpen=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)doOpenFile,'O',OPENMENUNAME,STOCKMENU,MENU_OPEN_LABEL,NULL,false);
 //open as hexdump

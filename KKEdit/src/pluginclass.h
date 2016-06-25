@@ -19,6 +19,7 @@
  */
 
 #include <gmodule.h>
+#include <stdarg.h>
 
 #include "kkedit-includes.h"
 
@@ -59,6 +60,8 @@ class PluginClass
 		int				runPlugFunction(moduleData* pdata,const char* func);
 		bool			enablePlugin(char* name,bool wanttounload);
 		bool			checkForFunction(char* name,const char* func);
+
+		void			setUserData(const char *fmt,...);
 
 	private:
 		GList*			plugEnabledList;

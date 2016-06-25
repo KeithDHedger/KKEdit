@@ -39,6 +39,9 @@ class TextBuffer
 		int				column;
 		int				charPos;
 
+		int				selectionStart;
+		int				selectionEnd;
+
 		void getLineData(void);
 
 		void getVisibleLine(void);
@@ -68,6 +71,8 @@ class TextBuffer
 		void scroll2CentreScreen(GtkTextView *view,bool doupdate);
 
 		char *getLineText(void);
+		void getSelectionBounds(void);
+
 	private:
 };
 

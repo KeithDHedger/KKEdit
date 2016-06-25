@@ -308,3 +308,33 @@ bool PluginClass::checkForFunction(char *name,const char *func)
 	ERRDATA return(false);
 }
 
+void PluginClass::setUserData(const char *fmt,...)
+{
+	va_list	ap;
+	va_start(ap,fmt);
+
+	while(*fmt)
+		switch(*fmt++)
+			{
+				case 't':
+					this->globalPlugData->userData.type=va_arg(ap,int);
+					break;
+				case 's':
+					this->globalPlugData->userData.userStr=va_arg(ap,char *);
+        			break;
+				case 'd':
+					this->globalPlugData->userData.userData=va_arg(ap,void*);
+					break;
+				case 'b':
+					this->globalPlugData->userData.userStart=va_arg(ap,int);
+					break;
+				case 'e':
+					this->globalPlugData->userData.userEnd=va_arg(ap,int);
+					break;
+			}
+	va_end(ap);
+}
+
+
+
+

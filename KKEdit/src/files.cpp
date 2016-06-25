@@ -475,11 +475,18 @@ VISIBLE bool saveFile(GtkWidget *widget,gpointer data)
 	FILE		*fd=NULL;
 	GtkWidget	*dialog;
 
+	if(data==NULL)
+		globalPlugins->setUserData("tsd",FROMFILEMENU,SAVEMENUNAME,data);
+	else
+		globalPlugins->setUserData("tsd",FROMFILEMENU,SAVEASMENUNAME,data);
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+
 	ERRDATA
 	page->itsMe=true;
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
 	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
 	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,FALSE);
+
 	if(page->filePath!=NULL && data==NULL)
 		{
 			fd=fopen(page->filePath,"w");
@@ -921,6 +928,23 @@ gboolean resetRegexMark (GtkWidget *widget,GdkEvent *event,pageStruct *page)
 	return(false);
 }
 
+bool highLightText(GtkWidget *widget,GdkEvent *event,gpointer data)
+{
+	TextBuffer	*buf;
+	pageStruct	*page;
+	page=(pageStruct*)data;
+	if(page!=NULL)
+		{
+			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+			buf->getSelectionBounds();
+
+			globalPlugins->setUserData("tsdbe",FROMSELECTION,OPENMENUNAME,data,buf->selectionStart,buf->selectionEnd);
+			g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+			delete buf;
+		}
+	return(false);
+}
+
 pageStruct *makeNewPage(void)
 {
 	ERRDATA
@@ -944,6 +968,10 @@ pageStruct *makeNewPage(void)
 #ifdef _USEGTK3_
 	gtk_style_context_add_provider(gtk_widget_get_style_context((GtkWidget*)page->view),provider,GTK_STYLE_PROVIDER_PRIORITY_USER);
 #endif
+
+	g_signal_connect(G_OBJECT(page->view),"button-release-event",G_CALLBACK(highLightText),(void*)page);
+//	g_signal_connect(G_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),(void*)page);
+
 
 //completion
 	page->completion=gtk_source_view_get_completion(GTK_SOURCE_VIEW(page->view));
@@ -1236,6 +1264,9 @@ VISIBLE void newFile(GtkWidget *widget,gpointer data)
 	GtkWidget	*label;
 	pageStruct	*page;
 
+	globalPlugins->setUserData("tsd",FROMFILEMENU,NEWMENUNAME,data);
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+
 	page=makeNewPage();
 	page->tabVbox=createNewBox(NEWVBOX,true,4);
 	page->filePath=NULL;
@@ -1277,7 +1308,7 @@ VISIBLE void doOpenFile(GtkWidget *widget,gpointer data)
 	GSList		*filenames;
 	GSList		*thisnext;
 
-	globalPlugins->globalPlugData->userDataStr=OPENMENUNAME;
+	globalPlugins->setUserData("tsd",FROMFILEMENU,OPENMENUNAME,data);
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 
 #ifdef _USEGTK3_

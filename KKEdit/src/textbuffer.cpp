@@ -248,4 +248,23 @@ void TextBuffer::scroll2Iter(GtkTextView *view,GtkTextIter iter)
 	ERRDATA gtk_text_view_scroll_to_iter(view,&iter,0,true,0,0.5);
 }
 
+void TextBuffer::getSelectionBounds(void)
+{
+	bool		gotbounds=false;
+	GtkTextIter	start;
+	GtkTextIter	end;
+
+	gotbounds=gtk_text_buffer_get_selection_bounds(this->textBuffer,&start,&end);
+	if(gotbounds==true)
+		{
+			this->selectionStart=gtk_text_iter_get_offset(&start);
+			this->selectionEnd=gtk_text_iter_get_offset(&end);
+		}
+	else
+		{
+			this->selectionStart=-1;
+			this->selectionEnd=-1;
+		}
+}
+
 

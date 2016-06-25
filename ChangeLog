@@ -1,4 +1,6 @@
 0.3.4
+Fixed not closing all tabs.
+Added 'Macro' plugin.
 Install instructions for OpenSuse added to INSTALL file.
 Fixed symlinking to wrong files.
 Fixed some files not being uninstalled properly.

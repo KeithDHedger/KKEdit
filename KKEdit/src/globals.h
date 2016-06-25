@@ -138,6 +138,8 @@ extern GtkNotebook		*mainNotebook;
 
 //file menu
 extern GtkWidget		*fileMenu;
+extern GtkWidget		*menuItemNew;
+extern GtkWidget		*menuItemOpen;
 extern GtkWidget		*saveMenu;
 extern GtkWidget		*saveAsMenu;
 extern GtkWidget		*saveAllMenu;
@@ -197,7 +199,6 @@ extern unsigned			pageID;
 extern char				*toolBarLayout;
 extern GtkWidget		*toolBarBox;
 
-extern GtkWidget		*menuItemOpen;
 
 extern GtkWidget		*lineNumberWidget;
 extern GtkWidget		*findApiWidget;
@@ -448,7 +449,6 @@ extern bool				loadingSession;
 extern HistoryClass		*globalHistory;
 extern StringSlice		*globalSlice;
 extern bool				doGoogleSearch;
-
 
 void plugRunFunction(gpointer data,gpointer funcname);
 
