@@ -245,6 +245,7 @@ LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MANPAGEEDITOR = @MANPAGEEDITOR@
 MKDIR_P = @MKDIR_P@
+NEWPLUGINCLUDES = @NEWPLUGINCLUDES@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
@@ -316,7 +317,7 @@ top_srcdir = @top_srcdir@
 with_debug_level = @with_debug_level@
 with_gsu_path = @with_gsu_path@
 with_qt5_docdir = @with_qt5_docdir@
-SUBDIRS = KKEdit/app $(PLUGINCLUDES)
+SUBDIRS = KKEdit/app $(PLUGINCLUDES) $(NEWPLUGINCLUDES)
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 

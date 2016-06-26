@@ -606,6 +606,7 @@ GTK_CFLAGS
 GTK3SUFFIX
 VTEVERS
 PLUGVERSION
+NEWPLUGINCLUDES
 PLUGINCLUDES
 VTE_LIBS
 VTE_CFLAGS
@@ -712,6 +713,7 @@ enable_dependency_tracking
 enable_silent_rules
 enable_gtk3
 enable_plugins
+enable_unstable_plugins
 enable_docviewer
 with_qt5_docdir
 enable_aspell
@@ -1367,6 +1369,8 @@ Optional Features:
   --disable-silent-rules  verbose build output (undo: "make V=0")
   --enable-gtk3           Use GTK3.
   --enable-plugins        Build/Install plugins
+  --enable-unstable-plugins
+                          Build/Install unstable/new plugins
   --enable-docviewer      Build the Gtk-Doc viewer
   --enable-aspell         Include spellchecker
 
@@ -4672,7 +4676,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_plugs" >&5
 $as_echo "$enable_plugs" >&6; }
 if test "$enable_plugs" = "yes"; then
-	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager KKEdit/plugins/MacroPlugin"
+	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
 	if test "$enable_gtk3" = "yes"; then
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Finding vte version" >&5
 $as_echo_n "checking Finding vte version... " >&6; }
@@ -4777,6 +4781,22 @@ fi
 else
 	PLUGINCLUDES=
 fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Build/Install unstable/new plugins" >&5
+$as_echo_n "checking Build/Install unstable/new plugins... " >&6; }
+# Check whether --enable-unstable-plugins was given.
+if test "${enable_unstable_plugins+set}" = set; then :
+  enableval=$enable_unstable_plugins; enable_new_plugs=$enableval
+else
+  enable_new_plugs="yes"
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_new_plugs" >&5
+$as_echo "$enable_new_plugs" >&6; }
+if test "$enable_new_plugs" = "yes"; then
+	NEWPLUGINCLUDES=KKEdit/unstable-plugins/*Plugin
+fi
+
 
 
 

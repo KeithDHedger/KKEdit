@@ -40,7 +40,7 @@ AC_MSG_CHECKING(Build/Install plugins)
 AC_ARG_ENABLE(plugins,AS_HELP_STRING([--enable-plugins],[Build/Install plugins]),[enable_plugs=$enableval],[enable_plugs="yes"])
 AC_MSG_RESULT($enable_plugs)
 if test "$enable_plugs" = "yes"; then
-	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager KKEdit/plugins/MacroPlugin"
+	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
 	if test "$enable_gtk3" = "yes"; then
 		AC_MSG_CHECKING(Finding vte version)
 		PKG_CHECK_EXISTS(vte-2.91,[usevte=91],[usevte=90])
@@ -62,7 +62,15 @@ else
 	PLUGINCLUDES=
 fi
 
+AC_MSG_CHECKING(Build/Install unstable/new plugins)
+AC_ARG_ENABLE(unstable-plugins,AS_HELP_STRING([--enable-unstable-plugins],[Build/Install unstable/new plugins]),[enable_new_plugs=$enableval],[enable_new_plugs="yes"])
+AC_MSG_RESULT($enable_new_plugs)
+if test "$enable_new_plugs" = "yes"; then
+	NEWPLUGINCLUDES=KKEdit/unstable-plugins/*Plugin
+fi
+
 AC_SUBST(PLUGINCLUDES)
+AC_SUBST(NEWPLUGINCLUDES)
 AC_SUBST(PLUGVERSION)
 AC_SUBST(VTEVERS)
 AC_SUBST(GTK3SUFFIX)

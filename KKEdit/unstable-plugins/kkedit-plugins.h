@@ -1,0 +1,1 @@
+../src/kkedit-plugins.h

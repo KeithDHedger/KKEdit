@@ -1,4 +1,6 @@
 0.3.4
+Unstable plugins now have to be specifically enabled with the --enable-unstable-plugins option to ./configure.
+Moved MacroPlugin to unstable-plugins.
 Fixed not closing all tabs.
 Added 'Macro' plugin.
 Install instructions for OpenSuse added to INSTALL file.
