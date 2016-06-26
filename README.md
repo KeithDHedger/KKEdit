@@ -31,3 +31,5 @@ Default is to build for gtk2
 You may need to install gtk3 dev files if your distro splits them off from the main package ( debian etc ).
 
 *** NEW ***
+
+gtk-version branch has now been synced with master branch and you shoud now be using the master branch.
