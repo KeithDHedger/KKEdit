@@ -66,6 +66,11 @@ char		*currentdomain=NULL;
 int			sinkInt;
 
 int	(*module_plug_function)(gpointer globaldata);
+extern void gotoLine(GtkWidget *widget,gpointer data);
+extern void basicFind(int dowhat);
+
+extern GtkWidget	*findBox;
+extern GtkWidget	*replaceBox;
 
 GtkWidget* findMenu(GtkWidget* parent, const gchar* name)
 {
@@ -152,6 +157,19 @@ printf("--->PAUSERECORDING<--\n");
 													gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&sc,&ec);
 												}
 										}
+									break;
+
+								case FROMGOTO:
+									gotoLine(NULL,(gpointer)recording[j].userData);
+									break;
+
+								case FROMBASICFIND:
+								printf("user str1=%s,userstr2=%s dowaht=%i\n",recording[j].userStr,recording[j].userStr2,recording[j].userInt);
+									gtk_entry_set_text((GtkEntry*)findBox,recording[j].userStr);
+									gtk_entry_set_text((GtkEntry*)replaceBox,recording[j].userStr2);
+								//	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)findBox));
+//	replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
+									basicFind(recording[j].userInt);
 									break;
 							}
 					}

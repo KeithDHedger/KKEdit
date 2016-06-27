@@ -31,6 +31,7 @@ void docSearchInPageBack(GtkWidget *widget,gpointer data);
 
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data);
 void find(GtkWidget *widget,gpointer data);
+void findNext(GtkWidget *widget,gpointer data);
 void doSearchPrefs(GtkWidget *widget,gpointer data);
 void docSearchFromBar(GtkWidget *widget,gpointer data);
 bool defSearchFromBar(GtkWidget *widget,gpointer data);

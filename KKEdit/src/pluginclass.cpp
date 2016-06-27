@@ -320,7 +320,10 @@ void PluginClass::setUserData(const char *fmt,...)
 					this->globalPlugData->userData.type=va_arg(ap,int);
 					break;
 				case 's':
-					this->globalPlugData->userData.userStr=va_arg(ap,char *);
+					this->globalPlugData->userData.userStr=strdup(va_arg(ap,char *));
+        			break;
+				case 'S':
+					this->globalPlugData->userData.userStr2=strdup(va_arg(ap,char *));
         			break;
 				case 'd':
 					this->globalPlugData->userData.userData=va_arg(ap,void*);
@@ -330,6 +333,9 @@ void PluginClass::setUserData(const char *fmt,...)
 					break;
 				case 'e':
 					this->globalPlugData->userData.userEnd=va_arg(ap,int);
+					break;
+				case 'i':
+					this->globalPlugData->userData.userInt=va_arg(ap,int);
 					break;
 			}
 	va_end(ap);

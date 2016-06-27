@@ -65,6 +65,7 @@
 #define COPYMENUNAME "copymenu"
 #define PASTEMENUNAME "pastemenu"
 #define FINDMENUNAME "findmenu"
+#define FINDNEXTMENUNAME "findnextmenu"
 #define PREFSMENUNAME "prefsmenu"
 #define PLUGPREFSMENUNAME "plugprefsmenu"
 #define SHOWDOCSMENUNAME "showdocsmenu"
@@ -100,7 +101,7 @@
 #ifndef _PAGESTRUCT_
 #define _PAGESTRUCT_
 
-enum {NOTYPE=0,FROMFILEMENU,FROMEDITMENU,FROMNAVMENU,FROMFUNCMENU,FROMBOOKMARKMENU,FROMTOOLSMENU,FROMHELPMENU,FROMSELECTION};
+enum {NOTYPE=0,FROMFILEMENU,FROMEDITMENU,FROMNAVMENU,FROMFUNCMENU,FROMBOOKMARKMENU,FROMTOOLSMENU,FROMHELPMENU,FROMSELECTION,FROMGOTO,FROMBASICFIND};
 
 struct	args
 {
@@ -181,9 +182,10 @@ struct	plugMenuList
 
 struct	plugUserData
 {
-	plugUserData():type(NOTYPE),userStr(NULL),userInt(0),userData(NULL),userStart(-1),userEnd(-1) {}
+	plugUserData():type(NOTYPE),userStr(NULL),userStr2(NULL),userInt(0),userData(NULL),userStart(-1),userEnd(-1) {}
 	int			type;
 	const char	*userStr;
+	const char	*userStr2;
 	int			userInt;
 	void		*userData;
 	int			userStart;

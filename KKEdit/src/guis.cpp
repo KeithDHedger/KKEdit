@@ -1529,6 +1529,8 @@ void buildMainGui(void)
 
 //find
 	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)find,'F',FINDMENUNAME,STOCKMENU,MENU_FIND_LABEL,NULL,false);
+//find next
+	menuitem=makeMenuItem(GTK_STOCK_GO_FORWARD,menu,(void*)findNext,'g',FINDNEXTMENUNAME,IMAGEMENU,MENU_FIND_NEXT_LABEL,NULL,false);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);

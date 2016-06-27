@@ -183,12 +183,15 @@ void gotoLineNoSavePos(GtkWidget *widget,gpointer data)
 	ERRDATA
 }
 
-void gotoLine(GtkWidget *widget,gpointer data)
+VISIBLE void gotoLine(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	int			line=(long)data;
 	TextBuffer	*buf;
 	pageStruct	*page=getPageStructByIDFromPage(-1);
+
+	globalPlugins->setUserData("td",FROMGOTO,data);
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 
 	if(page!=NULL)
 		{
@@ -686,7 +689,11 @@ void selectTab(GtkWidget *widget,gpointer data)
 		}
 	else
 		{
+//TODO//
 			gtk_notebook_set_current_page(mainNotebook,(int)(long)data);
+			//gtk_menu_item_get_label((GtkMenuItem*)widget);
+			//globalPlugins->setUserData("ts",FROMEDITMENU,gtk_menu_item_get_label((GtkMenuItem*)widget));
+			//g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 		}
 
 	page=getPageStructByIDFromPage(-1);

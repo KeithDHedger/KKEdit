@@ -127,6 +127,7 @@
 #define MENU_COPY_LABEL gettext("_Copy")
 #define MENU_PASTE_LABEL gettext("_Paste")
 #define MENU_FIND_LABEL gettext("_Find")
+#define MENU_FIND_NEXT_LABEL gettext("Find Ne_xt")
 #define MENU_SORT_TABS_LABEL gettext("_Sort Tabs")
 #define MENU_SHOW_ALL_TABS_LABEL gettext("S_how All Tabs")
 #define MENU_HIDE_TAB_LABEL gettext("_Hide Tab")

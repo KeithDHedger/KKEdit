@@ -962,7 +962,7 @@ void regexFind(int dowhat)
 		regexFind(FINDPREV);
 }
 
-void basicFind(int dowhat)
+VISIBLE void basicFind(int dowhat)
 {
 	pageStruct				*page=NULL;
 	char					*searchtext=NULL;
@@ -1012,6 +1012,10 @@ void basicFind(int dowhat)
 	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)findBox));
 	replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
 
+//printf("searchtext=%s replacetxtx=%s\n",searchtext,replacetext);
+//	globalPlugins->setUserData("tsSi",FROMBASICFIND,searchtext,replacetext,dowhat);
+//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+
 	if(!gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
 		gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 
@@ -1038,6 +1042,9 @@ void basicFind(int dowhat)
 
 	if(dowhat==FINDNEXT)
 		{
+//printf("searchtext=%s replacetxtx=%s\n",searchtext,replacetext);
+//	globalPlugins->setUserData("tsSi",FROMBASICFIND,searchtext,replacetext,dowhat);
+//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) &&(autoSeleced==false))
 				{
 					gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
@@ -1124,6 +1131,8 @@ void basicFind(int dowhat)
 
 		if((dowhat==REPLACE) &&(replaceAll==false))
 			{
+//	globalPlugins->setUserData("tsSi",FROMBASICFIND,searchtext,replacetext,dowhat);
+//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 				if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
 					{
 #ifdef _USEGTK3_
@@ -1282,8 +1291,18 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 VISIBLE void find(GtkWidget *widget,gpointer data)
 {
-	gtk_widget_show(findReplaceDialog);
-	gtk_dialog_run((GtkDialog *)findReplaceDialog);
+	globalPlugins->setUserData("ts",FROMEDITMENU,FINDMENUNAME);
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+
+	gtk_window_present((GtkWindow*)findReplaceDialog);
+}
+
+VISIBLE void findNext(GtkWidget *widget,gpointer data)
+{
+	globalPlugins->setUserData("ts",FROMEDITMENU,FINDNEXTMENUNAME);
+	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+
+	basicFind(FINDNEXT);
 }
 
 void doSearchPrefs(GtkWidget *widget,gpointer data)

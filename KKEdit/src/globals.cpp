@@ -274,8 +274,8 @@ GtkToolItem		*liveSearchButton=NULL;
 
 //find replace
 GtkWidget		*findReplaceDialog;
-GtkWidget		*findBox;
-GtkWidget		*replaceBox;
+VISIBLE GtkWidget		*findBox;
+VISIBLE GtkWidget		*replaceBox;
 GtkWidget		*findDropBox=NULL;
 GtkWidget		*replaceDropBox;
 GSList			*findList=NULL;
