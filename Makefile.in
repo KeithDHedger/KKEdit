@@ -795,6 +795,9 @@ uninstall-am:
 export GLOBAL = 1
 export GTKVERSION = $(PLUGVERSION)
 export VTEVERSION = $(VTEVERS)
+export CONFCXXFLAGS = $(CXXFLAGS)
+export CONFCPPFLAGS = $(CPPFLAGS)
+export CONFLDFLAGS = $(LDFLAGS)
 
 remake:
 	$(shell ./remakesourcelist)

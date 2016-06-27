@@ -1369,7 +1369,7 @@ Optional Features:
   --disable-silent-rules  verbose build output (undo: "make V=0")
   --enable-gtk3           Use GTK3.
   --enable-plugins        Build/Install plugins
-  --enable-unstable-plugins 
+  --disable-unstable-plugins 
                           Build/Install unstable/new plugins
   --enable-docviewer      Build the Gtk-Doc viewer
   --enable-aspell         Include spellchecker
@@ -4788,13 +4788,15 @@ $as_echo_n "checking Build/Install unstable/new plugins... " >&6; }
 if test "${enable_unstable_plugins+set}" = set; then :
   enableval=$enable_unstable_plugins; enable_new_plugs=$enableval
 else
-  enable_new_plugs="yes"
+  enable_new_plugs="no"
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_new_plugs" >&5
 $as_echo "$enable_new_plugs" >&6; }
 if test "$enable_new_plugs" = "yes"; then
 	NEWPLUGINCLUDES=KKEdit/unstable-plugins/*Plugin
+else
+	NEWPLUGINCLUDES=
 fi
 
 

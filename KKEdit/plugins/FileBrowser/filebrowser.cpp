@@ -65,8 +65,8 @@ bool			colflag=false;
 int				colsize=0;
 bool			showInvisible;
 gchar*			node=NULL;
-char*			currentdomain=NULL;
-
+char			*currentdomain=NULL;
+int				sinkInt;
 extern "C" const gchar* g_module_check_init(GModule *module)
 {
 	currentdomain=strdup(textdomain(NULL));
@@ -104,7 +104,7 @@ void showHideInvisibles(plugData* pdata)
 {
 	char*	filepath;
 
-	asprintf(&filepath,"%s/filebrowser.inv",pdata->lPlugFolder);
+	sinkInt=asprintf(&filepath,"%s/filebrowser.inv",pdata->lPlugFolder);
 	if(showInvisible==true)
 		touch(filepath);
 	else
@@ -162,7 +162,7 @@ GdkPixbuf* getPixBuf(char* name)
 			pix=gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),*names,16,(GtkIconLookupFlags)(GTK_ICON_LOOKUP_USE_BUILTIN|GTK_ICON_LOOKUP_FORCE_SVG|GTK_ICON_LOOKUP_GENERIC_FALLBACK|GTK_ICON_LOOKUP_FORCE_SIZE),NULL);
 			if(pix==NULL)
 				{
-					asprintf(&newname,"gnome-mime-%s",*names);
+					sinkInt=asprintf(&newname,"gnome-mime-%s",*names);
 					pix=gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),(const gchar*)newname,16,(GtkIconLookupFlags)(GTK_ICON_LOOKUP_USE_BUILTIN|GTK_ICON_LOOKUP_FORCE_SVG|GTK_ICON_LOOKUP_GENERIC_FALLBACK|GTK_ICON_LOOKUP_FORCE_SIZE),NULL);
 					debugFree(&newname);
 				}
@@ -200,9 +200,9 @@ void addToIter(GtkTreeView* treeview,char* filename,GtkTreeIter* iter,char* fold
 	char*				pathname;
 	
 	if(strcasecmp("/",folderpath)!=0)
-		asprintf(&pathname,"%s/%s",folderpath,filename);
+		sinkInt=asprintf(&pathname,"%s/%s",folderpath,filename);
 	else
-		asprintf(&pathname,"/%s",filename);
+		sinkInt=asprintf(&pathname,"/%s",filename);
 
 	model=gtk_tree_view_get_model(treeview);
 	gtk_tree_model_iter_parent(model,&parentiter,iter);
@@ -225,9 +225,9 @@ bool addContents(GtkTreeView* treeview,GtkTreeIter* iter,char* name)
 	gtk_tree_model_iter_parent(model,&parentiter,iter);
 
 	if(showInvisible==true)
-		asprintf(&command,"ls -1 -A \"%s\"|sort",name);
+		sinkInt=asprintf(&command,"ls -1 -A \"%s\"|sort",name);
 	else
-		asprintf(&command,"ls -1 \"%s\"|sort",name);
+		sinkInt=asprintf(&command,"ls -1 \"%s\"|sort",name);
 
 	fp=popen(command,"r");
 	if(fp!=NULL)
@@ -323,7 +323,7 @@ void onRowActivated(GtkTreeView* treeview, GtkTreePath* path,GtkTreeViewColumn* 
 		{
 			gtk_tree_model_get(model,&iter,COLUMN_PATHNAME,&name,-1);
 			app=getApp(name);
-			asprintf(&command,"%s '%s'",app,name);
+			sinkInt=asprintf(&command,"%s '%s'",app,name);
 			
 			if (GDK_CONTROL_MASK & mask )
 				runCommand(command,NULL,false,TOOL_ASYNC,true,NULL);
@@ -340,7 +340,7 @@ void showHideBrowser(plugData* pdata,bool startup)
 	char*	filepath;
 
 	setTextDomain(true,pdata);
-	asprintf(&filepath,"%s/filebrowser.rc",pdata->lPlugFolder);
+	sinkInt=asprintf(&filepath,"%s/filebrowser.rc",pdata->lPlugFolder);
 	if(showing==true)
 		{
 			gtk_widget_show_all(scrollbox);
@@ -381,7 +381,7 @@ void doStartUpCheck(plugData* pdata)
 {
 	char*	filepath;
 
-	asprintf(&filepath,"%s/filebrowser.rc",pdata->lPlugFolder);
+	sinkInt=asprintf(&filepath,"%s/filebrowser.rc",pdata->lPlugFolder);
 	if(g_file_test(filepath,G_FILE_TEST_EXISTS))
 		showing=true;
 	else
@@ -389,7 +389,7 @@ void doStartUpCheck(plugData* pdata)
 
 	debugFree(&filepath);
 
-	asprintf(&filepath,"%s/filebrowser.inv",pdata->lPlugFolder);
+	sinkInt=asprintf(&filepath,"%s/filebrowser.inv",pdata->lPlugFolder);
 	if(g_file_test(filepath,G_FILE_TEST_EXISTS))
 		showInvisible=true;
 	else
@@ -570,8 +570,8 @@ extern "C" int doAbout(gpointer data)
 	setTextDomain(true,plugdata);
 
 	const char		*aboutboxstring=gettext("File Browser - Add's a simple file browser to the left pane");
-	asprintf(&licencepath,"%s/docs/gpl-3.0.txt",plugdata->dataDir);
-	asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",gettext("French Translation"));
+	sinkInt=asprintf(&licencepath,"%s/docs/gpl-3.0.txt",plugdata->dataDir);
+	sinkInt=asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",gettext("French Translation"));
 
 	g_file_get_contents(licencepath,&licence,NULL,NULL);
 	about=(GtkAboutDialog*)gtk_about_dialog_new();

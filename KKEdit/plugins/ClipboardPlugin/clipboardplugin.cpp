@@ -61,6 +61,7 @@ plugData*		plugdata;
 gulong			clipid;
 char*			currentdomain=NULL;
 bool			manual=false;
+int				sinkInt;
 
 int	(*module_plug_function)(gpointer globaldata);
 
@@ -130,7 +131,7 @@ void clipChanged(GtkClipboard* clipboard,gpointer user_data)
 
 			if(strlen(clip[currentClip].text)>MAXCLIPMENULEN)
 				{
-					asprintf(&label,"%." CLIPENDLENSTR "s...%s",texthold,(char*)&texthold[strlen(texthold)-CLIPENDLEN]);
+					sinkInt=asprintf(&label,"%." CLIPENDLENSTR "s...%s",texthold,(char*)&texthold[strlen(texthold)-CLIPENDLEN]);
 					gtk_menu_item_set_label((GtkMenuItem*)clip[currentClip].menuItem,label);
 					free(label);
 				}
@@ -169,7 +170,7 @@ extern "C" int addToGui(gpointer data)
 
 	for(int j=0;j<MAXCLIPS;j++)
 		{
-			asprintf(&command,gettext("Clip Number. %i"),j+1);
+			sinkInt=asprintf(&command,gettext("Clip Number. %i"),j+1);
 			clip[j].menuItem=(GtkWidget*)gtk_menu_item_new_with_label(command);
 			free(command);
 			clip[j].text=NULL;
@@ -197,8 +198,8 @@ extern "C" int doAbout(gpointer data)
 	setTextDomain(true,plugdata);
 
 	const char		*aboutboxstring=gettext("Clipboard Plugin - Add's multiple clips");
-	asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",gettext("French Translation"));
-	asprintf(&licencepath,"%s/docs/gpl-3.0.txt",plugdata->dataDir);
+	sinkInt=asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",gettext("French Translation"));
+	sinkInt=asprintf(&licencepath,"%s/docs/gpl-3.0.txt",plugdata->dataDir);
 
 	g_file_get_contents(licencepath,&licence,NULL,NULL);
 	about=(GtkAboutDialog*)gtk_about_dialog_new();

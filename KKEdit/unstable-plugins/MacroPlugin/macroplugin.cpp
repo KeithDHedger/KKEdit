@@ -63,6 +63,7 @@ GtkWidget	*holdWidget=NULL;
 GtkWidget	*menuPlug;
 plugData	*globalPlugData;
 char		*currentdomain=NULL;
+int			sinkInt;
 
 int	(*module_plug_function)(gpointer globaldata);
 
@@ -238,8 +239,8 @@ extern "C" int doAbout(gpointer data)
 	setTextDomain(true,plugdata);
 
 	const char		*aboutboxstring=gettext("Macro Plugin - Add's macro recording/playback");
-	asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",gettext("French Translation"));
-	asprintf(&licencepath,"%s/docs/gpl-3.0.txt",plugdata->dataDir);
+	sinkInt=asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",gettext("French Translation"));
+	sinkInt=asprintf(&licencepath,"%s/docs/gpl-3.0.txt",plugdata->dataDir);
 
 	g_file_get_contents(licencepath,&licence,NULL,NULL);
 	about=(GtkAboutDialog*)gtk_about_dialog_new();

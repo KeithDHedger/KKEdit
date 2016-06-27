@@ -53,6 +53,7 @@ GtkWidget*	restoreSessionMenu=NULL;
 GtkWidget*	holdWidget=NULL;
 GtkWidget*	menusm;
 char		*currentdomain=NULL;
+int			sinkInt;
 
 int	(*module_plug_function)(gpointer globaldata);
 
@@ -163,7 +164,7 @@ char* getNewSessionName(int sessionnumber,plugData* plugdata)
 	gtk_widget_show_all(dialog);
 	response=gtk_dialog_run(GTK_DIALOG(dialog));
 	if(response==GTK_RESPONSE_APPLY)
-		asprintf(&command,"%s",gtk_entry_get_text((GtkEntry*)prefs));
+		sinkInt=asprintf(&command,"%s",gtk_entry_get_text((GtkEntry*)prefs));
 	else
 		command=NULL;
 
@@ -176,7 +177,7 @@ void saveSessionPlug(char* name,plugData* plugdata,int snum)
 {
 	char			*filename;
 
-	asprintf(&filename,"%s/session-%i",plugdata->lPlugFolder,snum);
+	sinkInt=asprintf(&filename,"%s/session-%i",plugdata->lPlugFolder,snum);
 	saveSession(name,(const char*)filename);
 	debugFree(&filename);
 }
@@ -192,11 +193,11 @@ void restoreSessionNum(GtkWidget* widget,gpointer data)
 	widgetname=gtk_widget_get_name(widget);
 	for(int j=0; j<MAXSESSIONS; j++)
 		{
-			asprintf(&sessionfile,"%s/session-%i",plugdata->lPlugFolder,j);
+			sinkInt=asprintf(&sessionfile,"%s/session-%i",plugdata->lPlugFolder,j);
 			fd=fopen(sessionfile,"r");
 			if(fd!=NULL)
 				{
-					fscanf(fd,"%a[^\n]s",&sname);
+					sinkInt=fscanf(fd,"%a[^\n]s",&sname);
 					if(strcmp(sname,widgetname)==0)
 						{
 							restoreSession(NULL,sessionfile);
@@ -224,7 +225,7 @@ void rebuildMainMenu(GtkWidget* menu,plugData*	plugdata,GCallback* func)
 
 	for(int j=0; j<MAXSESSIONS; j++)
 		{
-			asprintf(&sessionname,"%s",sessionNames[j]);
+			sinkInt=asprintf(&sessionname,"%s",sessionNames[j]);
 			menuitem=gtk_menu_item_new_with_label(sessionname);
 			gtk_widget_set_name(menuitem,sessionNames[j]);
 			free(sessionname);
@@ -272,15 +273,15 @@ extern "C" int addToGui(gpointer data)
 	setTextDomain(true,plugdata);
 	for(int j=0; j<MAXSESSIONS; j++)
 		{
-			asprintf(&sessionfile,"%s/session-%i",plugdata->lPlugFolder,j);
+			sinkInt=asprintf(&sessionfile,"%s/session-%i",plugdata->lPlugFolder,j);
 			fd=fopen(sessionfile,"r");
 			if(fd!=NULL)
 				{
-					fscanf(fd,"%a[^\n]s",&sessionNames[j]);
+					sinkInt=fscanf(fd,"%a[^\n]s",&sessionNames[j]);
 					fclose(fd);
 				}
 			else
-				asprintf(&sessionNames[j],gettext("Session %i"),j);
+				sinkInt=asprintf(&sessionNames[j],gettext("Session %i"),j);
 		}
 
 	setTextDomain(false,plugdata);
@@ -297,7 +298,7 @@ extern "C" int addToGui(gpointer data)
 
 			for(int j=0; j<MAXSESSIONS; j++)
 				{
-					asprintf(&sessionname,"%s",sessionNames[j]);
+					sinkInt=asprintf(&sessionname,"%s",sessionNames[j]);
 					menuitem=gtk_menu_item_new_with_label(sessionname);
 					gtk_widget_set_name(menuitem,sessionNames[j]);
 					free(sessionname);
@@ -319,7 +320,7 @@ extern "C" int addToGui(gpointer data)
 
 			for(int j=0; j<MAXSESSIONS; j++)
 				{
-					asprintf(&sessionname,"%s",sessionNames[j]);
+					sinkInt=asprintf(&sessionname,"%s",sessionNames[j]);
 					menuitem=gtk_menu_item_new_with_label(sessionname);
 					gtk_widget_set_name(menuitem,sessionNames[j]);
 					free(sessionname);
@@ -344,8 +345,8 @@ extern "C" int doAbout(gpointer data)
 	setTextDomain(true,plugdata);
 
 	const char		*aboutboxstring=gettext("Session Manager - Adds multiple named sessions to KKEdit");
-	asprintf(&licencepath,"%s/docs/gpl-3.0.txt",plugdata->dataDir);
-	asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",gettext("French Translation"));
+	sinkInt=asprintf(&licencepath,"%s/docs/gpl-3.0.txt",plugdata->dataDir);
+	sinkInt=asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",gettext("French Translation"));
 
 	g_file_get_contents(licencepath,&licence,NULL,NULL);
 	about=(GtkAboutDialog*)gtk_about_dialog_new();

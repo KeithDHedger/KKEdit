@@ -1,4 +1,6 @@
 0.3.4
+Fixed warnings for debian packagers.
+Included plugins now respect CXXFLAGS/CPPFLAGS/LDFLAGS passed to configure.
 Unstable plugins now have to be specifically enabled with the --enable-unstable-plugins option to ./configure.
 Moved MacroPlugin to unstable-plugins.
 Fixed not closing all tabs.

@@ -62,7 +62,8 @@ char*		foreColour=strdup("#000000");
 char*		backColour=strdup("#ffffff");
 int			childPid=-999;
 GtkWidget*	contextMenu;
-char*			currentdomain=NULL;
+char		*currentdomain=NULL;
+int			sinkInt;
 
 args		mydata[]=
 				{
@@ -113,7 +114,7 @@ void doStartUpCheck(plugData* pdata)
 {
 	char*	filepath;
 
-	asprintf(&filepath,"%s/terminal.rc",pdata->lPlugFolder);
+	sinkInt=asprintf(&filepath,"%s/terminal.rc",pdata->lPlugFolder);
 	if(g_file_test(filepath,G_FILE_TEST_EXISTS))
 		showing=true;
 	else
@@ -127,7 +128,7 @@ void showHideTerminal(plugData* plugdata,bool startup)
 	char*	filepath;
 
 	setTextDomain(true,plugdata);
-	asprintf(&filepath,"%s/terminal.rc",plugdata->lPlugFolder);
+	sinkInt=asprintf(&filepath,"%s/terminal.rc",plugdata->lPlugFolder);
 	if(showing==true)
 		{
 			gtk_widget_show_all(swindow);
@@ -280,7 +281,7 @@ extern "C" int addToGui(gpointer data)
 	terminal=vte_terminal_new();
 	vte_terminal_set_default_colors((VteTerminal*)terminal);
 
-	asprintf(&filename,"%s/terminalpane.rc",plugdata->lPlugFolder);
+	sinkInt=asprintf(&filename,"%s/terminalpane.rc",plugdata->lPlugFolder);
 	loadVarsFromFile(filename,mydata);
 	debugFree(&filename);
 
@@ -384,7 +385,7 @@ extern "C" int plugPrefs(gpointer data)
 			foreColour=strdup((char*)gtk_entry_get_text((GtkEntry*)fcolour));
 			backColour=strdup((char*)gtk_entry_get_text((GtkEntry*)bcolour));
 
-			asprintf(&filename,"%s/terminalpane.rc",plugdata->lPlugFolder);
+			sinkInt=asprintf(&filename,"%s/terminalpane.rc",plugdata->lPlugFolder);
 			saveVarsToFile(filename,mydata);
 			debugFree(&filename);
 			
@@ -428,8 +429,8 @@ extern "C" int doAbout(gpointer data)
 	setTextDomain(true,plugdata);
 
 	const char*		aboutboxstring=gettext("A Simple Terminal Pane For KKEdit");
-	asprintf(&licencepath,"%s/docs/gpl-3.0.txt",plugdata->dataDir);
-	asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",gettext("French Translation"));
+	sinkInt=asprintf(&licencepath,"%s/docs/gpl-3.0.txt",plugdata->dataDir);
+	sinkInt=asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",gettext("French Translation"));
 
 	g_file_get_contents(licencepath,&licence,NULL,NULL);
 	about=(GtkAboutDialog*)gtk_about_dialog_new();
