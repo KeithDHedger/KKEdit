@@ -50,6 +50,8 @@
 #define PLUGINSLINK "https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins#getplugs"
 #define NAGTIMELINK "https://dl.dropboxusercontent.com/s/xcvp8af3qp7ffxg/NAGTIME"
 
+#define COPYRITE "Copyright \xc2\xa9 2013-2016 K.D.Hedger"
+
 #define TOOL_ASYNC 8
 #define TOOL_IGNORE_OP 0
 #define TOOL_PASTE_OP 1

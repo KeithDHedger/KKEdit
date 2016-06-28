@@ -1,4 +1,5 @@
 0.3.4
+Fixed changed web links.
 Fixed Find/Replace dialog blocking on first showing.
 Fixed warnings for debian packagers.
 Included plugins now respect CXXFLAGS/CPPFLAGS/LDFLAGS passed to configure.

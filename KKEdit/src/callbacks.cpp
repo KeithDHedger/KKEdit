@@ -1474,7 +1474,7 @@ void setToolOptions(GtkWidget *widget,gpointer data)
 VISIBLE void doAbout(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
-	const char	copyright[] ="Copyright \xc2\xa9 2013 K.D.Hedger \n" MYEMAIL;
+	const char	copyright[]=COPYRITE " \n" MYEMAIL;
 	const char	*aboutboxstring=DIALOG_ABOUT_KKEDIT_LABEL;
 	char		*licence;
 	char		*translators;
