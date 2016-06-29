@@ -112,11 +112,11 @@ am__objects_1 = ../src/backclass.$(OBJEXT) ../src/bookmarks.$(OBJEXT) \
 	../src/callbacks.$(OBJEXT) ../src/completion.$(OBJEXT) \
 	../src/encoding.$(OBJEXT) ../src/files.$(OBJEXT) \
 	../src/globals.$(OBJEXT) ../src/guis.$(OBJEXT) \
-	../src/main.$(OBJEXT) ../src/navcallbacks.$(OBJEXT) \
-	../src/pages.$(OBJEXT) ../src/pluginclass.$(OBJEXT) \
-	../src/plugins.$(OBJEXT) ../src/searchcallbacks.$(OBJEXT) \
-	../src/sliceclass.$(OBJEXT) ../src/spellcheck.$(OBJEXT) \
-	../src/textbuffer.$(OBJEXT)
+	../src/internet.$(OBJEXT) ../src/main.$(OBJEXT) \
+	../src/navcallbacks.$(OBJEXT) ../src/pages.$(OBJEXT) \
+	../src/pluginclass.$(OBJEXT) ../src/plugins.$(OBJEXT) \
+	../src/searchcallbacks.$(OBJEXT) ../src/sliceclass.$(OBJEXT) \
+	../src/spellcheck.$(OBJEXT) ../src/textbuffer.$(OBJEXT)
 am_kkedit_OBJECTS = $(am__objects_1)
 kkedit_OBJECTS = $(am_kkedit_OBJECTS)
 kkedit_LDADD = $(LDADD)
@@ -355,7 +355,7 @@ AM_CPPFLAGS = -I$(top_srcdir) \
 			-DGTKSUPATH=\""${with_gsu_path}"\" \
 			-D_DEBUGLEVEL_=${with_debug_level}
 
-COMMONSRC = ../src/backclass.cpp ../src/bookmarks.cpp ../src/callbacks.cpp ../src/completion.cpp ../src/encoding.cpp ../src/files.cpp ../src/globals.cpp ../src/guis.cpp ../src/main.cpp ../src/navcallbacks.cpp ../src/pages.cpp ../src/pluginclass.cpp ../src/plugins.cpp ../src/searchcallbacks.cpp ../src/sliceclass.cpp ../src/spellcheck.cpp ../src/textbuffer.cpp
+COMMONSRC = ../src/backclass.cpp ../src/bookmarks.cpp ../src/callbacks.cpp ../src/completion.cpp ../src/encoding.cpp ../src/files.cpp ../src/globals.cpp ../src/guis.cpp ../src/internet.cpp ../src/main.cpp ../src/navcallbacks.cpp ../src/pages.cpp ../src/pluginclass.cpp ../src/plugins.cpp ../src/searchcallbacks.cpp ../src/sliceclass.cpp ../src/spellcheck.cpp ../src/textbuffer.cpp
 kkedit_SOURCES = $(COMMONSRC)
 KKEditProgressBar_SOURCES = ../pole/main.cpp
 pixfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/pixmaps
@@ -481,6 +481,8 @@ KKEditProgressBar$(EXEEXT): $(KKEditProgressBar_OBJECTS) $(KKEditProgressBar_DEP
 	../src/$(DEPDIR)/$(am__dirstamp)
 ../src/guis.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
+../src/internet.$(OBJEXT): ../src/$(am__dirstamp) \
+	../src/$(DEPDIR)/$(am__dirstamp)
 ../src/main.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
 ../src/navcallbacks.$(OBJEXT): ../src/$(am__dirstamp) \
@@ -556,6 +558,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/files.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/globals.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/guis.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/internet.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/navcallbacks.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/pages.Po@am__quote@

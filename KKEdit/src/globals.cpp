@@ -19,20 +19,21 @@
  */
 
 #include "kkedit-includes.h"
+//#include "internet.h"
 
-const char		*moreapps[]={
+const char		*thanks[]={
 								"Big thanks to Sadi Yumuşak and Thanh for all their help.",
-								DIALOG_ABOUT_MORE_LABEL,
-								"XDecorations\nhttp://khapplications.darktech.org/pages/xdecorations/xdecorations.html\n",
-								"Xfce-Theme-Manager\nhttp://khapplications.darktech.org/pages/apps.html#themeed\n",
-								"Xfce4-Composite-Editor\nhttp://khapplications.darktech.org/pages/apps.html#xfcecomp\n",
-								"Manpage Editor\nhttp://khapplications.darktech.org/pages/manpageeditor/help.html\n",
-								"GtkSu\nhttp://khapplications.darktech.org/pages/gtksu/gtksu.html\n",
-								"ASpell GUI\nhttp://khapplications.darktech.org/pages/aspellgui/aspelgui.html\n",
-								"Clipboard Viewer\nhttp://khapplications.darktech.org/pages/clipviewer/clip.html"
+//								DIALOG_ABOUT_MORE_LABEL
+//								"XDecorations\nhttp://khapplications.darktech.org/pages/xdecorations/xdecorations.html\n",
+//								"Xfce-Theme-Manager\nhttp://khapplications.darktech.org/pages/apps.html#themeed\n",
+//								"Xfce4-Composite-Editor\nhttp://khapplications.darktech.org/pages/apps.html#xfcecomp\n",
+//								"Manpage Editor\nhttp://khapplications.darktech.org/pages/manpageeditor/help.html\n",
+//								"GtkSu\nhttp://khapplications.darktech.org/pages/gtksu/gtksu.html\n",
+//								"ASpell GUI\nhttp://khapplications.darktech.org/pages/aspellgui/aspelgui.html\n",
+//								"Clipboard Viewer\nhttp://khapplications.darktech.org/pages/clipviewer/clip.html"
 							};
 
-const char		*authors[]={"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,moreapps[0],moreapps[1],moreapps[2],moreapps[3],moreapps[4],moreapps[5],moreapps[6],moreapps[7],moreapps[8],NULL};
+const char		*authorskk[]={"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,thanks[0],moreapps[0],moreapps[1],moreapps[2],moreapps[3],moreapps[4],moreapps[5],moreapps[6],moreapps[7],moreapps[8],moreapps[9],NULL};
 
 GApplication	*mainApp;
 bool			autoSeleced=false;

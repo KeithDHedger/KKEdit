@@ -475,6 +475,7 @@
 #endif
 
 #include "globals.h"
+#include "internet.h"
 #include "pages.h"
 #include "navcallbacks.h"
 

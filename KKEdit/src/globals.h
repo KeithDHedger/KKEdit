@@ -44,13 +44,13 @@
 #endif
 #endif
 
-#define MYEMAIL "keithhedger@keithhedger.darktech.org"
-#define MYWEBSITE "http://kkedit.darktech.org"
+//#define MYEMAIL "keithhedger@keithhedger.darktech.org"
+//#define MYWEBSITE "http://kkedit.darktech.org"
 
 #define PLUGINSLINK "https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins#getplugs"
 #define NAGTIMELINK "https://dl.dropboxusercontent.com/s/xcvp8af3qp7ffxg/NAGTIME"
 
-#define COPYRITE "Copyright \xc2\xa9 2013-2016 K.D.Hedger"
+//#define COPYRITE "Copyright \xc2\xa9 2013-2016 K.D.Hedger"
 
 #define TOOL_ASYNC 8
 #define TOOL_IGNORE_OP 0
@@ -89,8 +89,8 @@ enum {NOERR=0,NOOPENFILE,NOSAVEFILE};
 enum {NAVLAST=0,NAVNEXT};
 #endif
 
-extern const char	*moreapps[];
-extern const char	*authors[];
+//extern const char	*moreapps[];
+extern const char	*authorskk[];
 
 struct toolStruct
 {
