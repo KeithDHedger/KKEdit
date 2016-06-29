@@ -13,14 +13,17 @@ pixfiles_DATA = ../resources/pixmaps/*
 helpfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/help
 helpfiles_DATA = ../resources/help/*
 
-scriptfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/tools
-scriptfiles_SCRIPTS = ../resources/tools/*
+#scriptfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/tools
+#scriptfiles_SCRIPTS = ../resources/tools/*
 
 docfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/docs
 docfiles_DATA = ../resources/docs/*
 
 stylefilesdir = $(pkgdatadir)$(GTK3SUFFIX)/styles
 stylefiles_DATA = ../resources/styles/*
+
+toolsdir = $(pkgdatadir)$(GTK3SUFFIX)/tools
+tools_DATA = ../resources/tools/*
 
 man1_MANS = ../resources/man/kkedit.1
 
