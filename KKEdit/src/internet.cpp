@@ -32,7 +32,7 @@ const char	*moreapps[]={
 								"GtkSu\nhttp://khapplications.darktech.org/pages/gtksu/gtksu.html\n",
 								"ASpell GUI\nhttp://khapplications.darktech.org/pages/aspellgui/aspelgui.html\n",
 								"Clipboard Viewer\nhttp://khapplications.darktech.org/pages/clipviewer/clip.html",
-								"\nDevelopment versions canbe found here:\nhttps://github.com/KeithDHedger"
+								"\nDevelopment versions can be found here:\nhttp://github.com/KeithDHedger"
 							};
 
 const char	*authors[]={"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,moreapps[0],moreapps[1],moreapps[2],moreapps[3],moreapps[4],moreapps[5],moreapps[6],moreapps[7],moreapps[8],moreapps[9],NULL};
