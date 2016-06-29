@@ -13,8 +13,8 @@ pixfiles_DATA = ../resources/pixmaps/*
 helpfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/help
 helpfiles_DATA = ../resources/help/*
 
-#scriptfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/tools
-#scriptfiles_SCRIPTS = ../resources/tools/*
+scriptfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/scripts
+scriptfiles_SCRIPTS = ../resources/scripts/*
 
 docfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/docs
 docfiles_DATA = ../resources/docs/*
@@ -41,7 +41,7 @@ install-exec-hook:
 	install -D ../resources/pixmaps/KKEditRoot.desktop $(DESTDIR)${prefix}/share/applications/KKEditRoot$(GTK3SUFFIX).desktop
 
 	install -D ../../po/fr_FR/LC_MESSAGES/kkedit.mo $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES/kkedit$(GTK3SUFFIX).mo
-	install -D ../src/kkedit-plugins.h $(DESTDIR)${includedir}/kkedit-plugins$(GTK3SUFFIX).h
+	install -m 644 -D ../src/kkedit-plugins.h $(DESTDIR)${includedir}/kkedit-plugins$(GTK3SUFFIX).h
 
 	echo "Icon=KKEditRoot$(GTK3SUFFIX)" >> $(DESTDIR)${prefix}/share/applications/KKEditRoot$(GTK3SUFFIX).desktop
 	echo "Exec=${with_gsu_path} kkedit$(GTK3SUFFIX) -m %f" >> $(DESTDIR)${prefix}/share/applications/KKEditRoot$(GTK3SUFFIX).desktop

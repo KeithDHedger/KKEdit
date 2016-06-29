@@ -1,5 +1,5 @@
 name	Open Man Page
-command	./OpenManPage
+command	../scripts/OpenManPage
 comment	Opens the manpage for the selected text if available.
 flags	4
 interm	0

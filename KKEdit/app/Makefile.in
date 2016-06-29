@@ -15,6 +15,7 @@
 @SET_MAKE@
 
 
+
 VPATH = @srcdir@
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
@@ -98,10 +99,10 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" \
-	"$(DESTDIR)$(docfilesdir)" "$(DESTDIR)$(helpfilesdir)" \
-	"$(DESTDIR)$(pixfilesdir)" "$(DESTDIR)$(stylefilesdir)" \
-	"$(DESTDIR)$(toolsdir)"
+am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptfilesdir)" \
+	"$(DESTDIR)$(man1dir)" "$(DESTDIR)$(docfilesdir)" \
+	"$(DESTDIR)$(helpfilesdir)" "$(DESTDIR)$(pixfilesdir)" \
+	"$(DESTDIR)$(stylefilesdir)" "$(DESTDIR)$(toolsdir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
 am_KKEditProgressBar_OBJECTS = ../pole/main.$(OBJEXT)
@@ -119,6 +120,34 @@ am__objects_1 = ../src/backclass.$(OBJEXT) ../src/bookmarks.$(OBJEXT) \
 am_kkedit_OBJECTS = $(am__objects_1)
 kkedit_OBJECTS = $(am_kkedit_OBJECTS)
 kkedit_LDADD = $(LDADD)
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
+am__install_max = 40
+am__nobase_strip_setup = \
+  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
+am__nobase_strip = \
+  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
+am__nobase_list = $(am__nobase_strip_setup); \
+  for p in $$list; do echo "$$p $$p"; done | \
+  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
+  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
+    if (++n[$$2] == $(am__install_max)) \
+      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
+    END { for (dir in files) print dir, files[dir] }'
+am__base_list = \
+  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
+  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
+am__uninstall_files_from_dir = { \
+  test -z "$$files" \
+    || { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
+    || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
+         $(am__cd) "$$dir" && rm -f $$files; }; \
+  }
+SCRIPTS = $(scriptfiles_SCRIPTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -155,33 +184,6 @@ am__can_run_installinfo = \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
-am__install_max = 40
-am__nobase_strip_setup = \
-  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
-am__nobase_strip = \
-  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
-am__nobase_list = $(am__nobase_strip_setup); \
-  for p in $$list; do echo "$$p $$p"; done | \
-  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
-  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
-    if (++n[$$2] == $(am__install_max)) \
-      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
-    END { for (dir in files) print dir, files[dir] }'
-am__base_list = \
-  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
-  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__uninstall_files_from_dir = { \
-  test -z "$$files" \
-    || { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
-    || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
-         $(am__cd) "$$dir" && rm -f $$files; }; \
-  }
 man1dir = $(mandir)/man1
 NROFF = nroff
 MANS = $(man1_MANS)
@@ -360,9 +362,8 @@ pixfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/pixmaps
 pixfiles_DATA = ../resources/pixmaps/*
 helpfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/help
 helpfiles_DATA = ../resources/help/*
-
-#scriptfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/tools
-#scriptfiles_SCRIPTS = ../resources/tools/*
+scriptfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/scripts
+scriptfiles_SCRIPTS = ../resources/scripts/*
 docfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/docs
 docfiles_DATA = ../resources/docs/*
 stylefilesdir = $(pkgdatadir)$(GTK3SUFFIX)/styles
@@ -502,6 +503,41 @@ KKEditProgressBar$(EXEEXT): $(KKEditProgressBar_OBJECTS) $(KKEditProgressBar_DEP
 kkedit$(EXEEXT): $(kkedit_OBJECTS) $(kkedit_DEPENDENCIES) $(EXTRA_kkedit_DEPENDENCIES) 
 	@rm -f kkedit$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(kkedit_OBJECTS) $(kkedit_LDADD) $(LIBS)
+install-scriptfilesSCRIPTS: $(scriptfiles_SCRIPTS)
+	@$(NORMAL_INSTALL)
+	@list='$(scriptfiles_SCRIPTS)'; test -n "$(scriptfilesdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(scriptfilesdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(scriptfilesdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  if test -f "$$d$$p"; then echo "$$d$$p"; echo "$$p"; else :; fi; \
+	done | \
+	sed -e 'p;s,.*/,,;n' \
+	    -e 'h;s|.*|.|' \
+	    -e 'p;x;s,.*/,,;$(transform)' | sed 'N;N;N;s,\n, ,g' | \
+	$(AWK) 'BEGIN { files["."] = ""; dirs["."] = 1; } \
+	  { d=$$3; if (dirs[d] != 1) { print "d", d; dirs[d] = 1 } \
+	    if ($$2 == $$4) { files[d] = files[d] " " $$1; \
+	      if (++n[d] == $(am__install_max)) { \
+		print "f", d, files[d]; n[d] = 0; files[d] = "" } } \
+	    else { print "f", d "/" $$4, $$1 } } \
+	  END { for (d in files) print "f", d, files[d] }' | \
+	while read type dir files; do \
+	     if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
+	     test -z "$$files" || { \
+	       echo " $(INSTALL_SCRIPT) $$files '$(DESTDIR)$(scriptfilesdir)$$dir'"; \
+	       $(INSTALL_SCRIPT) $$files "$(DESTDIR)$(scriptfilesdir)$$dir" || exit $$?; \
+	     } \
+	; done
+
+uninstall-scriptfilesSCRIPTS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(scriptfiles_SCRIPTS)'; test -n "$(scriptfilesdir)" || exit 0; \
+	files=`for p in $$list; do echo "$$p"; done | \
+	       sed -e 's,.*/,,;$(transform)'`; \
+	dir='$(DESTDIR)$(scriptfilesdir)'; $(am__uninstall_files_from_dir)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -776,9 +812,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS) $(MANS) $(DATA)
+all-am: Makefile $(PROGRAMS) $(SCRIPTS) $(MANS) $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(docfilesdir)" "$(DESTDIR)$(helpfilesdir)" "$(DESTDIR)$(pixfilesdir)" "$(DESTDIR)$(stylefilesdir)" "$(DESTDIR)$(toolsdir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptfilesdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(docfilesdir)" "$(DESTDIR)$(helpfilesdir)" "$(DESTDIR)$(pixfilesdir)" "$(DESTDIR)$(stylefilesdir)" "$(DESTDIR)$(toolsdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -838,8 +874,8 @@ info: info-am
 info-am:
 
 install-data-am: install-docfilesDATA install-helpfilesDATA \
-	install-man install-pixfilesDATA install-stylefilesDATA \
-	install-toolsDATA
+	install-man install-pixfilesDATA install-scriptfilesSCRIPTS \
+	install-stylefilesDATA install-toolsDATA
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-dvi: install-dvi-am
@@ -888,7 +924,8 @@ ps-am:
 
 uninstall-am: uninstall-binPROGRAMS uninstall-docfilesDATA \
 	uninstall-helpfilesDATA uninstall-man uninstall-pixfilesDATA \
-	uninstall-stylefilesDATA uninstall-toolsDATA
+	uninstall-scriptfilesSCRIPTS uninstall-stylefilesDATA \
+	uninstall-toolsDATA
 
 uninstall-man: uninstall-man1
 
@@ -904,14 +941,15 @@ uninstall-man: uninstall-man1
 	install-helpfilesDATA install-html install-html-am \
 	install-info install-info-am install-man install-man1 \
 	install-pdf install-pdf-am install-pixfilesDATA install-ps \
-	install-ps-am install-strip install-stylefilesDATA \
-	install-toolsDATA installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic pdf pdf-am ps ps-am \
-	tags tags-am uninstall uninstall-am uninstall-binPROGRAMS \
-	uninstall-docfilesDATA uninstall-helpfilesDATA uninstall-man \
-	uninstall-man1 uninstall-pixfilesDATA uninstall-stylefilesDATA \
-	uninstall-toolsDATA
+	install-ps-am install-scriptfilesSCRIPTS install-strip \
+	install-stylefilesDATA install-toolsDATA installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
+	uninstall-am uninstall-binPROGRAMS uninstall-docfilesDATA \
+	uninstall-helpfilesDATA uninstall-man uninstall-man1 \
+	uninstall-pixfilesDATA uninstall-scriptfilesSCRIPTS \
+	uninstall-stylefilesDATA uninstall-toolsDATA
 
 .PRECIOUS: Makefile
 
@@ -928,7 +966,7 @@ install-exec-hook:
 	install -D ../resources/pixmaps/KKEditRoot.desktop $(DESTDIR)${prefix}/share/applications/KKEditRoot$(GTK3SUFFIX).desktop
 
 	install -D ../../po/fr_FR/LC_MESSAGES/kkedit.mo $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES/kkedit$(GTK3SUFFIX).mo
-	install -D ../src/kkedit-plugins.h $(DESTDIR)${includedir}/kkedit-plugins$(GTK3SUFFIX).h
+	install -m 644 -D ../src/kkedit-plugins.h $(DESTDIR)${includedir}/kkedit-plugins$(GTK3SUFFIX).h
 
 	echo "Icon=KKEditRoot$(GTK3SUFFIX)" >> $(DESTDIR)${prefix}/share/applications/KKEditRoot$(GTK3SUFFIX).desktop
 	echo "Exec=${with_gsu_path} kkedit$(GTK3SUFFIX) -m %f" >> $(DESTDIR)${prefix}/share/applications/KKEditRoot$(GTK3SUFFIX).desktop
