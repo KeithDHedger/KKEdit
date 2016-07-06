@@ -172,7 +172,7 @@
 
 //bookmarks menu
 #define MENU_BM_MENU_LABEL gettext("_Bookmarks")
-#define MENU_BM_TOGGLE_BM_LABEL gettext("Toggle Bookmark")
+#define MENU_BM_TOGGLE_BM_LABEL gettext("_Toggle Bookmark")
 #define MENU_BM_REMOVE_BMS gettext("Remove All Bookmarks")
 
 //tools menu

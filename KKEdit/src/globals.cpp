@@ -329,7 +329,7 @@ const char		*localeLang;
 int				openInThisTab=-1;
 
 //general app
-bool			loadingSession;
+bool			loadingSession=false;
 HistoryClass	*globalHistory;
 StringSlice		*globalSlice;
 bool			doGoogleSearch;
@@ -1164,8 +1164,9 @@ void rebuildBookMarkMenu(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(removeAllBookmarks),NULL);
 
-	menuitem=gtk_menu_item_new_with_label(MENU_BM_TOGGLE_BM_LABEL);
+	menuitem=gtk_menu_item_new_with_mnemonic(MENU_BM_TOGGLE_BM_LABEL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
+	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accgroup,'T',GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);
 
 	menuitem=gtk_separator_menu_item_new();

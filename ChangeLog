@@ -1,4 +1,6 @@
 0.3.4
+Added hot key to toggle bookmark menu (^T).
+Fixed not resetting page dirty when saving after replace all.
 Updated email and web page links, again!
 Tweaked makefiles to install global external tools correctly with correct permissions.
 Added 'Find Next' to edit menu.

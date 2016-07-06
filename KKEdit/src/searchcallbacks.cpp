@@ -1218,6 +1218,7 @@ void showOnStatus(const char *from,const char *to)
 	gtk_statusbar_remove_all ((GtkStatusbar*)statusWidget,0);
 	sinkReturn=asprintf(&message,REPLACE_INFO_LABEL,itemsReplaced+1,from,to);
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
+	loadingSession=false;
 }
 
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)

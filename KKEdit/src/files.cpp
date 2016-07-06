@@ -556,6 +556,7 @@ VISIBLE bool saveFile(GtkWidget *widget,gpointer data)
 		}
 	if(page->lang==NULL)
 		setLanguage(page);
+
 	switchPage(mainNotebook,page->tabVbox,currentTabNumber,NULL);
 	setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 	ERRDATA
