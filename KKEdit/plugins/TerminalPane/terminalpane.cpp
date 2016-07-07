@@ -280,7 +280,7 @@ extern "C" int addToGui(gpointer data)
 
 	terminal=vte_terminal_new();
 	vte_terminal_set_default_colors((VteTerminal*)terminal);
-
+	vte_terminal_set_scrollback_lines((VteTerminal*)terminal,-1);
 	sinkInt=asprintf(&filename,"%s/terminalpane.rc",plugdata->lPlugFolder);
 	loadVarsFromFile(filename,mydata);
 	debugFree(&filename);
