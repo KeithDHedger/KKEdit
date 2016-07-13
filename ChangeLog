@@ -1,4 +1,5 @@
 0.3.4
+Issue warning and exit gracefully if no room on /tmp.
 Set length of the scrollback buffer to infinite in terminalPlugin.
 Added hot key to toggle bookmark menu (^T).
 Fixed not resetting page dirty when saving after replace all.

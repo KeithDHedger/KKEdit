@@ -44,11 +44,19 @@ void readConfig(void)
 void init(void)
 {
 	ERRDATA
-	char		*filename;
+	char		*filename=NULL;
 	int			exitstatus;
 	char		tmpfoldertemplate[]="/tmp/KKEdit-XXXXXX";
 
-	tmpFolderName=strdup(mkdtemp(tmpfoldertemplate));
+	filename=mkdtemp(tmpfoldertemplate);
+	if(filename!=NULL)
+		tmpFolderName=strdup(filename);
+	else
+		{
+			infoMessage("Can't create tempory files!\nClear some space on /tmp.\nQuiting ...");
+			exit(0);
+		}
+	filename=NULL;
 	sinkReturn=asprintf(&logFile,"%s.log",tmpFolderName);
 
 //nag times
