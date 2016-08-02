@@ -707,7 +707,8 @@ void selectTab(GtkWidget *widget,gpointer data)
 
 	ERRDATA
 }
-
+//TODO//
+//segfaults?
 //rebuild tabs menu
 void rebuildTabsMenu(void)
 {
@@ -722,9 +723,11 @@ void rebuildTabsMenu(void)
 	if(submenu!=NULL)
 		gtk_menu_item_set_submenu((GtkMenuItem*)viewTabMenu,NULL);
 
+	ERRDATA
 	viewTabSubMenu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(viewTabMenu),viewTabSubMenu);
 
+	ERRDATA
 	for(int j=0;j<numtabs;j++)
 		{
 			page=getPageStructByIDFromPage(j);
@@ -735,6 +738,7 @@ void rebuildTabsMenu(void)
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(selectTab),(gpointer)(long)j);
 				}
 		}
+	ERRDATA
 	gtk_widget_show_all(viewTabMenu);
 	ERRDATA
 }

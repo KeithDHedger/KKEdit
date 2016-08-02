@@ -87,6 +87,7 @@ enum {PIXBUF_COLUMN,TEXT_COLUMN,BUTTON_NUM};
 enum {NEWVBOX=0,NEWHBOX};
 enum {NOERR=0,NOOPENFILE,NOSAVEFILE};
 enum {NAVLAST=0,NAVNEXT};
+enum {FUNCDATA=0};
 #endif
 
 //extern const char	*moreapps[];
@@ -494,6 +495,9 @@ int gerrorMessage(GError **err);
 #ifdef _USEGTK3_
 void applyCSS (GtkWidget *widget, GtkStyleProvider *widgprovider);
 #endif
+
+functionData* allocFStrings(unsigned what,char *string);
+functionData* initFunctionData(void);
 
 #endif
 

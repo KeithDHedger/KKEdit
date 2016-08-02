@@ -357,22 +357,21 @@ void sortTabs(GtkWidget *widget,gpointer data)
 VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpointer user_data)
 {
 	ERRDATA
-	pageStruct	*page;
-	char		*functions=NULL;
-	GtkWidget	*menuitem;
-	int			linenum=-1;
-	char		*ts=NULL;
-	char		*lineptr=NULL;
-	bool		onefunc=false;
-	int			numtypes=0;
-	char		*typenames[50]= {NULL,};
-	bool		flag;
-	char		*newstr=NULL;
-	GtkWidget	*whattypemenu;
-	GtkWidget	*typesubmenus[50]= {NULL,};
-	GtkWidget	*submenu;
-	char		*correctedstr=NULL;
-	GtkTextIter	start_find,end_find;
+	pageStruct		*page;
+	char			*functions=NULL;
+	GtkWidget		*menuitem;
+	char			*lineptr=NULL;
+	bool			onefunc=false;
+	int				numtypes=0;
+	char			*typenames[50]= {NULL,};
+	bool			flag;
+	char			*newstr=NULL;
+	GtkWidget		*whattypemenu;
+	GtkWidget		*typesubmenus[50]= {NULL,};
+	GtkWidget		*submenu;
+	char			*correctedstr=NULL;
+	GtkTextIter		start_find,end_find;
+	functionData	*fd=NULL;
 
 	if(loadingSession==true)
 		{
@@ -407,21 +406,20 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 
 	while((lineptr!=NULL) &&(strlen(lineptr)>0))
 		{
-			linenum=-1;
 			correctedstr=NULL;
-			ts=NULL;
-			sscanf(lineptr,"%*s %*s %i %a[^\n]s",&linenum,&ts);
-			if(linenum==-1)
+			fd=allocFStrings(FUNCDATA,lineptr);
+
+			if(fd->line==-1)
 				{
 					ERRDATA debugFree(&correctedstr);
-					ERRDATA debugFree(&ts);
+					ERRDATA destroyData(fd);
 				}
 			else
 				{
-					correctedstr=truncateWithElipses(ts,maxFuncDefs);
+					correctedstr=truncateWithElipses(fd->define,maxFuncDefs);
 				}
 
-			if(linenum>0)
+			if(fd->line>0)
 				{
 					if(listFunction==4)
 						{
@@ -462,7 +460,7 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 									onefunc=true;
 									menuitem=createNewImageMenuItem(NULL,correctedstr,false);
 									gtk_menu_shell_append(GTK_MENU_SHELL(whattypemenu),menuitem);
-									g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLineSavePos),(void*)(long)linenum);
+									g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLineSavePos),(void*)(long)fd->line);
 								}
 						}
 					else
@@ -470,14 +468,14 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 							onefunc=true;
 							menuitem=createNewImageMenuItem(NULL,correctedstr,false);
 							gtk_menu_shell_append(GTK_MENU_SHELL(page->navSubMenu),menuitem);
-							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLineSavePos),(void*)(long)linenum);
+							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(gotoLineSavePos),(void*)(long)fd->line);
 						}
 				}
 			lineptr=strchr(lineptr,'\n');
 			if(lineptr!=NULL)
 				lineptr++;
 			ERRDATA debugFree(&correctedstr);
-			ERRDATA debugFree(&ts);
+			ERRDATA destroyData(fd);
 		}
 
 	gtk_widget_show_all(page->tabVbox);

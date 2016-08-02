@@ -958,6 +958,19 @@ void destroyData(functionData *fdata)
 	ERRDATA
 }
 
+functionData* initFunctionData(void)
+{
+	functionData	*fd=(functionData*)calloc(1,sizeof(functionData));
+
+	fd->name=NULL;
+	fd->type=NULL;
+	fd->file=NULL;
+	fd->define=NULL;
+	fd->line=-1;
+
+	return(fd);
+}
+
 void getRecursiveTagListFileName(char *filepath,void *ptr)
 {
 	ERRDATA
@@ -1270,19 +1283,24 @@ void catchSignal(int signal)
 	if(_DEBUGLEVEL_ == DBG1)
 		fp=stderr;
 
-	if((_DEBUGLEVEL_ == DBG2) ||(_DEBUGLEVEL_ == DBG3) ||(_DEBUGLEVEL_ == DBG4))
+	if((_DEBUGLEVEL_ == DBG2) ||(_DEBUGLEVEL_ == DBG3) ||(_DEBUGLEVEL_ == DBG5))
 		{
 			if(logFile!=NULL)
 				fp=fopen(logFile,"a");
 			else
 				fp=stderr;
 		}
+	else if( _DEBUGLEVEL_ == DBG4 )
+		{
+			fp=fopen(logFile,"w");
+		}
 
+	
 	fprintf(fp,"Traped signal %s\n",strsignal(signal));
 	fprintf(fp,"File: %s, Function: %s, Line: %i\n",errFile,errFunc,errLine);
 	fprintf(stderr,"Traped signal %s\n",strsignal(signal));
 	fprintf(stderr,"File: %s, Function: %s, Line: %i\n",errFile,errFunc,errLine);
-	if(_DEBUGLEVEL_ == DBG2)
+	if((_DEBUGLEVEL_ == DBG2) || (_DEBUGLEVEL_ == DBG5))
 		fclose(fp);
     exit(EXIT_FAILURE);
 }
@@ -1675,5 +1693,54 @@ void applyCSS (GtkWidget *widget, GtkStyleProvider *widgprovider)
 		gtk_container_forall (GTK_CONTAINER(widget),(GtkCallback)applyCSS,widgprovider);
 }
 #endif
+
+functionData* allocFStrings(unsigned what,char *string)
+{
+	int	namelen=0;
+	int	typelen=0;
+	int	linenum=0;
+	int	deflen=0;
+	int	totalcnt=0;
+
+	functionData *fd=NULL;
+
+	switch(what)
+		{
+			case 0:
+//function name
+				fd=initFunctionData();
+				sscanf(string,"%*s%n",&namelen);
+				fd->name=strndup(string,namelen);
+				totalcnt=namelen;
+
+//function type
+				sscanf(string,"%*s %*s%n",&typelen);
+				typelen=typelen-totalcnt-1;
+				fd->type=strndup(&string[totalcnt+1],typelen);
+
+//function line
+				sscanf(string,"%*s %*s %i",&fd->line);
+
+//function define
+				sscanf(string,"%*s %*s %*i %n%*[^\n]s",&totalcnt);
+				deflen=(int)(long)((long)strchr(string,'\n')-(long)string)-totalcnt;
+				fd->define=strndup(&string[totalcnt],deflen-1);
+				break;
+		}
+
+	return(fd);
+	
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
