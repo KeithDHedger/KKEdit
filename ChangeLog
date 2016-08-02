@@ -1,4 +1,6 @@
 0.3.4
+Don't close tabs if loading missing session file.
+Fixed crash on reloading session if session file is missing.
 Internal cleaning, readying for porting to BSD.
 Issue warning and exit gracefully if no room on /tmp.
 Set length of the scrollback buffer to infinite in terminalPlugin.

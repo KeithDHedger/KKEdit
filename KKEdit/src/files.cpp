@@ -65,7 +65,7 @@ VISIBLE void saveVarsToFile(char *filepath,args *dataptr)
 									{
 										if(strlen((char*)list->data)>0)
 											{
-												fprintf(fd,"%s\t%s\n",dataptr[cnt].name,(char*)list->data);
+												fprintf(fd,"%s %s\n",dataptr[cnt].name,(char*)list->data);
 											}
 										list=list->next;
 									}
@@ -84,10 +84,8 @@ VISIBLE int loadVarsFromFile(char *filepath,args *dataptr)
 	FILE		*fd=NULL;
 	char		buffer[2048];
 	int			cnt;
-	char		*argname=NULL;
-	char		*strarg=NULL;
-	char		*liststr=NULL;
 	int			retval=NOERR;
+	varStrings	*vs=NULL;
 
 	fd=fopen(filepath,"r");
 	if(fd!=NULL)
@@ -96,37 +94,37 @@ VISIBLE int loadVarsFromFile(char *filepath,args *dataptr)
 				{
 					buffer[0]=0;
 					sinkReturnStr=fgets(buffer,2048,fd);
-					sscanf(buffer,"%ms %ms",&argname,&strarg);
+					vs=allocVStrings(buffer);
 					cnt=0;
 					while(dataptr[cnt].name!=NULL)
 						{
-							if((strarg!=NULL) &&(argname!=NULL) &&(strcmp(argname,dataptr[cnt].name)==0))
+							if((vs->data!=NULL) &&(vs->name!=NULL) &&(strcmp(vs->name,dataptr[cnt].name)==0))
 								{
 									switch(dataptr[cnt].type)
 										{
 											case TYPEINT:
-												*(int*)dataptr[cnt].data=atoi(strarg);
+												*(int*)dataptr[cnt].data=atoi(vs->data);
 												break;
 											case TYPESTRING:
 												if(*(char**)(dataptr[cnt].data)!=NULL)
 													{
 														ERRDATA debugFree(&*(char**)(dataptr[cnt].data));
 													}
-												sscanf(buffer,"%*s %m[^\n]s",(char**)dataptr[cnt].data);
+												*(char**)(dataptr[cnt].data)=(char*)strdup(vs->data);
 												break;
 											case TYPEBOOL:
-												*(bool*)dataptr[cnt].data=(bool)atoi(strarg);
+												*(bool*)dataptr[cnt].data=(bool)atoi(vs->data);
 												break;
 											case TYPELIST:
-												sscanf(buffer,"%*s\t%m[^\n]s",&liststr);
-												*(GSList**)dataptr[cnt].data=g_slist_append(*(GSList**)dataptr[cnt].data,liststr);
+												*(GSList**)dataptr[cnt].data=g_slist_append(*(GSList**)dataptr[cnt].data,strdup(vs->data));
 												break;
 										}
 								}
 							cnt++;
 						}
-					freeAndNull(&argname);
-					freeAndNull(&strarg);
+					freeAndNull(&vs->name);
+					freeAndNull(&vs->data);
+					free(vs);
 				}
 			fclose(fd);
 		}
@@ -738,7 +736,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 
 	ERRDATA
 	loadingSession=true;
-	closeAllTabs(NULL,NULL);
+//	closeAllTabs(NULL,NULL);
 	showBarberPole(DIALOG_POLE_RESTORING);
 
 	if(data==NULL)
@@ -749,6 +747,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 	fd=fopen(filename,"r");
 	if(fd!=NULL)
 		{
+			closeAllTabs(NULL,NULL);
 			sinkReturnStr=fgets(buffer,2048,fd);
 			sinkReturn=fscanf(fd,"%i %i %i %i\n",&width,&hite,&winx,&winy);
 			gtk_window_resize((GtkWindow*)mainWindow,width,hite);
@@ -806,7 +805,6 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 
 	ERRDATA delete buf;
 	currentTabNumber=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)-1;
-
 	for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
 		{
 			pageStruct *page=getPageStructByIDFromPage(j);
@@ -818,7 +816,8 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 				}
 		}
 	loadingSession=false;
-	updateStatusBar((GtkTextBuffer*)page->buffer,NULL,NULL,NULL);
+	if(page!=NULL)
+		updateStatusBar((GtkTextBuffer*)page->buffer,NULL,NULL,NULL);
 	killBarberPole();
 	ERRDATA
 }

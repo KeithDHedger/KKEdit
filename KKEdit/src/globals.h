@@ -120,6 +120,12 @@ struct functionData
 	int					intab;
 };
 
+struct varStrings
+{
+	char				*name;
+	char				*data;
+};
+
 extern int				errno;
 extern int				errLine;
 extern const char		*errFile;
@@ -498,6 +504,7 @@ void applyCSS (GtkWidget *widget, GtkStyleProvider *widgprovider);
 
 functionData* allocFStrings(unsigned what,char *string);
 functionData* initFunctionData(void);
+varStrings* allocVStrings(char *string);
 
 #endif
 

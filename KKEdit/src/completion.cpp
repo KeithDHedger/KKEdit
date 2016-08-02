@@ -181,16 +181,13 @@ void function_provider_init(FunctionProvider *self)
 void addProp(pageStruct *page)
 {
 	ERRDATA
-	char		*functions=NULL;
-	char		tmpstr[1024];
-	char		*lineptr;
-	char		*correctedstr;
-	char		functype[63];
-	char		infostr[1024];
-	char		*holdstr;
-	FILE		*fd=NULL;
-	char		buffer[2048];
-	char		*customfile;
+	char			*functions=NULL;
+	char			*lineptr;
+	char			infostr[1024];
+	FILE			*fd=NULL;
+	char			buffer[2048];
+	char			*customfile;
+	functionData	*funcdata;
 
 	if(page->filePath==NULL)
 		{
@@ -221,23 +218,15 @@ void addProp(pageStruct *page)
 
 	while (lineptr!=NULL)
 		{
-			tmpstr[0]=0;
-			sscanf (lineptr,"%s",tmpstr);
-			sscanf (lineptr,"%*s %*s %*i %[^\n]s",infostr);
-			holdstr=strdup(tmpstr);
-			correctedstr=truncateWithElipses(tmpstr,maxFuncDefs);
-			sprintf(tmpstr,"%s",correctedstr);
-			if(strlen(tmpstr)>0)
+			funcdata=allocFStrings(FUNCDATA,lineptr);
+			if(strlen(funcdata->name)>0)
 				{
-					sscanf (lineptr,"%*s %s",functype);	
-					if(strcasecmp(functype,"function")==0)
-						funcProv->proposals=g_list_append(funcProv->proposals,gtk_source_completion_item_new(tmpstr,holdstr,NULL,infostr));
-					if(strcasecmp(functype,"variable")==0)
-						varsProv->proposals=g_list_append(varsProv->proposals,gtk_source_completion_item_new(tmpstr,holdstr,NULL,infostr));
+					if(strcasecmp(funcdata->type,"function")==0)
+						funcProv->proposals=g_list_append(funcProv->proposals,gtk_source_completion_item_new(funcdata->name,funcdata->name,NULL,infostr));
+					if(strcasecmp(funcdata->type,"variable")==0)
+						varsProv->proposals=g_list_append(varsProv->proposals,gtk_source_completion_item_new(funcdata->name,funcdata->name,NULL,infostr));
 				}
-			ERRDATA debugFree(&correctedstr);
-			ERRDATA debugFree(&holdstr);
-
+			ERRDATA destroyData(funcdata);
 			lineptr=strchr(lineptr,'\n');
 			if (lineptr!=NULL)
 				lineptr++;
