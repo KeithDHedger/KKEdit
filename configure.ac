@@ -134,6 +134,7 @@ case $host_os in
 		if test $EXCTAGS = false; then
 			AC_MSG_ERROR([No exctags program found!])
 		fi
+		ICONV_LIBS=-liconv
 		;;
 
 	*)
@@ -142,8 +143,11 @@ case $host_os in
 		if test $CTAGS = false; then
 			AC_MSG_ERROR([No ctags program found!])
 		fi
+		ICONV_LIBS=
 		;;
 esac
+
+AC_SUBST(ICONV_LIBS)
 
 AC_CHECK_PROG(GTKSU, gtksu ,true,false)
 if test $GTKSU = false; then

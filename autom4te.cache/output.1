@@ -592,6 +592,7 @@ with_debug_level
 with_gsu_path
 MANPAGEEDITOR
 GTKSU
+ICONV_LIBS
 CTAGS
 EXCTAGS
 host_os
@@ -5366,6 +5367,7 @@ fi
 		if test $EXCTAGS = false; then
 			as_fn_error $? "No exctags program found!" "$LINENO" 5
 		fi
+		ICONV_LIBS=-liconv
 		;;
 
 	*)
@@ -5413,8 +5415,11 @@ fi
 		if test $CTAGS = false; then
 			as_fn_error $? "No ctags program found!" "$LINENO" 5
 		fi
+		ICONV_LIBS=
 		;;
 esac
+
+
 
 # Extract the first word of "gtksu ", so it can be a program name with args.
 set dummy gtksu ; ac_word=$2
