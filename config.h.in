@@ -36,6 +36,12 @@
 /* Use GTK3 */
 #undef _EXECSUFFIX_
 
+/* compiling for BSD */
+#undef _INBSD_
+
+/* compiling for linux */
+#undef _INLINUX_
+
 /* Use GTK3 */
 #undef _USEGTK3_
 

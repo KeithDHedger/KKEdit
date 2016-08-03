@@ -27,6 +27,26 @@
 bool	singleOverRide=false;
 bool	loadPluginsFlag=true;
 
+char* oneLiner(const char *command)
+{
+	FILE	*fp=NULL;
+	char	*retstr=(char*)calloc(1,256);
+	fp=popen(command,"r");
+	if(fp!=NULL)
+		{
+			sinkReturnStr=fgets(retstr,256,fp);
+			pclose(fp);
+		}
+	if(sinkReturnStr==NULL)
+		debugFree(&retstr);
+	else
+		{
+			if(retstr[strlen(retstr)-1]=='\n')
+				retstr[strlen(retstr)-1]=0;
+		}
+	return(retstr);
+}
+
 void readConfig(void)
 {
 	ERRDATA
@@ -120,10 +140,16 @@ void init(void)
 	doGoogleSearch=true;
 
 //runtime deps
+	
 	exitstatus=system("which manpageeditor 2>&1 >/dev/null");
-	gotManEditor=WEXITSTATUS(exitstatus);
+	gotManEditor=(bool)exitstatus;
 	exitstatus=system("which doxygen 2>&1 >/dev/null");
-	gotDoxygen=WEXITSTATUS(exitstatus);
+	gotDoxygen=(bool)exitstatus;
+#ifdef _INBSD_
+	ctagsPath=oneLiner("which exctags");
+#else
+	ctagsPath=oneLiner("which ctags");
+#endif
 
 	if(getuid()!=0)
 		styleName=strdup("classic");
@@ -278,14 +304,14 @@ void doNagStuff(void)
 	ERRDATA debugFree(&control);
 
 	exitstatus=system("which curl 2>&1 >/dev/null");
-	gotcurl=WEXITSTATUS(exitstatus);
+	gotcurl=(bool)exitstatus;
 
 	if(gotcurl==0)
 		sinkReturn=asprintf(&command,"curl %s -s -o -",NAGTIMELINK);
 	else
 		{
 			exitstatus=system("which wget 2>&1 >/dev/null");
-			gotwget=WEXITSTATUS(exitstatus);
+			gotwget=(bool)exitstatus;
 			if(gotwget==0)
 				sinkReturn=asprintf(&command,"wget %s -O - -q",NAGTIMELINK);
 		}

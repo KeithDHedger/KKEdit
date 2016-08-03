@@ -125,10 +125,25 @@ if test "$enable_aspell" = "yes"; then
 	AC_DEFINE([_ASPELL_], [], [Include spellchecker])
 fi
 
-AC_CHECK_PROG(CTAGS, ctags ,true,false)
-if test $CTAGS = false; then
-	AC_MSG_ERROR([No ctags program found!])
-fi
+AC_CANONICAL_HOST
+case $host_os in
+
+	*BSD* | *bsd* )
+		AC_DEFINE([_INBSD_], [], [compiling for BSD])
+		AC_CHECK_PROG(EXCTAGS, exctags ,true,false)
+		if test $EXCTAGS = false; then
+			AC_MSG_ERROR([No exctags program found!])
+		fi
+		;;
+
+	*)
+		AC_DEFINE([_INLINUX_], [], [compiling for linux])
+		AC_CHECK_PROG(CTAGS, ctags ,true,false)
+		if test $CTAGS = false; then
+			AC_MSG_ERROR([No ctags program found!])
+		fi
+		;;
+esac
 
 AC_CHECK_PROG(GTKSU, gtksu ,true,false)
 if test $GTKSU = false; then

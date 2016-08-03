@@ -387,15 +387,16 @@ extern bool				showToolBar;
 extern int				listFunction;
 extern GtkWidget		*funcListDrop;
 
-extern char			*functionSearchText;
-extern char			*thePage;
-extern char			*htmlFile;
-extern char			*htmlURI;
-extern char			*tmpFolderName;
+extern char				*functionSearchText;
+extern char				*thePage;
+extern char				*htmlFile;
+extern char				*htmlURI;
+extern char				*tmpFolderName;
 
 //runtime deps
 extern int				gotManEditor;
 extern int				gotDoxygen;
+extern char				*ctagsPath;
 
 extern GtkSourceStyleSchemeManager	*schemeManager;
 extern GtkSourceStyleScheme		*styleScheme;

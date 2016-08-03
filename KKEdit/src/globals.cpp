@@ -301,6 +301,7 @@ char			*tmpFolderName=NULL;
 //runtime deps
 int				gotManEditor;
 int				gotDoxygen;
+char			*ctagsPath=NULL;
 
 GtkSourceStyleSchemeManager	*schemeManager;
 GtkSourceStyleScheme			*styleScheme;
@@ -984,7 +985,7 @@ void getRecursiveTagListFileName(char *filepath,void *ptr)
 			ERRDATA return;
 		}
 
-	sinkReturn=asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - --excmd=number --format=1 -f -",filepath,depth);
+	sinkReturn=asprintf(&command,"find \"%s\" -maxdepth %i|%s -L - --excmd=number --format=1 -f -",filepath,depth,ctagsPath);
 	fp=popen(command, "r");
 	while(fgets(line,1024,fp))
 		{
@@ -1031,7 +1032,7 @@ void getRecursiveTagList(char *filepath,void *ptr)
 			break;
 		}
 
-	sinkReturn=asprintf(&command,"find \"%s\" -maxdepth %i|ctags -L - -x|%s|sed 's@ \\+@ @g'",filepath,depth,sort);
+	sinkReturn=asprintf(&command,"find \"%s\" -maxdepth %i|%s -L - -x|%s|sed 's@ \\+@ @g'",filepath,depth,ctagsPath,sort);
 
 	fp=popen(command, "r");
 	while(fgets(line,2048,fp))
