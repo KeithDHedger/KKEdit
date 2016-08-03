@@ -372,6 +372,7 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	char			*correctedstr=NULL;
 	GtkTextIter		start_find,end_find;
 	functionData	*fd=NULL;
+	functionData	*tempfd=NULL;
 
 	if(loadingSession==true)
 		{
@@ -399,7 +400,7 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 
 	getRecursiveTagList(page->filePath,&functions);
 	lineptr=functions;
-
+//printf(">>>%s<<<\n",lineptr);
 	page->isFirst=true;
 	page->navSubMenu=(GtkMenuItem*)gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(funcMenu),(GtkWidget*)page->navSubMenu);
@@ -418,13 +419,21 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 				{
 					correctedstr=truncateWithElipses(fd->define,maxFuncDefs);
 				}
-
 			if(fd->line>0)
 				{
 					if(listFunction==4)
 						{
+						tempfd=allocFStrings(FUNCDATA,lineptr);
+						
 							newstr=NULL;
-							newstr=globalSlice->sliceBetween(lineptr,(char*)" ",(char*)" ");
+							//newstr=globalSlice->replaceAllSlice(tempfd->type," ","@");
+							//newstr=globalSlice->replaceAllSlice(newstr,"@","");
+							//newstr=globalSlice->sliceBetween(lineptr,(char*)" ",(char*)" ");
+							//g_string_chomp
+							newstr=g_strstrip(tempfd->type);
+
+						//	printf(">>>linptr=%s<<\n",lineptr);
+						//	printf("---neswstr=%s---\n",newstr);
 							if(newstr!=NULL)
 								{
 									flag=false;
@@ -441,7 +450,9 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 									if(flag==false)
 										{
 											typenames[numtypes]=strdup(newstr);
-											ERRDATA debugFree(&newstr);
+										//	printf("typenames[numtypes]=strdup(newstr);=%s\n",typenames[numtypes]);
+											destroyData(tempfd);
+											//ERRDATA debugFree(&newstr);
 											if(typenames[numtypes][strlen(typenames[numtypes])-1]=='s')
 												sinkReturn=asprintf(&newstr,"%s's",typenames[numtypes]);
 											else

@@ -25,5 +25,6 @@ LIBS =	$(GTK_LIBS) \
 	$(GTKSRC_LIBS) \
 	$(WEBKIT_LIBS) \
 	$(GLIB_LIBS) \
-	$(ASPELL_LIBS)
+	$(ASPELL_LIBS) \
+	-liconv
 
