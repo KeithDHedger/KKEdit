@@ -704,7 +704,7 @@ VISIBLE void runCommand(char *commandtorun,void *ptr,bool interm,int flags,int u
 functionData *getFunctionByNameOpenFiles(char *name,bool casesensitive,bool wholefname)
 {
 	ERRDATA
-	pageStruct		*page;
+	pageStruct		*page=NULL;
 	int				numpages=gtk_notebook_get_n_pages(mainNotebook);
 	char			*lineptr;
 	char			*functions=NULL;
@@ -721,7 +721,10 @@ functionData *getFunctionByNameOpenFiles(char *name,bool casesensitive,bool whol
 
 	page=getPageStructByIDFromPage(-1);
 	if(page==NULL)
-		ERRDATA return(NULL);
+		{
+			ERRDATA
+			return(NULL);
+		}
 
 	loop=gtk_notebook_get_current_page(mainNotebook);
 	startpage=loop;
@@ -730,7 +733,8 @@ functionData *getFunctionByNameOpenFiles(char *name,bool casesensitive,bool whol
 	while(whileflag==true)
 		{
 			page=getPageStructByIDFromPage(loop);
-			if(page->filePath!=NULL)
+			
+			if((page!=NULL) && (page->filePath!=NULL))
 				{
 					getRecursiveTagList(page->filePath,&functions);
 					lineptr=functions;

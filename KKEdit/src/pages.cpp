@@ -45,7 +45,7 @@ VISIBLE pageStruct *getPageStructByIDFromPage(int pagenum)
 	int			thispage=-1;
 	GtkWidget	*pageBox=NULL;
 	unsigned	pageid=0;
-
+ERRDATA
 	if(pagenum==-1)
 		thispage=gtk_notebook_get_current_page(mainNotebook);
 	else
@@ -57,6 +57,9 @@ VISIBLE pageStruct *getPageStructByIDFromPage(int pagenum)
 	else
 		pageid=(unsigned)(long)g_object_get_data((GObject*)pageBox,"pageid");
 
+ERRDATA	if(pageid==0)
+			return(NULL);
+	
 	list=pages;
 	while(list!=NULL)
 		{
@@ -65,5 +68,5 @@ VISIBLE pageStruct *getPageStructByIDFromPage(int pagenum)
 				return(page);
 			list=list->next;
 		}			
-	return(NULL);
+ERRDATA	return(NULL);
 }

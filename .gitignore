@@ -8,6 +8,7 @@ makenagtime
 KKEdit/src/html
 KKEdit/src/searchdata.xml
 translations/
+autom4te.cache
 
 *~
 
