@@ -1,4 +1,6 @@
 0.3.4
+Put "Find Definition" back into popup menu.
+More tweaks for *bsd*.
 Check for exctags in *bsd*.
 Don't close tabs if loading missing session file.
 Fixed crash on reloading session if session file is missing.
