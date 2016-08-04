@@ -210,7 +210,7 @@ void init(void)
 	globalPlugins->globalPlugData->tmpFolder=tmpFolderName;
 	globalPlugins->globalPlugData->kkeditVersion=VERSION;
 
-	/*
+/*	
 		for(int j=0;j<globalPlugins->plugCount;j++)
 			{
 				struct pluginData
@@ -226,7 +226,8 @@ void init(void)
 				printf("num %i enabled=%i\n",j,(int)pd->enabled);
 				printf("num %i path=%s\n",j,pd->path);
 			}
-	*/
+*/
+
 //time to nag?
 
 	timeToNag=false;

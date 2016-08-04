@@ -31,6 +31,8 @@ PluginClass::PluginClass(bool loadPlugs)
 	sinkReturn=asprintf(&plugFolderPaths[GLOBALPLUGS],"%s",GPLUGSFOLDER);
 	sinkReturn=asprintf(&plugFolderPaths[LOCALPLUGS],"%s/%s/plugins-gtk",getenv("HOME"),APPFOLDENAME);
 
+printf("----%s-\n-%s--\n",plugFolderPaths[GLOBALPLUGS],plugFolderPaths[LOCALPLUGS]);
+
 	this->doLoadPlugs=loadPlugs;
 	this->loadPlugins();
 
@@ -176,9 +178,13 @@ void PluginClass::loadPlugins(void)
 	else
 		{
 			this->plugCount=0;
-			for(int j=0;j<2;j++)
+		for(int j=0;j<2;j++)
 				{
+#ifdef _INBSD_
+					sinkReturn=asprintf(&command,"find %s -follow -iname \"*.so\" | sort",plugFolderPaths[j]);
+#else
 					sinkReturn=asprintf(&command,"find %s -follow -iname \"*.so\" -printf '%%f/%%p\n' 2>/dev/null| sort -n -t /|cut -f2- -d/",plugFolderPaths[j]);
+#endif
 					pf=popen(command,"r");
 					if(pf!=NULL)
 						{

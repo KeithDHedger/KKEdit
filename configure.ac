@@ -29,18 +29,22 @@ if test "$enable_gtk3" = "yes"; then
 	program_transform_name='s,\(^[[kK]].*t.*\),\1-3,'
 	PLUGVERSION=3
 	GTK3SUFFIX=-3
+	GTKVERSION=3
 else
 	GTK_MODULES="gtk+-2.0 >= 2.24.0"
 	GTKSRC_MODULES="gtksourceview-2.0 >= 2.9.9"
 	AC_DEFINE([_EXECSUFFIX_], [""], [Use GTK3])
 	PLUGVERSION=2
+	GTKVERSION=2
 fi
 
 AC_MSG_CHECKING(Build/Install plugins)
 AC_ARG_ENABLE(plugins,AS_HELP_STRING([--enable-plugins],[Build/Install plugins]),[enable_plugs=$enableval],[enable_plugs="yes"])
 AC_MSG_RESULT($enable_plugs)
 if test "$enable_plugs" = "yes"; then
-	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
+#	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
+	PLUGMAKEFILES="KKEdit/plugins/TerminalPane/Makefile"
+	PLUGDIRS="KKEdit/plugins/TerminalPane"
 	if test "$enable_gtk3" = "yes"; then
 		AC_MSG_CHECKING(Finding vte version)
 		PKG_CHECK_EXISTS(vte-2.91,[usevte=91],[usevte=90])
@@ -71,11 +75,12 @@ else
 	NEWPLUGINCLUDES=
 fi
 
-AC_SUBST(PLUGINCLUDES)
+AC_SUBST(PLUGDIRS)
 AC_SUBST(NEWPLUGINCLUDES)
 AC_SUBST(PLUGVERSION)
 AC_SUBST(VTEVERS)
 AC_SUBST(GTK3SUFFIX)
+AC_SUBST(GTKVERSION)
 
 PKG_CHECK_MODULES(GTK,$GTK_MODULES)
 AC_SUBST(GTK_CFLAGS)
@@ -179,6 +184,6 @@ AC_ARG_WITH(debug_level,AS_HELP_STRING([ --with-debug-level],[Debug level ( 0,1,
 AC_SUBST(with_debug_level)
 AC_MSG_RESULT([Setting debug level to $with_debug_level])
 
-AC_OUTPUT(Makefile KKEdit/app/Makefile)
+AC_OUTPUT(Makefile KKEdit/app/Makefile KKEdit/plugins/TerminalPane/Makefile )
 
 
