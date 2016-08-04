@@ -60,8 +60,8 @@ ERRDATA
 ERRDATA	if(pageid==0)
 			return(NULL);
 	
-	list=pages;
-	while(list!=NULL)
+ERRDATA		list=pages;
+ERRDATA			while(list!=NULL)
 		{
 			page=(pageStruct*)list->data;
 			if((page!=NULL) && (page->pageID==pageid))
