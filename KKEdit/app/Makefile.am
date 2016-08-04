@@ -57,7 +57,7 @@ install-exec-hook:
 	mkdir -vp "$(DESTDIR)${pkgdatadir}$(GTK3SUFFIX)/Example External Tools"
 	cp -r "../resources/Example External Tools" "$(DESTDIR)${pkgdatadir}$(GTK3SUFFIX)"
 
-#install-data-hook:
-#	sed -i 's/kkedit/kkedit$(GTK3SUFFIX)/g' $(DESTDIR)${pkgdatadir}$(GTK3SUFFIX)/tools/*
+install-data-hook:
+	sed -i "" 's/kkedit/kkedit$(GTK3SUFFIX)/g' $(DESTDIR)${pkgdatadir}$(GTK3SUFFIX)/tools/*
 
 
