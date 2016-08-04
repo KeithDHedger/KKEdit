@@ -5369,7 +5369,11 @@ fi
 			as_fn_error $? "No exctags program found!" "$LINENO" 5
 		fi
 		ICONV_LIBS=-liconv
+<<<<<<< HEAD
 		SEDCOMMAND="sed -i \"\" "
+=======
+		SEDCOMMAND="sed -i ''"
+>>>>>>> dd7e5ad418ca8acf23d482d9de3286f0271fad73
 		;;
 
 	*)
@@ -5418,7 +5422,11 @@ fi
 			as_fn_error $? "No ctags program found!" "$LINENO" 5
 		fi
 		ICONV_LIBS=
+<<<<<<< HEAD
 		SEDCOMMAND="sed -i "
+=======
+		SEDCOMMAND="sed -i"
+>>>>>>> dd7e5ad418ca8acf23d482d9de3286f0271fad73
 		;;
 esac
 

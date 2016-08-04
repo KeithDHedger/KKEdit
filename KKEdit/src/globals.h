@@ -90,6 +90,7 @@ enum {NAVLAST=0,NAVNEXT};
 enum {FUNCDATA=0};
 #endif
 
+
 //extern const char	*moreapps[];
 extern const char	*authorskk[];
 
