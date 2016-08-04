@@ -331,8 +331,6 @@ top_srcdir = @top_srcdir@
 with_debug_level = @with_debug_level@
 with_gsu_path = @with_gsu_path@
 with_qt5_docdir = @with_qt5_docdir@
-
-#SUBDIRS = KKEdit/app $(PLUGINCLUDES) $(NEWPLUGINCLUDES)
 SUBDIRS = KKEdit/app $(PLUGDIRS) $(NEWPLUGINCLUDES)
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
@@ -809,7 +807,6 @@ uninstall-am:
 
 
 export GLOBAL = 1
-#export GTKVERSION = $(PLUGVERSION)
 export VTEVERSION = $(VTEVERS)
 export CONFCXXFLAGS = $(CXXFLAGS)
 export CONFCPPFLAGS = $(CPPFLAGS)

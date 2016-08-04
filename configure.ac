@@ -43,8 +43,7 @@ AC_ARG_ENABLE(plugins,AS_HELP_STRING([--enable-plugins],[Build/Install plugins])
 AC_MSG_RESULT($enable_plugs)
 if test "$enable_plugs" = "yes"; then
 #	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
-	PLUGMAKEFILES="KKEdit/plugins/TerminalPane/Makefile"
-	PLUGDIRS="KKEdit/plugins/TerminalPane"
+	PLUGDIRS="KKEdit/plugins/TerminalPane KKEdit/plugins/SessionManager"
 	if test "$enable_gtk3" = "yes"; then
 		AC_MSG_CHECKING(Finding vte version)
 		PKG_CHECK_EXISTS(vte-2.91,[usevte=91],[usevte=90])
@@ -184,6 +183,6 @@ AC_ARG_WITH(debug_level,AS_HELP_STRING([ --with-debug-level],[Debug level ( 0,1,
 AC_SUBST(with_debug_level)
 AC_MSG_RESULT([Setting debug level to $with_debug_level])
 
-AC_OUTPUT(Makefile KKEdit/app/Makefile KKEdit/plugins/TerminalPane/Makefile )
+AC_OUTPUT(Makefile KKEdit/app/Makefile KKEdit/plugins/TerminalPane/Makefile KKEdit/plugins/SessionManager/Makefile )
 
 

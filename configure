@@ -4695,8 +4695,7 @@ fi
 $as_echo "$enable_plugs" >&6; }
 if test "$enable_plugs" = "yes"; then
 #	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
-	PLUGMAKEFILES="KKEdit/plugins/TerminalPane/Makefile"
-	PLUGDIRS="KKEdit/plugins/TerminalPane"
+	PLUGDIRS="KKEdit/plugins/TerminalPane KKEdit/plugins/SessionManager"
 	if test "$enable_gtk3" = "yes"; then
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Finding vte version" >&5
 $as_echo_n "checking Finding vte version... " >&6; }
@@ -5550,7 +5549,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting debug level to $with_debug_level" >&5
 $as_echo "Setting debug level to $with_debug_level" >&6; }
 
-ac_config_files="$ac_config_files Makefile KKEdit/app/Makefile KKEdit/plugins/TerminalPane/Makefile"
+ac_config_files="$ac_config_files Makefile KKEdit/app/Makefile KKEdit/plugins/TerminalPane/Makefile KKEdit/plugins/SessionManager/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6286,6 +6285,7 @@ do
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "KKEdit/app/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/app/Makefile" ;;
     "KKEdit/plugins/TerminalPane/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/plugins/TerminalPane/Makefile" ;;
+    "KKEdit/plugins/SessionManager/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/plugins/SessionManager/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
