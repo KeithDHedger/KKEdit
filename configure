@@ -592,6 +592,7 @@ with_debug_level
 with_gsu_path
 MANPAGEEDITOR
 GTKSU
+SEDCOMMAND
 ICONV_LIBS
 CTAGS
 EXCTAGS
@@ -5368,6 +5369,7 @@ fi
 			as_fn_error $? "No exctags program found!" "$LINENO" 5
 		fi
 		ICONV_LIBS=-liconv
+		SEDCOMMAND="sed -i ''"
 		;;
 
 	*)
@@ -5416,8 +5418,10 @@ fi
 			as_fn_error $? "No ctags program found!" "$LINENO" 5
 		fi
 		ICONV_LIBS=
+		SEDCOMMAND="sed -i"
 		;;
 esac
+
 
 
 

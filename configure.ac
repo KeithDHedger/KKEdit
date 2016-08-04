@@ -135,6 +135,7 @@ case $host_os in
 			AC_MSG_ERROR([No exctags program found!])
 		fi
 		ICONV_LIBS=-liconv
+		SEDCOMMAND="sed -i ''"
 		;;
 
 	*)
@@ -144,10 +145,12 @@ case $host_os in
 			AC_MSG_ERROR([No ctags program found!])
 		fi
 		ICONV_LIBS=
+		SEDCOMMAND="sed -i"
 		;;
 esac
 
 AC_SUBST(ICONV_LIBS)
+AC_SUBST(SEDCOMMAND)
 
 AC_CHECK_PROG(GTKSU, gtksu ,true,false)
 if test $GTKSU = false; then
