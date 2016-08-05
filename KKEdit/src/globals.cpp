@@ -307,8 +307,8 @@ GtkSourceStyleSchemeManager	*schemeManager;
 GtkSourceStyleScheme			*styleScheme;
 
 #ifdef _BUILDDOCVIEWER_
-GtkWidget		*docView;
-WebKitWebView	*webView;
+GtkWidget		*docView=NULL;
+WebKitWebView	*webView=NULL;
 bool			showHideDocviewer;
 GtkWidget		*showDocViewWidget;
 #endif
