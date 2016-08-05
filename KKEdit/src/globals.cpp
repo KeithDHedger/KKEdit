@@ -1736,7 +1736,7 @@ functionData* allocFStrings(unsigned what,char *string)
 	
 }
 
-varStrings* allocVStrings(char *string)
+VISIBLE varStrings* allocVStrings(char *string)
 {
 	int	namelen=0;
 	int	datalen=0;

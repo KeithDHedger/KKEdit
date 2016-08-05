@@ -54,6 +54,7 @@ GtkWidget*	holdWidget=NULL;
 GtkWidget*	menusm;
 char		*currentdomain=NULL;
 int			sinkInt;
+char		*sinkStr;
 
 int	(*module_plug_function)(gpointer globaldata);
 
@@ -61,6 +62,7 @@ extern void saveSession(const char* name,const char* filepath);
 extern void restoreSession(GtkWidget* widget,gpointer data);
 extern void closeAllTabs(GtkWidget* widget,gpointer data);
 extern void toggleBookmark(GtkWidget* widget,GtkTextIter* titer);
+extern varStrings* allocVStrings(char *string);
 
 extern GList*			newBookMarksList;
 
@@ -185,7 +187,7 @@ void saveSessionPlug(char* name,plugData* plugdata,int snum)
 void restoreSessionNum(GtkWidget* widget,gpointer data)
 {
 	char		*sessionfile;
-	char		*sname=NULL;
+	char		*sname=(char*)calloc(1,256);
 	FILE		*fd=NULL;
 	const char	*widgetname=NULL;
 	plugData	*plugdata=(plugData*)data;
@@ -197,7 +199,9 @@ void restoreSessionNum(GtkWidget* widget,gpointer data)
 			fd=fopen(sessionfile,"r");
 			if(fd!=NULL)
 				{
-					sinkInt=fscanf(fd,"%a[^\n]s",&sname);
+					sinkStr=fgets(sname,256,fd);
+					if(strlen(sname)>1)
+						sname[strlen(sname)-1]=0;
 					if(strcmp(sname,widgetname)==0)
 						{
 							restoreSession(NULL,sessionfile);
@@ -206,10 +210,10 @@ void restoreSessionNum(GtkWidget* widget,gpointer data)
 							fclose(fd);
 							return;
 						}
-					free(sname);
 					fclose(fd);
 				}
 		}
+	free(sname);
 }
 
 void rebuildMainMenu(GtkWidget* menu,plugData*	plugdata,GCallback* func)
@@ -264,6 +268,7 @@ extern "C" int addToGui(gpointer data)
 	GtkWidget*	menuitem;
 	char		*sessionname;
 	GtkWidget*	menu;
+	char		*buffer=(char*)calloc(1,256);
 
 	plugData*	plugdata=(plugData*)data;
 
@@ -277,13 +282,14 @@ extern "C" int addToGui(gpointer data)
 			fd=fopen(sessionfile,"r");
 			if(fd!=NULL)
 				{
-					sinkInt=fscanf(fd,"%a[^\n]s",&sessionNames[j]);
+					sinkStr=fgets(buffer,256,fd);
+					sessionNames[j]=strndup(buffer,strlen(buffer)-1);
 					fclose(fd);
 				}
 			else
 				sinkInt=asprintf(&sessionNames[j],gettext("Session %i"),j);
 		}
-
+	free(buffer);
 	setTextDomain(false,plugdata);
 
 	holdWidget=NULL;
