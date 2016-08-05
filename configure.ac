@@ -36,6 +36,7 @@ else
 	AC_DEFINE([_EXECSUFFIX_], [""], [Use GTK3])
 	PLUGVERSION=2
 	GTKVERSION=2
+	GTK3SUFFIX=
 fi
 
 AC_MSG_CHECKING(Build/Install plugins)
@@ -43,17 +44,18 @@ AC_ARG_ENABLE(plugins,AS_HELP_STRING([--enable-plugins],[Build/Install plugins])
 AC_MSG_RESULT($enable_plugs)
 if test "$enable_plugs" = "yes"; then
 #	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
-	PLUGDIRS="KKEdit/plugins/TerminalPane KKEdit/plugins/SessionManager"
+	PLUGDIRS="KKEdit/plugins/TerminalPane KKEdit/plugins/SessionManager KKEdit/plugins/FileBrowser KKEdit/plugins/ClipboardPlugin"
 	if test "$enable_gtk3" = "yes"; then
 		AC_MSG_CHECKING(Finding vte version)
 		PKG_CHECK_EXISTS(vte-2.91,[usevte=91],[usevte=90])
 		if test $usevte = 91; then
 			VTE_MODULES="vte-2.91 >= 0.40.0"
-			VTEVERS=2.91
+			VTEVERS="-2.91"
 			AC_MSG_RESULT(using $VTEVERS)
 		else
 			VTE_MODULES="vte-2.90 >= 0.29.1"
-			VTEVERS=2.90
+			VTEVERS="-2.90"
+			USE290="-D_VTEVERS290_"
 			AC_DEFINE([_VTEVERS290_], [""], [Use vte-2.90])
 			AC_MSG_RESULT(using $VTEVERS)
 		fi
@@ -76,10 +78,12 @@ fi
 
 AC_SUBST(PLUGDIRS)
 AC_SUBST(NEWPLUGINCLUDES)
-AC_SUBST(PLUGVERSION)
+AC_SUBST(USE290)
 AC_SUBST(VTEVERS)
 AC_SUBST(GTK3SUFFIX)
 AC_SUBST(GTKVERSION)
+
+AC_SUBST(PLUGVERSION)
 
 PKG_CHECK_MODULES(GTK,$GTK_MODULES)
 AC_SUBST(GTK_CFLAGS)
@@ -183,6 +187,6 @@ AC_ARG_WITH(debug_level,AS_HELP_STRING([ --with-debug-level],[Debug level ( 0,1,
 AC_SUBST(with_debug_level)
 AC_MSG_RESULT([Setting debug level to $with_debug_level])
 
-AC_OUTPUT(Makefile KKEdit/app/Makefile KKEdit/plugins/TerminalPane/Makefile KKEdit/plugins/SessionManager/Makefile )
+AC_OUTPUT(Makefile KKEdit/app/Makefile KKEdit/plugins/TerminalPane/Makefile KKEdit/plugins/SessionManager/Makefile KKEdit/plugins/FileBrowser/Makefile KKEdit/plugins/ClipboardPlugin/Makefile)
 
 

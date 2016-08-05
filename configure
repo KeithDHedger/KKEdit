@@ -614,10 +614,11 @@ GTKSRC_LIBS
 GTKSRC_CFLAGS
 GTK_LIBS
 GTK_CFLAGS
+PLUGVERSION
 GTKVERSION
 GTK3SUFFIX
 VTEVERS
-PLUGVERSION
+USE290
 NEWPLUGINCLUDES
 PLUGDIRS
 VTE_LIBS
@@ -4680,6 +4681,7 @@ $as_echo "#define _EXECSUFFIX_ \"\"" >>confdefs.h
 
 	PLUGVERSION=2
 	GTKVERSION=2
+	GTK3SUFFIX=
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking Build/Install plugins" >&5
@@ -4695,7 +4697,7 @@ fi
 $as_echo "$enable_plugs" >&6; }
 if test "$enable_plugs" = "yes"; then
 #	PLUGINCLUDES="KKEdit/plugins/TerminalPane KKEdit/plugins/ClipboardPlugin KKEdit/plugins/FileBrowser KKEdit/plugins/SessionManager"
-	PLUGDIRS="KKEdit/plugins/TerminalPane KKEdit/plugins/SessionManager"
+	PLUGDIRS="KKEdit/plugins/TerminalPane KKEdit/plugins/SessionManager KKEdit/plugins/FileBrowser KKEdit/plugins/ClipboardPlugin"
 	if test "$enable_gtk3" = "yes"; then
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Finding vte version" >&5
 $as_echo_n "checking Finding vte version... " >&6; }
@@ -4711,12 +4713,13 @@ else
 fi
 		if test $usevte = 91; then
 			VTE_MODULES="vte-2.91 >= 0.40.0"
-			VTEVERS=2.91
+			VTEVERS="-2.91"
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: using $VTEVERS" >&5
 $as_echo "using $VTEVERS" >&6; }
 		else
 			VTE_MODULES="vte-2.90 >= 0.29.1"
-			VTEVERS=2.90
+			VTEVERS="-2.90"
+			USE290="-D_VTEVERS290_"
 
 $as_echo "#define _VTEVERS290_ \"\"" >>confdefs.h
 
@@ -4817,6 +4820,8 @@ if test "$enable_new_plugs" = "yes"; then
 else
 	NEWPLUGINCLUDES=
 fi
+
+
 
 
 
@@ -5549,7 +5554,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting debug level to $with_debug_level" >&5
 $as_echo "Setting debug level to $with_debug_level" >&6; }
 
-ac_config_files="$ac_config_files Makefile KKEdit/app/Makefile KKEdit/plugins/TerminalPane/Makefile KKEdit/plugins/SessionManager/Makefile"
+ac_config_files="$ac_config_files Makefile KKEdit/app/Makefile KKEdit/plugins/TerminalPane/Makefile KKEdit/plugins/SessionManager/Makefile KKEdit/plugins/FileBrowser/Makefile KKEdit/plugins/ClipboardPlugin/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6286,6 +6291,8 @@ do
     "KKEdit/app/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/app/Makefile" ;;
     "KKEdit/plugins/TerminalPane/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/plugins/TerminalPane/Makefile" ;;
     "KKEdit/plugins/SessionManager/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/plugins/SessionManager/Makefile" ;;
+    "KKEdit/plugins/FileBrowser/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/plugins/FileBrowser/Makefile" ;;
+    "KKEdit/plugins/ClipboardPlugin/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/plugins/ClipboardPlugin/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
