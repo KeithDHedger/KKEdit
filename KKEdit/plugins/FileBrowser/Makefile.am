@@ -12,7 +12,7 @@ clean: distclean
 distclean:
 	rm *.o *.so
 
-install:
+install: all
 	mkdir -vp $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES
 	cp libfilebrowser.so $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk
 	cp po/fr_FR/LC_MESSAGES/FileBrowser.mo  $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES

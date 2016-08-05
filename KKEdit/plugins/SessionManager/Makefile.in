@@ -355,8 +355,6 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean-am: clean-generic mostlyclean-am
 
-distclean: distclean-am
-	-rm -f Makefile
 distclean-am: clean-am distclean-generic
 
 dvi: dvi-am
@@ -438,10 +436,12 @@ all:
 
 	gcc -shared -Wl,--version-script=exportmap,-soname,libsessionmanager.so -o libsessionmanager.so sessionmanager.o -lc
 
-clean:
+clean: distclean
+
+distclean:
 	rm *.o *.so
 
-install:
+install: all
 	mkdir -vp $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES
 	cp libsessionmanager.so $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk
 	cp po/fr_FR/LC_MESSAGES/SessionManager.mo  $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES
