@@ -1,5 +1,5 @@
 
-AM_CXXFLAGS = -Wall -fvisibility=hidden
+AM_CCFLAGS = -Wall -fvisibility=hidden
 
 AM_CPPFLAGS =	-I$(top_srcdir) \
 			$(GTK_CFLAGS) \

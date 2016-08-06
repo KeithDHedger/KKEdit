@@ -615,6 +615,7 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 			setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 		}
 
+	rebuildTabsMenu();
 	gtk_widget_destroy(dialog);
 	ERRDATA
 }
