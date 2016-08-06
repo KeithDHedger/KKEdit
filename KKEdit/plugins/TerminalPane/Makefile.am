@@ -11,7 +11,7 @@ all:
 clean: distclean
 
 distclean:
-	rm *.o *.so
+	rm *.o *.so||true
 
 install: all
 	mkdir -vp $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES
