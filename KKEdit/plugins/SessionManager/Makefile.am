@@ -5,7 +5,7 @@ all:
 	gcc ${EXTRAMAKEFLAGS} $(CONFCXXFLAGS) $(CONFCPPFLAGS) $(CONFLDFLAGS) -fPIC -Wall -g -c sessionmanager.cpp `pkg-config --cflags --libs gtk+-$(GTKVERSION).0 gmodule-2.0 glib-2.0 gtksourceview-${GTKVERSION}.0` -DLOCALEDIR=\"${localedir}\" $(DEVMODE) $(USEGTK3) $(USE290) -DGTK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE -o sessionmanager.o
 
 
-	gcc -shared -Wl,--version-script=exportmap,-soname,libsessionmanager.so -o libsessionmanager.so sessionmanager.o -lc `pkg-config --libs gtk+-$(GTKVERSION).0`
+	gcc -shared -Wl,--version-script=exportmap,-soname,libsessionmanager.so -o libsessionmanager.so sessionmanager.o -lc
 
 clean: distclean
 

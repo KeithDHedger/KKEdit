@@ -238,9 +238,7 @@ void init(void)
 		}
 
 	localeLang=getenv("LANG");
-	if(localeLang==NULL)
-		localeLang="en";
-		
+
 	globalSlice->setReturnDupString(true);
 
 	funcProv=(FunctionProvider*)g_object_new(function_provider_get_type(),NULL);

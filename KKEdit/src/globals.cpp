@@ -307,8 +307,8 @@ GtkSourceStyleSchemeManager	*schemeManager;
 GtkSourceStyleScheme			*styleScheme;
 
 #ifdef _BUILDDOCVIEWER_
-GtkWidget		*docView=NULL;
-WebKitWebView	*webView=NULL;
+GtkWidget		*docView;
+WebKitWebView	*webView;
 bool			showHideDocviewer;
 GtkWidget		*showDocViewWidget;
 #endif
@@ -1736,7 +1736,7 @@ functionData* allocFStrings(unsigned what,char *string)
 	
 }
 
-VISIBLE varStrings* allocVStrings(char *string)
+varStrings* allocVStrings(char *string)
 {
 	int	namelen=0;
 	int	datalen=0;
