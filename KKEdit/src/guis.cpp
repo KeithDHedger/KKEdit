@@ -2020,7 +2020,7 @@ int showFunctionEntry(void)
 
 #ifdef _BUILDDOCVIEWER_
 
-
+#if 0
 #define GTK_API_VERSION_2
 
 //#include <errno.h>
@@ -2211,6 +2211,7 @@ void buildGtkDocViewerNew(void)
 printf("XXXXXXXXXXXX\n");
 	docView=createWindow(&webView);
 }
+#endif
 
 void buildGtkDocViewer(void)
 {
