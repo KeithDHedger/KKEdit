@@ -1,4 +1,6 @@
 0.3.4
+Tweaked *.am files for plugs.
+Fixed occasional error when loading session.
 Fixed Session plugin for *bsd*.
 Done *bsd* clipboard/firlebrowser plugs.
 Done *bsd* term/session plugs.
