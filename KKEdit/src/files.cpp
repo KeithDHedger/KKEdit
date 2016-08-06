@@ -149,8 +149,6 @@ GtkWidget *makeNewTab(char *name,char *tooltip,pageStruct *page)
 	char		*correctedname;
 
 	hbox=createNewBox(NEWHBOX,false,0);
-	ERRDATA rebuildTabsMenu();
-
 	correctedname=truncateWithElipses(name,maxTabChars);
 
 	label=gtk_label_new(correctedname);
@@ -1253,7 +1251,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	page->canRedo=false;
 	page->isDirty=false;
 	setPageSensitive();
-	
+	rebuildTabsMenu();
+
 	ERRDATA return(TRUE);
 }
 
@@ -1293,6 +1292,7 @@ VISIBLE void newFile(GtkWidget *widget,gpointer data)
 	currentPage++;
 	gtk_widget_show_all((GtkWidget*)page->tabVbox);
 	setFilePrefs(page);
+	rebuildTabsMenu();
 
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"newFile");
