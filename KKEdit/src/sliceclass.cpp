@@ -294,7 +294,7 @@ StringSlice::StringSlice()
 
 StringSlice::~StringSlice()
 {
-	ERRDATA debugFree(&buffer);
+	//ERRDATA debugFree(&buffer);
 }
 
 /*! Return text between 'startstr' and 'endstr' EXCLUSIVE.

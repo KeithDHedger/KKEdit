@@ -121,12 +121,6 @@ struct functionData
 	int					intab;
 };
 
-struct varStrings
-{
-	char				*name;
-	char				*data;
-};
-
 extern int				errno;
 extern int				errLine;
 extern const char		*errFile;

@@ -507,9 +507,17 @@ void docSearchFromBar(GtkWidget *widget,gpointer data)
 void docSearchInPageFoward(GtkWidget *widget,gpointer data)
 {
 	const char *text=gtk_entry_get_text((GtkEntry*)data);
-
+ERRDATA
 	if(text!=NULL && strlen(text)>0)
-		webkit_web_view_search_text(webView,text,false,true,true);
+	{
+	gboolean bl=false;
+	ERRDATA
+	printf(">>>%p---%s<<<<\n",webView,text);
+ERRDATA printf(">>>>%s<<<<\n",webkit_web_view_get_uri (webView));
+ERRDATA		bl=webkit_web_view_search_text(WEBKIT_WEB_VIEW(webView),"editor",false,true,false);
+ERRDATA		printf(">>>%p---%s<<<<\n",webView,text);
+	}
+ERRDATA
 }
 
 void docSearchInPageBack(GtkWidget *widget,gpointer data)

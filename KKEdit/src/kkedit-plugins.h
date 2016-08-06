@@ -152,6 +152,11 @@ struct pageStruct
 };
 #endif
 
+struct varStrings
+{
+	char				*name;
+	char				*data;
+};
 
 #ifndef _PLUGINDATA_
 #define _PLUGINDATA_
