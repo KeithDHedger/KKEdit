@@ -36,10 +36,10 @@
 
 #define PLUGVERSION VERSION
 #ifdef _USEGTK3_
-#define TEXTDOMAIN "MacroPlugin-3" 
+#define TEXTDOMAIN "macroplugin-3" 
 #define ABOUTICON "KKEditPlug-3"
 #else
-#define TEXTDOMAIN "MacroPlugin" 
+#define TEXTDOMAIN "macroplugin" 
 #define ABOUTICON "KKEditPlug"
 #endif
 
