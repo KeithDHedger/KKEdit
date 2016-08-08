@@ -72,6 +72,7 @@ AC_ARG_ENABLE(unstable-plugins,AS_HELP_STRING([--disable-unstable-plugins],[Buil
 AC_MSG_RESULT($enable_new_plugs)
 if test "$enable_new_plugs" = "yes"; then
 	NEWPLUGINCLUDES=KKEdit/unstable-plugins/*Plugin
+	AC_OUTPUT(KKEdit/unstable-plugins/BrowserPlugin/Makefile KKEdit/unstable-plugins/MacroPlugin/Makefile)
 else
 	NEWPLUGINCLUDES=
 fi
@@ -187,6 +188,6 @@ AC_ARG_WITH(debug_level,AS_HELP_STRING([ --with-debug-level],[Debug level ( 0,1,
 AC_SUBST(with_debug_level)
 AC_MSG_RESULT([Setting debug level to $with_debug_level])
 
-AC_OUTPUT(Makefile KKEdit/app/Makefile KKEdit/plugins/TerminalPane/Makefile KKEdit/plugins/SessionManager/Makefile KKEdit/plugins/FileBrowser/Makefile KKEdit/plugins/ClipboardPlugin/Makefile)
+AC_OUTPUT(Makefile KKEdit/app/Makefile KKEdit/plugins/TerminalPane/Makefile KKEdit/plugins/SessionManager/Makefile KKEdit/plugins/FileBrowser/Makefile KKEdit/plugins/ClipboardPlugin/Makefile )
 
 

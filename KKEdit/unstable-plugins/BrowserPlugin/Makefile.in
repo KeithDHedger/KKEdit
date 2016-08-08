@@ -87,7 +87,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = KKEdit/plugins/BrowserPlugin
+subdir = KKEdit/unstable-plugins/BrowserPlugin
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -266,9 +266,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu KKEdit/plugins/BrowserPlugin/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu KKEdit/unstable-plugins/BrowserPlugin/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu KKEdit/plugins/BrowserPlugin/Makefile
+	  $(AUTOMAKE) --gnu KKEdit/unstable-plugins/BrowserPlugin/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -435,14 +435,14 @@ uninstall-am:
 
 
 all:
-	gcc49 ${EXTRAMAKEFLAGS} $(CONFCXXFLAGS) $(CONFCPPFLAGS) $(CONFLDFLAGS) -fPIC -Wall -g -c $(SRCFILES) `pkg-config --cflags --libs gtk+-$(GTKVERSION).0 gmodule-2.0 glib-2.0 gtksourceview-${GTKVERSION}.0 webkit-1.0 ` -DLOCALEDIR=\"${localedir}\" -DDATADIR=\"${pkgdatadir}\" $(DEVMODE) $(USEGTK3) $(USE290) -DGTK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE -o $(PLUGNAME).o
+	gcc ${EXTRAMAKEFLAGS} $(CONFCXXFLAGS) $(CONFCPPFLAGS) $(CONFLDFLAGS) -fPIC -Wall -g -c $(SRCFILES) $(GLIB_CFLAGS) $(GLIB_LIBS) $(GTK_CFLAGS) $(GTK_LIBS) $(GTKSRC_CFLAGS) $(GTKSRC_LIBS) $(WEBKIT_CFLAGS) $(WEBKIT_LIBS) -DLOCALEDIR=\"${localedir}\" -DDATADIR=\"${pkgdatadir}\" $(DEVMODE) $(USEGTK3) -DGTK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE -o $(PLUGNAME).o
 
-	gcc49 -nodefaultlibs -shared -Wl,-rpath=/usr/local/lib/gcc49,--version-script=exportmap,-soname,$(SONAME).so -o $(SONAME).so $(PLUGNAME).o -lc `pkg-config --libs  webkit-1.0`
+	gcc -nodefaultlibs -shared -Wl,-rpath=/usr/local/lib/gcc49,--version-script=exportmap,-soname,$(SONAME).so -o $(SONAME).so $(PLUGNAME).o -lc
 
 clean: distclean
 
 distclean:
-	rm -f *.o *.so||true
+	rm -f *.o *.so Makefile||true
 
 install: all
 	mkdir -vp $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES
