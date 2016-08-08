@@ -293,7 +293,7 @@ int				listFunction=0;
 GtkWidget		*funcListDrop=NULL;
 
 char			*functionSearchText=NULL;
-char			*thePage=NULL;
+VISIBLE char			*thePage=NULL;
 char			*htmlFile=NULL;
 char			*htmlURI=NULL;
 char			*tmpFolderName=NULL;
@@ -1310,7 +1310,7 @@ void catchSignal(int signal)
     exit(EXIT_FAILURE);
 }
  
-GtkWidget *createNewBox(int orient,bool homog,int spacing)
+VISIBLE GtkWidget *createNewBox(int orient,bool homog,int spacing)
 {
 	GtkWidget	*retwidg=NULL;
 
@@ -1380,7 +1380,7 @@ GtkToolItem *createNewToolItem(const char *stock,const char *label)
 	return(button);
 }
 
-GtkWidget *createNewStockButton(const char *stock,const char *label)
+VISIBLE GtkWidget *createNewStockButton(const char *stock,const char *label)
 {
 	GtkWidget	*button;
 #ifdef _USEGTK3_

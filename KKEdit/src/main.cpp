@@ -518,7 +518,7 @@ void appStart(GApplication  *application,gpointer data)
 		gtk_combo_box_text_append_text((GtkComboBoxText*)replaceDropBox,(const char*)g_slist_nth_data(replaceList,j));
 
 #ifdef _BUILDDOCVIEWER_
-	buildGtkDocViewer();
+//	buildGtkDocViewer();
 #endif
 
 	gtk_window_get_size((GtkWindow*)mainWindow,&w,&h);

@@ -29,6 +29,7 @@ int	itemsReplaced=-1;
 
 void webKitGoBack(GtkWidget *widget,gpointer data)
 {
+printf("XXXXXXXXX\n");
 	webkit_web_view_go_back((WebKitWebView*)data);
 }
 
@@ -64,7 +65,7 @@ PROTECTED void showDocView(int howtodisplay,char *text,const char *title)
 					else
 						return;
 				}
-			webkit_web_view_load_uri(webView,thePage);
+			webkit_web_view_load_uri(webView,thePage);		
 		}
 
 	if(howtodisplay==USEFILE)
@@ -223,7 +224,7 @@ VISIBLE bool searchGtkDocs(GtkWidget *widget,gpointer data)
 		}
 	if((selection!=NULL) &&(data==NULL))
 		{
-			ERRDATA debugFree(&selection);
+			//ERRDATA debugFree(&selection);
 		}
 
 	return(retval);

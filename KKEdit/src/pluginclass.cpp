@@ -31,8 +31,6 @@ PluginClass::PluginClass(bool loadPlugs)
 	sinkReturn=asprintf(&plugFolderPaths[GLOBALPLUGS],"%s",GPLUGSFOLDER);
 	sinkReturn=asprintf(&plugFolderPaths[LOCALPLUGS],"%s/%s/plugins-gtk",getenv("HOME"),APPFOLDENAME);
 
-printf("----%s-\n-%s--\n",plugFolderPaths[GLOBALPLUGS],plugFolderPaths[LOCALPLUGS]);
-
 	this->doLoadPlugs=loadPlugs;
 	this->loadPlugins();
 
