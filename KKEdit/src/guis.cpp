@@ -944,7 +944,7 @@ void buildKeys()
 //hot modifier
 //hotkey strings
 //callbacks
-enum {MENUNEW=0,MENUOPEN,MENUOPENHEX,MENUNEWADMIN,MENUNEWED,MENUMANED,MENUDOXY,MENURECENT,MENUSAVE,MENUSAVEAS,MENUSAVEALL,MENUSAVESESSION};
+enum {MENUNEW=0,MENUOPEN,MENUOPENHEX,MENUNEWADMIN,MENUNEWED,MENUMANED,MENUDOXY,MENURECENT,MENUSAVE,MENUSAVEAS,MENUSAVEALL,MENUSAVESESSION,MENURESTORESESSION,MENUPRINT,MENUCLOSE,MENUCLOSEALL,MENUREVERT,MENUQUIT};
 
 struct	menuDataStruct
 {
@@ -959,45 +959,32 @@ struct	menuDataStruct
 	
 };
 
-menuDataStruct	menuData[]={
-					{MENU_NEW_LABEL,GTK_STOCK_NEW,GDK_KEY_N,GDK_CONTROL_MASK,"Ctrl+N",(void*)&newFile,NEWMENUNAME,NULL},
-					{MENU_OPEN_LABEL,GTK_STOCK_OPEN,GDK_KEY_O,GDK_CONTROL_MASK,"Ctrl+O",(void*)&doOpenFile,OPENMENUNAME,NULL},
-					{MENU_OPEN_AS_HEXDUMP_LABEL,GTK_STOCK_OPEN,0,0,NULL,(void*)&openAsHexDump,HEXDUMPMENUNAME,NULL},
-					{MENU_NEW_ADMIN_LABEL,ROOTEDITPNG,0,0,NULL,(void*)&newEditor,NEWADMINMENUNAME,(gpointer)NEWROOTEDITOR},
-					{MENU_NEW_EDITOR_LABEL,MENUKKEDITPNG,0,0,NULL,(void*)&newEditor,NEWEDITORMENUNAME,(gpointer)NEWEDITOR},
-					{MENU_MANPAGE_EDITOR_LABEL,MANPAGEEDITPNG,0,0,NULL,(void*)&newEditor,MANEDITORMENUNAME,(gpointer)NEWMANPAGEEDITOR},
-					{MENU_BUILD_DOCS_LABEL,GTK_STOCK_COPY,0,0,NULL,(void*)&doDoxy,DOXYBUILDMENUNAME,(gpointer)1},
-					{MENU_RECENT_FILES_LABEL,NULL,0,0,NULL,NULL,RECENTMENUNAME,NULL},
-					{MENU_SAVE_LABEL,GTK_STOCK_SAVE,GDK_KEY_S,GDK_CONTROL_MASK,"Ctrl+S",(void*)&saveFile,SAVEMENUNAME,NULL},
-					{MENU_SAVE_AS_LABEL,GTK_STOCK_SAVE_AS,GDK_KEY_S,GDK_CONTROL_MASK+GDK_SHIFT_MASK,"Shift+Ctrl+S",(void*)&saveFile,SAVEASMENUNAME,(void*)1},
-					{MENU_SAVE_ALL_LABEL,GTK_STOCK_SAVE,0,0,NULL,(void*)&doSaveAll,SAVEALLMENUNAME,NULL},
-					{MENU_SAVE_SESSION_LABEL,GTK_STOCK_SAVE,0,0,NULL,(void*)&saveSession,SAVESESSIONMENUNAME,NULL},
-//					{MENU_NEW_LABEL,GTK_STOCK_NEW,GDK_KEY_N,GDK_CONTROL_MASK,"Ctrl+N",(void*)&newFile,NEWMENUNAME},
-					{NULL,NULL,0,0,NULL,NULL,NULL}
-//										{GDK_KEY_W,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newFile},
-//										{GDK_KEY_Q,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newFile},
-//										{0,0,0},
-//										{0,0,0},
-//										{GDK_KEY_Left,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newFile},
-//										{GDK_KEY_Right,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newFile},
-//										{GDK_KEY_H,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newFile},
-//										{GDK_KEY_P,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newFile},
-							};
+menuDataStruct	menuData[]=
+	{
+		{MENU_NEW_LABEL,GTK_STOCK_NEW,GDK_KEY_N,GDK_CONTROL_MASK,"Ctrl+N",(void*)&newFile,NEWMENUNAME,NULL},
+		{MENU_OPEN_LABEL,GTK_STOCK_OPEN,GDK_KEY_O,GDK_CONTROL_MASK,"Ctrl+O",(void*)&doOpenFile,OPENMENUNAME,NULL},
+		{MENU_OPEN_AS_HEXDUMP_LABEL,GTK_STOCK_OPEN,0,0,NULL,(void*)&openAsHexDump,HEXDUMPMENUNAME,NULL},
+		{MENU_NEW_ADMIN_LABEL,ROOTEDITPNG,0,0,NULL,(void*)&newEditor,NEWADMINMENUNAME,(gpointer)NEWROOTEDITOR},
+		{MENU_NEW_EDITOR_LABEL,MENUKKEDITPNG,0,0,NULL,(void*)&newEditor,NEWEDITORMENUNAME,(gpointer)NEWEDITOR},
+		{MENU_MANPAGE_EDITOR_LABEL,MANPAGEEDITPNG,0,0,NULL,(void*)&newEditor,MANEDITORMENUNAME,(gpointer)NEWMANPAGEEDITOR},
+		{MENU_BUILD_DOCS_LABEL,GTK_STOCK_COPY,0,0,NULL,(void*)&doDoxy,DOXYBUILDMENUNAME,(gpointer)1},
+		{MENU_RECENT_FILES_LABEL,NULL,0,0,NULL,NULL,RECENTMENUNAME,NULL},
+		{MENU_SAVE_LABEL,GTK_STOCK_SAVE,GDK_KEY_S,GDK_CONTROL_MASK,"Ctrl+S",(void*)&saveFile,SAVEMENUNAME,NULL},
+		{MENU_SAVE_AS_LABEL,GTK_STOCK_SAVE_AS,GDK_KEY_S,GDK_CONTROL_MASK+GDK_SHIFT_MASK,"Shift+Ctrl+S",(void*)&saveFile,SAVEASMENUNAME,(void*)1},
+		{MENU_SAVE_ALL_LABEL,GTK_STOCK_SAVE,0,0,NULL,(void*)&doSaveAll,SAVEALLMENUNAME,NULL},
+		{MENU_SAVE_SESSION_LABEL,GTK_STOCK_SAVE,0,0,NULL,(void*)&saveSession,SAVESESSIONMENUNAME,NULL},
+		{MENU_RESTORE_SESSION_LABEL,GTK_STOCK_OPEN,0,0,NULL,(void*)&restoreSession,RESTORESESSIONMENUNAME,NULL},
+		{MENU_PRINT_LABEL,GTK_STOCK_PRINT,GDK_KEY_P,GDK_CONTROL_MASK,"Ctrl+P",(void*)&printFile,PRINTMENUNAME,NULL},
+		{MENU_CLOSE_LABEL,GTK_STOCK_CLOSE,GDK_KEY_W,GDK_CONTROL_MASK,"Ctrl+W",(void*)&closeTab,CLOSEMENUNAME,NULL},
+		{MENU_CLOSE_ALL_LABEL,GTK_STOCK_CLOSE,0,0,NULL,(void*)&closeAllTabs,CLOSEALLMENUNAME,NULL},
+		{MENU_REVERT_TO_SAVED_LABEL,GTK_STOCK_REVERT_TO_SAVED,0,0,NULL,(void*)&reloadFile,REVERTMENUNAME,NULL},
+		{MENU_QUIT_LABEL,GTK_STOCK_QUIT,GDK_KEY_Q,GDK_CONTROL_MASK,"Ctrl+Q",(void*)&doShutdown,QUITMENUNAME,NULL},
 
-/*
-			case PIXMAPMENU:
-#ifdef _USEGTK3_
-				widg=gtk_menu_item_new_with_mnemonic(menulabel);
-#else
-				widg=gtk_image_menu_item_new_with_mnemonic(menulabel);
-				image=gtk_image_new_from_file(stocklabel);
-				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
-#endif
-				break;
+		{NULL,NULL,0,0,NULL,NULL,NULL}
+	};
 
-*/
+
 GtkWidget* newMenuItem(unsigned menunumber,GtkWidget *parent)
-//GtkWidget* newMenuItem(const char* menuname,const char* stockid,int shortnum,const char* hotkey)
 {
 	GtkWidget	*menu;
 #ifdef _USEGTK3_
@@ -1673,32 +1660,32 @@ useMenuIcons=true;
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //save session
-	menuitem=newMenuItem(MENUSAVESESSION,menu);
+	menuitem=newImageMenuItem(MENUSAVESESSION,menu);
 	//menuitem=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveSession,0,SAVESESSIONMENUNAME,IMAGEMENU,MENU_SAVE_SESSION_LABEL,NULL,false);
 //restore session
-	menuitem=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)restoreSession,0,RESTORESESSIONMENUNAME,IMAGEMENU,MENU_RESTORE_SESSION_LABEL,NULL,false);
+	menuitem=newImageMenuItem(MENURESTORESESSION,menu);
 //printfile
-	printMenu=makeMenuItem(GTK_STOCK_PRINT,menu,(void*)printFile,'P',PRINTMENUNAME,STOCKMENU,PRINT_LABEL,NULL,false);
+	printMenu=newMenuItem(MENUPRINT,menu);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //close
-	closeMenu=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeTab,'W',CLOSEMENUNAME,STOCKMENU,CLOSE_LABEL,NULL,false);
+	closeMenu=newMenuItem(MENUCLOSE,menu);
 //close-all
-	closeAllMenu=makeMenuItem(GTK_STOCK_CLOSE,menu,(void*)closeAllTabs,0,CLOSEALLMENUNAME,IMAGEMENU,MENU_CLOSE_ALL_LABEL,NULL,false);
+	closeAllMenu=newImageMenuItem(MENUCLOSEALL,menu);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //reload file
-	revertMenu=makeMenuItem(GTK_STOCK_REVERT_TO_SAVED,menu,(void*)reloadFile,0,REVERTMENUNAME,STOCKMENU,REVERT_TO_SAVED_LABEL,NULL,false);
+	revertMenu=newMenuItem(MENUREVERT,menu);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //quit
-	menuitem=makeMenuItem(GTK_STOCK_QUIT,menu,(void*)doShutdown,'Q',QUITMENUNAME,STOCKMENU,QUIT_LABEL,NULL,false);
-
+	//menuitem=makeMenuItem(GTK_STOCK_QUIT,menu,(void*)doShutdown,'Q',QUITMENUNAME,STOCKMENU,QUIT_LABEL,NULL,false);
+	menuitem=newMenuItem(MENUQUIT,menu);
 //edit menu
 	editMenu=gtk_menu_item_new_with_label(MENU_EDIT_MENU_LABEL);
 	gtk_menu_item_set_use_underline((GtkMenuItem*)editMenu,true);

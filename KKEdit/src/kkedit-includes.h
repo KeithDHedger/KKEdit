@@ -95,6 +95,9 @@
 
 #endif
 
+//button labels
+#define CLOSE_LABEL gettext("_Close")
+
 //menus labels
 //file menu
 #define MENU_FILE_MENU_LABEL gettext("_File")
@@ -111,11 +114,11 @@
 #define MENU_SAVE_ALL_LABEL gettext("Save A_ll")
 #define MENU_SAVE_SESSION_LABEL gettext("Sa_ve Session")
 #define MENU_RESTORE_SESSION_LABEL gettext("Res_tore Session")
-#define PRINT_LABEL gettext("_Print...")
-#define CLOSE_LABEL gettext("_Close")
+#define MENU_PRINT_LABEL gettext("_Print...")
+#define MENU_CLOSE_LABEL gettext("_Close")
 #define MENU_CLOSE_ALL_LABEL gettext("Close All Ta_bs")
-#define REVERT_TO_SAVED_LABEL gettext("Re_vert")
-#define QUIT_LABEL gettext("_Quit")
+#define MENU_REVERT_TO_SAVED_LABEL gettext("Re_vert")
+#define MENU_QUIT_LABEL gettext("_Quit")
 
 //edit menu
 #define MENU_EDIT_MENU_LABEL gettext("_Edit")
