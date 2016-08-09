@@ -938,6 +938,89 @@ void buildKeys()
 	ERRDATA
 }
 
+//MENU_NEW_LABEL gettext("_New")
+//#define GTK_STOCK_NEW "document-new"
+//hot key
+//hot modifier
+//hotkey strings
+//callbacks
+enum {MENUDATALABEL=0,MENUDATAID,MENUDATAKEY,MENUDATAMOD,MENUDATAHOTSTR,MENUDATACB};
+
+struct	menuDataStruct
+{
+	const char		*menuLabel;
+	const char		*stockID;
+	char			key;
+	long			mod;
+	const char		*hotStr;
+	void			*cb;
+};
+
+menuDataStruct	menuData[]={
+							{MENU_NEW_LABEL,GTK_STOCK_NEW,GDK_KEY_N,GDK_CONTROL_MASK,"Ctrl+N",(void*)&newFile},
+							{NULL,NULL,0,0,NULL,NULL}
+//										{GDK_KEY_W,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newFile},
+//										{GDK_KEY_Q,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newFile},
+//										{0,0,0},
+//										{0,0,0},
+//										{GDK_KEY_Left,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newFile},
+//										{GDK_KEY_Right,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newFile},
+//										{GDK_KEY_H,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newFile},
+//										{GDK_KEY_P,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newFile},
+							};
+
+
+GtkWidget* newMenuItem(unsigned menunumber,GtkWidget *parent)
+//GtkWidget* newMenuItem(const char* menuname,const char* stockid,int shortnum,const char* hotkey)
+{
+	GtkWidget	*menu;
+#ifdef _USEGTK3_
+	char		*menulabel;
+	GtkWidget	*menuhbox;
+	GtkWidget	*pad;
+	GtkWidget	*image;
+	GtkWidget	*ritelabel;
+
+	menu=gtk_menu_item_new_with_mnemonic(menuData[menunumber].menuLabel);
+	if(useMenuIcons==true)
+		{
+			gtk_widget_destroy(gtk_bin_get_child(GTK_BIN(menu)));
+			menuhbox=createNewBox(NEWHBOX,false,0);
+			pad=createNewBox(NEWHBOX,false,0);
+
+			image=gtk_image_new_from_icon_name(menuData[menunumber].stockID,GTK_ICON_SIZE_MENU);
+			gtk_box_pack_start((GtkBox*)menuhbox,image,false,false,0);
+
+			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
+			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(menuData[menunumber].menuLabel),false,false,0);
+			gtk_box_pack_start(GTK_BOX(menuhbox),pad,true,true,0);
+
+			ritelabel=gtk_label_new(menuData[menunumber].hotStr);
+			gtk_widget_set_sensitive(ritelabel,false);
+			gtk_box_pack_start(GTK_BOX(menuhbox),ritelabel,false,false,8);
+
+			gtk_container_add(GTK_CONTAINER(menu),menuhbox);
+		}
+//	else
+//		{
+			if(menuData[menunumber].key>0)
+				gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accgroup,menuData[menunumber].key,(GdkModifierType)menuData[menunumber].mod,GTK_ACCEL_VISIBLE);
+//		}
+//{GDK_KEY_N,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newPage},
+#else
+	menu=gtk_image_menu_item_new_from_stock(menuData[menunumber].stockID,NULL);
+	if(menuData[menunumber].key>0)
+		gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accgroup,menuData[menunumber].key,(GdkModifierType)menuData[menunumber].mod,GTK_ACCEL_VISIBLE);
+#endif
+
+	gtk_menu_shell_append(GTK_MENU_SHELL(parent),menu);
+	g_signal_connect(G_OBJECT(menu),"activate",G_CALLBACK(menuData[menunumber].cb),NULL);
+
+	return(menu);
+}
+
+
+
 GtkWidget	*makeMenuItem(const char *stocklabel,GtkWidget *parent,void *function,char hotkey,const char *name,int setimage,const char *menulabel,void *userdata,bool toggle)
 {
 	ERRDATA
@@ -949,7 +1032,10 @@ GtkWidget	*makeMenuItem(const char *stocklabel,GtkWidget *parent,void *function,
 	switch(setimage)
 		{
 			case STOCKMENU:
-				widg=createNewStockMenuItem(stocklabel,menulabel);
+			//	if(useMenuIcons==true)
+			//		widg=newMenuItem(menulabel,stocklabel,0,"Shift+Ctrl+N");
+			//	else
+					widg=createNewStockMenuItem(stocklabel,menulabel);
 				break;
 
 			case IMAGEMENU:
@@ -1431,7 +1517,13 @@ void buildMainGui(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMenu),menu);
 
 //new
-	menuItemNew=makeMenuItem(GTK_STOCK_NEW,menu,(void*)newFile,'N',NEWMENUNAME,STOCKMENU,MENU_NEW_LABEL,NULL,false);
+
+useMenuIcons=true;
+//{GDK_KEY_N,GDK_CONTROL_MASK,"Ctrl+N",(long)&newFile},
+menuItemNew=newMenuItem(0,menu);
+	//gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuItemNew);
+//	menuItemNew=makeMenuItem(GTK_STOCK_NEW,menu,(void*)newFile,'N',NEWMENUNAME,STOCKMENU,MENU_NEW_LABEL,NULL,false);
+useMenuIcons=false;
 //open
 	menuItemOpen=makeMenuItem(GTK_STOCK_OPEN,menu,(void*)doOpenFile,'O',OPENMENUNAME,STOCKMENU,MENU_OPEN_LABEL,NULL,false);
 //open as hexdump

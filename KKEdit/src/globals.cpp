@@ -176,6 +176,7 @@ GtkWidget		*terminalBox;
 GtkWidget		*rootCommandBox;
 GtkWidget		*defaultBrowserBox;
 char			*browserCommand=strdup("firefox");
+bool			useMenuIcons=false;
 
 #ifdef _USEGTK3_
 GtkStyleProvider	*provider;
