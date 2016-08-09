@@ -41,4 +41,5 @@ void buildGtkDocViewer(void);
 #endif
 void setUpToolBar(void);
 char *makeToolBarList(void);
+void doPrefs(GtkWidget *widget,gpointer data);
 #endif

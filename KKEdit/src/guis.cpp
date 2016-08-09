@@ -944,7 +944,7 @@ void buildKeys()
 //hot modifier
 //hotkey strings
 //callbacks
-enum {MENUNEW=0,MENUOPEN,MENUOPENHEX,MENUNEWADMIN,MENUNEWED,MENUMANED,MENUDOXY,MENURECENT,MENUSAVE,MENUSAVEAS,MENUSAVEALL,MENUSAVESESSION,MENURESTORESESSION,MENUPRINT,MENUCLOSE,MENUCLOSEALL,MENUREVERT,MENUQUIT};
+enum {MENUNEW=0,MENUOPEN,MENUOPENHEX,MENUNEWADMIN,MENUNEWED,MENUMANED,MENUDOXY,MENURECENT,MENUSAVE,MENUSAVEAS,MENUSAVEALL,MENUSAVESESSION,MENURESTORESESSION,MENUPRINT,MENUCLOSE,MENUCLOSEALL,MENUREVERT,MENUQUIT,MENUUNDO,MENUREDO,MENUUNDOALL,MENUREDOALL,MENUCUT,MENUCOPY,MENUPASTE,MENUFIND,MENUNEXT,MENUSORTTABS,MENUSHOWTABS,MENUSELECTTAB,MENUPREFS,MENUPLUGPREFS};
 
 struct	menuDataStruct
 {
@@ -961,6 +961,7 @@ struct	menuDataStruct
 
 menuDataStruct	menuData[]=
 	{
+//file
 		{MENU_NEW_LABEL,GTK_STOCK_NEW,GDK_KEY_N,GDK_CONTROL_MASK,"Ctrl+N",(void*)&newFile,NEWMENUNAME,NULL},
 		{MENU_OPEN_LABEL,GTK_STOCK_OPEN,GDK_KEY_O,GDK_CONTROL_MASK,"Ctrl+O",(void*)&doOpenFile,OPENMENUNAME,NULL},
 		{MENU_OPEN_AS_HEXDUMP_LABEL,GTK_STOCK_OPEN,0,0,NULL,(void*)&openAsHexDump,HEXDUMPMENUNAME,NULL},
@@ -979,7 +980,25 @@ menuDataStruct	menuData[]=
 		{MENU_CLOSE_ALL_LABEL,GTK_STOCK_CLOSE,0,0,NULL,(void*)&closeAllTabs,CLOSEALLMENUNAME,NULL},
 		{MENU_REVERT_TO_SAVED_LABEL,GTK_STOCK_REVERT_TO_SAVED,0,0,NULL,(void*)&reloadFile,REVERTMENUNAME,NULL},
 		{MENU_QUIT_LABEL,GTK_STOCK_QUIT,GDK_KEY_Q,GDK_CONTROL_MASK,"Ctrl+Q",(void*)&doShutdown,QUITMENUNAME,NULL},
-
+//edit
+		{MENU_UNDO_LABEL,GTK_STOCK_UNDO,GDK_KEY_Z,GDK_CONTROL_MASK,"Ctrl+Z",(void*)&undo,UNDOMENUNAME,NULL},
+		{MENU_REDO_LABEL,GTK_STOCK_REDO,GDK_KEY_Z,GDK_CONTROL_MASK+GDK_SHIFT_MASK,"Shift+Ctrl+Z",(void*)&redo,REDOMENUNAME,NULL},
+		{MENU_UNDO_ALL_LABEL,GTK_STOCK_UNDO,0,0,NULL,(void*)&unRedoAll,UNDOALLMENUNAME,(void*)0},
+		{MENU_REDO_ALL_LABEL,GTK_STOCK_REDO,0,0,NULL,(void*)&unRedoAll,REDOALLMENUNAME,(void*)1},
+		{MENU_CUT_LABEL,GTK_STOCK_CUT,GDK_KEY_X,GDK_CONTROL_MASK,"Ctrl+X",(void*)&cutToClip,CUTMENUNAME,NULL},
+		{MENU_COPY_LABEL,GTK_STOCK_COPY,GDK_KEY_C,GDK_CONTROL_MASK,"Ctrl+C",(void*)&copyToClip,COPYMENUNAME,NULL},
+		{MENU_PASTE_LABEL,GTK_STOCK_PASTE,GDK_KEY_V,GDK_CONTROL_MASK,"Ctrl+V",(void*)&pasteFromClip,PASTEMENUNAME,NULL},
+//find
+		{MENU_FIND_LABEL,GTK_STOCK_FIND,GDK_KEY_F,GDK_CONTROL_MASK,"Ctrl+F",(void*)&find,FINDMENUNAME,NULL},
+		{MENU_FIND_NEXT_LABEL,GTK_STOCK_GO_FORWARD,GDK_KEY_G,GDK_CONTROL_MASK,"Ctrl+G",(void*)&findNext,FINDNEXTMENUNAME,NULL},
+//tabs
+		{MENU_SORT_TABS_LABEL,GTK_STOCK_SORT_ASCENDING,0,0,NULL,(void*)&sortTabs,SORTTABSMENUNAME,NULL},
+		{MENU_SHOW_ALL_TABS_LABEL,GTK_STOCK_ADD,0,0,NULL,(void*)&showAllTabs,SHOWTABSMENUNAME,NULL},
+		{MENU_SELECT_TAB_LABEL,GTK_STOCK_EDIT,0,0,NULL,NULL,SELECTTABMENUNAME,NULL},
+//prefs
+		{MENU_PREFERENCES_LABEL,GTK_STOCK_PREFERENCES,0,0,NULL,(void*)&doPrefs,PREFSMENUNAME,NULL},
+		{MENU_PLUG_PREFS_LABEL,GTK_STOCK_PREFERENCES,0,0,NULL,(void*)&doPlugPrefs,PLUGPREFSMENUNAME,NULL},
+//view
 		{NULL,NULL,0,0,NULL,NULL,NULL}
 	};
 
@@ -1067,7 +1086,8 @@ GtkWidget* newImageMenuItem(unsigned menunumber,GtkWidget *parent)
 		gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accgroup,menuData[menunumber].key,(GdkModifierType)menuData[menunumber].mod,GTK_ACCEL_VISIBLE);
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(parent),menu);
-	g_signal_connect(G_OBJECT(menu),"activate",G_CALLBACK(menuData[menunumber].cb),menuData[menunumber].userData);
+	if(menuData[menunumber].cb!=NULL)
+		g_signal_connect(G_OBJECT(menu),"activate",G_CALLBACK(menuData[menunumber].cb),menuData[menunumber].userData);
 	gtk_widget_set_name(menu,menuData[menunumber].widgetName);
 
 	return(menu);
@@ -1692,51 +1712,50 @@ useMenuIcons=true;
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(editMenu),menu);
 //undo
-	undoMenu=makeMenuItem(GTK_STOCK_UNDO,menu,(void*)undo,'Z',UNDOMENUNAME,STOCKMENU,MENU_UNDO_LABEL,NULL,false);
+	undoMenu=newMenuItem(MENUUNDO,menu);
+//	undoMenu=makeMenuItem(GTK_STOCK_UNDO,menu,(void*)undo,'Z',UNDOMENUNAME,STOCKMENU,MENU_UNDO_LABEL,NULL,false);
 //redo
-	redoMenu=makeMenuItem(GTK_STOCK_REDO,menu,(void*)redo,-'Z',REDOMENUNAME,STOCKMENU,MENU_REDO_LABEL,NULL,false);
+	redoMenu=newMenuItem(MENUREDO,menu);
 //undoall
-	undoAllMenu=makeMenuItem(GTK_STOCK_UNDO,menu,(void*)unRedoAll,0,UNDOALLMENUNAME,IMAGEMENU,MENU_UNDO_ALL_LABEL,(void*)0,false);
+	undoAllMenu=newImageMenuItem(MENUUNDOALL,menu);
 //redoall
-	redoAllMenu=makeMenuItem(GTK_STOCK_REDO,menu,(void*)unRedoAll,0,REDOALLMENUNAME,IMAGEMENU,MENU_REDO_ALL_LABEL,(void*)1,false);
+	redoAllMenu=newImageMenuItem(MENUREDOALL,menu);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //cut
-	cutMenu=makeMenuItem(GTK_STOCK_CUT,menu,(void*)cutToClip,'X',CUTMENUNAME,STOCKMENU,MENU_CUT_LABEL,NULL,false);
+	cutMenu=newMenuItem(MENUCUT,menu);
 //copy
-	copyMenu=makeMenuItem(GTK_STOCK_COPY,menu,(void*)copyToClip,'C',COPYMENUNAME,STOCKMENU,MENU_COPY_LABEL,NULL,false);
+	copyMenu=newMenuItem(MENUCOPY,menu);
 //paste
-	pasteMenu=makeMenuItem(GTK_STOCK_PASTE,menu,(void*)pasteFromClip,'V',PASTEMENUNAME,STOCKMENU,MENU_PASTE_LABEL,NULL,false);
+	pasteMenu=newMenuItem(MENUPASTE,menu);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
 //find
-	menuitem=makeMenuItem(GTK_STOCK_FIND,menu,(void*)find,'F',FINDMENUNAME,STOCKMENU,MENU_FIND_LABEL,NULL,false);
+	menuitem=newMenuItem(MENUFIND,menu);
 //find next
-	menuitem=makeMenuItem(GTK_STOCK_GO_FORWARD,menu,(void*)findNext,'g',FINDNEXTMENUNAME,IMAGEMENU,MENU_FIND_NEXT_LABEL,NULL,false);
+	menuitem=newImageMenuItem(MENUNEXT,menu);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //sort
-	sortTabsMenu=makeMenuItem(GTK_STOCK_SORT_ASCENDING,menu,(void*)sortTabs,0,SORTTABSMENUNAME,IMAGEMENU,MENU_SORT_TABS_LABEL,NULL,false);
+	sortTabsMenu=newImageMenuItem(MENUSORTTABS,menu);
 //show all tabs
-	showAllTabsMenu=makeMenuItem(GTK_STOCK_ADD,menu,(void*)showAllTabs,0,SORTTABSMENUNAME,IMAGEMENU,MENU_SHOW_ALL_TABS_LABEL,NULL,false);
+	showAllTabsMenu=newImageMenuItem(MENUSHOWTABS,menu);
 //jump to tab
-	viewTabMenu=createNewImageMenuItem(GTK_STOCK_EDIT,MENU_SELECT_TAB_LABEL,true);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),viewTabMenu);
+	viewTabMenu=newImageMenuItem(MENUSELECTTAB,menu);
 	rebuildTabsMenu();
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //prefs
-	menuitem=makeMenuItem(GTK_STOCK_PREFERENCES,menu,(void*)doPrefs,0,PREFSMENUNAME,STOCKMENU,MENU_PREFERENCES_LABEL,NULL,false);
+	menuitem=newImageMenuItem(MENUPREFS,menu);
 //plugs
-	menuitem=makeMenuItem(GTK_STOCK_PREFERENCES,menu,(void*)doPlugPrefs,0,PLUGPREFSMENUNAME,IMAGEMENU,MENU_PLUG_PREFS_LABEL,NULL,false);
+	menuitem=newImageMenuItem(MENUPLUGPREFS,menu);
 
 //view menu
 	viewMenu=gtk_menu_item_new_with_label(MENU_VIEW_MENU_LABEL);

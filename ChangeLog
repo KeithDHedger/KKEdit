@@ -1,5 +1,6 @@
 0.3.4
-Done file menu.
+Done Edit menu.
+Done File menu.
 Tweaked *.am files for plugs.
 Fixed occasional error when loading session.
 Fixed Session plugin for *bsd*.

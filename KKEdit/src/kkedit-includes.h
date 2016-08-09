@@ -90,7 +90,7 @@
 #define GTK_STOCK_OPEN_LABEL gettext("_Open")
 #define GTK_STOCK_SELECT_COLOR gettext("Select Colour")
 #define GTK_STOCK_APPLY gettext("_Apply")
-#define GTK_STOCK_EDIT gettext("_Edit")
+#define GTK_STOCK_EDIT "accessories-text-editor"
 #define GTK_STOCK_OK gettext("_OK")
 
 #endif

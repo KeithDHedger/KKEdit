@@ -55,6 +55,7 @@
 #define CLOSEALLMENUNAME "closeallmenu"
 #define SORTTABSMENUNAME "sorttabsmenu"
 #define SHOWTABSMENUNAME "showalltabsmenu"
+#define SELECTTABMENUNAME "selecttabsmenu"
 #define REVERTMENUNAME "revertmenu"
 #define QUITMENUNAME "quitmenu"
 #define UNDOMENUNAME "undomenu"
@@ -87,7 +88,6 @@
 #define ABOUTMENUNAME "aboutmenu"
 #define HELPMENUNAME "helpmenu"
 #define GETPLUGSMENUNAME "getplugsmenu"
-#define SELECTTABMENUNAME "selecttabmenu"
 
 #define VIEWSHOWLINENUMERS "viewshowlinenumbers"
 #define VIEWAUTOINDENT "viewautoindent"
