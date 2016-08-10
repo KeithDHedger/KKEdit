@@ -85,8 +85,10 @@
 #define SEARCHDOXYMENUNAME "searchdoxymenu"
 #define GOBACKMENUNAME "gobackmenu"
 #define GOFORWARDMENUNAME "goforwardmenu"
+#define EXTOOLSMENUNAME "extoolsmenuname"
 #define ABOUTMENUNAME "aboutmenu"
-#define HELPMENUNAME "helpmenu"
+#define HELPLOCALMENUNAME "helplocalmenu"
+#define HELPONLINEMENUNAME "helponlinemenu"
 #define GETPLUGSMENUNAME "getplugsmenu"
 
 #define VIEWSHOWLINENUMERS "viewshowlinenumbers"
