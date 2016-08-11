@@ -260,11 +260,7 @@ extern "C" int addToGui(gpointer data)
 	GtkWidget*	menu;
 	plugData*	plugdata=(plugData*)data;
 #ifdef _USEGTK3_
-//#ifdef _VTEVERS291_
 	GdkRGBA		colour;
-//#else
-//	GdkColor	colour;
-//#endif
 #else
 	GdkColor	colour;
 #endif

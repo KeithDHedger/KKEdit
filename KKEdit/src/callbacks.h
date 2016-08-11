@@ -80,5 +80,6 @@ void markUndo(GtkSourceUndoManager *manager,pageStruct *page);
 void markRedo(GtkSourceUndoManager *manager,pageStruct *page);
 void markDirty(GtkTextBuffer *textbuffer,pageStruct *page);
 void realCloseTab(GtkNotebook *notebook,GtkWidget *child,guint page_num,gpointer user_data);
+void doTabMenu(GtkWidget *widget,gpointer user_data);
 
 #endif

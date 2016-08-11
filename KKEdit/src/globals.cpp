@@ -21,7 +21,7 @@
 #include "kkedit-includes.h"
 //#include "internet.h"
 
-const char		*thanks[]={
+const char			*thanks[]={
 								"Big thanks to Sadi Yumuşak and Thanh for all their help.",
 //								DIALOG_ABOUT_MORE_LABEL
 //								"XDecorations\nhttp://khapplications.darktech.org/pages/xdecorations/xdecorations.html\n",
@@ -33,150 +33,151 @@ const char		*thanks[]={
 //								"Clipboard Viewer\nhttp://khapplications.darktech.org/pages/clipviewer/clip.html"
 							};
 
-const char		*authorskk[]={"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,thanks[0],moreapps[0],moreapps[1],moreapps[2],moreapps[3],moreapps[4],moreapps[5],moreapps[6],moreapps[7],moreapps[8],moreapps[9],NULL};
-
-GApplication	*mainApp;
-bool			autoSeleced=false;
-bool			fromGOpen=false;
-char			*prefsFolder=NULL;
+const char			*authorskk[]={"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,thanks[0],moreapps[0],moreapps[1],moreapps[2],moreapps[3],moreapps[4],moreapps[5],moreapps[6],moreapps[7],moreapps[8],moreapps[9],NULL};
 
 //app
+GApplication		*mainApp;
+bool				autoSeleced=false;
+bool				fromGOpen=false;
+char				*prefsFolder=NULL;
+GtkRecentManager	*recentMan=NULL;
+
 //main mainWindow
-GtkWidget		*mainWindow=NULL;
-GtkWidget		*menuBar=NULL;
-GtkToolbar		*toolBar;
-GtkWidget		*statusBarMenu=NULL;
-GtkNotebook		*mainNotebook=NULL;
+GtkWidget			*mainWindow=NULL;
+GtkWidget			*menuBar=NULL;
+GtkToolbar			*toolBar;
+GtkWidget			*statusBarMenu=NULL;
+GtkNotebook			*mainNotebook=NULL;
 
 //file menu
-GtkWidget		*fileMenu;
-GtkWidget		*menuItemNew=NULL;
-GtkWidget		*menuItemOpen=NULL;
-GtkWidget		*saveMenu;
-GtkWidget		*saveAsMenu;
-GtkWidget		*saveAllMenu;
-GtkWidget		*closeMenu;
-GtkWidget		*closeAllMenu;
-GtkWidget		*revertMenu;
-GtkWidget		*printMenu;
+GtkWidget			*fileMenu;
+GtkWidget			*menuItemNew=NULL;
+GtkWidget			*menuItemOpen=NULL;
+GtkWidget			*saveMenu;
+GtkWidget			*saveAsMenu;
+GtkWidget			*saveAllMenu;
+GtkWidget			*closeMenu;
+GtkWidget			*closeAllMenu;
+GtkWidget			*revertMenu;
+GtkWidget			*printMenu;
 
 //edit menu
-GtkWidget		*editMenu;
-GtkWidget		*redoMenu;
-GtkWidget		*undoMenu;
-GtkWidget		*redoAllMenu;
-GtkWidget		*undoAllMenu;
-GtkWidget		*cutMenu;
-GtkWidget		*copyMenu;
-GtkWidget		*pasteMenu;
-GtkWidget		*sortTabsMenu=NULL;
-GtkWidget		*showAllTabsMenu=NULL;
+GtkWidget			*editMenu;
+GtkWidget			*redoMenu;
+GtkWidget			*undoMenu;
+GtkWidget			*redoAllMenu;
+GtkWidget			*undoAllMenu;
+GtkWidget			*cutMenu;
+GtkWidget			*copyMenu;
+GtkWidget			*pasteMenu;
+GtkWidget			*sortTabsMenu=NULL;
+GtkWidget			*showAllTabsMenu=NULL;
 
 //view menu
-GtkWidget		*viewMenu=NULL;
-GtkWidget		*viewTabMenu=NULL;
-GtkWidget		*viewTabSubMenu=NULL;
+GtkWidget			*viewMenu=NULL;
+GtkWidget			*viewTabMenu=NULL;
+GtkWidget			*viewTabSubMenu=NULL;
 
 //nav menu
-GtkWidget		*navMenu;
-GtkWidget		*goBackMenu;
-GtkWidget		*goForwardMenu;
-GtkWidget		*gotoDefMenu;
-GtkWidget		*searchInGtkDocsMenu;
-GtkWidget		*searchInQTDocsMenu;
-GtkWidget		*searchInDocsMenu;
+GtkWidget			*navMenu;
+GtkWidget			*goBackMenu;
+GtkWidget			*goForwardMenu;
+GtkWidget			*gotoDefMenu;
+GtkWidget			*searchInGtkDocsMenu;
+GtkWidget			*searchInQTDocsMenu;
+GtkWidget			*searchInDocsMenu;
 
 //func menu
-GtkWidget		*funcMenu;
+GtkWidget			*funcMenu;
 //bookmark menu
-GtkWidget		*bookMarkMenu;
-GtkWidget		*bookMarkSubMenu;
+GtkWidget			*bookMarkMenu;
+GtkWidget			*bookMarkSubMenu;
 //tools menu
-GtkWidget		*toolsMenu;
-GtkWidget		*toolOutMenu=NULL;
+GtkWidget			*toolsMenu;
+GtkWidget			*toolOutMenu=NULL;
 //plug menu
-GtkWidget		*globalPlugMenu=NULL;
+GtkWidget			*globalPlugMenu=NULL;
 //help menu
-GtkWidget		*helpMenu;
+GtkWidget			*helpMenu;
 
 //barber pole
-char			*barControl;
+char				*barControl;
 
-GtkAccelGroup	*accgroup=NULL;
+GtkAccelGroup		*accgroup=NULL;
 
-VISIBLE GList	*newBookMarksList=NULL;
-char			*highlightColour;
-char			*tmpHighlightColour;
-bool			showBMBar;
-GtkWidget		*bmHighlightBox;
-int				bmMarkNumber=0;
-unsigned		pageID=100;
+VISIBLE GList		*newBookMarksList=NULL;
+char				*highlightColour;
+char				*tmpHighlightColour;
+bool				showBMBar;
+GtkWidget			*bmHighlightBox;
+int					bmMarkNumber=0;
+unsigned			pageID=100;
 
-char			*toolBarLayout=NULL;
-GtkWidget		*toolBarBox;
+char				*toolBarLayout=NULL;
+GtkWidget			*toolBarBox;
 
-GtkWidget		*lineNumberWidget;
-GtkWidget		*findApiWidget;
-GtkWidget		*findQtApiWidget;
-GtkWidget		*findDefWidget;
-GtkWidget		*liveSearchWidget;
+GtkWidget			*lineNumberWidget;
+GtkWidget			*findApiWidget;
+GtkWidget			*findQtApiWidget;
+GtkWidget			*findDefWidget;
+GtkWidget			*liveSearchWidget;
 
-int				currentPage=0;
-int				sinkReturn;
-char			*sinkReturnStr;
+int					currentPage=0;
+int					sinkReturn;
+char				*sinkReturnStr;
 
 //nag
-bool			nagScreen;
-unsigned int	nagTime;
-unsigned int	lastNagTime=0;
-bool			timeToNag=true;
-unsigned int	lastUpdate=0;
-unsigned int	lastPlugUpdate=0;
-unsigned int	updateWait=2678400;
+bool				nagScreen;
+unsigned int		nagTime;
+unsigned int		lastNagTime=0;
+bool				timeToNag=true;
+unsigned int		lastUpdate=0;
+unsigned int		lastPlugUpdate=0;
+unsigned int		updateWait=2678400;
 
 //docview size and position
-int				docWindowWidth;
-int				docWindowHeight;
-int				docWindowX=-1;
-int				docWindowY=-1;
+int					docWindowWidth;
+int					docWindowHeight;
+int					docWindowX=-1;
+int					docWindowY=-1;
 
 //prefs
-GtkWidget		*prefswin;
-bool			indent;
-bool			lineNumbers;
-bool			lineWrap;
-bool			highLight;
-bool			noSyntax;
-bool			showWhiteSpace;
-bool			singleUse;
-unsigned int	tabWidth;
-unsigned int	tabsSize;
-char			*fontAndSize;
-char			*terminalCommand;
-char			*rootCommand;
-unsigned int	depth;
-bool			onExitSaveSession;
-bool			restoreBookmarks;
-char			*styleName=NULL;
-bool			noDuplicates;
-bool			noWarnings;
-bool			readLinkFirst;
-bool			autoShowComps;
-bool			autoSearchDocs;
-bool			autoCheck;
-unsigned int	autoShowMinChars;
-bool			useGlobalPlugMenu;
-unsigned int	maxTabChars=20;
-unsigned int	maxBMChars;
-unsigned int	maxJumpHistory;
-unsigned int	maxFuncDefs;
+GtkWidget			*prefswin;
+bool				indent;
+bool				lineNumbers;
+bool				lineWrap;
+bool				highLight;
+bool				noSyntax;
+bool				showWhiteSpace;
+bool				singleUse;
+unsigned int		tabWidth;
+unsigned int		tabsSize;
+char				*fontAndSize;
+char				*terminalCommand;
+char				*rootCommand;
+unsigned int		depth;
+bool				onExitSaveSession;
+bool				restoreBookmarks;
+char				*styleName=NULL;
+bool				noDuplicates;
+bool				noWarnings;
+bool				readLinkFirst;
+bool				autoShowComps;
+bool				autoSearchDocs;
+bool				autoCheck;
+unsigned int		autoShowMinChars;
+bool				useGlobalPlugMenu;
+unsigned int		maxTabChars=20;
+unsigned int		maxBMChars;
+unsigned int		maxJumpHistory;
+unsigned int		maxFuncDefs;
 
-GtkWidget		*fontButton;
-GtkWidget		*terminalBox;
-GtkWidget		*rootCommandBox;
-GtkWidget		*defaultBrowserBox;
-char			*browserCommand=strdup("firefox");
-bool			useMenuIcons=true;
+GtkWidget			*fontButton;
+GtkWidget			*terminalBox;
+GtkWidget			*rootCommandBox;
+GtkWidget			*defaultBrowserBox;
+char				*browserCommand=strdup("firefox");
+bool				useMenuIcons=true;
 
 #ifdef _USEGTK3_
 GtkStyleProvider	*provider;
@@ -184,159 +185,159 @@ GtkStyleProvider	*tabBoxProvider;
 #endif
 
 //key short cuts
-GtkWidget		*keysWindow=NULL;
+GtkWidget			*keysWindow=NULL;
 
-char			*tmpStyleName=NULL;
+char				*tmpStyleName=NULL;
 
-GtkWidget		*toolNameWidget;
-GtkWidget		*commandLineWidget;
-GtkWidget		*keyWidget;
-GtkWidget		*commentWidget;
-GtkWidget		*inTermWidget;
-GtkWidget		*inPopupWidget;
-GtkWidget		*alwaysPopupWidget;
-GtkWidget		*syncWidget;
-GtkWidget		*ignoreWidget;
-GtkWidget		*pasteWidget;
-GtkWidget		*replaceWidget;
-GtkWidget		*outputWidget;
-GtkWidget		*showDocWidget;
-GtkWidget		*toolSelect;
-GtkWidget		*clearViewWidget;
-GtkWidget		*runAsRootWidget;
-GtkWidget		*useBarWidget;
+GtkWidget			*toolNameWidget;
+GtkWidget			*commandLineWidget;
+GtkWidget			*keyWidget;
+GtkWidget			*commentWidget;
+GtkWidget			*inTermWidget;
+GtkWidget			*inPopupWidget;
+GtkWidget			*alwaysPopupWidget;
+GtkWidget			*syncWidget;
+GtkWidget			*ignoreWidget;
+GtkWidget			*pasteWidget;
+GtkWidget			*replaceWidget;
+GtkWidget			*outputWidget;
+GtkWidget			*showDocWidget;
+GtkWidget			*toolSelect;
+GtkWidget			*clearViewWidget;
+GtkWidget			*runAsRootWidget;
+GtkWidget			*useBarWidget;
 
-toolStruct		*selectedToolFromDrop=NULL;
+toolStruct			*selectedToolFromDrop=NULL;
 
 //view tool output
-GtkWidget		*mainVPane=NULL;
-bool			showToolOutWin=false;
-GtkWidget		*toolOutputView=NULL;
-GtkTextBuffer	*toolOutputBuffer=NULL;
-GtkWidget		*toolOutVBox=NULL;
-bool			showStatus;
-GtkWidget		*statusWidget=NULL;
+GtkWidget			*mainVPane=NULL;
+bool				showToolOutWin=false;
+GtkWidget			*toolOutputView=NULL;
+GtkTextBuffer		*toolOutputBuffer=NULL;
+GtkWidget			*toolOutVBox=NULL;
+bool				showStatus;
+GtkWidget			*statusWidget=NULL;
 
-GList			*toolsList=NULL;
+GList				*toolsList=NULL;
 
-GtkWidget		*restoreBMs;
+GtkWidget			*restoreBMs;
 
 //main mainWindow
-int				windowWidth;
-int				windowHeight;
-int				windowX=-1;
-int				windowY=-1;
-bool			wrapSearch;
-bool			insensitiveSearch;
-bool			useRegex;
-bool			replaceAll;
-bool			findInAllFiles;
-bool			hightlightAll;
-int				toolOutHeight=200;
-int				bottomVPaneHite=200;
-int				topVPaneHite=200;
+int					windowWidth;
+int					windowHeight;
+int					windowX=-1;
+int					windowY=-1;
+bool				wrapSearch;
+bool				insensitiveSearch;
+bool				useRegex;
+bool				replaceAll;
+bool				findInAllFiles;
+bool				hightlightAll;
+int					toolOutHeight=200;
+int					bottomVPaneHite=200;
+int					topVPaneHite=200;
 
-GtkWidget		*mainWindowScrollbox=NULL;
+GtkWidget			*mainWindowScrollbox=NULL;
 
-GtkWidget		*mainWindowVBox=NULL;
-GtkWidget		*mainTopUserVBox=NULL;
-GtkWidget		*mainWindowHBox=NULL;
-GtkWidget		*mainLeftUserVBox=NULL;
-GtkWidget		*mainNotebookVBox=NULL;
-GtkWidget		*mainRightUserVBox=NULL;
-GtkWidget		*mainBottomUserVBox=NULL;
+GtkWidget			*mainWindowVBox=NULL;
+GtkWidget			*mainTopUserVBox=NULL;
+GtkWidget			*mainWindowHBox=NULL;
+GtkWidget			*mainLeftUserVBox=NULL;
+GtkWidget			*mainNotebookVBox=NULL;
+GtkWidget			*mainRightUserVBox=NULL;
+GtkWidget			*mainBottomUserVBox=NULL;
 
-GtkWidget		*mainWindowVPane=NULL;
-GtkWidget		*secondWindowVPane=NULL;
+GtkWidget			*mainWindowVPane=NULL;
+GtkWidget			*secondWindowVPane=NULL;
 
-GtkWidget		*mainWindowHPane=NULL;
-GtkWidget		*secondWindowHPane=NULL;
+GtkWidget			*mainWindowHPane=NULL;
+GtkWidget			*secondWindowHPane=NULL;
 
-int				currentTabNumber;
-int 			untitledNumber=1;
+int					currentTabNumber;
+int 				untitledNumber=1;
 
-GtkToolItem		*newButton=NULL;
-GtkToolItem		*openButton=NULL;
-GtkToolItem		*saveButton=NULL;
-GtkToolItem		*redoButton=NULL;
-GtkToolItem		*undoButton=NULL;
-GtkToolItem		*cutButton=NULL;
-GtkToolItem		*copyButton=NULL;
-GtkToolItem		*pasteButton=NULL;
-GtkToolItem		*findButton=NULL;
-GtkToolItem		*gotoDefButton=NULL;
-GtkToolItem		*backButton=NULL;
-GtkToolItem		*forwardButton=NULL;
-GtkToolItem		*gotoLineButton=NULL;
-GtkToolItem		*findApiButton=NULL;
-GtkToolItem		*findQtApiButton=NULL;
-GtkToolItem		*findFuncDefButton=NULL;
-GtkToolItem		*liveSearchButton=NULL;
+GtkToolItem			*newButton=NULL;
+GtkToolItem			*openButton=NULL;
+GtkToolItem			*saveButton=NULL;
+GtkToolItem			*redoButton=NULL;
+GtkToolItem			*undoButton=NULL;
+GtkToolItem			*cutButton=NULL;
+GtkToolItem			*copyButton=NULL;
+GtkToolItem			*pasteButton=NULL;
+GtkToolItem			*findButton=NULL;
+GtkToolItem			*gotoDefButton=NULL;
+GtkToolItem			*backButton=NULL;
+GtkToolItem			*forwardButton=NULL;
+GtkToolItem			*gotoLineButton=NULL;
+GtkToolItem			*findApiButton=NULL;
+GtkToolItem			*findQtApiButton=NULL;
+GtkToolItem			*findFuncDefButton=NULL;
+GtkToolItem			*liveSearchButton=NULL;
 
 //back/forward history
 
 //find replace
-GtkWidget		*findReplaceDialog;
-VISIBLE GtkWidget		*findBox;
-VISIBLE GtkWidget		*replaceBox;
-GtkWidget		*findDropBox=NULL;
-GtkWidget		*replaceDropBox;
-GSList			*findList=NULL;
-GSList			*replaceList=NULL;
-unsigned int	maxFRHistory=5;
+GtkWidget			*findReplaceDialog;
+VISIBLE GtkWidget	*findBox;
+VISIBLE GtkWidget	*replaceBox;
+GtkWidget			*findDropBox=NULL;
+GtkWidget			*replaceDropBox;
+GSList				*findList=NULL;
+GSList				*replaceList=NULL;
+unsigned int		maxFRHistory=5;
 
 //custom toolbar
-GtkWidget		*fromHBox;
-GtkWidget		*iconViewBox;
-bool			showToolBar=true;
+GtkWidget			*fromHBox;
+GtkWidget			*iconViewBox;
+bool				showToolBar=true;
 
-int				listFunction=0;
-GtkWidget		*funcListDrop=NULL;
+int					listFunction=0;
+GtkWidget			*funcListDrop=NULL;
 
-char			*functionSearchText=NULL;
-VISIBLE char			*thePage=NULL;
-char			*htmlFile=NULL;
-char			*htmlURI=NULL;
-char			*tmpFolderName=NULL;
+char				*functionSearchText=NULL;
+VISIBLE char		*thePage=NULL;
+char				*htmlFile=NULL;
+char				*htmlURI=NULL;
+char				*tmpFolderName=NULL;
 
 //runtime deps
-int				gotManEditor;
-int				gotDoxygen;
-char			*ctagsPath=NULL;
+int					gotManEditor;
+int					gotDoxygen;
+char				*ctagsPath=NULL;
 
 GtkSourceStyleSchemeManager	*schemeManager;
-GtkSourceStyleScheme			*styleScheme;
+GtkSourceStyleScheme		*styleScheme;
 
 #ifdef _BUILDDOCVIEWER_
-GtkWidget		*docView;
-WebKitWebView	*webView;
-bool			showHideDocviewer;
-GtkWidget		*showDocViewWidget;
+GtkWidget			*docView;
+WebKitWebView		*webView;
+bool				showHideDocviewer;
+GtkWidget			*showDocViewWidget;
 #endif
 
 //spellcheck
-GtkWidget		*spellCheckWord;
-GtkWidget		*wordListDropbox;
-GtkWidget		*wordListEntrybox;
-char			*badWord=NULL;
-char			*goodWord=NULL;
+GtkWidget			*spellCheckWord;
+GtkWidget			*wordListDropbox;
+GtkWidget			*wordListEntrybox;
+char				*badWord=NULL;
+char				*goodWord=NULL;
 #ifdef _ASPELL_
-AspellConfig	*aspellConfig;
-AspellSpeller	*spellChecker=0;
+AspellConfig		*aspellConfig;
+AspellSpeller		*spellChecker=0;
 #endif
 
-const char		*localeLang;
+const char			*localeLang;
 
 //notebook
-int				openInThisTab=-1;
+int					openInThisTab=-1;
 
 //general app
-bool			loadingSession=false;
-HistoryClass	*globalHistory;
-StringSlice		*globalSlice;
-bool			doGoogleSearch;
+bool				loadingSession=false;
+HistoryClass		*globalHistory;
+StringSlice			*globalSlice;
+bool				doGoogleSearch;
 
-unsigned int	shortCuts[NUMSHORTCUTS][2]=
+unsigned int		shortCuts[NUMSHORTCUTS][2]=
 {
 	{121,0},
 	{63,1},
@@ -355,9 +356,9 @@ unsigned int	shortCuts[NUMSHORTCUTS][2]=
 	{104,14}
 };
 
-char			*shortCutStrings[NUMSHORTCUTS]={NULL,};
+char				*shortCutStrings[NUMSHORTCUTS]={NULL,};
 
-args			keybindings_rc[]=
+args				keybindings_rc[]=
 	{
 //string
 		{"deleteline",TYPESTRING,&shortCutStrings[0]},
@@ -378,22 +379,22 @@ args			keybindings_rc[]=
 		{NULL,0,NULL}
 	};
 
-GtkWidget		*progressWindow;
-GtkWidget		*progressBar;
+GtkWidget			*progressWindow;
+GtkWidget			*progressBar;
 
-PluginClass	*globalPlugins=NULL;
+PluginClass			*globalPlugins=NULL;
 
 //save and load var lists
-char			*windowAllocData=NULL;
-char			*docWindowAllocData=NULL;
+char				*windowAllocData=NULL;
+char				*docWindowAllocData=NULL;
 
-args			kkedit_startup_vars[]=
+args				kkedit_startup_vars[]=
 {
 	{"singleuse",TYPEBOOL,&singleUse},
 	{NULL,0,NULL}
 };
 
-args			kkedit_window_rc[]=
+args				kkedit_window_rc[]=
 {
 	//bools
 	{"insenssearch",TYPEBOOL,&insensitiveSearch},
@@ -421,7 +422,7 @@ args			kkedit_window_rc[]=
 	{NULL,0,NULL}
 };
 
-args			kkedit_rc[]=
+args				kkedit_rc[]=
 {
 	//bools
 	{"indentcode",TYPEBOOL,&indent},
@@ -463,19 +464,19 @@ args			kkedit_rc[]=
 	{NULL,0,NULL}
 };
 
-int				intermarg=0;
-int				flagsarg=0;
-int				inpopup=0;
-int				alwayspopup=0;
-int				clearview=0;
-char			*commandarg=NULL;
-char			*commentarg=NULL;
-char			*menuname=NULL;
-int				rootarg=0;
-int				keycode=0;
-int				usebar=0;
+int					intermarg=0;
+int					flagsarg=0;
+int					inpopup=0;
+int					alwayspopup=0;
+int					clearview=0;
+char				*commandarg=NULL;
+char				*commentarg=NULL;
+char				*menuname=NULL;
+int					rootarg=0;
+int					keycode=0;
+int					usebar=0;
 
-args			tool_vars[]=
+args				tool_vars[]=
 {
 	//strings
 	{"name",TYPESTRING,&menuname},
@@ -1329,41 +1330,6 @@ VISIBLE GtkWidget *createNewBox(int orient,bool homog,int spacing)
 #endif
 
 	return(retwidg);
-}
-
-GtkWidget *createNewImageMenuItem(const char *stock,const char *label,bool useunderline)
-{
-	GtkWidget	*item;
-
-#ifdef _USEGTK3_
-	if(useunderline==true)
-		item=gtk_menu_item_new_with_mnemonic(label);
-	else
-		item=gtk_menu_item_new_with_label(label);
-#else
-	GtkWidget	*image;
-	if(useunderline==true)
-		item=gtk_image_menu_item_new_with_mnemonic(label);
-	else
-		item=gtk_image_menu_item_new_with_label(label);
-	image=gtk_image_new_from_stock(stock,GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image((GtkImageMenuItem *)item,image);
-#endif
-
-	return(item);
-}
-
-GtkWidget *createNewStockMenuItem(const char *stock,const char *label)
-{
-	GtkWidget	*item;
-
-#ifdef _USEGTK3_
-	item=gtk_menu_item_new_with_mnemonic(label);
-#else
-	item=gtk_image_menu_item_new_from_stock(stock,NULL);
-#endif
-
-	return(item);
 }
 
 GtkToolItem *createNewToolItem(const char *stock,const char *label)

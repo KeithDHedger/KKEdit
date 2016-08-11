@@ -138,6 +138,7 @@ void init(void)
 	loadingSession=false;
 	doGoogleSearch=true;
 
+	recentMan=gtk_recent_manager_get_default();
 //runtime deps
 	
 	exitstatus=system("which manpageeditor 2>&1 >/dev/null");

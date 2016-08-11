@@ -136,9 +136,10 @@ VISIBLE void toggleBookmark(GtkWidget *widget,GtkTextIter *titer)
 			ptr=newBookMarksList;
 			while(ptr!=NULL)
 				{
-					menuitem=createNewImageMenuItem(NULL,((bookMarksNew*)ptr->data)->label,false);
-					gtk_menu_shell_append(GTK_MENU_SHELL(bookMarkSubMenu),menuitem);
-					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(jumpToMark),(void*)ptr->data);
+					menuData[MENUBLANK].menuLabel=((bookMarksNew*)ptr->data)->label;
+					menuData[MENUBLANK].cb=(void*)jumpToMark;
+					menuData[MENUBLANK].userData=(gpointer)ptr->data;
+					menuitem=newMenuItem(MENUBLANK,bookMarkSubMenu);
 					ptr=g_list_next(ptr);
 				}
 			gtk_widget_show_all(bookMarkMenu);

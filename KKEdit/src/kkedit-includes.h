@@ -73,7 +73,7 @@
 #define GTK_STOCK_DIALOG_QUESTION "dialog-question"
 #define GTK_STOCK_ADD "list-add"
 #define GTK_STOCK_SORT_ASCENDING "view-sort-ascending"
-
+#define GTK_STOCK_DIALOG_INFO "dialog-information"
 //navigation
 #define GTK_STOCK_GO_BACK "go-previous"
 #define GTK_STOCK_GO_HOME "go-home"
@@ -88,7 +88,6 @@
 #define GTK_STOCK_NO gettext("_No")
 #define GTK_STOCK_CANCEL gettext("_Cancel")
 #define GTK_STOCK_OPEN_LABEL gettext("_Open")
-#define GTK_STOCK_SELECT_COLOR gettext("Select Colour")
 #define GTK_STOCK_APPLY gettext("_Apply")
 #define GTK_STOCK_EDIT "accessories-text-editor"
 #define GTK_STOCK_OK gettext("_OK")

@@ -1202,7 +1202,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	str=g_file_get_path(page->gFile);
 	recenturi=g_filename_to_uri(str,NULL,NULL);
-	gtk_recent_manager_add_item(gtk_recent_manager_get_default(),recenturi);
+	gtk_recent_manager_add_item(recentMan,recenturi);
 	ERRDATA debugFree(&filename);
 	ERRDATA debugFree(&recenturi);
 	ERRDATA debugFree(&str);

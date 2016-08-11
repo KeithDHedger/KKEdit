@@ -39,6 +39,7 @@ const char		*shortcuttext[NUMSHORTCUTS]={DELETE_LINE_LABEL,DELETE_TO_EOL_LABEL,D
 GtkWidget	*prefsWidgets[MAXPREFSWIDGETS];
 GObject	*prefsIntWidgets[MAXPREFSINTWIDGETS];
 
+#if 0
 //MENU_NEW_LABEL gettext("_New")
 //#define GTK_STOCK_NEW "document-new"
 //hot key
@@ -46,7 +47,8 @@ GObject	*prefsIntWidgets[MAXPREFSINTWIDGETS];
 //hotkey strings
 //callbacks
 enum {MENUNEW=0,MENUOPEN,MENUOPENHEX,MENUNEWADMIN,MENUNEWED,MENUMANED,MENUDOXY,MENURECENT,MENUSAVE,MENUSAVEAS,MENUSAVEALL,MENUSAVESESSION,MENURESTORESESSION,MENUPRINT,MENUCLOSE,MENUCLOSEALL,MENUREVERT,MENUQUIT,MENUUNDO,MENUREDO,MENUUNDOALL,MENUREDOALL,MENUCUT,MENUCOPY,MENUPASTE,MENUFIND,MENUNEXT,MENUSORTTABS,MENUSHOWTABS,MENUSELECTTAB,MENUPREFS,MENUPLUGPREFS,MENUSHOWDOCS,MENUSHOWBMBAR,MENUHIDEBMBAR,MENUHIDETOOLBAR,MENUSHOWTOOLBAR,MENUHIDETOOLOUT,MENUSHOWTOOLOUT,MENUHIDESTATUS,MENUSHOWSTATUS,MENUSHOWVIEWER, \
-MENUTOGGLENUMBERS,MENUWRAPLINES,MENUHILITELINE,MENUSYNTAXHILITE,MENUSHOWSPACE,MENUSHOWCOMPS \
+MENUTOGGLENUMBERS,MENUWRAPLINES,MENUHILITELINE,MENUSYNTAXHILITE,MENUSHOWSPACE,MENUSHOWCOMPS, \
+POPADDCUSTOM, \
 ,MENUGOTODEF,MENUOPENINC,MENUGOTOLINE,MENUSEARCHDEF,MENUSEARCHGTK,MENUSEARCHQT,MENUSEARCHDOXY,MENUBACK,MENUFORWARD,MENUTOOLS,MENUABOUT,MENULOCALHELP,MENUONLINE,MENUGETPLUGS};
 
 struct	menuDataStruct
@@ -60,6 +62,7 @@ struct	menuDataStruct
 	gpointer		userData;
 	
 };
+#endif
 
 menuDataStruct	menuData[]=
 	{
@@ -120,7 +123,7 @@ menuDataStruct	menuData[]=
 		{MENU_SHOW_SPACES_LABEL,NULL,0,0,(void*)&toggleWhitespace,VIEWWHITESPACE,NULL},
 		{MENU_SHOW_AUTO_COMPLETE,NULL,0,0,(void*)&toggleAutoComplete,VIEWAUTOCOMPLETE,NULL},
 //nav
-		{MENU_GOTO_DEFINE_LABEL,GTK_STOCK_EXECUTE,GDK_KEY_D,GDK_CONTROL_MASK,(void*)&goToDefinition,GOTODEFMENUNAME,NULL},
+		{MENU_GOTO_DEFINE_LABEL,GTK_STOCK_EXECUTE,0,0,(void*)&goToDefinition,GOTODEFMENUNAME,NULL},
 		{MENU_OPEN_INCLUDE_LABEL,GTK_STOCK_OPEN,GDK_KEY_I,GDK_CONTROL_MASK,(void*)&findFile,OPENINCLUDEMENUNAME,NULL},
 		{MENU_GOTO_LINE_LABEL,GTK_STOCK_GO_DOWN,0,0,(void*)&jumpToLine,GOTOLINEMENUNAME,NULL},
 		{MENU_FIND_DEFINE_LABEL,GTK_STOCK_FIND,0,0,(void*)&functionSearch,SEARCHFORDEFMENUNAME,NULL},
@@ -139,6 +142,18 @@ menuDataStruct	menuData[]=
 		{MENU_HELP_ONLINE_LABEL,GTK_STOCK_HELP,0,0,(void*)&openHelp,HELPONLINEMENUNAME,(void*)1},
 		{MENU_GET_PLUGS_LABEL,PLUGMENUPNG,0,0,(void*)&getPlugins,GETPLUGSMENUNAME,NULL},
 
+//context menus
+		{CUSTOM_WORD_CONTEXT_LABEL,GTK_STOCK_EDIT,0,0,(void*)&addtoCustomWordList,NULL,NULL},
+//other
+		{"",NULL,0,0,NULL,NULL,NULL},
+		{CHECK_SPELLING_CONTEXT_LABEL,GTK_STOCK_SPELL_CHECK,0,0,(void*)&checkWord,NULL,NULL},
+//tab popups
+		{COPY_FOLDER_PATH_LABEL,GTK_STOCK_COPY,0,0,(void*)&doTabMenu,NULL,NULL},
+		{COPY_FILE_PATH_LABEL,GTK_STOCK_COPY,0,0,(void*)&doTabMenu,NULL,NULL},
+		{COPY_FILE_NAME_LABEL,GTK_STOCK_COPY,0,0,(void*)&doTabMenu,NULL,NULL},
+		{SPELL_CHECK_LABEL,GTK_STOCK_SPELL_CHECK,0,0,(void*)&doSpellCheckDoc,NULL,NULL},
+		{SOURCE_HILITE_LABEL,GTK_STOCK_PREFERENCES,0,0,NULL,NULL,NULL},
+		{MENU_HIDE_TAB_LABEL,GTK_STOCK_REMOVE,0,0,(void*)&hideTab,NULL,NULL},
 
 		{NULL,NULL,0,0,NULL,NULL,NULL}
 	};
@@ -219,7 +234,8 @@ GtkWidget* newMenuItem(unsigned menunumber,GtkWidget *parent)
 	if(menuData[menunumber].key>0)
 		gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accgroup,menuData[menunumber].key,(GdkModifierType)menuData[menunumber].mod,GTK_ACCEL_VISIBLE);
 
-	gtk_menu_shell_append(GTK_MENU_SHELL(parent),menu);
+	if(parent!=NULL)
+		gtk_menu_shell_append(GTK_MENU_SHELL(parent),menu);
 	g_signal_connect(G_OBJECT(menu),"activate",G_CALLBACK(menuData[menunumber].cb),menuData[menunumber].userData);
 	gtk_widget_set_name(menu,menuData[menunumber].widgetName);
 
@@ -266,10 +282,12 @@ GtkWidget* newImageMenuItem(unsigned menunumber,GtkWidget *parent)
 	if(menuData[menunumber].key>0)
 		gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accgroup,menuData[menunumber].key,(GdkModifierType)menuData[menunumber].mod,GTK_ACCEL_VISIBLE);
 
-	gtk_menu_shell_append(GTK_MENU_SHELL(parent),menu);
+	if(parent!=NULL)
+		gtk_menu_shell_append(GTK_MENU_SHELL(parent),menu);
 	if(menuData[menunumber].cb!=NULL)
 		g_signal_connect(G_OBJECT(menu),"activate",G_CALLBACK(menuData[menunumber].cb),menuData[menunumber].userData);
-	gtk_widget_set_name(menu,menuData[menunumber].widgetName);
+	if(menuData[menunumber].widgetName!=NULL)
+		gtk_widget_set_name(menu,menuData[menunumber].widgetName);
 
 	return(menu);
 }
@@ -818,15 +836,17 @@ void buildTools(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 	ptr=toolsList;
+	menuData[MENUBLANK].cb=(void*)externalTool;
+	menuData[MENUBLANK].stockID=NULL;
+	menuData[MENUBLANK].key=0;
 	while(ptr!=NULL)
 		{
 			if(((toolStruct*)ptr->data)->global==true)
 				{
 					gotglobal=true;
-					menuitem=createNewImageMenuItem(NULL,((toolStruct*)ptr->data)->menuName,false);
-					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
-
+					menuData[MENUBLANK].menuLabel=((toolStruct*)ptr->data)->menuName;
+					menuData[MENUBLANK].userData=(gpointer)ptr->data;
+					menuitem=newMenuItem(MENUBLANK,menu);
 					if( (((toolStruct*)ptr->data)->keyCode!=GDK_KEY_VoidSymbol) && (((toolStruct*)ptr->data)->keyCode!=0) )
 						{
 							keyflags=0;
@@ -848,14 +868,18 @@ void buildTools(void)
 		}
 
 	ptr=toolsList;
+	menuData[MENUBLANK].cb=(void*)externalTool;
+	menuData[MENUBLANK].stockID=NULL;
+	menuData[MENUBLANK].key=0;
 	while(ptr!=NULL)
 		{
 			if(((toolStruct*)ptr->data)->global==false)
 				{
-					menuitem=createNewImageMenuItem(NULL,((toolStruct*)ptr->data)->menuName,false);
-					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(externalTool),(void*)ptr->data);
-
+					menuData[MENUBLANK].menuLabel=((toolStruct*)ptr->data)->menuName;
+					menuData[MENUBLANK].userData=(gpointer)ptr->data;
+					menuitem=newMenuItem(MENUBLANK,menu);
+//TODO//
+//needs tidying
 					if( (((toolStruct*)ptr->data)->keyCode!=GDK_KEY_VoidSymbol) && (((toolStruct*)ptr->data)->keyCode!=0) )
 						{
 							keyflags=0;
@@ -1218,59 +1242,6 @@ void buildKeys()
 	ERRDATA
 }
 
-GtkWidget	*makeMenuItem(const char *stocklabel,GtkWidget *parent,void *function,char hotkey,const char *name,int setimage,const char *menulabel,void *userdata,bool toggle)
-{
-	ERRDATA
-	GtkWidget	*widg;
-#ifndef _USEGTK3_
-	GtkWidget	*image;
-#endif
-
-	switch(setimage)
-		{
-			case STOCKMENU:
-			//	if(useMenuIcons==true)
-			//		widg=newMenuItem(menulabel,stocklabel,0,"Shift+Ctrl+N");
-			//	else
-					widg=createNewStockMenuItem(stocklabel,menulabel);
-				break;
-
-			case IMAGEMENU:
-				widg=createNewImageMenuItem(stocklabel,menulabel,true);
-				break;
-
-			case PIXMAPMENU:
-#ifdef _USEGTK3_
-				widg=gtk_menu_item_new_with_mnemonic(menulabel);
-#else
-				widg=gtk_image_menu_item_new_with_mnemonic(menulabel);
-				image=gtk_image_new_from_file(stocklabel);
-				gtk_image_menu_item_set_image((GtkImageMenuItem *)widg,image);
-#endif
-				break;
-
-			case CHECKMENU:
-				widg=gtk_check_menu_item_new_with_label(stocklabel);
-				gtk_check_menu_item_set_active((GtkCheckMenuItem*)widg,toggle);
-				break;
-
-			default:
-				widg=createNewImageMenuItem(NULL,stocklabel,true);
-		}
-
-	gtk_menu_shell_append(GTK_MENU_SHELL(parent),widg);
-	g_signal_connect(G_OBJECT(widg),"activate",G_CALLBACK(function),userdata);
-
-	if(hotkey>0)
-		gtk_widget_add_accelerator((GtkWidget *)widg,"activate",accgroup,hotkey,GDK_CONTROL_MASK,GTK_ACCEL_VISIBLE);
-
-	if(hotkey<0)
-		gtk_widget_add_accelerator((GtkWidget *)widg,"activate",accgroup,hotkey*-1,(GdkModifierType)(GDK_SHIFT_MASK|GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
-
-	gtk_widget_set_name(widg,name);
-	ERRDATA return(widg);
-}
-
 void makePrefsDial(int widgnum,const char *label,const char *name,int value,int minvalue,int maxvalue)
 {
 	ERRDATA
@@ -1599,6 +1570,8 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 	ERRDATA
 }
 
+//TODO//
+//not working properly
 void addRecentToMenu(GtkRecentChooser *chooser,GtkWidget *menu)
 {
 	ERRDATA
@@ -1621,12 +1594,15 @@ void addRecentToMenu(GtkRecentChooser *chooser,GtkWidget *menu)
 
 			menuname=gtk_recent_info_get_display_name(info);
 			uri=gtk_recent_info_get_uri(info);
+			menuData[MENUBLANK].cb=(void*)recentFileMenu;
+			menuData[MENUBLANK].stockID=NULL;
+			menuData[MENUBLANK].key=0;
 			if(uri!=NULL)
 				{
 					filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
-					menuitem=createNewImageMenuItem(NULL,menuname,false);
-					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(recentFileMenu),(void*)filename);
+					menuData[MENUBLANK].userData=(void*)filename;
+					menuData[MENUBLANK].menuLabel=menuname;
+					menuitem=newMenuItem(MENUBLANK,menu);
 				}
 		}
 	ERRDATA
@@ -1882,7 +1858,6 @@ useMenuIcons=true;
 	menuitem=newCheckMenuItem(MENUSHOWCOMPS,menu,autoShowComps);
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),gtk_separator_menu_item_new());
-
 //navigation menu
 	navMenu=gtk_menu_item_new_with_label(MENU_NAV_MENU_LABEL);
 	gtk_menu_item_set_use_underline((GtkMenuItem*)navMenu,true);

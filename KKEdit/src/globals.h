@@ -133,12 +133,13 @@ extern const char		*errFile;
 extern const char		*errFunc;
 extern char				*logFile;
 
+//app
 extern GApplication	*mainApp;
 extern bool				autoSeleced;
 extern bool				fromGOpen;
 extern char				*prefsFolder;
+extern GtkRecentManager	*recentMan;
 
-//app
 //main window
 extern GtkWidget		*mainWindow;
 extern GtkWidget		*menuBar;
@@ -487,7 +488,6 @@ void catchSignal(int signal);
 void freeAndNull(char** ptr);
 
 GtkWidget *createNewBox(int orient,bool homog,int spacing);
-GtkWidget *createNewImageMenuItem(const char *stock,const char *label,bool useunderline);
 GtkToolItem *createNewToolItem(const char *stock,const char *label);
 GtkWidget *createNewStockButton(const char *stock,const char *label);
 GdkPixbuf *createNewIcon(const char *stock,GtkWidget *widg);
