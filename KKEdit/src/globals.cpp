@@ -50,7 +50,7 @@ GtkWidget			*statusBarMenu=NULL;
 GtkNotebook			*mainNotebook=NULL;
 
 //file menu
-GtkWidget			*fileMenu;
+GtkWidget			*fileMenu=NULL;
 GtkWidget			*menuItemNew=NULL;
 GtkWidget			*menuItemOpen=NULL;
 GtkWidget			*saveMenu;
@@ -62,7 +62,7 @@ GtkWidget			*revertMenu;
 GtkWidget			*printMenu;
 
 //edit menu
-GtkWidget			*editMenu;
+GtkWidget			*editMenu=NULL;
 GtkWidget			*redoMenu;
 GtkWidget			*undoMenu;
 GtkWidget			*redoAllMenu;
@@ -79,7 +79,7 @@ GtkWidget			*viewTabMenu=NULL;
 GtkWidget			*viewTabSubMenu=NULL;
 
 //nav menu
-GtkWidget			*navMenu;
+GtkWidget			*navMenu=NULL;
 GtkWidget			*goBackMenu;
 GtkWidget			*goForwardMenu;
 GtkWidget			*gotoDefMenu;
@@ -88,17 +88,17 @@ GtkWidget			*searchInQTDocsMenu;
 GtkWidget			*searchInDocsMenu;
 
 //func menu
-GtkWidget			*funcMenu;
+GtkWidget			*funcMenu=NULL;
 //bookmark menu
-GtkWidget			*bookMarkMenu;
-GtkWidget			*bookMarkSubMenu;
+GtkWidget			*bookMarkMenu=NULL;
+GtkWidget			*bookMarkSubMenu=NULL;
 //tools menu
-GtkWidget			*toolsMenu;
+GtkWidget			*toolsMenu=NULL;
 GtkWidget			*toolOutMenu=NULL;
 //plug menu
 GtkWidget			*globalPlugMenu=NULL;
 //help menu
-GtkWidget			*helpMenu;
+GtkWidget			*helpMenu=NULL;
 
 //barber pole
 char				*barControl;

@@ -1593,79 +1593,14 @@ void addRecentToMenu(GtkRecentChooser *chooser,GtkWidget *menu)
 	ERRDATA
 }
 
-void buildMainGui(void)
+void buildMenus(void)
 {
-	ERRDATA
 	GtkWidget		*menuitem;
 	GtkWidget		*menu;
 	GtkWidget		*menurecent;
 	GtkWidget		*plugsubmenu=NULL;
 
-	mainWindowVBox=createNewBox(NEWVBOX,false,0);
-	mainTopUserVBox=createNewBox(NEWVBOX,false,0);
-	mainLeftUserVBox=createNewBox(NEWVBOX,false,0);
-	mainNotebookVBox=createNewBox(NEWVBOX,false,0);
-	mainRightUserVBox=createNewBox(NEWVBOX,false,0);
-	mainBottomUserVBox=createNewBox(NEWVBOX,false,0);
-
-	mainWindowHBox=createNewBox(NEWHBOX,false,0);
-
-#ifdef _USEGTK3_
-	mainWindowHPane=gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
-	secondWindowHPane=gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
-#else
-	mainWindowHPane=gtk_hpaned_new();
-	secondWindowHPane=gtk_hpaned_new();
-#endif
-
-	mainWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_default_size((GtkWindow*)mainWindow,windowWidth,windowHeight);
-	if(windowX!=-1 && windowY!=-1)
-		gtk_window_move((GtkWindow *)mainWindow,windowX,windowY);
-
-//TODO//?
-	g_signal_connect(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(gtk_widget_hide_on_delete),NULL);
-	//g_signal_connect_after(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(doShutdown),NULL);
-	g_signal_connect_after(G_OBJECT(mainWindow),"unmap",G_CALLBACK(doShutdown),NULL);
-	g_signal_connect(G_OBJECT(mainWindow),"key-press-event",G_CALLBACK(keyShortCut),NULL);
-
-	accgroup=gtk_accel_group_new();
-	gtk_window_add_accel_group((GtkWindow*)mainWindow,accgroup);
-
-	mainNotebook=(GtkNotebook*)gtk_notebook_new();
-	gtk_notebook_set_scrollable(mainNotebook,true);
-	g_signal_connect(G_OBJECT(mainNotebook),"switch-page",G_CALLBACK(switchPage),NULL);
-	g_signal_connect(G_OBJECT(mainNotebook),"page-reordered",G_CALLBACK(switchPage),NULL);
-	g_signal_connect(G_OBJECT(mainNotebook),"page-removed",G_CALLBACK(realCloseTab),NULL);
-
-	globalHistory=new HistoryClass(mainNotebook,maxJumpHistory);
-
-#ifdef _USEGTK3_
-	char	*notebookcss=NULL;
-	GtkStyleProvider	*nbprovider;
-
-	nbprovider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
-	sinkReturn=asprintf(&notebookcss,"GtkNotebook {\n \
-    padding: 0px;\n \
-}\n");
-
-	gtk_css_provider_load_from_data((GtkCssProvider*)nbprovider,notebookcss,-1,NULL);
-	applyCSS((GtkWidget*)mainNotebook,nbprovider);
-	gtk_style_context_reset_widgets(gdk_screen_get_default());
-	debugFree(&notebookcss);
-#endif
-
 	menuBar=gtk_menu_bar_new();
-	toolBarBox=createNewBox(NEWHBOX,true,0);
-	toolBar=(GtkToolbar*)gtk_toolbar_new();
-
-//dnd
-	gtk_drag_dest_set(mainWindowVBox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
-	gtk_drag_dest_add_uri_targets(mainWindowVBox);
-	g_signal_connect(G_OBJECT(mainWindowVBox),"drag_data_received",G_CALLBACK(dropUri),NULL);
-
-	setUpToolBar();
-	gtk_box_pack_start(GTK_BOX(toolBarBox),(GtkWidget*)toolBar,true,true,0);
 
 //menus
 //file menu
@@ -1719,7 +1654,6 @@ void buildMainGui(void)
 
 //save session
 	menuitem=newImageMenuItem(MENUSAVESESSION,menu);
-	//menuitem=makeMenuItem(GTK_STOCK_SAVE,menu,(void*)saveSession,0,SAVESESSIONMENUNAME,IMAGEMENU,MENU_SAVE_SESSION_LABEL,NULL,false);
 //restore session
 	menuitem=newImageMenuItem(MENURESTORESESSION,menu);
 //printfile
@@ -1912,12 +1846,92 @@ void buildMainGui(void)
 			gtk_menu_item_set_use_underline((GtkMenuItem*)globalPlugMenu,true);
 			plugsubmenu=gtk_menu_new();
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(globalPlugMenu),plugsubmenu);
+			globalPlugins->globalPlugData->mlist.menuBar=plugsubmenu;
 			gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),globalPlugMenu);
 		}
 	else
-		globalPlugMenu=NULL;
+		{
+			globalPlugMenu=NULL;
+			globalPlugins->globalPlugData->mlist.menuBar=menuBar;
+		}
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),helpMenu);
+}
+
+void buildMainGui(void)
+{
+	ERRDATA
+	GtkWidget		*menuitem;
+	GtkWidget		*menu;
+	GtkWidget		*menurecent;
+	GtkWidget		*plugsubmenu=NULL;
+
+	mainWindowVBox=createNewBox(NEWVBOX,false,0);
+	mainTopUserVBox=createNewBox(NEWVBOX,false,0);
+	mainLeftUserVBox=createNewBox(NEWVBOX,false,0);
+	mainNotebookVBox=createNewBox(NEWVBOX,false,0);
+	mainRightUserVBox=createNewBox(NEWVBOX,false,0);
+	mainBottomUserVBox=createNewBox(NEWVBOX,false,0);
+
+	mainWindowHBox=createNewBox(NEWHBOX,false,0);
+
+#ifdef _USEGTK3_
+	mainWindowHPane=gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
+	secondWindowHPane=gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
+#else
+	mainWindowHPane=gtk_hpaned_new();
+	secondWindowHPane=gtk_hpaned_new();
+#endif
+
+	mainWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_default_size((GtkWindow*)mainWindow,windowWidth,windowHeight);
+	if(windowX!=-1 && windowY!=-1)
+		gtk_window_move((GtkWindow *)mainWindow,windowX,windowY);
+
+//TODO//?
+	g_signal_connect(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(gtk_widget_hide_on_delete),NULL);
+	//g_signal_connect_after(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(doShutdown),NULL);
+	g_signal_connect_after(G_OBJECT(mainWindow),"unmap",G_CALLBACK(doShutdown),NULL);
+	g_signal_connect(G_OBJECT(mainWindow),"key-press-event",G_CALLBACK(keyShortCut),NULL);
+
+	accgroup=gtk_accel_group_new();
+	gtk_window_add_accel_group((GtkWindow*)mainWindow,accgroup);
+
+	mainNotebook=(GtkNotebook*)gtk_notebook_new();
+	gtk_notebook_set_scrollable(mainNotebook,true);
+	g_signal_connect(G_OBJECT(mainNotebook),"switch-page",G_CALLBACK(switchPage),NULL);
+	g_signal_connect(G_OBJECT(mainNotebook),"page-reordered",G_CALLBACK(switchPage),NULL);
+	g_signal_connect(G_OBJECT(mainNotebook),"page-removed",G_CALLBACK(realCloseTab),NULL);
+
+	globalHistory=new HistoryClass(mainNotebook,maxJumpHistory);
+
+#ifdef _USEGTK3_
+	char	*notebookcss=NULL;
+	GtkStyleProvider	*nbprovider;
+
+	nbprovider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
+	sinkReturn=asprintf(&notebookcss,"GtkNotebook {\n \
+    padding: 0px;\n \
+}\n");
+
+	gtk_css_provider_load_from_data((GtkCssProvider*)nbprovider,notebookcss,-1,NULL);
+	applyCSS((GtkWidget*)mainNotebook,nbprovider);
+	gtk_style_context_reset_widgets(gdk_screen_get_default());
+	debugFree(&notebookcss);
+#endif
+
+	toolBarBox=createNewBox(NEWHBOX,true,0);
+	toolBar=(GtkToolbar*)gtk_toolbar_new();
+
+//dnd
+	gtk_drag_dest_set(mainWindowVBox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
+	gtk_drag_dest_add_uri_targets(mainWindowVBox);
+	g_signal_connect(G_OBJECT(mainWindowVBox),"drag_data_received",G_CALLBACK(dropUri),NULL);
+
+	setUpToolBar();
+	gtk_box_pack_start(GTK_BOX(toolBarBox),(GtkWidget*)toolBar,true,true,0);
+
+	buildMenus();
 
 //tooloutputwindow
 #ifdef _USEGTK3_
@@ -2016,10 +2030,10 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->mlist.menuHelp=helpMenu;
 	globalPlugins->globalPlugData->mlist.menuBookMark=bookMarkMenu;
 	globalPlugins->globalPlugData->mlist.menuView=viewMenu;
-	if(useGlobalPlugMenu==true)
-		globalPlugins->globalPlugData->mlist.menuBar=plugsubmenu;
-	else
-		globalPlugins->globalPlugData->mlist.menuBar=menuBar;
+//	if(useGlobalPlugMenu==true)
+//		globalPlugins->globalPlugData->mlist.menuBar=plugsubmenu;
+//	else
+//		globalPlugins->globalPlugData->mlist.menuBar=menuBar;
 
 	globalPlugins->globalPlugData->topUserBox=mainTopUserVBox;
 	globalPlugins->globalPlugData->leftUserBox=mainLeftUserVBox;

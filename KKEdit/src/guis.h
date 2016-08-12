@@ -72,5 +72,6 @@ void doPrefs(GtkWidget *widget,gpointer data);
 void doMakeTool(void);
 GtkWidget* newImageMenuItem(unsigned menunumber,GtkWidget *parent);
 GtkWidget* newMenuItem(unsigned menunumber,GtkWidget *parent);
+void buildMenus(void);
 
 #endif

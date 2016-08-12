@@ -1289,6 +1289,7 @@ void setPrefs(GtkWidget *widget,gpointer data)
 			gtk_widget_destroy(prefswin);
 		}
 
+bool holdmenuicons=showMenuIcons;
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{
 			for(int j=0;j<MAXPREFSWIDGETS;j++)
@@ -1299,6 +1300,7 @@ void setPrefs(GtkWidget *widget,gpointer data)
 
 #ifdef _USEGTK3_
 			char	*tabcss=NULL;
+
 			sinkReturn=asprintf(&tabcss,"* {\npadding: %ipx;\n}\n",tabsSize);
 			gtk_css_provider_load_from_data((GtkCssProvider*)tabBoxProvider,tabcss,-1,NULL);
 			debugFree(&tabcss);
