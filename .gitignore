@@ -9,6 +9,9 @@ KKEdit/src/html
 KKEdit/src/searchdata.xml
 translations/
 autom4te.cache
+aclocal.m4
+config.guess
+config.sub
 
 *~
 
