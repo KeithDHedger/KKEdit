@@ -272,7 +272,7 @@ extern GtkWidget		*terminalBox;
 extern GtkWidget		*rootCommandBox;
 extern GtkWidget		*defaultBrowserBox;
 extern char				*browserCommand;
-extern bool				useMenuIcons;
+extern bool				showMenuIcons;
 
 #ifdef _USEGTK3_
 extern GtkStyleProvider	*provider;

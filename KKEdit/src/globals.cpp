@@ -177,7 +177,7 @@ GtkWidget			*terminalBox;
 GtkWidget			*rootCommandBox;
 GtkWidget			*defaultBrowserBox;
 char				*browserCommand=strdup("firefox");
-bool				useMenuIcons=true;
+bool				showMenuIcons;
 
 #ifdef _USEGTK3_
 GtkStyleProvider	*provider;
@@ -442,6 +442,7 @@ args				kkedit_rc[]=
 	{"autosearchdocs",TYPEBOOL,&autoSearchDocs},
 	{"updatecheck",TYPEBOOL,&autoCheck},
 	{"useplugmenu",TYPEBOOL,&useGlobalPlugMenu},
+	{"showmenuicons",TYPEBOOL,&showMenuIcons},
 	//strings
 	{"stylename",TYPESTRING,&styleName},
 	{"higlightcolour",TYPESTRING,&highlightColour},

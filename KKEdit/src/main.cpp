@@ -133,14 +133,15 @@ void init(void)
 	hightlightAll=true;
 	maxFuncDefs=64;
 	maxBMChars=64;
+	showMenuIcons=true;
 
 	openInThisTab=-1;
 	loadingSession=false;
 	doGoogleSearch=true;
 
 	recentMan=gtk_recent_manager_get_default();
+
 //runtime deps
-	
 	exitstatus=system("which manpageeditor 2>&1 >/dev/null");
 	gotManEditor=(bool)exitstatus;
 	exitstatus=system("which doxygen 2>&1 >/dev/null");

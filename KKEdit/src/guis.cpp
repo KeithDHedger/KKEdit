@@ -180,7 +180,7 @@ GtkWidget* newMenuItem(unsigned menunumber,GtkWidget *parent)
 	GtkWidget	*ritelabel;
 
 	menu=gtk_menu_item_new_with_mnemonic(menuData[menunumber].menuLabel);
-	if((useMenuIcons==true) && (menuData[menunumber].stockID!=NULL))
+	if((showMenuIcons==true) && (menuData[menunumber].stockID!=NULL))
 		{
 			setHotKeyString(menunumber);
 			gtk_widget_destroy(gtk_bin_get_child(GTK_BIN(menu)));
@@ -228,7 +228,7 @@ GtkWidget* newImageMenuItem(unsigned menunumber,GtkWidget *parent)
 	GtkWidget	*ritelabel;
 
 	menu=gtk_menu_item_new_with_mnemonic(menuData[menunumber].menuLabel);
-	if(useMenuIcons==true)
+	if(showMenuIcons==true)
 		{
 			setHotKeyString(menunumber);
 			gtk_widget_destroy(gtk_bin_get_child(GTK_BIN(menu)));
@@ -278,7 +278,7 @@ GtkWidget* newPixmapMenuItem(unsigned menunumber,GtkWidget *parent)
 	GtkWidget	*ritelabel;
 
 	menu=gtk_menu_item_new_with_mnemonic(menuData[menunumber].menuLabel);
-	if(useMenuIcons==true)
+	if(showMenuIcons==true)
 		{
 			setHotKeyString(menunumber);
 			gtk_widget_destroy(gtk_bin_get_child(GTK_BIN(menu)));
@@ -1358,6 +1358,16 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 	makePrefBox(true,true);
 	makePrefsCheck(AUTOSEARCH,PREFS_AUTO_SEARCH_LABEL,"autosearchdocs",autoSearchDocs,true,true);
 
+//show menu icons
+	makePrefBox(true,true);
+	makePrefsCheck(SHOWMENUICONS,PREFS_SHOW_MENU_ICONS_LABEL,"showmenuicons",showMenuIcons,true,true);
+#ifdef _USEGTK3_
+	gtk_widget_set_sensitive(prefsWidgets[SHOWMENUICONS],true);
+#else
+	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[SHOWMENUICONS],false);
+	gtk_widget_set_sensitive(prefsWidgets[SHOWMENUICONS],false);
+#endif
+
 	gtk_notebook_append_page(prefsnotebook,pagevbox,gtk_label_new(PREFS_GEN_APPEARANCE_LABEL));
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)prefsnotebook,true,true,0);
 
@@ -1663,7 +1673,6 @@ void buildMainGui(void)
 	gtk_menu_item_set_use_underline((GtkMenuItem*)fileMenu,true);
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMenu),menu);
-useMenuIcons=true;
 //new
 	menuItemNew=newMenuItem(MENUNEW,menu);
 //open
