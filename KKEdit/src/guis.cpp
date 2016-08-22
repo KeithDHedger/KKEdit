@@ -2030,10 +2030,6 @@ void buildMainGui(void)
 	globalPlugins->globalPlugData->mlist.menuHelp=helpMenu;
 	globalPlugins->globalPlugData->mlist.menuBookMark=bookMarkMenu;
 	globalPlugins->globalPlugData->mlist.menuView=viewMenu;
-//	if(useGlobalPlugMenu==true)
-//		globalPlugins->globalPlugData->mlist.menuBar=plugsubmenu;
-//	else
-//		globalPlugins->globalPlugData->mlist.menuBar=menuBar;
 
 	globalPlugins->globalPlugData->topUserBox=mainTopUserVBox;
 	globalPlugins->globalPlugData->leftUserBox=mainLeftUserVBox;
@@ -2073,9 +2069,9 @@ void buildFindReplace(void)
 	GtkWidget	*item;
 
 #ifdef _USEGTK3_
-	findReplaceDialog=gtk_dialog_new_with_buttons(FIND_FIND_REPLACE_LABEL,(GtkWindow*)mainWindow, GTK_DIALOG_DESTROY_WITH_PARENT,DIALOG_GO_FORWARD_LABEL,FINDNEXT,MENU_GO_BACK_LABEL,FINDPREV,FIND_REPLACE_LABEL,REPLACE,NULL);
+	findReplaceDialog=gtk_dialog_new_with_buttons(FIND_FIND_REPLACE_LABEL,(GtkWindow*)mainWindow, GTK_DIALOG_DESTROY_WITH_PARENT,DIALOG_GO_FORWARD_LABEL,FINDNEXT,MENU_GO_BACK_LABEL,FINDPREV,FIND_REPLACE_LABEL,REPLACENEXT,NULL);
 #else
-	findReplaceDialog=gtk_dialog_new_with_buttons(FIND_FIND_REPLACE_LABEL,(GtkWindow*)mainWindow, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_GO_FORWARD,FINDNEXT,GTK_STOCK_GO_BACK,FINDPREV,FIND_REPLACE_LABEL,REPLACE,NULL);
+	findReplaceDialog=gtk_dialog_new_with_buttons(FIND_FIND_REPLACE_LABEL,(GtkWindow*)mainWindow, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_GO_FORWARD,FINDNEXT,GTK_STOCK_GO_BACK,FINDPREV,FIND_REPLACE_LABEL,REPLACENEXT,NULL);
 #endif
 
 	g_signal_connect(G_OBJECT(findReplaceDialog),"response",G_CALLBACK(doFindReplace),NULL);
@@ -2152,12 +2148,12 @@ void buildFindReplace(void)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,true,true,0);
 	gtk_box_pack_start(GTK_BOX(content_area),vbox,true,true,0);
 
-	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACE);
+	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACENEXT);
 #ifndef _USEGTK3_
 	image=gtk_image_new_from_icon_name(GTK_STOCK_FIND_AND_REPLACE,GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image((GtkButton*)replace,image);
 #endif	
-	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACE);
+	replace=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACENEXT);
 	if(replaceAll==true)
 		gtk_button_set_label((GtkButton*)replace,FIND_REPLACE_ALL_MNEMONIC);
 	else

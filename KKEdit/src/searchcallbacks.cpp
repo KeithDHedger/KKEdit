@@ -20,10 +20,11 @@
 
 #include "kkedit-includes.h"
 
-int currentFindPage=-1;
-int firstPage=-1;
-int pagesChecked=0;
-int	itemsReplaced=-1;
+int				currentFindPage=-1;
+int				firstPage=-1;
+int				pagesChecked=0;
+int				itemsReplaced=-1;
+pageListData	*pageData=NULL;
 
 #ifdef _BUILDDOCVIEWER_
 
@@ -859,7 +860,7 @@ void regexFind(int dowhat)
 					}
 				break;
 
-			case REPLACE:
+			case REPLACENEXT:
 				fromregexreplace=false;
 				fromregexsinglereplace=false;
 				if(replaceAll==true)
@@ -963,6 +964,219 @@ void regexFind(int dowhat)
 		regexFind(FINDPREV);
 }
 
+bool	wrapFlag=false;
+
+void showOnStatus(const char *from,const char *to)
+{
+	char	*message=NULL;
+
+	if((showStatus==false))
+		{
+			ERRDATA return;
+		}
+
+	loadingSession=true;
+	gtk_statusbar_remove_all ((GtkStatusbar*)statusWidget,0);
+	sinkReturn=asprintf(&message,REPLACE_INFO_LABEL,itemsReplaced+1,from,to);
+	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
+	loadingSession=false;
+}
+
+#if 0
+void replaceSelectedText(pageStruct *page,const char *reptxt,GtkTextIter start,GtkTextIter end)
+{
+	gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&start,&end);
+	gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&start,reptxt,-1);
+	TextBuffer	*buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+	buf->scroll2CentreScreen((GtkTextView*)page->view,true);
+	delete buf;
+}
+
+bool searchForward(GtkTextIter *start_find,const char *srchtxt,long flags,GtkTextIter *start_match,GtkTextIter *end_match)
+{
+#ifdef _USEGTK3_
+	return(gtk_text_iter_forward_search(start_find,srchtxt,(GtkTextSearchFlags)flags,start_match,end_match,NULL));
+#else
+	return(gtk_source_iter_forward_search(start_find,srchtxt,(GtkSourceSearchFlags)flags,start_match,end_match,NULL));
+#endif
+}
+
+bool searchBackward(GtkTextIter *start_find,const char *srchtxt,long flags,GtkTextIter *start_match,GtkTextIter *end_match)
+{
+#ifdef _USEGTK3_
+	return(gtk_text_iter_backward_search(start_find,srchtxt,(GtkTextSearchFlags)flags,start_match,end_match,NULL));
+#else
+	return(gtk_source_iter_backward_search(start_find,srchtxt,(GtkSourceSearchFlags)flags,start_match,end_match,NULL));
+#endif
+}
+
+bool findInPageNoRegex(pageListData *pagedata,const char *srchtxt,const char *reptxt,long srchflags,int dowhat)
+{
+	GtkTextBuffer	*buffer=(GtkTextBuffer*)pagedata->page->buffer;
+	pageStruct		*page=pagedata->page;
+	GtkTextIter		start_find,end_find;
+	GtkTextIter		start_match,end_match;
+	int				offset;
+	bool			foundmatch=false;
+
+	if((dowhat==REPLACENEXT) && (replaceAll==true))
+		{
+			char		*pagetext=NULL;
+			char		*newtxt=NULL;
+			StringSlice	*str=new StringSlice;
+			gtk_text_buffer_get_start_iter(buffer,&start_find);
+			gtk_text_buffer_get_end_iter(buffer,&end_find);
+			pagetext=gtk_text_buffer_get_text (buffer,&start_find,&end_find,true);
+			str->setCaseless(insensitiveSearch);
+			str->setReturnDupString(true);
+			newtxt=str->replaceAllSlice(pagetext,(char*)srchtxt,(char*)reptxt);
+			gtk_text_buffer_begin_user_action (buffer);
+				gtk_text_buffer_set_text (buffer,newtxt,-1);
+			gtk_text_buffer_end_user_action (buffer);
+			debugFree(&pagetext);
+			debugFree(&newtxt);
+			itemsReplaced=str->getResult()*-1;
+			delete str;
+			return;
+		}
+
+	if(page->startChar==-1)
+		{
+			gtk_text_buffer_get_selection_bounds(buffer,&start_find,&end_find);
+			page->startChar=gtk_text_iter_get_offset(&start_find);
+			page->endChar=gtk_text_iter_get_offset(&end_find);
+		}
+
+	gtk_text_buffer_get_start_iter(buffer,&start_find);
+	gtk_text_buffer_get_end_iter(buffer,&end_find);
+	gtk_text_buffer_remove_tag_by_name(buffer,"highlighttag",&start_find,&end_find);  
+
+	if(hightlightAll==true)
+		{
+			while(searchForward(&start_find,srchtxt,srchflags,&start_match,&end_match))
+				{
+					gtk_text_buffer_apply_tag_by_name(buffer,"highlighttag",&start_match,&end_match);
+					offset=gtk_text_iter_get_offset(&end_match);
+					gtk_text_buffer_get_iter_at_offset(buffer,&start_find,offset);
+				}
+		}
+
+//check for already selected txt for replacement
+	if((dowhat==REPLACENEXT) && (gtk_text_buffer_get_has_selection(buffer)))
+		{
+			char	*selectedtxt=NULL;
+			bool	searchresult=false;
+			gtk_text_buffer_get_selection_bounds(buffer,&start_match,&end_match);
+			selectedtxt=gtk_text_buffer_get_text(buffer,&start_match,&end_match,true);
+			
+			if(insensitiveSearch==true)
+				searchresult=((selectedtxt!=NULL) && (strcasecmp(selectedtxt,srchtxt)==0));
+			else
+				searchresult=((selectedtxt!=NULL) && (strcmp(selectedtxt,srchtxt)==0));
+
+			if(searchresult==true)
+				{
+					replaceSelectedText(page,reptxt,start_match,end_match);
+					dowhat=FINDNEXT;
+				}
+		}
+//search forward
+	if((dowhat==FINDNEXT) || (dowhat==REPLACENEXT))
+		{
+			gtk_text_buffer_get_iter_at_offset(buffer,&start_find,page->endChar);
+			foundmatch=searchForward(&start_find,srchtxt,srchflags,&start_match,&end_match);
+		}
+
+//search back
+	if((dowhat==FINDPREV) || (dowhat==REPLACEPREV))
+		{
+			gtk_text_buffer_get_iter_at_offset(buffer,&start_find,page->startChar);
+			foundmatch=searchBackward(&start_find,srchtxt,srchflags,&start_match,&end_match);
+		}
+
+	if(foundmatch==true)
+		{
+			gtk_text_buffer_apply_tag_by_name(buffer,"highlighttag",&start_match,&end_match);
+			page->startChar=gtk_text_iter_get_offset(&start_match);
+			page->endChar=gtk_text_iter_get_offset(&end_match);
+			gtk_text_buffer_select_range (buffer,&start_match,&end_match);
+			TextBuffer	*buf=new TextBuffer(buffer);
+			buf->scroll2CentreScreen((GtkTextView*)page->view,true);
+			delete buf;
+			if(dowhat==REPLACENEXT)
+				replaceSelectedText(page,reptxt,start_match,end_match);
+			
+		}
+	else
+		{
+			if((dowhat==FINDNEXT)  || (dowhat==REPLACENEXT))
+				{
+					if(findInAllFiles==true)
+						{
+							
+						}
+					else
+						{
+							if((wrapSearch==true)
+							if(wrapFlag==false)
+								{
+									wrapFlag=true;
+									page->startChar=0;
+									page->endChar=0;
+									findInPageNoRegex(pagedata,srchtxt,reptxt,srchflags,FINDNEXT);
+								}
+						}
+				}
+		}
+	wrapFlag=false;
+}
+
+VISIBLE void findNoRegex(int dowhat)
+{
+	pageStruct				*page=NULL;
+	char					*searchtext=NULL;
+	char					*replacetext=NULL;
+	bool					founditem=false;
+
+#ifdef _USEGTK3_
+	GtkTextSearchFlags		flags=GTK_TEXT_SEARCH_TEXT_ONLY;
+#else
+	GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
+#endif
+
+	if(gtk_entry_get_text_length((GtkEntry*)findBox)==0)
+		return;
+
+	if(insensitiveSearch==true)
+#ifdef _USEGTK3_
+		flags=(GtkTextSearchFlags)(GTK_TEXT_SEARCH_TEXT_ONLY|GTK_TEXT_SEARCH_CASE_INSENSITIVE);
+#else
+		flags=(GtkSourceSearchFlags)(GTK_SOURCE_SEARCH_TEXT_ONLY|GTK_SOURCE_SEARCH_CASE_INSENSITIVE);
+#endif
+
+	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)findBox));
+	replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
+
+	if(pageData==NULL)
+		pagedata=getCurrentPageListData();
+
+	if(pagedata==NULL)
+		return;
+
+//	if(findInAllFiles==false)
+//		{
+			findInPageNoRegex(pagedata,searchtext,replacetext,(long)flags,dowhat);
+//		}
+//	else
+//		{
+//			while
+//		}
+	if(itemsReplaced>-1)
+		showOnStatus(gtk_entry_get_text((GtkEntry*)findBox),gtk_entry_get_text((GtkEntry*)replaceBox));
+	
+}
+#endif
+
 VISIBLE void basicFind(int dowhat)
 {
 	pageStruct				*page=NULL;
@@ -1013,10 +1227,6 @@ VISIBLE void basicFind(int dowhat)
 	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)findBox));
 	replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
 
-//printf("searchtext=%s replacetxtx=%s\n",searchtext,replacetext);
-//	globalPlugins->setUserData("tsSi",FROMBASICFIND,searchtext,replacetext,dowhat);
-//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
-
 	if(!gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
 		gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&page->iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 
@@ -1043,9 +1253,6 @@ VISIBLE void basicFind(int dowhat)
 
 	if(dowhat==FINDNEXT)
 		{
-//printf("searchtext=%s replacetxtx=%s\n",searchtext,replacetext);
-//	globalPlugins->setUserData("tsSi",FROMBASICFIND,searchtext,replacetext,dowhat);
-//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) &&(autoSeleced==false))
 				{
 					gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
@@ -1130,7 +1337,7 @@ VISIBLE void basicFind(int dowhat)
 					}
 			}
 
-		if((dowhat==REPLACE) &&(replaceAll==false))
+		if((dowhat==REPLACENEXT) &&(replaceAll==false))
 			{
 //	globalPlugins->setUserData("tsSi",FROMBASICFIND,searchtext,replacetext,dowhat);
 //	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
@@ -1149,7 +1356,7 @@ VISIBLE void basicFind(int dowhat)
 				basicFind(FINDNEXT);
 			}
 
-		if((dowhat==REPLACE) &&(findInAllFiles==true) &&(replaceAll==true))
+		if((dowhat==REPLACENEXT) &&(findInAllFiles==true) &&(replaceAll==true))
 			{
 				if(yesNo((char*)DIALOG_YESNO_REPLACE_IN_ALL_FILES,(char*)"")==GTK_RESPONSE_CANCEL)
 					{
@@ -1159,12 +1366,12 @@ VISIBLE void basicFind(int dowhat)
 						for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
 							{
 								gtk_notebook_set_current_page(mainNotebook,j);
-								basicFind(REPLACE);
+								basicFind(REPLACENEXT);
 							}
 						findInAllFiles=true;
 			}
 
-		if((dowhat==REPLACE) &&(replaceAll==true))
+		if((dowhat==REPLACENEXT) &&(replaceAll==true))
 			{
 
 			if((gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true) &&(autoSeleced==false))
@@ -1206,22 +1413,6 @@ void pasteFRClip(GtkWidget *widget,gpointer data)
 	gtk_entry_set_text((GtkEntry*)data,gtk_combo_box_text_get_active_text((GtkComboBoxText*)widget));
 }
 
-void showOnStatus(const char *from,const char *to)
-{
-	char	*message=NULL;
-
-	if((showStatus==false))
-		{
-			ERRDATA return;
-		}
-
-	loadingSession=true;
-	gtk_statusbar_remove_all ((GtkStatusbar*)statusWidget,0);
-	sinkReturn=asprintf(&message,REPLACE_INFO_LABEL,itemsReplaced+1,from,to);
-	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
-	loadingSession=false;
-}
-
 void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 {
 	bool		flag=false;
@@ -1234,7 +1425,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	if(response_id==GTK_RESPONSE_DELETE_EVENT)
 		return;
 
-	if(response_id!=REPLACE)
+	if(response_id!=REPLACENEXT)
 		{
 			drop=findDropBox;
 			entry=findBox;
@@ -1277,12 +1468,13 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	currentFindPage=gtk_notebook_get_current_page(mainNotebook);
 	pagesChecked=0;
 
-	if(response_id!=REPLACE)
+	if(response_id!=REPLACENEXT)
 		findList=list;
 	else
 		replaceList=list;
 
 	if(useRegex==false)
+		//findNoRegex(response_id);
 		basicFind(response_id);
 	else
 		regexFind(response_id);
@@ -1321,7 +1513,7 @@ void doSearchPrefs(GtkWidget *widget,gpointer data)
 				break;
 			case 3:
 				replaceAll=gtk_toggle_button_get_active((GtkToggleButton*)widget);
-				button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACE);
+				button=gtk_dialog_get_widget_for_response((GtkDialog*)findReplaceDialog,REPLACENEXT);
 				if(replaceAll==false)
 					gtk_button_set_label((GtkButton*)button,FIND_REPLACE_LABEL);
 				else

@@ -57,16 +57,69 @@ ERRDATA
 	else
 		pageid=(unsigned)(long)g_object_get_data((GObject*)pageBox,"pageid");
 
-ERRDATA	if(pageid==0)
-			return(NULL);
+	if(pageid==0)
+		return(NULL);
 	
-ERRDATA		list=pages;
-ERRDATA			while(list!=NULL)
+	list=pages;
+	while(list!=NULL)
 		{
 			page=(pageStruct*)list->data;
 			if((page!=NULL) && (page->pageID==pageid))
 				return(page);
 			list=list->next;
 		}			
-ERRDATA	return(NULL);
+ERRDATA
+	return(NULL);
 }
+
+pageListData* getCurrentPageListData(void)
+{
+	pageStruct		*page=NULL;
+	GList			*list;
+	int				thispage;
+	GtkWidget		*pageBox=NULL;
+	pageListData	*data=NULL;
+	unsigned		pageid=0;
+	unsigned		cnt=0;
+
+	thispage=gtk_notebook_get_current_page(mainNotebook);
+	pageBox=gtk_notebook_get_nth_page(mainNotebook,thispage);
+	if(pageBox==NULL)
+		return(NULL);
+	else
+		pageid=(unsigned)(long)g_object_get_data((GObject*)pageBox,"pageid");
+
+	list=pages;
+	while(list!=NULL)
+		{
+			page=(pageStruct*)list->data;
+			if((page!=NULL) && (page->pageID==pageid))
+				{
+					data=(pageListData*)calloc(1,sizeof(pageListData));
+					data->page=page;
+					data->list=list;
+					data->listNum=cnt;
+					return(data);
+				}
+			cnt++;
+			list=list->next;
+		}			
+	return(NULL);
+}
+
+#if 0
+pageListData* getNextPage(pageListData *pagedata)
+{
+	pageListData	data=NULL;
+	if(pagedata!=NULL)
+		{
+			if(pagedata->list>next!=NULL)
+				XXXXXXXXXXXXXX
+		}
+	else
+		data=getCurrentPageListData();
+
+	return(sata);
+}
+#endif
+

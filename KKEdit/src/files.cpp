@@ -936,7 +936,16 @@ bool highLightText(GtkWidget *widget,GdkEvent *event,gpointer data)
 		{
 			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 			buf->getSelectionBounds();
-
+			if(buf->selectionStart==-1)
+				{
+					page->startChar=buf->charPos;
+					page->endChar=buf->charPos;
+				}
+			else
+				{
+					page->startChar=buf->selectionStart;
+					page->endChar=buf->selectionEnd;
+				}
 			globalPlugins->setUserData("tsdbe",FROMSELECTION,OPENMENUNAME,data,buf->selectionStart,buf->selectionEnd);
 			g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 			delete buf;
@@ -1011,6 +1020,8 @@ pageStruct *makeNewPage(void)
 	page->searchString=NULL;
 	page->replaceString=NULL;
 	page->hidden=false;
+	page->startChar=-1;
+	page->endChar=-1;
 
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&iter);
 	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),page->backMark,&iter);

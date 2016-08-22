@@ -151,6 +151,9 @@ struct pageStruct
 	char				*replaceString;;
 	GtkWidget			*tabButton;
 	bool				hidden;
+	bool				restoreHidden;
+	int					startChar;
+	int					endChar;
 };
 #endif
 

@@ -21,9 +21,17 @@
 #ifndef _PAGES_
 #define _PAGES_
 
+struct pageListData
+{
+	pageStruct	*page;
+	GList		*list;
+	int			listNum;
+};
+
 extern GList	*pages;
 
 pageStruct *getPageStructByIDFromList(unsigned pageid);
 pageStruct *getPageStructByIDFromPage(int pagenum);
+pageListData *getCurrentPageListData(void);
 
 #endif

@@ -30,9 +30,10 @@
 #define DBG4 4 //only catch faults
 #define DBG5 5 //trace progflow
 
-#define REPLACE			100
-#define FINDNEXT		200
-#define FINDPREV		300
+#define REPLACENEXT		100
+#define REPLACEPREV		200
+#define FINDNEXT		400
+#define FINDPREV		800
 
 #if _DEBUGLEVEL_ == DBG0
 #define ERRDATA
