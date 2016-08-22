@@ -1,0 +1,39 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: SessionManager 1.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-22 13:34+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: sessionmanager.cpp:153 sessionmanager.cpp:353
+msgid "Session Manager"
+msgstr ""
+
+#: sessionmanager.cpp:161
+msgid "Session Name"
+msgstr ""
+
+#: sessionmanager.cpp:284
+#, c-format
+msgid "Session %i"
+msgstr ""
+
+#: sessionmanager.cpp:347
+msgid "Session Manager - Adds multiple named sessions to KKEdit"
+msgstr ""
+
+#: sessionmanager.cpp:349
+msgid "French Translation"
+msgstr ""
