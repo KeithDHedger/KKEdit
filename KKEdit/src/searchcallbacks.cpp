@@ -982,6 +982,15 @@ void showOnStatus(const char *from,const char *to)
 	loadingSession=false;
 }
 
+bool searchForward(GtkTextIter *start_find,const char *srchtxt,long flags,GtkTextIter *start_match,GtkTextIter *end_match)
+{
+#ifdef _USEGTK3_
+	return(gtk_text_iter_forward_search(start_find,srchtxt,(GtkTextSearchFlags)flags,start_match,end_match,NULL));
+#else
+	return(gtk_source_iter_forward_search(start_find,srchtxt,(GtkSourceSearchFlags)flags,start_match,end_match,NULL));
+#endif
+}
+
 #if 0
 void replaceSelectedText(pageStruct *page,const char *reptxt,GtkTextIter start,GtkTextIter end)
 {
@@ -1261,12 +1270,13 @@ VISIBLE void basicFind(int dowhat)
 				}
 			else
 				autoSeleced=true;
-
-#ifdef _USEGTK3_
-			if(gtk_text_iter_forward_search(&page->match_end,searchtext,flags,&page->match_start,&page->match_end,NULL))
-#else
-			if(gtk_source_iter_forward_search(&page->match_end,searchtext,flags,&page->match_start,&page->match_end,NULL))
-#endif
+//searchForward(GtkTextIter *start_find,const char *srchtxt,long flags,GtkTextIter *start_match,GtkTextIter *end_match)
+			if(searchForward(&page->match_end,searchtext,flags,&page->match_start,&page->match_end))
+//#ifdef _USEGTK3_
+//			if(gtk_text_iter_forward_search(&page->match_end,searchtext,flags,&page->match_start,&page->match_end,NULL))
+//#else
+//			if(gtk_source_iter_forward_search(&page->match_end,searchtext,flags,&page->match_start,&page->match_end,NULL))
+//#endif
 				{
 					found=true;
 					gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
