@@ -156,7 +156,7 @@ GtkWidget* newCheckMenuItem(unsigned menunumber,GtkWidget *parent,bool initial)
 {
 	GtkWidget	*menu;
 
-	menu=gtk_check_menu_item_new_with_label(menuData[menunumber].menuLabel);
+	menu=gtk_check_menu_item_new_with_label(gettext(menuData[menunumber].menuLabel));
 	gtk_check_menu_item_set_active((GtkCheckMenuItem*)menu,initial);
 
 	if(menuData[menunumber].key>0)
@@ -179,7 +179,7 @@ GtkWidget* newMenuItem(unsigned menunumber,GtkWidget *parent)
 	GtkWidget	*image;
 	GtkWidget	*ritelabel;
 
-	menu=gtk_menu_item_new_with_mnemonic(menuData[menunumber].menuLabel);
+	menu=gtk_menu_item_new_with_mnemonic(gettext(menuData[menunumber].menuLabel));
 	if((showMenuIcons==true) && (menuData[menunumber].stockID!=NULL))
 		{
 			setHotKeyString(menunumber);
@@ -191,7 +191,7 @@ GtkWidget* newMenuItem(unsigned menunumber,GtkWidget *parent)
 			gtk_box_pack_start((GtkBox*)menuhbox,image,false,false,0);
 
 			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
-			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(menuData[menunumber].menuLabel),false,false,0);
+			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(gettext(menuData[menunumber].menuLabel)),false,false,0);
 			gtk_box_pack_start(GTK_BOX(menuhbox),pad,true,true,0);
 
 			ritelabel=gtk_label_new(keyStrBuffer);
@@ -204,7 +204,7 @@ GtkWidget* newMenuItem(unsigned menunumber,GtkWidget *parent)
 	if(menuData[menunumber].stockID!=NULL)
 		menu=gtk_image_menu_item_new_from_stock(menuData[menunumber].stockID,NULL);
 	else
-		menu=gtk_menu_item_new_with_mnemonic(menuData[menunumber].menuLabel);
+		menu=gtk_menu_item_new_with_mnemonic(gettext(menuData[menunumber].menuLabel));
 #endif
 	if(menuData[menunumber].key>0)
 		gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accgroup,menuData[menunumber].key,(GdkModifierType)menuData[menunumber].mod,GTK_ACCEL_VISIBLE);
@@ -227,7 +227,7 @@ GtkWidget* newImageMenuItem(unsigned menunumber,GtkWidget *parent)
 	GtkWidget	*image;
 	GtkWidget	*ritelabel;
 
-	menu=gtk_menu_item_new_with_mnemonic(menuData[menunumber].menuLabel);
+	menu=gtk_menu_item_new_with_mnemonic(gettext(menuData[menunumber].menuLabel));
 	if(showMenuIcons==true)
 		{
 			setHotKeyString(menunumber);
@@ -239,7 +239,7 @@ GtkWidget* newImageMenuItem(unsigned menunumber,GtkWidget *parent)
 			gtk_box_pack_start((GtkBox*)menuhbox,image,false,false,0);
 
 			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
-			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(menuData[menunumber].menuLabel),false,false,0);
+			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(gettext(menuData[menunumber].menuLabel)),false,false,0);
 			gtk_box_pack_start(GTK_BOX(menuhbox),pad,true,true,0);
 
 			ritelabel=gtk_label_new(keyStrBuffer);
@@ -250,7 +250,7 @@ GtkWidget* newImageMenuItem(unsigned menunumber,GtkWidget *parent)
 		}
 #else
 	GtkWidget	*image;
-	menu=gtk_image_menu_item_new_with_mnemonic(menuData[menunumber].menuLabel);
+	menu=gtk_image_menu_item_new_with_mnemonic(gettext(menuData[menunumber].menuLabel));
 	image=gtk_image_new_from_stock(menuData[menunumber].stockID,GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menu,image);
 #endif
@@ -277,7 +277,7 @@ GtkWidget* newPixmapMenuItem(unsigned menunumber,GtkWidget *parent)
 	GtkWidget	*image;
 	GtkWidget	*ritelabel;
 
-	menu=gtk_menu_item_new_with_mnemonic(menuData[menunumber].menuLabel);
+	menu=gtk_menu_item_new_with_mnemonic(gettext(menuData[menunumber].menuLabel));
 	if(showMenuIcons==true)
 		{
 			setHotKeyString(menunumber);
@@ -289,7 +289,7 @@ GtkWidget* newPixmapMenuItem(unsigned menunumber,GtkWidget *parent)
 			gtk_box_pack_start((GtkBox*)menuhbox,image,false,false,0);
 
 			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
-			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(menuData[menunumber].menuLabel),false,false,0);
+			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(gettext(menuData[menunumber].menuLabel)),false,false,0);
 			gtk_box_pack_start(GTK_BOX(menuhbox),pad,true,true,0);
 
 			ritelabel=gtk_label_new(keyStrBuffer);
@@ -300,7 +300,7 @@ GtkWidget* newPixmapMenuItem(unsigned menunumber,GtkWidget *parent)
 		}
 #else
 	GtkWidget	*image;
-	menu=gtk_image_menu_item_new_with_mnemonic(menuData[menunumber].menuLabel);
+	menu=gtk_image_menu_item_new_with_mnemonic(gettext(menuData[menunumber].menuLabel));
 	image=gtk_image_new_from_file(menuData[menunumber].stockID);
 	gtk_image_menu_item_set_image((GtkImageMenuItem *)menu,image);
 #endif

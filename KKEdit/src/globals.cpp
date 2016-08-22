@@ -1040,7 +1040,6 @@ void getRecursiveTagList(char *filepath,void *ptr)
 		}
 
 	sinkReturn=asprintf(&command,"find \"%s\" -maxdepth %i|%s -L - -x|%s|sed 's@ \\+@ @g'",filepath,depth,ctagsPath,sort);
-
 	fp=popen(command, "r");
 	while(fgets(line,2048,fp))
 		{
