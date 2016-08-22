@@ -1,0 +1,60 @@
+# French translations for FileBrowser package
+# Traductions françaises du paquet FileBrowser.
+# Copyright (C) 2014 THE FileBrowser'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the FileBrowser package.
+# Automatically generated, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: FileBrowser 1.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-22 13:31+0100\n"
+"PO-Revision-Date: 2016-08-22 13:31-0000\n"
+"Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.6.11\n"
+
+#: filebrowser.cpp:127
+msgid "File Browser Plug In Prefs"
+msgstr "Préférences du navigateur de fichiers"
+
+#: filebrowser.cpp:131
+msgid "Show Invisible File/Folders"
+msgstr "Montrer les fichiers/dossiers cachés"
+
+#: filebrowser.cpp:350 filebrowser.cpp:505
+msgid "Hide Browser"
+msgstr "Cacher le navigateur"
+
+#: filebrowser.cpp:358
+msgid "Show Browser"
+msgstr "Montrer le navigateur"
+
+#: filebrowser.cpp:472 filebrowser.cpp:485
+msgid "Open In Browser"
+msgstr "Ouvrir dans le navigateur"
+
+#: filebrowser.cpp:572
+msgid "File Browser - Add's a simple file browser to the left pane"
+msgstr ""
+"Navigateur de fichiers - un simple navigateur de fichiers sur le côté gauche"
+
+#: filebrowser.cpp:574
+msgid "French Translation"
+msgstr ""
+
+#: filebrowser.cpp:578
+msgid "FileBrowser"
+msgstr "Navigateur de fichiers"
+
+#~ msgid ""
+#~ "\n"
+#~ "More by the same author\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Plus du même auteur\n"
