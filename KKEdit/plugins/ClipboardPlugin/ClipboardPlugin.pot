@@ -1,0 +1,35 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ClipboardPlugin 1.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-22 13:13+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: clipboardplugin.cpp:166
+msgid "C_lipboard"
+msgstr ""
+
+#: clipboardplugin.cpp:173
+#, c-format
+msgid "Clip Number. %i"
+msgstr ""
+
+#: clipboardplugin.cpp:200
+msgid "Clipboard Plugin - Add's multiple clips"
+msgstr ""
+
+#: clipboardplugin.cpp:201
+msgid "French Translation"
+msgstr ""
