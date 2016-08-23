@@ -34,3 +34,5 @@
 
 extern const char	*moreapps[];
 extern const char	*authors[];
+
+#endif

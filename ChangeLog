@@ -1,4 +1,5 @@
 0.4.0
+Made session manager name box modal.
 Standardized about boxes.
 Tweaked some plugin makefiles.
 Fixed some plugin translations not working.

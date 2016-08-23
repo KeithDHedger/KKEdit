@@ -150,7 +150,7 @@ char* getNewSessionName(int sessionnumber,plugData* plugdata)
 	vbox=createNewBox(NEWVBOX,false,0);
 
 	setTextDomain(true,plugdata);
-	dialog=gtk_dialog_new_with_buttons(gettext("Session Manager"),NULL,GTK_DIALOG_MODAL,GTK_STOCK_APPLY,GTK_RESPONSE_APPLY,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,NULL);
+	dialog=gtk_dialog_new_with_buttons(gettext("Session Manager"),(GtkWindow*)plugdata->mainWindow,GTK_DIALOG_MODAL,GTK_STOCK_APPLY,GTK_RESPONSE_APPLY,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,NULL);
 	gtk_window_set_default_size((GtkWindow*)dialog,300,120);
 	dialogbox=gtk_dialog_get_content_area((GtkDialog*)dialog);
 	gtk_container_add(GTK_CONTAINER(dialogbox),vbox);
@@ -161,7 +161,7 @@ char* getNewSessionName(int sessionnumber,plugData* plugdata)
 	gtk_box_pack_start((GtkBox*)vbox,gtk_label_new(gettext("Session Name")),true,true,4);
 	gtk_box_pack_start((GtkBox*)vbox,prefs,true,true,4);
 
-	gtk_widget_show_all(dialog);
+	gtk_widget_show_all(vbox);
 	response=gtk_dialog_run(GTK_DIALOG(dialog));
 	if(response==GTK_RESPONSE_APPLY)
 		sinkInt=asprintf(&command,"%s",gtk_entry_get_text((GtkEntry*)prefs));
