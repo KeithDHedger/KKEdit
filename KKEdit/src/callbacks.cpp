@@ -1481,7 +1481,7 @@ VISIBLE void doAbout(GtkWidget *widget,gpointer data)
 	sinkReturn=asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",DIALOG_ABOUT_FRENCH_LABEL);
 	g_file_get_contents(GDOCSFOLDER "/gpl-3.0.txt",&licence,NULL,NULL);
 
-	gtk_show_about_dialog(NULL,"authors",authorskk,"translator-credits",translators,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",KKEDITPAGE,"website-label","KKEdit Homepage","program-name","KKEdit","logo-icon-name",ABOUTICON,"license",licence,"artists",artists,NULL);
+	gtk_show_about_dialog(NULL,"authors",authors,"translator-credits",translators,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",KKEDITPAGE,"website-label","KKEdit Homepage","program-name","KKEdit","logo-icon-name",ABOUTICON,"license",licence,"artists",artists,NULL);
 
 	ERRDATA debugFree(&licence);
 	ERRDATA debugFree(&translators);

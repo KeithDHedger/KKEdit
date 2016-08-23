@@ -357,7 +357,7 @@ extern "C" int plugPrefs(gpointer data)
 
 	setTextDomain(true,plugdata);
 	vbox=createNewBox(NEWVBOX,false,0);
-	dialog=gtk_dialog_new_with_buttons(gettext("Terminal Pane"),NULL,GTK_DIALOG_MODAL,GTK_STOCK_APPLY,GTK_RESPONSE_APPLY,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,NULL);
+	dialog=gtk_dialog_new_with_buttons(gettext("Terminal Pane"),(GtkWindow*)plugdata->prefsWindow,GTK_DIALOG_MODAL,gettext(GTK_STOCK_APPLY),GTK_RESPONSE_APPLY,gettext(GTK_STOCK_CANCEL),GTK_RESPONSE_CANCEL,NULL);
 	gtk_window_set_default_size((GtkWindow*)dialog,300,120);
 	dialogbox=gtk_dialog_get_content_area((GtkDialog*)dialog);
 	gtk_container_add(GTK_CONTAINER(dialogbox),vbox);
@@ -424,7 +424,7 @@ extern "C" int doAbout(gpointer data)
 
 	setTextDomain(true,plugdata);
 
-	const char*		aboutboxstring=gettext("A Simple Terminal Pane For KKEdit");
+	const char		*aboutboxstring=gettext("A Simple Terminal Pane For KKEdit");
 	sinkInt=asprintf(&licencepath,"%s/docs/gpl-3.0.txt",plugdata->dataDir);
 	sinkInt=asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",gettext("French Translation"));
 
@@ -440,7 +440,10 @@ extern "C" int doAbout(gpointer data)
 	gtk_about_dialog_set_license(about,licence);
 	gtk_about_dialog_set_translator_credits(about,(const gchar*)translators);
 
+	gtk_window_set_transient_for((GtkWindow*)about,(GtkWindow*)plugdata->prefsWindow);
+
 	gtk_dialog_run(GTK_DIALOG(about));
+
 	gtk_widget_destroy((GtkWidget*)about);
 	free(licence);
 	free(licencepath);

@@ -258,6 +258,9 @@ struct	plugData
 
 //user data passed to plugins.
 	plugUserData		userData;
+
+//plug prefs window
+	GtkWidget			*prefsWindow;
 };
 
 void		showDocView(int howtodisplay,char *text,const char *title);

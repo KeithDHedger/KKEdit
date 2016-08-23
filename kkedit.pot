@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kkedit 1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-22 14:57+0100\n"
+"POT-Creation-Date: 2016-08-22 17:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -726,7 +726,7 @@ msgid "Read Link Before Opening File"
 msgstr ""
 
 #: KKEdit/src/kkedit-includes.h:317
-msgid "Show Icons In Gtk3 Menus ( Requies Restart )"
+msgid "Show Icons In Gtk3 Menus ( Requires Restart )"
 msgstr ""
 
 #: KKEdit/src/kkedit-includes.h:318

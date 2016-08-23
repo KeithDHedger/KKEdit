@@ -314,7 +314,7 @@
 #define PREFS_NO_WARN_LABEL gettext("Don't Warn On File Change")
 #define PREFS_READ_LINK_LABEL gettext("Read Link Before Opening File")
 #define PREFS_AUTO_COMPLETE_LABEL gettext("Auto Show Completions")
-#define PREFS_SHOW_MENU_ICONS_LABEL gettext("Show Icons In Gtk3 Menus ( Requies Restart )")
+#define PREFS_SHOW_MENU_ICONS_LABEL gettext("Show Icons In Gtk3 Menus ( Requires Restart )")
 #define PREFS_AUTO_SEARCH_LABEL gettext("Auto Search Docs")
 #define PREFS_GEN_APPEARANCE_LABEL gettext("General Appearance")
 #define PREFS_TAB_WIDTH_LABEL gettext("Tab width:")

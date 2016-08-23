@@ -51,6 +51,17 @@
 #define ABOUTICON "KKEditPlug"
 #endif
 
+//#ifdef _USEGTK3_
+////gtk stock widget labels
+//#define GTK_STOCK_YES gettext("_Yes")
+//#define GTK_STOCK_NO gettext("_No")
+//#define GTK_STOCK_CANCEL gettext("_Cancel")
+//#define GTK_STOCK_OPEN_LABEL gettext("_Open")
+//#define GTK_STOCK_APPLY gettext("_Apply")
+//#define GTK_STOCK_EDIT "accessories-text-editor"
+//#define GTK_STOCK_OK gettext("_OK")
+//#endif
+
 int	(*module_plug_function)(gpointer globaldata);
 
 GtkWidget*		leftButton;
@@ -124,7 +135,7 @@ extern "C" int plugPrefs(gpointer data)
 	vbox=createNewBox(NEWVBOX,false,0);
 	setTextDomain(true,plugdata);
 
-	dialog=gtk_dialog_new_with_buttons(gettext("File Browser Plug In Prefs"),NULL,GTK_DIALOG_MODAL,GTK_STOCK_APPLY,GTK_RESPONSE_APPLY,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,NULL);
+	dialog=gtk_dialog_new_with_buttons(gettext("File Browser Plug In Prefs"),(GtkWindow*)plugdata->prefsWindow,GTK_DIALOG_MODAL,gettext(GTK_STOCK_APPLY),GTK_RESPONSE_APPLY,gettext(GTK_STOCK_CANCEL),GTK_RESPONSE_CANCEL,NULL);
 	dialogbox=gtk_dialog_get_content_area((GtkDialog*)dialog);
 	gtk_container_add(GTK_CONTAINER(dialogbox),vbox);
 
@@ -584,6 +595,8 @@ extern "C" int doAbout(gpointer data)
 	gtk_about_dialog_set_logo_icon_name(about,ABOUTICON);
 	gtk_about_dialog_set_license(about,licence);
 	gtk_about_dialog_set_translator_credits(about,(const gchar*)translators);
+
+	gtk_window_set_transient_for((GtkWindow*)about,(GtkWindow*)plugdata->prefsWindow);
 
 	gtk_dialog_run(GTK_DIALOG(about));
 	gtk_widget_destroy((GtkWidget*)about);

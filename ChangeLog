@@ -1,4 +1,8 @@
 0.3.4
+Standardized about boxes.
+Tweaked some plugin makefiles.
+Fixed some plugin translations not working.
+Fixed plugin translation files names for gtk3 version.
 Fixed some menus not being translated.
 Tweaking find/replace code.
 Added "Show Icons In Gtk3 Menus" to prefs.

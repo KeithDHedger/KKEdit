@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileBrowser 1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-22 13:31+0100\n"
-"PO-Revision-Date: 2016-08-22 13:31-0000\n"
+"POT-Creation-Date: 2016-08-23 12:20+0100\n"
+"PO-Revision-Date: 2016-08-23 12:46-0000\n"
 "Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
@@ -19,42 +19,72 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.6.11\n"
 
-#: filebrowser.cpp:127
+#: filebrowser.cpp:140
 msgid "File Browser Plug In Prefs"
 msgstr "Préférences du navigateur de fichiers"
 
-#: filebrowser.cpp:131
+#: filebrowser.cpp:144
 msgid "Show Invisible File/Folders"
 msgstr "Montrer les fichiers/dossiers cachés"
 
-#: filebrowser.cpp:350 filebrowser.cpp:505
+#: filebrowser.cpp:363 filebrowser.cpp:518
 msgid "Hide Browser"
 msgstr "Cacher le navigateur"
 
-#: filebrowser.cpp:358
+#: filebrowser.cpp:371
 msgid "Show Browser"
 msgstr "Montrer le navigateur"
 
-#: filebrowser.cpp:472 filebrowser.cpp:485
+#: filebrowser.cpp:485 filebrowser.cpp:498
 msgid "Open In Browser"
 msgstr "Ouvrir dans le navigateur"
 
-#: filebrowser.cpp:572
+#: filebrowser.cpp:585
 msgid "File Browser - Add's a simple file browser to the left pane"
 msgstr ""
-"Navigateur de fichiers - un simple navigateur de fichiers sur le côté gauche"
+"Navigateur de fichiers - Ajoute un simple navigateur de fichiers sur le côté "
+"gauche"
 
-#: filebrowser.cpp:574
+#: filebrowser.cpp:587
 msgid "French Translation"
-msgstr ""
+msgstr "Traduction française"
 
-#: filebrowser.cpp:578
+#: filebrowser.cpp:591
 msgid "FileBrowser"
 msgstr "Navigateur de fichiers"
 
-#~ msgid ""
-#~ "\n"
-#~ "More by the same author\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Plus du même auteur\n"
+#: ../common.h:28
+msgid "Apply"
+msgstr "_Appliquer"
+
+#: ../common.h:29
+msgid "Cancel"
+msgstr "_Annuler"
+
+#: ../common.h:30
+msgid "New"
+msgstr "Nouveau"
+
+#: ../common.h:31
+msgid "Help"
+msgstr "Aide"
+
+#: ../common.h:32
+msgid "Open"
+msgstr "Ouvrir"
+
+#: ../common.h:33
+msgid "Connect"
+msgstr "Relier"
+
+#: ../common.h:34
+msgid "OK"
+msgstr "OK"
+
+#: ../common.h:43
+msgid ""
+"\n"
+"More by the same author\n"
+msgstr ""
+"\n"
+"Plus du même auteur\n"

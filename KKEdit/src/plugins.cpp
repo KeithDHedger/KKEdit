@@ -148,6 +148,7 @@ void setPlugPrefs(GtkWidget *widget,gpointer data)
 	GtkTreeIter			iter;
 	char				*plugname;
 
+	globalPlugins->globalPlugData->prefsWindow=plugwindow;
 	switch(long(data))
 		{
 			case 1:

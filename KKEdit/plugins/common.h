@@ -20,6 +20,7 @@
 
 //#include "../src/links.h"
 
+#include "../src/internet.h"
 #ifndef _COMMON_
 #define _COMMON_
 
@@ -37,24 +38,6 @@
 #define GDK_V GDK_KEY_V
 
 #endif
-
-#define MYEMAIL "keithhedger@keithhedger.darktech.org"
-#define MYWEBSITE "http://kkedit.darktech.org"
-#define DIALOG_ABOUT_MORE_LABEL gettext("\nMore by the same author\n")
-
-const char		*moreapps[]={
-								"Big thanks to Sadi Yumuşak and Thanh for all their help.\n",
-								"More by the same author",
-								"Xfce-Theme-Manager\nhttp://khapplications.darktech.org/pages/apps.html#themeed\n",
-								"Xfce4-Composite-Editor\nhttp://khapplications.darktech.org/pages/apps.html#xfcecomp\n",
-								"Manpage Editor\nhttp://gtk-apps.org/content/show.php?content=160219\n",
-								"GtkSu\nhttp://gtk-apps.org/content/show.php?content=158974\n",
-								"ASpell GUI\nhttp://gtk-apps.org/content/show.php/?content=161353\n",
-								"Clipboard Viewer\nhttp://gtk-apps.org/content/show.php/?content=121667"
-							};
-
-const char		*authors[]={"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,moreapps[0],moreapps[1],moreapps[2],moreapps[3],moreapps[4],moreapps[5],moreapps[6],moreapps[7],NULL};
-
 
 #ifndef _ENUMS_
 #define _ENUMS_

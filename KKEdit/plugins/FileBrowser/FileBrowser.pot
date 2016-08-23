@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileBrowser 1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-22 13:31+0100\n"
+"POT-Creation-Date: 2016-08-23 12:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,34 +17,68 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: filebrowser.cpp:127
+#: filebrowser.cpp:138
 msgid "File Browser Plug In Prefs"
 msgstr ""
 
-#: filebrowser.cpp:131
+#: filebrowser.cpp:142
 msgid "Show Invisible File/Folders"
 msgstr ""
 
-#: filebrowser.cpp:350 filebrowser.cpp:505
+#: filebrowser.cpp:361 filebrowser.cpp:516
 msgid "Hide Browser"
 msgstr ""
 
-#: filebrowser.cpp:358
+#: filebrowser.cpp:369
 msgid "Show Browser"
 msgstr ""
 
-#: filebrowser.cpp:472 filebrowser.cpp:485
+#: filebrowser.cpp:483 filebrowser.cpp:496
 msgid "Open In Browser"
 msgstr ""
 
-#: filebrowser.cpp:572
+#: filebrowser.cpp:583
 msgid "File Browser - Add's a simple file browser to the left pane"
 msgstr ""
 
-#: filebrowser.cpp:574
+#: filebrowser.cpp:585
 msgid "French Translation"
 msgstr ""
 
-#: filebrowser.cpp:578
+#: filebrowser.cpp:589
 msgid "FileBrowser"
+msgstr ""
+
+#: ../common.h:28
+msgid "Apply"
+msgstr ""
+
+#: ../common.h:29
+msgid "Cancel"
+msgstr ""
+
+#: ../common.h:30
+msgid "New"
+msgstr ""
+
+#: ../common.h:31
+msgid "Help"
+msgstr ""
+
+#: ../common.h:32
+msgid "Open"
+msgstr ""
+
+#: ../common.h:33
+msgid "Connect"
+msgstr ""
+
+#: ../common.h:34
+msgid "OK"
+msgstr ""
+
+#: ../common.h:43
+msgid ""
+"\n"
+"More by the same author\n"
 msgstr ""

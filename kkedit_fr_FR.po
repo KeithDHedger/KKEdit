@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kkedit 1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-22 14:56+0100\n"
-"PO-Revision-Date: 2016-08-22 14:56-0000\n"
+"POT-Creation-Date: 2016-08-22 17:27+0100\n"
+"PO-Revision-Date: 2016-08-22 17:27-0000\n"
 "Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
@@ -152,9 +152,8 @@ msgid "_Find"
 msgstr "Re_chercher"
 
 #: KKEdit/src/kkedit-includes.h:132
-#, fuzzy
 msgid "Find Ne_xt"
-msgstr "Trouver"
+msgstr "Rechercher le sui_vant"
 
 #: KKEdit/src/kkedit-includes.h:133
 msgid "_Sort Tabs"
@@ -297,9 +296,8 @@ msgid "_Bookmarks"
 msgstr "_Signets"
 
 #: KKEdit/src/kkedit-includes.h:177
-#, fuzzy
 msgid "_Toggle Bookmark"
-msgstr "Placer un signet"
+msgstr "_Placer un signet"
 
 #: KKEdit/src/kkedit-includes.h:178
 msgid "Remove All Bookmarks"
@@ -751,9 +749,8 @@ msgid "Read Link Before Opening File"
 msgstr "Suivre les liens avant d'ouvrir un fichier"
 
 #: KKEdit/src/kkedit-includes.h:317
-#, fuzzy
-msgid "Show Icons In Gtk3 Menus ( Requies Restart )"
-msgstr "Utilisez le menu général des greffons ( Nécessite un redémarrage )"
+msgid "Show Icons In Gtk3 Menus ( Requires Restart )"
+msgstr "Afficher les icônes dans les menus Gtk3 ( Nécessite un redémarrage )"
 
 #: KKEdit/src/kkedit-includes.h:318
 msgid "Auto Search Docs"

@@ -7,7 +7,8 @@ all:
 
 	gcc -shared -Wl,--version-script=exportmap,-soname,libclipboardplugin.so -o libclipboardplugin.so clipboardplugin.o -lc
 
-clean: distclean
+clean:
+	rm -f *.o *.so||true
 
 distclean:
 	rm -f *.o *.so Makefile||true
@@ -15,4 +16,4 @@ distclean:
 install: all
 	mkdir -vp $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES
 	cp libclipboardplugin.so $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk
-	cp po/fr_FR/LC_MESSAGES/ClipboardPlugin.mo  $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES
+	cp po/fr_FR/LC_MESSAGES/ClipboardPlugin.mo  $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES/ClipboardPlugin$(GTK3SUFFIX).mo

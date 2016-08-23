@@ -19,7 +19,7 @@ fi
 langs="fr_FR"
 
 rm ${DOMAINNAME}.pot||true
-xgettext --package-name  ${DOMAINNAME}  --package-version 1.2 --default-domain  ${DOMAINNAME} --output ${DOMAINNAME}.pot sessionmanager.cpp
+xgettext --package-name  ${DOMAINNAME}  --package-version 1.2 --default-domain  ${DOMAINNAME} --output ${DOMAINNAME}.pot sessionmanager.cpp ../common.h
 
 for arg in $langs
 	do

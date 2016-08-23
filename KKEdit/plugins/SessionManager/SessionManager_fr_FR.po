@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SessionManager 1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-22 13:34+0100\n"
-"PO-Revision-Date: 2016-08-22 13:34-0000\n"
+"POT-Creation-Date: 2016-08-23 12:47+0100\n"
+"PO-Revision-Date: 2016-08-23 12:48-0000\n"
 "Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
@@ -35,16 +35,45 @@ msgstr "Session %i"
 #: sessionmanager.cpp:347
 msgid "Session Manager - Adds multiple named sessions to KKEdit"
 msgstr ""
-"Gestionnaire de sessions - Ajoute un menu de sauvegarde ou de restauration "
+"Gestionnaire de sessions - Ajoute un menu de sauvegarde et de restauration "
 "de sessions pour KKEdit"
 
 #: sessionmanager.cpp:349
 msgid "French Translation"
-msgstr ""
+msgstr "Traduction française"
 
-#~ msgid ""
-#~ "\n"
-#~ "More by the same author\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Plus du même auteur\n"
+#: ../common.h:28
+msgid "Apply"
+msgstr "_Appliquer"
+
+#: ../common.h:29
+msgid "Cancel"
+msgstr "_Annuler"
+
+#: ../common.h:30
+msgid "New"
+msgstr "Nouveau"
+
+#: ../common.h:31
+msgid "Help"
+msgstr "Aide"
+
+#: ../common.h:32
+msgid "Open"
+msgstr "Ouvrir"
+
+#: ../common.h:33
+msgid "Connect"
+msgstr "Relier"
+
+#: ../common.h:34
+msgid "OK"
+msgstr "OK"
+
+#: ../common.h:43
+msgid ""
+"\n"
+"More by the same author\n"
+msgstr ""
+"\n"
+"Plus du même auteur\n"

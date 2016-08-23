@@ -7,7 +7,8 @@ all:
 	gcc -shared -Wl,--version-script=exportmap,-soname,libterminalpane.so -o libterminalpane.so terminalpane.o -lc `pkg-config --libs vte${VTEVERS}`
 
 
-clean: distclean
+clean:
+	rm -f *.o *.so||true
 
 distclean:
 	rm -f *.o *.so Makefile||true
@@ -15,4 +16,4 @@ distclean:
 install: all
 	mkdir -vp $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES
 	cp libterminalpane.so $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk
-	cp po/fr_FR/LC_MESSAGES/TerminalPane.mo  $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES
+	cp po/fr_FR/LC_MESSAGES/TerminalPane.mo  $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES/TerminalPane$(GTK3SUFFIX).mo
