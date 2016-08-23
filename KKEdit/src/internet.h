@@ -32,10 +32,5 @@
 
 #define COPYRITE "Copyright \xc2\xa9 2013-2016 K.D.Hedger"
 
-#ifndef _USEQT5_
 extern const char	*moreapps[];
 extern const char	*authors[];
-#else
-extern const char*	authors;
-#endif
-#endif
