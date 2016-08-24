@@ -1785,9 +1785,9 @@ void buildMenus(void)
 //goto define
 	gotoDefMenu=newImageMenuItem(MENUGOTODEF,menu);
 //open include
-	menuitem=newMenuItem(MENUOPENINC,menu);
+	menuitem=newImageMenuItem(MENUOPENINC,menu);
 //goto line number
-	menuitem=newMenuItem(MENUGOTOLINE,menu);
+	menuitem=newImageMenuItem(MENUGOTOLINE,menu);
 //find define
 	menuitem=newImageMenuItem(MENUSEARCHDEF,menu);
 //find gtkdoc
