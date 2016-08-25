@@ -101,13 +101,13 @@ VISIBLE void toggleBookmark(GtkWidget *widget,GtkTextIter *titer)
 
 	if(page==NULL)
 		return;
-
 	mark_type=MARK_TYPE_1;
 	if(titer==NULL)
 		{
 			mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 			gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&siter,mark);
-			iter=&siter;
+			gtk_text_iter_set_line_offset(&siter,0);
+			iter=(GtkTextIter*)(&siter);
 		}
 	else
 		iter=titer;
@@ -143,6 +143,7 @@ VISIBLE void toggleBookmark(GtkWidget *widget,GtkTextIter *titer)
 					ptr=g_list_next(ptr);
 				}
 			gtk_widget_show_all(bookMarkMenu);
+			//gtk_source_view_set_show_line_marks(page->view,showBMBar);
 			g_slist_free(mark_list);
 		}
 	else

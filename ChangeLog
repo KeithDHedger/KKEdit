@@ -1,3 +1,8 @@
+0.4.1
+Fixed menu icons in gtk3 mucking up the text.
+Fixed not showing bookmark in gtk3 when using hotkey.
+Show menu icons in gtk3 now defaults to off.
+
 0.4.0
 About window now modal.
 Corrected a few menu labels.

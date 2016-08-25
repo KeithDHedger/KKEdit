@@ -88,7 +88,11 @@ menuDataStruct	menuData[]=
 		{MENU_SHOW_TOOL_OP_LABEL,NULL,0,0,(void*)&toggleToolOutput,SHOWTOOLOUTMENUNAME,NULL},
 		{MENU_HIDE_STATUS_LABEL,NULL,0,0,(void*)&toggleStatusBar,SHOWSTATUSMENUNAME,NULL},
 		{MENU_SHOW_STATUS_LABEL,NULL,0,0,(void*)&toggleStatusBar,SHOWSTATUSMENUNAME,NULL},
+#ifdef _BUILDDOCVIEWER_
 		{MENU_SHOW_DOCVIEWER_LABEL,NULL,0,0,(void*)&toggleDocviewer,SHOWDOCVIEWERMENUNAME,NULL},
+#else
+		{"",NULL,0,0,NULL,NULL,NULL},
+#endif
 
 //toggles
 		{MENU_SHOW_LINE_NUMBERS_LABEL,NULL,0,0,(void*)&toggleLineNumbers,VIEWSHOWLINENUMERS,NULL},
@@ -121,12 +125,21 @@ menuDataStruct	menuData[]=
 		{CUSTOM_WORD_CONTEXT_LABEL,GTK_STOCK_EDIT,0,0,(void*)&addtoCustomWordList,NULL,NULL},
 //other
 		{"",NULL,0,0,NULL,NULL,NULL},
+#ifdef _ASPELL_
 		{CHECK_SPELLING_CONTEXT_LABEL,GTK_STOCK_SPELL_CHECK,0,0,(void*)&checkWord,NULL,NULL},
+#else
+		{"",NULL,0,0,NULL,NULL,NULL},
+#endif
+
 //tab popups
 		{COPY_FOLDER_PATH_LABEL,GTK_STOCK_COPY,0,0,(void*)&doTabMenu,NULL,NULL},
 		{COPY_FILE_PATH_LABEL,GTK_STOCK_COPY,0,0,(void*)&doTabMenu,NULL,NULL},
 		{COPY_FILE_NAME_LABEL,GTK_STOCK_COPY,0,0,(void*)&doTabMenu,NULL,NULL},
+#ifdef _ASPELL_
 		{SPELL_CHECK_LABEL,GTK_STOCK_SPELL_CHECK,0,0,(void*)&doSpellCheckDoc,NULL,NULL},
+#else
+		{NULL,NULL,0,0,NULL,NULL,NULL},
+#endif
 		{SOURCE_HILITE_LABEL,GTK_STOCK_PREFERENCES,0,0,NULL,NULL,NULL},
 		{MENU_HIDE_TAB_LABEL,GTK_STOCK_REMOVE,0,0,(void*)&hideTab,NULL,NULL},
 
@@ -178,6 +191,7 @@ GtkWidget* newMenuItem(unsigned menunumber,GtkWidget *parent)
 	GtkWidget	*pad;
 	GtkWidget	*image;
 	GtkWidget	*ritelabel;
+	char		*labelwithspace;
 
 	menu=gtk_menu_item_new_with_mnemonic(gettext(menuData[menunumber].menuLabel));
 	if((showMenuIcons==true) && (menuData[menunumber].stockID!=NULL))
@@ -190,8 +204,11 @@ GtkWidget* newMenuItem(unsigned menunumber,GtkWidget *parent)
 			image=gtk_image_new_from_icon_name(menuData[menunumber].stockID,GTK_ICON_SIZE_MENU);
 			gtk_box_pack_start((GtkBox*)menuhbox,image,false,false,0);
 
-			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
-			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(gettext(menuData[menunumber].menuLabel)),false,false,0);
+			//gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
+			asprintf(&labelwithspace," %s",gettext(menuData[menunumber].menuLabel));
+//			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(gettext(menuData[menunumber].menuLabel)),false,false,0);
+			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(labelwithspace),false,false,0);
+			free(labelwithspace);
 			gtk_box_pack_start(GTK_BOX(menuhbox),pad,true,true,0);
 
 			ritelabel=gtk_label_new(keyStrBuffer);
@@ -226,6 +243,7 @@ GtkWidget* newImageMenuItem(unsigned menunumber,GtkWidget *parent)
 	GtkWidget	*pad;
 	GtkWidget	*image;
 	GtkWidget	*ritelabel;
+	char		*labelwithspace;
 
 	menu=gtk_menu_item_new_with_mnemonic(gettext(menuData[menunumber].menuLabel));
 	if(showMenuIcons==true)
@@ -238,8 +256,11 @@ GtkWidget* newImageMenuItem(unsigned menunumber,GtkWidget *parent)
 			image=gtk_image_new_from_icon_name(menuData[menunumber].stockID,GTK_ICON_SIZE_MENU);
 			gtk_box_pack_start((GtkBox*)menuhbox,image,false,false,0);
 
-			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
-			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(gettext(menuData[menunumber].menuLabel)),false,false,0);
+			//gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
+			asprintf(&labelwithspace," %s",gettext(menuData[menunumber].menuLabel));
+			//gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(gettext(menuData[menunumber].menuLabel)),false,false,0);
+			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(labelwithspace),false,false,0);
+			free(labelwithspace);
 			gtk_box_pack_start(GTK_BOX(menuhbox),pad,true,true,0);
 
 			ritelabel=gtk_label_new(keyStrBuffer);
@@ -276,6 +297,7 @@ GtkWidget* newPixmapMenuItem(unsigned menunumber,GtkWidget *parent)
 	GtkWidget	*pad;
 	GtkWidget	*image;
 	GtkWidget	*ritelabel;
+	char		*labelwithspace;
 
 	menu=gtk_menu_item_new_with_mnemonic(gettext(menuData[menunumber].menuLabel));
 	if(showMenuIcons==true)
@@ -288,8 +310,11 @@ GtkWidget* newPixmapMenuItem(unsigned menunumber,GtkWidget *parent)
 			image=gtk_image_new_from_file(menuData[menunumber].stockID);
 			gtk_box_pack_start((GtkBox*)menuhbox,image,false,false,0);
 
-			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
-			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(gettext(menuData[menunumber].menuLabel)),false,false,0);
+			//gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
+			asprintf(&labelwithspace," %s",gettext(menuData[menunumber].menuLabel));
+//			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(gettext(menuData[menunumber].menuLabel)),false,false,0);
+			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(labelwithspace),false,false,0);
+			free(labelwithspace);
 			gtk_box_pack_start(GTK_BOX(menuhbox),pad,true,true,0);
 
 			ritelabel=gtk_label_new(keyStrBuffer);
@@ -2350,8 +2375,9 @@ void buildGtkDocViewer(void)
 	gtk_container_add(GTK_CONTAINER(docView),vbox);
 	gtk_widget_grab_focus(GTK_WIDGET(webView));
 
+#ifdef _BUILDDOCVIEWER_
 	g_signal_connect_object(G_OBJECT(docView),"delete-event",G_CALLBACK(toggleDocviewer),G_OBJECT(docView),G_CONNECT_SWAPPED);
-
+#endif
 	const char *lang;
 
 	if(strncmp(localeLang,"en",2)==0)

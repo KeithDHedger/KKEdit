@@ -133,7 +133,7 @@ void init(void)
 	hightlightAll=true;
 	maxFuncDefs=64;
 	maxBMChars=64;
-	showMenuIcons=true;
+	showMenuIcons=false;
 
 	openInThisTab=-1;
 	loadingSession=false;
