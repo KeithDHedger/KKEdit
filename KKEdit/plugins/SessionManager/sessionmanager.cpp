@@ -359,7 +359,6 @@ extern "C" int doAbout(gpointer data)
 	gtk_about_dialog_set_logo_icon_name(about,ABOUTICON);
 	gtk_about_dialog_set_license(about,licence);
 	gtk_about_dialog_set_translator_credits(about,(const gchar*)translators);
-
 	gtk_window_set_transient_for((GtkWindow*)about,(GtkWindow*)plugdata->prefsWindow);
 
 	gtk_dialog_run(GTK_DIALOG(about));

@@ -264,6 +264,10 @@ VISIBLE void doPlugPrefs(GtkWidget *widget,gpointer data)
 
 	gtk_container_add(GTK_CONTAINER(vbox),hbox);
 	gtk_container_add(GTK_CONTAINER(plugwindow),vbox);
+	gtk_window_set_transient_for((GtkWindow*)plugwindow,(GtkWindow*)mainWindow);
+//gtk_dialog_run ((GtkDialog*)plugwindow);
+
+gtk_window_set_modal ((GtkWindow*)plugwindow,true);
 	gtk_widget_show_all(plugwindow);
 	ERRDATA
 }

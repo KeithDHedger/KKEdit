@@ -372,6 +372,7 @@ extern "C" int plugPrefs(gpointer data)
 	gtk_box_pack_start((GtkBox*)vbox,gtk_label_new(gettext("Background Colour")),true,true,4);
 	gtk_box_pack_start((GtkBox*)vbox,bcolour,true,true,4);
 
+	gtk_window_set_transient_for((GtkWindow*)dialog,(GtkWindow*)plugdata->prefsWindow);
 	gtk_widget_show_all(dialog);
 	response=gtk_dialog_run(GTK_DIALOG(dialog));
 	if(response==GTK_RESPONSE_APPLY);
@@ -439,12 +440,11 @@ extern "C" int doAbout(gpointer data)
 	gtk_about_dialog_set_logo_icon_name(about,ABOUTICON);
 	gtk_about_dialog_set_license(about,licence);
 	gtk_about_dialog_set_translator_credits(about,(const gchar*)translators);
-
 	gtk_window_set_transient_for((GtkWindow*)about,(GtkWindow*)plugdata->prefsWindow);
 
 	gtk_dialog_run(GTK_DIALOG(about));
-
 	gtk_widget_destroy((GtkWidget*)about);
+
 	free(licence);
 	free(licencepath);
 	free(translators);

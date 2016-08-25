@@ -203,7 +203,7 @@ extern "C" int doAbout(gpointer data)
 
 	g_file_get_contents(licencepath,&licence,NULL,NULL);
 	about=(GtkAboutDialog*)gtk_about_dialog_new();
-	gtk_about_dialog_set_program_name(about,"ClipboardPlugin");
+	gtk_about_dialog_set_program_name(about,gettext("ClipboardPlugin"));
 	gtk_about_dialog_set_authors(about,authors);
 	gtk_about_dialog_set_comments(about,aboutboxstring);
 	gtk_about_dialog_set_copyright(about,copyright);
@@ -212,7 +212,6 @@ extern "C" int doAbout(gpointer data)
 	gtk_about_dialog_set_logo_icon_name(about,ABOUTICON);
 	gtk_about_dialog_set_license(about,licence);
 	gtk_about_dialog_set_translator_credits(about,(const gchar*)translators);
-
 	gtk_window_set_transient_for((GtkWindow*)about,(GtkWindow*)plugdata->prefsWindow);
 
 	gtk_dialog_run(GTK_DIALOG(about));
