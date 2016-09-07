@@ -594,7 +594,11 @@ gboolean docLinkTrap(WebKitWebView *web_view,WebKitWebFrame *frame,WebKitNetwork
 					slce.setReturnDupString(false);
 					sinkReturn=asprintf(&command,"%s/%s",filep,slce.sliceBetween(line,(char*)"html\">",(char*)"</a>"));
 					if(openFile(command,linenum,false)==true)
-						gotoLine(NULL,(gpointer)(long)linenum);
+						{
+							if(mainWindow!=NULL)
+								gtk_window_present((GtkWindow*)mainWindow);
+							gotoLine(NULL,(gpointer)(long)linenum);
+						}
 					free(command);
 					free(filep);
 					free(htmlpage);
@@ -604,7 +608,6 @@ gboolean docLinkTrap(WebKitWebView *web_view,WebKitWebFrame *frame,WebKitNetwork
 			slce.setReturnDupString(false);
 			if(strstr(uri,(char*)"#l")!=NULL)
 				{
-				printf("--usr =%s--\n",uri);
 					linenum=atoi(slce.sliceBetween((char*)uri,(char*)"#l",NULL));
 					command=(char*)slce.sliceBetween((char*)uri,(char*)"file://",(char*)"#l");
 					command=(char*)slce.sliceBetween((char*)command,NULL,(char*)".html");
@@ -615,7 +618,11 @@ gboolean docLinkTrap(WebKitWebView *web_view,WebKitWebFrame *frame,WebKitNetwork
 					for(int j=0;j<52;j+=2)
 						command=(char*)slce.replaceAllSlice((char*)command,(char*)upperdata[j],(char*)upperdata[j+1]);
 					if(openFile(command,linenum,true)==true)
-						gotoLine(NULL,(gpointer)(long)linenum);
+						{
+							if(mainWindow!=NULL)
+								gtk_window_present((GtkWindow*)mainWindow);
+							gotoLine(NULL,(gpointer)(long)linenum);
+						}
 				}
 			else
 				{
@@ -640,7 +647,11 @@ gboolean docLinkTrap(WebKitWebView *web_view,WebKitWebFrame *frame,WebKitNetwork
 									slce.setReturnDupString(false);
 									sinkReturn=asprintf(&command,"%s/%s",filep,slce.sliceBetween(line,(char*)"html\">",(char*)"</a>"));
 									if(openFile(command,linenum,false)==true)
-										gotoLine(NULL,(gpointer)(long)linenum);
+										{
+											if(mainWindow!=NULL)
+												gtk_window_present((GtkWindow*)mainWindow);
+											gotoLine(NULL,(gpointer)(long)linenum);
+										}
 									free(command);
 									free(filep);
 									free(htmlpage);
