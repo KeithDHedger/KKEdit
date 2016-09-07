@@ -462,7 +462,9 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 									menuData[MENUBLANK].menuLabel=correctedstr;
 									menuData[MENUBLANK].cb=(void*)&gotoLineSavePos;
 									menuData[MENUBLANK].userData=(gpointer)(long)fd->line;
-									menuitem=newMenuItem(MENUBLANK,whattypemenu);
+									menuitem=gtk_menu_item_new_with_label(correctedstr);
+									gtk_menu_shell_append(GTK_MENU_SHELL(whattypemenu),menuitem);
+									g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(menuData[MENUBLANK].cb),menuData[MENUBLANK].userData);
 								}
 						}
 					else
@@ -471,7 +473,9 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 							menuData[MENUBLANK].menuLabel=correctedstr;
 							menuData[MENUBLANK].cb=(void*)&gotoLineSavePos;
 							menuData[MENUBLANK].userData=(gpointer)(long)fd->line;
-							menuitem=newMenuItem(MENUBLANK,(GtkWidget*)page->navSubMenu);
+							menuitem=gtk_menu_item_new_with_label(correctedstr);
+							gtk_menu_shell_append(GTK_MENU_SHELL((GtkWidget*)page->navSubMenu),menuitem);
+							g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(menuData[MENUBLANK].cb),menuData[MENUBLANK].userData);
 						}
 				}
 			lineptr=strchr(lineptr,'\n');

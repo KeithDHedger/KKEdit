@@ -1,3 +1,6 @@
+0.4.2
+Fixed underlines in function names creating mnomenic in menus.
+
 0.4.1
 Fixed menu icons in gtk3 mucking up the text.
 Fixed not showing bookmark in gtk3 when using hotkey.
