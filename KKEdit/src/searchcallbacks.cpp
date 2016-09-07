@@ -30,7 +30,6 @@ pageListData	*pageData=NULL;
 
 void webKitGoBack(GtkWidget *widget,gpointer data)
 {
-printf("XXXXXXXXX\n");
 	webkit_web_view_go_back((WebKitWebView*)data);
 }
 
