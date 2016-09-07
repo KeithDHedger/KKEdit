@@ -1,5 +1,7 @@
 0.4.2
-Fixed underlines in function names creating mnomenic in menus.
+Fixed 'Shift-Click' on links in documentaion not opening file at line number in editor.
+Fixed underlines in function names creating mnemonic in menus.
+Fixed underlines in bookmark creating mnemonic in menus.
 
 0.4.1
 Fixed menu icons in gtk3 mucking up the text.
