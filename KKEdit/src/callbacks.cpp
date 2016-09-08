@@ -664,7 +664,7 @@ void externalTool(GtkWidget *widget,gpointer data)
 			pagepath=(char*)(pageStruct*)(getPageStructByIDFromPage(j))->filePath;
 			if(pagepath!=NULL)
 				{
-					if(buffersize<strlen(strarray)+strlen(pagepath))
+					if(buffersize<(strlen(strarray)+strlen(pagepath)+2))
 						{
 							buffersize+=1000;
 							strarray=(char*)realloc(strarray,buffersize);

@@ -1,4 +1,5 @@
 0.4.2
+Fixed occasional segfault when launching external tool.
 Fixed editor not coming to front when Shift-clicking docviewer documentation links.
 Fixed 'Shift-Click' on links in documentation in docviewer not opening file at line number in editor.
 Fixed underlines in function names creating mnemonic in menus.
