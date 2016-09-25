@@ -914,7 +914,7 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	menuitem=gtk_menu_item_new_with_label(MENU_BM_TOGGLE_BM_LABEL);
+	menuitem=gtk_menu_item_new_with_mnemonic(MENU_BM_TOGGLE_BM_LABEL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(toggleBookmark),NULL);
 
