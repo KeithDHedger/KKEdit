@@ -364,8 +364,11 @@ bool getSaveFile(void)
 	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog),TRUE);
 	if(saveFileName!=NULL)
 		{
+printf("4444444444444444\n");
+
 			if(saveFilePath!=NULL)
 				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),g_path_get_dirname(saveFilePath));
+printf("5555555555555555\n");
 			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),saveFileName);
 		}
 	else
@@ -431,7 +434,10 @@ VISIBLE bool saveFile(GtkWidget *widget,gpointer data)
 						{
 							ERRDATA debugFree(&page->dirName);
 						}
+printf("66666666666666\n");
+
 					page->dirName=g_path_get_dirname(page->filePath);
+printf("77777777777777\n");
 				}
 
 			saveFileName=page->fileName;
@@ -450,7 +456,10 @@ VISIBLE bool saveFile(GtkWidget *widget,gpointer data)
 						{
 							ERRDATA debugFree(&page->dirName);
 						}
+printf("8888888888888\n");
+
 					page->dirName=g_path_get_dirname(page->filePath);
+printf("99999999999999\n");
 
 					gtk_text_buffer_set_modified((GtkTextBuffer*)page->buffer,FALSE);
 
@@ -933,6 +942,7 @@ pageStruct *makeNewPage(void)
 	page->tabVbox=NULL;
 	page->showingChanged=false;
 	page->backMark=gtk_text_mark_new("back-mark",true);
+	page->breakMark=gtk_text_mark_new("break-mark",true);
 	page->regexList=NULL;
 	page->regexMatchNumber=-1;
 	page->canUndo=false;
@@ -1069,6 +1079,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	page->tabVbox=createNewBox(NEWVBOX,true,4);
 	page->filePath=strdup(filepathcopy);
 	page->fileName=strdup(filename);
+
 	page->dirName=g_path_get_dirname(filepathcopy);
 	ERRDATA
 
@@ -1091,7 +1102,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 				}
 			ERRDATA return(false);
 		}
-
 	convertContents((char*)contents,length);
 	ERRDATA debugFree(&contents);
 

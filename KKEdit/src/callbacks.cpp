@@ -650,6 +650,7 @@ void externalTool(GtkWidget *widget,gpointer data)
 
 	tempCommand=g_string_new(tool->command);
 
+
 	if(page->filePath!=NULL)
 		docdirname=g_path_get_dirname(page->filePath);
 	else

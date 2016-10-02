@@ -961,7 +961,8 @@ void destroyData(functionData *fdata)
 				{
 					ERRDATA debugFree(&fdata->define);
 				}
-			ERRDATA debugFree((char**)&fdata);
+			ERRDATA
+			debugFree((char**)fdata);
 		}
 	ERRDATA
 }

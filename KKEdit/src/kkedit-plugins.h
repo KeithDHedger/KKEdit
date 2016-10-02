@@ -154,6 +154,7 @@ struct pageStruct
 	bool				restoreHidden;
 	int					startChar;
 	int					endChar;
+	GtkTextMark			*breakMark;
 };
 #endif
 

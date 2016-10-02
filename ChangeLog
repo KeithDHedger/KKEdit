@@ -1,4 +1,5 @@
 0.4.2
+Fixed rare segfault when loading certain .cc files.
 Fixed 'Toggle BM' menu text in context menu.
 Fixed occasional segfault when launching external tool.
 Fixed editor not coming to front when Shift-clicking docviewer documentation links.

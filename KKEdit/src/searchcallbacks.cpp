@@ -164,6 +164,7 @@ VISIBLE bool searchGtkDocs(GtkWidget *widget,gpointer data)
 													tempstr=globalSlice->sliceBetween(line,(char*)"",(char*)":");
 													if(tempstr!=NULL)
 														{
+
 															foldername=g_path_get_dirname(tempstr);
 															link=globalSlice->sliceBetween(line,(char*)"link=\"",(char*)"\"");
 															if((foldername!=NULL) &&(link!=NULL))
