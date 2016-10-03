@@ -395,12 +395,6 @@ VISIBLE bool saveFile(GtkWidget *widget,gpointer data)
 	FILE		*fd=NULL;
 	GtkWidget	*dialog;
 
-//	if(data==NULL)
-//		globalPlugins->setUserData("tsd",FROMFILEMENU,SAVEMENUNAME,data);
-//	else
-//		globalPlugins->setUserData("tsd",FROMFILEMENU,SAVEASMENUNAME,data);
-//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
-
 	ERRDATA
 	page->itsMe=true;
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start);
@@ -894,8 +888,6 @@ bool highLightText(GtkWidget *widget,GdkEvent *event,gpointer data)
 					page->startChar=buf->selectionStart;
 					page->endChar=buf->selectionEnd;
 				}
-//			globalPlugins->setUserData("tsdbe",FROMSELECTION,OPENMENUNAME,data,buf->selectionStart,buf->selectionEnd);
-//			g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 			delete buf;
 		}
 	return(false);
@@ -1225,9 +1217,6 @@ VISIBLE void newFile(GtkWidget *widget,gpointer data)
 	GtkWidget	*label;
 	pageStruct	*page;
 
-//	globalPlugins->setUserData("tsd",FROMFILEMENU,NEWMENUNAME,data);
-//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
-
 	page=makeNewPage();
 	page->tabVbox=createNewBox(NEWVBOX,true,4);
 	page->filePath=NULL;
@@ -1269,9 +1258,6 @@ VISIBLE void doOpenFile(GtkWidget *widget,gpointer data)
 	char		*filename;
 	GSList		*filenames;
 	GSList		*thisnext;
-
-//	globalPlugins->setUserData("tsd",FROMFILEMENU,OPENMENUNAME,data);
-//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 
 #ifdef _USEGTK3_
 	dialog=gtk_file_chooser_dialog_new(OPEN_TT_LABEL,NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN_LABEL, GTK_RESPONSE_ACCEPT,NULL);

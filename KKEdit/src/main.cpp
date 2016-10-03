@@ -388,21 +388,15 @@ void activate(GApplication *application)
 
 void doKKCommand(const char *command)
 {
-	char		*commanddata;
-//	char		*folder;
+	const char	*commanddata;
 	char		commandname;
 	long		line;
 	pageStruct	*page=getPageStructByIDFromPage(-1);
 
 	commanddata=basename((char*)command);
-	commandname=commanddata[2];
-	commanddata+=2;
+	commandname=commanddata[5];
+	commanddata=&commanddata[6];
 
-	commanddata++;
-
-//	printf(">>command = %c<<\n",commandname);
-//	printf(">>com data= %s<<\n",commanddata);
-//	printf(">>folder = %s<<\n",folder);
 	if(mainWindow!=NULL)
 		gtk_window_present((GtkWindow*)mainWindow);
 
@@ -412,12 +406,7 @@ void doKKCommand(const char *command)
 			case 'G':
 				line=atoi(commanddata);
 				if(fromGOpen==true)
-					{
-						gtk_widget_show_all((GtkWidget*)(GtkTextView*)page->view);
-//						if(line>0)
-//						while(gtk_events_pending())
-//							gtk_main_iteration();
-					}
+					gtk_widget_show_all((GtkWidget*)(GtkTextView*)page->view);
 				gotoLine(NULL,(void*)line);
 				break;
 //search for define
@@ -474,7 +463,8 @@ void open(GApplication *application,GFile** files,gint n_files,const gchar *hint
 		{
 			filepath=g_file_get_path(files[i]);
 			basepart=basename(filepath);
-			if((basepart[0]=='@') &&(basepart[1]=='@'))
+			if(strncmp(basepart,"TELL=",5)==0)
+			//if((basepart[0]=='@') &&(basepart[1]=='@'))
 				{
 					doKKCommand(filepath);
 					continue;

@@ -190,9 +190,6 @@ VISIBLE void gotoLine(GtkWidget *widget,gpointer data)
 	TextBuffer	*buf;
 	pageStruct	*page=getPageStructByIDFromPage(-1);
 
-//	globalPlugins->setUserData("td",FROMGOTO,data);
-//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
-
 	if(page!=NULL)
 		{
 			buf=new TextBuffer((GtkTextBuffer*)page->buffer);
@@ -700,11 +697,7 @@ void selectTab(GtkWidget *widget,gpointer data)
 		}
 	else
 		{
-//TODO//
 			gtk_notebook_set_current_page(mainNotebook,(int)(long)data);
-			//gtk_menu_item_get_label((GtkMenuItem*)widget);
-			//globalPlugins->setUserData("ts",FROMEDITMENU,gtk_menu_item_get_label((GtkMenuItem*)widget));
-			//g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 		}
 
 	page=getPageStructByIDFromPage(-1);
@@ -718,9 +711,7 @@ void selectTab(GtkWidget *widget,gpointer data)
 
 	ERRDATA
 }
-//TODO//
-//segfaults?
-//rebuild tabs menu
+
 void rebuildTabsMenu(void)
 {
 	ERRDATA

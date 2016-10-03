@@ -1318,8 +1318,6 @@ VISIBLE void basicFind(int dowhat)
 
 		if((dowhat==REPLACENEXT) &&(replaceAll==false))
 			{
-//	globalPlugins->setUserData("tsSi",FROMBASICFIND,searchtext,replacetext,dowhat);
-//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 				if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end))
 					{
 						if(searchForward(&page->match_start,searchtext,flags,&page->match_start,&page->match_end,&page->match_end))
@@ -1460,17 +1458,11 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 VISIBLE void find(GtkWidget *widget,gpointer data)
 {
-//	globalPlugins->setUserData("ts",FROMEDITMENU,FINDMENUNAME);
-//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
-
 	gtk_window_present((GtkWindow*)findReplaceDialog);
 }
 
 VISIBLE void findNext(GtkWidget *widget,gpointer data)
 {
-//	globalPlugins->setUserData("ts",FROMEDITMENU,FINDNEXTMENUNAME);
-//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
-
 	basicFind(FINDNEXT);
 }
 
