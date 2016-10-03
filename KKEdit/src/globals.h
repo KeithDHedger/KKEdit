@@ -140,6 +140,7 @@ extern bool				autoSeleced;
 extern bool				fromGOpen;
 extern char				*prefsFolder;
 extern GtkRecentManager	*recentMan;
+extern char				*sessionID;
 
 //main window
 extern GtkWidget		*mainWindow;

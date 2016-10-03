@@ -1460,16 +1460,16 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 
 VISIBLE void find(GtkWidget *widget,gpointer data)
 {
-	globalPlugins->setUserData("ts",FROMEDITMENU,FINDMENUNAME);
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+//	globalPlugins->setUserData("ts",FROMEDITMENU,FINDMENUNAME);
+//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 
 	gtk_window_present((GtkWindow*)findReplaceDialog);
 }
 
 VISIBLE void findNext(GtkWidget *widget,gpointer data)
 {
-	globalPlugins->setUserData("ts",FROMEDITMENU,FINDNEXTMENUNAME);
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+//	globalPlugins->setUserData("ts",FROMEDITMENU,FINDNEXTMENUNAME);
+//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 
 	basicFind(FINDNEXT);
 }

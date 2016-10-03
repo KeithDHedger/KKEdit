@@ -433,6 +433,7 @@
 #define PREFSEXPAND DATADIR _EXECSUFFIX_ "/pixmaps/expand.png"
 
 #define BOOKMARKPNG DATADIR _EXECSUFFIX_ "/pixmaps/BookMark.png"
+#define USERMARKPNG DATADIR _EXECSUFFIX_ "/pixmaps/UserMark.png"
 #define ROOTEDITPNG DATADIR _EXECSUFFIX_ "/pixmaps/ROOTKKEdit.png"
 #define MENUKKEDITPNG DATADIR _EXECSUFFIX_  "/pixmaps/MenuKKEdit.png"
 #define MANPAGEEDITPNG DATADIR _EXECSUFFIX_  "/pixmaps/ManPageEditor.png"

@@ -190,8 +190,8 @@ VISIBLE void gotoLine(GtkWidget *widget,gpointer data)
 	TextBuffer	*buf;
 	pageStruct	*page=getPageStructByIDFromPage(-1);
 
-	globalPlugins->setUserData("td",FROMGOTO,data);
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+//	globalPlugins->setUserData("td",FROMGOTO,data);
+//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 
 	if(page!=NULL)
 		{

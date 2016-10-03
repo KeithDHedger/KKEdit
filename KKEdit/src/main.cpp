@@ -444,6 +444,13 @@ void doKKCommand(const char *command)
 			case 'C':
 				closeTab(NULL,(void*)-1);
 				break;
+//set user mark
+			case 'U':
+				setUserMark();
+				break;
+			case 'u':
+				removeUserMark();
+				break;
 		}
 	if(mainWindow!=NULL)
 		gtk_window_present((GtkWindow*)mainWindow);
@@ -626,10 +633,12 @@ int main(int argc, char **argv)
 	singleOverRide=false;
 	loadPluginsFlag=true;
 	loadingSession=false;
+	sessionID=NULL;
 
 	GOptionEntry	entries[]=
 {
     {"multiple",'m',0,G_OPTION_ARG_NONE,&singleOverRide,"Multiple instance mode",NULL},
+    {"sessionid",'i',0,G_OPTION_ARG_STRING,&sessionID,"Set an ID to be used for (new) instance",NULL},
     { "safe",'s',0,G_OPTION_ARG_NONE,&safeflag,"Safe mode(disable all plugins and use new instance )",NULL},
     { NULL }
 };
@@ -649,7 +658,11 @@ int main(int argc, char **argv)
 
 	gtk_init(&argc,&argv);
 
-	sinkReturn=asprintf(&dbusname,"org.keithhedger%i." APPEXECNAME,getWorkspaceNumber());
+	if(sessionID==NULL)
+		sinkReturn=asprintf(&dbusname,"org.keithhedger%i." APPEXECNAME,getWorkspaceNumber());
+	else
+		sinkReturn=asprintf(&dbusname,"org.keithhedger%s." APPEXECNAME,sessionID);
+
 	if((singleOverRide==true) ||(singleUse==false))
 		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN));
 	else

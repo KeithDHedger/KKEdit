@@ -395,11 +395,11 @@ VISIBLE bool saveFile(GtkWidget *widget,gpointer data)
 	FILE		*fd=NULL;
 	GtkWidget	*dialog;
 
-	if(data==NULL)
-		globalPlugins->setUserData("tsd",FROMFILEMENU,SAVEMENUNAME,data);
-	else
-		globalPlugins->setUserData("tsd",FROMFILEMENU,SAVEASMENUNAME,data);
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+//	if(data==NULL)
+//		globalPlugins->setUserData("tsd",FROMFILEMENU,SAVEMENUNAME,data);
+//	else
+//		globalPlugins->setUserData("tsd",FROMFILEMENU,SAVEASMENUNAME,data);
+//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 
 	ERRDATA
 	page->itsMe=true;
@@ -843,6 +843,24 @@ void add_source_mark_pixbufs(GtkSourceView *view)
 	gtk_source_view_set_mark_category_icon_from_pixbuf(view,MARK_TYPE_1,pbuf);
 	gtk_source_view_set_mark_category_priority(view,MARK_TYPE_1,1);
 #endif
+
+	image=(GtkImage*)gtk_image_new_from_file(USERMARKPNG);
+	pbuf=gtk_image_get_pixbuf(image);
+
+#ifdef _USEGTK3_
+	gdk_rgba_parse (&color,highlightColour);
+
+	attr=gtk_source_mark_attributes_new();
+
+	gtk_source_mark_attributes_set_pixbuf(attr,pbuf);
+	gtk_source_mark_attributes_set_background(attr,&color);
+	gtk_source_view_set_mark_attributes(view,MARK_TYPE_2,attr,1);
+#else
+	gdk_color_parse(highlightColour,&color);
+	gtk_source_view_set_mark_category_background(view,MARK_TYPE_2,&color);
+	gtk_source_view_set_mark_category_icon_from_pixbuf(view,MARK_TYPE_2,pbuf);
+	gtk_source_view_set_mark_category_priority(view,MARK_TYPE_2,1);
+#endif
 	ERRDATA
 }
 
@@ -876,8 +894,8 @@ bool highLightText(GtkWidget *widget,GdkEvent *event,gpointer data)
 					page->startChar=buf->selectionStart;
 					page->endChar=buf->selectionEnd;
 				}
-			globalPlugins->setUserData("tsdbe",FROMSELECTION,OPENMENUNAME,data,buf->selectionStart,buf->selectionEnd);
-			g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+//			globalPlugins->setUserData("tsdbe",FROMSELECTION,OPENMENUNAME,data,buf->selectionStart,buf->selectionEnd);
+//			g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 			delete buf;
 		}
 	return(false);
@@ -942,7 +960,8 @@ pageStruct *makeNewPage(void)
 	page->tabVbox=NULL;
 	page->showingChanged=false;
 	page->backMark=gtk_text_mark_new("back-mark",true);
-	page->breakMark=gtk_text_mark_new("break-mark",true);
+	//page->userMark=gtk_text_mark_new("user-mark",true);
+	
 	page->regexList=NULL;
 	page->regexMatchNumber=-1;
 	page->canUndo=false;
@@ -1206,8 +1225,8 @@ VISIBLE void newFile(GtkWidget *widget,gpointer data)
 	GtkWidget	*label;
 	pageStruct	*page;
 
-	globalPlugins->setUserData("tsd",FROMFILEMENU,NEWMENUNAME,data);
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+//	globalPlugins->setUserData("tsd",FROMFILEMENU,NEWMENUNAME,data);
+//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 
 	page=makeNewPage();
 	page->tabVbox=createNewBox(NEWVBOX,true,4);
@@ -1251,8 +1270,8 @@ VISIBLE void doOpenFile(GtkWidget *widget,gpointer data)
 	GSList		*filenames;
 	GSList		*thisnext;
 
-	globalPlugins->setUserData("tsd",FROMFILEMENU,OPENMENUNAME,data);
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+//	globalPlugins->setUserData("tsd",FROMFILEMENU,OPENMENUNAME,data);
+//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 
 #ifdef _USEGTK3_
 	dialog=gtk_file_chooser_dialog_new(OPEN_TT_LABEL,NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN_LABEL, GTK_RESPONSE_ACCEPT,NULL);

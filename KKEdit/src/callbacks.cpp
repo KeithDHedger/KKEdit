@@ -238,8 +238,8 @@ VISIBLE void closeAllTabs(GtkWidget *widget,gpointer data)
 
 	int numpages=gtk_notebook_get_n_pages(mainNotebook);
 
-	globalPlugins->setUserData("tsd",FROMFILEMENU,CLOSEALLMENUNAME,data);
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+//	globalPlugins->setUserData("tsd",FROMFILEMENU,CLOSEALLMENUNAME,data);
+//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 
 	showAllTabs(NULL,NULL);
 	for(int loop=0;loop<numpages;loop++)
@@ -283,11 +283,11 @@ bool checkBeforeClose(int pagenum)
 
 VISIBLE void closeTab(GtkWidget *widget,gpointer data)
 {
-	if(closingAll==false)
-		{
-			globalPlugins->setUserData("tsd",FROMFILEMENU,CLOSEMENUNAME,data);
-			g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
-		}
+//	if(closingAll==false)
+//		{
+//			globalPlugins->setUserData("tsd",FROMFILEMENU,CLOSEMENUNAME,data);
+//			g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+//		}
 
 	if(data!=NULL)
 		{
@@ -510,8 +510,8 @@ VISIBLE void copyToClip(GtkWidget *widget,gpointer data)
 
 	if(page==NULL)
 		return;
-	globalPlugins->setUserData("ts",FROMEDITMENU,COPYMENUNAME);
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+//	globalPlugins->setUserData("ts",FROMEDITMENU,COPYMENUNAME);
+//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 	gtk_text_buffer_copy_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD));
 }
 
@@ -523,8 +523,8 @@ VISIBLE void cutToClip(GtkWidget *widget,gpointer data)
 	if(page==NULL)
 		return;
 
-	globalPlugins->setUserData("ts",FROMEDITMENU,CUTMENUNAME);
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+//	globalPlugins->setUserData("ts",FROMEDITMENU,CUTMENUNAME);
+//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 
 	gtk_text_buffer_cut_clipboard((GtkTextBuffer*)page->buffer,gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),true);
 	setChangedSensitive((GtkTextBuffer*)page->buffer,page);
@@ -542,8 +542,8 @@ VISIBLE void pasteFromClip(GtkWidget *widget,gpointer data)
 	if(page==NULL)
 		return;
 
-	globalPlugins->setUserData("ts",FROMEDITMENU,PASTEMENUNAME);
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+//	globalPlugins->setUserData("ts",FROMEDITMENU,PASTEMENUNAME);
+//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 	mainclipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
 	clipdata=gtk_clipboard_wait_for_text(mainclipboard);
 	if(clipdata!=NULL)
@@ -1170,8 +1170,8 @@ VISIBLE bool doSaveAll(GtkWidget *widget,gpointer data)
 	int			result;
 	pageStruct	*page;
 
-	globalPlugins->setUserData("ts",FROMFILEMENU,SAVEALLMENUNAME);
-	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
+//	globalPlugins->setUserData("ts",FROMFILEMENU,SAVEALLMENUNAME);
+//	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"informPlugin");
 
 	for(int loop=0; loop<numpages; loop++)
 		{
