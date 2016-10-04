@@ -299,7 +299,7 @@ void dropText(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelecti
 	char			*filename;
 	FILE			*fp;
 	char			*command;
-	GString		*str;
+	GString			*str;
 	char			line[1024];
 	pageStruct		*page=(pageStruct*)user_data;
 	GtkTextIter		iter;
@@ -952,7 +952,6 @@ pageStruct *makeNewPage(void)
 	page->tabVbox=NULL;
 	page->showingChanged=false;
 	page->backMark=gtk_text_mark_new("back-mark",true);
-	//page->userMark=gtk_text_mark_new("user-mark",true);
 	
 	page->regexList=NULL;
 	page->regexMatchNumber=-1;

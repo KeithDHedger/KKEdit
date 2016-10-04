@@ -36,7 +36,7 @@
 #define USEFILE				-2
 #define USEURI				-1
 
-#define NEWMENUNAMEX "newmenu"
+#define NEWMENUNAME "newmenu"
 #define OPENMENUNAME "openmenu"
 #define HEXDUMPMENUNAME "hexdumpmenu"
 #define NEWADMINMENUNAME "newadminmenu"

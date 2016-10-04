@@ -42,7 +42,7 @@ GObject	*prefsIntWidgets[MAXPREFSINTWIDGETS];
 menuDataStruct	menuData[]=
 	{
 //file
-		{MENU_NEW_LABEL,GTK_STOCK_NEW,GDK_KEY_N,GDK_CONTROL_MASK,(void*)&newFile,NEWMENUNAMEX,NULL},
+		{MENU_NEW_LABEL,GTK_STOCK_NEW,GDK_KEY_N,GDK_CONTROL_MASK,(void*)&newFile,NEWMENUNAME,NULL},
 		{MENU_OPEN_LABEL,GTK_STOCK_OPEN,GDK_KEY_O,GDK_CONTROL_MASK,(void*)&doOpenFile,OPENMENUNAME,NULL},
 		{MENU_OPEN_AS_HEXDUMP_LABEL,GTK_STOCK_OPEN,0,0,(void*)&openAsHexDump,HEXDUMPMENUNAME,NULL},
 		{MENU_NEW_ADMIN_LABEL,ROOTEDITPNG,0,0,(void*)&newEditor,NEWADMINMENUNAME,(gpointer)NEWROOTEDITOR},
@@ -204,9 +204,7 @@ GtkWidget* newMenuItem(unsigned menunumber,GtkWidget *parent)
 			image=gtk_image_new_from_icon_name(menuData[menunumber].stockID,GTK_ICON_SIZE_MENU);
 			gtk_box_pack_start((GtkBox*)menuhbox,image,false,false,0);
 
-			//gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
 			asprintf(&labelwithspace," %s",gettext(menuData[menunumber].menuLabel));
-//			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(gettext(menuData[menunumber].menuLabel)),false,false,0);
 			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(labelwithspace),false,false,0);
 			free(labelwithspace);
 			gtk_box_pack_start(GTK_BOX(menuhbox),pad,true,true,0);

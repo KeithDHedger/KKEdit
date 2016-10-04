@@ -422,10 +422,14 @@ void doKKCommand(const char *command)
 	long		line;
 	pageStruct	*page=getPageStructByIDFromPage(-1);
 	GtkWidget	*widg=NULL;
+	GtkTextIter	iter;
+	char		buffer[256];
+	FILE		*fp;
+	char		*syscommand;
+	GString		*str;
 
-	commanddata=basename((char*)command);
-	commandname=commanddata[5];
-	commanddata=&commanddata[6];
+	commandname=command[5];
+	commanddata=&command[6];
 
 	if(mainWindow!=NULL)
 		gtk_window_present((GtkWindow*)mainWindow);
@@ -475,7 +479,43 @@ void doKKCommand(const char *command)
 				holdWidget=NULL;
 				activateMenuInBar((GtkWidget*)menuBar,commanddata);
 				break;
+//goto offset at current line
+			case 'O':
+				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+				gtk_text_iter_set_line_offset(&iter,atoi(commanddata));
+				gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
+				break;
+//paste clipboard at current pos
+			case 'P':
+				pasteFromClip(NULL,NULL);
+				break;
+//insert text at current pos
+			case 'I':
+				gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)commanddata,-1);
+				break;
+//insert newlines at current pos
+			case 'L':
+				sprintf(buffer,"%c",'\n');
+				for(int j=0;j<atoi(commanddata);j++)
+					gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)buffer,-1);
+				break;			
+//insert file at current pos
+			case 'F':
+				str=g_string_new(NULL);
+				sinkReturn=asprintf(&syscommand,"cat %s",commanddata);
+				fp=popen(syscommand,"r");
+				if(fp!=NULL)
+					{
+						while(fgets(buffer,256,fp))
+							g_string_append_printf(str,"%s",buffer);
+						gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(page->buffer),str->str,str->len);
+						pclose(fp);
+					}
+				ERRDATA debugFree(&syscommand);
+				g_string_free(str,true);
+				break;
 		}
+
 	if(mainWindow!=NULL)
 		gtk_window_present((GtkWindow*)mainWindow);
 }
@@ -497,13 +537,16 @@ void open(GApplication *application,GFile** files,gint n_files,const gchar *hint
 	for(int i=0; i<n_files; i++)
 		{
 			filepath=g_file_get_path(files[i]);
-			basepart=basename(filepath);
-			if(strncmp(basepart,"TELL=",5)==0)
-			//if((basepart[0]=='@') &&(basepart[1]=='@'))
+			basepart=strstr(filepath,"TELL=");
+			if(basepart!=NULL)
 				{
-					doKKCommand(filepath);
-					continue;
+					if(strncmp(basepart,"TELL=",5)==0)
+						{
+							doKKCommand(basepart);
+							continue;
+						}
 				}
+
 			linenum=strrchr(filepath,'@');
 			if(linenum!=NULL)
 				{
