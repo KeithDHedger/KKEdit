@@ -1959,23 +1959,20 @@ GtkWidget* findMenu(GtkWidget *parent,const gchar *name)
 			if(mname!=NULL)
 				{
 					if(strcmp(name,mname)==0)
-						{
-							holdWidget=parent;
-						}
+						holdWidget=parent;
 				}
 		}
 
 	if (GTK_IS_CONTAINER(parent))
 		{
 			GList *children = gtk_container_get_children(GTK_CONTAINER(parent));
-			while ((children = g_list_next(children)) != NULL)
+			while(children!=NULL)
 				{
 					GtkWidget* widget = findMenu((GtkWidget*)children->data, name);
 
 					if (widget != NULL)
-						{
-							return widget;
-						}
+						return widget;
+					children=g_list_next(children);
 				}
 			g_list_free(children);
 		}

@@ -386,12 +386,42 @@ void activate(GApplication *application)
 		gtk_window_present((GtkWindow*)mainWindow);
 }
 
+
+GtkWidget* activateMenuInBar(GtkWidget *parent,const gchar *name)
+{
+	GtkWidget	*widg=NULL;
+	if (GTK_IS_CONTAINER(parent))
+		{
+			GList *children=gtk_container_get_children(GTK_CONTAINER(parent));
+			while(children!=NULL)
+				{
+				GtkWidget* widget=NULL;
+				 widget=(GtkWidget*)children->data;
+				if(widget!=NULL)
+					{
+						holdWidget=NULL;
+						widg=findMenu(gtk_menu_item_get_submenu((GtkMenuItem*)widget),name);
+						if(holdWidget!=NULL)
+							{
+								gtk_menu_item_activate((GtkMenuItem*)holdWidget);
+								g_list_free(children);
+								return(NULL);
+							}
+					}
+					children=g_list_next(children);
+				}
+			g_list_free(children);
+		}
+	return NULL;
+}
+
 void doKKCommand(const char *command)
 {
 	const char	*commanddata;
 	char		commandname;
 	long		line;
 	pageStruct	*page=getPageStructByIDFromPage(-1);
+	GtkWidget	*widg=NULL;
 
 	commanddata=basename((char*)command);
 	commandname=commanddata[5];
@@ -439,6 +469,11 @@ void doKKCommand(const char *command)
 				break;
 			case 'u':
 				removeUserMark();
+				break;
+//select menu
+			case 'M':
+				holdWidget=NULL;
+				activateMenuInBar((GtkWidget*)menuBar,commanddata);
 				break;
 		}
 	if(mainWindow!=NULL)

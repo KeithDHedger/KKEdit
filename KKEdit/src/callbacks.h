@@ -20,7 +20,7 @@
 
 #ifndef _CALLBACKS_
 #define _CALLBACKS_
-
+extern GtkWidget			*holdWidget;
 enum {NEWROOTEDITOR=1,NEWEDITOR,NEWMANPAGEEDITOR};
 
 void closeTab(GtkWidget *widget,gpointer data);
@@ -81,5 +81,7 @@ void markRedo(GtkSourceUndoManager *manager,pageStruct *page);
 void markDirty(GtkTextBuffer *textbuffer,pageStruct *page);
 void realCloseTab(GtkNotebook *notebook,GtkWidget *child,guint page_num,gpointer user_data);
 void doTabMenu(GtkWidget *widget,gpointer user_data);
+
+GtkWidget* findMenu(GtkWidget *parent,const gchar *name);
 
 #endif

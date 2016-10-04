@@ -1,4 +1,5 @@
 0.4.2
+Added activate menu by name to remote control.
 Remote control is now eg: kkedit -i 1234 TELL=Nmain.cpp TELL=G5 TELL=U. activate kkedit with id=1234 switch to tab main.cpp goto line 5 and add user mark.
 Can now start instance with a user defined dbus name ( for remote control, later ).
 Fixed rare segfault when loading certain .cc files.
