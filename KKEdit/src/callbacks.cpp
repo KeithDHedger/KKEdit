@@ -618,10 +618,10 @@ void externalTool(GtkWidget *widget,gpointer data)
 	char			*ptr;
 	long			pos;
 	int				loop=0;
-	GString		*tempCommand=NULL;
+	GString			*tempCommand=NULL;
 	bool			continueflag=false;
 	char			*barcontrol=NULL;
-	StringSlice	*slice=new StringSlice;
+	StringSlice		*slice=new StringSlice;
 	char			*barcommand=NULL;
 	char			*strarray=NULL;
 	unsigned int	buffersize=1000;

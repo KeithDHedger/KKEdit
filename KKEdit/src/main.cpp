@@ -382,10 +382,10 @@ void doNagStuff(void)
 void activate(GApplication *application)
 {
 	ERRDATA
+	printf("XXXXXXXXX\n");
 	if(mainWindow!=NULL)
 		gtk_window_present((GtkWindow*)mainWindow);
 }
-
 
 GtkWidget* activateMenuInBar(GtkWidget *parent,const gchar *name)
 {
@@ -436,6 +436,10 @@ void doKKCommand(const char *command)
 
 	switch(commandname)
 		{
+//quit app
+			case 'Q':
+				doShutdown(NULL,NULL,NULL);
+				break;
 //goto line on current page
 			case 'G':
 				line=atoi(commanddata);
@@ -513,6 +517,42 @@ void doKKCommand(const char *command)
 					}
 				ERRDATA debugFree(&syscommand);
 				g_string_free(str,true);
+				break;
+//print list of open files to file commanddata
+			case 'p':
+			{
+				char			*strarray=NULL;
+				unsigned int	buffersize=1000;
+				char			*pagepath=NULL;
+				FILE			*savestdout;
+				char			nl[2]={'\n',0};
+				char			*com=NULL;
+				strarray=(char*)calloc(buffersize,1);
+				for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
+					{
+						pagepath=(char*)(pageStruct*)(getPageStructByIDFromPage(j))->filePath;
+						if(pagepath!=NULL)
+							{
+								if(buffersize<(strlen(strarray)+strlen(pagepath)+2))
+									{
+										buffersize+=1000;
+										strarray=(char*)realloc(strarray,buffersize);
+									}
+								if((pagepath!=NULL) && (strlen(pagepath)>0))
+									{
+										strcat(strarray,pagepath);
+										strcat(strarray,nl);
+									}
+							}
+					}
+				if(strarray!=NULL)
+					{
+						asprintf(&com,"echo -n \"%s\" > %s",strarray,commanddata);
+						system(com);
+						free(com);
+						free(strarray);
+					}
+			}
 				break;
 		}
 

@@ -6,6 +6,7 @@ include ../sources
 
 kkedit_SOURCES = $(COMMONSRC)
 KKEditProgressBar_SOURCES = ../pole/main.cpp
+kkeditmsg_SOURCES = ../kkeditmsg/main.cpp
 
 pixfilesdir = $(pkgdatadir)$(GTK3SUFFIX)/pixmaps
 pixfiles_DATA = ../resources/pixmaps/*
@@ -27,7 +28,7 @@ tools_DATA = ../resources/tools/*
 
 man1_MANS = ../resources/man/kkedit.1
 
-bin_PROGRAMS = kkedit KKEditProgressBar
+bin_PROGRAMS = kkedit KKEditProgressBar kkeditmsg
 
 install-exec-hook:
 
