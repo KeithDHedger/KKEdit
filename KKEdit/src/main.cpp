@@ -381,7 +381,6 @@ void doNagStuff(void)
 
 void activate(GApplication *application)
 {
-printf("activate\n");
 	ERRDATA
 	if(mainWindow!=NULL)
 		gtk_window_present((GtkWindow*)mainWindow);

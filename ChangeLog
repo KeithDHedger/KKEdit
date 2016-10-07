@@ -1,4 +1,5 @@
 0.4.2
+Added 'goodies' folder with example script.
 Added 'Continue' menu to Navigation to continue with script.
 Added run external tool by menu name to rc.
 Added wait for 1st message to kkeditmsg.
