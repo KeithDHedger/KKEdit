@@ -26,6 +26,7 @@ int			queueID;
 msgStruct	message;
 int			msgType=1;
 int			receiveType=IPC_NOWAIT;
+bool		waitForFinish=false;
 
 int sendRealMsg(int msglen)
 {
@@ -67,6 +68,13 @@ void sendMsg(const char *msg)
 			if(sendRealMsg(strlen(message.mText))!=ALLOK)
 				return;
 	}
+}
+
+void sendOK(void)
+{
+	message.mType=MSGSEND;
+	snprintf(message.mText,MAX_MSG_SIZE-1,"%s","continue");
+	sendRealMsg(strlen(message.mText));
 }
 
 GtkWidget* activateMenuInBar(GtkWidget *parent,const gchar *name)
@@ -202,37 +210,41 @@ void doKKCommand(void)
 				break;
 //print list of open files to file commanddata
 			case 'p':
-			{
-				char			*strarray=NULL;
-				unsigned int	buffersize=1000;
-				char			*pagepath=NULL;
-				FILE			*savestdout;
-				char			nl[2]={'\n',0};
-				char			*com=NULL;
-				strarray=(char*)calloc(buffersize,1);
-				for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
-					{
-						pagepath=(char*)(pageStruct*)(getPageStructByIDFromPage(j))->filePath;
-						if(pagepath!=NULL)
-							{
-								if(buffersize<(strlen(strarray)+strlen(pagepath)+2))
-									{
-										buffersize+=1000;
-										strarray=(char*)realloc(strarray,buffersize);
-									}
-								if((pagepath!=NULL) && (strlen(pagepath)>0))
-									{
-										strcat(strarray,pagepath);
-										strcat(strarray,nl);
-									}
-							}
-					}
-				if(strarray!=NULL)
-					{
-						sendMsg(strarray);
-						free(strarray);
-					}
-			}
+				{
+					char			*strarray=NULL;
+					unsigned int	buffersize=1000;
+					char			*pagepath=NULL;
+					FILE			*savestdout;
+					char			nl[2]={'\n',0};
+					char			*com=NULL;
+					strarray=(char*)calloc(buffersize,1);
+					for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
+						{
+							pagepath=(char*)(pageStruct*)(getPageStructByIDFromPage(j))->filePath;
+							if(pagepath!=NULL)
+								{
+									if(buffersize<(strlen(strarray)+strlen(pagepath)+2))
+										{
+											buffersize+=1000;
+											strarray=(char*)realloc(strarray,buffersize);
+										}
+									if((pagepath!=NULL) && (strlen(pagepath)>0))
+										{
+											strcat(strarray,pagepath);
+											strcat(strarray,nl);
+										}
+								}
+						}
+					if(strarray!=NULL)
+						{
+							sendMsg(strarray);
+							free(strarray);
+						}
+				}
+				break;
+//wait for open files to finish
+			case 'W':
+				waitForFinish=true;
 				break;
 		}
 

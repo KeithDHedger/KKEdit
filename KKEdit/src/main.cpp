@@ -420,6 +420,12 @@ void open(GApplication *application,GFile** files,gint n_files,const gchar *hint
 
 	fromGOpen=false;
 	g_application_release(application);
+	if(waitForFinish==true)
+		{
+			waitForFinish=false;
+			sendOK();
+		}
+
 	ERRDATA
 }
 

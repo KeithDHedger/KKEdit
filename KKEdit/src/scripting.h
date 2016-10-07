@@ -21,7 +21,7 @@
 #ifndef _SCRIPTING_
 #define _SCRIPTING_
 
-#define MAX_MSG_SIZE 32
+#define MAX_MSG_SIZE 1024
 
 #define ALLOK 0
 #define UNKNOWNARG 1
@@ -39,8 +39,10 @@ struct msgStruct
 	char mText[MAX_MSG_SIZE];
 };
 
+extern bool	waitForFinish;
 
 void createQueue(void);
 void getMsg(void);
+void sendOK(void);
 
 #endif

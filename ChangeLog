@@ -1,4 +1,6 @@
 0.4.2
+Added wait for 1st message to kkeditmsg.
+Message split into smaller messages if to large (>MAX_MSG_SIZE)
 Added remote controll app 'kkeditmsg' all commands now go thorugh this.
 More commands added to rc.
 Added activate menu by name to remote control.
