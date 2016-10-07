@@ -2,8 +2,8 @@
 
 #©keithhedger Fri 7 Oct 11:22:22 BST 2016 kdhedger68713@gmail.com
 
-KKEDIT=/media/LinuxData/Development/Projects/KKEdit/KKEdit/app/kkedit
-KKMSG=/media/LinuxData/Development/Projects/KKEdit/KKEdit/app/kkeditmsg
+KKEDIT=../app/kkedit
+KKMSG=../app/kkeditmsg
 INSTANCE=1234
 
 #open instance or bring to front
@@ -18,7 +18,7 @@ $KKMSG -k $INSTANCE -W -r >/dev/null
 $KKMSG -k $INSTANCE -s "p" -a
 #wait for 1st message then print all meassages to stdout
 $KKMSG -k $INSTANCE -W -r
-#wait for user
+#wait for user ( click Navigation->Continue )
 $KKMSG -k $INSTANCE -w >/dev/null
 #print open files to stdout
 $KKMSG -k $INSTANCE -s "p" -a
