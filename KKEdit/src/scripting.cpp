@@ -246,6 +246,23 @@ void doKKCommand(void)
 			case 'W':
 				waitForFinish=true;
 				break;
+//run external tool by menu name
+			case 'T':
+				{
+					GList		*tools=toolsList;
+					const char	*label;
+					while(tools!=NULL)
+						{
+							label=((toolStruct*)(tools->data))->menuName;
+							if(strcmp(label,commanddata)==0)
+								{
+									externalTool(NULL,tools->data);
+									break;
+								}
+							tools=tools->next;
+						}
+				}
+				break;
 		}
 
 	if(mainWindow!=NULL)

@@ -1079,7 +1079,7 @@ void buildToolsList(void)
 {
 	ERRDATA
 	GDir			*folder;
-	const gchar	*entry=NULL;
+	const gchar		*entry=NULL;
 	char			*filepath;
 	toolStruct		*tool;
 	char			*datafolder[2];
