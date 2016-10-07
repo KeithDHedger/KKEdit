@@ -33,7 +33,7 @@ bool				autoSeleced=false;
 bool				fromGOpen=false;
 char				*prefsFolder=NULL;
 GtkRecentManager	*recentMan=NULL;
-char				*sessionID=NULL;
+int					sessionID=-1;
 
 //main mainWindow
 GtkWidget			*mainWindow=NULL;

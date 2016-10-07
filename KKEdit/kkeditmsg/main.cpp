@@ -17,7 +17,7 @@
 #define APPNAME "kkeditmsg"
 #define VERSION "0.2.0"
 
-#define MAX_MSG_SIZE 1024
+#define MAX_MSG_SIZE 4096
 
 #define ALLOK 0
 #define UNKNOWNARG 1
@@ -25,15 +25,19 @@
 #define NOSENDMSG 3
 #define WAIT_MSG 0
 
+#define MSGANY 0
+#define MSGSEND 1
+#define MSGRECEIVE 2
+
 struct option long_options[] =
 {
 	{"send",1,0,'s'},
-	{"repeat",0,0,'r'},
 	{"all",0,0,'a'},
-	{"type",1,0,'t'},
 	{"key",1,0,'k'},
 	{"wait",0,0,'w'},
+	{"wait-first",0,0,'W'},
 	{"flush",0,0,'f'},
+	{"activate",0,0,'A'},
 	{"version",0,0,'v'},
 	{"help",0,0,'?'},
 	{0, 0, 0, 0}
@@ -47,25 +51,27 @@ struct msgBuffer
 
 int			queueID;
 msgBuffer	buffer;
-int			msgType=1;
 bool		action=false;
 int			receiveType=IPC_NOWAIT;
-bool		repeat=false;
 bool		printAll=false;
 bool		allDone=false;
 bool		flushQueue=false;
+bool		doActivateKKEdit=false;
+bool		doRemove=false;
+bool		waitFirst=false;
 
 void printHelp()
 {
 	printf("Usage: %s [OPTION] [TEXT]\n"
 	       "A CLI application\n"
 	       " -s, --send	Send message [TEXT] (defaults to receive)\n"
-	       " -r, --repeat	Print received message and resend\n"
-	       " -a, --all	Print all messages in queue\n"
+	       " -r, --receive	Print all messages in queue to stdout\n"
 	       " -f, --flush	Flush message queue quietly\n"
-	       " -t, --type	Message type (defaults to 1)\n"
 	       " -k, --key	Use key [INTEGER] instead of generated one\n"
-	       " -w, --wait	Wait for message to arrive (blocking)\n"
+	       " -w, --wait	Wait for message's to arrive (blocking)\n"
+	       " -W, --wait-first	Wait for first message to arrive (blocking) then continue\n"
+	       " -a, --activate	Activate kkedit\n"
+	       " -R, --remove	Remove Queue\n"
 	       " -v, --version	output version information and exit\n"
 	       " -h, -?, --help	print this help\n\n"
 	       "Report bugs to kdhedger@yahoo.co.uk\n"
@@ -74,6 +80,7 @@ void printHelp()
 
 void sendMsg()
 {
+	buffer.mType=MSGSEND;
 	if((msgsnd(queueID,&buffer,strlen(buffer.mText)+1,0))==-1)
 		{
 			fprintf(stderr,"Can't send message :(\n");
@@ -85,10 +92,10 @@ void readMsg()
 {
 	int retcode;
 
-	retcode=msgrcv(queueID,&buffer,MAX_MSG_SIZE,msgType,receiveType);
+	retcode=msgrcv(queueID,&buffer,MAX_MSG_SIZE,MSGRECEIVE,receiveType);
 
 	if(retcode>1)
-		printf("%s\n",buffer.mText);
+		printf("%s",buffer.mText);
 	else
 		allDone=true;
 }
@@ -98,15 +105,16 @@ int main(int argc, char **argv)
 	int	c;
 	int	key;
 	int	retcode;
-
-	buffer.mType=msgType;
+	const char *gg="G";
+	
+	buffer.mType=MSGRECEIVE;
 	buffer.mText[0]=0;
 	key=0xdeadbeef;
 
 	while (1)
 		{
 			int option_index = 0;
-			c = getopt_long (argc, argv, "v?hdwfras:t:k:",long_options, &option_index);
+			c = getopt_long (argc, argv, "v?hdwWfarRs:k:",long_options, &option_index);
 			if (c == -1)
 				break;
 
@@ -118,10 +126,6 @@ int main(int argc, char **argv)
 					break;
 
 				case 'r':
-					repeat=true;
-					break;
-
-				case 'a':
 					printAll=true;
 					break;
 
@@ -129,20 +133,28 @@ int main(int argc, char **argv)
 					flushQueue=true;
 					break;
 
-				case 't':
-					msgType=atoi(optarg);
-					break;
-
 				case 'w':
 					receiveType=WAIT_MSG;
+					break;
+
+				case 'W':
+					waitFirst=true;
 					break;
 
 				case 'k':
 					key=atoi(optarg);
 					break;
 
+				case 'a':
+					doActivateKKEdit=true;
+					break;
+
+				case 'R':
+					doRemove=true;
+					break;
+
 				case 'v':
-					printf("climsg %s\n",VERSION);
+					printf("kkeditmsg %s\n",VERSION);
 					return ALLOK;
 					break;
 
@@ -165,24 +177,31 @@ int main(int argc, char **argv)
 			exit(NOMAKEQUEUE);
 		}
 
-	buffer.mType=msgType;
-
 	if (printAll==true)
 		{
-			while(allDone==false)
+			if(waitFirst==true)
 				{
+					receiveType=WAIT_MSG;
 					readMsg();
+					receiveType=IPC_NOWAIT;
 				}
+			while(allDone==false)
+				readMsg();
 			return(ALLOK);
+		}
+
+	if(doRemove==true)
+		{
+			queueID=msgget(key,IPC_CREAT|0660);
+			msgctl(queueID,IPC_RMID,NULL);
 		}
 
 	if (flushQueue==true)
 		{
 			allDone=false;
-			msgType=0;
 			while(allDone==false)
 				{
-					retcode=msgrcv(queueID,&buffer,MAX_MSG_SIZE,msgType,receiveType);
+					retcode=msgrcv(queueID,&buffer,MAX_MSG_SIZE,MSGANY,receiveType);
 					if(retcode<=1)
 						allDone=true;
 				}
@@ -192,12 +211,15 @@ int main(int argc, char **argv)
 	if(action==true)
 		sendMsg();
 	else
-		{
-			readMsg();
-			if (repeat==true)
-				sendMsg();
-		}
+		readMsg();
 
+	if(doActivateKKEdit==true)
+		{
+			char *com;
+			asprintf(&com,"kkedit -i %i",key);
+			system(com);
+			free(com);
+		}
 	return(ALLOK);
 
 }

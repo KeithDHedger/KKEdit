@@ -491,6 +491,7 @@
 #include "files.h"
 #include "encoding.h"
 #include "completion.h"
+#include "scripting.h"
 
 
 #define VISIBLE __attribute__((visibility("default")))

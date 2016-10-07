@@ -21,5 +21,26 @@
 #ifndef _SCRIPTING_
 #define _SCRIPTING_
 
+#define MAX_MSG_SIZE 32
+
+#define ALLOK 0
+#define UNKNOWNARG 1
+#define NOMAKEQUEUE 2
+#define NOSENDMSG 3
+#define WAIT_MSG 0
+
+#define MSGANY 0
+#define MSGSEND 2
+#define MSGRECEIVE 1
+
+struct msgStruct
+{
+	long mType;
+	char mText[MAX_MSG_SIZE];
+};
+
+
+void createQueue(void);
+void getMsg(void);
 
 #endif
