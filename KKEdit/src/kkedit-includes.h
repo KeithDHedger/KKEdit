@@ -82,6 +82,7 @@
 #define GTK_STOCK_HOME "go-home"
 #define GTK_STOCK_GO_UP "go-up"
 #define GTK_STOCK_EXECUTE "system-run"
+#define GTK_STOCK_MEDIA_PLAY "media-playback-start"
 
 //gtk stock widget labels
 #define GTK_STOCK_YES gettext("_Yes")
@@ -168,6 +169,7 @@
 #define MENU_FIND_IN_DOCS_LABEL gettext("_Find In Documentation")
 #define MENU_GO_BACK_LABEL gettext("_Back")
 #define MENU_GO_FORWARD_LABEL DIALOG_GO_FORWARD_LABEL
+#define MENU_CONTINUE_LABEL gettext("_Continue")
 
 //func menu
 #define MENU_FUNC_MENU_LABEL gettext("Fun_ctions")

@@ -85,6 +85,8 @@
 #define SEARCHDOXYMENUNAME "searchdoxymenu"
 #define GOBACKMENUNAME "gobackmenu"
 #define GOFORWARDMENUNAME "goforwardmenu"
+#define CONTINUEMENUNAME "continuemenu"
+
 #define EXTOOLSMENUNAME "extoolsmenuname"
 #define ABOUTMENUNAME "aboutmenu"
 #define HELPLOCALMENUNAME "helplocalmenu"

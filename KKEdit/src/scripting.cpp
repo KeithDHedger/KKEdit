@@ -41,7 +41,6 @@ int sendRealMsg(int msglen)
 void sendMsg(const char *msg)
 {
 	unsigned 	segstart=0;
-	//const char	*ptr=msg;
 	unsigned	slen=strlen(msg);
 
 	message.mType=MSGSEND;
