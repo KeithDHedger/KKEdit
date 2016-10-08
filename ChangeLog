@@ -1,4 +1,5 @@
 0.4.2
+Added open session file to scripting ( command='s', fullpath to session file needed ). 
 More scripting.
 Added 'goodies' folder with example script.
 Added 'Continue' menu to Navigation to continue with script.
