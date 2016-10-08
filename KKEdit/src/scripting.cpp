@@ -281,6 +281,13 @@ void doKKCommand(void)
 						}
 				}
 				break;
+//restore session by name
+			case 's':
+				if(strlen(commanddata)==0)
+					restoreSession(NULL,NULL);
+				else
+					restoreSession(NULL,(gpointer)commanddata);
+				break;
 		}
 
 	if(mainWindow!=NULL)
