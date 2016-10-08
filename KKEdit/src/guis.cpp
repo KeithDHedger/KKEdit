@@ -111,7 +111,7 @@ menuDataStruct	menuData[]=
 		{MENU_FIND_IN_DOCS_LABEL,GTK_STOCK_FIND,0,0,(void*)&doxyDocs,SEARCHDOXYMENUNAME,NULL},
 		{MENU_GO_BACK_LABEL,GTK_STOCK_GO_BACK,0,0,(void*)&navigateHistory,GOBACKMENUNAME,(void*)NAVLAST},
 		{MENU_GO_FORWARD_LABEL,GTK_STOCK_GO_FORWARD,0,0,(void*)&navigateHistory,GOFORWARDMENUNAME,(void*)NAVNEXT},
-		{MENU_CONTINUE_LABEL,GTK_STOCK_MEDIA_PLAY,0,0,(void*)&sendOK,CONTINUEMENUNAME,NULL},
+		{MENU_CONTINUE_LABEL,GTK_STOCK_MEDIA_PLAY,0,0,(void*)&sendContinue,CONTINUEMENUNAME,NULL},
 //functions
 //bookmarks
 //tools
@@ -1826,7 +1826,8 @@ void buildMenus(void)
 //go foward
 	goForwardMenu=newMenuItem(MENUFORWARD,menu);
 //continue
-	menuitem=newImageMenuItem(MENUCONTINUE,menu);
+	continueMenu=newImageMenuItem(MENUCONTINUE,menu);
+	gtk_widget_hide(continueMenu);
 
 //function menu
 	funcMenu=gtk_menu_item_new_with_label(MENU_FUNC_MENU_LABEL);
@@ -2078,6 +2079,7 @@ void buildMainGui(void)
 //gettext
 	globalPlugins->globalPlugData->locale=LOCALEDIR;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToGui");
+
 	resetSensitive();
 }
 

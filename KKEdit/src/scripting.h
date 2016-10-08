@@ -40,9 +40,11 @@ struct msgStruct
 };
 
 extern bool	waitForFinish;
-
+extern bool	waitForUserContinue;
+extern int			queueID;
 void createQueue(void);
 void getMsg(void);
 void sendOK(void);
+void sendContinue(void);
 
 #endif

@@ -79,6 +79,7 @@ GtkWidget			*gotoDefMenu;
 GtkWidget			*searchInGtkDocsMenu;
 GtkWidget			*searchInQTDocsMenu;
 GtkWidget			*searchInDocsMenu;
+GtkWidget			*continueMenu;
 
 //func menu
 GtkWidget			*funcMenu=NULL;
@@ -1518,6 +1519,10 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 
 	if(loadingSession==true)
 		return;
+	if(waitForUserContinue==true)
+		gtk_widget_show(continueMenu);
+	else
+		gtk_widget_hide(continueMenu);
 
 	if(page==NULL)
 		return;

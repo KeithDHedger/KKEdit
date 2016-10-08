@@ -36,6 +36,7 @@ struct option long_options[] =
 	{"key",1,0,'k'},
 	{"wait",0,0,'w'},
 	{"wait-first",0,0,'W'},
+	{"block",0,0,'b'},
 	{"flush",0,0,'f'},
 	{"activate",0,0,'A'},
 	{"version",0,0,'v'},
@@ -70,6 +71,7 @@ void printHelp()
 	       " -k, --key	Use key [INTEGER] instead of generated one\n"
 	       " -w, --wait	Wait for message's to arrive (blocking)\n"
 	       " -W, --wait-first	Wait for first message to arrive (blocking) then continue\n"
+	       " -b, --block	Wait for first message to arrive (blocking) then continue receved message is discarded\n"
 	       " -a, --activate	Activate kkedit\n"
 	       " -R, --remove	Remove Queue\n"
 	       " -v, --version	output version information and exit\n"
@@ -100,12 +102,20 @@ void readMsg()
 		allDone=true;
 }
 
+void block(void)
+{
+	int retcode;
+
+	retcode=msgrcv(queueID,&buffer,MAX_MSG_SIZE,MSGRECEIVE,WAIT_MSG);
+}
+
 int main(int argc, char **argv)
 {
 	int	c;
 	int	key;
 	int	retcode;
 	const char *gg="G";
+	bool	doblock=false;
 	
 	buffer.mType=MSGRECEIVE;
 	buffer.mText[0]=0;
@@ -114,7 +124,7 @@ int main(int argc, char **argv)
 	while (1)
 		{
 			int option_index = 0;
-			c = getopt_long (argc, argv, "v?hdwWfarRs:k:",long_options, &option_index);
+			c = getopt_long (argc, argv, "v?hdbwWfarRs:k:",long_options, &option_index);
 			if (c == -1)
 				break;
 
@@ -153,6 +163,10 @@ int main(int argc, char **argv)
 					doRemove=true;
 					break;
 
+				case 'b':
+					doblock=true;
+					break;
+
 				case 'v':
 					printf("kkeditmsg %s\n",VERSION);
 					return ALLOK;
@@ -177,6 +191,35 @@ int main(int argc, char **argv)
 			exit(NOMAKEQUEUE);
 		}
 
+	if (flushQueue==true)
+		{
+			allDone=false;
+			while(allDone==false)
+				{
+					retcode=msgrcv(queueID,&buffer,MAX_MSG_SIZE,MSGANY,receiveType);
+					if(retcode<=1)
+						allDone=true;
+				}
+			return(ALLOK);
+		}
+
+	if(action==true)
+		sendMsg();
+
+	if(doActivateKKEdit==true)
+		{
+			char *com;
+			asprintf(&com,"kkedit -i %i",key);
+			system(com);
+			free(com);
+		}
+
+	if(doblock==true)
+		{
+			block();
+			return(ALLOK);
+		}
+
 	if (printAll==true)
 		{
 			if(waitFirst==true)
@@ -196,30 +239,31 @@ int main(int argc, char **argv)
 			msgctl(queueID,IPC_RMID,NULL);
 		}
 
-	if (flushQueue==true)
-		{
-			allDone=false;
-			while(allDone==false)
-				{
-					retcode=msgrcv(queueID,&buffer,MAX_MSG_SIZE,MSGANY,receiveType);
-					if(retcode<=1)
-						allDone=true;
-				}
-			return(ALLOK);
-		}
+//	if (flushQueue==true)
+//		{
+//			allDone=false;
+//			while(allDone==false)
+//				{
+//					retcode=msgrcv(queueID,&buffer,MAX_MSG_SIZE,MSGANY,receiveType);
+//					if(retcode<=1)
+//						allDone=true;
+//				}
+//			return(ALLOK);
+//		}
 
-	if(action==true)
-		sendMsg();
-	else
+//	if(action==true)
+	if(action==false)
+//		sendMsg();
+//	else
 		readMsg();
 
-	if(doActivateKKEdit==true)
-		{
-			char *com;
-			asprintf(&com,"kkedit -i %i",key);
-			system(com);
-			free(com);
-		}
+//	if(doActivateKKEdit==true)
+//		{
+//			char *com;
+//			asprintf(&com,"kkedit -i %i",key);
+//			system(com);
+//			free(com);
+//		}
 	return(ALLOK);
 
 }

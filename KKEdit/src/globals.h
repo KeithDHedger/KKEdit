@@ -181,6 +181,7 @@ extern GtkWidget		*searchInQTDocsMenu;
 extern GtkWidget		*searchInDocsMenu;
 extern GtkWidget		*goBackMenu;
 extern GtkWidget		*goForwardMenu;
+extern GtkWidget		*continueMenu;
 
 //view menu
 extern GtkWidget		*viewMenu;

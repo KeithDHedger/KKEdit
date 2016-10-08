@@ -419,12 +419,12 @@ void open(GApplication *application,GFile** files,gint n_files,const gchar *hint
 		}
 
 	fromGOpen=false;
-	g_application_release(application);
 	if(waitForFinish==true)
 		{
 			waitForFinish=false;
 			sendOK();
 		}
+	g_application_release(application);
 
 	ERRDATA
 }
@@ -537,6 +537,7 @@ int getWorkspaceNumber(void)
 		}
 	ERRDATA return retnum;
 }
+#include <sys/msg.h>
 
 int main(int argc, char **argv)
 {
@@ -605,8 +606,8 @@ int main(int argc, char **argv)
 	g_signal_connect(mainApp,"open",G_CALLBACK(open),NULL);
 
 	status=g_application_run(mainApp,argc,argv);
-
 	g_object_unref(mainApp);
+
 	ERRDATA delete globalHistory;
 	ERRDATA delete globalSlice;
 

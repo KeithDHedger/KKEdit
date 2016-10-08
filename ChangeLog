@@ -1,4 +1,5 @@
 0.4.2
+More scripting.
 Added 'goodies' folder with example script.
 Added 'Continue' menu to Navigation to continue with script.
 Added run external tool by menu name to rc.

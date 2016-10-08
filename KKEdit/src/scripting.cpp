@@ -22,11 +22,12 @@
 
 #include "kkedit-includes.h"
 
-int			queueID;
+int			queueID=-1;
 msgStruct	message;
 int			msgType=1;
 int			receiveType=IPC_NOWAIT;
 bool		waitForFinish=false;
+bool		waitForUserContinue=false;
 
 int sendRealMsg(int msglen)
 {
@@ -72,8 +73,18 @@ void sendMsg(const char *msg)
 void sendOK(void)
 {
 	message.mType=MSGSEND;
+	snprintf(message.mText,MAX_MSG_SIZE-1,"%s","ok");
+	sendRealMsg(strlen(message.mText));
+	waitForFinish=false;
+}
+
+void sendContinue(void)
+{
+	message.mType=MSGSEND;
 	snprintf(message.mText,MAX_MSG_SIZE-1,"%s","continue");
 	sendRealMsg(strlen(message.mText));
+	waitForUserContinue=false;
+	gtk_widget_hide(continueMenu);
 }
 
 GtkWidget* activateMenuInBar(GtkWidget *parent,const gchar *name)
@@ -241,10 +252,18 @@ void doKKCommand(void)
 						}
 				}
 				break;
-//wait for open files to finish
+
+//wait for this instanace to finish what its doing ( open files )
 			case 'W':
 				waitForFinish=true;
 				break;
+
+//wait for user to continue
+			case 'R':
+				waitForUserContinue=true;
+				gtk_widget_show(continueMenu);
+				break;
+
 //run external tool by menu name
 			case 'T':
 				{
