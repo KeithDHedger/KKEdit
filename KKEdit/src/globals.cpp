@@ -1519,6 +1519,7 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 
 	if(loadingSession==true)
 		return;
+
 	if(waitForUserContinue==true)
 		gtk_widget_show(continueMenu);
 	else
