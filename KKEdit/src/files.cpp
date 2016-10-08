@@ -601,6 +601,9 @@ VISIBLE void saveSession(const char *filename,const char *path)
 			name=filename;
 		}
 
+//>>>filename=testmsg path=/home/keithhedger/.KKEdit/plugins-gtk/session-1<<<
+//printf(">>>filename=%s path=%s<<<\n",filename,filepath);
+
 	fd=fopen(filepath,"w");
 	if(fd!=NULL)
 		{

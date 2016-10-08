@@ -17,5 +17,5 @@ $KKMSG -k $INSTANCE -f
 #open instance or bring to front
 ($KKEDIT -i $INSTANCE) &
 
-#open session
+#open session 1
 $KKMSG -k $INSTANCE -s "s${HOME}/.KKEdit/plugins-gtk/session-1" -a
