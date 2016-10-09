@@ -1,0 +1,21 @@
+#!/bin/bash -e
+
+#©keithhedger Sat 8 Oct 17:07:10 BST 2016 kdhedger68713@gmail.com
+
+KKEDIT=../app/kkedit
+KKMSG=../app/kkeditmsg
+INSTANCE=12345999
+
+#if arg then remove and flush q then exit
+if [ "X$1" != "X" ];then
+	$KKMSG -k $INSTANCE -fR
+	exit 0
+fi
+#make sure queue is empty
+$KKMSG -k $INSTANCE -f
+
+#open instance or bring to front
+($KKEDIT -i $INSTANCE) &
+
+#open session 1
+$KKMSG -k $INSTANCE -s "s${HOME}/.KKEdit/plugins-gtk/session-1" -a
