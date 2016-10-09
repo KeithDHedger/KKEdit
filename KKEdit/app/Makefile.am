@@ -26,6 +26,9 @@ stylefiles_DATA = ../resources/styles/*
 toolsdir = $(pkgdatadir)$(GTK3SUFFIX)/tools
 tools_DATA = ../resources/tools/*
 
+goodiesdir = $(pkgdatadir)$(GTK3SUFFIX)/goodies
+goodies_DATA = ../resources/goodies/*
+
 man1_MANS = ../resources/man/kkedit.1
 
 bin_PROGRAMS = kkedit KKEditProgressBar kkeditmsg

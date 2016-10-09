@@ -104,8 +104,9 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptfilesdir)" \
 	"$(DESTDIR)$(man1dir)" "$(DESTDIR)$(docfilesdir)" \
-	"$(DESTDIR)$(helpfilesdir)" "$(DESTDIR)$(pixfilesdir)" \
-	"$(DESTDIR)$(stylefilesdir)" "$(DESTDIR)$(toolsdir)"
+	"$(DESTDIR)$(goodiesdir)" "$(DESTDIR)$(helpfilesdir)" \
+	"$(DESTDIR)$(pixfilesdir)" "$(DESTDIR)$(stylefilesdir)" \
+	"$(DESTDIR)$(toolsdir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
 am_KKEditProgressBar_OBJECTS = ../pole/main.$(OBJEXT)
@@ -196,8 +197,8 @@ am__can_run_installinfo = \
 man1dir = $(mandir)/man1
 NROFF = nroff
 MANS = $(man1_MANS)
-DATA = $(docfiles_DATA) $(helpfiles_DATA) $(pixfiles_DATA) \
-	$(stylefiles_DATA) $(tools_DATA)
+DATA = $(docfiles_DATA) $(goodies_DATA) $(helpfiles_DATA) \
+	$(pixfiles_DATA) $(stylefiles_DATA) $(tools_DATA)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -394,6 +395,8 @@ stylefilesdir = $(pkgdatadir)$(GTK3SUFFIX)/styles
 stylefiles_DATA = ../resources/styles/*
 toolsdir = $(pkgdatadir)$(GTK3SUFFIX)/tools
 tools_DATA = ../resources/tools/*
+goodiesdir = $(pkgdatadir)$(GTK3SUFFIX)/goodies
+goodies_DATA = ../resources/goodies/*
 man1_MANS = ../resources/man/kkedit.1
 all: all-am
 
@@ -687,6 +690,27 @@ uninstall-docfilesDATA:
 	@list='$(docfiles_DATA)'; test -n "$(docfilesdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(docfilesdir)'; $(am__uninstall_files_from_dir)
+install-goodiesDATA: $(goodies_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(goodies_DATA)'; test -n "$(goodiesdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(goodiesdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(goodiesdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(goodiesdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(goodiesdir)" || exit $$?; \
+	done
+
+uninstall-goodiesDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(goodies_DATA)'; test -n "$(goodiesdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(goodiesdir)'; $(am__uninstall_files_from_dir)
 install-helpfilesDATA: $(helpfiles_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(helpfiles_DATA)'; test -n "$(helpfilesdir)" || list=; \
@@ -858,7 +882,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(PROGRAMS) $(SCRIPTS) $(MANS) $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptfilesdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(docfilesdir)" "$(DESTDIR)$(helpfilesdir)" "$(DESTDIR)$(pixfilesdir)" "$(DESTDIR)$(stylefilesdir)" "$(DESTDIR)$(toolsdir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptfilesdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(docfilesdir)" "$(DESTDIR)$(goodiesdir)" "$(DESTDIR)$(helpfilesdir)" "$(DESTDIR)$(pixfilesdir)" "$(DESTDIR)$(stylefilesdir)" "$(DESTDIR)$(toolsdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -919,9 +943,10 @@ info: info-am
 
 info-am:
 
-install-data-am: install-docfilesDATA install-helpfilesDATA \
-	install-man install-pixfilesDATA install-scriptfilesSCRIPTS \
-	install-stylefilesDATA install-toolsDATA
+install-data-am: install-docfilesDATA install-goodiesDATA \
+	install-helpfilesDATA install-man install-pixfilesDATA \
+	install-scriptfilesSCRIPTS install-stylefilesDATA \
+	install-toolsDATA
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-dvi: install-dvi-am
@@ -969,9 +994,9 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-binPROGRAMS uninstall-docfilesDATA \
-	uninstall-helpfilesDATA uninstall-man uninstall-pixfilesDATA \
-	uninstall-scriptfilesSCRIPTS uninstall-stylefilesDATA \
-	uninstall-toolsDATA
+	uninstall-goodiesDATA uninstall-helpfilesDATA uninstall-man \
+	uninstall-pixfilesDATA uninstall-scriptfilesSCRIPTS \
+	uninstall-stylefilesDATA uninstall-toolsDATA
 
 uninstall-man: uninstall-man1
 
@@ -984,18 +1009,19 @@ uninstall-man: uninstall-man1
 	install-am install-binPROGRAMS install-data install-data-am \
 	install-data-hook install-docfilesDATA install-dvi \
 	install-dvi-am install-exec install-exec-am install-exec-hook \
-	install-helpfilesDATA install-html install-html-am \
-	install-info install-info-am install-man install-man1 \
-	install-pdf install-pdf-am install-pixfilesDATA install-ps \
-	install-ps-am install-scriptfilesSCRIPTS install-strip \
-	install-stylefilesDATA install-toolsDATA installcheck \
-	installcheck-am installdirs maintainer-clean \
+	install-goodiesDATA install-helpfilesDATA install-html \
+	install-html-am install-info install-info-am install-man \
+	install-man1 install-pdf install-pdf-am install-pixfilesDATA \
+	install-ps install-ps-am install-scriptfilesSCRIPTS \
+	install-strip install-stylefilesDATA install-toolsDATA \
+	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
 	uninstall-am uninstall-binPROGRAMS uninstall-docfilesDATA \
-	uninstall-helpfilesDATA uninstall-man uninstall-man1 \
-	uninstall-pixfilesDATA uninstall-scriptfilesSCRIPTS \
-	uninstall-stylefilesDATA uninstall-toolsDATA
+	uninstall-goodiesDATA uninstall-helpfilesDATA uninstall-man \
+	uninstall-man1 uninstall-pixfilesDATA \
+	uninstall-scriptfilesSCRIPTS uninstall-stylefilesDATA \
+	uninstall-toolsDATA
 
 .PRECIOUS: Makefile
 

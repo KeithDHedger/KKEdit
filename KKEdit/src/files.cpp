@@ -816,50 +816,101 @@ void fileChangedOnDisk(GFileMonitor *monitor,GFile *file,GFile *other_file,GFile
 void add_source_mark_pixbufs(GtkSourceView *view)
 {
 	ERRDATA
-
 	GtkImage	*image;
 	GdkPixbuf	*pbuf;
+	const char	*umarks[]={MARK_TYPE_1,MARK_TYPE_2,MARK_TYPE_3,MARK_TYPE_4,MARK_TYPE_5};
+	const char	*markpaths[]={BOOKMARKPNG,USERMARK1PNG,USERMARK2PNG,USERMARK3PNG,USERMARK4PNG};
 
-	ERRDATA
-	image=(GtkImage*)gtk_image_new_from_file(BOOKMARKPNG);
-	pbuf=gtk_image_get_pixbuf(image);
-
-#ifdef _USEGTK3_
-	GdkRGBA		color;
-	gdk_rgba_parse (&color,highlightColour);
-
-	GtkSourceMarkAttributes *attr=gtk_source_mark_attributes_new();
-
-	gtk_source_mark_attributes_set_pixbuf(attr,pbuf);
-	gtk_source_mark_attributes_set_background(attr,&color);
-	gtk_source_view_set_mark_attributes(view,MARK_TYPE_1,attr,1);
-#else
-	GdkColor	color;
-	gdk_color_parse(highlightColour,&color);
-	gtk_source_view_set_mark_category_background(view,MARK_TYPE_1,&color);
-	gtk_source_view_set_mark_category_icon_from_pixbuf(view,MARK_TYPE_1,pbuf);
-	gtk_source_view_set_mark_category_priority(view,MARK_TYPE_1,1);
-#endif
-
-	image=(GtkImage*)gtk_image_new_from_file(USERMARKPNG);
-	pbuf=gtk_image_get_pixbuf(image);
+	for(int j=0;j<5;j++)
+		{
+			image=(GtkImage*)gtk_image_new_from_file(markpaths[j]);
+			pbuf=gtk_image_get_pixbuf(image);
 
 #ifdef _USEGTK3_
-	gdk_rgba_parse (&color,highlightColour);
+			GdkRGBA		color;
+			gdk_rgba_parse (&color,highlightColour);
 
-	attr=gtk_source_mark_attributes_new();
+			GtkSourceMarkAttributes *attr=gtk_source_mark_attributes_new();
 
-	gtk_source_mark_attributes_set_pixbuf(attr,pbuf);
-	gtk_source_mark_attributes_set_background(attr,&color);
-	gtk_source_view_set_mark_attributes(view,MARK_TYPE_2,attr,1);
+			gtk_source_mark_attributes_set_pixbuf(attr,pbuf);
+			gtk_source_mark_attributes_set_background(attr,&color);
+			gtk_source_view_set_mark_attributes(view,umarks[j],attr,1);
 #else
-	gdk_color_parse(highlightColour,&color);
-	gtk_source_view_set_mark_category_background(view,MARK_TYPE_2,&color);
-	gtk_source_view_set_mark_category_icon_from_pixbuf(view,MARK_TYPE_2,pbuf);
-	gtk_source_view_set_mark_category_priority(view,MARK_TYPE_2,1);
+			GdkColor	color;
+			gdk_color_parse(highlightColour,&color);
+			gtk_source_view_set_mark_category_background(view,umarks[j],&color);
+			gtk_source_view_set_mark_category_icon_from_pixbuf(view,umarks[j],pbuf);
+			gtk_source_view_set_mark_category_priority(view,umarks[j],1);
 #endif
+		}
+//
+//	image=(GtkImage*)gtk_image_new_from_file(USERMARKPNG);
+//	pbuf=gtk_image_get_pixbuf(image);
+//
+//#ifdef _USEGTK3_
+//	gdk_rgba_parse (&color,highlightColour);
+//
+//	attr=gtk_source_mark_attributes_new();
+//
+//	gtk_source_mark_attributes_set_pixbuf(attr,pbuf);
+//	gtk_source_mark_attributes_set_background(attr,&color);
+//	gtk_source_view_set_mark_attributes(view,MARK_TYPE_2,attr,1);
+//#else
+//	gdk_color_parse(highlightColour,&color);
+//	gtk_source_view_set_mark_category_background(view,MARK_TYPE_2,&color);
+//	gtk_source_view_set_mark_category_icon_from_pixbuf(view,MARK_TYPE_2,pbuf);
+//	gtk_source_view_set_mark_category_priority(view,MARK_TYPE_2,1);
+//#endif
 	ERRDATA
 }
+//
+//void xxxadd_source_mark_pixbufs(GtkSourceView *view)
+//{
+//	ERRDATA
+//
+//	GtkImage	*image;
+//	GdkPixbuf	*pbuf;
+//
+//	ERRDATA
+//	image=(GtkImage*)gtk_image_new_from_file(BOOKMARKPNG);
+//	pbuf=gtk_image_get_pixbuf(image);
+//
+//#ifdef _USEGTK3_
+//	GdkRGBA		color;
+//	gdk_rgba_parse (&color,highlightColour);
+//
+//	GtkSourceMarkAttributes *attr=gtk_source_mark_attributes_new();
+//
+//	gtk_source_mark_attributes_set_pixbuf(attr,pbuf);
+//	gtk_source_mark_attributes_set_background(attr,&color);
+//	gtk_source_view_set_mark_attributes(view,MARK_TYPE_1,attr,1);
+//#else
+//	GdkColor	color;
+//	gdk_color_parse(highlightColour,&color);
+//	gtk_source_view_set_mark_category_background(view,MARK_TYPE_1,&color);
+//	gtk_source_view_set_mark_category_icon_from_pixbuf(view,MARK_TYPE_1,pbuf);
+//	gtk_source_view_set_mark_category_priority(view,MARK_TYPE_1,1);
+//#endif
+//
+//	image=(GtkImage*)gtk_image_new_from_file(USERMARKPNG);
+//	pbuf=gtk_image_get_pixbuf(image);
+//
+//#ifdef _USEGTK3_
+//	gdk_rgba_parse (&color,highlightColour);
+//
+//	attr=gtk_source_mark_attributes_new();
+//
+//	gtk_source_mark_attributes_set_pixbuf(attr,pbuf);
+//	gtk_source_mark_attributes_set_background(attr,&color);
+//	gtk_source_view_set_mark_attributes(view,MARK_TYPE_2,attr,1);
+//#else
+//	gdk_color_parse(highlightColour,&color);
+//	gtk_source_view_set_mark_category_background(view,MARK_TYPE_2,&color);
+//	gtk_source_view_set_mark_category_icon_from_pixbuf(view,MARK_TYPE_2,pbuf);
+//	gtk_source_view_set_mark_category_priority(view,MARK_TYPE_2,1);
+//#endif
+//	ERRDATA
+//}
 
 gboolean resetRegexMark (GtkWidget *widget,GdkEvent *event,pageStruct *page)
 {

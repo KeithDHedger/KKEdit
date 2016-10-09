@@ -173,7 +173,7 @@ void doKKCommand(void)
 				break;
 //set user mark
 			case 'U':
-				setUserMark();
+				setUserMark(commanddata);
 				break;
 			case 'u':
 				removeUserMark();

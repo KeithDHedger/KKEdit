@@ -71,7 +71,8 @@
 #define MARK_TYPE_1		"one"
 #define MARK_TYPE_2		"two"
 #define MARK_TYPE_3		"three"
-#define MARK_TYPE_4		"tfour"
+#define MARK_TYPE_4		"four"
+#define MARK_TYPE_5		"five"
 
 #define USEURI			-1
 #define USEFILE			-2

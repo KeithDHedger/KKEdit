@@ -101,19 +101,20 @@ VISIBLE void removeUserMark(void)
 	gtk_source_buffer_remove_source_marks(page->buffer,&iter,&iter,mark_type);
 }
 
-VISIBLE void setUserMark(void)
+VISIBLE void setUserMark(const char *mark)
 {
 	pageStruct		*page=getPageStructByIDFromPage(-1);
 	const gchar		*mark_type;
-	GtkTextMark		*mark;
+	GtkTextMark		*tmark;
 	GtkTextIter		iter;
 
 	if(page==NULL)
-	return;
-	mark_type=MARK_TYPE_2;
+		return;
 
-	mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
-	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);
+	mark_type=mark;
+
+	tmark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
+	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,tmark);
 	page->userMark=gtk_source_buffer_create_source_mark(page->buffer,NULL,mark_type,&iter);
 }
 
