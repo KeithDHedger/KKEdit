@@ -2,8 +2,8 @@
 
 #©keithhedger Fri 7 Oct 11:22:22 BST 2016 kdhedger68713@gmail.com
 
-KKEDIT=../app/kkedit
-KKMSG=../app/kkeditmsg
+KKEDIT=../../app/kkedit
+KKMSG=../../app/kkeditmsg
 INSTANCE=1234
 
 #open instance or bring to front

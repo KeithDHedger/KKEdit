@@ -176,7 +176,7 @@ void doKKCommand(void)
 				setUserMark(commanddata);
 				break;
 			case 'u':
-				removeUserMark();
+				removeUserMark(commanddata);
 				break;
 //select menu
 			case 'M':

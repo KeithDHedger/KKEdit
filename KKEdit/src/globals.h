@@ -68,11 +68,11 @@
 #define MAXTEXTWIDTH 500
 #define MAXBFHISTORY 100
 
-#define MARK_TYPE_1		"one"
-#define MARK_TYPE_2		"two"
-#define MARK_TYPE_3		"three"
-#define MARK_TYPE_4		"four"
-#define MARK_TYPE_5		"five"
+#define MARK_TYPE_1		"bookmark"
+#define MARK_TYPE_2		"user1"
+#define MARK_TYPE_3		"user2"
+#define MARK_TYPE_4		"user3"
+#define MARK_TYPE_5		"user4"
 
 #define USEURI			-1
 #define USEFILE			-2

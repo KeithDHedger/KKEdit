@@ -2,8 +2,8 @@
 
 #©keithhedger Sat 8 Oct 17:07:10 BST 2016 kdhedger68713@gmail.com
 
-KKEDIT=../app/kkedit
-KKMSG=../app/kkeditmsg
+KKEDIT=../../app/kkedit
+KKMSG=../../app/kkeditmsg
 INSTANCE=12345999
 
 #if arg then remove and flush q then exit

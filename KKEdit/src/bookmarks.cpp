@@ -84,7 +84,7 @@ VISIBLE void removeAllBookmarks(GtkWidget *widget,GtkTextIter *titer)
 
 //TODO//
 //make more configurable
-VISIBLE void removeUserMark(void)
+VISIBLE void removeUserMark(const char *umark)
 {
 	pageStruct		*page=getPageStructByIDFromPage(-1);
 	const gchar		*mark_type;
@@ -93,7 +93,7 @@ VISIBLE void removeUserMark(void)
 
 	if(page==NULL)
 	return;
-	mark_type=MARK_TYPE_2;
+	mark_type=umark;
 
 	mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
 	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,mark);

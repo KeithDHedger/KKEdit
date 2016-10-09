@@ -40,7 +40,7 @@ void toggleBookmark(GtkWidget*,GtkTextIter *titer);
 void removeAllBookmarks(GtkWidget *widget,GtkTextIter *titer);
 void toggleBookMarkBar(GtkWidget *widget,gpointer data);
 void setUserMark(const char *mark);
-void removeUserMark(void);
+void removeUserMark(const char *umark);
 
 
 #endif
