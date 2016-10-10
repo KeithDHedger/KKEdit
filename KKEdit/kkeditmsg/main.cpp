@@ -14,8 +14,6 @@
 #include <string.h>
 #include <getopt.h>
 
-//#include "../src/scripting.h"
-
 #define APPNAME "kkeditmsg"
 #define VERSION "0.2.0"
 
@@ -64,7 +62,7 @@ bool		doRemove=false;
 bool		waitFirst=false;
 int			sinkReturn;
 
-const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","Bookmark","CloseTab","SetMark","UnsetMark","ActivateMenu","MoveTo","Paste","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession",NULL};
+const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","Bookmark","CloseTab","SetMark","UnsetMark","ActivateMenu","MoveTo","SelectBetween","Paste","Copy","Cut","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession",NULL};
 
 void printHelp()
 {

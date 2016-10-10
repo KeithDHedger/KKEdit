@@ -115,9 +115,9 @@ GtkWidget* activateMenuInBar(GtkWidget *parent,const gchar *name)
 	return NULL;
 }
 
-const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","Bookmark","CloseTab","SetMark","UnsetMark","ActivateMenu","MoveTo","Paste","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession",NULL};
+const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","Bookmark","CloseTab","SetMark","UnsetMark","ActivateMenu","MoveTo","SelectBetween","Paste","Copy","Cut","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession",NULL};
 
-enum {SQUIT=0,SGOTOLINE,SSEARCHDEF,SSELECTTAB,SBOOKMARK,SCLOSETAB,SSETMARK,SUNSETMARK,SACTIVATEMENU,SMOVETO,SPASTE,SINSERTTEXT,SINSERTNL,SINSERTFILE,SPRINTFILES,SWAITFORKKEDIT,SSHOWCONTINUE,SRUNTOOL,SRESTORESESSION};
+enum {SQUIT=0,SGOTOLINE,SSEARCHDEF,SSELECTTAB,SBOOKMARK,SCLOSETAB,SSETMARK,SUNSETMARK,SACTIVATEMENU,SMOVETO,SSELECTBETWEEN,SPASTE,SCOPY,SCUT,SINSERTTEXT,SINSERTNL,SINSERTFILE,SPRINTFILES,SWAITFORKKEDIT,SSHOWCONTINUE,SRUNTOOL,SRESTORESESSION};
 
 const char	*commandArgsArray[10]={NULL,};
 unsigned	commandArgsCnt=0;
@@ -127,6 +127,8 @@ void runKKCommand(void)
 {
 	pageStruct	*page=getPageStructByIDFromPage(-1);
 	GtkTextIter	iter;
+	GtkTextIter	startiter;
+	GtkTextIter	enditer;
 	char		buffer[256];
 	char		*syscommand;
 	GString		*str;
@@ -205,9 +207,29 @@ void runKKCommand(void)
 				gtk_text_iter_set_line_offset(&iter,atoi(commandArgsArray[0]));
 				gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
 				break;
+//select between char pos and char pos on same line
+			case SSELECTBETWEEN:
+				if(commandArgsCnt<2)
+					return;
+				if(page==NULL)
+					return;
+				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&startiter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+				gtk_text_iter_set_line_offset(&startiter,atoi(commandArgsArray[0]));
+				enditer=startiter;
+				gtk_text_iter_set_line_offset(&enditer,atoi(commandArgsArray[1]));
+				gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&startiter,&enditer);
+				break;
 //paste clipboard at current pos
 			case SPASTE:
 				pasteFromClip(NULL,NULL);
+				break;
+//copy current selection to clip
+			case SCOPY:
+				copyToClip(NULL,NULL);
+				break;
+//cut current selection
+			case SCUT:
+				cutToClip(NULL,NULL);
 				break;
 //insert text at current pos
 			case SINSERTTEXT:

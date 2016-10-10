@@ -4,7 +4,7 @@
 
 KKEDIT=../../app/kkedit
 KKMSG=../../app/kkeditmsg
-INSTANCE=$(xdotool get_desktop)
+INSTANCE=12345
 
 #if arg then remove and flush q then exit
 if [ "X$1" != "X" ];then

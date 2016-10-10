@@ -1,6 +1,7 @@
 0.4.2
+Added extra script commands ("Quit","GotoLine","SearchDef","SelectTab","Bookmark","CloseTab","SetMark","UnsetMark","ActivateMenu","MoveTo","SelectBetween","Paste","Copy","Cut","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession").
 Redone scripting commands now using words instead of single letters ( kkeditmsg -h for full list ).
-User marks are now labeled "user1","user2","user3","user4" Add at cuurent line with eg 'Uuser3' remove with eg 'uuser3'.
+User marks are now labeled "user1","user2","user3","user4" Add at curent line with eg 'Uuser3' remove with eg 'uuser3'.
 Added open session file to scripting ( command='s', fullpath to session file needed ). 
 More scripting.
 Added 'goodies' folder with example script.
