@@ -253,31 +253,10 @@ int main(int argc, char **argv)
 			msgctl(queueID,IPC_RMID,NULL);
 		}
 
-//	if (flushQueue==true)
-//		{
-//			allDone=false;
-//			while(allDone==false)
-//				{
-//					retcode=msgrcv(queueID,&buffer,MAX_MSG_SIZE,MSGANY,receiveType);
-//					if(retcode<=1)
-//						allDone=true;
-//				}
-//			return(ALLOK);
-//		}
 
-//	if(action==true)
 	if(action==false)
-//		sendMsg();
-//	else
 		readMsg();
 
-//	if(doActivateKKEdit==true)
-//		{
-//			char *com;
-//			asprintf(&com,"kkedit -i %i",key);
-//			system(com);
-//			free(com);
-//		}
 	return(ALLOK);
 
 }
