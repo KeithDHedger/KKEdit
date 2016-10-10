@@ -364,11 +364,8 @@ bool getSaveFile(void)
 	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog),TRUE);
 	if(saveFileName!=NULL)
 		{
-printf("4444444444444444\n");
-
 			if(saveFilePath!=NULL)
 				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),g_path_get_dirname(saveFilePath));
-printf("5555555555555555\n");
 			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),saveFileName);
 		}
 	else
@@ -428,10 +425,7 @@ VISIBLE bool saveFile(GtkWidget *widget,gpointer data)
 						{
 							ERRDATA debugFree(&page->dirName);
 						}
-printf("66666666666666\n");
-
 					page->dirName=g_path_get_dirname(page->filePath);
-printf("77777777777777\n");
 				}
 
 			saveFileName=page->fileName;
@@ -450,11 +444,7 @@ printf("77777777777777\n");
 						{
 							ERRDATA debugFree(&page->dirName);
 						}
-printf("8888888888888\n");
-
 					page->dirName=g_path_get_dirname(page->filePath);
-printf("99999999999999\n");
-
 					gtk_text_buffer_set_modified((GtkTextBuffer*)page->buffer,FALSE);
 
 					gtk_widget_set_tooltip_text(page->tabName,page->filePath);

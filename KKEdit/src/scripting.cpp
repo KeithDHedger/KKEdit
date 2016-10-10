@@ -122,7 +122,7 @@ enum {SQUIT=0,SGOTOLINE,SSEARCHDEF,SSELECTTAB,SBOOKMARK,SCLOSETAB,SSETMARK,SUNSE
 const char	*commandArgsArray[10]={NULL,};
 unsigned	commandArgsCnt=0;
 unsigned	commandNumber=666;
-//TODO// add error checking for missing args
+
 void runKKCommand(void)
 {
 	pageStruct	*page=getPageStructByIDFromPage(-1);
@@ -142,18 +142,24 @@ void runKKCommand(void)
 			case SGOTOLINE:
 				{
 					long line=0;
-					line=atoi(commandArgsArray[0]);
-					if(fromGOpen==true)
-						gtk_widget_show_all((GtkWidget*)(GtkTextView*)page->view);
-					gotoLine(NULL,(void*)line);
+					if(commandArgsCnt==0)
+						return;
+							line=atoi(commandArgsArray[0]);
+							if(fromGOpen==true)
+								gtk_widget_show_all((GtkWidget*)(GtkTextView*)page->view);
+							gotoLine(NULL,(void*)line);
 				}
 				break;
 //search for define
 			case SSEARCHDEF:
+				if(commandArgsCnt==0)
+					return;
 				defSearchFromBar((GtkWidget*)commandArgsArray[0],NULL);
 				break;
 //switch to tab by name
 			case SSELECTTAB:
+				if(commandArgsCnt==0)
+					return;
 				for(int j=-0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
 					{
 						page=getPageStructByIDFromPage(j);
@@ -174,19 +180,27 @@ void runKKCommand(void)
 				break;
 //set user mark
 			case SSETMARK:
+				if(commandArgsCnt==0)
+					return;
 				setUserMark(commandArgsArray[0]);
 				break;
 //unset user mark
 			case SUNSETMARK:
+				if(commandArgsCnt==0)
+					return;
 				removeUserMark(commandArgsArray[0]);
 				break;
 //select menu
 			case SACTIVATEMENU:
+				if(commandArgsCnt==0)
+					return;
 				holdWidget=NULL;
 				activateMenuInBar((GtkWidget*)menuBar,commandArgsArray[0]);
 				break;
 //goto offset at current line
 			case SMOVETO:
+				if(commandArgsCnt==0)
+					return;
 				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
 				gtk_text_iter_set_line_offset(&iter,atoi(commandArgsArray[0]));
 				gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
@@ -197,16 +211,22 @@ void runKKCommand(void)
 				break;
 //insert text at current pos
 			case SINSERTTEXT:
+				if(commandArgsCnt==0)
+					return;
 				gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)commandArgsArray[0],-1);
 				break;
 //insert newlines at current pos
 			case SINSERTNL:
+				if(commandArgsCnt==0)
+					return;
 				sprintf(buffer,"%c",'\n');
 				for(int j=0;j<atoi(commandArgsArray[0]);j++)
 					gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)buffer,-1);
 				break;			
 //insert file at current pos
 			case SINSERTFILE:
+				if(commandArgsCnt==0)
+					return;
 				str=g_string_new(NULL);
 				sinkReturn=asprintf(&syscommand,"cat %s",commandArgsArray[0]);
 				fp=popen(syscommand,"r");
@@ -268,6 +288,8 @@ void runKKCommand(void)
 				{
 					GList		*tools=toolsList;
 					const char	*label;
+					if(commandArgsCnt==0)
+						return;
 					while(tools!=NULL)
 						{
 							label=((toolStruct*)(tools->data))->menuName;
