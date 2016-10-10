@@ -42,6 +42,8 @@ struct msgStruct
 extern bool	waitForFinish;
 extern bool	waitForUserContinue;
 extern int			queueID;
+extern const char	*commandList[];
+
 void createQueue(void);
 void getMsg(void);
 void sendOK(void);

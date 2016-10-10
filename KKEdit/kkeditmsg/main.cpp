@@ -14,6 +14,8 @@
 #include <string.h>
 #include <getopt.h>
 
+//#include "../src/scripting.h"
+
 #define APPNAME "kkeditmsg"
 #define VERSION "0.2.0"
 
@@ -61,8 +63,11 @@ bool		doActivateKKEdit=false;
 bool		doRemove=false;
 bool		waitFirst=false;
 
+const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","Bookmark","CloseTab","SetMark","UnsetMark","ActivateMenu","MoveTo","Paste","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession",NULL};
+
 void printHelp()
 {
+	unsigned cnt=0;
 	printf("Usage: %s [OPTION] [TEXT]\n"
 	       "A CLI application\n"
 	       " -s, --send	Send message [TEXT] (defaults to receive)\n"
@@ -78,6 +83,14 @@ void printHelp()
 	       " -h, -?, --help	print this help\n\n"
 	       "Report bugs to kdhedger@yahoo.co.uk\n"
 	       ,APPNAME);
+
+	printf("\nCommands recognised by KKEdit:\n");
+	while(commandList[cnt]!=NULL)
+		{
+			printf("%s ",commandList[cnt]);
+			cnt++;
+		}
+	printf("\n");
 }
 
 void sendMsg()

@@ -1,4 +1,5 @@
 0.4.2
+Redone scripting commands now using words instead of single letters ( kkeditmsg -h for full list ).
 User marks are now labeled "user1","user2","user3","user4" Add at cuurent line with eg 'Uuser3' remove with eg 'uuser3'.
 Added open session file to scripting ( command='s', fullpath to session file needed ). 
 More scripting.
