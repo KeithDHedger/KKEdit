@@ -9,7 +9,7 @@ INSTANCE=1234
 #open instance or bring to front
 ($KKEDIT -i $INSTANCE) &
 #tell instance to inform us after loading has finished
-$KKMSG -k $INSTANCE -s "W" -a
+$KKMSG -k $INSTANCE -s "WaitForKKEdit" -a
 #open files
 $KKEDIT -i $INSTANCE /etc/fstab /etc/hosts
 #wait for loading to finish and discard o/p ("continue")

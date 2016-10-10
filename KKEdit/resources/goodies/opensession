@@ -18,4 +18,4 @@ $KKMSG -k $INSTANCE -f
 ($KKEDIT -i $INSTANCE) &
 
 #open session 1
-$KKMSG -k $INSTANCE -s "s${HOME}/.KKEdit/plugins-gtk/session-1" -a
+$KKMSG -k $INSTANCE -s "RestoreSession:${HOME}/.KKEdit/plugins-gtk/session-2" -a

@@ -17,28 +17,28 @@ $KKMSG -k $INSTANCE -f
 ($KKEDIT -i $INSTANCE) &
 
 #tell instance to inform us after loading has finished
-$KKMSG -k $INSTANCE -s "W" -a
+$KKMSG -k $INSTANCE -s "WaitForKKEdit" -a
 #open files
 $KKEDIT -i $INSTANCE /etc/fstab /etc/hosts
 #block until finished loading
 $KKMSG -k $INSTANCE -b
 
 
-$KKMSG -k $INSTANCE -s "p" -a
+$KKMSG -k $INSTANCE -s "PrintFiles" -a
 #wait for 1st message then print all meassages to stdout
 $KKMSG -k $INSTANCE -r
 
 #wait for user ( click Navigation->Continue )
-$KKMSG -k $INSTANCE -s "R" -a
+$KKMSG -k $INSTANCE -s "ShowContinue" -a
 #block until user continues
 $KKMSG -k $INSTANCE -b
 #print list of open files
-$KKMSG -k $INSTANCE -s "p" -a
+$KKMSG -k $INSTANCE -s "PrintFiles" -a
 #print all meassages to stdout
 $KKMSG -k $INSTANCE -r
 
 #send quit
-$KKMSG -k $INSTANCE -s "Q" -a
+$KKMSG -k $INSTANCE -s "Quit" -a
 #flush and remove queue
 $KKMSG -k $INSTANCE -fR
 
