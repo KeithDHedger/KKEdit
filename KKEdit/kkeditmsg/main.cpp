@@ -62,6 +62,7 @@ bool		flushQueue=false;
 bool		doActivateKKEdit=false;
 bool		doRemove=false;
 bool		waitFirst=false;
+int			sinkReturn;
 
 const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","Bookmark","CloseTab","SetMark","UnsetMark","ActivateMenu","MoveTo","Paste","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession",NULL};
 
@@ -222,8 +223,8 @@ int main(int argc, char **argv)
 	if(doActivateKKEdit==true)
 		{
 			char *com;
-			asprintf(&com,"kkedit -i %i",key);
-			system(com);
+			sinkReturn=asprintf(&com,"kkedit -i %i",key);
+			sinkReturn=system(com);
 			free(com);
 		}
 

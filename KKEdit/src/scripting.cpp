@@ -299,24 +299,28 @@ void doKKCommand(void)
 	commandnumber=0;
 	command=message.mText;
 	token=strtok(command,":");
+
+	for(int j=0;j<10;j++)
+		commandArgsArray[j]=NULL;
+	commandArgsCnt=0;
+		
 	while(token!=NULL)
 		{
 			while(commandList[commandnumber]!=NULL)
 				{
 					if(strcmp(commandList[commandnumber],token)==0)
 						{
-							printf("found command=%s ",commandList[commandnumber]);
+							//printf("found command=%s ",commandList[commandnumber]);
 							commandNumber=commandnumber;
-							commandArgsCnt=0;
 							token=strtok(NULL,":");
 							while(token!=NULL)
 								{
 									commandArgsArray[commandArgsCnt]=token;
 									commandArgsCnt++;
-									printf("args=%s ",token);
+									//printf("args=%s ",token);
 									token=strtok(NULL,":");
 								}
-							printf("\n");
+							//printf("\n");
 							runKKCommand();
 							return;
 						}
@@ -324,186 +328,6 @@ void doKKCommand(void)
 				}
 			token=strtok(NULL,":");
 		}
-}
-
-
-void xxdoKKCommand(void)
-{
-	const char	*commanddata;
-	char		commandname;
-	long		line;
-	pageStruct	*page=getPageStructByIDFromPage(-1);
-	GtkWidget	*widg=NULL;
-	GtkTextIter	iter;
-	char		buffer[256];
-	FILE		*fp;
-	char		*syscommand;
-	GString		*str;
-
-	commandname=message.mText[0];
-	commanddata=&message.mText[1];
-
-	if(mainWindow!=NULL)
-		gtk_window_present((GtkWindow*)mainWindow);
-
-	switch(commandname)
-		{
-//quit app
-//			case 'Q':
-//				doShutdown(NULL,NULL,NULL);
-//				break;
-//goto line on current page
-//			case 'G':
-//				line=atoi(commanddata);
-//				if(fromGOpen==true)
-//					gtk_widget_show_all((GtkWidget*)(GtkTextView*)page->view);
-//				gotoLine(NULL,(void*)line);
-//				break;
-//search for define
-//			case 'S':
-//				defSearchFromBar((GtkWidget*)commanddata,NULL);
-//				break;
-//switch to tab by name
-//			case 'N':
-//				for(int j=-0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
-//					{
-//						page=getPageStructByIDFromPage(j);
-//						if(strcmp(page->fileName,commanddata)==0)
-//							{
-//								gtk_notebook_set_current_page(mainNotebook,j);
-//								break;
-//							}
-//					}
-//				break;
-//toggle bookmark
-//			case 'B':
-//				toggleBookmark(NULL,NULL);
-//				break;
-//close current tab
-//			case 'C':
-//				closeTab(NULL,(void*)-1);
-//				break;
-//set user mark
-//			case 'U':
-//				setUserMark(commanddata);
-//				break;
-//			case 'u':
-//				removeUserMark(commanddata);
-//				break;
-//select menu
-//			case 'M':
-//				holdWidget=NULL;
-//				activateMenuInBar((GtkWidget*)menuBar,commanddata);
-//				break;
-//goto offset at current line
-//			case 'O':
-//				gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&iter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-//				gtk_text_iter_set_line_offset(&iter,atoi(commanddata));
-//				gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&iter);
-//				break;
-//paste clipboard at current pos
-//			case 'P':
-//				pasteFromClip(NULL,NULL);
-//				break;
-//insert text at current pos
-//			case 'I':
-//				gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)commanddata,-1);
-//				break;
-//insert newlines at current pos
-//			case 'L':
-//				sprintf(buffer,"%c",'\n');
-//				for(int j=0;j<atoi(commanddata);j++)
-//					gtk_text_buffer_insert_at_cursor((GtkTextBuffer*)page->buffer,(const gchar*)buffer,-1);
-//				break;			
-//insert file at current pos
-//			case 'F':
-//				str=g_string_new(NULL);
-//				sinkReturn=asprintf(&syscommand,"cat %s",commanddata);
-//				fp=popen(syscommand,"r");
-//				if(fp!=NULL)
-//					{
-//						while(fgets(buffer,256,fp))
-//							g_string_append_printf(str,"%s",buffer);
-//						gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(page->buffer),str->str,str->len);
-//						pclose(fp);
-//					}
-//				ERRDATA debugFree(&syscommand);
-//				g_string_free(str,true);
-//				break;
-//print list of open files to file commanddata
-//			case 'p':
-//				{
-//					char			*strarray=NULL;
-//					unsigned int	buffersize=1000;
-//					char			*pagepath=NULL;
-//					FILE			*savestdout;
-//					char			nl[2]={'\n',0};
-//					char			*com=NULL;
-//					strarray=(char*)calloc(buffersize,1);
-//					for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
-//						{
-//							pagepath=(char*)(pageStruct*)(getPageStructByIDFromPage(j))->filePath;
-//							if(pagepath!=NULL)
-//								{
-//									if(buffersize<(strlen(strarray)+strlen(pagepath)+2))
-//										{
-//											buffersize+=1000;
-//											strarray=(char*)realloc(strarray,buffersize);
-//										}
-//									if((pagepath!=NULL) && (strlen(pagepath)>0))
-//										{
-//											strcat(strarray,pagepath);
-//											strcat(strarray,nl);
-//										}
-//								}
-//						}
-//					if(strarray!=NULL)
-//						{
-//							sendMsg(strarray);
-//							free(strarray);
-//						}
-//				}
-//				break;
-//
-//wait for this instanace to finish what its doing ( open files )
-//			case 'W':
-//				waitForFinish=true;
-//				break;
-//
-//wait for user to continue
-//			case 'R':
-//				waitForUserContinue=true;
-//				gtk_widget_show(continueMenu);
-//				break;
-//
-//run external tool by menu name
-//			case 'T':
-//				{
-//					GList		*tools=toolsList;
-//					const char	*label;
-//					while(tools!=NULL)
-//						{
-//							label=((toolStruct*)(tools->data))->menuName;
-//							if(strcmp(label,commanddata)==0)
-//								{
-//									externalTool(NULL,tools->data);
-//									break;
-//								}
-//							tools=tools->next;
-//						}
-//				}
-//				break;
-//restore session by name
-//			case 's':
-//				if(strlen(commanddata)==0)
-//					restoreSession(NULL,NULL);
-//				else
-//					restoreSession(NULL,(gpointer)commanddata);
-//				break;
-		}
-
-	if(mainWindow!=NULL)
-		gtk_window_present((GtkWindow*)mainWindow);
 }
 
 void getMsg(void)
