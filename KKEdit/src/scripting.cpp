@@ -385,10 +385,16 @@ void runKKCommand(void)
 				break;
 //restore session by filename
 			case SRESTORESESSION:
+				
 				if(commandArgsArray[0]==NULL)
 					restoreSession(NULL,NULL);
 				else
 					restoreSession(NULL,(gpointer)commandArgsArray[0]);
+				if(waitForFinish==true)
+					{
+						waitForFinish=false;
+						sendOK();
+					}
 				break;
 		}
 }
