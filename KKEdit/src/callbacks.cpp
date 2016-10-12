@@ -1958,7 +1958,11 @@ GtkWidget* findMenu(GtkWidget *parent,const gchar *name)
 	const gchar	*mname=NULL;
 
 	if ( (GTK_IS_MENU_ITEM(parent)) && !(GTK_IS_SEPARATOR_MENU_ITEM(parent)) )
+//	if ( !(GTK_IS_SEPARATOR_MENU_ITEM(parent)) )
 		{
+//			mname=gtk_menu_item_get_label((GtkMenuItem*)parent);
+//			if(mname!=NULL)
+//				fprintf(stderr,"mname=%s\n",mname);
 			mname=gtk_widget_get_name((GtkWidget*)parent);
 			if(mname!=NULL)
 				{
@@ -1972,7 +1976,7 @@ GtkWidget* findMenu(GtkWidget *parent,const gchar *name)
 			GList *children = gtk_container_get_children(GTK_CONTAINER(parent));
 			while(children!=NULL)
 				{
-					GtkWidget* widget = findMenu((GtkWidget*)children->data, name);
+					GtkWidget* widget=findMenu((GtkWidget*)children->data, name);
 
 					if (widget != NULL)
 						return widget;

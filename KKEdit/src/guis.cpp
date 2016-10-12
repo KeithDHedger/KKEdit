@@ -1611,6 +1611,7 @@ void addRecentToMenu(GtkRecentChooser *chooser,GtkWidget *menu)
 					filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
 					menuData[MENUBLANK].userData=(void*)filename;
 					menuData[MENUBLANK].menuLabel=menuname;
+					menuData[MENUBLANK].widgetName=menuname;
 					menuitem=newMenuItem(MENUBLANK,menu);
 				}
 		}

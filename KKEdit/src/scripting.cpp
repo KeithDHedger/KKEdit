@@ -22,12 +22,21 @@
 
 #include "kkedit-includes.h"
 
+enum {SQUIT=0,SGOTOLINE,SSEARCHDEF,SSELECTTAB,SBOOKMARK,SCLOSETAB,SSETMARK,SUNSETMARK,SACTIVATEMENU,SMOVETO,SSELECTBETWEEN,SPASTE,SCOPY,SCUT,SINSERTTEXT,SINSERTNL,SINSERTFILE,SPRINTFILES,SWAITFORKKEDIT,SSHOWCONTINUE,SRUNTOOL,SRESTORESESSION,SACTIVATEMENUBYNAME,SACTIVATEMENUBYLABEL};
+
+const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","Bookmark","CloseTab","SetMark","UnsetMark","ActivateMenu","MoveTo","SelectBetween","Paste","Copy","Cut","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession","ActivateMenuNamed","ActivateMenuLabeled",NULL};
+
 int			queueID=-1;
 msgStruct	message;
 int			msgType=1;
 int			receiveType=IPC_NOWAIT;
 bool		waitForFinish=false;
 bool		waitForUserContinue=false;
+const char	*commandArgsArray[10]={NULL,};
+unsigned	commandArgsCnt=0;
+unsigned	commandNumber=666;
+GtkWidget	*foundMenu=NULL;
+
 
 int sendRealMsg(int msglen)
 {
@@ -96,7 +105,7 @@ GtkWidget* activateMenuInBar(GtkWidget *parent,const gchar *name)
 			while(children!=NULL)
 				{
 				GtkWidget* widget=NULL;
-				 widget=(GtkWidget*)children->data;
+				widget=(GtkWidget*)children->data;
 				if(widget!=NULL)
 					{
 						holdWidget=NULL;
@@ -115,13 +124,83 @@ GtkWidget* activateMenuInBar(GtkWidget *parent,const gchar *name)
 	return NULL;
 }
 
-const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","Bookmark","CloseTab","SetMark","UnsetMark","ActivateMenu","MoveTo","SelectBetween","Paste","Copy","Cut","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession",NULL};
+void getMenuByName(GtkWidget *m)
+{
+	GList		*children=NULL;
+	GtkWidget	*submenu=NULL;
+	GtkWidget	*widget=NULL;
 
-enum {SQUIT=0,SGOTOLINE,SSEARCHDEF,SSELECTTAB,SBOOKMARK,SCLOSETAB,SSETMARK,SUNSETMARK,SACTIVATEMENU,SMOVETO,SSELECTBETWEEN,SPASTE,SCOPY,SCUT,SINSERTTEXT,SINSERTNL,SINSERTFILE,SPRINTFILES,SWAITFORKKEDIT,SSHOWCONTINUE,SRUNTOOL,SRESTORESESSION};
+	if(foundMenu!=NULL)
+		return;
 
-const char	*commandArgsArray[10]={NULL,};
-unsigned	commandArgsCnt=0;
-unsigned	commandNumber=666;
+	if((GTK_IS_MENU_ITEM(m)) && !(GTK_IS_SEPARATOR_MENU_ITEM(m)))
+		{
+			submenu=gtk_menu_item_get_submenu((GtkMenuItem*)m);
+			if(submenu!=NULL)
+				getMenuByName(submenu);
+		}
+
+	if (GTK_IS_CONTAINER(m))
+		{
+			children=gtk_container_get_children((GtkContainer*)m);
+			while(children!=NULL)
+				{
+					if((GTK_IS_MENU_ITEM((GtkMenuItem*)children->data)) && !(GTK_IS_SEPARATOR_MENU_ITEM((GtkMenuItem*)children->data)))
+						{
+							submenu=gtk_menu_item_get_submenu((GtkMenuItem*)children->data);
+							if(submenu!=NULL)
+								getMenuByName(submenu);
+						}
+
+					if((GTK_IS_MENU_ITEM((GtkMenuItem*)children->data)) && !(GTK_IS_SEPARATOR_MENU_ITEM((GtkMenuItem*)children->data)))
+						{
+							if(strcmp(gtk_widget_get_name((GtkWidget*)children->data),commandArgsArray[0])==0)
+								foundMenu=(GtkWidget*)children->data;
+						}
+					children=g_list_next(children);
+				}
+			g_list_free(children);
+		}
+}
+
+void getMenuByLabel(GtkWidget *m)
+{
+	GList		*children=NULL;
+	GtkWidget	*submenu=NULL;
+	GtkWidget	*widget=NULL;
+
+	if(foundMenu!=NULL)
+		return;
+
+	if((GTK_IS_MENU_ITEM(m)) && !(GTK_IS_SEPARATOR_MENU_ITEM(m)))
+		{
+			submenu=gtk_menu_item_get_submenu((GtkMenuItem*)m);
+			if(submenu!=NULL)
+				getMenuByLabel(submenu);
+		}
+
+	if (GTK_IS_CONTAINER(m))
+		{
+			children=gtk_container_get_children((GtkContainer*)m);
+			while(children!=NULL)
+				{
+					if((GTK_IS_MENU_ITEM((GtkMenuItem*)children->data)) && !(GTK_IS_SEPARATOR_MENU_ITEM((GtkMenuItem*)children->data)))
+						{
+							submenu=gtk_menu_item_get_submenu((GtkMenuItem*)children->data);
+							if(submenu!=NULL)
+								getMenuByLabel(submenu);
+						}
+
+					if((GTK_IS_MENU_ITEM((GtkMenuItem*)children->data)) && !(GTK_IS_SEPARATOR_MENU_ITEM((GtkMenuItem*)children->data)))
+						{
+							if(strcmp(gtk_menu_item_get_label((GtkMenuItem*)children->data),commandArgsArray[0])==0)
+								foundMenu=(GtkWidget*)children->data;
+						}
+					children=g_list_next(children);
+				}
+			g_list_free(children);
+		}
+}
 
 void runKKCommand(void)
 {
@@ -136,6 +215,21 @@ void runKKCommand(void)
 
 	switch(commandNumber)
 		{
+//activate menu by menu name
+			case SACTIVATEMENUBYNAME:
+				foundMenu=NULL;
+				getMenuByName(menuBar);
+				if(foundMenu!=NULL)
+					gtk_menu_item_activate((GtkMenuItem*)foundMenu);
+				break;
+//activate menu by menu label
+			case SACTIVATEMENUBYLABEL:
+				foundMenu=NULL;
+				getMenuByLabel(menuBar);
+				if(foundMenu!=NULL)
+					gtk_menu_item_activate((GtkMenuItem*)foundMenu);
+				break;
+				
 //quit app
 			case SQUIT:
 				doShutdown(NULL,NULL,NULL);
@@ -372,6 +466,7 @@ void doKKCommand(void)
 				}
 			token=strtok(NULL,":");
 		}
+	fprintf(stderr,"Unkown command \"%s\"...\n",command);
 }
 
 void getMsg(void)

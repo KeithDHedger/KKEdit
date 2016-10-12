@@ -185,34 +185,16 @@ void saveSessionPlug(char* name,plugData* plugdata,int snum)
 void restoreSessionNum(GtkWidget* widget,gpointer data)
 {
 	char		*sessionfile;
-	char		*sname=NULL;
-	FILE		*fd=NULL;
 	const char	*widgetname=NULL;
 	plugData	*plugdata=(plugData*)data;
 
 	widgetname=gtk_widget_get_name(widget);
-	for(int j=0; j<MAXSESSIONS; j++)
-		{
-			sinkInt=asprintf(&sessionfile,"%s/session-%i",plugdata->lPlugFolder,j);
-			fd=fopen(sessionfile,"r");
-			if(fd!=NULL)
-				{
-					sinkInt=fscanf(fd,"%a[^\n]s",&sname);
-					if(strcmp(sname,widgetname)==0)
-						{
-							restoreSession(NULL,sessionfile);
-							free(sessionfile);
-							free(sname);
-							fclose(fd);
-							return;
-						}
-					free(sname);
-					fclose(fd);
-				}
-		}
+	sinkInt=asprintf(&sessionfile,"%s/session-%i",plugdata->lPlugFolder,atoi(widgetname));
+	restoreSession(NULL,sessionfile);
+	free(sessionfile);
 }
 
-void rebuildMainMenu(GtkWidget* menu,plugData*	plugdata,GCallback* func)
+void rebuildMainMenu(bool dosavemenu,GtkWidget* menu,plugData*	plugdata,GCallback* func)
 {
 	GtkWidget*	menuitem;
 	char		*sessionname;
@@ -225,10 +207,15 @@ void rebuildMainMenu(GtkWidget* menu,plugData*	plugdata,GCallback* func)
 
 	for(int j=0; j<MAXSESSIONS; j++)
 		{
-			sinkInt=asprintf(&sessionname,"%s",sessionNames[j]);
-			menuitem=gtk_menu_item_new_with_label(sessionname);
-			gtk_widget_set_name(menuitem,sessionNames[j]);
+			menuitem=gtk_menu_item_new_with_label(sessionNames[j]);
+			
+			if(dosavemenu==true)
+				asprintf(&sessionname,"%i-SaveSession",j);
+			else
+				asprintf(&sessionname,"%i-RestoreSession",j);
+			gtk_widget_set_name(menuitem,sessionname);
 			free(sessionname);
+			
 			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(func),plugdata);
 			gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuitem);
 		}
@@ -241,11 +228,7 @@ void saveSessionNum(GtkWidget* widget,gpointer data)
 	int			snum=0;
 	plugData*	plugdata=(plugData*)data;
 
-	for(int j=0; j<MAXSESSIONS; j++)
-		{
-			if(strcmp(sessionNames[j],gtk_widget_get_name(widget))==0)
-				snum=j;
-		}
+	snum=atoi(gtk_widget_get_name(widget));
 
 	sname=getNewSessionName(snum,plugdata);
 	if(sname!=NULL)
@@ -253,8 +236,8 @@ void saveSessionNum(GtkWidget* widget,gpointer data)
 			free(sessionNames[snum]);
 			sessionNames[snum]=sname;
 			saveSessionPlug(sname,plugdata,snum);
-			rebuildMainMenu(saveSessionMenu,plugdata,(GCallback*)saveSessionNum);
-			rebuildMainMenu(restoreSessionMenu,plugdata,(GCallback*)restoreSessionNum);
+			rebuildMainMenu(true,saveSessionMenu,plugdata,(GCallback*)saveSessionNum);
+			rebuildMainMenu(false,restoreSessionMenu,plugdata,(GCallback*)restoreSessionNum);
 		}
 }
 
@@ -298,9 +281,9 @@ extern "C" int addToGui(gpointer data)
 
 			for(int j=0; j<MAXSESSIONS; j++)
 				{
-					sinkInt=asprintf(&sessionname,"%s",sessionNames[j]);
-					menuitem=gtk_menu_item_new_with_label(sessionname);
-					gtk_widget_set_name(menuitem,sessionNames[j]);
+					menuitem=gtk_menu_item_new_with_label(sessionNames[j]);
+					asprintf(&sessionname,"%i-SaveSession",j);
+					gtk_widget_set_name(menuitem,sessionname);
 					free(sessionname);
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(saveSessionNum),plugdata);
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -320,9 +303,9 @@ extern "C" int addToGui(gpointer data)
 
 			for(int j=0; j<MAXSESSIONS; j++)
 				{
-					sinkInt=asprintf(&sessionname,"%s",sessionNames[j]);
-					menuitem=gtk_menu_item_new_with_label(sessionname);
-					gtk_widget_set_name(menuitem,sessionNames[j]);
+					menuitem=gtk_menu_item_new_with_label(sessionNames[j]);
+					asprintf(&sessionname,"%i-RestoreSession",j);
+					gtk_widget_set_name(menuitem,sessionname);
 					free(sessionname);
 					g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(restoreSessionNum),plugdata);
 					gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
