@@ -22,9 +22,9 @@
 
 #include "kkedit-includes.h"
 
-enum {SQUIT=0,SGOTOLINE,SSEARCHDEF,SSELECTTAB,SBOOKMARK,SCLOSETAB,SSETMARK,SUNSETMARK,SACTIVATEMENU,SMOVETO,SSELECTBETWEEN,SPASTE,SCOPY,SCUT,SINSERTTEXT,SINSERTNL,SINSERTFILE,SPRINTFILES,SWAITFORKKEDIT,SSHOWCONTINUE,SRUNTOOL,SRESTORESESSION,SACTIVATEMENUBYNAME,SACTIVATEMENUBYLABEL};
+enum {SQUIT=0,SGOTOLINE,SSEARCHDEF,SSELECTTAB,SBOOKMARK,SCLOSETAB,SSETMARK,SUNSETMARK,SMOVETO,SSELECTBETWEEN,SPASTE,SCOPY,SCUT,SINSERTTEXT,SINSERTNL,SINSERTFILE,SPRINTFILES,SWAITFORKKEDIT,SSHOWCONTINUE,SRUNTOOL,SRESTORESESSION,SACTIVATEMENUBYNAME,SACTIVATEMENUBYLABEL};
 
-const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","Bookmark","CloseTab","SetMark","UnsetMark","ActivateMenu","MoveTo","SelectBetween","Paste","Copy","Cut","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession","ActivateMenuNamed","ActivateMenuLabeled",NULL};
+const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","Bookmark","CloseTab","SetMark","UnsetMark","MoveTo","SelectBetween","Paste","Copy","Cut","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession","ActivateMenuNamed","ActivateMenuLabeled",NULL};
 
 int			queueID=-1;
 msgStruct	message;
@@ -94,34 +94,6 @@ void sendContinue(void)
 	sendRealMsg(strlen(message.mText));
 	waitForUserContinue=false;
 	gtk_widget_hide(continueMenu);
-}
-
-GtkWidget* activateMenuInBar(GtkWidget *parent,const gchar *name)
-{
-	GtkWidget	*widg=NULL;
-	if (GTK_IS_CONTAINER(parent))
-		{
-			GList *children=gtk_container_get_children(GTK_CONTAINER(parent));
-			while(children!=NULL)
-				{
-				GtkWidget* widget=NULL;
-				widget=(GtkWidget*)children->data;
-				if(widget!=NULL)
-					{
-						holdWidget=NULL;
-						widg=findMenu(gtk_menu_item_get_submenu((GtkMenuItem*)widget),name);
-						if(holdWidget!=NULL)
-							{
-								gtk_menu_item_activate((GtkMenuItem*)holdWidget);
-								g_list_free(children);
-								return(NULL);
-							}
-					}
-					children=g_list_next(children);
-				}
-			g_list_free(children);
-		}
-	return NULL;
 }
 
 void getMenuByName(GtkWidget *m)
@@ -285,13 +257,6 @@ void runKKCommand(void)
 				if(commandArgsCnt==0)
 					return;
 				removeUserMark(commandArgsArray[0]);
-				break;
-//select menu
-			case SACTIVATEMENU:
-				if(commandArgsCnt==0)
-					return;
-				holdWidget=NULL;
-				activateMenuInBar((GtkWidget*)menuBar,commandArgsArray[0]);
 				break;
 //goto offset at current line
 			case SMOVETO:
