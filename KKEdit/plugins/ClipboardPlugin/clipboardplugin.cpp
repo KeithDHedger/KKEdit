@@ -172,6 +172,7 @@ extern "C" int addToGui(gpointer data)
 		{
 			sinkInt=asprintf(&command,gettext("Clip Number. %i"),j+1);
 			clip[j].menuItem=(GtkWidget*)gtk_menu_item_new_with_label(command);
+			gtk_widget_set_name(clip[j].menuItem,command);
 			free(command);
 			clip[j].text=NULL;
 			g_signal_connect(G_OBJECT(clip[j].menuItem),"activate",G_CALLBACK(theCallBack),(void*)(long)j);

@@ -1,4 +1,5 @@
 0.4.2
+Updated clipboardplugin for new scripting commands.
 Updated sessionmanager plugin for new scripting commands.
 Added extra script commands ("Quit","GotoLine","SearchDef","SelectTab","Bookmark","CloseTab","SetMark","UnsetMark","ActivateMenu","MoveTo","SelectBetween","Paste","Copy","Cut","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession","ActivateMenuNamed","ActivateMenuLabeled").
 Redone scripting commands now using words instead of single letters ( kkeditmsg -h for full list ).
