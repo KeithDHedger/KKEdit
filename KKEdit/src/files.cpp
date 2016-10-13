@@ -823,12 +823,14 @@ void add_source_mark_pixbufs(GtkSourceView *view)
 			GtkSourceMarkAttributes *attr=gtk_source_mark_attributes_new();
 
 			gtk_source_mark_attributes_set_pixbuf(attr,pbuf);
-			gtk_source_mark_attributes_set_background(attr,&color);
+			if(j==0)
+				gtk_source_mark_attributes_set_background(attr,&color);
 			gtk_source_view_set_mark_attributes(view,umarks[j],attr,1);
 #else
 			GdkColor	color;
 			gdk_color_parse(highlightColour,&color);
-			gtk_source_view_set_mark_category_background(view,umarks[j],&color);
+			if(j==0)
+				gtk_source_view_set_mark_category_background(view,umarks[j],&color);
 			gtk_source_view_set_mark_category_icon_from_pixbuf(view,umarks[j],pbuf);
 			gtk_source_view_set_mark_category_priority(view,umarks[j],1);
 #endif

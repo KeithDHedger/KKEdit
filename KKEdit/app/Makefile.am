@@ -40,6 +40,7 @@ install-exec-hook:
 	ln -sf ${pkgdatadir}$(GTK3SUFFIX)/pixmaps/KKEditPlugMenu$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/pixmaps/KKEditPlugMenu$(GTK3SUFFIX).png
 	ln -sf ${pkgdatadir}$(GTK3SUFFIX)/pixmaps/KKEdit$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/pixmaps/KKEdit$(GTK3SUFFIX).png
 	ln -sf ${pkgdatadir}$(GTK3SUFFIX)/pixmaps/KKEditRoot$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/pixmaps/KKEditRoot$(GTK3SUFFIX).png
+	ln -sf ${pkgdatadir}$(GTK3SUFFIX)/pixmaps/KKEditProject$(GTK3SUFFIX).png $(DESTDIR)${prefix}/share/pixmaps/KKEditProject$(GTK3SUFFIX).png
 
 	mkdir -vp $(DESTDIR)${prefix}/share/applications $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES $(DESTDIR)${includedir} ||true
 	install ../resources/pixmaps/KKEdit.desktop $(DESTDIR)${prefix}/share/applications/KKEdit$(GTK3SUFFIX).desktop

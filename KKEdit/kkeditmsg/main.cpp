@@ -144,6 +144,8 @@ int main(int argc, char **argv)
 				{
 				case 's':
 					strcpy(buffer.mText,optarg);
+					sendMsg();
+
 					action=true;
 					break;
 
@@ -165,6 +167,11 @@ int main(int argc, char **argv)
 
 				case 'k':
 					key=atoi(optarg);
+	if((queueID=msgget(key,IPC_CREAT|0660))==-1)
+		{
+			fprintf(stderr,"Can't create message queue\n");
+			exit(NOMAKEQUEUE);
+		}
 					break;
 
 				case 'a':
@@ -215,8 +222,8 @@ int main(int argc, char **argv)
 			return(ALLOK);
 		}
 
-	if(action==true)
-		sendMsg();
+//	if(action==true)
+//		sendMsg();
 
 	if(doActivateKKEdit==true)
 		{

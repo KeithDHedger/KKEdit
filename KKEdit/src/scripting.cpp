@@ -250,13 +250,19 @@ void runKKCommand(void)
 			case SSETMARK:
 				if(commandArgsCnt==0)
 					return;
-				setUserMark(commandArgsArray[0]);
+				if(commandArgsCnt==1)
+					setUserMark(commandArgsArray[0],-1);
+				else
+					setUserMark(commandArgsArray[0],atoi(commandArgsArray[1])-1);
 				break;
 //unset user mark
 			case SUNSETMARK:
 				if(commandArgsCnt==0)
 					return;
-				removeUserMark(commandArgsArray[0]);
+				if(commandArgsCnt==1)
+					removeUserMark(commandArgsArray[0],1);
+				else
+					removeUserMark(commandArgsArray[0],atoi(commandArgsArray[1])-1);
 				break;
 //goto offset at current line
 			case SMOVETO:
