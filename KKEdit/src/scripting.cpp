@@ -22,9 +22,9 @@
 
 #include "kkedit-includes.h"
 
-enum {SQUIT=0,SGOTOLINE,SSEARCHDEF,SSELECTTAB,SBOOKMARK,SCLOSETAB,SSETMARK,SUNSETMARK,SMOVETO,SSELECTBETWEEN,SPASTE,SCOPY,SCUT,SINSERTTEXT,SINSERTNL,SINSERTFILE,SPRINTFILES,SWAITFORKKEDIT,SSHOWCONTINUE,SRUNTOOL,SRESTORESESSION,SACTIVATEMENUBYNAME,SACTIVATEMENUBYLABEL};
+enum {SQUIT=0,SGOTOLINE,SSEARCHDEF,SSELECTTAB,SSELECTTABBYPATH,SBOOKMARK,SCLOSETAB,SSETMARK,SUNSETMARK,SMOVETO,SSELECTBETWEEN,SPASTE,SCOPY,SCUT,SINSERTTEXT,SINSERTNL,SINSERTFILE,SPRINTFILES,SWAITFORKKEDIT,SSHOWCONTINUE,SRUNTOOL,SRESTORESESSION,SACTIVATEMENUBYNAME,SACTIVATEMENUBYLABEL,SSENDPOSDATA};
 
-const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","Bookmark","CloseTab","SetMark","UnsetMark","MoveTo","SelectBetween","Paste","Copy","Cut","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession","ActivateMenuNamed","ActivateMenuLabeled",NULL};
+const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","SelectTabByPath","Bookmark","CloseTab","SetMark","UnsetMark","MoveTo","SelectBetween","Paste","Copy","Cut","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession","ActivateMenuNamed","ActivateMenuLabeled","SendPosData",NULL};
 
 int			queueID=-1;
 msgStruct	message;
@@ -238,6 +238,21 @@ void runKKCommand(void)
 							}
 					}
 				break;
+//select tab by path
+			case SSELECTTABBYPATH:
+				if(commandArgsCnt==0)
+					return;
+				for(int j=-0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
+					{
+						page=getPageStructByIDFromPage(j);
+						if(strcmp(page->filePath,commandArgsArray[0])==0)
+							{
+								gtk_notebook_set_current_page(mainNotebook,j);
+								break;
+							}
+					}
+				break;
+
 //toggle bookmark
 			case SBOOKMARK:
 				toggleBookmark(NULL,NULL);
@@ -401,6 +416,23 @@ void runKKCommand(void)
 						waitForFinish=false;
 						sendOK();
 					}
+				break;
+//send current postition data
+			case SSENDPOSDATA:
+				{
+					char *data=NULL;
+					if(page!=NULL)
+						{
+							gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&startiter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+							asprintf(&data,"%s:%i\n",page->filePath,gtk_text_iter_get_line(&startiter)+1);
+						}
+					else
+						{
+							asprintf(&data,":\n");
+						}
+					sendMsg(data);
+					free(data);
+				}
 				break;
 		}
 }
