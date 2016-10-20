@@ -397,7 +397,7 @@ toolsdir = $(pkgdatadir)$(GTK3SUFFIX)/tools
 tools_DATA = ../resources/tools/*
 goodiesdir = $(pkgdatadir)$(GTK3SUFFIX)/goodies
 goodies_DATA = ../resources/goodies/*
-man1_MANS = ../resources/man/kkedit.1
+man1_MANS = ../resources/man/*
 all: all-am
 
 .SUFFIXES:

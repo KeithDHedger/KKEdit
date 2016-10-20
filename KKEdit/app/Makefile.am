@@ -29,7 +29,7 @@ tools_DATA = ../resources/tools/*
 goodiesdir = $(pkgdatadir)$(GTK3SUFFIX)/goodies
 goodies_DATA = ../resources/goodies/*
 
-man1_MANS = ../resources/man/kkedit.1
+man1_MANS = ../resources/man/*
 
 bin_PROGRAMS = kkedit KKEditProgressBar kkeditmsg
 
