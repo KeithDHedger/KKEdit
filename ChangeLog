@@ -1,4 +1,5 @@
 0.4.2
+Added manpage for kkeditmsg.
 Changed user marks so all can be visible on the same line.
 Started docs for kkeditmsg.
 Added extra script commands:

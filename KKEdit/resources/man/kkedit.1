@@ -1,9 +1,9 @@
-.TH "kkedit" "1" "0.3.4" "K.D.Hedger" ""
+.TH "kkedit" "1" "0.4.2" "K.D.Hedger" ""
 .SH "NAME"
 KKEdit — Source code text editor.
 .br
 .SH "SYNTAX"
-kkedit [\fIoption\fR] <file>
+kkedit [\fIoption\fR] FILE1 FILE2 ... FILEN
 .br
 .SH "DESCRIPTION"
 KKEdit is NOT a word processor or a web page editor, it is NOT
@@ -65,23 +65,24 @@ into the edit box on the toolbar to jump straight to that line.
 .SH "OPTIONS"
 \fB-h, --help\fR
 .br
-		Show help options.
+	Show help options.
 .br
 
 \fB-m, --multiple\fR
 .br
-		Multiple instance mode.
+	Multiple instance mode.
+.br
+
+\fB-i\fR, \fB--\fR\fBsessionid\fR ARG
+.br
+	Set an ID to be used for (new) instance, ARG=any integer eg 12345.
 .br
 
 \fB-s, --safe\fR
 .br
-		Safe mode (disable all plugins and use new instance).
+	Safe mode (disable all plugins and use new instance).
 .br
 
-<\fIfile\fR>
-.br
-		Opens specified <\fIfile\fR>.
-.br
 .SH "AUTHORS"
 Bugs, suggestions etc to:
 .br

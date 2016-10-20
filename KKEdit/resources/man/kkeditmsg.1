@@ -1,0 +1,187 @@
+.TH "kkeditmsg" "1" "0.2.0" "K. D. Hedger." "User Commands"
+.SH "NAME"
+\fBkkeditmsg\fR - manual page for kkeditmsg 0.2.0
+.br
+
+.SH "SYNOPSIS"
+\fBkkeditmsg \fR[\fIOPTION\fR] [\fITEXT\fR]
+.br
+
+.SH "DESCRIPTION"
+A simple scripting/remote control cli app for kkedit.
+.br
+
+\fB-s\fR, \fB--send\fR=\fITEXT\fR
+.br
+	Send message [\fITEXT\fR] (defaults to receive).
+.br
+	See 'COMMANDS' for description of what commadns can be sent to KKEdit.
+.br
+
+\fB-r\fR, \fB--receive\fR
+.br
+	Print all messages in queue to stdout.
+.br
+
+\fB-f\fR, \fB--flush\fR
+.br
+	Flush message queue quietly.
+.br
+
+\fB-k\fR, \fB--key\fR=\fIKEY\fR
+.br
+	Use \fIKEY\fR (INTEGER) instead of generated one.
+.br
+
+\fB-w\fR, \fB--wait\fR
+.br
+	Wait for message's to arrive (blocking).
+.br
+
+\fB-W\fR, \fB--wait-first\fR
+.br
+	Wait for first message to arrive (blocking) then continue.
+.br
+
+\fB-b\fR, \fB--block\fR
+.br
+	Wait for first message to arrive (blocking) then continue receved message is discarded.
+.br
+
+\fB-a\fR, \fB--activate\fR
+.br
+	Activate kkedit and execute queued commands.
+.br
+
+\fB-R\fR, \fB--remove\fR
+.br
+	Remove Queue.
+.br
+
+\fB-v\fR, \fB--version\fR
+.br
+	output version information and exit.
+.br
+
+\fB-h\fR, -?, \fB--help\fR
+.br
+	print this help.
+.br
+
+.SH "COMMANDS"
+Commands are case sensitive.
+.br
+Commands recognised by KKEdit:
+.br
+
+\fBQuit\fR
+.br
+	Tell KKEdit to quit.
+.br
+\fBGotoLine\fR:\fILINENUM\fR
+.br
+	Tell KKEdit to goto \fILINENUM\fR on current page.
+.br
+\fBSearchDef\fR:\fINAME\fR
+.br
+	Tell KKEdit to search for definition of function, variable etc \fINAME\fR.
+.br
+\fBSelectTab\fR:\fINAME\fR
+.br
+	Tell KKEdit to activate tab \fINAME\fR.
+.br
+\fBSelectTabByPath\fR:\fIFILEPATH\fR
+.br
+	Tell KKEdit to activate tab whose filepath is \fIFILEPATH\fR.
+.br
+\fBBookmark\fR
+.br
+	Tell KKEdit to toggle bookmark for current line.
+.br
+\fBCloseTab\fR
+.br
+	Tell KKEdit to close current tab.
+.br
+\fBSetMark\fR:\fIUSERMARK\fR
+.br
+	Tell KKEdit to set usermark named \fIUSERMARK\fR at current line.
+.br
+\fBUnsetMark\fR
+.br
+	Tell KKEdit to remove usermark named \fIUSERMARK\fR at current line.
+.br
+\fBMoveTo\fR:\fIOFFSET\fR
+.br
+	Tell KKEdit to move cursor to \fIOFFSET\fR on current line. 
+.br
+\fBSelectBetween\fR:\fISTART\fR:\fIEND\fR
+.br
+	Tell KKEdit to select text between \fISTART\fR and \fIEND\fR on currrent line.
+.br
+\fBPaste\fR
+.br
+	Tell KKEdit to paste text on clipboard.
+.br
+\fBCopy\fR
+.br
+	Tell KKEdit to copy currently selected text.
+.br
+\fBCut\fR
+.br
+	Tell KKEdit to cut currently selected text.
+.br
+\fBInsertText\fR:\fITEXT\fR
+.br
+	Tell KKEdit to insert \fITEXT\fR at current position.
+.br
+\fBInsertNL\fR:\fINUM\fR
+.br
+	Tell KKEdit to insert \fINUM\fR newlines into text.
+.br
+\fBInsertFile\fR:\fIFILEPATH\fR
+.br
+	Tell KKEdit to insert file \fIFILEPATH\fR at current location.
+.br
+\fBPrintFiles\fR
+.br
+	Tell KKEdit to send a list of currently open files back to kkeditmsg.
+.br
+\fBWaitForKKEdit\fR
+.br
+	Tell KKEdit to inform kkeditmsg when finished opening files from the command line. 
+.br
+\fBShowContinue\fR
+.br
+	Tell KKEdit to show the 'Continue' menu item in the 'Navigation' menu and send a message to back to kkeditmsg when activated.
+.br
+\fBRunTool\fR:\fINAME\fR
+.br
+	Tell KKEdit to run external tool named \fINAME\fR.
+.br
+\fBRestoreSession\fR:\fIFILEPATH\fR
+.br
+	Tell KKEdit to restore a session from file \fIFILEPATH\fR.
+.br
+\fBActivateMenuNamed\fR:\fINAME\fR
+.br
+	Tell KKEdit to activate a menu item named \fINAME\fR, this is the widget name as defined in 'kkedit-plugins.h' or defined by a plugin NOT the menu label.
+.br
+\fBActivateMenuLabeled\fR:\fILABEL\fR
+.br
+	Tell KKEdit to activate menu by menu item label \fILABEL\fR.
+.br
+\fBSendPosData\fR
+.br
+	Tell KKEdit to send kkeditmsg the current filepath and line number in the format "/path/to/file:linnumber"
+.br
+
+User marks are named "user1", "user2", "user3", "user4", this may change and be configureable later.
+.br
+.SH "FILES"
+
+See the example scropts in the '/usr/share/KKEdit/goodies' folder.
+.br
+.SH "REPORTING BUGS"
+Report bugs to kdhedger68713@gmail.com
+.br
+
