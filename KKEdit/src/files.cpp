@@ -832,7 +832,7 @@ void add_source_mark_pixbufs(GtkSourceView *view)
 			if(j==0)
 				gtk_source_view_set_mark_category_background(view,umarks[j],&color);
 			gtk_source_view_set_mark_category_icon_from_pixbuf(view,umarks[j],pbuf);
-			gtk_source_view_set_mark_category_priority(view,umarks[j],1);
+			gtk_source_view_set_mark_category_priority(view,umarks[j],j);
 #endif
 		}
 //

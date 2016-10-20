@@ -1,4 +1,8 @@
 0.4.2
+Changed user marks so all can be visible on the same line.
+Started docs for kkeditmsg.
+Added extra script commands:
+Quit GotoLine SearchDef SelectTab SelectTabByPath Bookmark CloseTab SetMark UnsetMark MoveTo SelectBetween Paste Copy Cut InsertText InsertNL InsertFile PrintFiles WaitForKKEdit ShowContinue RunTool RestoreSession ActivateMenuNamed ActivateMenuLabeled SendPosData.
 Added some extra example sripts to goodies.
 Can now do a wait for session to finish loading.
 Removed obsolete 'ActivateMenu' from scripting.
