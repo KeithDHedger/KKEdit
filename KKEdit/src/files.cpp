@@ -652,7 +652,8 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 
 	ERRDATA
 	loadingSession=true;
-//	closeAllTabs(NULL,NULL);
+	fromGOpen=false;
+	waitForFinish=false;
 	showBarberPole(DIALOG_POLE_RESTORING);
 
 	if(data==NULL)
@@ -701,9 +702,6 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 									gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
 									toggleBookmark(NULL,&markiter);
 									sinkReturnStr=fgets(buffer,2048,fd);
-//skip reserved
-//									if(strcmp(buffer,"#RESERVED")==0)
-//										continue;
 									sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 								}
 							buf->textBuffer=(GtkTextBuffer*)page->buffer;
@@ -1343,7 +1341,6 @@ VISIBLE void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,Gtk
 
 void recentFileMenu(GtkRecentChooser *chooser,gpointer *data)
 {
-	ERRDATA
 	gchar	*uri=NULL;
 	char	*filename;
 
@@ -1353,13 +1350,13 @@ void recentFileMenu(GtkRecentChooser *chooser,gpointer *data)
 			return;
 		}
 
-	uri=gtk_recent_chooser_get_current_uri(chooser);
+	uri=gtk_recent_chooser_get_current_uri((GtkRecentChooser*)chooser);
 	if(uri!=NULL)
 		{
 			filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
 			openFile(filename,0,true);
 			g_free(uri);
-			ERRDATA debugFree(&filename);
+			g_free(filename);
 		}
 }
 

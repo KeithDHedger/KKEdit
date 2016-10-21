@@ -71,7 +71,7 @@ AC_ARG_ENABLE(unstable-plugins,AS_HELP_STRING([--disable-unstable-plugins],[Buil
 AC_MSG_RESULT($enable_new_plugs)
 if test "$enable_new_plugs" = "yes"; then
 	NEWPLUGINCLUDES=KKEdit/unstable-plugins/*Plugin
-	AC_OUTPUT(KKEdit/unstable-plugins/BrowserPlugin/Makefile KKEdit/unstable-plugins/MacroPlugin/Makefile)
+	AC_OUTPUT(KKEdit/unstable-plugins/BrowserPlugin/Makefile)
 else
 	NEWPLUGINCLUDES=
 fi

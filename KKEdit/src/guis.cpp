@@ -22,7 +22,7 @@
 
 #define TABLECOLS 2
 
-GtkWidget		*recent;
+//GtkWidget		*recent;
 GtkToolItem		*tool[MAXITEMS]={NULL,};
 GtkIconView		*iconView=NULL;
 GtkListStore	*listStore=NULL;
@@ -33,6 +33,10 @@ GtkWidget		*prefHBox2;
 GtkWidget		*pagevbox;
 
 GtkWidget		*entries[NUMSHORTCUTS];
+
+GtkWidget		*recentMenu;
+GtkWidget		*recentToolBar;
+
 
 const char		*shortcuttext[NUMSHORTCUTS]={DELETE_LINE_LABEL,DELETE_TO_EOL_LABEL,DELETE_TO_BOL_LABEL,SELECT_WORD_LABEL,DELETE_WORD_LABEL,DUPLICATE_LINE_LABEL,SELECT_LINE_LABEL,LINE_UP_LABEL,LINE_DOWN_LABEL,SELECT_TO_EOL_LABEL,SELECT_TO_BOL_LABEL,SELECTION_UP_LABEL,SELECTION_DOWN_LABEL,SHOW_COMPLETION_LABEL,HIDE_TAB_LABEL};
 
@@ -421,18 +425,7 @@ void setUpToolBar(void)
 #ifdef _USEGTK3_
 	GtkWidget		*image;
 #endif
-	GtkRecentFilter	*filter;
 	GtkWidget		*menu;
-
-	recent=gtk_recent_chooser_menu_new();
-	gtk_recent_chooser_set_local_only(GTK_RECENT_CHOOSER(recent),false);
-	gtk_recent_chooser_set_sort_type(GTK_RECENT_CHOOSER(recent),GTK_RECENT_SORT_MRU);
-	gtk_recent_chooser_set_limit(GTK_RECENT_CHOOSER(recent),MAXRECENT);
-
-	filter=gtk_recent_filter_new();
-	gtk_recent_filter_add_application(filter,APPEXECNAME);
-	gtk_recent_chooser_set_filter(GTK_RECENT_CHOOSER(recent),filter);
-	g_signal_connect(recent,"item_activated",G_CALLBACK(recentFileMenu),NULL);
 
 	for(int j=0;j<(int)strlen(toolBarLayout);j++)
 		{
@@ -453,7 +446,7 @@ void setUpToolBar(void)
 #else
 						openButton=gtk_menu_tool_button_new_from_stock(GTK_STOCK_OPEN);
 #endif
-						gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(openButton),recent);
+						gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(openButton),recentToolBar);
 						gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENU_TOOL_BUTTON(openButton),RECENT_FILE_TT_LABEL);
 						g_signal_connect(G_OBJECT(openButton),"clicked",G_CALLBACK(doOpenFile),NULL);
 						gtk_toolbar_insert(toolBar,openButton,-1);
@@ -1581,7 +1574,7 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 
 //TODO//
 //not working properly
-void addRecentToMenu(GtkRecentChooser *chooser,GtkWidget *menu)
+void addRecentToMenuXXX(GtkRecentChooser *chooser,GtkWidget *menu)
 {
 	ERRDATA
 	GList		*itemlist=NULL;
@@ -1616,6 +1609,20 @@ void addRecentToMenu(GtkRecentChooser *chooser,GtkWidget *menu)
 				}
 		}
 	ERRDATA
+}
+
+void setupRecent(GtkWidget *widg)
+{
+	GtkRecentFilter	*filter;
+
+	gtk_recent_chooser_set_local_only(GTK_RECENT_CHOOSER(widg),false);
+	gtk_recent_chooser_set_sort_type(GTK_RECENT_CHOOSER(widg),GTK_RECENT_SORT_MRU);
+	gtk_recent_chooser_set_limit(GTK_RECENT_CHOOSER(widg),10);
+
+	filter=gtk_recent_filter_new();
+	gtk_recent_filter_add_application(filter,APPEXECNAME);
+	gtk_recent_chooser_set_filter(GTK_RECENT_CHOOSER(recentMenu),filter);
+	g_signal_connect(widg,"item_activated",G_CALLBACK(recentFileMenu),NULL);
 }
 
 void buildMenus(void)
@@ -1656,13 +1663,21 @@ void buildMenus(void)
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
-//recent menu
-	menuitem=gtk_menu_item_new_with_mnemonic(gettext(menuData[MENURECENT].menuLabel));
-	menurecent=gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
-	addRecentToMenu((GtkRecentChooser*)recent,menurecent);
+
+//open recent menu
+	menuitem=gtk_menu_item_new_with_mnemonic("_Recent");
+	//setupRecent(recentMenu);
+	gtk_menu_item_set_submenu((GtkMenuItem*)menuitem,recentMenu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-	gtk_widget_set_name(menuitem,menuData[MENURECENT].widgetName);
+
+//
+////recent menu
+//	menuitem=gtk_menu_item_new_with_mnemonic(gettext(menuData[MENURECENT].menuLabel));
+//	menurecent=gtk_menu_new();
+//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
+//	addRecentToMenu((GtkRecentChooser*)recent,menurecent);
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//	gtk_widget_set_name(menuitem,menuData[MENURECENT].widgetName);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -1955,6 +1970,11 @@ void buildMainGui(void)
 	gtk_drag_dest_set(mainWindowVBox,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets(mainWindowVBox);
 	g_signal_connect(G_OBJECT(mainWindowVBox),"drag_data_received",G_CALLBACK(dropUri),NULL);
+
+	recentMenu=gtk_recent_chooser_menu_new();
+	recentToolBar=gtk_recent_chooser_menu_new();
+	setupRecent(recentMenu);
+	setupRecent(recentToolBar);
 
 	setUpToolBar();
 	gtk_box_pack_start(GTK_BOX(toolBarBox),(GtkWidget*)toolBar,true,true,0);

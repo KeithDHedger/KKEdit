@@ -4816,7 +4816,7 @@ fi
 $as_echo "$enable_new_plugs" >&6; }
 if test "$enable_new_plugs" = "yes"; then
 	NEWPLUGINCLUDES=KKEdit/unstable-plugins/*Plugin
-	ac_config_files="$ac_config_files KKEdit/unstable-plugins/BrowserPlugin/Makefile KKEdit/unstable-plugins/MacroPlugin/Makefile"
+	ac_config_files="$ac_config_files KKEdit/unstable-plugins/BrowserPlugin/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -5550,7 +5550,6 @@ do
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "KKEdit/unstable-plugins/BrowserPlugin/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/unstable-plugins/BrowserPlugin/Makefile" ;;
-    "KKEdit/unstable-plugins/MacroPlugin/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/unstable-plugins/MacroPlugin/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
@@ -7752,7 +7751,6 @@ do
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "KKEdit/unstable-plugins/BrowserPlugin/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/unstable-plugins/BrowserPlugin/Makefile" ;;
-    "KKEdit/unstable-plugins/MacroPlugin/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/unstable-plugins/MacroPlugin/Makefile" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "KKEdit/app/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/app/Makefile" ;;
     "KKEdit/plugins/TerminalPane/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/plugins/TerminalPane/Makefile" ;;

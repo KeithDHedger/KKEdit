@@ -1,4 +1,6 @@
 0.4.2
+Open recent now works in gtk3 on *buntu ( 'til they break it again ).
+Open recent menu now updates properly.
 Added manpage for kkeditmsg.
 Changed user marks so all can be visible on the same line.
 Started docs for kkeditmsg.
