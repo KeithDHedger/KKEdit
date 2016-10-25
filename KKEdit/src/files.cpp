@@ -681,6 +681,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 //skip reserved
 					if(strcmp(buffer,"#RESERVED")==0)
 						continue;
+					setBarberPoleMessage(strarg);
 					if(openFile(strarg,currentline,true)==false)
 						{
 							intarg=999;
@@ -704,8 +705,9 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 									sinkReturnStr=fgets(buffer,2048,fd);
 									sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 								}
-							buf->textBuffer=(GtkTextBuffer*)page->buffer;
-							buf->scroll2Line((GtkTextView*)page->view,currentline);					
+							
+							gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,currentline);
+							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
 
 							if(hidden==true)
 								hideTab(NULL,(void*)page);
@@ -717,18 +719,17 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 			ERRDATA debugFree(&filename);
 		}
 
-	ERRDATA delete buf;
 	currentTabNumber=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)-1;
 	for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
 		{
 			pageStruct *page=getPageStructByIDFromPage(j);
 			if(page!=NULL)
 				{
-					buf=new TextBuffer((GtkTextBuffer*)page->buffer);
+					buf->textBuffer=(GtkTextBuffer*)page->buffer;
 					buf->scroll2CentreScreen((GtkTextView*)page->view,true);
-					delete buf;
 				}
 		}
+	delete buf;
 	loadingSession=false;
 	if(page!=NULL)
 		updateStatusBar((GtkTextBuffer*)page->buffer,NULL,NULL,NULL);

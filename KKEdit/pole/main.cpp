@@ -13,14 +13,17 @@
 #include "config.h"
 #include "../src/kkedit-includes.h"
 
-GtkWidget*	progressWindow;
-GtkWidget*	progressBar;
+GtkWidget	*progressWindow;
+GtkWidget	*progressBar;
+GtkWidget	*barInfo;
+
 bool		doPulse=true;
 int			percent;
+int			holdPercent;
 char		*path=NULL;
 int			sinkReturn;
 
-enum {QUIT,PULSE,PERCENT};
+enum {QUIT,PULSE,PERCENT,INFO};
 
 GtkWidget* createNewBox(int orient,bool homog,int spacing)
 {
@@ -73,6 +76,13 @@ gboolean idleScroll(gpointer data)
 				dowhat=QUIT;
 			if(strncasecmp(line,"pulse",5)==0)
 				dowhat=PULSE;
+			if(strncasecmp(line,"info",4)==0)
+				{
+					dowhat=INFO;
+					fgets(line,256,fp);
+					if(strlen(line)>0)
+						line[strlen(line)-1]=0;
+				}
 		}
 	pclose(fp);
 
@@ -81,6 +91,11 @@ gboolean idleScroll(gpointer data)
 		{
 			switch(dowhat)
 				{
+					case INFO:
+						gtk_label_set_text((GtkLabel*)barInfo,line);
+						if(doPulse==false)
+							sprintf(line,"%i",holdPercent);
+						break;
 					case QUIT:
 						killBarberPole();
 						return(false);
@@ -98,6 +113,7 @@ gboolean idleScroll(gpointer data)
 			else
 				{
 					perc=(int)atof(line);
+					holdPercent=perc;
 					if(perc>100)
 						gtk_progress_bar_set_fraction((GtkProgressBar*)progressBar,1.0);
 					else if(perc<0)
@@ -117,11 +133,13 @@ void showBarberPole(const char* title,char* filepath)
 	GtkWidget*		vbox;
 
 	progressWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_widget_set_size_request(progressWindow,400,40);
+	gtk_widget_set_size_request(progressWindow,400,-1);
 	gtk_window_set_type_hint((GtkWindow*)progressWindow,GDK_WINDOW_TYPE_HINT_NORMAL);
 	gtk_window_set_title((GtkWindow*)progressWindow,title);
-	//vbox=gtk_vbox_new(FALSE,0);
 	vbox=createNewBox(NEWVBOX,false,0);
+
+	barInfo=gtk_label_new(title);
+	gtk_box_pack_start(GTK_BOX(vbox),barInfo,false,true,8);
 	progressBar=gtk_progress_bar_new();
 	gtk_progress_bar_set_fraction((GtkProgressBar*)progressBar,0);
 
@@ -143,6 +161,12 @@ void showBarberPole(const char* title,char* filepath)
 	g_timeout_add(100,idleScroll,(void*)filepath);
 }
 
+/*
+argv[1]= window title
+argv[2]= control file
+argv[3]= initial state
+
+*/
 int main(int argc,char **argv)
 {
 	char*	command;

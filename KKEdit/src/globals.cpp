@@ -1211,6 +1211,17 @@ VISIBLE void navigateHistory(GtkWidget *widget,gpointer data)
 	globalHistory->redoMenus();
 }
 
+void setBarberPoleMessage(const char *msg)
+{
+	char	*barcommand;
+	char	*goodstr;
+	goodstr=truncateWithElipses((char*)msg,48);
+	sinkReturn=asprintf(&barcommand,"echo -e \"INFO\\n%s\" > %s",goodstr,barControl);
+	sinkReturn=system(barcommand);
+	free(barcommand);
+	free(goodstr);
+}
+
 void showBarberPole(const char *title)
 {
 	ERRDATA

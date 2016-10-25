@@ -1,4 +1,6 @@
 0.4.2
+Added 'INFO' command to progress bar to set extra info, see testbar example for usage.
+Speed tweaks for loading session.
 Open recent now works in gtk3 on *buntu ( 'til they break it again ).
 Open recent menu now updates properly.
 Added manpage for kkeditmsg.

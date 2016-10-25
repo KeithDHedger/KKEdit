@@ -486,6 +486,7 @@ void scrollToIterInPane(pageStruct *page,GtkTextIter *iter);
 void navigateHistory(GtkWidget *widget,gpointer data);
 void showBarberPole(const char *title);
 void killBarberPole(void);
+void setBarberPoleMessage(const char *msg);
 void debugFree(char** ptr);
 char *truncateWithElipses(char *str,unsigned int maxlen);
 char *truncateTabNameWithElipses(char *str,unsigned int maxlen);
