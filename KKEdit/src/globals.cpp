@@ -41,11 +41,13 @@ GtkWidget			*menuBar=NULL;
 GtkToolbar			*toolBar;
 GtkWidget			*statusBarMenu=NULL;
 GtkNotebook			*mainNotebook=NULL;
+int					switchPageHandler=0;
 
 //file menu
 GtkWidget			*fileMenu=NULL;
 GtkWidget			*menuItemNew=NULL;
 GtkWidget			*menuItemOpen=NULL;
+GtkWidget			*buildDocsMenu=NULL;
 GtkWidget			*saveMenu;
 GtkWidget			*saveAsMenu;
 GtkWidget			*saveAllMenu;
@@ -211,6 +213,7 @@ GtkTextBuffer		*toolOutputBuffer=NULL;
 GtkWidget			*toolOutVBox=NULL;
 bool				showStatus;
 GtkWidget			*statusWidget=NULL;
+unsigned			statusID=0;
 
 GList				*toolsList=NULL;
 
@@ -307,6 +310,7 @@ GtkWidget			*docView;
 WebKitWebView		*webView;
 bool				showHideDocviewer;
 GtkWidget			*showDocViewWidget;
+bool				inWindow;
 #endif
 
 //spellcheck
@@ -437,6 +441,7 @@ args				kkedit_rc[]=
 	{"updatecheck",TYPEBOOL,&autoCheck},
 	{"useplugmenu",TYPEBOOL,&useGlobalPlugMenu},
 	{"showmenuicons",TYPEBOOL,&showMenuIcons},
+	{"docinwindow",TYPEBOOL,&inWindow},
 	//strings
 	{"stylename",TYPESTRING,&styleName},
 	{"higlightcolour",TYPESTRING,&highlightColour},
@@ -690,7 +695,6 @@ VISIBLE void runCommand(char *commandtorun,void *ptr,bool interm,int flags,int u
 					pclose(fp);
 				}
 		}
-
 	if(flags & TOOL_SHOW_DOC)
 		showDocView(USEFILE,(char*)"",title);
 
@@ -831,71 +835,74 @@ functionData *getFunctionByName(char *name,bool recurse,bool casesensitive)
 			for(int loop=0; loop<numpages; loop++)
 				{
 					page=getPageStructByIDFromPage(loop);
-					if(page->filePath!=NULL)
+					if(page!=NULL)
 						{
-							dirname=strdup(g_path_get_dirname(page->filePath));
-							getRecursiveTagListFileName(dirname,&stdout);
-
-							lineptr=stdout;
-							while(lineptr!=NULL)
+							if(page->filePath!=NULL)
 								{
-									sscanf(lineptr,"%s",function);
+									dirname=strdup(g_path_get_dirname(page->filePath));
+									getRecursiveTagListFileName(dirname,&stdout);
 
-									if(casesensitive==true)
-										gotmatch=strncmp(function,name,(int)strlen(name));
-									else
-										gotmatch=strncasecmp(function,name,(int)strlen(name));
+									lineptr=stdout;
+									while(lineptr!=NULL)
+										{
+											sscanf(lineptr,"%s",function);
 
-									if(gotmatch!=0)
-										{
-											char *p=NULL;
-											p=strcasestr(function,name);
-											if(p!=NULL)
-												gotmatch=0;
-										}
-										
-									if(strlen(name)==strlen(function))
-										thislen=strlen(name);
-									else
-										{
-											if(strlen(name)>strlen(function))
-												thislen=strlen(function);
+											if(casesensitive==true)
+												gotmatch=strncmp(function,name,(int)strlen(name));
 											else
+												gotmatch=strncasecmp(function,name,(int)strlen(name));
+
+											if(gotmatch!=0)
+												{
+													char *p=NULL;
+													p=strcasestr(function,name);
+													if(p!=NULL)
+														gotmatch=0;
+												}
+										
+											if(strlen(name)==strlen(function))
 												thislen=strlen(name);
-										}
+											else
+												{
+													if(strlen(name)>strlen(function))
+														thislen=strlen(function);
+													else
+														thislen=strlen(name);
+												}
 
-									if((gotmatch==0) &&(strlen(name)==strlen(function)))
+											if((gotmatch==0) &&(strlen(name)==strlen(function)))
+												{
+													sscanf(lineptr, "%s\t%s\t%i",funcname,filepath,&linenumber);
+													fdata=(functionData*)malloc(sizeof(functionData));
+													fdata->name=strdup(funcname);
+													fdata->file=strdup(filepath);
+													fdata->line=linenumber+1;
+													fdata->type=NULL;
+													fdata->define=NULL;
+													fdata->intab=-1;
+													ERRDATA return(fdata);
+												}
+
+											if((gotmatch==0) &&(bestlen<thislen))
+												{
+													possmatch=strdup(lineptr);
+													bestlen=thislen;
+													loophold=loop;
+													getfromfile=true;
+												}
+
+											lineptr=strchr(lineptr,'\n');
+											if(lineptr!=NULL)
+												lineptr++;
+										}
+									if(stdout!=NULL)
 										{
-											sscanf(lineptr, "%s\t%s\t%i",funcname,filepath,&linenumber);
-											fdata=(functionData*)malloc(sizeof(functionData));
-											fdata->name=strdup(funcname);
-											fdata->file=strdup(filepath);
-											fdata->line=linenumber+1;
-											fdata->type=NULL;
-											fdata->define=NULL;
-											fdata->intab=-1;
-											ERRDATA return(fdata);
+											ERRDATA debugFree(&stdout);
 										}
-
-									if((gotmatch==0) &&(bestlen<thislen))
+									if(dirname!=NULL)
 										{
-											possmatch=strdup(lineptr);
-											bestlen=thislen;
-											loophold=loop;
-											getfromfile=true;
+											ERRDATA debugFree(&dirname);
 										}
-
-									lineptr=strchr(lineptr,'\n');
-									if(lineptr!=NULL)
-										lineptr++;
-								}
-							if(stdout!=NULL)
-								{
-									ERRDATA debugFree(&stdout);
-								}
-							if(dirname!=NULL)
-								{
-									ERRDATA debugFree(&dirname);
 								}
 						}
 				}
@@ -1232,7 +1239,6 @@ void showBarberPole(const char *title)
 	sinkReturn=asprintf(&barcommand,POLEPATH " \"%s\" \"%s\" \"pulse\" &",title,barControl);
 	sinkReturn=system(barcommand);
 	ERRDATA debugFree(&barcommand);
-	ERRDATA
 }
 
 void killBarberPole(void)
@@ -1479,18 +1485,6 @@ void setToobarWidgetsSensitive(pageStruct *page)
 					if(gotoDefButton!=NULL)
 						gtk_widget_set_sensitive((GtkWidget*)gotoDefButton,hasselection);
 					break;
-//now handled from history class
-//go back
-//				case 'B':
-//					if(backButton!=NULL)
-//						gtk_widget_set_sensitive((GtkWidget*)backButton,globalHistory->canGoBack());
-//					break;
-////go forward
-//				case 'W':
-//					if(forwardButton!=NULL)
-//						gtk_widget_set_sensitive((GtkWidget*)forwardButton,globalHistory->canGoForward());
-//					break;
-//
 //go to line
 				case '9':
 					if(gotoLineButton!=NULL)
@@ -1540,6 +1534,7 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 		return;
 
 	setToobarWidgetsSensitive(page);
+	gtk_widget_set_sensitive((GtkWidget*)navMenu,true);
 
 	gtk_widget_set_sensitive((GtkWidget*)undoMenu,page->canUndo);
 	gtk_widget_set_sensitive((GtkWidget*)redoMenu,page->canRedo);
@@ -1568,7 +1563,10 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 	gtk_widget_set_sensitive((GtkWidget*)searchInGtkDocsMenu,hasselection);
 	gtk_widget_set_sensitive((GtkWidget*)searchInQTDocsMenu,hasselection);
 	if(gotDoxygen==0)
-		gtk_widget_set_sensitive((GtkWidget*)searchInDocsMenu,hasselection);
+		{
+			gtk_widget_set_sensitive((GtkWidget*)searchInDocsMenu,hasselection);
+			gtk_widget_set_sensitive((GtkWidget*)buildDocsMenu,true);
+		}
 	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,globalHistory->canGoBack());
 	gtk_widget_set_sensitive((GtkWidget*)goForwardMenu,globalHistory->canGoForward());
 
@@ -1581,6 +1579,8 @@ void resetSensitive(void)
 {
 	setToobarWidgetsSensitive(NULL);
 
+	if(gotDoxygen==0)
+		gtk_widget_set_sensitive((GtkWidget*)buildDocsMenu,false);
 	gtk_widget_set_sensitive((GtkWidget*)undoMenu,false);
 	gtk_widget_set_sensitive((GtkWidget*)redoMenu,false);
 	gtk_widget_set_sensitive((GtkWidget*)undoAllMenu,false);
@@ -1611,6 +1611,8 @@ void setPageSensitive(void)
 			return;
 		}
 	setToobarWidgetsSensitive(NULL);
+	if(gotDoxygen==0)
+		gtk_widget_set_sensitive((GtkWidget*)buildDocsMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)saveAllMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)closeAllMenu,true);
@@ -1621,6 +1623,14 @@ void setPageSensitive(void)
 	gtk_widget_set_sensitive((GtkWidget*)funcMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)printMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)revertMenu,true);
+}
+
+void setDocViewSensitive(void)
+{
+	setToobarWidgetsSensitive(NULL);
+	resetSensitive();
+	gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)closeAllMenu,true);
 }
 
 void getOldConfigs(const char *file,args *dataptr)

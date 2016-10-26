@@ -136,15 +136,12 @@ void updateStatusBar(GtkTextBuffer *textbuffer,GtkTextIter *location,GtkTextMark
 	if(page==NULL)
 		return;
 
-	if(showStatus==false)
-		return;
-
 	setChangedSensitive((GtkTextBuffer*)page->buffer,page);
 
 	if((page==NULL) ||(showStatus==false))
 		{
-			gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,0);
-			gtk_statusbar_push((GtkStatusbar*)statusWidget,0,"");
+			gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,statusID);
+			gtk_statusbar_push((GtkStatusbar*)statusWidget,statusID,"");
 			return;
 		}
 
@@ -157,15 +154,15 @@ void updateStatusBar(GtkTextBuffer *textbuffer,GtkTextIter *location,GtkTextMark
 	if(lang==NULL)
 		lang="";
 
-	buf=new TextBuffer(textbuffer);
+	//buf=new TextBuffer(textbuffer);
+	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 
 	sinkReturn=asprintf(&message,STATUS_LINE_LABEL,buf->lineNum,buf->column,lang,path);
-	gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,0);
-	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
+	gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,statusID);
+	gtk_statusbar_push((GtkStatusbar*)statusWidget,statusID,message);
 	ERRDATA debugFree(&message);
 	delete buf;
 }
-
 
 VISIBLE void realCloseTab(GtkNotebook *notebook,GtkWidget *child,guint page_num,gpointer user_data)
 {
@@ -237,8 +234,17 @@ VISIBLE void closeAllTabs(GtkWidget *widget,gpointer data)
 	ERRDATA
 
 	int numpages=gtk_notebook_get_n_pages(mainNotebook);
-
 	showAllTabs(NULL,NULL);
+
+#ifdef _BUILDDOCVIEWER_
+	if(inWindow==false)
+		{
+			showHideDocviewer=true;
+			toggleDocviewer(NULL,NULL);
+			numpages--;
+		}
+#endif
+
 	for(int loop=0;loop<numpages;loop++)
 		{
 			closingAll=true;
@@ -366,19 +372,21 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	functionData	*fd=NULL;
 	functionData	*tempfd=NULL;
 
+	if(arg1==NULL)
+		return;
+
 	if(loadingSession==true)
 		{
 			gtk_widget_show_all((GtkWidget*)arg1);
 			return;
 		}
 
-	if(arg1==NULL)
-		return;
-
 	page=getPageStructByIDFromPage(thispage);
 	if(page==NULL)
-		return;
-
+		{
+			setDocViewSensitive();
+			return;
+		}
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start_find);
 	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end_find);
 	gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);
@@ -637,8 +645,6 @@ void externalTool(GtkWidget *widget,gpointer data)
 	const char		*varData[]= {NULL,page->filePath,NULL,GAPPFOLDER,htmlFile,page->lang};
 
 	tempCommand=g_string_new(tool->command);
-
-
 	if(page->filePath!=NULL)
 		docdirname=g_path_get_dirname(page->filePath);
 	else
@@ -650,18 +656,23 @@ void externalTool(GtkWidget *widget,gpointer data)
 	strarray=(char*)calloc(buffersize,1);
 	for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
 		{
-			pagepath=(char*)(pageStruct*)(getPageStructByIDFromPage(j))->filePath;
-			if(pagepath!=NULL)
+			pageStruct	*pge=getPageStructByIDFromPage(j);
+			pagepath=NULL;
+			if(pge!=NULL)
 				{
-					if(buffersize<(strlen(strarray)+strlen(pagepath)+2))
-						{
-							buffersize+=1000;
-							strarray=(char*)realloc(strarray,buffersize);
-						}
+					pagepath=pge->filePath;
 					if(pagepath!=NULL)
 						{
-							strcat(strarray,pagepath);
-							strcat(strarray,";");
+							if(buffersize<(strlen(strarray)+strlen(pagepath)+2))
+								{
+									buffersize+=1000;
+									strarray=(char*)realloc(strarray,buffersize);
+								}
+							if(pagepath!=NULL)
+								{
+									strcat(strarray,pagepath);
+									strcat(strarray,";");
+								}
 						}
 				}
 		}
@@ -1104,9 +1115,9 @@ void writeExitData(void)
 	gtk_window_get_position((GtkWindow*)mainWindow,&winx,&winy);
 	if( (alloc.width>10) && (alloc.height>10) )
 		sinkReturn=asprintf(&windowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
-		
+
 #ifdef _BUILDDOCVIEWER_
-	if(gtk_widget_get_realized(docView)==true)
+	if((gtk_widget_get_realized(docView)==true) && (inWindow==true))
 		{
 			gtk_widget_get_allocation(docView,&alloc);
 			gtk_window_get_position((GtkWindow*)docView,&winx,&winy);
@@ -1119,6 +1130,7 @@ void writeExitData(void)
 			winy=docWindowY;
 		}
 #endif
+
 	if( (alloc.width>10) && (alloc.height>10) )
 		sinkReturn=asprintf(&docWindowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
 
@@ -1161,31 +1173,33 @@ VISIBLE bool doSaveAll(GtkWidget *widget,gpointer data)
 	for(int loop=0; loop<numpages; loop++)
 		{
 			page=getPageStructByIDFromPage(loop);
-			if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)))
+			if(page!=NULL)
 				{
-					if((bool)data==true)
+					if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(page->buffer)))
 						{
-							result=show_question(g_path_get_basename(page->fileName));
-							switch(result)
+							if((bool)data==true)
 								{
-								case GTK_RESPONSE_YES:
+									result=show_question(g_path_get_basename(page->fileName));
+									switch(result)
+										{
+										case GTK_RESPONSE_YES:
+											gtk_notebook_set_current_page(mainNotebook,loop);
+											saveFile(NULL,NULL);
+											break;
+										case GTK_RESPONSE_NO:
+											break;
+										case GTK_RESPONSE_CANCEL:
+											return(false);
+											break;
+										default:
+											break;
+										}
+								}
+							else
+								{
 									gtk_notebook_set_current_page(mainNotebook,loop);
 									saveFile(NULL,NULL);
-									break;
-								case GTK_RESPONSE_NO:
-									break;
-								case GTK_RESPONSE_CANCEL:
-									return(false);
-									break;
-
-								default:
-									break;
 								}
-						}
-					else
-						{
-							gtk_notebook_set_current_page(mainNotebook,loop);
-							saveFile(NULL,NULL);
 						}
 				}
 		}
@@ -1248,7 +1262,7 @@ void setPrefs(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	pageStruct	*tpage=getPageStructByIDFromPage(-1);
-	bool		*bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&restoreBookmarks,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen,&useGlobalPlugMenu,&autoSearchDocs,&showWhiteSpace,&showMenuIcons};
+	bool		*bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&restoreBookmarks,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen,&useGlobalPlugMenu,&autoSearchDocs,&showWhiteSpace,&inWindow,&showMenuIcons};
 	unsigned	*ints[MAXPREFSINTWIDGETS]={&maxTabChars,&maxFRHistory,&depth,&autoShowMinChars,&tabWidth,&maxFuncDefs,&maxBMChars,&tabsSize,&maxJumpHistory};
 
 	if(strcmp(gtk_widget_get_name(widget),"style")==0)
@@ -1272,8 +1286,7 @@ void setPrefs(GtkWidget *widget,gpointer data)
 				gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)tpage->buffer,styleScheme);
 			gtk_widget_destroy(prefswin);
 		}
-
-bool holdmenuicons=showMenuIcons;
+//bool holdmenuicons=showMenuIcons;
 	if(strcmp(gtk_widget_get_name(widget),"apply")==0)
 		{
 			for(int j=0;j<MAXPREFSWIDGETS;j++)
@@ -1350,6 +1363,13 @@ bool holdmenuicons=showMenuIcons;
 
 			if(tpage!=NULL)
 				switchPage(mainNotebook,tpage->tabVbox,currentTabNumber,NULL);
+
+#ifdef _BUILDDOCVIEWER_
+			gtk_widget_destroy(docView);
+			buildGtkDocViewer();
+			showHideDocviewer=false;
+			toggleDocviewer(NULL,NULL);
+#endif
 
 			gtk_widget_destroy(prefswin);
 			resetAllFilePrefs();
@@ -1651,7 +1671,6 @@ VISIBLE void toggleStatusBar(GtkWidget *widget,gpointer data)
 }
 
 #ifdef _BUILDDOCVIEWER_
-
 VISIBLE void toggleDocviewer(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
@@ -1660,9 +1679,17 @@ VISIBLE void toggleDocviewer(GtkWidget *widget,gpointer data)
 		{
 			gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,MENU_HIDE_DOCVIEWER_LABEL);
 			gtk_widget_show_all(docView);
-			if(docWindowX!=-1 && docWindowY!=-1)
-				gtk_window_move((GtkWindow *)docView,docWindowX,docWindowY);
-			gtk_window_present((GtkWindow*)docView);
+			if(inWindow==true)
+				{
+					if(docWindowX!=-1 && docWindowY!=-1)
+						gtk_window_move((GtkWindow *)docView,docWindowX,docWindowY);
+					gtk_window_present((GtkWindow*)docView);
+				}
+			else
+				{
+					int p=gtk_notebook_page_num(mainNotebook,docView);
+					gtk_notebook_set_current_page(mainNotebook,p);
+				}
 		}
 	else
 		{

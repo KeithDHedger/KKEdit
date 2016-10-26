@@ -119,6 +119,7 @@ void init(void)
 	docWindowHeight=600;
 	docWindowX=-1;
 	docWindowY=-1;
+	inWindow=false;
 
 	wrapSearch=true;
 	insensitiveSearch=true;

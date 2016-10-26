@@ -318,6 +318,7 @@
 #define PREFS_AUTO_COMPLETE_LABEL gettext("Auto Show Completions")
 #define PREFS_SHOW_MENU_ICONS_LABEL gettext("Show Icons In Gtk3 Menus ( Requires Restart )")
 #define PREFS_AUTO_SEARCH_LABEL gettext("Auto Search Docs")
+#define PREFS_DOCVIEWER_IN_WINDOW gettext("Show Docviewer In A Window")
 #define PREFS_GEN_APPEARANCE_LABEL gettext("General Appearance")
 #define PREFS_TAB_WIDTH_LABEL gettext("Tab width:")
 #define PREFS_THEME_LABEL gettext("Theme:")

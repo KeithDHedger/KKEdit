@@ -40,8 +40,8 @@ GtkWidget		*recentToolBar;
 
 const char		*shortcuttext[NUMSHORTCUTS]={DELETE_LINE_LABEL,DELETE_TO_EOL_LABEL,DELETE_TO_BOL_LABEL,SELECT_WORD_LABEL,DELETE_WORD_LABEL,DUPLICATE_LINE_LABEL,SELECT_LINE_LABEL,LINE_UP_LABEL,LINE_DOWN_LABEL,SELECT_TO_EOL_LABEL,SELECT_TO_BOL_LABEL,SELECTION_UP_LABEL,SELECTION_DOWN_LABEL,SHOW_COMPLETION_LABEL,HIDE_TAB_LABEL};
 
-GtkWidget	*prefsWidgets[MAXPREFSWIDGETS];
-GObject	*prefsIntWidgets[MAXPREFSINTWIDGETS];
+GtkWidget		*prefsWidgets[MAXPREFSWIDGETS];
+GObject			*prefsIntWidgets[MAXPREFSINTWIDGETS];
 
 menuDataStruct	menuData[]=
 	{
@@ -1374,6 +1374,9 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 //auto search
 	makePrefBox(true,true);
 	makePrefsCheck(AUTOSEARCH,PREFS_AUTO_SEARCH_LABEL,"autosearchdocs",autoSearchDocs,true,true);
+//show docviewer in editor
+	makePrefBox(true,true);
+	makePrefsCheck(DOCINEDITOR,PREFS_DOCVIEWER_IN_WINDOW,"docinwindow",inWindow,true,true);
 
 //show menu icons
 	makePrefBox(true,true);
@@ -1658,26 +1661,16 @@ void buildMenus(void)
 
 //doxy
 	if(gotDoxygen==0)
-		menuitem=newImageMenuItem(MENUDOXY,menu);
+		buildDocsMenu=newImageMenuItem(MENUDOXY,menu);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
 
 //open recent menu
 	menuitem=gtk_menu_item_new_with_mnemonic("_Recent");
 	//setupRecent(recentMenu);
 	gtk_menu_item_set_submenu((GtkMenuItem*)menuitem,recentMenu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
-//
-////recent menu
-//	menuitem=gtk_menu_item_new_with_mnemonic(gettext(menuData[MENURECENT].menuLabel));
-//	menurecent=gtk_menu_new();
-//	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem),menurecent);
-//	addRecentToMenu((GtkRecentChooser*)recent,menurecent);
-//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-//	gtk_widget_set_name(menuitem,menuData[MENURECENT].widgetName);
 
 	menuitem=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
@@ -1942,7 +1935,7 @@ void buildMainGui(void)
 
 	mainNotebook=(GtkNotebook*)gtk_notebook_new();
 	gtk_notebook_set_scrollable(mainNotebook,true);
-	g_signal_connect(G_OBJECT(mainNotebook),"switch-page",G_CALLBACK(switchPage),NULL);
+	switchPageHandler=g_signal_connect(G_OBJECT(mainNotebook),"switch-page",G_CALLBACK(switchPage),NULL);
 	g_signal_connect(G_OBJECT(mainNotebook),"page-reordered",G_CALLBACK(switchPage),NULL);
 	g_signal_connect(G_OBJECT(mainNotebook),"page-removed",G_CALLBACK(realCloseTab),NULL);
 
@@ -1975,6 +1968,7 @@ void buildMainGui(void)
 	recentToolBar=gtk_recent_chooser_menu_new();
 	setupRecent(recentMenu);
 	setupRecent(recentToolBar);
+	g_object_ref(recentToolBar);
 
 	setUpToolBar();
 	gtk_box_pack_start(GTK_BOX(toolBarBox),(GtkWidget*)toolBar,true,true,0);
@@ -2042,6 +2036,7 @@ void buildMainGui(void)
 
 //add status bar
 	statusWidget=gtk_statusbar_new();
+	statusID=gtk_statusbar_get_context_id((GtkStatusbar*)statusWidget,"mainstatusbar");
 	gtk_widget_show(statusWidget);
 #ifdef _USEGTK3_
 	char	*statuscss=NULL;
@@ -2330,13 +2325,20 @@ void buildGtkDocViewer(void)
 	GtkWidget	*findnextinpage;
 	WebKitWebSettings	*settings;
 
-	docView=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title((GtkWindow*)docView,DOCVIEW_DOCVIEWER_LABEL);
+	if(inWindow==true)
+		{
+			docView=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+			gtk_window_set_title((GtkWindow*)docView,DOCVIEW_DOCVIEWER_LABEL);
 
-	gtk_window_set_default_size((GtkWindow*)docView,docWindowWidth,docWindowHeight);
-	if(docWindowX!=-1 && docWindowY!=-1)
-		gtk_window_move((GtkWindow *)docView,docWindowX,docWindowY);
-
+			gtk_window_set_default_size((GtkWindow*)docView,docWindowWidth,docWindowHeight);
+			if(docWindowX!=-1 && docWindowY!=-1)
+				gtk_window_move((GtkWindow *)docView,docWindowX,docWindowY);
+		}
+	else
+		{
+			docView=vbox=createNewBox(NEWVBOX,false,0);
+		}
+		
 	vbox=createNewBox(NEWVBOX,false,0);
 	hbox=createNewBox(NEWHBOX,false,4);
 
@@ -2399,9 +2401,9 @@ void buildGtkDocViewer(void)
 	gtk_container_add(GTK_CONTAINER(docView),vbox);
 	gtk_widget_grab_focus(GTK_WIDGET(webView));
 
-#ifdef _BUILDDOCVIEWER_
+//#ifdef _BUILDDOCVIEWER_
 	g_signal_connect_object(G_OBJECT(docView),"delete-event",G_CALLBACK(toggleDocviewer),G_OBJECT(docView),G_CONNECT_SWAPPED);
-#endif
+//#endif
 	const char *lang;
 
 	if(strncmp(localeLang,"en",2)==0)
@@ -2412,7 +2414,11 @@ void buildGtkDocViewer(void)
 	sinkReturn=asprintf(&thePage,"file://%s/help.%s.html",GHELPFOLDER,lang);
 	webkit_web_view_load_uri(webView,thePage);
 	ERRDATA freeAndNull(&thePage);
-	ERRDATA
+	if(inWindow==false)
+		{
+			gtk_notebook_append_page(mainNotebook,docView,gtk_label_new("Documentation"));
+			gtk_notebook_set_tab_reorderable(mainNotebook,docView,true);
+		}
 }
 #endif
 

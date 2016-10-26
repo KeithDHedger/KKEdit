@@ -151,11 +151,13 @@ extern GtkWidget		*menuBar;
 extern GtkToolbar		*toolBar;
 extern GtkWidget		*statusBarMenu;
 extern GtkNotebook		*mainNotebook;
+extern  int				switchPageHandler;
 
 //file menu
 extern GtkWidget		*fileMenu;
 extern GtkWidget		*menuItemNew;
 extern GtkWidget		*menuItemOpen;
+extern GtkWidget		*buildDocsMenu;
 extern GtkWidget		*saveMenu;
 extern GtkWidget		*saveAsMenu;
 extern GtkWidget		*saveAllMenu;
@@ -319,6 +321,7 @@ extern GtkTextBuffer	*toolOutputBuffer;
 extern GtkWidget		*toolOutVBox;
 extern bool				showStatus;
 extern GtkWidget		*statusWidget;
+extern unsigned			statusID;
 
 extern GList			*toolsList;
 
@@ -415,6 +418,7 @@ extern GtkWidget		*docView;
 extern WebKitWebView	*webView;
 extern bool				showHideDocviewer;
 extern GtkWidget		*showDocViewWidget;
+extern bool				inWindow;
 #endif
 
 extern GtkWidget		*spellCheckWord;
@@ -504,6 +508,7 @@ void setToobarWidgetsSensitive(pageStruct *page);
 void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page);
 void resetSensitive(void);
 void setPageSensitive(void);
+void setDocViewSensitive(void);
 void getOldConfigs(const char *file,args *dataptr);
 void infoMessage(const char *message);
 int gerrorMessage(GError **err);

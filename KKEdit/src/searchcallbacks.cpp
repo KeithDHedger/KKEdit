@@ -49,8 +49,8 @@ PROTECTED void showDocView(int howtodisplay,char *text,const char *title)
 {
 
 #ifdef _BUILDDOCVIEWER_
-
-	gtk_window_set_title((GtkWindow*)docView,title);
+	if(inWindow==true)
+		gtk_window_set_title((GtkWindow*)docView,title);
 
 	if(howtodisplay==USEURI)
 		{
@@ -58,7 +58,8 @@ PROTECTED void showDocView(int howtodisplay,char *text,const char *title)
 				{
 					if(doGoogleSearch==true)
 						{
-							gtk_window_set_title((GtkWindow*)docView,DOCVIEW_SEARCHING_GOOGLE_LABEL);
+							if(inWindow==true)
+								gtk_window_set_title((GtkWindow*)docView,DOCVIEW_SEARCHING_GOOGLE_LABEL);
 							ERRDATA debugFree(&thePage);
 							sinkReturn=asprintf(&thePage,"https://www.google.co.uk/search?q=%s",text);
 						}
@@ -67,12 +68,14 @@ PROTECTED void showDocView(int howtodisplay,char *text,const char *title)
 				}
 			webkit_web_view_load_uri(webView,thePage);		
 		}
-
 	if(howtodisplay==USEFILE)
 		webkit_web_view_load_uri(webView,htmlURI);
 
 	gtk_widget_show_all(docView);
-	gtk_window_present((GtkWindow*)docView);
+	if(inWindow==true)
+		gtk_window_present((GtkWindow*)docView);
+	else
+		gtk_notebook_set_current_page(mainNotebook,gtk_notebook_page_num(mainNotebook,docView));
 
 	showHideDocviewer=true;
 	gtk_menu_item_set_label((GtkMenuItem*)showDocViewWidget,MENU_HIDE_DOCVIEWER_LABEL);

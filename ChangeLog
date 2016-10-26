@@ -1,4 +1,6 @@
 0.4.2
+Inbuilt docviewer can now be showed either in a seperate window or in a tab in the editor, can be set in the prefs ("Show Docviewer In A Window")
+Added docviewer to new tab in editor.
 Added 'INFO' command to progress bar to set extra info, see testbar example for usage.
 Speed tweaks for loading session.
 Open recent now works in gtk3 on *buntu ( 'til they break it again ).
