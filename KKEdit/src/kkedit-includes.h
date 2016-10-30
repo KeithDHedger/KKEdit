@@ -356,6 +356,7 @@
 #define FIND_INSENSITIVE_LABEL gettext("Case insensitive")
 #define FIND_USE_REGEX_LABEL gettext("Use Regex")
 #define FIND_WRAP_LABEL gettext("Wrap")
+#define FIND_BACK_LABEL gettext("Backwards")
 #define FIND_ALL_FILES_LABEL gettext("All Files")
 #define FIND_HIGHLIGHT_ALL_LABEL gettext("Highlight All")
 #define FIND_REPLACE_ALL_LABEL gettext("Replace All")

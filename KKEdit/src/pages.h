@@ -28,10 +28,13 @@ struct pageListData
 	int			listNum;
 };
 
-extern GList	*pages;
+extern GList		*pages;
+extern GList		*currentSearchList;
+extern pageStruct	*searchPageStruct;
 
 pageStruct *getPageStructByIDFromList(unsigned pageid);
 pageStruct *getPageStructByIDFromPage(int pagenum);
 pageListData *getCurrentPageListData(void);
+unsigned getIDFromPage(int pagenum);
 
 #endif

@@ -1,4 +1,7 @@
 0.4.2
+Find now doesn't show hidden tabs if no match found ( regex find still to do ).
+Cleaned find code.
+Fixed find when docview is in a tab.
 Inbuilt docviewer can now be showed either in a seperate window or in a tab in the editor, can be set in the prefs ("Show Docviewer In A Window")
 Added docviewer to new tab in editor.
 Added 'INFO' command to progress bar to set extra info, see testbar example for usage.

@@ -77,6 +77,8 @@
 #define USEURI			-1
 #define USEFILE			-2
 
+#define PAGESTARTID		1000
+
 #define	POLEPATH PREFIX "/bin/KKEditProgressBar" _EXECSUFFIX_
 #define	APPEXECNAME "kkedit" _EXECSUFFIX_
 #define APPFOLDENAME ".KKEdit" _EXECSUFFIX_
@@ -94,6 +96,7 @@ enum {NAVLAST=0,NAVNEXT};
 enum {FUNCDATA=0};
 #endif
 
+enum {FIRSTCHAR=0,CURRENTCHAR,LASTCHAR};
 
 //extern const char	*moreapps[];
 extern const char	*authorskk[];
@@ -332,12 +335,6 @@ extern int				windowWidth;
 extern int				windowHeight;
 extern int				windowX;
 extern int				windowY;
-extern bool				wrapSearch;
-extern bool				insensitiveSearch;
-extern bool				useRegex;
-extern bool				replaceAll;
-extern bool				findInAllFiles;
-extern bool				hightlightAll;
 extern int				toolOutHeight;
 extern int				bottomVPaneHite;
 extern int				topVPaneHite;
@@ -390,6 +387,13 @@ extern GtkWidget		*replaceDropBox;
 extern GSList			*findList;
 extern GSList			*replaceList;
 extern unsigned int		maxFRHistory;
+extern bool				wrapSearch;
+extern bool				searchBack;
+extern bool				insensitiveSearch;
+extern bool				useRegex;
+extern bool				replaceAll;
+extern bool				findInAllFiles;
+extern bool				hightlightAll;
 
 //custom toolbar
 extern GtkWidget		*fromHBox;
@@ -520,6 +524,9 @@ void applyCSS (GtkWidget *widget, GtkStyleProvider *widgprovider);
 functionData* allocFStrings(unsigned what,char *string);
 functionData* initFunctionData(void);
 varStrings* allocVStrings(char *string);
+
+int getCurrentCursorPos(void);
+int getCharacterPos(unsigned what,GtkTextBuffer *buf);
 
 #endif
 

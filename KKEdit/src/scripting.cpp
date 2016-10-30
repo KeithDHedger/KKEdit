@@ -231,10 +231,13 @@ void runKKCommand(void)
 				for(int j=-0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
 					{
 						page=getPageStructByIDFromPage(j);
-						if(strcmp(page->fileName,commandArgsArray[0])==0)
+						if(page!=NULL)
 							{
-								gtk_notebook_set_current_page(mainNotebook,j);
-								break;
+								if(strcmp(page->fileName,commandArgsArray[0])==0)
+									{
+										gtk_notebook_set_current_page(mainNotebook,j);
+										break;
+									}
 							}
 					}
 				break;
@@ -245,10 +248,13 @@ void runKKCommand(void)
 				for(int j=-0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
 					{
 						page=getPageStructByIDFromPage(j);
-						if(strcmp(page->filePath,commandArgsArray[0])==0)
+						if(page!=NULL)
 							{
-								gtk_notebook_set_current_page(mainNotebook,j);
-								break;
+								if(strcmp(page->filePath,commandArgsArray[0])==0)
+									{
+										gtk_notebook_set_current_page(mainNotebook,j);
+										break;
+									}
 							}
 					}
 				break;

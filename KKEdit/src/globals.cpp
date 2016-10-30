@@ -107,7 +107,7 @@ char				*tmpHighlightColour;
 bool				showBMBar;
 GtkWidget			*bmHighlightBox;
 int					bmMarkNumber=0;
-unsigned			pageID=100;
+unsigned			pageID=PAGESTARTID;
 
 char				*toolBarLayout=NULL;
 GtkWidget			*toolBarBox;
@@ -224,12 +224,6 @@ int					windowWidth;
 int					windowHeight;
 int					windowX=-1;
 int					windowY=-1;
-bool				wrapSearch;
-bool				insensitiveSearch;
-bool				useRegex;
-bool				replaceAll;
-bool				findInAllFiles;
-bool				hightlightAll;
 int					toolOutHeight=200;
 int					bottomVPaneHite=200;
 int					topVPaneHite=200;
@@ -282,6 +276,13 @@ GtkWidget			*replaceDropBox;
 GSList				*findList=NULL;
 GSList				*replaceList=NULL;
 unsigned int		maxFRHistory=5;
+bool				wrapSearch;
+bool				searchBack;
+bool				insensitiveSearch;
+bool				useRegex;
+bool				replaceAll;
+bool				findInAllFiles;
+bool				hightlightAll;
 
 //custom toolbar
 GtkWidget			*fromHBox;
@@ -400,6 +401,7 @@ args				kkedit_window_rc[]=
 	{"wrapsearch",TYPEBOOL,&wrapSearch},
 	{"replaceall",TYPEBOOL,&replaceAll},
 	{"allfiles",TYPEBOOL,&findInAllFiles},
+	{"searchback",TYPEBOOL,&searchBack},
 	{"showbmbar",TYPEBOOL,&showBMBar},
 	{"showtoolbar",TYPEBOOL,&showToolBar},
 	{"showstatusbar",TYPEBOOL,&showStatus},
@@ -1747,9 +1749,47 @@ varStrings* allocVStrings(char *string)
 	return(vs);
 }
 
+int getCurrentCursorPos(void)
+{
+	pageStruct	*page=NULL;
+	GtkTextIter	startiter;
 
+	page=getPageStructByIDFromPage(-1);
+	if(page==NULL)
+		return(-1);
+	gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&startiter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+	return(gtk_text_iter_get_offset(&startiter));
+}
 
+int getCharacterPos(unsigned what,GtkTextBuffer *buf)
+{
+	pageStruct		*page=NULL;
+	GtkTextIter		iter;
+	GtkTextBuffer	*usebuf=NULL;
 
+	if(buf!=NULL)
+		usebuf=buf;
+	else
+		{
+			page=getPageStructByIDFromPage(-1);
+			if(page==NULL)
+				return(-1);
+			usebuf=(GtkTextBuffer*)page->buffer;
+		}
+	switch (what)
+		{
+			case FIRSTCHAR:
+				gtk_text_buffer_get_start_iter(usebuf,&iter);
+				break;
+			case CURRENTCHAR:
+				return(getCurrentCursorPos());
+				break;
+			case LASTCHAR:
+				gtk_text_buffer_get_end_iter(usebuf,&iter);
+				break;
+		}
+	return(gtk_text_iter_get_offset(&iter));
+}
 
 
 

@@ -20,7 +20,9 @@
 
 #include "kkedit-includes.h"
 
-GList	*pages=NULL;
+GList		*pages=NULL;
+GList		*currentSearchList=NULL;
+pageStruct	*searchPageStruct=NULL;
 
 VISIBLE pageStruct *getPageStructByIDFromList(unsigned pageid)
 {
@@ -45,7 +47,7 @@ VISIBLE pageStruct *getPageStructByIDFromPage(int pagenum)
 	int			thispage=-1;
 	GtkWidget	*pageBox=NULL;
 	unsigned	pageid=0;
-ERRDATA
+
 	if(pagenum==-1)
 		thispage=gtk_notebook_get_current_page(mainNotebook);
 	else
@@ -68,7 +70,6 @@ ERRDATA
 				return(page);
 			list=list->next;
 		}			
-ERRDATA
 	return(NULL);
 }
 
@@ -105,6 +106,24 @@ pageListData* getCurrentPageListData(void)
 			list=list->next;
 		}			
 	return(NULL);
+}
+
+unsigned getIDFromPage(int pagenum)
+{
+	int			thispage;
+	GtkWidget	*pageBox=NULL;
+
+	if(pagenum!=-1)
+		thispage=pagenum;
+	else
+		thispage=gtk_notebook_get_current_page(mainNotebook);
+
+	pageBox=gtk_notebook_get_nth_page(mainNotebook,thispage);
+
+	if(pageBox==NULL)
+		return(0);
+	else
+		return((unsigned)(long)g_object_get_data((GObject*)pageBox,"pageid"));
 }
 
 #if 0

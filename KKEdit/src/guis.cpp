@@ -2115,7 +2115,7 @@ void buildFindReplace(void)
 #ifdef _USEGTK3_
 	findReplaceDialog=gtk_dialog_new_with_buttons(FIND_FIND_REPLACE_LABEL,(GtkWindow*)mainWindow, GTK_DIALOG_DESTROY_WITH_PARENT,DIALOG_GO_FORWARD_LABEL,FINDNEXT,MENU_GO_BACK_LABEL,FINDPREV,FIND_REPLACE_LABEL,REPLACENEXT,NULL);
 #else
-	findReplaceDialog=gtk_dialog_new_with_buttons(FIND_FIND_REPLACE_LABEL,(GtkWindow*)mainWindow, GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_GO_FORWARD,FINDNEXT,GTK_STOCK_GO_BACK,FINDPREV,FIND_REPLACE_LABEL,REPLACENEXT,NULL);
+	findReplaceDialog=gtk_dialog_new_with_buttons(FIND_FIND_REPLACE_LABEL,(GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_FIND,FINDNEXT,FIND_REPLACE_LABEL,REPLACENEXT,NULL);
 #endif
 
 	g_signal_connect(G_OBJECT(findReplaceDialog),"response",G_CALLBACK(doFindReplace),NULL);
@@ -2170,6 +2170,13 @@ void buildFindReplace(void)
 	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
 	gtk_widget_show(item);
 	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)2);
+
+//search backwards
+	item=gtk_check_button_new_with_label(FIND_BACK_LABEL);
+	gtk_toggle_button_set_active((GtkToggleButton*)item,searchBack);
+	gtk_box_pack_start(GTK_BOX(hbox),item,true,true,0);
+	gtk_widget_show(item);
+	g_signal_connect(G_OBJECT(item),"toggled",G_CALLBACK(doSearchPrefs),(void*)7);
 
 	item=gtk_check_button_new_with_label(FIND_ALL_FILES_LABEL);
 	gtk_toggle_button_set_active((GtkToggleButton*)item,findInAllFiles);

@@ -154,7 +154,6 @@ void updateStatusBar(GtkTextBuffer *textbuffer,GtkTextIter *location,GtkTextMark
 	if(lang==NULL)
 		lang="";
 
-	//buf=new TextBuffer(textbuffer);
 	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 
 	sinkReturn=asprintf(&message,STATUS_LINE_LABEL,buf->lineNum,buf->column,lang,path);
@@ -227,6 +226,8 @@ VISIBLE void realCloseTab(GtkNotebook *notebook,GtkWidget *child,guint page_num,
 	if(closingAll==false)
 		setPageSensitive();
 	stolenPage=0;
+	currentSearchList=NULL;
+	searchPageStruct=NULL;
 }
 
 VISIBLE void closeAllTabs(GtkWidget *widget,gpointer data)
@@ -254,6 +255,7 @@ VISIBLE void closeAllTabs(GtkWidget *widget,gpointer data)
 	closingAll=false;
 	currentPage=0;
 	setPageSensitive();
+	currentSearchList=NULL;
 }
 
 bool checkBeforeClose(int pagenum)
