@@ -1,4 +1,6 @@
 0.4.2
+Fixed replaceall speed ( again! ).
+Redone 'Replace All'.
 Find now doesn't show hidden tabs if no match found ( regex find still to do ).
 Cleaned find code.
 Fixed find when docview is in a tab.

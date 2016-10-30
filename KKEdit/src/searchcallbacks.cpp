@@ -1417,6 +1417,71 @@ void whatToDo(void)
 		}
 }
 
+
+/*
+
+*/
+
+void replaceAllTextInBuffer(pageStruct *page)
+{
+	char		*txt;
+	char		*newtxt;
+	GtkTextIter	startiter;
+	GtkTextIter	enditer;
+	StringSlice	*mystr;
+
+	loadingSession=true;
+	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+	moveBMsForPage(page,UPDATEBMLINE);
+	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
+	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
+	txt=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&startiter,&enditer,false);
+	mystr=new StringSlice;
+	mystr->setCaseless(insensitiveSearch);
+	newtxt=mystr->replaceAllSlice(txt,searchtext,replacetext);
+	itemsReplaced=mystr->getResult()*-1;
+	itemsReplaced--;
+	gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&startiter,&enditer);
+	gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&startiter,newtxt,-1);
+	delete mystr;
+	free(txt);
+	moveBMsForPage(page,MOVEBM);
+	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+	loadingSession=false;
+	page->isDirty=true;
+}
+
+void doReplaceAll(void)
+{
+	pageStruct	*page=NULL;
+	GtkTextIter	startiter;
+	GtkTextIter	enditer;
+	
+	if(findInAllFiles==true)
+		if(yesNo((char*)DIALOG_YESNO_REPLACE_IN_ALL_FILES,(char*)"")==GTK_RESPONSE_CANCEL)
+			return;
+
+	g_signal_handler_block(mainNotebook,switchPageHandler);
+
+	if(findInAllFiles==true)
+		{
+			for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
+				{
+					page=getPageStructByIDFromPage(j);
+					if(page!=NULL)
+						replaceAllTextInBuffer(page);
+				}
+		}
+	else
+		{
+			page=getPageStructByIDFromPage(-1);
+			if(page!=NULL)
+				replaceAllTextInBuffer(page);
+		}
+
+	g_signal_handler_unblock(mainNotebook,switchPageHandler);
+}
+
 VISIBLE void basicFind(int dowhat)
 {
 	GtkTextIter	startiter;
@@ -1483,6 +1548,12 @@ VISIBLE void basicFind(int dowhat)
 	switch(dowhat)
 		{
 			case REPLACENEXT:
+				if(replaceAll==true)
+					{
+						doReplaceAll();
+						return;
+					}
+
 				if(gtk_text_buffer_get_has_selection((GtkTextBuffer*)searchPageStruct->buffer))
 					{
 						gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)searchPageStruct->buffer,&startiter,&enditer);

@@ -689,8 +689,10 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 					if(strcmp(buffer,"#RESERVED")==0)
 						continue;
 					setBarberPoleMessage(strarg);
+					g_signal_handler_unblock(mainNotebook,switchPageHandler);
 					if(openFile(strarg,currentline,true)==false)
 						{
+							g_signal_handler_block(mainNotebook,switchPageHandler);
 							intarg=999;
 							while(intarg!=-1)
 								{
@@ -700,6 +702,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 						}
 					else
 						{
+							g_signal_handler_block(mainNotebook,switchPageHandler);
 							sinkReturnStr=fgets(buffer,2048,fd);
 							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 							page=getPageStructByIDFromPage(currentPage-1);
