@@ -22,6 +22,7 @@ int			percent;
 int			holdPercent;
 char		*path=NULL;
 int			sinkReturn;
+char		*sinkReturnStr;
 
 enum {QUIT,PULSE,PERCENT,INFO};
 
@@ -79,7 +80,7 @@ gboolean idleScroll(gpointer data)
 			if(strncasecmp(line,"info",4)==0)
 				{
 					dowhat=INFO;
-					fgets(line,256,fp);
+					sinkReturnStr=fgets(line,256,fp);
 					if(strlen(line)>0)
 						line[strlen(line)-1]=0;
 				}

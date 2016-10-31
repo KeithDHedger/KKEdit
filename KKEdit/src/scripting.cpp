@@ -430,11 +430,11 @@ void runKKCommand(void)
 					if(page!=NULL)
 						{
 							gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&startiter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
-							asprintf(&data,"%s:%i\n",page->filePath,gtk_text_iter_get_line(&startiter)+1);
+							sinkReturn=asprintf(&data,"%s:%i\n",page->filePath,gtk_text_iter_get_line(&startiter)+1);
 						}
 					else
 						{
-							asprintf(&data,":\n");
+							sinkReturn=asprintf(&data,":\n");
 						}
 					sendMsg(data);
 					free(data);
