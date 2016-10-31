@@ -627,7 +627,7 @@ char* StringSlice::replaceSlice(char* src,char* findstr,char* replacestr)
 
 	startreplace=(long)ptr-(long)copyofstr;
 	finalseglen=strlen(copyofstr)-startreplace-strlen(findstr);
-	this->replaceAllOffset=startreplace+strlen(findstr);
+	this->replaceAllOffset=startreplace+strlen(replacestr);
 
 	fullsize=finalseglen+startreplace+strlen(replacestr);
 	this->checkBufferLen(fullsize);

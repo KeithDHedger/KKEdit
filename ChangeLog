@@ -1,4 +1,5 @@
 0.4.2
+Fixed replace all missing matches too close together.
 Fixed replaceall speed ( again! ).
 Redone 'Replace All'.
 Find now doesn't show hidden tabs if no match found ( regex find still to do ).
