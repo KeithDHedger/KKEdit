@@ -20,11 +20,35 @@
 
 #include "kkedit-includes.h"
 
-int				currentFindPage=-1;
-int				firstPage=-1;
-int				pagesChecked=0;
-int				itemsReplaced=-1;
-pageListData	*pageData=NULL;
+int						currentFindPage=-1;
+int						firstPage=-1;
+int						pagesChecked=0;
+int						itemsReplaced=-1;
+pageListData			*pageData=NULL;
+bool					fromregexreplace=false;
+bool					gotselection=false;
+bool					fromregexsinglereplace=false;
+bool					wrapFlag=false;
+unsigned				currentpageid=0;
+bool					finishedpage=false;
+unsigned				startchar=0;
+unsigned				oldstartchar=0;
+#ifdef _USEGTK3_
+GtkTextSearchFlags		flags=GTK_TEXT_SEARCH_TEXT_ONLY;
+#else
+GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
+#endif
+
+
+struct regexData
+{
+	int			start;
+	int			end;
+};
+
+char			*searchtext=NULL;
+char			*replacetext=NULL;
+
 
 #ifdef _BUILDDOCVIEWER_
 
@@ -226,10 +250,10 @@ VISIBLE bool searchGtkDocs(GtkWidget *widget,gpointer data)
 					ERRDATA debugFree(&searchdata[loop][1]);
 				}
 		}
-	if((selection!=NULL) &&(data==NULL))
-		{
-			//ERRDATA debugFree(&selection);
-		}
+//	if((selection!=NULL) &&(data==NULL))
+//		{
+//			//ERRDATA debugFree(&selection);
+//		}
 
 	return(retval);
 }
@@ -534,7 +558,8 @@ void qt5DocSearchFromBar(GtkWidget *widget,gpointer data)
 		searchQT5Docs(NULL,(void*)text);
 }
 
-void doAllFiles(int dowhat,bool found)
+#if 0
+void doAllFilesXXX(int dowhat,bool found)
 {
 	pageStruct	*page=NULL;
 
@@ -566,8 +591,6 @@ void doAllFiles(int dowhat,bool found)
 	gtk_notebook_set_current_page(mainNotebook,currentFindPage);
 	page=getPageStructByIDFromPage(currentFindPage);
 
-//	if(page!=NULL)
-//		{
 	if(dowhat==FINDNEXT)
 		{
 			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&page->iter);
@@ -582,22 +605,13 @@ void doAllFiles(int dowhat,bool found)
 			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&page->match_end);
 			gtk_text_buffer_select_range((GtkTextBuffer*)page->buffer,&page->match_start,&page->match_end);
 		}
-//		}
 
 	if(useRegex==false)
 		basicFind(dowhat);
 	else
 		regexFind(dowhat);
 }
-
-struct regexData
-{
-	int start;
-	int	end;
-};
-
-char					*searchtext=NULL;
-char					*replacetext=NULL;
+#endif
 
 int findNextRegex(pageStruct *page,int charpos,int thisregxnum)
 {
@@ -649,9 +663,6 @@ int findThisRegex(pageStruct *page,int charpos)
 		}
 	ERRDATA return(retval);
 }
-
-bool fromregexreplace=false;
-bool gotselection=false,fromregexsinglereplace=false;
 
 void regexFind(int dowhat)
 {
@@ -970,8 +981,6 @@ void regexFind(int dowhat)
 		regexFind(FINDPREV);
 }
 
-bool	wrapFlag=false;
-
 void showOnStatus(const char *from,const char *to)
 {
 	char	*message=NULL;
@@ -1183,16 +1192,6 @@ VISIBLE void findNoRegex(int dowhat)
 }
 #endif
 
-unsigned				currentpageid=0;
-bool					finishedpage=false;
-unsigned				startchar=0;
-unsigned				oldstartchar=0;
-#ifdef _USEGTK3_
-GtkTextSearchFlags		flags=GTK_TEXT_SEARCH_TEXT_ONLY;
-#else
-GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
-#endif
-
 bool findInPage(bool forward)
 {
 	bool					retval=false;
@@ -1235,91 +1234,6 @@ bool findInPage(bool forward)
 
 	return(retval);
 }
-
-#if 0
-void whatToDo(void)
-{
-	GtkTextIter		startiter;
-	unsigned		thispageid;
-	pageListData	*data=NULL; 
-
-	thispageid=getIDFromPage(-1);
-	if(thispageid!=currentpageid)
-		{
-			//isvalidfind=false;
-			startchar=0;
-			data=getCurrentPageListData();
-			if(data!=NULL)
-				{
-					currentSearchList=data->list;
-					searchPageStruct=data->page;	
-					currentpageid=thispageid;
-					startchar=getCurrentCursorPos();
-				}
-			else
-				{
-					currentSearchList=NULL;
-					searchPageStruct=NULL;
-					currentpageid=0;
-					if(searchBack==false)
-						startchar=0;
-					else
-						startchar=getCharacterPos(LASTCHAR,NULL);
-				}
-			return;
-		}
-
-	if(getCurrentCursorPos()!=oldstartchar)
-		{
-			startchar=getCurrentCursorPos();
-			//isvalidfind=false;
-		}
-
-	if(currentSearchList==NULL)
-		{
-			//isvalidfind=false;
-			return;
-		}
-
-	if(finishedpage==true)
-		{
-			if(findInAllFiles==true)
-				{
-					if(searchBack==false)
-						currentSearchList=currentSearchList->next;
-					else
-						currentSearchList=currentSearchList->prev;
-					if(currentSearchList==NULL)
-						{
-							if(searchBack==false)
-								currentSearchList=pages;
-							else
-								currentSearchList=g_list_last(pages);
-						}
-					searchPageStruct=(pageStruct*)currentSearchList->data;
-					if(searchBack==false)
-						startchar=0;
-					else
-						startchar=getCharacterPos(LASTCHAR,NULL);
-
-					//isvalidfind=false;
-					currentpageid=searchPageStruct->pageID;
-					return;
-				}
-
-			if(wrapSearch==true)
-				{
-					if(searchBack==false)
-						startchar=0;
-					else
-						startchar=getCharacterPos(LASTCHAR,NULL);
-					//isvalidfind=false;
-					return;
-				}
-		}
-}
-#endif
-pageListData	*pagedata=NULL;
 
 void whatToDo(void)
 {
@@ -1417,11 +1331,6 @@ void whatToDo(void)
 		}
 }
 
-
-/*
-
-*/
-
 void replaceAllTextInBuffer(pageStruct *page)
 {
 	char		*txt;
@@ -1439,8 +1348,8 @@ void replaceAllTextInBuffer(pageStruct *page)
 	mystr=new StringSlice;
 	mystr->setCaseless(insensitiveSearch);
 	newtxt=mystr->replaceAllSlice(txt,searchtext,replacetext);
-	itemsReplaced=mystr->getResult()*-1;
-	itemsReplaced--;
+	if(mystr->getResult()<0)
+		itemsReplaced+=mystr->getResult()*-1;
 	gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&startiter,&enditer);
 	gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&startiter,newtxt,-1);
 	delete mystr;
@@ -1460,7 +1369,6 @@ void doReplaceAll(void)
 	if(findInAllFiles==true)
 		if(yesNo((char*)DIALOG_YESNO_REPLACE_IN_ALL_FILES,(char*)"")==GTK_RESPONSE_CANCEL)
 			return;
-
 	g_signal_handler_block(mainNotebook,switchPageHandler);
 
 	if(findInAllFiles==true)
@@ -1478,7 +1386,6 @@ void doReplaceAll(void)
 			if(page!=NULL)
 				replaceAllTextInBuffer(page);
 		}
-
 	g_signal_handler_unblock(mainNotebook,switchPageHandler);
 }
 
@@ -1517,19 +1424,18 @@ VISIBLE void basicFind(int dowhat)
 	replacetext=g_strcompress(gtk_entry_get_text((GtkEntry*)replaceBox));
 	searchtext=g_strcompress(gtk_entry_get_text((GtkEntry*)findBox));
 	
-	if((pagedata==NULL) || ((getPageStructByIDFromPage(-1)!=NULL) && (currentpageid!=getPageStructByIDFromPage(-1)->pageID)))
+	if((pageData==NULL) || ((getPageStructByIDFromPage(-1)!=NULL) && (currentpageid!=getPageStructByIDFromPage(-1)->pageID)))
 		{
-			if(pagedata!=NULL)
-				free(pagedata);
-			pagedata=getCurrentPageListData();
-			if(pagedata==NULL)
+			if(pageData!=NULL)
+				free(pageData);
+			pageData=getCurrentPageListData();
+			if(pageData==NULL)
 				return;
 			startchar=getCurrentCursorPos();
 			oldstartchar=startchar;
-			searchPageStruct=pagedata->page;
+			searchPageStruct=pageData->page;
 			finishedpage=false;
 			currentpageid=searchPageStruct->pageID;
-			currentSearchList=pagedata->list;
 		}
 
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)searchPageStruct->buffer,&starthilite);
@@ -1550,7 +1456,12 @@ VISIBLE void basicFind(int dowhat)
 			case REPLACENEXT:
 				if(replaceAll==true)
 					{
+						itemsReplaced=-1;
 						doReplaceAll();
+						gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,statusID);
+						while(gtk_events_pending())
+							gtk_main_iteration();
+						showOnStatus(searchtext,replacetext);
 						return;
 					}
 
@@ -1826,7 +1737,7 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 			list=replaceList;
 		}
 
-	itemsReplaced=-1;
+	//itemsReplaced=-1;
 
 	edata=gtk_entry_get_text((GtkEntry*)entry);
 	if(list==NULL)
@@ -1867,8 +1778,8 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 	else
 		regexFind(response_id);
 
-	if(itemsReplaced>-1)
-		showOnStatus(gtk_entry_get_text((GtkEntry*)findBox),gtk_entry_get_text((GtkEntry*)replaceBox));
+//	if(itemsReplaced>-1)
+//		showOnStatus(gtk_entry_get_text((GtkEntry*)findBox),gtk_entry_get_text((GtkEntry*)replaceBox));
 }
 
 VISIBLE void find(GtkWidget *widget,gpointer data)

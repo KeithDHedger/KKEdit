@@ -21,7 +21,6 @@
 #include "kkedit-includes.h"
 
 GList		*pages=NULL;
-GList		*currentSearchList=NULL;
 pageStruct	*searchPageStruct=NULL;
 
 VISIBLE pageStruct *getPageStructByIDFromList(unsigned pageid)

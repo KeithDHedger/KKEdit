@@ -226,7 +226,6 @@ VISIBLE void realCloseTab(GtkNotebook *notebook,GtkWidget *child,guint page_num,
 	if(closingAll==false)
 		setPageSensitive();
 	stolenPage=0;
-	currentSearchList=NULL;
 	searchPageStruct=NULL;
 }
 
@@ -255,7 +254,6 @@ VISIBLE void closeAllTabs(GtkWidget *widget,gpointer data)
 	closingAll=false;
 	currentPage=0;
 	setPageSensitive();
-	currentSearchList=NULL;
 }
 
 bool checkBeforeClose(int pagenum)

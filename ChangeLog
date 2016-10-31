@@ -1,4 +1,5 @@
 0.4.2
+Fixed displaying total number of replacements on status bar.
 Fixed replace all missing matches too close together.
 Fixed replaceall speed ( again! ).
 Redone 'Replace All'.

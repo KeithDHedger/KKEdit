@@ -29,7 +29,6 @@ struct pageListData
 };
 
 extern GList		*pages;
-extern GList		*currentSearchList;
 extern pageStruct	*searchPageStruct;
 
 pageStruct *getPageStructByIDFromList(unsigned pageid);
