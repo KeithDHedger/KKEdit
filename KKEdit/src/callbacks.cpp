@@ -1217,7 +1217,7 @@ bool doShutdown(GtkWidget *widget,GdkEvent *event,gpointer data)
 			return(true);
 		}
 
-	if(onExitSaveSession)
+	if((onExitSaveSession) && (safeMode==false))
 		saveSession(NULL,NULL);
 	writeExitData();
 
@@ -1262,7 +1262,7 @@ void setPrefs(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	pageStruct	*tpage=getPageStructByIDFromPage(-1);
-	bool		*bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&restoreBookmarks,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen,&useGlobalPlugMenu,&autoSearchDocs,&showWhiteSpace,&inWindow,&showMenuIcons};
+	bool		*bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen,&useGlobalPlugMenu,&autoSearchDocs,&showWhiteSpace,&inWindow,&showMenuIcons};
 	unsigned	*ints[MAXPREFSINTWIDGETS]={&maxTabChars,&maxFRHistory,&depth,&autoShowMinChars,&tabWidth,&maxFuncDefs,&maxBMChars,&tabsSize,&maxJumpHistory};
 
 	if(strcmp(gtk_widget_get_name(widget),"style")==0)
@@ -1272,12 +1272,6 @@ void setPrefs(GtkWidget *widget,gpointer data)
 			tmpStyleName=gtk_combo_box_text_get_active_text((GtkComboBoxText*)data);
 			if(tpage!=NULL)
 				gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)tpage->buffer,gtk_source_style_scheme_manager_get_scheme(schemeManager,tmpStyleName));
-		}
-
-	if(strcmp(gtk_widget_get_name(widget),"save")==0)
-		{
-			gtk_widget_set_sensitive(prefsWidgets[AUTOBM],gtk_toggle_button_get_active((GtkToggleButton*)prefsWidgets[AUTOSAVE]));
-			return;
 		}
 
 	if(strcmp(gtk_widget_get_name(widget),"cancel")==0)

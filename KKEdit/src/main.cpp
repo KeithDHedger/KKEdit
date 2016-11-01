@@ -18,8 +18,10 @@
  * along with KKEdit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include <X11/Xatom.h>
 #include <gdk/gdkx.h>
+#include <sys/msg.h>
 
 #include "kkedit-includes.h"
 
@@ -126,8 +128,6 @@ void init(void)
 	useRegex=false;
 	replaceAll=false;
 	onExitSaveSession=false;
-	onExitSaveSession=false;
-	restoreBookmarks=false;
 	noDuplicates=false;
 	noWarnings=false;
 	readLinkFirst=false;
@@ -445,8 +445,8 @@ void appStart(GApplication  *application,gpointer data)
 	init();
 	buildMainGui();
 
-	if(onExitSaveSession==true)
-		restoreSession(NULL,(void*)restoreBookmarks);
+	if((onExitSaveSession==true) && (safeMode==false))
+		restoreSession(NULL,NULL);
 
 	refreshMainWindow();
 
@@ -538,14 +538,12 @@ int getWorkspaceNumber(void)
 		}
 	ERRDATA return retnum;
 }
-#include <sys/msg.h>
 
 int main(int argc, char **argv)
 {
 	ERRDATA
 	int				status;
 	char			*dbusname;
-	bool			safeflag=false;
 	GOptionContext	*context;
 
 #if _DEBUGLEVEL_ > DBG0
@@ -571,7 +569,7 @@ int main(int argc, char **argv)
 {
     {"multiple",'m',0,G_OPTION_ARG_NONE,&singleOverRide,"Multiple instance mode",NULL},
     {"sessionid",'i',0,G_OPTION_ARG_INT,&sessionID,"Set an ID to be used for (new) instance",NULL},
-    { "safe",'s',0,G_OPTION_ARG_NONE,&safeflag,"Safe mode(disable all plugins and use new instance )",NULL},
+    { "safe",'s',0,G_OPTION_ARG_NONE,&safeMode,"Safe mode(disable all plugins and use new instance )",NULL},
     { NULL }
 };
 
@@ -580,7 +578,7 @@ int main(int argc, char **argv)
 	g_option_context_set_help_enabled(context,true); 
 	g_option_context_parse(context,&argc,&argv,NULL);
 
-	if(safeflag==true)
+	if(safeMode==true)
 		{
 			singleOverRide=true;
 			loadPluginsFlag=false; 

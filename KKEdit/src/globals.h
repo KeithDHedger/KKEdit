@@ -147,6 +147,7 @@ extern bool				fromGOpen;
 extern char				*prefsFolder;
 extern GtkRecentManager	*recentMan;
 extern int				sessionID;
+extern bool				safeMode;
 
 //main window
 extern GtkWidget		*mainWindow;
@@ -263,7 +264,6 @@ extern char				*terminalCommand;
 extern char				*rootCommand;
 extern unsigned int		depth;
 extern bool				onExitSaveSession;
-extern bool				restoreBookmarks;
 extern char				*styleName;
 extern bool				noDuplicates;
 extern bool				noWarnings;

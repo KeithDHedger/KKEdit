@@ -34,6 +34,7 @@ bool				fromGOpen=false;
 char				*prefsFolder=NULL;
 GtkRecentManager	*recentMan=NULL;
 int					sessionID=-1;
+bool				safeMode=false;
 
 //main mainWindow
 GtkWidget			*mainWindow=NULL;
@@ -153,7 +154,6 @@ char				*terminalCommand;
 char				*rootCommand;
 unsigned int		depth;
 bool				onExitSaveSession;
-bool				restoreBookmarks;
 char				*styleName=NULL;
 bool				noDuplicates;
 bool				noWarnings;
@@ -435,7 +435,6 @@ args				kkedit_rc[]=
 	{"noduplicates",TYPEBOOL,&noDuplicates},
 	{"warning",TYPEBOOL,&noWarnings},
 	{"savesessiononexit",TYPEBOOL,&onExitSaveSession},
-	{"restorebookmarks",TYPEBOOL,&restoreBookmarks},
 	{"nagscreen",TYPEBOOL,&nagScreen},
 	{"readlink",TYPEBOOL,&readLinkFirst},
 	{"autocomp",TYPEBOOL,&autoShowComps},
@@ -1625,6 +1624,7 @@ void setPageSensitive(void)
 	gtk_widget_set_sensitive((GtkWidget*)funcMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)printMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)revertMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)saveAllMenu,true);
 }
 
 void setDocViewSensitive(void)
@@ -1633,6 +1633,7 @@ void setDocViewSensitive(void)
 	resetSensitive();
 	gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)closeAllMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)saveAllMenu,true);
 }
 
 void getOldConfigs(const char *file,args *dataptr)

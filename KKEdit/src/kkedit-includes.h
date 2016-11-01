@@ -311,7 +311,6 @@
 #define PREFS_SHOW_WHITESPACE_LABEL gettext("Show Whitespace")
 #define PREFS_USE_SINGLE_LABEL gettext("Use Single Instance")
 #define PREFS_AUTO_MENU_SAVE_LABEL gettext("Auto Save/Restore Session")
-#define PREFS_RESTORE_SESSION_LABEL gettext("Restore Session Bookmarks")
 #define PREFS_NO_DUPLICATE_LABEL gettext("Don't Open Duplicate File")
 #define PREFS_NO_WARN_LABEL gettext("Don't Warn On File Change")
 #define PREFS_READ_LINK_LABEL gettext("Read Link Before Opening File")

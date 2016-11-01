@@ -1353,11 +1353,7 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 
 //auto save session
 	makePrefBox(true,true);
-	makePrefsCheck(AUTOSAVE,PREFS_AUTO_MENU_SAVE_LABEL,"save",onExitSaveSession,true,false);
-	g_signal_connect(G_OBJECT(prefsWidgets[AUTOSAVE]),"toggled",G_CALLBACK(setPrefs),(void*)prefsWidgets[AUTOSAVE]);
-//auto restore bookmarks
-	makePrefsCheck(AUTOBM,PREFS_RESTORE_SESSION_LABEL,"marks",restoreBookmarks,false,true);
-	gtk_widget_set_sensitive(prefsWidgets[AUTOBM],onExitSaveSession);
+	makePrefsCheck(AUTOSAVE,PREFS_AUTO_MENU_SAVE_LABEL,"save",onExitSaveSession,true,true);
 
 //no duplicates
 	makePrefBox(true,true);
