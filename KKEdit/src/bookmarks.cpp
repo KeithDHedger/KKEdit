@@ -72,9 +72,12 @@ VISIBLE void removeAllBookmarks(GtkWidget *widget,GtkTextIter *titer)
 	for(int j=0; j<numpages; j++)
 		{
 			page=getPageStructByIDFromPage(j);
-			gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
-			gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
-			gtk_source_buffer_remove_source_marks(page->buffer,&startiter,&enditer,NULL);
+			if(page!=NULL)
+				{
+					gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
+					gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
+					gtk_source_buffer_remove_source_marks(page->buffer,&startiter,&enditer,NULL);
+				}
 		}
 	g_list_free_full(newBookMarksList,destroyBMData);
 	newBookMarksList=NULL;
