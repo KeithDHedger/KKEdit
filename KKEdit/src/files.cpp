@@ -1013,7 +1013,6 @@ pageStruct *makeNewPage(void)
 	page->lang=NULL;
 	page->tabVbox=NULL;
 	page->showingChanged=false;
-	page->backMark=gtk_text_mark_new("back-mark",true);
 	
 	page->regexList=NULL;
 	page->regexMatchNumber=-1;
@@ -1025,9 +1024,6 @@ pageStruct *makeNewPage(void)
 	page->hidden=false;
 	page->startChar=-1;
 	page->endChar=-1;
-
-	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&iter);
-	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(page->buffer),page->backMark,&iter);
 
 //dnd
 	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);

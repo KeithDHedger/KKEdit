@@ -502,7 +502,6 @@
 
 #define VISIBLE __attribute__((visibility("default")))
 #define PROTECTED __attribute__((visibility("protected")))
-
 #endif
 
 

@@ -139,7 +139,6 @@ struct pageStruct
 	const char			*lang;
 	GtkWidget			*tabVbox;
 	bool				showingChanged;
-	GtkTextMark			*backMark;
 	GtkTextTag			*highlightTag;
 	GList				*userDataList;
 	GtkSourceCompletion	*completion;

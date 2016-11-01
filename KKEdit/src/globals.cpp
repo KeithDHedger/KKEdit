@@ -1570,6 +1570,10 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 		}
 	gtk_widget_set_sensitive((GtkWidget*)goBackMenu,globalHistory->canGoBack());
 	gtk_widget_set_sensitive((GtkWidget*)goForwardMenu,globalHistory->canGoForward());
+	if(backButton!=NULL)
+		gtk_widget_set_sensitive((GtkWidget*)backButton,globalHistory->canGoBack());
+	if(forwardButton!=NULL)
+		gtk_widget_set_sensitive((GtkWidget*)forwardButton,globalHistory->canGoForward());
 
 //do plugin sensitive
 	globalPlugins->globalPlugData->page=page;
