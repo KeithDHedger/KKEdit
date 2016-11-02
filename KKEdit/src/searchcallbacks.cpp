@@ -1277,8 +1277,6 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 			list=replaceList;
 		}
 
-	//itemsReplaced=-1;
-
 	edata=gtk_entry_get_text((GtkEntry*)entry);
 	if(list==NULL)
 		{
@@ -1313,13 +1311,9 @@ void doFindReplace(GtkDialog *dialog,gint response_id,gpointer user_data)
 		replaceList=list;
 
 	if(useRegex==false)
-		//findNoRegex(response_id);
 		basicFind(response_id);
 	else
 		regexFind(response_id);
-
-//	if(itemsReplaced>-1)
-//		showOnStatus(gtk_entry_get_text((GtkEntry*)findBox),gtk_entry_get_text((GtkEntry*)replaceBox));
 }
 
 VISIBLE void find(GtkWidget *widget,gpointer data)

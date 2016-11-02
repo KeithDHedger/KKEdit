@@ -1575,6 +1575,8 @@ void setChangedSensitive(GtkTextBuffer *textbuffer,pageStruct *page)
 	if(forwardButton!=NULL)
 		gtk_widget_set_sensitive((GtkWidget*)forwardButton,globalHistory->canGoForward());
 
+	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,true);
+
 //do plugin sensitive
 	globalPlugins->globalPlugData->page=page;
 	g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"setSensitive");
@@ -1638,6 +1640,7 @@ void setDocViewSensitive(void)
 	gtk_widget_set_sensitive((GtkWidget*)bookMarkMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)closeAllMenu,true);
 	gtk_widget_set_sensitive((GtkWidget*)saveAllMenu,true);
+	gtk_widget_set_sensitive((GtkWidget*)saveAsMenu,false);
 }
 
 void getOldConfigs(const char *file,args *dataptr)
