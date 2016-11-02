@@ -2139,7 +2139,6 @@ void buildFindReplace(void)
 	replaceDropBox=gtk_combo_box_text_new_with_entry();
 	replaceBox=gtk_bin_get_child((GtkBin*)replaceDropBox);
 
-	g_signal_connect_after(G_OBJECT(replaceDropBox),"changed",G_CALLBACK(pasteFRClip),replaceBox);
 	gtk_container_add(GTK_CONTAINER(content_area),replaceDropBox);
 	gtk_widget_show(replaceDropBox);
 

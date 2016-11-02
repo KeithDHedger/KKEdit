@@ -43,7 +43,6 @@ void searchQT5Assist(GtkWidget *widget,gpointer data);
 void qt5DocSearchFromBar(GtkWidget *widget,gpointer data);
 bool searchGtkDocs(GtkWidget *widget,gpointer data);
 void showDocView(int howtodisplay,char *text,const char *title);
-void pasteFRClip(GtkWidget *widget,gpointer data);
 void doDoxy(GtkWidget *widget,long data);
 void doxyDocs(GtkWidget *widget,gpointer data);
 
