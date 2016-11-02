@@ -1,4 +1,5 @@
 0.4.2
+Fixed segfault on open hexdump.
 Auto save/restore session now disabled in safe mode ( -s ).
 Fixed displaying total number of replacements on status bar.
 Fixed replace all missing matches too close together.

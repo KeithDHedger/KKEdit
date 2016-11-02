@@ -20,6 +20,12 @@
 
 #include "kkedit-includes.h"
 
+struct regexData
+{
+	int					start;
+	int					end;
+};
+
 int						currentFindPage=-1;
 int						firstPage=-1;
 int						pagesChecked=0;
@@ -39,16 +45,8 @@ GtkTextSearchFlags		flags=GTK_TEXT_SEARCH_TEXT_ONLY;
 GtkSourceSearchFlags	flags=GTK_SOURCE_SEARCH_TEXT_ONLY;
 #endif
 
-
-struct regexData
-{
-	int			start;
-	int			end;
-};
-
-char			*searchtext=NULL;
-char			*replacetext=NULL;
-
+char					*searchtext=NULL;
+char					*replacetext=NULL;
 
 #ifdef _BUILDDOCVIEWER_
 
@@ -250,11 +248,6 @@ VISIBLE bool searchGtkDocs(GtkWidget *widget,gpointer data)
 					ERRDATA debugFree(&searchdata[loop][1]);
 				}
 		}
-//	if((selection!=NULL) &&(data==NULL))
-//		{
-//			//ERRDATA debugFree(&selection);
-//		}
-
 	return(retval);
 }
 

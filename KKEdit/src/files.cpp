@@ -503,15 +503,13 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 			filepath=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 			filename=g_path_get_basename(filepath);
 			newFile(NULL,NULL);
-			pagenum=currentPage-1;
-			page=getPageStructByIDFromPage(pagenum);
+			page=getPageStructByIDFromPage(-1);
 			sinkReturn=asprintf(&command,"hexdump -C %s",filepath);
 			fp=popen(command,"r");
 			while(fgets(line,1024,fp))
 				g_string_append_printf(str,"%s",line);
 
 			pclose(fp);
-
 			gtk_source_buffer_begin_not_undoable_action(page->buffer);
 			gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(page->buffer),&iter);
 			if(g_utf8_validate(str->str,-1,NULL)==false)
@@ -1044,7 +1042,7 @@ pageStruct *makeNewPage(void)
 	g_signal_connect(G_OBJECT(page->buffer),"mark-set",G_CALLBACK(updateStatusBar),NULL);
 	g_signal_connect((GtkWidget*)page->view,"button-release-event",G_CALLBACK(resetRegexMark),(void*)page);
 
-	setPageSensitive();
+//	setPageSensitive();
 	pages=g_list_prepend(pages,(gpointer)page);
 	ERRDATA return(page);
 }
