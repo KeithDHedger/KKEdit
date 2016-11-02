@@ -35,6 +35,7 @@ char				*prefsFolder=NULL;
 GtkRecentManager	*recentMan=NULL;
 int					sessionID=-1;
 bool				safeMode=false;
+bool				overRideLoadSession=false;
 
 //main mainWindow
 GtkWidget			*mainWindow=NULL;

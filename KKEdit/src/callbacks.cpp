@@ -1217,7 +1217,7 @@ bool doShutdown(GtkWidget *widget,GdkEvent *event,gpointer data)
 			return(true);
 		}
 
-	if((onExitSaveSession) && (safeMode==false))
+	if((onExitSaveSession) && (safeMode==false) && (overRideLoadSession==false))
 		saveSession(NULL,NULL);
 	writeExitData();
 

@@ -143,6 +143,7 @@ extern char				*prefsFolder;
 extern GtkRecentManager	*recentMan;
 extern int				sessionID;
 extern bool				safeMode;
+extern bool				overRideLoadSession;
 
 //main window
 extern GtkWidget		*mainWindow;

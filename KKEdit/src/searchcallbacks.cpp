@@ -622,7 +622,12 @@ void regexFind(int dowhat)
 	int						testformatch;
 	GtkTextIter				hastart,haend;
 	GError					*regexError=NULL;
+	int						newdowhat;
 
+	if(searchBack==true)
+		newdowhat=FINDPREV;
+	else
+		newdowhat=dowhat;
 	page=getPageStructByIDFromPage(currentFindPage);
 	if(page==NULL)
 		{
@@ -715,7 +720,7 @@ void regexFind(int dowhat)
 			page->regexMatchNumber=0;
 		}
 
-	switch(dowhat)
+	switch(newdowhat)
 		{
 //forward search
 			case FINDNEXT:
@@ -746,15 +751,18 @@ void regexFind(int dowhat)
 									currentFindPage=0;
 								gtk_notebook_set_current_page(mainNotebook,currentFindPage);
 								page=getPageStructByIDFromPage(currentFindPage);
-								page->regexMatchNumber=-1;
-								dofindnext=true;
-								gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
-								gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&startiter);
-
-								if(pagesChecked>gtk_notebook_get_n_pages(mainNotebook))
+								if(page!=NULL)
 									{
-										dofindnext=false;
-										pagesChecked=0;
+										page->regexMatchNumber=-1;
+										dofindnext=true;
+										gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
+										gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&startiter);
+
+										if(pagesChecked>gtk_notebook_get_n_pages(mainNotebook))
+											{
+												dofindnext=false;
+												pagesChecked=0;
+											}
 									}
 							}
 						else if(wrapSearch==true)
@@ -797,11 +805,14 @@ void regexFind(int dowhat)
 									currentFindPage=gtk_notebook_get_n_pages(mainNotebook)-1;
 								gtk_notebook_set_current_page(mainNotebook,currentFindPage);
 								page=getPageStructByIDFromPage(currentFindPage);
-								page->regexMatchNumber=-1;
-								dofindprev=true;
-								gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
-								gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&enditer);
-								scrollToIterInPane(page,&enditer);
+								if(page!=NULL)
+									{
+										page->regexMatchNumber=-1;
+										dofindprev=true;
+										gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
+										gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&enditer);
+										scrollToIterInPane(page,&enditer);
+									}
 							}
 						else if(wrapSearch==true)
 							{
@@ -840,39 +851,42 @@ void regexFind(int dowhat)
 						for(int j=startloop;j<endloop;j++)
 							{
 								page=getPageStructByIDFromPage(j);
+								if(page!=NULL)
+									{
 								//if(findInAllFiles==true)
 								//	{
 										gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
 										gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
 								//	}
-								moveBMsForPage(page,UPDATEBMLINE);
-								text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&startiter,&enditer,false);
-								regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,(GRegexMatchFlags)matchflags,&regexError);
-								if(gerrorMessage(&regexError)!=0)
-									return;
+										moveBMsForPage(page,UPDATEBMLINE);
+										text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&startiter,&enditer,false);
+										regex=g_regex_new(searchtext,(GRegexCompileFlags)compileflags,(GRegexMatchFlags)matchflags,&regexError);
+										if(gerrorMessage(&regexError)!=0)
+											return;
 
-								g_regex_match_full(regex,text,-1,0,matchflags,&match_info,NULL);
-								while(g_match_info_matches(match_info))
-									{
-										itemsReplaced++;
-										g_match_info_next(match_info,NULL);
+										g_regex_match_full(regex,text,-1,0,matchflags,&match_info,NULL);
+										while(g_match_info_matches(match_info))
+											{
+												itemsReplaced++;
+												g_match_info_next(match_info,NULL);
+											}
+
+										reptext=g_regex_replace(regex,text,-1,0,replacetext,(GRegexMatchFlags)matchflags,&regexError);
+										if(gerrorMessage(&regexError)!=0)
+											return;
+
+										if((reptext!=NULL) &&(strcmp(reptext,text)!=0))
+											{
+												gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+													gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&startiter,&enditer);
+													gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&startiter,reptext,-1);
+													page->regexMatchNumber=-1;
+													ERRDATA debugFree(&reptext);
+												gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+											}
+										ERRDATA debugFree(&text);
+										moveBMsForPage(page,MOVEBM);
 									}
-
-								reptext=g_regex_replace(regex,text,-1,0,replacetext,(GRegexMatchFlags)matchflags,&regexError);
-								if(gerrorMessage(&regexError)!=0)
-									return;
-
-								if((reptext!=NULL) &&(strcmp(reptext,text)!=0))
-									{
-									gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
-										gtk_text_buffer_delete((GtkTextBuffer*)page->buffer,&startiter,&enditer);
-										gtk_text_buffer_insert((GtkTextBuffer*)page->buffer,&startiter,reptext,-1);
-										page->regexMatchNumber=-1;
-										ERRDATA debugFree(&reptext);
-									gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
-									}
-								ERRDATA debugFree(&text);
-								moveBMsForPage(page,MOVEBM);
 							}
 					}
 				else

@@ -445,7 +445,7 @@ void appStart(GApplication  *application,gpointer data)
 	init();
 	buildMainGui();
 
-	if((onExitSaveSession==true) && (safeMode==false))
+	if((onExitSaveSession==true) && (safeMode==false) && (overRideLoadSession==false))
 		restoreSession(NULL,NULL);
 
 	refreshMainWindow();
@@ -568,6 +568,7 @@ int main(int argc, char **argv)
 	GOptionEntry	entries[]=
 {
     {"multiple",'m',0,G_OPTION_ARG_NONE,&singleOverRide,"Multiple instance mode",NULL},
+    {"no-autosession",'a',0,G_OPTION_ARG_NONE,&overRideLoadSession,"Don't auto load last session",NULL},
     {"sessionid",'i',0,G_OPTION_ARG_INT,&sessionID,"Set an ID to be used for (new) instance",NULL},
     { "safe",'s',0,G_OPTION_ARG_NONE,&safeMode,"Safe mode(disable all plugins and use new instance )",NULL},
     { NULL }
