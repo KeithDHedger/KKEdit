@@ -27,12 +27,14 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <glib.h>
+#include <sys/time.h>
+
 
 #include <signal.h>
 #include <stdio.h>
 #include <errno.h>
 
+#include <glib.h>
 #include <gtksourceview/gtksourcestyleschememanager.h>
 #include <gtksourceview/gtksourceview.h>
 #include <gtksourceview/gtksourcebuffer.h>

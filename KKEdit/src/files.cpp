@@ -637,15 +637,6 @@ VISIBLE void saveSession(const char *filename,const char *path)
 	ERRDATA
 }
 
-//void timing(bool start)
-//{
-//
-//	clock_gettime(CLOCK_MONOTONIC,&now);
-//
-//}
-#include <time.h>
-#include <sys/time.h>
-
 VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
