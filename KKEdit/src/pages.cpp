@@ -22,6 +22,7 @@
 
 GList		*pages=NULL;
 pageStruct	*searchPageStruct=NULL;
+pageStruct	*currentPageStruct=NULL;
 
 VISIBLE pageStruct *getPageStructByIDFromList(unsigned pageid)
 {
@@ -124,20 +125,4 @@ unsigned getIDFromPage(int pagenum)
 	else
 		return((unsigned)(long)g_object_get_data((GObject*)pageBox,"pageid"));
 }
-
-#if 0
-pageListData* getNextPage(pageListData *pagedata)
-{
-	pageListData	data=NULL;
-	if(pagedata!=NULL)
-		{
-			if(pagedata->list>next!=NULL)
-				XXXXXXXXXXXXXX
-		}
-	else
-		data=getCurrentPageListData();
-
-	return(sata);
-}
-#endif
 

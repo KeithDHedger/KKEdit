@@ -1396,7 +1396,7 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
    --with-qt5-docdir      Installtion DIR for Qt5 documentation
    --with-gsu-path        Path to graphical su app
-   --with-debug-level     Debug level ( 0,1,2,3,4 )
+   --with-debug-level     Debug level ( 0,1,2,3,4,5,6 )
 
 Some influential environment variables:
   CXX         C++ compiler command

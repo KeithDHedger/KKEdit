@@ -30,6 +30,7 @@ struct pageListData
 
 extern GList		*pages;
 extern pageStruct	*searchPageStruct;
+extern pageStruct	*currentPageStruct;
 
 pageStruct *getPageStructByIDFromList(unsigned pageid);
 pageStruct *getPageStructByIDFromPage(int pagenum);

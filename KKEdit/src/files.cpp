@@ -645,7 +645,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 	char		buffer[2048];
 	int			intarg;
 	char		strarg[2048];
-	pageStruct	*page=NULL;
+//	pageStruct	*page=NULL;
 	GtkTextIter	markiter;
 	int			currentline;
 	TextBuffer	*buf=new TextBuffer;
@@ -699,15 +699,16 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 								{
 									sinkReturnStr=fgets(buffer,2048,fd);
 									sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
-									page=getPageStructByIDFromPage(currentPage-1);
+									//page=getPageStructByIDFromPage(currentPage-1);
+									//page=currentPageStruct;
 									//gtk_notebook_set_current_page(mainNotebook,currentPage-1);
 									intarg=999;
 									while(intarg!=-1)
 										{
 											if(strcmp(buffer,"#RESERVED\n")!=0)
 												{
-													gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
-													gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
+													gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)currentPageStruct->buffer,&markiter,intarg);
+													gtk_text_buffer_place_cursor((GtkTextBuffer*)currentPageStruct->buffer,&markiter);
 													toggleBookmark(NULL,&markiter);
 												}
 											sinkReturnStr=fgets(buffer,2048,fd);
@@ -716,9 +717,9 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 							
 									gotoLine(NULL,(gpointer)(long)currentline);
 									if(hidden==true)
-										hideTab(NULL,(void*)page);
+										hideTab(NULL,(void*)currentPageStruct);
 									else
-										page->hidden=false;
+										currentPageStruct->hidden=false;
 								}
 							else
 								{
@@ -1034,26 +1035,22 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	int						whattodo;
 	const gchar				*end;
 
-	//_ENTER_
-	//printf("filepath=>>>%s<<\n",filepath);
+	_ENTER_
 	if(readLinkFirst==true)
 		filepathcopy=realpath(filepath,NULL);
 	else
 		filepathcopy=strdup(filepath);
 
 	filename=g_path_get_basename(filepathcopy);
-//printf("--------------------\n");
 
 	for(int j=0; j<gtk_notebook_get_n_pages(mainNotebook); j++)
 		{
 			page=getPageStructByIDFromPage(j);
 			if(page!=NULL)
 				{
-//				printf("++++++++++++++++++++\n");
 					if(noDuplicates==true)
 						{
 							tpath=realpath(filepath,NULL);
-							//printf(">>>%s<<<\n",tpath);
 							if((tpath!=NULL) &&(page->realFilePath!=NULL) &&(strcmp(page->realFilePath,tpath)==0))
 								{
 									gtk_notebook_set_current_page(mainNotebook,j);
@@ -1065,7 +1062,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 						}
 				}
 		}
-//printf("<<<<<<<<<<<<<<<<<<<<<<<<<\n");
 
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		{
@@ -1124,17 +1120,13 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	if(dataLen>0)
 		{
 			gtk_source_buffer_begin_not_undoable_action(page->buffer);
-				gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&startiter);
-				gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(page->buffer),&enditer);
-				gtk_text_buffer_delete(GTK_TEXT_BUFFER(page->buffer),&startiter,&enditer);
-				gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&startiter);
 				whattodo=GTK_RESPONSE_YES;
 				if(g_utf8_validate((const gchar*)convertedData,dataLen,&end)==false)
 					whattodo=yesNo(DIALOG_YESNO_NON_TEXT_LABEL,(char*)filepath);
 				if(whattodo==GTK_RESPONSE_YES)
 					{
 						dataLen=(long)end-(long)convertedData;
-						gtk_text_buffer_insert(GTK_TEXT_BUFFER(page->buffer),&startiter,convertedData,dataLen);
+						gtk_text_buffer_set_text((GtkTextBuffer*)page->buffer,convertedData,dataLen);
 					}
 				else
 					{
@@ -1146,10 +1138,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	else
 		{
 			gtk_source_buffer_begin_not_undoable_action(page->buffer);
-				gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&startiter);
-				gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(page->buffer),&enditer);
-				gtk_text_buffer_delete(GTK_TEXT_BUFFER(page->buffer),&startiter,&enditer);
-				gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(page->buffer),&startiter);
+				gtk_text_buffer_set_text((GtkTextBuffer*)page->buffer,"",-1);
 			gtk_source_buffer_end_not_undoable_action(page->buffer);
 		}
 	ERRDATA debugFree(&convertedData);
@@ -1208,10 +1197,11 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	page->canUndo=false;
 	page->canRedo=false;
 	page->isDirty=false;
+	currentPageStruct=page;
 	setPageSensitive();
 	rebuildTabsMenu();
 
-//	_LEAVE_
+	_LEAVE_
 	ERRDATA return(TRUE);
 }
 
