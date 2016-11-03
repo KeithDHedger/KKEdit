@@ -637,6 +637,15 @@ VISIBLE void saveSession(const char *filename,const char *path)
 	ERRDATA
 }
 
+//void timing(bool start)
+//{
+//
+//	clock_gettime(CLOCK_MONOTONIC,&now);
+//
+//}
+#include <time.h>
+#include <sys/time.h>
+
 VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
@@ -652,8 +661,11 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 	int			hidden;
 	int			winx=0,winy=0;
 	int			width=800,hite=600;
+	bool		goodfile=false;
 
+	_ENTER_
 	ERRDATA
+
 	loadingSession=true;
 	fromGOpen=false;
 	waitForFinish=false;
@@ -681,52 +693,56 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 
 			while(fgets(buffer,2048,fd)!=NULL)
 				{
-
-					sscanf(buffer,"%i %i %[^\n]s",(int*)&currentline,(int*)&hidden,(char*)&strarg);
 //skip reserved
-					if(strcmp(buffer,"#RESERVED")==0)
+					if(strcmp(buffer,"#RESERVED\n")==0)
 						continue;
+					strarg[0]=0;
+					sscanf(buffer,"%i %i %[^\n]s",(int*)&currentline,(int*)&hidden,(char*)&strarg);
 					setBarberPoleMessage(strarg);
-					g_signal_handler_unblock(mainNotebook,switchPageHandler);
-					if(openFile(strarg,currentline,true)==false)
+					if(strlen(strarg)>0)
 						{
+							g_signal_handler_unblock(mainNotebook,switchPageHandler);
+								goodfile=openFile(strarg,currentline,true);
 							g_signal_handler_block(mainNotebook,switchPageHandler);
-							intarg=999;
-							while(intarg!=-1)
+							if(goodfile==true)
 								{
-									sinkReturnStr=fgets(buffer,2048,fd);
-									sscanf(buffer,"%i",(int*)&intarg);
-								}
-						}
-					else
-						{
-							g_signal_handler_block(mainNotebook,switchPageHandler);
-							sinkReturnStr=fgets(buffer,2048,fd);
-							sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
-							page=getPageStructByIDFromPage(currentPage-1);
-							gtk_notebook_set_current_page(mainNotebook,currentPage-1);
-							while(intarg!=-1)
-								{
-									gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
-									gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
-									toggleBookmark(NULL,&markiter);
 									sinkReturnStr=fgets(buffer,2048,fd);
 									sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
-								}
+									page=getPageStructByIDFromPage(currentPage-1);
+									//gtk_notebook_set_current_page(mainNotebook,currentPage-1);
+									intarg=999;
+									while(intarg!=-1)
+										{
+											if(strcmp(buffer,"#RESERVED\n")!=0)
+												{
+													gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,intarg);
+													gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
+													toggleBookmark(NULL,&markiter);
+												}
+											sinkReturnStr=fgets(buffer,2048,fd);
+											sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
+										}
 							
-							gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)page->buffer,&markiter,currentline);
-							gtk_text_buffer_place_cursor((GtkTextBuffer*)page->buffer,&markiter);
-
-							if(hidden==true)
-								hideTab(NULL,(void*)page);
+									gotoLine(NULL,(gpointer)(long)currentline);
+									if(hidden==true)
+										hideTab(NULL,(void*)page);
+									else
+										page->hidden=false;
+								}
 							else
-								page->hidden=false;
+								{
+									intarg=999;
+									while(intarg!=-1)
+										{
+											sinkReturnStr=fgets(buffer,2048,fd);
+											sscanf(buffer,"%i",(int*)&intarg);
+										}
+								}
 						}
 				}
 			fclose(fd);
 			ERRDATA debugFree(&filename);
 		}
-
 	setBarberPoleMessage("Finishing ...");
 	currentTabNumber=gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)-1;
 	for(int j=0;j<gtk_notebook_get_n_pages(mainNotebook);j++)
@@ -748,7 +764,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 	updateStatusBar(NULL,NULL,NULL,NULL);
 
 	killBarberPole();
-
+	_LEAVE_
 	ERRDATA
 }
 
@@ -1027,21 +1043,26 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	int						whattodo;
 	const gchar				*end;
 
+	//_ENTER_
+	//printf("filepath=>>>%s<<\n",filepath);
 	if(readLinkFirst==true)
 		filepathcopy=realpath(filepath,NULL);
 	else
 		filepathcopy=strdup(filepath);
 
 	filename=g_path_get_basename(filepathcopy);
+//printf("--------------------\n");
 
 	for(int j=0; j<gtk_notebook_get_n_pages(mainNotebook); j++)
 		{
 			page=getPageStructByIDFromPage(j);
 			if(page!=NULL)
 				{
+//				printf("++++++++++++++++++++\n");
 					if(noDuplicates==true)
 						{
 							tpath=realpath(filepath,NULL);
+							//printf(">>>%s<<<\n",tpath);
 							if((tpath!=NULL) &&(page->realFilePath!=NULL) &&(strcmp(page->realFilePath,tpath)==0))
 								{
 									gtk_notebook_set_current_page(mainNotebook,j);
@@ -1053,6 +1074,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 						}
 				}
 		}
+//printf("<<<<<<<<<<<<<<<<<<<<<<<<<\n");
 
 	if(!g_file_test(filepath,G_FILE_TEST_EXISTS))
 		{
@@ -1152,7 +1174,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	ERRDATA debugFree(&recenturi);
 	ERRDATA debugFree(&str);
 	ERRDATA debugFree(&filepathcopy);
-
 //connect to mainNotebook
 	gtk_container_add(GTK_CONTAINER(page->tabVbox),GTK_WIDGET(page->pageWindow));
 	g_object_set_data(G_OBJECT(page->tabVbox),"pageid",(gpointer)(long)page->pageID);
@@ -1199,6 +1220,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	setPageSensitive();
 	rebuildTabsMenu();
 
+//	_LEAVE_
 	ERRDATA return(TRUE);
 }
 

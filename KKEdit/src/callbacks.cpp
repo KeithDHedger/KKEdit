@@ -239,8 +239,11 @@ VISIBLE void closeAllTabs(GtkWidget *widget,gpointer data)
 #ifdef _BUILDDOCVIEWER_
 	if(inWindow==false)
 		{
-			showHideDocviewer=true;
-			toggleDocviewer(NULL,NULL);
+			if(docView!=NULL)
+				{
+					showHideDocviewer=true;
+					toggleDocviewer(NULL,NULL);
+				}
 			numpages--;
 		}
 #endif

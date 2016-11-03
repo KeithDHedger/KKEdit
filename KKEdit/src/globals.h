@@ -29,6 +29,7 @@
 #define DBG3 3 //debug to both
 #define DBG4 4 //only catch faults
 #define DBG5 5 //trace progflow
+#define DBG6 6 //trace and timing
 
 #define REPLACENEXT		100
 #define REPLACEPREV		200
@@ -37,11 +38,17 @@
 
 #if _DEBUGLEVEL_ == DBG0
 #define ERRDATA
+#define _ENTER_
+#define _LEAVE_
 #else
 #if _DEBUGLEVEL_ == DBG5
 #define ERRDATA errLine=__LINE__,errFile=__FILE__,errFunc=__func__;printf("File: %s,Func: %s,Line: %i\n",errFile,errFunc,errLine);
 #else
 #define ERRDATA errLine=__LINE__,errFile=__FILE__,errFunc=__func__;
+#endif
+#if _DEBUGLEVEL_ == DBG6
+#define _ENTER_ struct timeval then;struct timeval now;gettimeofday(&then,NULL);printf("Entered %s\n",__func__);
+#define _LEAVE_ gettimeofday(&now,NULL);double diff=(double)((((now.tv_sec-then.tv_sec)*1000000L+now.tv_usec)-then.tv_usec))/1000000L;printf("Time spent in function=%.3f\n",diff);
 #endif
 #endif
 
