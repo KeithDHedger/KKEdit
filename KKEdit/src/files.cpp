@@ -645,7 +645,6 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 	char		buffer[2048];
 	int			intarg;
 	char		strarg[2048];
-//	pageStruct	*page=NULL;
 	GtkTextIter	markiter;
 	int			currentline;
 	TextBuffer	*buf=new TextBuffer;
@@ -653,6 +652,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 	int			winx=0,winy=0;
 	int			width=800,hite=600;
 	bool		goodfile=false;
+	GtkTextMark	*mark;
 
 	_ENTER_
 	ERRDATA
@@ -699,9 +699,6 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 								{
 									sinkReturnStr=fgets(buffer,2048,fd);
 									sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
-									//page=getPageStructByIDFromPage(currentPage-1);
-									//page=currentPageStruct;
-									//gtk_notebook_set_current_page(mainNotebook,currentPage-1);
 									intarg=999;
 									while(intarg!=-1)
 										{
@@ -714,7 +711,6 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 											sinkReturnStr=fgets(buffer,2048,fd);
 											sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 										}
-							
 									gotoLine(NULL,(gpointer)(long)currentline);
 									if(hidden==true)
 										hideTab(NULL,(void*)currentPageStruct);
@@ -1035,7 +1031,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	int						whattodo;
 	const gchar				*end;
 
-	_ENTER_
+//	_ENTER_
 	if(readLinkFirst==true)
 		filepathcopy=realpath(filepath,NULL);
 	else
@@ -1184,6 +1180,10 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	if(fromGOpen==true)
 		gtk_widget_show_all((GtkWidget*)(GtkTextView*)page->view);
 
+	page->canUndo=false;
+	page->canRedo=false;
+	page->isDirty=false;
+
 	if(loadingSession==false)
 		{
 			TextBuffer	*buf;
@@ -1193,15 +1193,11 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 //yet another gtk3 hack;
 			buf->scroll2CentreScreen((GtkTextView*)page->view,false);
 			delete buf;
+			setPageSensitive();
+			rebuildTabsMenu();
 		}
-	page->canUndo=false;
-	page->canRedo=false;
-	page->isDirty=false;
 	currentPageStruct=page;
-	setPageSensitive();
-	rebuildTabsMenu();
-
-	_LEAVE_
+//	_LEAVE_
 	ERRDATA return(TRUE);
 }
 

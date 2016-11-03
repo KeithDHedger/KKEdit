@@ -208,10 +208,10 @@ void TextBuffer::scroll2OnScreen(GtkTextView *view)
 
 #ifndef _USEGTK3_
 	bool			didscroll;
-	didscroll=gtk_text_view_scroll_to_iter(view,&iter,0,false,0,0);
+	didscroll=gtk_text_view_scroll_to_iter(view,&iter,0.05,false,0,0);
 	if(didscroll==true)
 #else
-	gtk_text_view_scroll_to_iter(view,&iter,0,false,0,0);
+	gtk_text_view_scroll_to_iter(view,&iter,0.05,false,0,0);
 #endif
 		gtk_text_view_scroll_mark_onscreen(view,mark);
 }
