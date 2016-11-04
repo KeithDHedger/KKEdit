@@ -1031,7 +1031,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	int						whattodo;
 	const gchar				*end;
 
-//	_ENTER_
+	_ENTER_
 	if(readLinkFirst==true)
 		filepathcopy=realpath(filepath,NULL);
 	else
@@ -1193,11 +1193,11 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 //yet another gtk3 hack;
 			buf->scroll2CentreScreen((GtkTextView*)page->view,false);
 			delete buf;
-			setPageSensitive();
 			rebuildTabsMenu();
 		}
+	setPageSensitive();
 	currentPageStruct=page;
-//	_LEAVE_
+	_LEAVE_
 	ERRDATA return(TRUE);
 }
 
