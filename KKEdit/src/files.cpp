@@ -692,9 +692,9 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 					setBarberPoleMessage(strarg);
 					if(strlen(strarg)>0)
 						{
-							g_signal_handler_unblock(mainNotebook,switchPageHandler);
+							//g_signal_handler_unblock(mainNotebook,switchPageHandler);
 								goodfile=openFile(strarg,currentline,true);
-							g_signal_handler_block(mainNotebook,switchPageHandler);
+							//g_signal_handler_block(mainNotebook,switchPageHandler);
 							if(goodfile==true)
 								{
 									sinkReturnStr=fgets(buffer,2048,fd);
@@ -739,7 +739,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 			if(page!=NULL)
 				{
 					buf->textBuffer=(GtkTextBuffer*)page->buffer;
-					buf->scroll2CentreScreen((GtkTextView*)page->view,false);
+					buf->scroll2CentreScreen((GtkTextView*)page->view,true);
 				}
 		}
 	delete buf;
@@ -1031,7 +1031,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	int						whattodo;
 	const gchar				*end;
 
-	_ENTER_
+//	_ENTER_
 	if(readLinkFirst==true)
 		filepathcopy=realpath(filepath,NULL);
 	else
@@ -1082,7 +1082,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 
 	if(linenum<0)
 		linenum=0;
-
 	page=makeNewPage();
 	page->tabVbox=createNewBox(NEWVBOX,true,4);
 	page->filePath=strdup(filepathcopy);
@@ -1160,6 +1159,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 		currentPage=gtk_notebook_insert_page(mainNotebook,page->tabVbox,label,openInThisTab+1);
 
 	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
+
+	gtk_widget_show(page->tabVbox);
 	gtk_notebook_set_current_page(mainNotebook,currentPage);
 
 	if(openInThisTab==-1)
@@ -1169,8 +1170,8 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(page->buffer),false);
 	gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
 
-	gtk_widget_show_all((GtkWidget*)page->tabVbox);
-	gtk_widget_show_all(menuBar);
+	gtk_widget_show((GtkWidget*)page->pageWindow);
+	gtk_widget_show((GtkWidget*)page->view);
 	setFilePrefs(page);
 
 	globalPlugins->globalPlugData->page=page;
@@ -1197,7 +1198,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 		}
 	setPageSensitive();
 	currentPageStruct=page;
-	_LEAVE_
+//	_LEAVE_
 	ERRDATA return(TRUE);
 }
 
