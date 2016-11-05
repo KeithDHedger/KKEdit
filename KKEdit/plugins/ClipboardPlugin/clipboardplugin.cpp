@@ -204,7 +204,7 @@ extern "C" int doAbout(gpointer data)
 
 	g_file_get_contents(licencepath,&licence,NULL,NULL);
 	about=(GtkAboutDialog*)gtk_about_dialog_new();
-	gtk_about_dialog_set_program_name(about,gettext("ClipboardPlugin"));
+	gtk_about_dialog_set_program_name(about,gettext("Clipboard Plugin"));
 	gtk_about_dialog_set_authors(about,authors);
 	gtk_about_dialog_set_comments(about,aboutboxstring);
 	gtk_about_dialog_set_copyright(about,copyright);

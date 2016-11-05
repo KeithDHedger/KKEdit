@@ -1,4 +1,5 @@
 0.4.2
+Added symbol menu plugin.
 Speed tweaks for restore session.
 Moving line/selection off the top/bottom of page with shortcutkey now scroll's a couple of lines before.
 Added --no-autosession,-a to options to temporarily disable auto loading/saving of session.
