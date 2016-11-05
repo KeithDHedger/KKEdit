@@ -44,12 +44,16 @@
 #define ABOUTICON "KKEditPlug"
 #endif
 
-char*			prefsPath;
-GtkWidget		*menuPlug;
-char			*sinkReturnStr;
-int				sinkReturn;
-GtkClipboard	*mainClipboard;
-char			*currentdomain=NULL;
+extern bool			showStatus;
+extern GtkWidget	*statusWidget;
+
+char*				prefsPath;
+GtkWidget			*menuPlug;
+char				*sinkReturnStr;
+int					sinkReturn;
+GtkClipboard		*mainClipboard;
+char				*currentdomain=NULL;
+
 int	(*module_plug_function)(gpointer globaldata);
 
 extern "C" const gchar* g_module_check_init(GModule *module)
@@ -82,6 +86,16 @@ void setTextDomain(bool plugdomain,plugData* pdata)
 
 void copySymbol(GtkWidget* widget,gpointer data)
 {
+	char	*message=NULL;
+	gtk_clipboard_set_text(mainClipboard,gtk_menu_item_get_label((GtkMenuItem*)widget),-1);
+
+	if((showStatus==false))
+		return;
+
+	gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,0);
+	sinkReturn=asprintf(&message,"Copied %s to clipboard ...",gtk_menu_item_get_label((GtkMenuItem*)widget));
+	gtk_statusbar_push((GtkStatusbar*)statusWidget,0,message);
+	free(message);
 	gtk_clipboard_set_text(mainClipboard,gtk_menu_item_get_label((GtkMenuItem*)widget),-1);
 }
 

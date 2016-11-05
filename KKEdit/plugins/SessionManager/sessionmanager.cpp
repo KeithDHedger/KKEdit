@@ -45,7 +45,6 @@
 #define ABOUTICON "KKEditPlug"
 #endif
 
-
 char		*prefsPath;
 GtkWidget*	menuPlug;
 GtkWidget*	saveSessionMenu=NULL;
