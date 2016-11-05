@@ -20,3 +20,4 @@ install: all
 	cp $(SONAME).so $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk
 	cp po/fr_FR/LC_MESSAGES/SymbolMenuPlugin.mo  $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES
 	cp indicator-chars.txt $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk
+	chmod 644 $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk/indicator-chars.txt
