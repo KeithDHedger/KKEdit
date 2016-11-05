@@ -191,7 +191,6 @@ extern "C" int doAbout(gpointer data)
 {
 	plugData		*plugdata=(plugData*)data;
 	char			*licencepath;
-	const char		copyright[] ="Copyright \xc2\xa9 2014 K.D.Hedger";
 	char			*licence;
 	GtkAboutDialog	*about;
 	char			*translators;
@@ -207,7 +206,7 @@ extern "C" int doAbout(gpointer data)
 	gtk_about_dialog_set_program_name(about,gettext("Clipboard Plugin"));
 	gtk_about_dialog_set_authors(about,authors);
 	gtk_about_dialog_set_comments(about,aboutboxstring);
-	gtk_about_dialog_set_copyright(about,copyright);
+	gtk_about_dialog_set_copyright(about,COPYRITE);
 	gtk_about_dialog_set_version(about,PLUGVERSION);
 	gtk_about_dialog_set_website(about,MYWEBSITE);
 	gtk_about_dialog_set_logo_icon_name(about,ABOUTICON);
