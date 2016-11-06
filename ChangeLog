@@ -1,4 +1,5 @@
 0.4.2
+Fixed rebuild tab list on restoring session.
 Updated copyright notice in about boxes.
 Added symbol menu plugin.
 Speed tweaks for restore session.
