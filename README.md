@@ -35,3 +35,5 @@ You may need to install gtk3 dev files if your distro splits them off from the m
 gtk-version branch has now been synced with master branch and you shoud now be using the master branch.
 
 *bsd* compile abandoned for the moment as webkit is broken on freeports, can be used with --disable-docviewer.
+
+** When building from a fesh clone for the first time, please use ./autogen.sh instead of ./configure, args passed to autogen.sh are the same for configure, this only needs to be done on a fresh clone **
