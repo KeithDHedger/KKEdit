@@ -748,6 +748,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 	while(gtk_events_pending())
 		gtk_main_iteration();
 	loadingSession=false;
+	rebuildTabsMenu();
 	g_signal_handler_unblock(mainNotebook,switchPageHandler);
 	updateStatusBar(NULL,NULL,NULL,NULL);
 
