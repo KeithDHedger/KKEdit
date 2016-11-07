@@ -7,9 +7,6 @@ makenagtime
 KKEdit/src/html
 KKEdit/src/searchdata.xml
 translations/
-aclocal.m4
-config.guess
-config.sub
 
 *~
 
