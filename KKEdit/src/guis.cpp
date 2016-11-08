@@ -1620,7 +1620,7 @@ void setupRecent(GtkWidget *widg)
 
 	filter=gtk_recent_filter_new();
 	gtk_recent_filter_add_application(filter,APPEXECNAME);
-	gtk_recent_chooser_set_filter(GTK_RECENT_CHOOSER(recentMenu),filter);
+	gtk_recent_chooser_set_filter(GTK_RECENT_CHOOSER(widg),filter);
 	g_signal_connect(widg,"item_activated",G_CALLBACK(recentFileMenu),NULL);
 }
 
@@ -1962,8 +1962,8 @@ void buildMainGui(void)
 
 	recentMenu=gtk_recent_chooser_menu_new();
 	recentToolBar=gtk_recent_chooser_menu_new();
-	setupRecent(recentMenu);
 	setupRecent(recentToolBar);
+	setupRecent(recentMenu);
 	g_object_ref(recentToolBar);
 
 	setUpToolBar();
