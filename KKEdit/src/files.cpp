@@ -490,14 +490,20 @@ VISIBLE void openAsHexDump(GtkWidget *widget,gpointer user_data)
 	int				pagenum;
 	FILE			*fp;
 	char			line[1024];
-	GString		*str=g_string_new(NULL);
+	GString			*str=g_string_new(NULL);
 	char			*command;
 	GtkTextIter		iter;
 	pageStruct		*page;
 	char			*convstr=NULL;
 
 	ERRDATA
-	dialog=gtk_file_chooser_dialog_new(OPEN_TT_LABEL,NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN,GTK_RESPONSE_ACCEPT,NULL);
+
+#ifdef _USEGTK3_
+	dialog=gtk_file_chooser_dialog_new(OPEN_TT_LABEL,NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN_LABEL, GTK_RESPONSE_ACCEPT,NULL);
+#else
+	dialog=gtk_file_chooser_dialog_new(OPEN_TT_LABEL,NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,NULL);
+#endif
+	gtk_window_set_transient_for((GtkWindow*)dialog,(GtkWindow*)mainWindow);
 	if(gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_ACCEPT)
 		{
 			filepath=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
@@ -1003,7 +1009,7 @@ void convertContents(char *data,int datalen)
 	len_src=datalen;
 	len_dst=len_src * 8;
     cd=iconv_open("UTF-8",charset);
-	convertedData=(char*)malloc(datalen*8);
+	convertedData=(char*)malloc(datalen*16);
 	startptr=convertedData;
 
     iconv(cd,&data,&len_src,&startptr,&len_dst);
@@ -1232,7 +1238,7 @@ VISIBLE void newFile(GtkWidget *widget,gpointer data)
 	gtk_notebook_append_page(mainNotebook,page->tabVbox,label);
 	gtk_notebook_set_tab_reorderable(mainNotebook,page->tabVbox,true);
 
-	gtk_notebook_set_current_page(mainNotebook,currentPage);
+	gtk_notebook_set_current_page(mainNotebook,gtk_notebook_get_n_pages(mainNotebook)-1);
 	currentPage++;
 	gtk_widget_show_all((GtkWidget*)page->tabVbox);
 	setFilePrefs(page);
@@ -1257,6 +1263,7 @@ VISIBLE void doOpenFile(GtkWidget *widget,gpointer data)
 #else
 	dialog=gtk_file_chooser_dialog_new(OPEN_TT_LABEL,NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,NULL);
 #endif
+	gtk_window_set_transient_for((GtkWindow*)dialog,(GtkWindow*)mainWindow);
 	gtk_file_chooser_set_select_multiple((GtkFileChooser*)dialog,true);
 	if(gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_ACCEPT)
 		{

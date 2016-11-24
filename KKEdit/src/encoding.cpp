@@ -351,16 +351,27 @@ const gchar *detect_charset(const gchar *text)
 	ERRDATA
 	guint8		c=*text;
 	const char*	charset=NULL;
-	
+
+	if(((unsigned char)text[0]==0xff) && ((unsigned char)text[1]==0xfe))
+		return("utf-16");
+
 	if(g_utf8_validate(text,-1,NULL))
 		{
 			while((c=*text++) != '\0')
 				{
+					if(c==0xFF)
+						{
+							charset="utf-16le";
+							return(charset);
+							break;
+						}
+
 					if(c > 0x7F)
 						{
 							charset="UTF-8";
 							break;
 						}
+
 					if(c==0x1B) /* ESC */
 						{
 							c=*text++;
@@ -396,6 +407,10 @@ const gchar *detect_charset(const gchar *text)
 				}
 			if(!charset)
 				charset=get_default_charset();
+		}
+	else
+		{
+			return("utf16");
 		}
 	
 	if(!charset)
