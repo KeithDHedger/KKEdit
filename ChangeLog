@@ -1,4 +1,5 @@
 0.4.2
+Fixed doc viewer not displaying properly in a tab.
 Fixed Recent menu again!
 Fixed rebuild tab list on restoring session.
 Updated copyright notice in about boxes.

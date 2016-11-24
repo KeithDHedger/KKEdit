@@ -1610,10 +1610,12 @@ void addRecentToMenuXXX(GtkRecentChooser *chooser,GtkWidget *menu)
 	ERRDATA
 }
 
-void setupRecent(GtkWidget *widg)
+GtkWidget *setupRecent(void)
 {
 	GtkRecentFilter	*filter;
+	GtkWidget		*widg;
 
+	widg=gtk_recent_chooser_menu_new();
 	gtk_recent_chooser_set_local_only(GTK_RECENT_CHOOSER(widg),false);
 	gtk_recent_chooser_set_sort_type(GTK_RECENT_CHOOSER(widg),GTK_RECENT_SORT_MRU);
 	gtk_recent_chooser_set_limit(GTK_RECENT_CHOOSER(widg),10);
@@ -1622,6 +1624,8 @@ void setupRecent(GtkWidget *widg)
 	gtk_recent_filter_add_application(filter,APPEXECNAME);
 	gtk_recent_chooser_set_filter(GTK_RECENT_CHOOSER(widg),filter);
 	g_signal_connect(widg,"item_activated",G_CALLBACK(recentFileMenu),NULL);
+
+	return(widg);
 }
 
 void buildMenus(void)
@@ -1960,10 +1964,8 @@ void buildMainGui(void)
 	gtk_drag_dest_add_uri_targets(mainWindowVBox);
 	g_signal_connect(G_OBJECT(mainWindowVBox),"drag_data_received",G_CALLBACK(dropUri),NULL);
 
-	recentMenu=gtk_recent_chooser_menu_new();
-	recentToolBar=gtk_recent_chooser_menu_new();
-	setupRecent(recentToolBar);
-	setupRecent(recentMenu);
+	recentMenu=setupRecent();
+	recentToolBar=setupRecent();
 	g_object_ref(recentToolBar);
 
 	setUpToolBar();
@@ -2400,12 +2402,15 @@ void buildGtkDocViewer(void)
 
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,false,false,4);
 
-	gtk_container_add(GTK_CONTAINER(docView),vbox);
+	if(inWindow==true)
+		gtk_container_add(GTK_CONTAINER(docView),vbox);
+	else
+		gtk_box_pack_start(GTK_BOX(docView),(GtkWidget*)vbox,true,true,2);
+
+
 	gtk_widget_grab_focus(GTK_WIDGET(webView));
 
-//#ifdef _BUILDDOCVIEWER_
 	g_signal_connect_object(G_OBJECT(docView),"delete-event",G_CALLBACK(toggleDocviewer),G_OBJECT(docView),G_CONNECT_SWAPPED);
-//#endif
 	const char *lang;
 
 	if(strncmp(localeLang,"en",2)==0)
@@ -2423,7 +2428,6 @@ void buildGtkDocViewer(void)
 		}
 }
 #endif
-
 
 
 

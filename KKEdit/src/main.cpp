@@ -545,7 +545,6 @@ int main(int argc, char **argv)
 	int				status;
 	char			*dbusname;
 	GOptionContext	*context;
-
 #if _DEBUGLEVEL_ > DBG0
 	int				data[]={SIGSEGV,SIGFPE,SIGILL,SIGBUS,SIGINT,SIGABRT};
 	int				num=6;
