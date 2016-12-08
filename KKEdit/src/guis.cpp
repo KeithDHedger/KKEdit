@@ -207,6 +207,7 @@ GtkWidget* newMenuItem(unsigned menunumber,GtkWidget *parent)
 			pad=createNewBox(NEWHBOX,false,0);
 
 			image=gtk_image_new_from_icon_name(menuData[menunumber].stockID,GTK_ICON_SIZE_MENU);
+			gtk_image_set_pixel_size ((GtkImage*)image,16);
 			gtk_box_pack_start((GtkBox*)menuhbox,image,false,false,0);
 
 			asprintf(&labelwithspace," %s",gettext(menuData[menunumber].menuLabel));
@@ -257,6 +258,7 @@ GtkWidget* newImageMenuItem(unsigned menunumber,GtkWidget *parent)
 			pad=createNewBox(NEWHBOX,false,0);
 
 			image=gtk_image_new_from_icon_name(menuData[menunumber].stockID,GTK_ICON_SIZE_MENU);
+			gtk_image_set_pixel_size ((GtkImage*)image,16);
 			gtk_box_pack_start((GtkBox*)menuhbox,image,false,false,0);
 
 			//gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
@@ -311,6 +313,7 @@ GtkWidget* newPixmapMenuItem(unsigned menunumber,GtkWidget *parent)
 			pad=createNewBox(NEWHBOX,false,0);
 
 			image=gtk_image_new_from_file(menuData[menunumber].stockID);
+			gtk_image_set_pixel_size ((GtkImage*)image,16);
 			gtk_box_pack_start((GtkBox*)menuhbox,image,false,false,0);
 
 			//gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
@@ -442,6 +445,8 @@ void setUpToolBar(void)
 //open+recent
 #ifdef _USEGTK3_
 						image=gtk_image_new_from_icon_name(GTK_STOCK_OPEN,GTK_ICON_SIZE_LARGE_TOOLBAR);
+						gtk_image_set_pixel_size ((GtkImage*)image,24);
+
 						openButton=gtk_menu_tool_button_new(image,OPEN_TOOLBAR_LABEL);
 #else
 						openButton=gtk_menu_tool_button_new_from_stock(GTK_STOCK_OPEN);
