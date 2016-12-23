@@ -762,7 +762,7 @@ void menuJumpBack(GtkWidget *widget,gpointer data)
 			for(int loop=0;loop<gtk_notebook_get_n_pages(mainNotebook);loop++)
 				{
 					checkpage=getPageStructByIDFromPage(loop);
-					if(checkpage->pageID==pageid)
+					if((checkpage!=NULL) && (checkpage->pageID==pageid))
 						{
 							globalHistory->saveLastPos();
 							buf=new TextBuffer((GtkTextBuffer*)page->buffer);

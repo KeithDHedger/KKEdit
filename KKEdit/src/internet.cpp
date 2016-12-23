@@ -21,18 +21,34 @@
 #include "config.h"
 #include "internet.h"
 
+#ifndef _USEQT5_
 const char	*moreapps[]={
 								"\nMore by the same author\n",
 								"KKEdit\nhttp://kkedit.darktech.org/\n",
 								"KKTerminal\nhttp://khapplications.darktech.org/pages/kkterminal/kkterminal.html\n",
+								"KKFileManager\nhttps://github.com/KeithDHedger/KKFileManager\n",
 								"XDecorations\nhttp://khapplications.darktech.org/pages/xdecorations/xdecorations.html\n",
 								"Xfce-Theme-Manager\nhttp://khapplications.darktech.org/pages/apps.html#themeed\n",
 								"Xfce4-Composite-Editor\nhttp://khapplications.darktech.org/pages/apps.html#xfcecomp\n",
 								"Manpage Editor\nhttp://khapplications.darktech.org/pages/manpageeditor/help.html\n",
 								"GtkSu\nhttp://khapplications.darktech.org/pages/gtksu/gtksu.html\n",
 								"ASpell GUI\nhttp://khapplications.darktech.org/pages/aspellgui/aspelgui.html\n",
-								"Clipboard Viewer\nhttp://khapplications.darktech.org/pages/clipviewer/clip.html\n",
-								"\nDevelopment versions can be found here:\nhttp://github.com/KeithDHedger\n"
+								"Clipboard Viewer\nhttp://khapplications.darktech.org/pages/clipviewer/clip.html",
+								"\nDevelopment versions can be found here:\nhttp://github.com/KeithDHedger"
 							};
 
-const char	*authors[]={"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,moreapps[0],moreapps[1],moreapps[2],moreapps[3],moreapps[4],moreapps[5],moreapps[6],moreapps[7],moreapps[8],moreapps[9],moreapps[10],NULL};
+const char	*authors[]={"K.D.Hedger <" MYEMAIL ">",MYWEBSITE,moreapps[0],moreapps[1],moreapps[2],moreapps[3],moreapps[4],moreapps[5],moreapps[6],moreapps[7],moreapps[8],moreapps[9],NULL};
+#else
+const char	*authors="K.D.Hedger ©2013-2014<br><a href=\"mailto:" MYEMAIL "\">Email Me</a><br>" \
+				"<a href=\"" GLOBALWEBSITE "\">Homepage</a>" \
+				"<br><br>More by the same author<br>" \
+				
+				"<a href=\"http://kkedit.darktech.org\">KKEdit<br>" \
+				"<a href=\"http://khapplications.darktech.org/pages/xdecorations/xdecorations.html\">XDecorations<br>" \
+				"<a href=\"http://khapplications.darktech.org/pages/apps.html#themeed\">Xfce-Theme-Manager<br>" \
+				"<a href=\"http://khapplications.darktech.org/pages/apps.html#xfcecomp\">Xfce4-Composite-Editor<br>" \
+				"<a href=\"http://khapplications.darktech.org/pages/manpageeditor/help.html\">Manpage Editor<br>" \
+				"<a href=\"http://khapplications.darktech.org/pages/gtksu/gtksu.html\">GtkSu<br>" \
+				"<a href=\"http://khapplications.darktech.org/pages/aspellgui/aspelgui.html\">ASpell<br>" \
+				"<a href=\"http://khapplications.darktech.org/pages/clipviewer/clip.html\">Clipboard Viewer<br>";
+#endif

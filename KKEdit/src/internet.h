@@ -28,11 +28,14 @@
 #define THEMEMANAGER GLOBALWEBSITE "/pages/apps.html#themeed"
 #define COMPMANAGER GLOBALWEBSITE "/pages/apps.html#xfcecomp"
 #define KKEDITPAGE "http://kkedit.darktech.org"
-#define KKTERMINALPAGE "http://khapplications.darktech.org/index.html"
+#define KKTERMINALPAGE "http://khapplications.darktech.org/pages/kkterminal/kkterminal.html"
 
 #define COPYRITE "Copyright \xc2\xa9 2013-2016 K.D.Hedger"
 
+#ifndef _USEQT5_
 extern const char	*moreapps[];
 extern const char	*authors[];
-
+#else
+extern const char*	authors;
+#endif
 #endif

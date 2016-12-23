@@ -1,5 +1,6 @@
 0.4.2
-fixed wrong sized icons in menus and toolbar for certain themes in gtk3 version.
+Fixed segfaule on selecting back/forward menu item on gtk3.
+Fixed wrong sized icons in menus and toolbar for certain themes in gtk3 version.
 Fixed wrong button label on open dialog.
 Fixed opening utf16 encoded file.
 Fixed open as hexdump not writing to new tab.
