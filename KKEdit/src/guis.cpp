@@ -147,6 +147,7 @@ menuDataStruct	menuData[]=
 #endif
 		{SOURCE_HILITE_LABEL,GTK_STOCK_PREFERENCES,0,0,NULL,NULL,NULL},
 		{MENU_HIDE_TAB_LABEL,GTK_STOCK_REMOVE,0,0,(void*)&hideTab,NULL,NULL},
+		{MENU_LOCK_TAB_LABEL,GTK_STOCK_REMOVE,0,0,(void*)&toggleReadOnly,NULL,NULL},
 
 		{NULL,NULL,0,0,NULL,NULL,NULL}
 	};
@@ -1951,8 +1952,8 @@ void buildMainGui(void)
 	GtkStyleProvider	*nbprovider;
 
 	nbprovider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
-	sinkReturn=asprintf(&notebookcss,"GtkNotebook {\n \
-    padding: 0px;\n \
+	sinkReturn=asprintf(&notebookcss,"* {\n \
+    padding: 0px 0px;\n  margin: 0px 0px;\n \
 }\n");
 
 	gtk_css_provider_load_from_data((GtkCssProvider*)nbprovider,notebookcss,-1,NULL);

@@ -1,4 +1,7 @@
 0.4.2
+Fixed tab size in gtk3 again!
+Added Lock/Unlock contents to tab popup.
+Fixed editor and viewer positions not being on screen at start up.
 Fixed segfaule on selecting back/forward menu item on gtk3.
 Fixed wrong sized icons in menus and toolbar for certain themes in gtk3 version.
 Fixed wrong button label on open dialog.

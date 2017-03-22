@@ -142,11 +142,10 @@ GtkWidget *makeNewTab(char *name,char *tooltip,pageStruct *page)
 	GtkWidget	*evbox=gtk_event_box_new();
 	GtkWidget	*hbox;
 	GtkWidget	*label;
-	GtkWidget	*close=gtk_image_new_from_icon_name(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
-
-	GtkWidget	*button=gtk_button_new();
-
 	char		*correctedname;
+
+	GtkWidget	*close=gtk_image_new_from_icon_name(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
+	GtkWidget	*button=gtk_button_new();
 
 	hbox=createNewBox(NEWHBOX,false,0);
 	correctedname=truncateWithElipses(name,maxTabChars);
@@ -158,7 +157,11 @@ GtkWidget *makeNewTab(char *name,char *tooltip,pageStruct *page)
 	gtk_widget_set_tooltip_text(label,tooltip);
 	gtk_box_pack_start(GTK_BOX(hbox),label,false,false,0);
 
+#ifdef _USEGTK3_
+	gtk_widget_set_focus_on_click((GtkWidget*)button,false);
+#else
 	gtk_button_set_focus_on_click(GTK_BUTTON(button),FALSE);
+#endif
 	gtk_container_add(GTK_CONTAINER(button),close);
 
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
@@ -178,6 +181,23 @@ GtkWidget *makeNewTab(char *name,char *tooltip,pageStruct *page)
 	gtk_widget_modify_style(button,style);
 	g_object_unref(G_OBJECT(style));
 #endif
+
+
+#ifdef _USEGTK3_
+	char	*notebookcss=NULL;
+	GtkStyleProvider	*nbprovider;
+
+	nbprovider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
+	sinkReturn=asprintf(&notebookcss,"*  {\n \
+    padding: 0px 10px 0px 10px;\n \
+}\n");
+
+	gtk_css_provider_load_from_data((GtkCssProvider*)nbprovider,notebookcss,-1,NULL);
+	applyCSS((GtkWidget*)evbox,nbprovider);
+	gtk_style_context_reset_widgets(gdk_screen_get_default());
+	debugFree(&notebookcss);
+#endif
+
 	gtk_widget_show_all(evbox);
 
 	ERRDATA
@@ -967,7 +987,7 @@ pageStruct *makeNewPage(void)
 	page->hidden=false;
 	page->startChar=-1;
 	page->endChar=-1;
-
+	page->isEditable=true;
 //dnd
 	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);
@@ -1191,6 +1211,7 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 	page->canUndo=false;
 	page->canRedo=false;
 	page->isDirty=false;
+	page->isEditable=true;
 
 	if(loadingSession==false)
 		{

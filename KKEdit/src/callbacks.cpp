@@ -958,6 +958,29 @@ void hideTab(GtkWidget *widget,gpointer data)
 	page->hidden=true;
 }
 
+void toggleReadOnly(GtkWidget *widget,gpointer data)
+{
+//	GtkTextIter startiter;
+//	GtkTextIter enditer;
+	
+	pageStruct	*page=(pageStruct*)data;
+	page->isEditable=!page->isEditable;
+//	gtk_text_buffer_get_start_iter ((GtkTextBuffer*)page->buffer,&startiter);
+//	gtk_text_buffer_get_end_iter ((GtkTextBuffer*)page->buffer,&enditer);
+//
+//gtk_text_buffer_select_range ((GtkTextBuffer*)page->buffer,
+ //                                &startiter,
+//                                 &enditer);
+//gtk_text_buffer_place_cursor ((GtkTextBuffer*)page->buffer,&startiter);
+
+	gtk_text_view_set_editable((GtkTextView*)page->view,page->isEditable);
+//	gtk_widget_show((GtkWidget*)page->view);
+//		styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
+//gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
+//setFilePrefs(page);
+//printf("page=%p, edit=%i widg edit=%i\n",page,page->isEditable,gtk_text_view_get_editable((GtkTextView*)page->view));
+}
+
 bool tabPopUp(GtkWidget *widget,GdkEventButton *event,gpointer user_data)
 {
 	ERRDATA
@@ -1061,6 +1084,24 @@ bool tabPopUp(GtkWidget *widget,GdkEventButton *event,gpointer user_data)
 //hide tab
 			menuData[TABHIDE].userData=(gpointer)page;
 			menuitem=newImageMenuItem(TABHIDE,tabMenu);
+
+//toggle make page readonly
+			if(page->isEditable==true)
+				{
+					menuData[TABLOCK].menuLabel=MENU_LOCK_TAB_LABEL;
+					menuData[TABLOCK].stockID=GTK_STOCK_REMOVE;
+					menuData[TABLOCK].userData=(gpointer)page;
+				}
+			else
+				{
+					menuData[TABLOCK].menuLabel=MENU_UNLOCK_TAB_LABEL;
+					menuData[TABLOCK].stockID=GTK_STOCK_ADD;
+					menuData[TABLOCK].userData=(gpointer)page;
+				}
+
+			menuData[TABLOCK].userData=(gpointer)page;
+			menuitem=newImageMenuItem(TABLOCK,tabMenu);
+
 //add files to tab
 			menuData[MENUOPEN].cb=NULL;
 			menuData[MENUOPEN].key=0;
@@ -1098,7 +1139,11 @@ bool tabPopUp(GtkWidget *widget,GdkEventButton *event,gpointer user_data)
 			g_list_foreach(globalPlugins->plugins,plugRunFunction,(gpointer)"addToTab");
 
 			gtk_menu_attach_to_widget(GTK_MENU(tabMenu),widget,NULL);
+#ifdef _USEGTK3_
+			gtk_menu_popup_at_pointer(GTK_MENU(tabMenu),NULL);
+#else
 			gtk_menu_popup(GTK_MENU(tabMenu),NULL,NULL,NULL,NULL,event->button,event->time);
+#endif
 			gtk_widget_show_all((GtkWidget*)tabMenu);
 			return(true);
 		}

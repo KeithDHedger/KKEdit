@@ -51,6 +51,9 @@ char* oneLiner(const char *command)
 void readConfig(void)
 {
 	ERRDATA
+	char	*scrwid;
+	char	*scrhite;
+
 	getOldConfigs("kkedit.rc",kkedit_rc);
 
 	getOldConfigs("kkedit.window.rc",kkedit_window_rc);
@@ -59,6 +62,22 @@ void readConfig(void)
 
 	if(docWindowAllocData!=NULL)
 		sscanf(docWindowAllocData,"%i %i %i %i",(int*)&docWindowWidth,(int*)&docWindowHeight,(int*)&docWindowX,(int*)&docWindowY);
+
+
+	scrwid=oneLiner("xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $3}'");
+	scrhite=oneLiner("xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $4}'");
+
+	if(atoi(scrwid)<windowX)
+		windowX=10;
+	if(atoi(scrhite)<windowY)
+		windowY=10;
+	if(atoi(scrwid)<docWindowX)
+		docWindowX=10;
+	if(atoi(scrhite)<docWindowY)
+		docWindowY=10;
+
+	free(scrwid);
+	free(scrhite);
 	ERRDATA
 }
 
@@ -500,8 +519,8 @@ void appStart(GApplication  *application,gpointer data)
 
 	provider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
 	sinkReturn=asprintf(&tabcss,"* {\n \
-  padding: %ipx; \n \
-}\n",tabsSize);
+  padding: %ipx %ipx;\n  margin: 0px 0px; \n \
+}\n",tabsSize,tabsSize);
 
 	tabBoxProvider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
 	gtk_css_provider_load_from_data((GtkCssProvider*)tabBoxProvider,tabcss,-1,NULL);

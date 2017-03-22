@@ -266,6 +266,16 @@ printf("XXXXXXXXX\n");
 	webkit_web_view_go_back((WebKitWebView*)data);
 }
 
+void gotoURL(GtkWidget *widget,GtkEntry *entry)
+{
+	const char *data=gtk_entry_get_text (entry);
+	if(data!=NULL)
+	{
+		printf("%s\n",data);
+	webkit_web_view_load_uri (browser,data);
+	}
+}
+
 GtkWidget* buildGtkDocViewer(void)
 {
 	GtkWidget	*vbox;
@@ -296,13 +306,13 @@ GtkWidget* buildGtkDocViewer(void)
 
 //	g_signal_connect(G_OBJECT(webView),"navigation-policy-decision-requested",G_CALLBACK(docLinkTrap),NULL);
 
-//	settings=webkit_web_view_get_settings(browser);
-//	g_object_set((gpointer)settings,"enable-file-access-from-file-uris",true,NULL);
-//	g_object_set((gpointer)settings,"enable-page-cache",true,NULL);
-//	g_object_set((gpointer)settings,"enable-plugins",false,NULL);
-//	g_object_set((gpointer)settings,"enable-caret-browsing",true,NULL);
-//	g_object_set((gpointer)settings,"enable-private-browsing",true,NULL);
-//	g_object_set((gpointer)settings,"enable-java-applet",false,NULL);
+	settings=webkit_web_view_get_settings(browser);
+	g_object_set((gpointer)settings,"enable-file-access-from-file-uris",true,NULL);
+	g_object_set((gpointer)settings,"enable-page-cache",true,NULL);
+	g_object_set((gpointer)settings,"enable-plugins",false,NULL);
+	g_object_set((gpointer)settings,"enable-caret-browsing",true,NULL);
+	g_object_set((gpointer)settings,"enable-private-browsing",true,NULL);
+	g_object_set((gpointer)settings,"enable-java-applet",false,NULL);
 //
 //	scrolledWindow=gtk_scrolled_window_new(NULL,NULL);
 //	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledWindow),GTK_POLICY_ALWAYS,GTK_POLICY_ALWAYS);
@@ -330,7 +340,7 @@ GtkWidget* buildGtkDocViewer(void)
 //	//findbutton=createNewStockButton(GTK_STOCK_FIND,MENU_FIND_LABEL);
 	findbutton=createNewStockButton(GTK_STOCK_FIND,"Find");
 	gtk_box_pack_start(GTK_BOX(hbox),findbutton,false,false,0);
-//	g_signal_connect(G_OBJECT(findbutton),"clicked",G_CALLBACK(docSearchFromBar),(void*)entry);	
+	g_signal_connect(G_OBJECT(findbutton),"clicked",G_CALLBACK(gotoURL),(void*)entry);	
 
 	gtk_box_pack_start(GTK_BOX(hbox),entry,false,true,0);
 //	g_signal_connect_after(G_OBJECT(entry),"activate",G_CALLBACK(docSearchFromBar),(void*)entry);

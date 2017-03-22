@@ -35,14 +35,14 @@
 #include <errno.h>
 
 #include <glib.h>
+#ifndef _USEGTK3_
 #include <gtksourceview/gtksourcestyleschememanager.h>
 #include <gtksourceview/gtksourceview.h>
 #include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourcelanguage.h>
-
-#ifndef _USEGTK3_
 #include <gtksourceview/gtksourceiter.h>
 #else
+#include <gtksourceview/gtksource.h>
 
 //documents
 #define GTK_STOCK_NEW "document-new"
@@ -136,6 +136,8 @@
 #define MENU_SORT_TABS_LABEL gettext("_Sort Tabs")
 #define MENU_SHOW_ALL_TABS_LABEL gettext("S_how All Tabs")
 #define MENU_HIDE_TAB_LABEL gettext("_Hide Tab")
+#define MENU_LOCK_TAB_LABEL gettext("_Lock Contents")
+#define MENU_UNLOCK_TAB_LABEL gettext("_Unlock Contents")
 #define MENU_SELECT_TAB_LABEL gettext("Se_lect Tab")
 #define MENU_PREFERENCES_LABEL gettext("Pr_eferences")
 #define MENU_PLUG_PREFS_LABEL gettext("Plu_gin Prefs")

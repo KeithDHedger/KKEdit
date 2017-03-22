@@ -673,12 +673,11 @@ void selectTab(GtkWidget *widget,gpointer data)
 	pageStruct		*page=NULL;
 
 #ifdef _USEGTK3_
-	GdkDeviceManager	*device_manager=gdk_display_get_device_manager(gdk_display_get_default());
-	GdkDevice			*device=gdk_device_manager_get_client_pointer(device_manager);
+	GdkSeat	*seat=gdk_display_get_default_seat(gdk_display_get_default());
+	GdkDevice			*device=gdk_seat_get_pointer(seat);
 	GdkWindow			*window;
 
-	window=gdk_screen_get_active_window (gdk_screen_get_default());
-	gdk_window_get_device_position(window,device,NULL,NULL,&mask);
+	window=gdk_window_get_device_position (NULL,device,NULL,NULL,&mask);
 #else
 	gdk_window_get_pointer(NULL,NULL,NULL,&mask);
 #endif

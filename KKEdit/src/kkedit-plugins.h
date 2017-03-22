@@ -156,6 +156,7 @@ struct pageStruct
 	int					startChar;
 	int					endChar;
 	GtkSourceMark		*userMark;
+	bool				isEditable;
 };
 #endif
 

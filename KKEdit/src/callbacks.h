@@ -75,6 +75,7 @@ void toggleSyntax(GtkWidget *widget,gpointer data);
 void toggleWhitespace(GtkWidget *widget,gpointer data);
 void toggleAutoComplete(GtkWidget *widget,gpointer data);
 void toggleHighlightCurrent(GtkWidget *widget,gpointer data);
+void toggleReadOnly(GtkWidget *widget,gpointer data);
 
 void markUndo(GtkSourceUndoManager *manager,pageStruct *page);
 void markRedo(GtkSourceUndoManager *manager,pageStruct *page);
