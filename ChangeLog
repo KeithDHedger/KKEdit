@@ -1,4 +1,5 @@
 0.4.2
+Fixed locking contents.
 Fixed tab size in gtk3 again!
 Added Lock/Unlock contents to tab popup.
 Fixed editor and viewer positions not being on screen at start up.

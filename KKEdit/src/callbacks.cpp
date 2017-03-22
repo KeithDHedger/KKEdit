@@ -973,7 +973,8 @@ void toggleReadOnly(GtkWidget *widget,gpointer data)
 //                                 &enditer);
 //gtk_text_buffer_place_cursor ((GtkTextBuffer*)page->buffer,&startiter);
 
-	gtk_text_view_set_editable((GtkTextView*)page->view,page->isEditable);
+	//gtk_text_view_set_editable((GtkTextView*)page->view,page->isEditable);
+	gtk_widget_set_sensitive(GTK_WIDGET(page->view),page->isEditable);
 //	gtk_widget_show((GtkWidget*)page->view);
 //		styleScheme=gtk_source_style_scheme_manager_get_scheme(schemeManager,styleName);
 //gtk_source_buffer_set_style_scheme((GtkSourceBuffer*)page->buffer,styleScheme);
