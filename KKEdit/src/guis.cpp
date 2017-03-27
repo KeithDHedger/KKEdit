@@ -1674,7 +1674,7 @@ void buildMenus(void)
 
 //open recent menu
 	menuitem=gtk_menu_item_new_with_mnemonic("_Recent");
-	//setupRecent(recentMenu);
+//	setupRecent();
 	gtk_menu_item_set_submenu((GtkMenuItem*)menuitem,recentMenu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
