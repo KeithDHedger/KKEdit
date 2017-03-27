@@ -501,18 +501,18 @@ void appStart(GApplication  *application,gpointer data)
 	if((timeToNag==true) &&(autoCheck==true))
 		doNagStuff();
 
-/*
-	char	*tabcss=NULL;
 
-	provider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
-	sinkReturn=asprintf(&tabcss,"* {\n \
-  font-family: mono;\n \
-  font-size: 8px;\n \
-  border: 0px solid;\n \
-  padding: 4px; \n \
-}\n");
-
-*/
+//	char	*tabcss=NULL;
+//
+//	provider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
+//	sinkReturn=asprintf(&tabcss,"* {\n \
+//  font-family: mono;\n \
+//  font-size: 8px;\n \
+//  border: 0px solid;\n \
+//  padding: 4px; \n \
+//}\n");
+//
+//
 
 #ifdef _USEGTK3_
 	char	*tabcss=NULL;

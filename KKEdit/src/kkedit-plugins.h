@@ -21,7 +21,11 @@
 #ifndef _PLUGINS_
 #define _PLUGINS_
 
+#ifdef _USEGTK3_
+#include <gtksourceview/gtksource.h>
+#else
 #include <gtksourceview/gtksourceview.h>
+#endif
 
 #define GLOBALPLUGS			1
 #define LOCALPLUGS			0

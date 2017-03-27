@@ -1341,7 +1341,7 @@ void setPrefs(GtkWidget *widget,gpointer data)
 #ifdef _USEGTK3_
 			char	*tabcss=NULL;
 
-			sinkReturn=asprintf(&tabcss,"* {\npadding: %ipx;\n}\n",tabsSize);
+			sinkReturn=asprintf(&tabcss,"* {\npadding: %ipx 10 px %ipx 10px;\n}\n",tabsSize,tabsSize);
 			gtk_css_provider_load_from_data((GtkCssProvider*)tabBoxProvider,tabcss,-1,NULL);
 			debugFree(&tabcss);
 #endif

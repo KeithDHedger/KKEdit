@@ -976,7 +976,6 @@ pageStruct *makeNewPage(void)
 	page->lang=NULL;
 	page->tabVbox=NULL;
 	page->showingChanged=false;
-	
 	page->regexList=NULL;
 	page->regexMatchNumber=-1;
 	page->canUndo=false;
