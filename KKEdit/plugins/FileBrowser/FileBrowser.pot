@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileBrowser 1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-23 12:47+0100\n"
+"POT-Creation-Date: 2017-03-30 16:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,48 +37,42 @@ msgstr ""
 msgid "Open In Browser"
 msgstr ""
 
-#: filebrowser.cpp:583
+#: filebrowser.cpp:582
 msgid "File Browser - Add's a simple file browser to the left pane"
 msgstr ""
 
-#: filebrowser.cpp:585
+#: filebrowser.cpp:584
 msgid "French Translation"
 msgstr ""
 
-#: filebrowser.cpp:589
+#: filebrowser.cpp:588
 msgid "FileBrowser"
 msgstr ""
 
-#: ../common.h:28
+#: ../common.h:29
 msgid "Apply"
 msgstr ""
 
-#: ../common.h:29
+#: ../common.h:30
 msgid "Cancel"
 msgstr ""
 
-#: ../common.h:30
+#: ../common.h:31
 msgid "New"
 msgstr ""
 
-#: ../common.h:31
+#: ../common.h:32
 msgid "Help"
 msgstr ""
 
-#: ../common.h:32
+#: ../common.h:33
 msgid "Open"
 msgstr ""
 
-#: ../common.h:33
+#: ../common.h:34
 msgid "Connect"
 msgstr ""
 
-#: ../common.h:34
+#: ../common.h:35
 msgid "OK"
-msgstr ""
-
-#: ../common.h:43
-msgid ""
-"\n"
-"More by the same author\n"
 msgstr ""

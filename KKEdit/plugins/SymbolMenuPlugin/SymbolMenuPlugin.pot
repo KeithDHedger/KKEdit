@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SymbolMenuPlugin 1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-05 15:54+0000\n"
+"POT-Creation-Date: 2017-03-30 16:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: symbolmenuplugin.cpp:177
+#: symbolmenuplugin.cpp:191
 msgid "Symbol Menu Plugin - Copy symbols to clipboard"
 msgstr ""
 
-#: symbolmenuplugin.cpp:178
+#: symbolmenuplugin.cpp:192
 msgid "French Translation"
 msgstr ""
 
-#: symbolmenuplugin.cpp:183
+#: symbolmenuplugin.cpp:197
 msgid "Symbol Menu Plugin"
 msgstr ""
 
