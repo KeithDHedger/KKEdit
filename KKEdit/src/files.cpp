@@ -640,7 +640,12 @@ VISIBLE void saveSession(const char *filename,const char *path)
 							linenumber=gtk_text_iter_get_line(&iter);
 							fprintf(fd,"%i %i %s\n",linenumber,(int)page->hidden,page->filePath);
 //reseve space for expansion
-							fprintf(fd,"#RESERVED\n#RESERVED\n");
+							//fprintf(fd,"#RESERVED\n#RESERVED\n");
+							if(page->isEditable==true)
+								fprintf(fd,"unlocked\n");
+							else
+								fprintf(fd,"locked\n");
+							fprintf(fd,"#RESERVED\n");
 							ptr=newBookMarksList;
 							while(ptr!=NULL)
 								{
@@ -679,6 +684,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 	int			width=800,hite=600;
 	bool		goodfile=false;
 	GtkTextMark	*mark;
+	bool		lockit=false;
 
 	_ENTER_
 	ERRDATA
@@ -718,22 +724,32 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 					setBarberPoleMessage(strarg);
 					if(strlen(strarg)>0)
 						{
-							//g_signal_handler_unblock(mainNotebook,switchPageHandler);
-								goodfile=openFile(strarg,currentline,true);
-							//g_signal_handler_block(mainNotebook,switchPageHandler);
+							goodfile=openFile(strarg,currentline,true);
 							if(goodfile==true)
 								{
 									sinkReturnStr=fgets(buffer,2048,fd);
 									sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 									intarg=999;
+									lockit=false;
 									while(intarg!=-1)
 										{
-											if(strcmp(buffer,"#RESERVED\n")!=0)
+											if(strcmp(buffer,"locked\n")==0)
 												{
-													gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)currentPageStruct->buffer,&markiter,intarg);
-													gtk_text_buffer_place_cursor((GtkTextBuffer*)currentPageStruct->buffer,&markiter);
-													toggleBookmark(NULL,&markiter);
+													lockit=true;
+													sinkReturnStr=fgets(buffer,2048,fd);
+													sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
+													continue;
 												}
+											if((strcmp(buffer,"unlocked\n")==0) || (strcmp(buffer,"#RESERVED\n")==0))
+												{
+													sinkReturnStr=fgets(buffer,2048,fd);
+													sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
+													continue;
+												}
+											gtk_text_buffer_get_iter_at_line((GtkTextBuffer*)currentPageStruct->buffer,&markiter,intarg);
+											gtk_text_buffer_place_cursor((GtkTextBuffer*)currentPageStruct->buffer,&markiter);
+											toggleBookmark(NULL,&markiter);
+
 											sinkReturnStr=fgets(buffer,2048,fd);
 											sscanf(buffer,"%i %s",(int*)&intarg,(char*)&strarg);
 										}
@@ -742,6 +758,11 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 										hideTab(NULL,(void*)currentPageStruct);
 									else
 										currentPageStruct->hidden=false;
+									if(lockit==true)
+										{
+											currentPageStruct->isEditable=false;
+											gtk_widget_set_sensitive(GTK_WIDGET(currentPageStruct->view),currentPageStruct->isEditable);
+										}
 								}
 							else
 								{

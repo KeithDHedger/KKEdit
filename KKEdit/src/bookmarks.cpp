@@ -151,6 +151,8 @@ VISIBLE void toggleBookmark(GtkWidget *widget,GtkTextIter *titer)
 
 	if(page==NULL)
 		return;
+	if(page->isEditable==false)
+		return;
 	mark_type=MARK_TYPE_1;
 	if(titer==NULL)
 		{

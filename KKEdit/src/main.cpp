@@ -27,6 +27,7 @@
 
 bool	singleOverRide=false;
 bool	loadPluginsFlag=true;
+char	*sessionName=NULL;
 
 char* oneLiner(const char *command)
 {
@@ -404,6 +405,11 @@ void activate(GApplication *application)
 	ERRDATA
 	if(mainWindow!=NULL)
 		gtk_window_present((GtkWindow*)mainWindow);
+	if(sessionName!=NULL)
+		{
+			restoreSession(NULL,(gpointer)sessionName);
+			debugFree(&sessionName);
+		}
 	getMsg();
 }
 
@@ -588,6 +594,7 @@ int main(int argc, char **argv)
     {"multiple",'m',0,G_OPTION_ARG_NONE,&singleOverRide,"Multiple instance mode",NULL},
     {"no-autosession",'a',0,G_OPTION_ARG_NONE,&overRideLoadSession,"Don't auto load last session",NULL},
     {"sessionid",'i',0,G_OPTION_ARG_INT,&sessionID,"Set an ID to be used for (new) instance",NULL},
+    {"session",'f',0,G_OPTION_ARG_STRING,&sessionName,"Load a session for a new instance",NULL},
     { "safe",'s',0,G_OPTION_ARG_NONE,&safeMode,"Safe mode(disable all plugins and use new instance )",NULL},
     { NULL }
 };
