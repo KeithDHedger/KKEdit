@@ -283,6 +283,7 @@ void init(void)
 	g_object_set(docWordsProv,"priority",10,NULL);
 	g_object_set(docWordsProv,"minimum-word-size",autoShowMinChars,NULL);
 	g_object_set(docWordsProv,"interactive-delay",50,NULL);
+
 	ERRDATA
 }
 
@@ -598,9 +599,10 @@ int main(int argc, char **argv)
     { "safe",'s',0,G_OPTION_ARG_NONE,&safeMode,"Safe mode(disable all plugins and use new instance )",NULL},
     { NULL }
 };
-
 	context=g_option_context_new(NULL);
 	g_option_context_add_main_entries(context,entries,NULL);
+
+
 	g_option_context_set_help_enabled(context,true); 
 	g_option_context_parse(context,&argc,&argv,NULL);
 
@@ -620,7 +622,7 @@ int main(int argc, char **argv)
 		sinkReturn=asprintf(&dbusname,"org.keithhedger%i." APPEXECNAME,sessionID);
 
 	if((singleOverRide==true) ||(singleUse==false))
-		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN));
+		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN|G_APPLICATION_HANDLES_COMMAND_LINE));
 	else
 		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_HANDLES_OPEN));
 
