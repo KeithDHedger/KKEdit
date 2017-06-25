@@ -531,6 +531,8 @@ varStrings* allocVStrings(char *string);
 int getCurrentCursorPos(void);
 int getCharacterPos(unsigned what,GtkTextBuffer *buf);
 
+char* oneLiner(const char *command);
+
 #endif
 
 

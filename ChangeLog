@@ -1,4 +1,5 @@
 0.4.2
+Fixed charset detection on opening some files.
 Added --session/-f option to load new session on opening a new instance, format is --session=/full/path/to/session/file.
 Locked pages are now stored/re-loaded with save/restore session.
 Fixed locking contents.

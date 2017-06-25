@@ -401,7 +401,7 @@ void doNagStuff(void)
 	ERRDATA debugFree(&control);
 }
 
-void activate(GApplication *application)
+void activate(GApplication *application,gpointer data)
 {
 	ERRDATA
 	if(mainWindow!=NULL)
@@ -411,6 +411,7 @@ void activate(GApplication *application)
 			restoreSession(NULL,(gpointer)sessionName);
 			debugFree(&sessionName);
 		}
+
 	getMsg();
 }
 

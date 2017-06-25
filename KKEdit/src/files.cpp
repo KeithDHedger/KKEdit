@@ -1032,6 +1032,35 @@ pageStruct *makeNewPage(void)
 	ERRDATA return(page);
 }
 
+void convertContentsFilePath(char *filepathcopy,char *data,int datalen)
+{
+	char		*command=NULL;
+	char		*charsetfrom=NULL;
+	iconv_t		cd;
+    size_t		len_src;
+    size_t		len_dst;
+	char		*startptr;
+
+	dataLen=-1;
+	asprintf(&command,"file -i %s|awk -F'=' '{print $2}'",filepathcopy);
+	charsetfrom=oneLiner(command);
+	free(command);
+	if(charsetfrom!=NULL)
+		{
+			len_src=datalen;
+			len_dst=len_src * 8;
+			cd=iconv_open("UTF-8",charsetfrom);
+			convertedData=(char*)malloc(datalen*16);
+			startptr=convertedData;
+
+			iconv(cd,&data,&len_src,&startptr,&len_dst);
+			iconv_close(cd);
+
+			dataLen=(long)startptr-(long)convertedData;
+			free(charsetfrom);
+		}
+}
+
 void convertContents(char *data,int datalen)
 {
 	ERRDATA
@@ -1045,6 +1074,12 @@ void convertContents(char *data,int datalen)
 	if(charset==NULL)
 		charset=get_default_charset();
 
+charset="iso-8859-1";
+//	char		*command=NULL;
+//	asprintf(&command,"file -i %s|awk -F'=' '{print $2}'",filepathcopy);
+//	charset=oneLiner(command);
+
+
 	dataLen=-1;
 	len_src=datalen;
 	len_dst=len_src * 8;
@@ -1053,6 +1088,37 @@ void convertContents(char *data,int datalen)
 	startptr=convertedData;
 
     iconv(cd,&data,&len_src,&startptr,&len_dst);
+    iconv_close(cd);
+
+	ERRDATA dataLen=(long)startptr-(long)convertedData;
+}
+
+
+void convertContentsXX(char *data,int datalen)
+{
+	ERRDATA
+ 	const gchar	*charset;
+	iconv_t		cd;
+    size_t		len_src;
+    size_t		len_dst;
+	char		*startptr;
+
+	charset=detect_charset(data);
+	if(charset==NULL)
+		charset=get_default_charset();
+
+charset="iso-8859-1";
+//charset='\0';
+	dataLen=-1;
+	len_src=datalen;
+	len_dst=len_src * 8;
+//   cd=iconv_open("UTF-8","ISO-8859-1");
+    cd=iconv_open(charset,"UTF-8");
+	convertedData=(char*)malloc(datalen*16);
+	startptr=convertedData;
+
+    iconv(cd,&data,&len_src,&startptr,&len_dst);
+//    iconv(cd,NULL,&len_src,&startptr,&len_dst);
     iconv_close(cd);
 
 	ERRDATA dataLen=(long)startptr-(long)convertedData;
@@ -1156,7 +1222,9 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 				}
 			ERRDATA return(false);
 		}
-	convertContents((char*)contents,length);
+
+//	convertContents((char*)contents,length);
+	convertContentsFilePath(filepathcopy,contents,length);
 	ERRDATA debugFree(&contents);
 
 	if(dataLen>0)
