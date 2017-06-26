@@ -499,7 +499,6 @@
 #include "searchcallbacks.h"
 #include "spellcheck.h"
 #include "files.h"
-#include "encoding.h"
 #include "completion.h"
 #include "scripting.h"
 
