@@ -1061,6 +1061,7 @@ void convertContentsFilePath(char *filepathcopy,char *data,int datalen)
 		}
 }
 
+/*
 void convertContents(char *data,int datalen)
 {
 	ERRDATA
@@ -1092,37 +1093,7 @@ charset="iso-8859-1";
 
 	ERRDATA dataLen=(long)startptr-(long)convertedData;
 }
-
-
-void convertContentsXX(char *data,int datalen)
-{
-	ERRDATA
- 	const gchar	*charset;
-	iconv_t		cd;
-    size_t		len_src;
-    size_t		len_dst;
-	char		*startptr;
-
-	charset=detect_charset(data);
-	if(charset==NULL)
-		charset=get_default_charset();
-
-charset="iso-8859-1";
-//charset='\0';
-	dataLen=-1;
-	len_src=datalen;
-	len_dst=len_src * 8;
-//   cd=iconv_open("UTF-8","ISO-8859-1");
-    cd=iconv_open(charset,"UTF-8");
-	convertedData=(char*)malloc(datalen*16);
-	startptr=convertedData;
-
-    iconv(cd,&data,&len_src,&startptr,&len_dst);
-//    iconv(cd,NULL,&len_src,&startptr,&len_dst);
-    iconv_close(cd);
-
-	ERRDATA dataLen=(long)startptr-(long)convertedData;
-}
+*/
 
 VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 {
@@ -1223,7 +1194,6 @@ VISIBLE bool openFile(const gchar *filepath,int linenumber,bool warn)
 			ERRDATA return(false);
 		}
 
-//	convertContents((char*)contents,length);
 	convertContentsFilePath(filepathcopy,contents,length);
 	ERRDATA debugFree(&contents);
 

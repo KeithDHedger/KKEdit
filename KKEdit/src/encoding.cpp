@@ -24,7 +24,7 @@
 */
 
 #include "kkedit-includes.h"
-
+#if 0
 const char *country_table[][MAX_COUNTRY_NUM] =
 {
 	/* LATIN1 */        {NULL},
@@ -321,7 +321,7 @@ static const gchar *detect_charset_korean(const gchar *text)
 	ERRDATA return(char*)charset;
 }
 
-static gboolean detect_noniso(const gchar *text)
+static gboolean detect_nonisox(const gchar *text)
 {
 	ERRDATA
 	guint8 c=*text;
@@ -336,7 +336,7 @@ static gboolean detect_noniso(const gchar *text)
 	ERRDATA return FALSE;
 }
 
-const gchar *get_default_charset(void)
+const gchar *get_default_charsetx(void)
 {
 	ERRDATA
 	const gchar *charset;
@@ -346,7 +346,7 @@ const gchar *get_default_charset(void)
 	ERRDATA return charset;
 }
 
-const gchar *detect_charset(const gchar *text)
+const gchar *detect_charsetx(const gchar *text)
 {
 	ERRDATA
 	guint8		c=*text;
@@ -452,3 +452,4 @@ const gchar *detect_charset(const gchar *text)
 	
 	ERRDATA return charset;
 }
+#endif
