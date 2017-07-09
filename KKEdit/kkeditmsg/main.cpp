@@ -24,6 +24,8 @@
 #include <string.h>
 #include <getopt.h>
 
+#include "../../config.h"
+
 #define APPNAME "kkeditmsg"
 #define VERSION "0.2.0"
 
@@ -91,7 +93,7 @@ void printHelp()
 	       " -v, --version	output version information and exit\n"
 	       " -h, -?, --help	print this help\n\n"
 	       "Report bugs to kdhedger@yahoo.co.uk\n"
-	       ,APPNAME);
+	       ,APPNAME _EXECSUFFIX_);
 
 	printf("\nCommands recognised by KKEdit:\n");
 	while(commandList[cnt]!=NULL)
@@ -235,7 +237,7 @@ int main(int argc, char **argv)
 	if(doActivateKKEdit==true)
 		{
 			char *com;
-			sinkReturn=asprintf(&com,"kkedit -i %i",key);
+			sinkReturn=asprintf(&com,"kkedit" _EXECSUFFIX_ " -i %i",key);
 			sinkReturn=system(com);
 			free(com);
 		}

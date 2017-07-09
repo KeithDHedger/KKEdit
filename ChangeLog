@@ -1,4 +1,5 @@
 0.4.2
+Fixed kkeditmsg-3 trying to open gtk2 version of editor.
 Added SessionID number to status bar.
 Editor default sessionID for remote control is now desktop number +100.
 Fixed charset detection on opening some files.
