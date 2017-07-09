@@ -314,6 +314,9 @@ VISIBLE void doxyDocs(GtkWidget *widget,gpointer data)
 	char		*searchdata[2048][2];
 	FILE		*fd;
 
+
+printf("XXXXXXXXXXX\n");
+
 	if(gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&start,&end))
 		selection=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,false);
 
@@ -326,6 +329,8 @@ VISIBLE void doxyDocs(GtkWidget *widget,gpointer data)
 				}
 
 			sinkReturn=asprintf(&findcommand,"cat %s/searchdata.xml|grep 'name=\"name\".*%s.*field'|sed 's/^[ \\t]*<field name=\"name\">//;s/<\\/field>//'",page->dirName,selection);
+			printf(">>>%s<<<\n",findcommand);
+
 			findfile=popen(findcommand,"r");
 			while(fgets(line,1024,findfile))
 				{

@@ -237,7 +237,7 @@
 #define REPLACE_INFO_LABEL gettext("Replaced %i instances of '%s' with '%s'")
 #define SAVE_BEFORE_CLOSE_LABEL gettext("Save file %s before closing?")
 #define UNSAVED_DATA_LABEL gettext("Warning unsaved data!")
-#define STATUS_LINE_LABEL gettext("Line %i Column %i \t\tSyntax Highlighting %s\t\tFilePath %s")
+#define STATUS_LINE_LABEL gettext("Line %i Column %i \t\tSyntax Highlighting %s\t\tFilePath %s\tSessionID %i")
 #define UNTITLED_LABEL gettext("Untitled")
 #define CANT_SAVE_LABEL gettext("Can't save file '%s' :(")
 

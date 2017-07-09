@@ -563,7 +563,7 @@ int getWorkspaceNumber(void)
 			retnum=(int)data_return[0];
 			XFree(data_return);
 		}
-	ERRDATA return retnum;
+	ERRDATA return retnum+100;
 }
 
 int main(int argc, char **argv)
@@ -603,7 +603,6 @@ int main(int argc, char **argv)
 	context=g_option_context_new(NULL);
 	g_option_context_add_main_entries(context,entries,NULL);
 
-
 	g_option_context_set_help_enabled(context,true); 
 	g_option_context_parse(context,&argc,&argv,NULL);
 
@@ -618,9 +617,9 @@ int main(int argc, char **argv)
 	gtk_init(&argc,&argv);
 
 	if(sessionID==-1)
-		sinkReturn=asprintf(&dbusname,"org.keithhedger%i." APPEXECNAME,getWorkspaceNumber());
-	else
-		sinkReturn=asprintf(&dbusname,"org.keithhedger%i." APPEXECNAME,sessionID);
+		sessionID=getWorkspaceNumber();
+
+	sinkReturn=asprintf(&dbusname,"org.keithhedger%i." APPEXECNAME,sessionID);
 
 	if((singleOverRide==true) ||(singleUse==false))
 		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN|G_APPLICATION_HANDLES_COMMAND_LINE));

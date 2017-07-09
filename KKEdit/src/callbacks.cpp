@@ -156,7 +156,7 @@ void updateStatusBar(GtkTextBuffer *textbuffer,GtkTextIter *location,GtkTextMark
 
 	buf=new TextBuffer((GtkTextBuffer*)page->buffer);
 
-	sinkReturn=asprintf(&message,STATUS_LINE_LABEL,buf->lineNum,buf->column,lang,path);
+	sinkReturn=asprintf(&message,STATUS_LINE_LABEL,buf->lineNum,buf->column,lang,path,sessionID);
 	gtk_statusbar_remove_all((GtkStatusbar*)statusWidget,statusID);
 	gtk_statusbar_push((GtkStatusbar*)statusWidget,statusID,message);
 	ERRDATA debugFree(&message);

@@ -2357,12 +2357,24 @@ void buildGtkDocViewer(void)
 
 	settings=webkit_web_view_get_settings(webView);
 	g_object_set((gpointer)settings,"enable-file-access-from-file-uris",true,NULL);
-	g_object_set((gpointer)settings,"enable-page-cache",true,NULL);
+	g_object_set((gpointer)settings,"enable-page-cache",false,NULL);
 	g_object_set((gpointer)settings,"enable-plugins",false,NULL);
 	g_object_set((gpointer)settings,"enable-caret-browsing",true,NULL);
 	g_object_set((gpointer)settings,"enable-private-browsing",true,NULL);
 	g_object_set((gpointer)settings,"enable-java-applet",false,NULL);
 
+/*
+	g_object_set((gpointer)settings,"enable-display-of-insecure-content",true,NULL);
+	g_object_set((gpointer)settings,"enable-running-of-insecure-content",true,NULL);
+	g_object_set((gpointer)settings,"enable-scripts",true,NULL);
+	g_object_set((gpointer)settings,"enable-universal-access-from-file-uris",true,NULL);
+	g_object_set((gpointer)settings,"enable-xss-auditor",true,NULL);
+	g_object_set((gpointer)settings,"javascript-can-open-windows-automatically",true,NULL);
+	g_object_set((gpointer)settings,"user-agent","firefox",NULL);
+	g_object_set((gpointer)settings,"enable-hyperlink-auditing",true,NULL);
+	g_object_set((gpointer)settings,"enable-site-specific-quirks",true,NULL);
+
+*/
 	scrolledWindow=gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(scrolledWindow),GTK_WIDGET(webView));
