@@ -425,8 +425,8 @@ extern GtkWidget		*docView;
 extern WebKitWebView	*webView;
 extern bool				showHideDocviewer;
 extern GtkWidget		*showDocViewWidget;
-extern bool				inWindow;
 #endif
+extern bool				inWindow;
 
 extern GtkWidget		*spellCheckWord;
 extern GtkWidget		*wordListDropbox;

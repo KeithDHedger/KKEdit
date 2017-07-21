@@ -27,7 +27,7 @@
 #include "../../config.h"
 
 #define APPNAME "kkeditmsg"
-#define VERSION "0.2.0"
+#define MSGVERSION "0.2.0"
 
 #define MAX_MSG_SIZE 4096
 
@@ -199,7 +199,7 @@ int main(int argc, char **argv)
 					break;
 
 				case 'v':
-					printf("kkeditmsg %s\n",VERSION);
+					printf("kkeditmsg %s\n",MSGVERSION);
 					return ALLOK;
 					break;
 

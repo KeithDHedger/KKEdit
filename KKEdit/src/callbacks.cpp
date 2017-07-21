@@ -1126,7 +1126,11 @@ bool tabPopUp(GtkWidget *widget,GdkEventButton *event,gpointer user_data)
 
 			gtk_menu_attach_to_widget(GTK_MENU(tabMenu),widget,NULL);
 #ifdef _USEGTK3_
+#if GTK_MINOR_VERSION >=22
 			gtk_menu_popup_at_pointer(GTK_MENU(tabMenu),NULL);
+#else
+			gtk_menu_popup(GTK_MENU(tabMenu),NULL,NULL,NULL,NULL,event->button,event->time);
+#endif
 #else
 			gtk_menu_popup(GTK_MENU(tabMenu),NULL,NULL,NULL,NULL,event->button,event->time);
 #endif

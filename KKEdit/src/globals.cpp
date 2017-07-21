@@ -312,8 +312,8 @@ GtkWidget			*docView=NULL;
 WebKitWebView		*webView;
 bool				showHideDocviewer;
 GtkWidget			*showDocViewWidget=NULL;
-bool				inWindow;
 #endif
+bool				inWindow;
 
 //spellcheck
 GtkWidget			*spellCheckWord;
