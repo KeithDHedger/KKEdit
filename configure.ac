@@ -24,7 +24,7 @@ AC_MSG_RESULT($enable_gtk3)
 if test "$enable_gtk3" = "yes"; then
 	AC_DEFINE([_USEGTK3_], [], [Use GTK3])
 	AC_DEFINE([_EXECSUFFIX_], ["-3"], [Use GTK3])
-	GTK_MODULES="gtk+-3.0 >= 3.22.8"
+	GTK_MODULES="gtk+-3.0 >= 3.18.0"
 	GTKSRC_MODULES="gtksourceview-3.0 >= 3.22.2"
 	program_transform_name='s,\(^[[kK]].*t.*\),\1-3,'
 	PLUGVERSION=3
