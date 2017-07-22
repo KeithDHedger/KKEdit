@@ -158,7 +158,11 @@ GtkWidget *makeNewTab(char *name,char *tooltip,pageStruct *page)
 	gtk_box_pack_start(GTK_BOX(hbox),label,false,false,0);
 
 #ifdef _USEGTK3_
+#if GTK_MINOR_VERSION >=22
 	gtk_widget_set_focus_on_click((GtkWidget*)button,false);
+#else
+	gtk_button_set_focus_on_click(GTK_BUTTON(button),FALSE);
+#endif
 #else
 	gtk_button_set_focus_on_click(GTK_BUTTON(button),FALSE);
 #endif
