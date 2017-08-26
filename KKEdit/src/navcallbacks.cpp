@@ -674,12 +674,11 @@ void selectTab(GtkWidget *widget,gpointer data)
 
 #ifdef _USEGTK3_
 #if GTK_MINOR_VERSION >=22
+	GdkSeat			*seat=gdk_display_get_default_seat(gdk_display_get_default());
+	GdkDevice		*device=gdk_seat_get_pointer(seat);
+	GdkWindow		*window=gdk_device_get_window_at_position (device,NULL,NULL);;
 
-	GdkSeat	*seat=gdk_display_get_default_seat(gdk_display_get_default());
-	GdkDevice			*device=gdk_seat_get_pointer(seat);
-	GdkWindow			*window;
-
-	window=gdk_window_get_device_position (NULL,device,NULL,NULL,&mask);
+	window=gdk_window_get_device_position(window,device,NULL,NULL,&mask);
 #else
 	gdk_window_get_pointer(NULL,NULL,NULL,&mask);
 #endif

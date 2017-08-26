@@ -260,7 +260,7 @@ extern "C" int addToGui(gpointer data)
 			fd=fopen(sessionfile,"r");
 			if(fd!=NULL)
 				{
-					sinkReturn=fscanf(fd,"%a[^\n]s",&sessionNames[j]);
+					sinkReturn=fscanf(fd,"%m[^\n]s",&sessionNames[j]);
 					fclose(fd);
 				}
 			else

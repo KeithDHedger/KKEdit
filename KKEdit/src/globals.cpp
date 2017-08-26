@@ -775,12 +775,12 @@ functionData *getFunctionByNameOpenFiles(char *name,bool casesensitive,bool whol
 							if(gotmatch==0)
 								{
 									fdata=(functionData*)malloc(sizeof(functionData));
-									sscanf(lineptr,"%"VALIDFUNCTIONCHARS"s",function);
+									sscanf(lineptr,"%" VALIDFUNCTIONCHARS "s",function);
 									fdata->name=strdup(function);
-									sscanf(lineptr,"%*s %"VALIDFUNCTIONCHARS"s",function);
+									sscanf(lineptr,"%*s %" VALIDFUNCTIONCHARS "s",function);
 									fdata->type=strdup(function);
 									sscanf(lineptr,"%*s %*s %i",&fdata->line);
-									sscanf(lineptr,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
+									sscanf(lineptr,"%*s %*s %*i %" VALIDFILENAMECHARS "s",function);
 									fdata->file=strdup(function);
 									sscanf(lineptr,"%*s %*s %*i %*s %[^\n]s",function);
 									fdata->define=strdup(function);
@@ -915,12 +915,12 @@ functionData *getFunctionByName(char *name,bool recurse,bool casesensitive)
 			if(getfromfile==false)
 				{
 					fdata=(functionData*)malloc(sizeof(functionData));
-					sscanf(possmatch,"%"VALIDFUNCTIONCHARS"s",function);
+					sscanf(possmatch,"%" VALIDFUNCTIONCHARS "s",function);
 					fdata->name=strdup(function);
-					sscanf(possmatch,"%*s %"VALIDFUNCTIONCHARS"s",function);
+					sscanf(possmatch,"%*s %" VALIDFUNCTIONCHARS "s",function);
 					fdata->type=strdup(function);
 					sscanf(possmatch,"%*s %*s %i",&fdata->line);
-					sscanf(possmatch,"%*s %*s %*i %"VALIDFILENAMECHARS"s",function);
+					sscanf(possmatch,"%*s %*s %*i %" VALIDFILENAMECHARS "s",function);
 					fdata->file=strdup(function);
 					sscanf(possmatch,"%*s %*s %*i %*s %[^\n]s",function);
 					fdata->define=strdup(function);

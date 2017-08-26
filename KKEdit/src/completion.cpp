@@ -18,10 +18,6 @@
  * along with KKEdit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _USEGTK3_
-#include <gtksourceview/gtksourcecompletionitem.h>
-#endif
-
 #include "kkedit-includes.h"
 
 struct _FunctionProviderClass

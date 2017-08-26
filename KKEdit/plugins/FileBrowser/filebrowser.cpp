@@ -318,12 +318,15 @@ void onRowActivated(GtkTreeView* treeview, GtkTreePath* path,GtkTreeViewColumn* 
 	const char			*app;
 
 #ifdef _USEGTK3_
-	GdkDeviceManager	*device_manager=gdk_display_get_device_manager(gdk_display_get_default());
-	GdkDevice			*device=gdk_device_manager_get_client_pointer(device_manager);
-	GdkWindow			*window;
+#if GTK_MINOR_VERSION >=22
+	GdkSeat				*seat=gdk_display_get_default_seat(gdk_display_get_default());
+	GdkDevice			*device=gdk_seat_get_pointer(seat);
+	GdkWindow			*window=gdk_device_get_window_at_position (device,NULL,NULL);
 
-	window=gdk_screen_get_active_window (gdk_screen_get_default());
-	gdk_window_get_device_position(window,device,NULL,NULL,&mask);
+	window=gdk_window_get_device_position(window,device,NULL,NULL,&mask);
+#else
+	gdk_window_get_pointer(NULL,NULL,NULL,&mask);
+#endif
 #else
 	gdk_window_get_pointer(NULL,NULL,NULL,&mask);
 #endif

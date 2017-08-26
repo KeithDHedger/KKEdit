@@ -169,7 +169,8 @@ void cdHere(GtkWidget* widget,gpointer data)
 
 gboolean doButton(GtkWidget *widget, GdkEventButton *event,gpointer data)
 {
-	int button, event_time;
+	int button;
+	int	event_time;
 
 	gtk_widget_set_can_focus(terminal,true);
 	gtk_widget_grab_focus(terminal);
@@ -187,9 +188,23 @@ gboolean doButton(GtkWidget *widget, GdkEventButton *event,gpointer data)
 			{
 				button=0;
 				event_time=gtk_get_current_event_time();
-				}
+			}
 
-		gtk_menu_popup(GTK_MENU(contextMenu),NULL,NULL,NULL,NULL,button,event_time);
+#ifdef _USEGTK3_
+#if GTK_MINOR_VERSION >=22
+			if(button)
+				printf("%i\n",button);
+			if(event_time)
+				printf("%i\n",event_time);
+			gtk_menu_popup_at_pointer(GTK_MENU(contextMenu),NULL);
+#else
+			gtk_menu_popup(GTK_MENU(contextMenu),NULL,NULL,NULL,NULL,button,event->time);
+#endif
+#else
+			gtk_menu_popup(GTK_MENU(contextMenu),NULL,NULL,NULL,NULL,button,event->time);
+#endif
+
+//		gtk_menu_popup(GTK_MENU(contextMenu),NULL,NULL,NULL,NULL,button,event_time);
 	}
 	return(false);
 }
@@ -375,7 +390,7 @@ extern "C" int plugPrefs(gpointer data)
 	gtk_window_set_transient_for((GtkWindow*)dialog,(GtkWindow*)plugdata->prefsWindow);
 	gtk_widget_show_all(dialog);
 	response=gtk_dialog_run(GTK_DIALOG(dialog));
-	if(response==GTK_RESPONSE_APPLY);
+	if(response==GTK_RESPONSE_APPLY)
 		{
 			free(foreColour);
 			free(backColour);
