@@ -41,6 +41,7 @@
 #include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourceiter.h>
+#include <gtksourceview/gtksourcecompletionitem.h>
 #else
 #include <gtksourceview/gtksource.h>
 
