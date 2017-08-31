@@ -960,6 +960,8 @@ pageStruct *makeNewPage(void)
 
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
+//gtk_text_buffer_apply_tag ()
+
 
 	page->buffer=gtk_source_buffer_new(NULL);
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
@@ -969,7 +971,6 @@ pageStruct *makeNewPage(void)
 
 	g_signal_connect(G_OBJECT(page->view),"button-release-event",G_CALLBACK(highLightText),(void*)page);
 //	g_signal_connect(G_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),(void*)page);
-
 
 //completion
 	page->completion=gtk_source_view_get_completion(GTK_SOURCE_VIEW(page->view));

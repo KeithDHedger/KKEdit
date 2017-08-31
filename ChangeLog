@@ -1,4 +1,5 @@
 0.4.2
+Minor code clean for terminal pane plugin.
 Fixed seffault when selecting file in browser plugin.
 Minor bug fixes.
 Fixed yet another api breakage in gtk3 ... for fucks sake leave shit alone guys!

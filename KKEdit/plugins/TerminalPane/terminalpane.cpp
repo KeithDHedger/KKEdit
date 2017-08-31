@@ -167,11 +167,9 @@ void cdHere(GtkWidget* widget,gpointer data)
 		}
 }
 
+
 gboolean doButton(GtkWidget *widget, GdkEventButton *event,gpointer data)
 {
-	int button;
-	int	event_time;
-
 	gtk_widget_set_can_focus(terminal,true);
 	gtk_widget_grab_focus(terminal);
 
@@ -179,32 +177,16 @@ gboolean doButton(GtkWidget *widget, GdkEventButton *event,gpointer data)
   if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
     {
 		gtk_widget_show_all(contextMenu);
-		if (event)
-			{
-				button=event->button;
-				event_time=event->time;
-			}
-		else
-			{
-				button=0;
-				event_time=gtk_get_current_event_time();
-			}
 
 #ifdef _USEGTK3_
 #if GTK_MINOR_VERSION >=22
-			if(button)
-				printf("%i\n",button);
-			if(event_time)
-				printf("%i\n",event_time);
 			gtk_menu_popup_at_pointer(GTK_MENU(contextMenu),NULL);
 #else
-			gtk_menu_popup(GTK_MENU(contextMenu),NULL,NULL,NULL,NULL,button,event->time);
+			gtk_menu_popup(GTK_MENU(contextMenu),NULL,NULL,NULL,NULL,event->button,event->time);
 #endif
 #else
-			gtk_menu_popup(GTK_MENU(contextMenu),NULL,NULL,NULL,NULL,button,event->time);
+			gtk_menu_popup(GTK_MENU(contextMenu),NULL,NULL,NULL,NULL,event->button,event->time);
 #endif
-
-//		gtk_menu_popup(GTK_MENU(contextMenu),NULL,NULL,NULL,NULL,button,event_time);
 	}
 	return(false);
 }
