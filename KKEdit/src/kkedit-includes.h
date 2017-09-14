@@ -227,6 +227,10 @@
 #define NO_LABEL gettext("_No")
 #define CANCEL_LABEL gettext("_Cancel")
 
+//verticalSelect
+#define VERTICAL_COPY_LABEL gettext("_Vertical Copy")
+#define VERTICAL_CLEAR_LABEL gettext("C_lear V Selection")
+
 //kkedit general text
 #define BOOKMARK_LABEL gettext("Bookmark")
 #define CHECKING_LABEL gettext("Checking for updates ...")
@@ -366,6 +370,7 @@
 #define FIND_REPLACE_ALL_LABEL gettext("Replace All")
 #define FIND_REPLACE_LABEL gettext("_Replace")
 #define FIND_REPLACE_ALL_MNEMONIC gettext("_Replace All")
+#define FIND_FIND_LABEL gettext("_Find")
 
 //aspell
 #define SPELL_CHECK_WORD_LABEL gettext("Spell check word")

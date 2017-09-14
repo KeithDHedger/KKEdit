@@ -393,6 +393,8 @@ VISIBLE void switchPage(GtkNotebook *notebook,gpointer arg1,guint thispage,gpoin
 	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&start_find);
 	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end_find);
 	gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"highlighttag",&start_find,&end_find);
+	gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"verticaltag",&start_find,&end_find);
+	page->vertTag.gotSelect=false;
 
 	submenu=gtk_menu_item_get_submenu((GtkMenuItem*)funcMenu);
 	if(submenu!=NULL)
@@ -894,6 +896,18 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 							ptr=g_list_next(ptr);
 						}
 				}
+		}
+
+	if(page->vertTag.gotSelect==true)
+		{
+			menuData[VERTICALCLEAR].userData=(gpointer)page;
+			menuitem=newImageMenuItem(VERTICALCLEAR,NULL);
+			gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+			menuData[VERTICALCOPY].userData=(gpointer)page;
+			menuitem=newImageMenuItem(VERTICALCOPY,NULL);
+			gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+			menuitem=gtk_separator_menu_item_new();
+			gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 		}
 
 	menuitem=gtk_separator_menu_item_new();

@@ -540,6 +540,32 @@ void appStart(GApplication  *application,gpointer data)
 	ERRDATA
 }
 
+gint commandLine(GApplication *application,GApplicationCommandLine *command_line,gpointer user_data)
+{
+	int		argc=0;
+	char	*linenum=NULL;
+	int		line=0;
+
+	gchar **args=g_application_command_line_get_arguments(command_line,&argc);
+
+	for(int j=1;j<argc;j++)
+		{
+			linenum=strrchr(args[j],'@');
+			if(linenum!=NULL)
+				{
+					*linenum=0;
+					linenum++;
+					line=atoi(linenum);
+				}
+			
+			if(args[j]!=NULL)
+				{
+					openFile(args[j],line,true);
+				}
+		}
+	g_strfreev(args);
+}
+
 int getWorkspaceNumber(void)
 {
 	ERRDATA
@@ -623,7 +649,10 @@ int main(int argc, char **argv)
 	sinkReturn=asprintf(&dbusname,"org.keithhedger%i." APPEXECNAME,sessionID);
 
 	if((singleOverRide==true) ||(singleUse==false))
-		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN|G_APPLICATION_HANDLES_COMMAND_LINE));
+		{
+			mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN|G_APPLICATION_HANDLES_COMMAND_LINE));
+			g_signal_connect(mainApp,"command-line",G_CALLBACK(commandLine),NULL);
+		}
 	else
 		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_HANDLES_OPEN));
 

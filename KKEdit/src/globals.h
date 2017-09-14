@@ -406,6 +406,7 @@ extern bool				showToolBar;
 extern int				listFunction;
 extern GtkWidget		*funcListDrop;
 
+//misc
 extern char				*functionSearchText;
 extern char				*thePage;
 extern char				*htmlFile;
@@ -418,7 +419,7 @@ extern int				gotDoxygen;
 extern char				*ctagsPath;
 
 extern GtkSourceStyleSchemeManager	*schemeManager;
-extern GtkSourceStyleScheme		*styleScheme;
+extern GtkSourceStyleScheme	*styleScheme;
 
 #ifdef _BUILDDOCVIEWER_
 extern GtkWidget		*docView;
@@ -431,15 +432,15 @@ extern bool				inWindow;
 extern GtkWidget		*spellCheckWord;
 extern GtkWidget		*wordListDropbox;
 extern GtkWidget		*wordListEntrybox;
-extern char			*badWord;
-extern char			*goodWord;
+extern char				*badWord;
+extern char				*goodWord;
 #ifdef _ASPELL_
-extern AspellConfig	*aspellConfig;
+extern AspellConfig		*aspellConfig;
 extern AspellSpeller	*spellChecker;
 #endif
 
 extern unsigned int		shortCuts[NUMSHORTCUTS][2];
-extern char			*shortCutStrings[NUMSHORTCUTS];
+extern char				*shortCutStrings[NUMSHORTCUTS];
 
 extern GtkWidget		*progressWindow;
 extern GtkWidget		*progressBar;

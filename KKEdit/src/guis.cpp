@@ -149,6 +149,10 @@ menuDataStruct	menuData[]=
 		{MENU_HIDE_TAB_LABEL,GTK_STOCK_REMOVE,0,0,(void*)&hideTab,NULL,NULL},
 		{MENU_LOCK_TAB_LABEL,GTK_STOCK_REMOVE,0,0,(void*)&toggleReadOnly,NULL,NULL},
 
+//verticalSelect
+		{VERTICAL_COPY_LABEL,GTK_STOCK_COPY,0,0,(void*)&copyVerticalSelection,NULL,NULL},
+		{VERTICAL_CLEAR_LABEL,GTK_STOCK_REMOVE,0,0,(void*)&clearVerticalSelection,NULL,NULL},
+
 		{NULL,NULL,0,0,NULL,NULL,NULL}
 	};
 
@@ -2117,7 +2121,7 @@ void buildFindReplace(void)
 	GtkWidget	*item;
 
 #ifdef _USEGTK3_
-	findReplaceDialog=gtk_dialog_new_with_buttons(FIND_FIND_REPLACE_LABEL,(GtkWindow*)mainWindow, GTK_DIALOG_DESTROY_WITH_PARENT,DIALOG_GO_FORWARD_LABEL,FINDNEXT,MENU_GO_BACK_LABEL,FINDPREV,FIND_REPLACE_LABEL,REPLACENEXT,NULL);
+	findReplaceDialog=gtk_dialog_new_with_buttons(FIND_FIND_REPLACE_LABEL,(GtkWindow*)mainWindow, GTK_DIALOG_DESTROY_WITH_PARENT,FIND_FIND_LABEL,FINDNEXT,FIND_REPLACE_LABEL,REPLACENEXT,NULL);
 #else
 	findReplaceDialog=gtk_dialog_new_with_buttons(FIND_FIND_REPLACE_LABEL,(GtkWindow*)mainWindow,GTK_DIALOG_DESTROY_WITH_PARENT,GTK_STOCK_FIND,FINDNEXT,FIND_REPLACE_LABEL,REPLACENEXT,NULL);
 #endif

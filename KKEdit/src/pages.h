@@ -36,5 +36,8 @@ pageStruct *getPageStructByIDFromList(unsigned pageid);
 pageStruct *getPageStructByIDFromPage(int pagenum);
 pageListData *getCurrentPageListData(void);
 unsigned getIDFromPage(int pagenum);
+gboolean verticalSelect(GtkWidget *widget,GdkEvent *event,gpointer page);
+void copyVerticalSelection(GtkWidget *widget,gpointer data);
+void clearVerticalSelection(GtkWidget *widget,gpointer data);
 
 #endif

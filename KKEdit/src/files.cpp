@@ -216,6 +216,8 @@ void setFilePrefs(pageStruct *page)
 	ERRDATA
 	PangoFontDescription	*font_desc;
 	GtkTextAttributes		*attr;
+	gchar					*forecol;
+	gchar					*backcol;
 
 	ERRDATA
 	gtk_source_view_set_auto_indent(page->view,indent);
@@ -251,10 +253,19 @@ void setFilePrefs(pageStruct *page)
 	fcol.blue=(gdouble)attr->appearance.bg_color.blue / 65535.0;
 	fcol.alpha=1.0;
 
-	g_object_set((gpointer)page->highlightTag,"background",gdk_rgba_to_string(&bcol),"foreground",gdk_rgba_to_string(&fcol),NULL);
+	forecol=gdk_rgba_to_string(&fcol);
+	backcol=gdk_rgba_to_string(&bcol);
+	g_object_set((gpointer)page->highlightTag,"background",backcol,"foreground",forecol,NULL);
+	g_object_set((gpointer)page->vertTag.verticalTag,"background",backcol,"foreground",forecol,NULL);
 #else
-	g_object_set((gpointer)page->highlightTag,"background",gdk_color_to_string((const GdkColor*)&attr->appearance.fg_color),"foreground",gdk_color_to_string((const GdkColor*)&attr->appearance.bg_color),NULL);
+	forecol=gdk_color_to_string((const GdkColor*)&attr->appearance.bg_color);
+	backcol=gdk_color_to_string((const GdkColor*)&attr->appearance.fg_color);
+	g_object_set((gpointer)page->highlightTag,"background",backcol,"foreground",forecol,NULL);
+	g_object_set((gpointer)page->vertTag.verticalTag,"background",backcol,"foreground",forecol,NULL);
 #endif
+	g_free(forecol);
+	g_free(backcol);
+
 	gtk_text_attributes_unref(attr);
 
 	if(noSyntax==true)
@@ -916,6 +927,8 @@ gboolean resetRegexMark (GtkWidget *widget,GdkEvent *event,pageStruct *page)
 	page->regexList=NULL;
 	page->regexMatchNumber=-1;
 	loadingSession=false;
+	page->vertTag.gotStart=false;
+
 	return(false);
 }
 
@@ -960,17 +973,16 @@ pageStruct *makeNewPage(void)
 
 	page->pageWindow=(GtkScrolledWindow*)gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(page->pageWindow),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC);
-//gtk_text_buffer_apply_tag ()
-
-
 	page->buffer=gtk_source_buffer_new(NULL);
 	page->view=(GtkSourceView*)gtk_source_view_new_with_buffer(page->buffer);
 #ifdef _USEGTK3_
 	gtk_style_context_add_provider(gtk_widget_get_style_context((GtkWidget*)page->view),provider,GTK_STYLE_PROVIDER_PRIORITY_USER);
 #endif
 
+//vert select
+	gtk_widget_set_events((GtkWidget*)page->view,GDK_POINTER_MOTION_MASK);
+	g_signal_connect(G_OBJECT(page->view),"motion-notify-event",G_CALLBACK(verticalSelect),(void*)page);
 	g_signal_connect(G_OBJECT(page->view),"button-release-event",G_CALLBACK(highLightText),(void*)page);
-//	g_signal_connect(G_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),(void*)page);
 
 //completion
 	page->completion=gtk_source_view_get_completion(GTK_SOURCE_VIEW(page->view));
@@ -984,11 +996,10 @@ pageStruct *makeNewPage(void)
 	g_signal_connect(G_OBJECT(page->view),"populate-popup",G_CALLBACK(populatePopupMenu),NULL);
 
 	attr=gtk_text_view_get_default_attributes((GtkTextView*)page->view);
-#ifdef _USEGTK3_
-	page->highlightTag=gtk_text_buffer_create_tag((GtkTextBuffer*)page->buffer,"highlighttag","background",gdk_rgba_to_string((const GdkRGBA*)&attr->appearance.fg_color),"foreground",gdk_rgba_to_string((const GdkRGBA*)&attr->appearance.bg_color),NULL);
-#else
-	page->highlightTag=gtk_text_buffer_create_tag((GtkTextBuffer*)page->buffer,"highlighttag","background",gdk_color_to_string((const GdkColor*)&attr->appearance.fg_color),"foreground",gdk_color_to_string((const GdkColor*)&attr->appearance.bg_color),NULL);
-#endif
+//highlite
+	page->highlightTag=gtk_text_buffer_create_tag((GtkTextBuffer*)page->buffer,"highlighttag",NULL,NULL);
+//vert select
+	page->vertTag.verticalTag=gtk_text_buffer_create_tag((GtkTextBuffer*)page->buffer,"verticaltag",NULL,NULL);
 
 	gtk_text_attributes_unref(attr);
 	gtk_container_add(GTK_CONTAINER(page->pageWindow),(GtkWidget*)page->view);
@@ -1013,6 +1024,13 @@ pageStruct *makeNewPage(void)
 	page->startChar=-1;
 	page->endChar=-1;
 	page->isEditable=true;
+	page->vertTag.gotStart=false;
+	page->vertTag.xStartLoc=0;
+	page->vertTag.yStartLoc=0;
+	page->vertTag.xEndLoc=0;
+	page->vertTag.yEndLoc=0;
+	page->vertTag.gotSelect=false;;
+
 //dnd
 	gtk_drag_dest_set((GtkWidget*)page->view,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets((GtkWidget*)page->view);

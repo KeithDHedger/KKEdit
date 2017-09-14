@@ -105,7 +105,6 @@
 #define VIEWAUTOCOMPLETE "viewautocomplete"
 #define VIEWHIGHLIGHT "viewhighlight"
 
-
 #ifndef _PAGESTRUCT_
 #define _PAGESTRUCT_
 
@@ -119,6 +118,19 @@ struct	args
 };
 
 enum {TYPEINT=1,TYPESTRING,TYPEBOOL,TYPELIST};
+
+struct vertTagStruct
+{
+	GtkTextTag			*verticalTag;
+	bool				gotStart;
+	bool				gotSelect;
+	GtkTextIter			startIter;
+	int					lineHite;
+	int					xStartLoc;
+	int					yStartLoc;
+	int					xEndLoc;
+	int					yEndLoc;
+};
 
 struct pageStruct
 {
@@ -161,6 +173,7 @@ struct pageStruct
 	int					endChar;
 	GtkSourceMark		*userMark;
 	bool				isEditable;
+	vertTagStruct		vertTag;
 };
 #endif
 

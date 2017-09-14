@@ -293,6 +293,7 @@ bool				showToolBar=true;
 int					listFunction=0;
 GtkWidget			*funcListDrop=NULL;
 
+//misc
 char				*functionSearchText=NULL;
 VISIBLE char		*thePage=NULL;
 char				*htmlFile=NULL;

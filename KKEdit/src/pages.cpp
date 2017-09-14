@@ -126,3 +126,134 @@ unsigned getIDFromPage(int pagenum)
 		return((unsigned)(long)g_object_get_data((GObject*)pageBox,"pageid"));
 }
 
+gboolean verticalSelect(GtkWidget *widget,GdkEvent *event,gpointer ud)
+{
+	GdkEventMotion	*evmotion=(GdkEventMotion*)event;;
+	GdkModifierType	mask;
+	int				buffer_x;
+	int				buffer_y;
+	GtkTextIter		iter;
+	GtkTextIter		startiter;
+	GtkTextIter		enditer;
+	int				xstartcoord;
+	int				ystartcoord;
+	int				xendcoord;
+	int				yendcoord;
+
+	pageStruct		*page=(pageStruct*)ud;
+
+	if(page==NULL)
+		return(false);
+
+	if (event->type==GDK_MOTION_NOTIFY)
+		{
+#ifdef _USEGTK3_
+#if GTK_MINOR_VERSION >=22
+			GdkSeat		*seat=gdk_display_get_default_seat(gdk_display_get_default());
+			GdkDevice	*device=gdk_seat_get_pointer(seat);
+			GdkWindow	*window=gdk_device_get_window_at_position (device,NULL,NULL);
+if(window==NULL)
+	return(false);
+			window=gdk_window_get_device_position(window,device,NULL,NULL,&mask);
+#else
+			gdk_window_get_pointer(NULL,NULL,NULL,&mask);
+#endif
+#else
+			gdk_window_get_pointer(NULL,NULL,NULL,&mask);
+#endif
+
+			if((mask & GDK_CONTROL_MASK) && (mask & GDK_BUTTON1_MASK))
+				{
+					gtk_text_view_window_to_buffer_coords((GtkTextView*)page->view,GTK_TEXT_WINDOW_TEXT,evmotion->x,evmotion->y,&buffer_x,&buffer_y);
+					if(page->vertTag.gotStart==false)
+						{
+							page->vertTag.gotStart=true;
+							gtk_text_view_get_iter_at_location((GtkTextView*)page->view,&page->vertTag.startIter,buffer_x,buffer_y);
+							gtk_text_view_get_line_yrange((GtkTextView*)page->view,&page->vertTag.startIter,&page->vertTag.yStartLoc,&page->vertTag.lineHite);
+							page->vertTag.xStartLoc=buffer_x;
+							page->vertTag.yStartLoc=buffer_y;
+						}
+					else
+						{
+							page->vertTag.gotSelect=true;
+							page->vertTag.xEndLoc=buffer_x;
+							page->vertTag.yEndLoc=buffer_y;
+						}
+
+					gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
+					gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
+					gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"verticaltag",&startiter,&enditer);
+
+					xstartcoord=page->vertTag.xStartLoc;
+					ystartcoord=page->vertTag.yStartLoc;
+					xendcoord=page->vertTag.xEndLoc;
+					yendcoord=page->vertTag.yEndLoc;
+					
+					while(ystartcoord<yendcoord)
+						{
+							gtk_text_view_get_iter_at_location((GtkTextView*)page->view,&startiter,xstartcoord,ystartcoord);
+							gtk_text_view_get_iter_at_location((GtkTextView*)page->view,&enditer,xendcoord,ystartcoord);
+							gtk_text_buffer_apply_tag((GtkTextBuffer*)page->buffer,page->vertTag.verticalTag,&startiter,&enditer);
+							ystartcoord+=page->vertTag.lineHite;
+						}
+					return(true);
+	       		}
+    	}
+	return(false);
+}
+
+void copyVerticalSelection(GtkWidget *widget,gpointer data)
+{
+	GtkTextIter		startiter;
+	GtkTextIter		enditer;
+	gchar			*textslice=NULL;
+	GString			*str=g_string_new("");
+	pageStruct		*page=(pageStruct*)data;
+	GtkClipboard	*clipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+	const char		*addnewline="";
+	int				xstartcoord=page->vertTag.xStartLoc;
+	int				ystartcoord=page->vertTag.yStartLoc;
+	int				xendcoord=page->vertTag.xEndLoc;
+	int				yendcoord=page->vertTag.yEndLoc-page->vertTag.lineHite;
+
+	if(page==NULL)
+		return;
+
+	while(ystartcoord<yendcoord)
+		{
+			gtk_text_view_get_iter_at_location((GtkTextView*)page->view,&startiter,xstartcoord,ystartcoord);
+			gtk_text_view_get_iter_at_location((GtkTextView*)page->view,&enditer,xendcoord,ystartcoord);
+			ystartcoord+=page->vertTag.lineHite;
+			textslice=gtk_text_iter_get_visible_text(&startiter,&enditer);
+			if(textslice[strlen(textslice)-1]!='\n')
+				addnewline="\n";
+			else
+				addnewline="";
+			g_string_append_printf(str,"%s%s",textslice,addnewline);
+			g_free(textslice);
+		}
+
+	gtk_text_view_get_iter_at_location((GtkTextView*)page->view,&startiter,xstartcoord,ystartcoord);
+	gtk_text_view_get_iter_at_location((GtkTextView*)page->view,&enditer,xendcoord,ystartcoord);
+	textslice=gtk_text_iter_get_visible_text(&startiter,&enditer);
+	g_string_append_printf(str,"%s",textslice);
+	g_free(textslice);
+	gtk_clipboard_set_text(clipboard,(char*)str->str,-1);
+
+	g_string_free(str,true);
+}
+
+void clearVerticalSelection(GtkWidget *widget,gpointer data)
+{
+	GtkTextIter	startiter;
+	GtkTextIter	enditer;
+	pageStruct	*page=(pageStruct*)data;
+
+	gtk_text_buffer_get_start_iter((GtkTextBuffer*)page->buffer,&startiter);
+	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&enditer);
+	gtk_text_buffer_remove_tag_by_name((GtkTextBuffer*)page->buffer,"verticaltag",&startiter,&enditer);
+
+	page->vertTag.gotSelect=false;
+	page->vertTag.gotStart=false;
+}
+

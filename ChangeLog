@@ -1,4 +1,8 @@
 0.4.2
+Fixed not picking up files to open on command line when using -m switch.
+Fixed gtk 3 crash when moving outside tab.
+Added 'Vertical Copy' to context menu.
+Added Vertical select/copy, hold CTRL key whilst dragging.
 Minor code clean for terminal pane plugin.
 Fixed seffault when selecting file in browser plugin.
 Minor bug fixes.
