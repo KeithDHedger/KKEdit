@@ -1,4 +1,5 @@
 0.4.2
+Fixed file opening and conversion with spaces in filename.
 Fixed not picking up files to open on command line when using -m switch.
 Fixed gtk 3 crash when moving outside tab.
 Added 'Vertical Copy' to context menu.
