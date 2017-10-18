@@ -1065,7 +1065,7 @@ void convertContentsFilePath(char *filepathcopy,char *data,int datalen)
 	char		*startptr;
 
 	dataLen=-1;
-	asprintf(&command,"file -i %s|awk -F'=' '{print $2}'",filepathcopy);
+	asprintf(&command,"file -i \"%s\"|awk -F'=' '{print $2}'",filepathcopy);
 	charsetfrom=oneLiner(command);
 	free(command);
 	if(charsetfrom!=NULL)
