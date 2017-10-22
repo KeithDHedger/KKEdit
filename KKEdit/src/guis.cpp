@@ -151,6 +151,7 @@ menuDataStruct	menuData[]=
 
 //verticalSelect
 		{VERTICAL_COPY_LABEL,GTK_STOCK_COPY,0,0,(void*)&copyVerticalSelection,NULL,NULL},
+		{VERTICAL_CUT_LABEL,GTK_STOCK_CUT,0,0,(void*)&cutVerticalSelection,NULL,NULL},
 		{VERTICAL_CLEAR_LABEL,GTK_STOCK_REMOVE,0,0,(void*)&clearVerticalSelection,NULL,NULL},
 
 		{NULL,NULL,0,0,NULL,NULL,NULL}

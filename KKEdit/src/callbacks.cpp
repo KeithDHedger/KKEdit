@@ -903,6 +903,9 @@ void populatePopupMenu(GtkTextView *entry,GtkMenu *menu,gpointer user_data)
 			menuData[VERTICALCLEAR].userData=(gpointer)page;
 			menuitem=newImageMenuItem(VERTICALCLEAR,NULL);
 			gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
+			menuData[VERTICALCUT].userData=(gpointer)page;
+			menuitem=newImageMenuItem(VERTICALCUT,NULL);
+			gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);
 			menuData[VERTICALCOPY].userData=(gpointer)page;
 			menuitem=newImageMenuItem(VERTICALCOPY,NULL);
 			gtk_menu_shell_prepend(GTK_MENU_SHELL(menu),menuitem);

@@ -243,6 +243,35 @@ void copyVerticalSelection(GtkWidget *widget,gpointer data)
 	g_string_free(str,true);
 }
 
+void cutVerticalSelection(GtkWidget *widget,gpointer data)
+{
+	GtkTextIter		startiter;
+	GtkTextIter		enditer;
+	gchar			*textslice=NULL;
+	pageStruct		*page=(pageStruct*)data;
+	GtkClipboard	*clipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+	const char		*addnewline="";
+	int				xstartcoord=page->vertTag.xStartLoc;
+	int				ystartcoord=page->vertTag.yStartLoc;
+	int				xendcoord=page->vertTag.xEndLoc;
+	int				yendcoord=page->vertTag.yEndLoc-page->vertTag.lineHite;
+
+	if(page==NULL)
+		return;
+
+	copyVerticalSelection(widget,data);
+
+	gtk_text_buffer_begin_user_action((GtkTextBuffer*)page->buffer);
+	while(ystartcoord<yendcoord+page->vertTag.lineHite)
+		{
+			gtk_text_view_get_iter_at_location((GtkTextView*)page->view,&startiter,xstartcoord,ystartcoord);
+			gtk_text_view_get_iter_at_location((GtkTextView*)page->view,&enditer,xendcoord,ystartcoord);
+			ystartcoord+=page->vertTag.lineHite;
+			gtk_text_buffer_delete ((GtkTextBuffer*)page->buffer,&startiter,&enditer);
+		}
+	gtk_text_buffer_end_user_action((GtkTextBuffer*)page->buffer);
+}
+
 void clearVerticalSelection(GtkWidget *widget,gpointer data)
 {
 	GtkTextIter	startiter;

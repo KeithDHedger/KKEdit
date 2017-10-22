@@ -229,6 +229,7 @@
 
 //verticalSelect
 #define VERTICAL_COPY_LABEL gettext("_Vertical Copy")
+#define VERTICAL_CUT_LABEL gettext("V_ertical Cut")
 #define VERTICAL_CLEAR_LABEL gettext("C_lear V Selection")
 
 //kkedit general text
