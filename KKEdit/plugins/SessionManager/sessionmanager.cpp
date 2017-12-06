@@ -36,7 +36,7 @@
 #include "../kkedit-plugins.h"
 
 #define PLUGVERSION VERSION
-#define	MAXSESSIONS 16
+#define	MAXSESSIONS 24
 #ifdef _USEGTK3_
 #define TEXTDOMAIN "SessionManager-3"
 #define ABOUTICON "KKEditPlug-3"
@@ -45,24 +45,24 @@
 #define ABOUTICON "KKEditPlug"
 #endif
 
-char		*prefsPath;
-GtkWidget*	menuPlug;
-GtkWidget*	saveSessionMenu=NULL;
-GtkWidget*	restoreSessionMenu=NULL;
-GtkWidget*	holdWidget=NULL;
-GtkWidget*	menusm;
-char		*currentdomain=NULL;
-int			sinkReturn;
-char		*sinkReturnStr;
+char			*prefsPath;
+GtkWidget		*menuPlug;
+GtkWidget		*saveSessionMenu=NULL;
+GtkWidget		*restoreSessionMenu=NULL;
+GtkWidget		*holdWidget=NULL;
+GtkWidget		*menusm;
+char			*currentdomain=NULL;
+int				sinkReturn;
+char			*sinkReturnStr;
 
 int	(*module_plug_function)(gpointer globaldata);
 
-extern void saveSession(const char* name,const char* filepath);
-extern void restoreSession(GtkWidget* widget,gpointer data);
-extern void closeAllTabs(GtkWidget* widget,gpointer data);
-extern void toggleBookmark(GtkWidget* widget,GtkTextIter* titer);
+extern void		saveSession(const char* name,const char* filepath);
+extern void		restoreSession(GtkWidget* widget,gpointer data);
+extern void		closeAllTabs(GtkWidget* widget,gpointer data);
+extern void		toggleBookmark(GtkWidget* widget,GtkTextIter* titer);
 
-extern GList*			newBookMarksList;
+extern GList	*newBookMarksList;
 
 struct bookMarksNew
 {
