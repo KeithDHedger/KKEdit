@@ -1,4 +1,5 @@
 0.4.2
+Added "Current Session" to session manager save menu to save current session.
 Fixed segfault if LANG env var is unset, defaults to en_GB now.
 Added "Vertical Cut" to context menu.
 Fixed file opening and conversion with spaces in filename.
