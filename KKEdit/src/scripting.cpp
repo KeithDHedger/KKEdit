@@ -22,9 +22,9 @@
 
 #include "kkedit-includes.h"
 
-enum {SQUIT=0,SGOTOLINE,SSEARCHDEF,SSELECTTAB,SSELECTTABBYPATH,SBOOKMARK,SCLOSETAB,SSETMARK,SUNSETMARK,SMOVETO,SSELECTBETWEEN,SPASTE,SCOPY,SCUT,SINSERTTEXT,SINSERTNL,SINSERTFILE,SPRINTFILES,SWAITFORKKEDIT,SSHOWCONTINUE,SRUNTOOL,SRESTORESESSION,SACTIVATEMENUBYNAME,SACTIVATEMENUBYLABEL,SSENDPOSDATA};
+enum {SQUIT=0,SGOTOLINE,SSEARCHDEF,SSELECTTAB,SSELECTTABBYPATH,SBOOKMARK,SCLOSETAB,SSETMARK,SUNSETMARK,SMOVETO,SSELECTBETWEEN,SPASTE,SCOPY,SCUT,SINSERTTEXT,SINSERTNL,SINSERTFILE,SPRINTFILES,SWAITFORKKEDIT,SSHOWCONTINUE,SRUNTOOL,SRESTORESESSION,SACTIVATEMENUBYNAME,SACTIVATEMENUBYLABEL,SSENDPOSDATA,SSENDSELECTION};
 
-const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","SelectTabByPath","Bookmark","CloseTab","SetMark","UnsetMark","MoveTo","SelectBetween","Paste","Copy","Cut","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession","ActivateMenuNamed","ActivateMenuLabeled","SendPosData",NULL};
+const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","SelectTabByPath","Bookmark","CloseTab","SetMark","UnsetMark","MoveTo","SelectBetween","Paste","Copy","Cut","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession","ActivateMenuNamed","ActivateMenuLabeled","SendPosData","SendSelectedText",NULL};
 
 int			queueID=-1;
 msgStruct	message;
@@ -185,6 +185,8 @@ void runKKCommand(void)
 	GString		*str;
 	FILE		*fp;
 
+printf("command num=%i=%s\n",commandNumber,commandList[commandNumber]);
+//vte_get_user_shell
 	switch(commandNumber)
 		{
 //activate menu by menu name
@@ -438,6 +440,23 @@ void runKKCommand(void)
 						}
 					sendMsg(data);
 					free(data);
+				}
+				break;
+//get selection
+			case SSENDSELECTION:
+				{
+					char *data=NULL;
+					if(page!=NULL)
+						{
+							if(gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true)
+								{
+									gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&startiter,&enditer);
+									sinkReturn=asprintf(&data,"%s",gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&startiter,&enditer,false));
+									sendMsg(data);
+									free(data);
+								}
+							
+						}
 				}
 				break;
 		}

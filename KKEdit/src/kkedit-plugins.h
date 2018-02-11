@@ -298,5 +298,6 @@ bool		saveFile(GtkWidget *widget,gpointer data);
 void		newFile(GtkWidget *widget,gpointer data);
 int			loadVarsFromFile(char *filepath,args *dataptr);
 void		saveVarsToFile(char *filepath,args *dataptr);
+GtkToolItem *createNewToolItem(const char *stock,const char *label);
 
 #endif

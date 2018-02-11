@@ -1347,7 +1347,7 @@ VISIBLE GtkWidget *createNewBox(int orient,bool homog,int spacing)
 	return(retwidg);
 }
 
-GtkToolItem *createNewToolItem(const char *stock,const char *label)
+VISIBLE GtkToolItem *createNewToolItem(const char *stock,const char *label)
 {
 	GtkToolItem	*button;
 #ifdef _USEGTK3_

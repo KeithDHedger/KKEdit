@@ -1671,7 +1671,7 @@ VISIBLE void hideToolOutput(bool immediate)
 {
 	ERRDATA
 	showToolOutWin=false;;
-	gtk_widget_show(toolOutVBox);
+	gtk_widget_hide(toolOutVBox);
 	gtk_menu_item_set_label((GtkMenuItem*)toolOutMenu,MENU_SHOW_TOOL_OP_LABEL);
 //	if(immediate==true)
 //		{

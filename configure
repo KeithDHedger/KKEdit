@@ -4815,8 +4815,12 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_new_plugs" >&5
 $as_echo "$enable_new_plugs" >&6; }
 if test "$enable_new_plugs" = "yes"; then
-	NEWPLUGINCLUDES=KKEdit/unstable-plugins/*Plugin
-	ac_config_files="$ac_config_files KKEdit/unstable-plugins/BrowserPlugin/Makefile"
+#	NEWPLUGINCLUDES=KKEdit/unstable-plugins/*Plugin
+	NEWPLUGINCLUDES=KKEdit/unstable-plugins/DebuggerPlugin
+
+
+#	AC_OUTPUT(KKEdit/unstable-plugins/BrowserPlugin/Makefile KKEdit/unstable-plugins/DebuggerPlugin/Makefile)
+	ac_config_files="$ac_config_files KKEdit/unstable-plugins/DebuggerPlugin/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -5549,7 +5553,7 @@ do
   case $ac_config_target in
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
-    "KKEdit/unstable-plugins/BrowserPlugin/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/unstable-plugins/BrowserPlugin/Makefile" ;;
+    "KKEdit/unstable-plugins/DebuggerPlugin/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/unstable-plugins/DebuggerPlugin/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
@@ -6275,6 +6279,8 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
+
+#	AC_OUTPUT($(INCLUDEUNSTABLE))
 
 else
 	NEWPLUGINCLUDES=
@@ -7750,7 +7756,7 @@ do
   case $ac_config_target in
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
-    "KKEdit/unstable-plugins/BrowserPlugin/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/unstable-plugins/BrowserPlugin/Makefile" ;;
+    "KKEdit/unstable-plugins/DebuggerPlugin/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/unstable-plugins/DebuggerPlugin/Makefile" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "KKEdit/app/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/app/Makefile" ;;
     "KKEdit/plugins/TerminalPane/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/plugins/TerminalPane/Makefile" ;;
