@@ -134,8 +134,6 @@ void theCallBack(GtkWidget* widget,gpointer data)
 
 void showHideDebugger(plugData* plugdata,bool startup)
 {
-	//char*	filepath;
-
 	setTextDomain(true,plugdata);
 	if(showing==true)
 		{
@@ -146,15 +144,12 @@ void showHideDebugger(plugData* plugdata,bool startup)
 		}
 	else
 		{
-			//gtk_widget_show_all(swindow);
-			//unlink(filepath);
 			if(plugdata->bottomShow==1 && startup==false)
 				hideTop(false);
 			gtk_menu_item_set_label((GtkMenuItem*)hideMenu,gettext("Show Debugger"));
 			hideToolOutput(true);
 		}
 	setTextDomain(false,plugdata);
-	//debugFree(&filepath);
 }
 
 void toggleDebugger(GtkWidget* widget,gpointer data)
@@ -168,53 +163,13 @@ extern "C" int addToGui(gpointer data)
 {
 	GtkWidget	*menu;
 	plugData	*plugdata=(plugData*)data;
-//#ifdef _USEGTK3_
-//	GdkRGBA		colour;
-//#else
-//	GdkColor	colour;
-//#endif
-//	char*		startterm[2]={0,0};
-//	char*		filename;
-//showToolOutput(true);
+
 	setTextDomain(true,plugdata);
 	menu=gtk_menu_item_get_submenu((GtkMenuItem*)plugdata->mlist.menuView);
 	hideMenu=gtk_menu_item_new_with_label(gettext("Hide Debuuger"));
 	g_signal_connect(G_OBJECT(hideMenu),"activate",G_CALLBACK(toggleDebugger),plugdata);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),hideMenu);
 	gtk_widget_show_all(plugdata->mlist.menuView);
-
-//	terminal=vte_terminal_new();
-//	vte_terminal_set_default_colors((VteTerminal*)terminal);
-//	vte_terminal_set_scrollback_lines((VteTerminal*)terminal,-1);
-//	sinkInt=asprintf(&filename,"%s/debugger.rc",plugdata->lPlugFolder);
-//	loadVarsFromFile(filename,mydata);
-//	debugFree(&filename);
-//
-////gdk_rgba_parse
-//#ifdef _USEGTK3_
-//	gdk_rgba_parse(&colour,(const gchar*)foreColour);
-//
-//#ifdef _VTEVERS290_
-//	vte_terminal_set_color_foreground_rgba((VteTerminal*)terminal,(const GdkRGBA*)&colour);
-//#else
-//	vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkRGBA*)&colour);
-//#endif
-//
-//	gdk_rgba_parse(&colour,(const gchar*)backColour);
-//#ifdef _VTEVERS290_
-//	vte_terminal_set_color_background_rgba((VteTerminal*)terminal,(const GdkRGBA*)&colour);
-//#else
-//	vte_terminal_set_color_background((VteTerminal*)terminal,(const GdkRGBA*)&colour);
-//#endif
-//
-//#else
-//	gdk_color_parse((const gchar*)foreColour,&colour);
-//	vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkColor*)&colour);
-//	gdk_color_parse((const gchar*)backColour,&colour);
-//	vte_terminal_set_color_background((VteTerminal*)terminal,(const GdkColor*)&colour);
-//#endif
-//
-//	//swindow = gtk_scrolled_window_new(NULL, NULL);
 
 //toolbar
 	debuggerVBox=createNewBox(NEWVBOX,false,0);
@@ -312,44 +267,14 @@ extern "C" int addToGui(gpointer data)
 	GtkWidget *vbox=createNewBox(NEWVBOX,false,0);
 
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)debuggerToolbar,false,false,0);
-//	swindow = gtk_scrolled_window_new(NULL, NULL);
-//	gtk_container_add(GTK_CONTAINER(swindow),terminal);
-//	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)swindow,true,true,0);
 	gtk_widget_show_all(vbox);
 
 	gtk_box_pack_start((GtkBox*)plugdata->bottomUserBox,vbox,true,true,0);
-	//gtk_widget_show_all(plugdata->bottomUserBox);
-
-//	g_signal_connect(terminal,"key-press-event",G_CALLBACK(on_key_press),NULL);
-//	g_signal_connect(terminal,"button-press-event",G_CALLBACK(doButton),(void*)plugdata);
-//	startterm[0]=vte_get_user_shell();
-
-//#ifdef _USEGTK3_
-//
-//#ifdef _VTEVERS290_
-//	vte_terminal_fork_command_full((VteTerminal *)terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&childPid,NULL);
-//#else
-//	vte_terminal_spawn_sync((VteTerminal *)terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&childPid,NULL,NULL);
-//#endif
-//
-//#else
-//	vte_terminal_fork_command_full((VteTerminal *)terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&childPid,NULL);
-//#endif
-
-	//doStartUpCheck(plugdata);
 	showHideDebugger(plugdata,false);
-//showToolOutput(true);
-//	if(showing==true)
-//		{
-//		//showToolOutput(true);
-//		showTop(false);
-//		}
-//	else
-//		hideTop(false);
 
-GtkTextIter	endopiter;
-gtk_text_buffer_get_end_iter(plugdata->toolOutBuffer,&endopiter);
-gtk_text_buffer_insert(plugdata->toolOutBuffer,&endopiter,"Welcome to the KKEdit Debuuger Plugin",-1);
+	GtkTextIter	endopiter;
+	gtk_text_buffer_get_end_iter(plugdata->toolOutBuffer,&endopiter);
+	gtk_text_buffer_insert(plugdata->toolOutBuffer,&endopiter,"Welcome to the KKEdit Debuuger Plugin",-1);
 	return(0);
 }
 
