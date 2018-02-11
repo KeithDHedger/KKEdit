@@ -356,8 +356,6 @@ extern "C" int enablePlug(gpointer data)
 	if(plugdata->modData->unload==true)
 		{
 			gtk_widget_destroy(hideMenu);
-			//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),hideMenu);
-
 			gtk_widget_show_all(plugdata->mlist.menuBar);	
 		}
 	else
