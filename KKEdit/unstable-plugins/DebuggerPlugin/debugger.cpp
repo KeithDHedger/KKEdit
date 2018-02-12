@@ -37,12 +37,15 @@ char		*prefsPath;
 GtkWidget	*menuPlug;
 char		*currentdomain=NULL;
 int			sinkInt;
+plugData	*thisPlugData;
 
 //menus
 GtkWidget	*hideMenu=NULL;
 bool		showing=false;
 
 //debugger controls
+enum {RUNNAPP=1,NEXTLINE,STEPINTO,STEPOUTOF,EXITLOOP,FINISH,INTAPP,CONTINUE,SHOWBACK,GETBP,SETBP,CLEARBP,GETVAR,UPDATEVAR,RUNGDBCOM,OPENPATH};
+
 GtkWidget	*toolBarBox;
 GtkWidget	*debuggerVBox;
 GtkToolbar	*debuggerToolbar=NULL;
@@ -72,6 +75,10 @@ GtkToolItem	*updateVarButton=NULL;
 GtkToolItem	*gdbCommandButton=NULL;
 GtkWidget	*gdbCommandEntry=NULL;
 GtkToolItem	*gdbCommandEntryTI=NULL;
+//app to debug
+GtkToolItem	*debugApp=NULL;
+GtkWidget	*debugAppEntry=NULL;
+GtkToolItem	*debugAppEntryTI=NULL;
 
 int	(*module_plug_function)(gpointer globaldata);
 
@@ -158,10 +165,79 @@ void toggleDebugger(GtkWidget* widget,gpointer data)
 	showHideDebugger((plugData*)data,false);
 }
 
+void buttonCB(GtkWidget* widget,gpointer data)
+{
+	printf("select=%lu\n",(unsigned long)data);
+	switch((unsigned long)data)
+		{
+			case RUNNAPP:
+				break;
+			case NEXTLINE:
+				break;
+			case STEPINTO:
+				break;
+			case STEPOUTOF:
+				break;
+			case EXITLOOP:
+				break;
+			case FINISH:
+				break;
+			case INTAPP:
+				break;
+			case CONTINUE:
+				break;
+			case SHOWBACK:
+				break;
+			case GETBP:
+				break;
+			case SETBP:
+				break;
+			case CLEARBP:
+				break;
+			case GETVAR:
+				break;
+			case UPDATEVAR:
+				break;
+			case RUNGDBCOM:
+				break;
+			case OPENPATH:
+				{
+					GtkWidget	*dialog;
+					char		*filename;
+
+#ifdef _USEGTK3_
+					dialog=gtk_file_chooser_dialog_new(gettext("Select Application To Debug"),NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN_LABEL, GTK_RESPONSE_ACCEPT,NULL);
+#else
+					dialog=gtk_file_chooser_dialog_new(gettext("Select Application To Debug"),NULL,GTK_FILE_CHOOSER_ACTION_OPEN,GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,NULL);
+#endif
+					gtk_window_set_transient_for((GtkWindow*)dialog,(GtkWindow*)thisPlugData->mainWindow);
+					if(gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_ACCEPT)
+						{
+							filename=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+							if(filename!=NULL)
+								{
+									struct stat st;
+									stat(filename,&st);
+									
+									if((st.st_mode & S_IXUSR))
+										{
+											gtk_entry_set_text((GtkEntry*)debugAppEntry,filename);
+											g_free(filename);
+										}
+								}
+							gtk_widget_destroy(dialog);
+						}
+				}
+				break;
+		}
+}
+
 extern "C" int addToGui(gpointer data)
 {
 	GtkWidget	*menu;
 	plugData	*plugdata=(plugData*)data;
+
+	thisPlugData=(plugData*)data;
 
 	setTextDomain(true,plugdata);
 	menu=gtk_menu_item_get_submenu((GtkMenuItem*)plugdata->mlist.menuView);
@@ -175,91 +251,132 @@ extern "C" int addToGui(gpointer data)
 	debuggerToolbar=(GtkToolbar*)gtk_toolbar_new();
 	gtk_toolbar_set_icon_size(debuggerToolbar,GTK_ICON_SIZE_SMALL_TOOLBAR);
 	gtk_toolbar_set_style (debuggerToolbar,GTK_TOOLBAR_ICONS);
+
 //run
 	runAppButton=createNewToolItem(GTK_STOCK_MEDIA_PLAY,"Run");
 	gtk_toolbar_insert(debuggerToolbar,runAppButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)runAppButton,"Run application");
+	g_signal_connect_after(G_OBJECT(runAppButton),"clicked",G_CALLBACK(buttonCB),(void*)RUNNAPP);
+
 //next
 	nextAppButton=createNewToolItem(GTK_STOCK_MEDIA_NEXT,"Next");
 	gtk_toolbar_insert(debuggerToolbar,nextAppButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)nextAppButton,"Next comannd");
+	g_signal_connect_after(G_OBJECT(nextAppButton),"clicked",G_CALLBACK(buttonCB),(void*)NEXTLINE);
+
 //into
 	stepIntoAppButton=createNewToolItem(GTK_STOCK_GO_DOWN,"Step In");
 	gtk_toolbar_insert(debuggerToolbar,stepIntoAppButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)stepIntoAppButton,"Step into next func");
+	g_signal_connect_after(G_OBJECT(stepIntoAppButton),"clicked",G_CALLBACK(buttonCB),(void*)STEPINTO);
+
 //out
 	stepOutAppButton=createNewToolItem(GTK_STOCK_GO_UP,"Step Out");
 	gtk_toolbar_insert(debuggerToolbar,stepOutAppButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)stepOutAppButton,"Step out of next func");
+	g_signal_connect_after(G_OBJECT(stepOutAppButton),"clicked",G_CALLBACK(buttonCB),(void*)STEPOUTOF);
+
 //end loop
 	endLoopAppButton=createNewToolItem(GTK_STOCK_REDO,"Exit Loop");
 	gtk_toolbar_insert(debuggerToolbar,endLoopAppButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)endLoopAppButton,"Run to end of loop");
+	g_signal_connect_after(G_OBJECT(endLoopAppButton),"clicked",G_CALLBACK(buttonCB),(void*)EXITLOOP);
+
 //finish
 	finishAppButton=createNewToolItem(GTK_STOCK_GOTO_LAST,"Finish");
 	gtk_toolbar_insert(debuggerToolbar,finishAppButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)finishAppButton,"Finish app");
+	g_signal_connect_after(G_OBJECT(finishAppButton),"clicked",G_CALLBACK(buttonCB),(void*)FINISH);
+
 //interupt
 	intAppButton=createNewToolItem(GTK_STOCK_DIALOG_WARNING,"Interupt");
 	gtk_toolbar_insert(debuggerToolbar,intAppButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)intAppButton,"Interupt app");
+	g_signal_connect_after(G_OBJECT(intAppButton),"clicked",G_CALLBACK(buttonCB),(void*)INTAPP);
+
 //continue
 	contAppButton=createNewToolItem(GTK_STOCK_EXECUTE,"Continue");
 	gtk_toolbar_insert(debuggerToolbar,contAppButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)contAppButton,"Continue app");
+	g_signal_connect_after(G_OBJECT(contAppButton),"clicked",G_CALLBACK(buttonCB),(void*)CONTINUE);
+
 //backtrace
 	backtraceAppButton=createNewToolItem(GTK_STOCK_COPY,"Backtrace");
 	gtk_toolbar_insert(debuggerToolbar,backtraceAppButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)backtraceAppButton,"Show backtrace");
+	g_signal_connect_after(G_OBJECT(backtraceAppButton),"clicked",G_CALLBACK(buttonCB),(void*)SHOWBACK);
 
 //get breakpoint
 	getBreakPointButton=createNewToolItem(GTK_STOCK_MEDIA_RECORD,"BP");
 	gtk_toolbar_insert(debuggerToolbar,getBreakPointButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)getBreakPointButton,"Get break point at current line");
+	g_signal_connect_after(G_OBJECT(getBreakPointButton),"clicked",G_CALLBACK(buttonCB),(void*)GETBP);
+
 //set/unset
 	setBreakPointButton=createNewToolItem(GTK_STOCK_APPLY,"Set");
 	gtk_toolbar_insert(debuggerToolbar,setBreakPointButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)setBreakPointButton,"Set break point at current line");
+	g_signal_connect_after(G_OBJECT(setBreakPointButton),"clicked",G_CALLBACK(buttonCB),(void*)SETBP);
 
 	unsetBreakPointButton=createNewToolItem(GTK_STOCK_CANCEL,"Unset");
 	gtk_toolbar_insert(debuggerToolbar,unsetBreakPointButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)unsetBreakPointButton,"Unset break point at current line");
+	g_signal_connect_after(G_OBJECT(unsetBreakPointButton),"clicked",G_CALLBACK(buttonCB),(void*)CLEARBP);
+
 //breakpoint data
 	getBreakPointEntry=gtk_entry_new();
+	gtk_entry_set_width_chars((GtkEntry *)getBreakPointEntry,6);
 	getBreakPointEntryTI=gtk_tool_item_new();
 	gtk_container_add((GtkContainer *)getBreakPointEntryTI,getBreakPointEntry);
 	gtk_toolbar_insert(debuggerToolbar,getBreakPointEntryTI,-1);
-						//g_signal_connect_after(G_OBJECT(findApiWidget),"activate",G_CALLBACK(docSearchFromBar),(void*)findApiWidget);
 	gtk_widget_set_tooltip_text((GtkWidget*)getBreakPointEntry,"Get break point at current line");
 
 //variables
 	getVarButton=createNewToolItem(GTK_STOCK_DIALOG_QUESTION,"Var");
 	gtk_toolbar_insert(debuggerToolbar,getVarButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)getVarButton,"Get selected variable");
+	g_signal_connect_after(G_OBJECT(getVarButton),"clicked",G_CALLBACK(buttonCB),(void*)GETVAR);
+
 //update
 	updateVarButton=createNewToolItem(GTK_STOCK_APPLY,"Update");
 	gtk_toolbar_insert(debuggerToolbar,updateVarButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)updateVarButton,"Update variable data");
+	g_signal_connect_after(G_OBJECT(updateVarButton),"clicked",G_CALLBACK(buttonCB),(void*)UPDATEVAR);
 
 //variable data
 	getVarEntry=gtk_entry_new();
 	getVarEntryTI=gtk_tool_item_new();
 	gtk_container_add((GtkContainer *)getVarEntryTI,getVarEntry);
 	gtk_toolbar_insert(debuggerToolbar,getVarEntryTI,-1);
-						//g_signal_connect_after(G_OBJECT(findApiWidget),"activate",G_CALLBACK(docSearchFromBar),(void*)findApiWidget);
 	gtk_widget_set_tooltip_text((GtkWidget*)getVarEntry,"Variable data");
 
 //gdb command
 	gdbCommandButton=createNewToolItem(GTK_STOCK_APPLY,"GDB");
 	gtk_toolbar_insert(debuggerToolbar,gdbCommandButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)gdbCommandButton,"Run GDB command");
+	g_signal_connect_after(G_OBJECT(gdbCommandButton),"clicked",G_CALLBACK(buttonCB),(void*)RUNGDBCOM);
+
 //gdb command data
 	gdbCommandEntry=gtk_entry_new();
 	gdbCommandEntryTI=gtk_tool_item_new();
 	gtk_container_add((GtkContainer *)gdbCommandEntryTI,gdbCommandEntry);
 	gtk_toolbar_insert(debuggerToolbar,gdbCommandEntryTI,-1);
-						//g_signal_connect_after(G_OBJECT(findApiWidget),"activate",G_CALLBACK(docSearchFromBar),(void*)findApiWidget);
 	gtk_widget_set_tooltip_text((GtkWidget*)gdbCommandEntry,"GDB command to run");
+	gtk_tool_item_set_expand(gdbCommandEntryTI,true);
+
+//debug app path
+	debugApp=createNewToolItem(GTK_STOCK_OPEN,"Debug");
+	gtk_toolbar_insert(debuggerToolbar,debugApp,-1);
+	gtk_widget_set_tooltip_text((GtkWidget*)debugApp,"Path to app for debugging");
+	g_signal_connect_after(G_OBJECT(debugApp),"clicked",G_CALLBACK(buttonCB),(void*)OPENPATH);
+
+//debug app data
+	debugAppEntry=gtk_entry_new();
+	debugAppEntryTI=gtk_tool_item_new();
+	gtk_container_add((GtkContainer *)debugAppEntryTI,debugAppEntry);
+	gtk_toolbar_insert(debuggerToolbar,debugAppEntryTI,-1);
+	gtk_widget_set_tooltip_text((GtkWidget*)debugAppEntry,"Path to app for debugging");
+	gtk_tool_item_set_expand(debugAppEntryTI,true);
 
 
 //vbox->debuggerToolbar->swindow->terminal
