@@ -39,8 +39,8 @@ void destroyBMData(gpointer data);
 void toggleBookmark(GtkWidget*,GtkTextIter *titer);
 void removeAllBookmarks(GtkWidget *widget,GtkTextIter *titer);
 void toggleBookMarkBar(GtkWidget *widget,gpointer data);
-void setUserMark(const char *mark,unsigned line);
-void removeUserMark(const char *umark,unsigned line);
+void setUserMark(const char *mark,int line);
+void removeUserMark(const char *umark,int line);
 
 
 #endif

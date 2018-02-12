@@ -85,7 +85,7 @@ VISIBLE void removeAllBookmarks(GtkWidget *widget,GtkTextIter *titer)
 	gtk_widget_show_all(bookMarkMenu);
 }
 
-VISIBLE void removeUserMark(const char *umark,unsigned line)
+VISIBLE void removeUserMark(const char *umark,int line)
 {
 	pageStruct		*page=getPageStructByIDFromPage(-1);
 	const gchar		*mark_type;
@@ -93,9 +93,9 @@ VISIBLE void removeUserMark(const char *umark,unsigned line)
 	GtkTextIter		iter;
 
 	if(page==NULL)
-	return;
+		return;
 	mark_type=umark;
-
+printf(">>>line=%i<<<<\n",line);
 	if(line<0)
 		{
 			mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
@@ -108,7 +108,8 @@ VISIBLE void removeUserMark(const char *umark,unsigned line)
 	gtk_source_buffer_remove_source_marks(page->buffer,&iter,&iter,mark_type);
 }
 
-VISIBLE void setUserMark(const char *mark,unsigned line)
+//TODO//
+VISIBLE void setUserMark(const char *mark,int line)
 {
 	pageStruct		*page=getPageStructByIDFromPage(-1);
 	const gchar		*mark_type;

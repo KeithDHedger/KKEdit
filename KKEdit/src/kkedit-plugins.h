@@ -299,5 +299,8 @@ void		newFile(GtkWidget *widget,gpointer data);
 int			loadVarsFromFile(char *filepath,args *dataptr);
 void		saveVarsToFile(char *filepath,args *dataptr);
 GtkToolItem *createNewToolItem(const char *stock,const char *label);
+void		removeUserMark(const char *umark,int line);
+void		setUserMark(const char *mark,int line);
+void		gotoLine(GtkWidget *widget,gpointer data);
 
 #endif

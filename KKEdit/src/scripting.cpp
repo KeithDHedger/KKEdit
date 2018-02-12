@@ -185,7 +185,7 @@ void runKKCommand(void)
 	GString		*str;
 	FILE		*fp;
 
-printf("command num=%i=%s\n",commandNumber,commandList[commandNumber]);
+//printf("command num=%i=%s\n",commandNumber,commandList[commandNumber]);
 //vte_get_user_shell
 	switch(commandNumber)
 		{

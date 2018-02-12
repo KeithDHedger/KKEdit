@@ -15,6 +15,12 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+
+#include <unistd.h>
+#include <spawn.h>
+#include <poll.h>
+#include <signal.h>
+
 #include <gdk/gdkkeysyms.h>
 
 #include <libintl.h>
@@ -165,36 +171,479 @@ void toggleDebugger(GtkWidget* widget,gpointer data)
 	showHideDebugger((plugData*)data,false);
 }
 
+
+
+
+#define MAXBUFSIZE 8192
+
+char		buffer[MAXBUFSIZE]={0,};
+FILE		*to,*from;
+/* Pipes connected to gdb. */
+int			to_gdb[2];
+int			from_gdb[2];
+pid_t		xtermpid;
+GtkWidget	*command;
+char		*instance;
+char		*sinkReturnStr;
+unsigned	lastline=0;
+char		*currentfile=strdup("");
+int			childPid=-1;
+const char	*keywords[]={"fullname=","line=","value=",NULL};
+char		*fullPath=NULL;
+char		*fileName=NULL;
+char		*lineNumber=NULL;
+char		*value=NULL;
+
+int stopChild(void)
+{
+	fputs("info proc\n",to);
+	fflush(to);
+	buffer[0]=0;
+	usleep(10000);
+
+	while(fgets((char*)&buffer,MAXBUFSIZE-1,from))
+		{
+			if(strstr(buffer,"process")!=NULL)
+				return(atoi(&buffer[10]));
+			buffer[0]=0;
+		}
+	return(-1);
+}
+
+void selectTabByPath(const char *path)
+{
+	pageStruct	*page;
+
+	for(int j=-0;j<gtk_notebook_get_n_pages(thisPlugData->notebook);j++)
+		{
+			page=getPageStructByIDFromPage(j);
+			if(page!=NULL)
+				{
+					if(strcmp(page->filePath,path)==0)
+						{
+							gtk_notebook_set_current_page(thisPlugData->notebook,j);
+							break;
+						}
+				}
+		}
+}
+
+void setLineMarker(const char *file,unsigned long nl)
+{
+	if(strcmp(currentfile,file)!=0)
+		{
+			free(currentfile);
+			currentfile=strdup(file);
+			openFile(file,nl,false);
+			selectTabByPath(file);
+		}
+	else
+		{
+			removeUserMark("user2",nl-1);
+			setUserMark("user2",nl-1);
+			gotoLine(NULL,(gpointer)nl);
+		}
+	lastline=nl;
+}
+
+void removeLineMark(void)
+{
+	removeUserMark("user2",lastline-1);
+}
+
+void setLineMark(const char *file,unsigned long line,const char *markname,bool set)
+{
+
+	selectTabByPath(file);
+	gotoLine(NULL,(gpointer)line);
+	if(set==true)
+		setUserMark(markname,line-1);
+	else
+		removeUserMark(markname,line-1);
+}
+
+bool parseOPString(void)
+{
+	char		*holdstr;
+	unsigned	cnt=0;
+	char		*endptr=NULL;
+	char		*startptr=NULL;
+	bool		found=false;
+	holdstr=strdup(buffer);
+
+	while(keywords[cnt]!=NULL)
+		{
+			if(strstr(buffer,keywords[cnt])!=NULL)
+				{
+					startptr=strstr(buffer,keywords[cnt]);
+					endptr=strstr(startptr,"\",");
+					if(endptr!=NULL)
+						*endptr=0;
+					found=true;
+					switch(cnt)
+						{
+							case 0:
+								if(fullPath!=NULL)
+									free(fullPath);
+								fullPath=strdup(&startptr[strlen(keywords[cnt])+1]);
+								break;
+							case 1:
+								if(lineNumber!=NULL)
+									free(lineNumber);
+								lineNumber=strdup(&startptr[strlen(keywords[cnt])+1]);
+								break;
+							case 2:
+								endptr=strstr(startptr,"\"\n");
+								if(endptr!=NULL)
+									*endptr=0;
+								if(value!=NULL)
+									free(value);
+								value=strdup(&startptr[strlen(keywords[cnt])+1]);
+								break;
+						}
+					sprintf(buffer,"%s",holdstr);
+				}
+			cnt++;
+		}
+	return(found);
+}
+
+void waitForPrompt(void)
+{
+	fflush(to);
+	buffer[0]=0;
+	usleep(150000);
+	while(fgets((char*)&buffer,MAXBUFSIZE-1,from))
+		{
+		//printf(">>bufer=%s<<<\n",buffer);
+			if(parseOPString()==true)
+				setLineMarker(fullPath,atoi(lineNumber));
+			buffer[0]=0;
+		}
+}
+
+int fileExists(const char *name)
+{
+	struct stat buffer;
+	return (stat(name,&buffer));
+}
+
+void setUpGDB(const char*program)
+{
+	/* Streams for the pipes. */
+	/* PID of child gdb. */
+	pid_t		pid;
+	extern char	**environ;
+	const char	*commands[]={"-break-insert main\n","-exec-run\n","\n",NULL};
+	int			cnt=0;
+	char		*ttynum;
+	FILE		*fp=NULL;
+	const char	*argvxt[]={"xterm","-geom","100x20+100+100","-e","/tmp/xtermscript",NULL};
+	const char	*argvv[6];
+
+	system("rm /tmp/xtermscript /tmp/ptynum &>/dev/null");
+	system("echo -e \"#!/bin/bash\ntty >/tmp/ptynum\ntail -f $@ &>/dev/null\n\" > /tmp/xtermscript");
+	system ("chmod +x /tmp/xtermscript");
+	posix_spawnp(&xtermpid,argvxt[0],NULL,NULL,(char**)argvxt,environ);
+
+	while(fileExists("/tmp/ptynum")!=0)
+		usleep(10000);
+
+	fp=popen("cat /tmp/ptynum","r");
+	if(fp!=NULL)
+		{
+			while(fgets(buffer,MAXBUFSIZE-1,fp))
+				{
+					buffer[strlen(buffer)-1]=0;
+					asprintf(&ttynum,"--tty=%s",buffer);
+				}
+			fclose(fp);
+		}
+
+	argvv[0]="/usr/bin/gdb";
+	argvv[1]="--interpreter=mi2";
+	argvv[2]="-q";
+	argvv[3]=ttynum;
+	argvv[4]=program;
+	argvv[5]=NULL;
+
+	pipe2(to_gdb,O_NONBLOCK);
+	pipe2(from_gdb,O_NONBLOCK);
+	to=fdopen(to_gdb[1],"w");
+	from=fdopen(from_gdb[0],"r");
+
+	posix_spawn_file_actions_t action;
+	posix_spawn_file_actions_init(&action);
+	posix_spawn_file_actions_addclose(&action,to_gdb[1]);
+	posix_spawn_file_actions_addclose(&action,from_gdb[0]);
+
+	posix_spawn_file_actions_adddup2(&action,to_gdb[0],STDIN_FILENO);
+	posix_spawn_file_actions_adddup2(&action,from_gdb[1],STDOUT_FILENO);
+
+	posix_spawn_file_actions_addclose(&action,to_gdb[0]);
+	posix_spawn_file_actions_addclose(&action,from_gdb[1]);
+	posix_spawnp(&pid,argvv[0],  &action, NULL, (char**)argvv, environ);
+
+	usleep(500000);
+	while(commands[cnt]!=NULL)
+		{
+			fputs(commands[cnt],to);
+			fflush(to);
+			waitForPrompt();
+			cnt++;
+		}
+	fputs("set print pretty on\n",to);
+	childPid=stopChild();
+}
+
+void printUntilGDB(void)
+{
+	char	*prettystr;
+	bool	isdone;
+
+	fflush(to);
+	buffer[0]=0;
+
+	do
+		{
+			isdone=false;
+			while(fgets((char*)&buffer,MAXBUFSIZE-1,from))
+				{
+					if((strncmp(buffer,"(gdb)",5)==0) ||(strncmp(buffer,"^done",5)==0))
+						{
+							isdone=true;
+							break;
+						}
+					buffer[strlen(buffer)-2]=0;
+					if(buffer[1]=='"')
+						prettystr=g_strcompress(&buffer[2]);
+					else
+						prettystr=g_strcompress(buffer);
+					printf("%s",prettystr);
+					g_free(prettystr);
+				}
+		}
+	while(isdone==false);
+	printf("\n");
+}
+
+void printOut(void)
+{
+	char	*prettystr;
+	fflush(to);
+	buffer[0]=0;
+	usleep(10000);
+	while(fgets((char*)&buffer,MAXBUFSIZE-1,from))
+		{
+			buffer[strlen(buffer)-2]=0;
+			if(buffer[1]=='"')
+				prettystr=g_strcompress(&buffer[2]);
+			else
+				prettystr=g_strcompress(buffer);
+			printf("%s",prettystr);
+			g_free(prettystr);
+			buffer[0]=0;
+		}
+	printf("\n");
+}
+
+void makeBreakPoint(bool set)
+{
+	if(set==true)
+		sprintf(buffer,"-break-insert %s",gtk_entry_get_text((GtkEntry*)getBreakPointEntry));
+	else
+		sprintf(buffer,"clear %s",gtk_entry_get_text((GtkEntry*)getBreakPointEntry));
+}
+
+void discardUntilGDB(void)
+{
+	bool	isdone=false;
+
+	fflush(to);
+	buffer[0]=0;
+
+	do
+		{
+			isdone=false;
+			while(fgets((char*)&buffer,MAXBUFSIZE-1,from))
+				{
+					if((strncmp(buffer,"(gdb)",5)==0) ||(strncmp(buffer,"^done",5)==0))
+						{
+							isdone=true;
+							break;
+						}
+				}
+		}
+	while(isdone==false);
+	printf("\n");
+}
+
+const char *waitForValue(void)
+{
+	fflush(to);
+	buffer[0]=0;
+	usleep(150000);
+	while(fgets((char*)&buffer,MAXBUFSIZE-1,from))
+		{
+			if(parseOPString()==true)
+				return(value);
+		}
+	return(NULL);
+}
+
 void buttonCB(GtkWidget* widget,gpointer data)
 {
 	printf("select=%lu\n",(unsigned long)data);
 	switch((unsigned long)data)
 		{
 			case RUNNAPP:
+				fputs("-exec-run\n",to);
+				usleep(10000);
+				waitForPrompt();
+				childPid=stopChild();
+				return;
 				break;
 			case NEXTLINE:
+				removeLineMark();
+				fputs("-exec-next\n",to);
 				break;
 			case STEPINTO:
+				removeLineMark();
+				fputs("-exec-step\n",to);
 				break;
 			case STEPOUTOF:
+				removeLineMark();
+				fputs("-exec-finish\n",to);
 				break;
 			case EXITLOOP:
+				removeLineMark();
+				fputs("-exec-until\n",to);
 				break;
 			case FINISH:
+				removeLineMark();
+				fputs("finish\n",to);
+				printOut();
+				fputs("backtrace\n",to);
+				printUntilGDB();
 				break;
 			case INTAPP:
+				if(childPid!=-1)
+					{
+						sprintf(buffer,"kill -2 %i",childPid);
+						system(buffer);
+					}
+				printOut();
+				fputs("backtrace\n",to);
+				printUntilGDB();
 				break;
 			case CONTINUE:
+				removeLineMark();
+				fputs("-exec-continue\n",to);
 				break;
 			case SHOWBACK:
+				fputs("backtrace\n",to);
+				printUntilGDB();
 				break;
 			case GETBP:
+				{
+					char		linenumasstr[16];
+					int			linenum;
+					GtkTextIter	startiter;
+					pageStruct	*page=getPageStructByIDFromPage(-1);
+
+//TODO//
+					if(page!=NULL)
+						{
+							gtk_text_buffer_get_iter_at_mark((GtkTextBuffer*)page->buffer,&startiter,gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer));
+							linenum=gtk_text_iter_get_line(&startiter);
+							sprintf(linenumasstr,"%i",linenum+1);
+							gtk_entry_set_text((GtkEntry*)getBreakPointEntry,linenumasstr);
+							makeBreakPoint(true);
+							fputs(buffer,to);
+							setUserMark("user1",atoi(gtk_entry_get_text((GtkEntry*)getBreakPointEntry))-1);
+							discardUntilGDB();
+							return;
+						}
+				}
 				break;
 			case SETBP:
+				{
+					pageStruct	*page=getPageStructByIDFromPage(-1);
+					if(page!=NULL)
+						{
+							makeBreakPoint(true);
+							fputs(buffer,to);							
+							setUserMark("user1",atoi(gtk_entry_get_text((GtkEntry*)getBreakPointEntry))-1);
+							discardUntilGDB();
+							return;
+						}
+				}
 				break;
 			case CLEARBP:
+				{
+					pageStruct	*page=getPageStructByIDFromPage(-1);
+					if(page!=NULL)
+						{
+							makeBreakPoint(false);
+							fputs(buffer,to);							
+							removeUserMark("user1",atoi(gtk_entry_get_text((GtkEntry*)getBreakPointEntry))-1);
+							discardUntilGDB();
+							return;
+						}
+				}
 				break;
 			case GETVAR:
+					{
+					char		*clipdata=NULL;
+					GtkTextIter	startiter;
+					GtkTextIter	enditer;
+					const char	*val;
+
+					pageStruct	*page=getPageStructByIDFromPage(-1);
+
+					if(page!=NULL)
+						{
+							if(gtk_text_buffer_get_has_selection((GtkTextBuffer*)page->buffer)==true)
+								{
+									gtk_text_buffer_get_selection_bounds((GtkTextBuffer*)page->buffer,&startiter,&enditer);
+									sinkInt=asprintf(&clipdata,"%s",gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&startiter,&enditer,false));
+									//sendMsg(data);
+									//free(data);
+								//}
+							
+						//}
+
+
+					//sprintf(buffer,"kkeditmsg -k %s -s \"SendSelectedText\" -a",instance);
+					//system(buffer);
+					//sprintf(buffer,"kkeditmsg -k %s",instance);
+					//clipdata=oneLiner(buffer);
+
+					if(clipdata!=NULL)
+						{
+							gtk_entry_set_text ((GtkEntry*)getVarEntry,clipdata);
+							sprintf(buffer,"ptype %s\n",clipdata);
+							fputs(buffer,to);
+							printUntilGDB();
+							free(clipdata);
+							sprintf(buffer,"-data-evaluate-expression %s\n",gtk_entry_get_text((GtkEntry*)getVarEntry));
+							fputs(buffer,to);
+							val=waitForValue();
+							if((val!=NULL))
+								printf("%s\n",val);
+							//	gtk_entry_set_text((GtkEntry*)mainguiText[VAROPTXT],val);
+							else
+								printf("--UNKOWN VARIABLE--");
+								//gtk_entry_set_text((GtkEntry*)mainguiText[VAROPTXT],"--UNKOWN VARIABLE--");
+						}
+						}
+						}
+					//else
+					//	{
+					//		gtk_entry_set_text ((GtkEntry*)mainguiText[VARNAMETXT],"");
+					//	}
+				}
+
 				break;
 			case UPDATEVAR:
 				break;
@@ -222,6 +671,7 @@ void buttonCB(GtkWidget* widget,gpointer data)
 									if((st.st_mode & S_IXUSR))
 										{
 											gtk_entry_set_text((GtkEntry*)debugAppEntry,filename);
+											setUpGDB(filename);
 											g_free(filename);
 										}
 								}
@@ -230,6 +680,7 @@ void buttonCB(GtkWidget* widget,gpointer data)
 				}
 				break;
 		}
+	waitForPrompt();
 }
 
 extern "C" int addToGui(gpointer data)
