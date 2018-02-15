@@ -1,4 +1,6 @@
 0.4.2
+Added custom icons to debug plugin.
+Fixed wrong types when calling set/remove user mark.
 Added debugger plugin to unstable plugins.
 Added "Current Session" to session manager save menu to save current session.
 Fixed segfault if LANG env var is unset, defaults to en_GB now.

@@ -95,7 +95,7 @@ VISIBLE void removeUserMark(const char *umark,int line)
 	if(page==NULL)
 		return;
 	mark_type=umark;
-printf(">>>line=%i<<<<\n",line);
+
 	if(line<0)
 		{
 			mark=gtk_text_buffer_get_insert((GtkTextBuffer*)page->buffer);
