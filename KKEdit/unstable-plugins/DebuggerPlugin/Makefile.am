@@ -15,6 +15,7 @@ distclean:
 	rm -f *.o *.so Makefile||true
 
 install: all
-	mkdir -vp $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk/$(PLUGNAME)/Resources
+	mkdir -vp $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk/$(PLUGNAME)/resources
 	cp $(SONAME).so $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk
 	cp po/fr_FR/LC_MESSAGES/Debugger.mo  $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES
+	cp -r resources $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk/$(PLUGNAME)/resources
