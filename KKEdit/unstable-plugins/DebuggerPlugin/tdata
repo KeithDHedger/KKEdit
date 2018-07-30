@@ -1,0 +1,62 @@
+ptype windowInitStruct
+type = struct windowInitStruct {
+    int x;
+    int y;
+    int w;
+    int h;
+    const char *name;
+    bool overRide;
+    bool loadVars;
+    bool shutDisplayOnExit;
+    const char *windowType;
+    bool decorated;
+    int level;
+}
+
+select=15
+info windowInitStruct
+Undefined info command: "windowInitStruct".  Try "help info".
+
+select=15
+whatis windowInitStruct
+type = windowInitStruct
+
+select=15
+whatis wc
+type = LFSTK_windowClass *
+
+select=15
+whatis wi
+type = windowInitStruct *
+
+select=15
+whatis diskInfoPath
+type = char *
+
+select=15
+whatis LFSTK_windowClass
+type = LFSTK_windowClass
+
+
+select=15
+whatis msgBuffer
+type = msgBuffer
+
+select=15
+whatis buffer
+type = msgBuffer
+
+select=15
+ptype buffer
+type = struct msgBuffer {
+    long mType;
+    char mText[256];
+}
+
+select=15
+ptype wi->overRide
+type = bool
+
+select=15
+ptype wi->overRide
+type = bool

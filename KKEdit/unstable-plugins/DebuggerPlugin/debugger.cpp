@@ -15,7 +15,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-
 #include <unistd.h>
 #include <spawn.h>
 #include <poll.h>
@@ -65,6 +64,7 @@ char		*fullPath=NULL;
 char		*fileName=NULL;
 char		*lineNumber=NULL;
 char		*value=NULL;
+bool		running=false;
 
 char		*prefsPath;
 GtkWidget	*menuPlug;
@@ -78,17 +78,17 @@ GtkWidget	*hideMenu=NULL;
 bool		showing=false;
 
 //debugger controls
-enum {RUNNAPP=1,NEXTLINE,STEPINTO,STEPOUTOF,EXITLOOP,FINISH,INTAPP,CONTINUE,SHOWBACK,GETBP,SETBP,CLEARBP,GETVAR,UPDATEVAR,RUNGDBCOM,OPENPATH};
+enum {RUNNAPP=1,NEXTLINE,STEPINTO,STEPOUTOF,EXITLOOP,INTAPP,CONTINUE,SHOWBACK,GETBP,SETBP,CLEARBP,GETVAR,UPDATEVAR,RUNGDBCOM,OPENPATH,EXITAPP};
 
 GtkWidget	*toolBarBox;
 GtkWidget	*debuggerVBox;
 GtkToolbar	*debuggerToolbar=NULL;
 GtkToolItem	*runAppButton=NULL;
+GtkToolItem	*quitAppButton=NULL;
 GtkToolItem	*nextAppButton=NULL;
 GtkToolItem	*stepIntoAppButton=NULL;
 GtkToolItem	*stepOutAppButton=NULL;
 GtkToolItem	*endLoopAppButton=NULL;
-GtkToolItem	*finishAppButton=NULL;
 GtkToolItem	*intAppButton=NULL;
 GtkToolItem	*contAppButton=NULL;
 GtkToolItem	*backtraceAppButton=NULL;
@@ -142,6 +142,12 @@ void setTextDomain(bool plugdomain,plugData* pdata)
 			textdomain(currentdomain);
 			bind_textdomain_codeset(currentdomain,"UTF-8");	
 		}
+}
+
+void segfault_sigaction(int signal, siginfo_t *si, void *arg)
+{
+    printf("Caught segfault at address %p\n", si->si_addr);
+    exit(0);
 }
 
 void showHideDebugger(plugData* plugdata,bool startup)
@@ -307,6 +313,9 @@ void setUpGDB(const char*program)
 {
 	/* Streams for the pipes. */
 	/* PID of child gdb. */
+
+	if(running==true)
+		return;
 	pid_t		pid;
 	extern char	**environ;
 	const char	*commands[]={"-break-insert main\n","-exec-run\n","\n",NULL};
@@ -369,26 +378,7 @@ void setUpGDB(const char*program)
 		}
 	fputs("set print pretty on\n",to);
 	childPid=stopChild();
-}
-
-void printOut(void)
-{
-	char	*prettystr;
-	fflush(to);
-	buffer[0]=0;
-	usleep(10000);
-	while(fgets((char*)&buffer,MAXBUFSIZE-1,from))
-		{
-			buffer[strlen(buffer)-2]=0;
-			if(buffer[1]=='"')
-				prettystr=g_strcompress(&buffer[2]);
-			else
-				prettystr=g_strcompress(buffer);
-			printf("%s",prettystr);
-			g_free(prettystr);
-			buffer[0]=0;
-		}
-	printf("\n");
+	running=true;
 }
 
 void waitForResponse(void)
@@ -406,6 +396,19 @@ void waitForResponse(void)
 				isdone=true;
 		}
 	while(isdone==false);
+}
+
+void printToToolOP(const char *txt)
+{
+	GtkTextIter	enditer;
+	gtk_text_buffer_get_end_iter(thisPlugData->toolOutBuffer,&enditer);
+	gtk_text_buffer_insert(thisPlugData->toolOutBuffer,&enditer,txt,-1);
+
+	gtk_text_buffer_get_end_iter(thisPlugData->toolOutBuffer,&enditer);
+
+	gtk_text_view_scroll_to_iter((GtkTextView*)thisPlugData->toolOutWindow,&enditer,0,true,0,0.5);
+	while(gtk_events_pending())
+		gtk_main_iteration();
 }
 
 void discardUntilGDB(void)
@@ -428,51 +431,28 @@ void discardUntilGDB(void)
 				}
 		}
 	while(isdone==false);
-	printf("\n");
+	printToToolOP("\n");
 }
 
-void printUntilGDB(void)
+void printOut(void)
 {
 	char	*prettystr;
-	bool	isdone;
-
 	fflush(to);
 	buffer[0]=0;
-
-	do
+	usleep(10000);
+	while(fgets((char*)&buffer,MAXBUFSIZE-1,from))
 		{
-			isdone=false;
-			while(fgets((char*)&buffer,MAXBUFSIZE-1,from))
-				{
-					if((strncmp(buffer,"(gdb)",5)==0) || (strncmp(buffer,"^done",5)==0) || (strncmp(buffer,"^error",6)==0))
-						{
-							isdone=true;
-							break;
-						}
-					buffer[strlen(buffer)-2]=0;
-					if(buffer[1]=='"')
-						prettystr=g_strcompress(&buffer[2]);
-					else
-						prettystr=g_strcompress(buffer);
-					printf("%s",prettystr);
-					g_free(prettystr);
-				}
+			buffer[strlen(buffer)-2]=0;
+			if(buffer[1]=='"')
+				prettystr=g_strcompress(&buffer[2]);
+			else
+				prettystr=g_strcompress(buffer);
+			//printf("%s",prettystr);
+			printToToolOP(prettystr);
+			g_free(prettystr);
+			buffer[0]=0;
 		}
-	while(isdone==false);
-	printf("\n");
-}
-
-void printToToolOP(const char *txt)
-{
-	GtkTextIter	enditer;
-	gtk_text_buffer_get_end_iter(thisPlugData->toolOutBuffer,&enditer);
-	gtk_text_buffer_insert(thisPlugData->toolOutBuffer,&enditer,txt,-1);
-
-	gtk_text_buffer_get_end_iter(thisPlugData->toolOutBuffer,&enditer);
-
-	gtk_text_view_scroll_to_iter((GtkTextView*)thisPlugData->toolOutWindow,&enditer,0,true,0,0.5);
-	while(gtk_events_pending())
-		gtk_main_iteration();
+	printToToolOP("\n");
 }
 
 bool getIsPtr(const char *var)
@@ -539,8 +519,11 @@ void printGDBCommandToToolOP(const char *command)
 	char	*prettystr;
 	bool	isdone;
 
-	sprintf(gdbcommand,"%s",command);
-	fputs(gdbcommand,to);
+	if(gdbcommand!=NULL)
+		{
+			sprintf(gdbcommand,"%s",command);
+			fputs(gdbcommand,to);
+		}
 
 	fflush(to);
 	buffer[0]=0;
@@ -567,6 +550,37 @@ void printGDBCommandToToolOP(const char *command)
 	while(isdone==false);
 	printToToolOP("\n");
 
+}
+
+void printUntilGDB(void)
+{
+	char	*prettystr;
+	bool	isdone;
+
+	fflush(to);
+	buffer[0]=0;
+
+	do
+		{
+			isdone=false;
+			while(fgets((char*)&buffer,MAXBUFSIZE-1,from))
+				{
+					if((strncmp(buffer,"(gdb)",5)==0) || (strncmp(buffer,"^done",5)==0) || (strncmp(buffer,"^error",6)==0))
+						{
+							isdone=true;
+							break;
+						}
+					buffer[strlen(buffer)-2]=0;
+					if(buffer[1]=='"')
+						prettystr=g_strcompress(&buffer[2]);
+					else
+						prettystr=g_strcompress(buffer);
+					printToToolOP(prettystr);
+					g_free(prettystr);
+				}
+		}
+	while(isdone==false);
+	printToToolOP("\n");
 }
 
 void printVariable(const char *var)
@@ -632,10 +646,29 @@ void buttonCB(GtkWidget* widget,gpointer data)
 	switch((unsigned long)data)
 		{
 			case RUNNAPP:
-				fputs("-exec-run\n",to);
-				usleep(10000);
-				waitForPrompt();
-				childPid=stopChild();
+				if(gtk_entry_get_text_length((GtkEntry*)debugAppEntry)>0)
+					{
+						setUpGDB(gtk_entry_get_text((GtkEntry*)debugAppEntry));
+						fputs("-exec-run\n",to);
+						usleep(10000);
+						waitForPrompt();
+						childPid=stopChild();
+						return;
+					}
+				break;
+			case EXITAPP:
+				if(running==false)
+					return;
+				removeLineMark();
+				printGDBCommandToToolOP("kill");
+				kill(xtermpid,9);
+
+				close(to_gdb[0]);
+				close(to_gdb[1]);
+				close(from_gdb[0]);
+				close(from_gdb[1]);
+				system("rm /tmp/xtermscript /tmp/ptynum");
+				running=false;
 				return;
 				break;
 			case NEXTLINE:
@@ -654,13 +687,6 @@ void buttonCB(GtkWidget* widget,gpointer data)
 				removeLineMark();
 				fputs("-exec-until\n",to);
 				break;
-			case FINISH:
-				removeLineMark();
-				fputs("finish\n",to);
-				printOut();
-				fputs("backtrace\n",to);
-				printUntilGDB();
-				break;
 			case INTAPP:
 				if(childPid!=-1)
 					{
@@ -668,16 +694,14 @@ void buttonCB(GtkWidget* widget,gpointer data)
 						system(buffer);
 					}
 				printOut();
-				fputs("backtrace\n",to);
-				printUntilGDB();
+				printGDBCommandToToolOP("backtrace\n");
 				break;
 			case CONTINUE:
 				removeLineMark();
 				fputs("-exec-continue\n",to);
 				break;
 			case SHOWBACK:
-				fputs("backtrace\n",to);
-				printUntilGDB();
+				printGDBCommandToToolOP("backtrace\n");
 				break;
 			case GETBP:
 				{
@@ -768,11 +792,7 @@ void buttonCB(GtkWidget* widget,gpointer data)
 				break;
 			case RUNGDBCOM:
 				if(strlen(gtk_entry_get_text((GtkEntry*)gdbCommandEntry))>0)
-					{
-						fputs(gtk_entry_get_text((GtkEntry*)gdbCommandEntry),to);
-						printUntilGDB();
-						
-					}
+					printGDBCommandToToolOP(gtk_entry_get_text((GtkEntry*)gdbCommandEntry));
 				break;
 			case OPENPATH:
 				{
@@ -796,13 +816,15 @@ void buttonCB(GtkWidget* widget,gpointer data)
 									if((st.st_mode & S_IXUSR))
 										{
 											gtk_entry_set_text((GtkEntry*)debugAppEntry,filename);
-											setUpGDB(filename);
 											g_free(filename);
 										}
 								}
 							gtk_widget_destroy(dialog);
 						}
+					else
+						gtk_widget_destroy(dialog);
 				}
+				return;
 				break;
 		}
 	waitForPrompt();
@@ -826,9 +848,16 @@ extern "C" int addToGui(gpointer data)
 	plugData	*plugdata=(plugData*)data;
 
 	thisPlugData=(plugData*)data;
-//	asprintf(&dataPath,"%s",thisPlugData->
 
-printf("%s\n",_RESOURCES_);
+    struct sigaction sa;
+
+    memset(&sa, 0, sizeof(struct sigaction));
+    sigemptyset(&sa.sa_mask);
+    sa.sa_sigaction = segfault_sigaction;
+    sa.sa_flags   = SA_SIGINFO;
+
+    sigaction(SIGSEGV, &sa, NULL);
+
 
 	setTextDomain(true,plugdata);
 	menu=gtk_menu_item_get_submenu((GtkMenuItem*)plugdata->mlist.menuView);
@@ -844,11 +873,16 @@ printf("%s\n",_RESOURCES_);
 	gtk_toolbar_set_style (debuggerToolbar,GTK_TOOLBAR_ICONS);
 
 //run
-//	runAppButton=createNewToolItem(GTK_STOCK_MEDIA_PLAY,"Run");
 	runAppButton=buildToolItem(_RESOURCES_ "debug.png","Run");
 	gtk_toolbar_insert(debuggerToolbar,runAppButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)runAppButton,"Run application");
 	g_signal_connect_after(G_OBJECT(runAppButton),"clicked",G_CALLBACK(buttonCB),(void*)RUNNAPP);
+
+//quit
+	quitAppButton=buildToolItem(_RESOURCES_ "exit.png","Exit");
+	gtk_toolbar_insert(debuggerToolbar,quitAppButton,-1);
+	gtk_widget_set_tooltip_text((GtkWidget*)quitAppButton,"Stop debugging application");
+	g_signal_connect_after(G_OBJECT(quitAppButton),"clicked",G_CALLBACK(buttonCB),(void*)EXITAPP);
 
 //next
 //	nextAppButton=createNewToolItem(GTK_STOCK_MEDIA_NEXT,"Next");
@@ -859,69 +893,54 @@ printf("%s\n",_RESOURCES_);
 
 //into
 //	stepIntoAppButton=createNewToolItem(GTK_STOCK_GO_DOWN,"Step In");
-	stepIntoAppButton=buildToolItem(_RESOURCES_ "into.png","Step In");
+	stepIntoAppButton=buildToolItem(_RESOURCES_ "into.png","Into");
 	gtk_toolbar_insert(debuggerToolbar,stepIntoAppButton,-1);
-	gtk_widget_set_tooltip_text((GtkWidget*)stepIntoAppButton,"Step into next func");
+	gtk_widget_set_tooltip_text((GtkWidget*)stepIntoAppButton,"Step into func");
 	g_signal_connect_after(G_OBJECT(stepIntoAppButton),"clicked",G_CALLBACK(buttonCB),(void*)STEPINTO);
 
 //out
-//	stepOutAppButton=createNewToolItem(GTK_STOCK_GO_UP,"Step Out");
-	stepOutAppButton=buildToolItem(_RESOURCES_ "outof.png","Step In");
+	stepOutAppButton=buildToolItem(_RESOURCES_ "outof.png","Out of");
 	gtk_toolbar_insert(debuggerToolbar,stepOutAppButton,-1);
-	gtk_widget_set_tooltip_text((GtkWidget*)stepOutAppButton,"Step out of next func");
+	gtk_widget_set_tooltip_text((GtkWidget*)stepOutAppButton,"Step out of func");
 	g_signal_connect_after(G_OBJECT(stepOutAppButton),"clicked",G_CALLBACK(buttonCB),(void*)STEPOUTOF);
 
 //end loop
-//	endLoopAppButton=createNewToolItem(GTK_STOCK_REDO,"Exit Loop");
-	endLoopAppButton=buildToolItem(_RESOURCES_ "endloop.png","Step In");
+	endLoopAppButton=buildToolItem(_RESOURCES_ "endloop.png","End Loop");
 	gtk_toolbar_insert(debuggerToolbar,endLoopAppButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)endLoopAppButton,"Run to end of loop");
 	g_signal_connect_after(G_OBJECT(endLoopAppButton),"clicked",G_CALLBACK(buttonCB),(void*)EXITLOOP);
 
-//finish
-//	finishAppButton=createNewToolItem(GTK_STOCK_GOTO_LAST,"Finish");
-	finishAppButton=buildToolItem(_RESOURCES_ "finish.png","Step In");
-	gtk_toolbar_insert(debuggerToolbar,finishAppButton,-1);
-	gtk_widget_set_tooltip_text((GtkWidget*)finishAppButton,"Finish app");
-	g_signal_connect_after(G_OBJECT(finishAppButton),"clicked",G_CALLBACK(buttonCB),(void*)FINISH);
-
 //interupt
-//	intAppButton=createNewToolItem(GTK_STOCK_DIALOG_WARNING,"Interupt");
-	intAppButton=buildToolItem(_RESOURCES_ "interupt.png","Step In");
+	intAppButton=buildToolItem(_RESOURCES_ "interupt.png","Int");
 	gtk_toolbar_insert(debuggerToolbar,intAppButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)intAppButton,"Interupt app");
 	g_signal_connect_after(G_OBJECT(intAppButton),"clicked",G_CALLBACK(buttonCB),(void*)INTAPP);
 
 //continue
-//	contAppButton=createNewToolItem(GTK_STOCK_EXECUTE,"Continue");
-	contAppButton=buildToolItem(_RESOURCES_ "continue.png","Step In");
+	contAppButton=buildToolItem(_RESOURCES_ "continue.png","Cont");
 	gtk_toolbar_insert(debuggerToolbar,contAppButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)contAppButton,"Continue app");
 	g_signal_connect_after(G_OBJECT(contAppButton),"clicked",G_CALLBACK(buttonCB),(void*)CONTINUE);
 
 //backtrace
-//	backtraceAppButton=createNewToolItem(GTK_STOCK_COPY,"Backtrace");
-	backtraceAppButton=buildToolItem(_RESOURCES_ "backtrace.png","Step In");
+	backtraceAppButton=buildToolItem(_RESOURCES_ "backtrace.png","Trace");
 	gtk_toolbar_insert(debuggerToolbar,backtraceAppButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)backtraceAppButton,"Show backtrace");
 	g_signal_connect_after(G_OBJECT(backtraceAppButton),"clicked",G_CALLBACK(buttonCB),(void*)SHOWBACK);
 
 //get breakpoint
-//	getBreakPointButton=createNewToolItem(GTK_STOCK_MEDIA_RECORD,"BP");
-	getBreakPointButton=buildToolItem(_RESOURCES_ "breakpoint.png","Step In");
+	getBreakPointButton=buildToolItem(_RESOURCES_ "breakpoint.png","Get BP");
 	gtk_toolbar_insert(debuggerToolbar,getBreakPointButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)getBreakPointButton,"Get break point at current line");
 	g_signal_connect_after(G_OBJECT(getBreakPointButton),"clicked",G_CALLBACK(buttonCB),(void*)GETBP);
 
 //set/unset
-//	setBreakPointButton=createNewToolItem(GTK_STOCK_APPLY,"Set");
-	setBreakPointButton=buildToolItem(_RESOURCES_ "set.png","Step In");
+	setBreakPointButton=buildToolItem(_RESOURCES_ "set.png","Set BP");
 	gtk_toolbar_insert(debuggerToolbar,setBreakPointButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)setBreakPointButton,"Set break point at current line");
 	g_signal_connect_after(G_OBJECT(setBreakPointButton),"clicked",G_CALLBACK(buttonCB),(void*)SETBP);
 
-//	unsetBreakPointButton=createNewToolItem(GTK_STOCK_CANCEL,"Unset");
-	unsetBreakPointButton=buildToolItem(_RESOURCES_ "unset.png","Step In");
+	unsetBreakPointButton=buildToolItem(_RESOURCES_ "unset.png","Unset BP");
 	gtk_toolbar_insert(debuggerToolbar,unsetBreakPointButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)unsetBreakPointButton,"Unset break point at current line");
 	g_signal_connect_after(G_OBJECT(unsetBreakPointButton),"clicked",G_CALLBACK(buttonCB),(void*)CLEARBP);
@@ -935,15 +954,13 @@ printf("%s\n",_RESOURCES_);
 	gtk_widget_set_tooltip_text((GtkWidget*)getBreakPointEntry,"Get break point at current line");
 
 //variables
-//	getVarButton=createNewToolItem(GTK_STOCK_DIALOG_QUESTION,"Var");
-	getVarButton=buildToolItem(_RESOURCES_ "query.png","Step In");
+	getVarButton=buildToolItem(_RESOURCES_ "query.png","Get Var");
 	gtk_toolbar_insert(debuggerToolbar,getVarButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)getVarButton,"Get selected variable");
 	g_signal_connect_after(G_OBJECT(getVarButton),"clicked",G_CALLBACK(buttonCB),(void*)GETVAR);
 
 //update
-//	updateVarButton=createNewToolItem(GTK_STOCK_APPLY,"Update");
-	updateVarButton=buildToolItem(_RESOURCES_ "set.png","Step In");
+	updateVarButton=buildToolItem(_RESOURCES_ "set.png","Update");
 	gtk_toolbar_insert(debuggerToolbar,updateVarButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)updateVarButton,"Update variable data");
 	g_signal_connect_after(G_OBJECT(updateVarButton),"clicked",G_CALLBACK(buttonCB),(void*)UPDATEVAR);
@@ -957,8 +974,7 @@ printf("%s\n",_RESOURCES_);
 	g_signal_connect_after(G_OBJECT(getVarEntry),"activate",G_CALLBACK(buttonCB),(void*)UPDATEVAR);
 
 //gdb command
-//	gdbCommandButton=createNewToolItem(GTK_STOCK_APPLY,"GDB");
-	gdbCommandButton=buildToolItem(_RESOURCES_ "set.png","Step In");
+	gdbCommandButton=buildToolItem(_RESOURCES_ "set.png","GDB Com");
 	gtk_toolbar_insert(debuggerToolbar,gdbCommandButton,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)gdbCommandButton,"Run GDB command");
 	g_signal_connect_after(G_OBJECT(gdbCommandButton),"clicked",G_CALLBACK(buttonCB),(void*)RUNGDBCOM);
@@ -973,8 +989,7 @@ printf("%s\n",_RESOURCES_);
 	gtk_tool_item_set_expand(gdbCommandEntryTI,true);
 
 //debug app path
-//	debugApp=createNewToolItem(GTK_STOCK_OPEN,"Debug");
-	debugApp=buildToolItem(_RESOURCES_ "open.png","Step In");
+	debugApp=buildToolItem(_RESOURCES_ "open.png","Open");
 	gtk_toolbar_insert(debuggerToolbar,debugApp,-1);
 	gtk_widget_set_tooltip_text((GtkWidget*)debugApp,"Path to app for debugging");
 	g_signal_connect_after(G_OBJECT(debugApp),"clicked",G_CALLBACK(buttonCB),(void*)OPENPATH);
@@ -994,7 +1009,7 @@ printf("%s\n",_RESOURCES_);
 	gtk_box_pack_start(GTK_BOX(vbox),(GtkWidget*)debuggerToolbar,false,false,0);
 	gtk_widget_show_all(vbox);
 
-	gtk_box_pack_start((GtkBox*)plugdata->bottomUserBox,vbox,true,true,0);
+	gtk_box_pack_start((GtkBox*)plugdata->bottomUserBox,vbox,false,false,0);
 	showHideDebugger(plugdata,false);
 
 	GtkTextIter	endopiter;

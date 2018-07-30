@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Debugger package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Debugger 1.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-11 13:22+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: debugger.cpp:160
+msgid "Clipboard Plugin - Add's multiple clips"
+msgstr ""
+
+#: debugger.cpp:161
+msgid "French Translation"
+msgstr ""
+
+#: debugger.cpp:166
+msgid "Clipboard Plugin"
+msgstr ""
+
+#: ../common.h:29
+msgid "Apply"
+msgstr ""
+
+#: ../common.h:30
+msgid "Cancel"
+msgstr ""
+
+#: ../common.h:31
+msgid "New"
+msgstr ""
+
+#: ../common.h:32
+msgid "Help"
+msgstr ""
+
+#: ../common.h:33
+msgid "Open"
+msgstr ""
+
+#: ../common.h:34
+msgid "Connect"
+msgstr ""
+
+#: ../common.h:35
+msgid "OK"
+msgstr ""

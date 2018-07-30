@@ -92,7 +92,7 @@ void printHelp()
 	       " -R, --remove	Remove Queue\n"
 	       " -v, --version	output version information and exit\n"
 	       " -h, -?, --help	print this help\n\n"
-	       "Report bugs to kdhedger@yahoo.co.uk\n"
+	       "Report bugs to keithdhedger@gmail.com\n"
 	       ,APPNAME _EXECSUFFIX_);
 
 	printf("\nCommands recognised by KKEdit:\n");
