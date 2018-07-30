@@ -8,6 +8,6 @@ KKEdit/src/html
 KKEdit/src/searchdata.xml
 translations/
 autom4te.cache
-KKEdit/unstable-plugins/DebuggerPlugin/*.xcf
+KKEdit/unstable-plugins/DebuggerPlugin/rawdata
 *~
 
