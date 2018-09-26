@@ -739,7 +739,7 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 					setBarberPoleMessage(strarg);
 					if(strlen(strarg)>0)
 						{
-							goodfile=openFile(strarg,currentline,true);
+							goodfile=openFile(strarg,currentline,false);
 							if(goodfile==true)
 								{
 									sinkReturnStr=fgets(buffer,2048,fd);

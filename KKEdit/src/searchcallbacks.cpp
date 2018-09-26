@@ -288,7 +288,7 @@ VISIBLE void doDoxy(GtkWidget *widget,long data)
 			ERRDATA debugFree(&thePage);
 		}
 
-	sinkReturn=asprintf(&thePage,"file://%s/html/index.html",page->dirName);
+	sinkReturn=asprintf(&thePage,"file://%s/html/index.xhtml",page->dirName);
 	if(dorebuild==true)
 		{
 			fp=popen("doxygen Doxyfile","r");

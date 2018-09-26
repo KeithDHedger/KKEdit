@@ -1,4 +1,6 @@
 0.4.2
+Restore session now silently skips missing files.
+Doxygen config files should now set "HTML_FILE_EXTENSION = .xhtml" and NOT ".html".
 Added custom icons to debug plugin.
 Fixed wrong types when calling set/remove user mark.
 Added debugger plugin to unstable plugins.

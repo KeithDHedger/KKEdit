@@ -2378,8 +2378,12 @@ void buildGtkDocViewer(void)
 	g_object_set((gpointer)settings,"user-agent","firefox",NULL);
 	g_object_set((gpointer)settings,"enable-hyperlink-auditing",true,NULL);
 	g_object_set((gpointer)settings,"enable-site-specific-quirks",true,NULL);
-
+	
+	g_object_set((gpointer)settings,"enable-html5-database",true,NULL);
+	g_object_set((gpointer)settings,"enable-html5-local-storage",true,NULL);
+	//g_object_set((gpointer)settings,"",true,NULL);
 */
+
 	scrolledWindow=gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(scrolledWindow),GTK_WIDGET(webView));

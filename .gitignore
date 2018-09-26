@@ -10,4 +10,11 @@ translations/
 autom4te.cache
 KKEdit/unstable-plugins/DebuggerPlugin/rawdata
 *~
-
+.deps
+.dirstamp
+config.log
+config.status
+stamp-h1
+Makefile
+config.h
+TODO
