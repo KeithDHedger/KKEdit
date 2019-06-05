@@ -561,103 +561,87 @@ char *getPathFromXML(char *xml)
 
 gboolean docLinkTrap(WebKitWebView *web_view,WebKitWebFrame *frame,WebKitNetworkRequest *request,WebKitWebNavigationAction *navigationAction,WebKitWebPolicyDecision *policy_decision, gpointer user_data)
 {
-	ERRDATA
 	int				mod=-1;
 	const char		*uri;
 	StringSlice		slce;
-	char			*htmlpage;
-	FILE			*fp;
-	char			*command;
-	char			line[4096];
-	char			*filep;
 	int				linenum;
+	char			*filepath;
+	char			*filename;
+	char			*fn;
+	char			*filedir;
+	char			*com;
+	char			*output;
+	const char *upperdata[]={"_a","A","_b","B","_c","C","_d","D","_e","E","_f","F","_g","G","_h","H","_i","I","_j","J","_k","K","_l","L","_m","M","_n","N","_o","O","_p","P","_q","Q","_r","R","_s","S","_t","T","_u","U","_v","V","_w","W","_x","X","_y","Y","_z","Z"};
 
 	mod=webkit_web_navigation_action_get_modifier_state(navigationAction);
 	if(mod&GDK_SHIFT_MASK)
 		{
 			uri=webkit_network_request_get_uri(request);
-			slce.setReturnDupString(true);
-			htmlpage=slce.sliceBetween((char*)uri,(char*)"file://",(char*)"#");
-			memset(line,0,4096);
-			sinkReturn=asprintf(&command,"cat %s 2>/dev/null|grep \"<p>Definition at line \"",htmlpage);
-			fp=popen(command,"r");
-			free(command);
-			sinkReturnStr=fgets(line,4096,fp);
-			pclose(fp);
-			if(strlen(line)>0)
+			slce.setReturnDupString(false);
+			linenum=atoi(slce.sliceBetween((char*)uri,(char*)"#l",NULL));
+			filepath=(char*)slce.sliceBetween((char*)uri,(char*)"file://",(char*)"#l");
+			filepath=(char*)slce.sliceBetween((char*)filepath,NULL,(char*)"_source.xhtml");
+			filepath=(char*)slce.deleteSlice((char*)filepath,(char*)"html/");
+			filepath=(char*)slce.replaceAllSlice((char*)filepath,(char*)"_8",(char*)".");
+
+			for(int j=0;j<52;j+=2)
+				filepath=(char*)slce.replaceAllSlice((char*)filepath,(char*)upperdata[j],(char*)upperdata[j+1]);
+
+			if(openFile(filepath,linenum,false)==true)
 				{
-					linenum=atoi(slce.sliceBetween(line,(char*)"#l",(char*)"\">"));
-					filep=slce.sliceBetween(htmlpage,NULL,(char*)"/html/");
-					slce.setReturnDupString(false);
-					sinkReturn=asprintf(&command,"%s/%s",filep,slce.sliceBetween(line,(char*)"html\">",(char*)"</a>"));
-					if(openFile(command,linenum,false)==true)
-						{
-							if(mainWindow!=NULL)
-								gtk_window_present((GtkWindow*)mainWindow);
-							gotoLine(NULL,(gpointer)(long)linenum);
-						}
-					free(command);
-					free(filep);
-					free(htmlpage);
-					ERRDATA return(false);
+					if(mainWindow!=NULL)
+						gtk_window_present((GtkWindow*)mainWindow);
+						gotoLine(NULL,(gpointer)(long)linenum);
+						return(true);
 				}
 
-			slce.setReturnDupString(false);
-			if(strstr(uri,(char*)"#l")!=NULL)
+			filepath=(char*)slce.sliceBetween((char*)uri,(char*)"file://",(char*)"#");
+
+			asprintf(&com,"grep 'Definition at line' %s 2>/dev/null",filepath);
+			output=oneLiner(com);
+			linenum=atoi((char*)slce.sliceBetween((char*)output,(char*)"_source.xhtml#l",NULL));
+
+			filename=strdup((char*)slce.sliceBetween((char*)output,(char*)"href=\"",(char*)"#l"));
+			filename=(char*)slce.sliceBetween((char*)filename,NULL,(char*)"_source.xhtml");
+			filename=(char*)slce.replaceAllSlice((char*)filename,(char*)"_8",(char*)".");	
+
+			for(int j=0;j<52;j+=2)
+				filename=(char*)slce.replaceAllSlice((char*)filename,(char*)upperdata[j],(char*)upperdata[j+1]);
+			fn=strdup(filename);
+			filedir=(char*)slce.sliceBetween((char*)uri,(char*)"file://",(char*)"/html/");
+			free(com);
+			free(output);
+			asprintf(&filepath,"%s/%s",filedir,fn);
+			if(openFile(filepath,linenum,false)==true)
 				{
-					linenum=atoi(slce.sliceBetween((char*)uri,(char*)"#l",NULL));
-					command=(char*)slce.sliceBetween((char*)uri,(char*)"file://",(char*)"#l");
-					command=(char*)slce.sliceBetween((char*)command,NULL,(char*)".html");
-					command=(char*)slce.sliceBetween((char*)command,NULL,(char*)"_source");
-					command=(char*)slce.deleteSlice((char*)command,(char*)"html/");
-					command=(char*)slce.replaceAllSlice((char*)command,(char*)"_8",(char*)".");
-					const char *upperdata[]={"_a","A","_b","B","_c","C","_d","D","_e","E","_f","F","_g","G","_h","H","_i","I","_j","J","_k","K","_l","L","_m","M","_n","N","_o","O","_p","P","_q","Q","_r","R","_s","S","_t","T","_u","U","_v","V","_w","W","_x","X","_y","Y","_z","Z"};
-					for(int j=0;j<52;j+=2)
-						command=(char*)slce.replaceAllSlice((char*)command,(char*)upperdata[j],(char*)upperdata[j+1]);
-					if(openFile(command,linenum,true)==true)
-						{
-							if(mainWindow!=NULL)
-								gtk_window_present((GtkWindow*)mainWindow);
-							gotoLine(NULL,(gpointer)(long)linenum);
-						}
+					free(filepath);
+					free(fn);
+					if(mainWindow!=NULL)
+						gtk_window_present((GtkWindow*)mainWindow);
+					gotoLine(NULL,(gpointer)(long)linenum);
+					return(true);
 				}
-			else
+
+			free(filepath);
+			free(fn);
+
+			filepath=(char*)slce.sliceBetween((char*)uri,(char*)"file://",(char*)"_source.xhtml");
+			filepath=(char*)slce.deleteSlice((char*)filepath,(char*)"html/");
+			filepath=(char*)slce.deleteSlice((char*)filepath,(char*)".xhtml");
+			filepath=(char*)slce.deleteSlice((char*)filepath,(char*)"file://");
+			filepath=(char*)slce.replaceAllSlice((char*)filepath,(char*)"_8",(char*)".");	
+			for(int j=0;j<52;j+=2)
+				filepath=(char*)slce.replaceAllSlice((char*)filepath,(char*)upperdata[j],(char*)upperdata[j+1]);
+
+			if(openFile(filepath,1,false)==true)
 				{
-					command=(char*)slce.sliceBetween((char*)uri,(char*)"file://",(char*)".html");
-					command=(char*)slce.sliceBetween((char*)command,NULL,(char*)"_source");
-					command=(char*)slce.deleteSlice((char*)command,(char*)"html/");
-					command=(char*)slce.replaceAllSlice((char*)command,(char*)"_8",(char*)".");
-					if(openFile(command,-1,false)==false)
-						{
-							slce.setReturnDupString(true);
-							htmlpage=slce.sliceBetween((char*)uri,(char*)"file://",NULL);
-							memset(line,0,4096);
-							sinkReturn=asprintf(&command,"cat %s 2>/dev/null|grep \"<p>Definition at line \"",htmlpage);
-							fp=popen(command,"r");
-							free(command);
-							sinkReturnStr=fgets(line,4096,fp);
-							pclose(fp);
-							if(strlen(line)>0)
-								{
-									linenum=atoi(slce.sliceBetween(line,(char*)"#l",(char*)"\">"));
-									filep=slce.sliceBetween(htmlpage,NULL,(char*)"/html/");
-									slce.setReturnDupString(false);
-									sinkReturn=asprintf(&command,"%s/%s",filep,slce.sliceBetween(line,(char*)"html\">",(char*)"</a>"));
-									if(openFile(command,linenum,false)==true)
-										{
-											if(mainWindow!=NULL)
-												gtk_window_present((GtkWindow*)mainWindow);
-											gotoLine(NULL,(gpointer)(long)linenum);
-										}
-									free(command);
-									free(filep);
-									free(htmlpage);
-									ERRDATA return(false);
-								}
-						}
+					if(mainWindow!=NULL)
+						gtk_window_present((GtkWindow*)mainWindow);
+					return(true);
 				}
 		}
-	ERRDATA return(false);
+	return(false);
+
 }
 #endif
 

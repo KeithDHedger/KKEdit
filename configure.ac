@@ -1,6 +1,6 @@
 #
 #
-AC_INIT([KKEdit],[0.4.2],[PROJ],[KKEdit])
+AC_INIT([KKEdit],[0.4.3],[PROJ],[KKEdit])
 
 AC_CONFIG_HEADER([config.h])
 AC_PROG_CXX
@@ -111,7 +111,7 @@ AC_ARG_ENABLE(docviewer,AS_HELP_STRING([--enable-docviewer],[Build the Gtk-Doc v
 AC_MSG_RESULT($enable_docviewer)
 if test "$enable_docviewer" = "yes"; then
 if test "$enable_gtk3" = "yes"; then
-	WEBKIT_MODULES="webkitgtk-3.0 >= 2.4.0"
+	WEBKIT_MODULES="webkit2gtk-4.0 >= 2.4.0"
 else
 	WEBKIT_MODULES="webkit-1.0 >= 1.6.1"
 fi

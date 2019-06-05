@@ -22,9 +22,9 @@
 
 #include "kkedit-includes.h"
 
-enum {SQUIT=0,SGOTOLINE,SSEARCHDEF,SSELECTTAB,SSELECTTABBYPATH,SBOOKMARK,SCLOSETAB,SSETMARK,SUNSETMARK,SMOVETO,SSELECTBETWEEN,SPASTE,SCOPY,SCUT,SINSERTTEXT,SINSERTNL,SINSERTFILE,SPRINTFILES,SWAITFORKKEDIT,SSHOWCONTINUE,SRUNTOOL,SRESTORESESSION,SACTIVATEMENUBYNAME,SACTIVATEMENUBYLABEL,SSENDPOSDATA,SSENDSELECTION};
+enum {SQUIT=0,SGOTOLINE,SSEARCHDEF,SSELECTTAB,SSELECTTABBYPATH,SBOOKMARK,SCLOSETAB,SSETMARK,SUNSETMARK,SMOVETO,SSELECTBETWEEN,SPASTE,SCOPY,SCUT,SINSERTTEXT,SINSERTNL,SINSERTFILE,SPRINTFILES,SWAITFORKKEDIT,SSHOWCONTINUE,SRUNTOOL,SRESTORESESSION,SACTIVATEMENUBYNAME,SACTIVATEMENUBYLABEL,SSENDPOSDATA,SSENDSELECTION,SSELECTTABBYNUM};
 
-const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","SelectTabByPath","Bookmark","CloseTab","SetMark","UnsetMark","MoveTo","SelectBetween","Paste","Copy","Cut","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession","ActivateMenuNamed","ActivateMenuLabeled","SendPosData","SendSelectedText",NULL};
+const char	*commandList[]={"Quit","GotoLine","SearchDef","SelectTab","SelectTabByPath","Bookmark","CloseTab","SetMark","UnsetMark","MoveTo","SelectBetween","Paste","Copy","Cut","InsertText","InsertNL","InsertFile","PrintFiles","WaitForKKEdit","ShowContinue","RunTool","RestoreSession","ActivateMenuNamed","ActivateMenuLabeled","SendPosData","SendSelectedText","SelectTabByNum",NULL};
 
 int			queueID=-1;
 msgStruct	message;
@@ -226,6 +226,13 @@ void runKKCommand(void)
 					return;
 				defSearchFromBar((GtkWidget*)commandArgsArray[0],NULL);
 				break;
+//switch to tab by num
+			case SSELECTTABBYNUM:
+				if(commandArgsCnt==0)
+					return;
+				gtk_notebook_set_current_page(mainNotebook,atoi(commandArgsArray[0]));
+				break;
+
 //switch to tab by name
 			case SSELECTTAB:
 				if(commandArgsCnt==0)

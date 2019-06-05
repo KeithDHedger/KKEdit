@@ -492,7 +492,11 @@
 #endif
 
 #ifdef _BUILDDOCVIEWER_
+#ifndef _USEGTK3_
 #include <webkit/webkit.h>
+#else
+#include <webkit2/webkit2.h>
+#endif
 #endif
 
 #include "globals.h"

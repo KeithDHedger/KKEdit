@@ -18,3 +18,5 @@ stamp-h1
 Makefile
 config.h
 TODO
+*.o
+*.so

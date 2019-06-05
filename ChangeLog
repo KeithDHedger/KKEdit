@@ -1,3 +1,10 @@
+0.4.3
+Updated Doxyfile.
+More reliable opening of files when doxygen link is clicked.
+Requires doxygen version 1.8.14
+Various plugin fixes.
+Various scripting changes.
+
 0.4.2
 Restore session now silently skips missing files.
 Doxygen config files should now set "HTML_FILE_EXTENSION = .xhtml" and NOT ".html".
