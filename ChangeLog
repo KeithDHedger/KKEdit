@@ -1,3 +1,8 @@
+0.4.4
+Minor bug fixes for latest glib etc.
+Removed nag screen.
+No longer doing releases, so removed update check.
+
 0.4.3
 Updated Doxyfile.
 More reliable opening of files when doxygen link is clicked.

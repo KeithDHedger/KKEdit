@@ -45,6 +45,8 @@
 #define ERRDATA errLine=__LINE__,errFile=__FILE__,errFunc=__func__;printf("File: %s,Func: %s,Line: %i\n",errFile,errFunc,errLine);
 #else
 #define ERRDATA errLine=__LINE__,errFile=__FILE__,errFunc=__func__;
+#define _ENTER_
+#define _LEAVE_
 #endif
 #if _DEBUGLEVEL_ == DBG6
 #define _ENTER_ struct timeval then;struct timeval now;gettimeofday(&then,NULL);printf("Entered %s\n",__func__);
@@ -238,12 +240,6 @@ extern char				*sinkReturnStr;
 
 //nag
 extern bool				nagScreen;
-extern unsigned int		nagTime;
-extern unsigned int		lastNagTime;
-extern bool				timeToNag;
-extern unsigned int		lastUpdate;
-extern unsigned int		lastPlugUpdate;
-extern unsigned int		updateWait;
 
 //docview size and position
 extern int				docWindowWidth;

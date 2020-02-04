@@ -33,6 +33,7 @@ char* oneLiner(const char *command)
 {
 	FILE	*fp=NULL;
 	char	*retstr=(char*)calloc(1,256);
+
 	fp=popen(command,"r");
 	if(fp!=NULL)
 		{
@@ -100,10 +101,6 @@ void init(void)
 	filename=NULL;
 	sinkReturn=asprintf(&logFile,"%s.log",tmpFolderName);
 
-//nag times
-	lastNagTime=-1;
-	nagTime=(long)time(NULL);
-
 #ifdef _ASPELL_
 	AspellCanHaveError	*possible_err;
 #endif
@@ -161,7 +158,6 @@ void init(void)
 	doGoogleSearch=true;
 
 	recentMan=gtk_recent_manager_get_default();
-
 //runtime deps
 	exitstatus=system("which manpageeditor 2>&1 >/dev/null");
 	gotManEditor=(bool)exitstatus;
@@ -251,15 +247,6 @@ void init(void)
 			}
 */
 
-//time to nag?
-
-	timeToNag=false;
-	if((lastNagTime==0) ||(nagTime-lastNagTime>updateWait))
-		{
-			timeToNag=true;
-			lastNagTime=nagTime;
-		}
-
 	localeLang=getenv("LANG");
 	if(localeLang==NULL)
 		localeLang="en_GB";
@@ -300,107 +287,6 @@ void doNagScreen(void)
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 	ERRDATA
-}
-
-void doNagStuff(void)
-{
-	ERRDATA
-	char			*command=NULL;
-	char			*control=NULL;
-	int				gotcurl=-1;
-	int				gotwget=-1;
-	int				exitstatus;
-	FILE			*fp;
-	char			t1[1024];
-	char			vers[1024];
-	char			plugt[1024];
-	unsigned int	thisupdate=0;
-	char			*kkeditupdatemessage=strdup("");
-	char			*plugupdatemessage=strdup("");
-
-	sinkReturn=asprintf(&command,"%s \"%s\" %s/updatecontrol &",POLEPATH,CHECKING_LABEL,tmpFolderName);
-	sinkReturn=system(command);
-	while(gtk_events_pending())
-		gtk_main_iteration();
-
-	ERRDATA debugFree(&command);
-
-	sinkReturn=asprintf(&control,"echo \"pulse\" > \"%s/updatecontrol\"",tmpFolderName);
-	sinkReturn=system(control);
-	ERRDATA debugFree(&control);
-
-	exitstatus=system("which curl 2>&1 >/dev/null");
-	gotcurl=(bool)exitstatus;
-
-	if(gotcurl==0)
-		sinkReturn=asprintf(&command,"curl %s -s -o -",NAGTIMELINK);
-	else
-		{
-			exitstatus=system("which wget 2>&1 >/dev/null");
-			gotwget=(bool)exitstatus;
-			if(gotwget==0)
-				sinkReturn=asprintf(&command,"wget %s -O - -q",NAGTIMELINK);
-		}
-
-	if(command!=NULL)
-		{
-			t1[0]=0;
-			vers[0]=0;
-			plugt[0]=0;
-			fp=popen(command,"r");
-			if(fp!=NULL)
-				{
-					sinkReturnStr=fgets(t1,1024,fp);
-					sinkReturnStr=fgets(vers,1024,fp);
-					sinkReturnStr=fgets(plugt,1024,fp);
-					pclose(fp);
-				}
-			t1[strlen(t1)-1]=0;
-			vers[strlen(vers)-1]=0;
-			plugt[strlen(plugt)-1]=0;
-
-			sinkReturn=asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
-			sinkReturn=system(control);
-			ERRDATA debugFree(&control);
-			if(strlen(t1)>1)
-				{
-					thisupdate=atol(t1);
-					if((thisupdate>lastUpdate) ||(strcmp(VERSION,vers)!=0))
-						{
-							GtkWidget *dialog;
-
-							if(strcmp(VERSION,vers)!=0)
-								{
-									ERRDATA debugFree(&kkeditupdatemessage);
-									sinkReturn=asprintf(&kkeditupdatemessage,"%s <b>%s</b> %s <b>%s</b>\n%s:\n<b>%s</b>\n",KKEDIT_UPDATE_AVAILABLE_LABEL,vers,UPDATE_FROM_VERS_LABEL,VERSION,FROM_HERE_LABEL,MYWEBSITE);
-								}
-
-							if(lastPlugUpdate<atol(plugt))
-								{
-									ERRDATA debugFree(&plugupdatemessage);
-									sinkReturn=asprintf(&plugupdatemessage,"\n%s:\n<b>https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins</b>",PLUGIN_UPDATES_LABEL);
-									lastPlugUpdate=thisupdate;
-								}
-
-							dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",UPDATES_AVAILABLE_LABEL);
-							gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s%s",kkeditupdatemessage,plugupdatemessage);
-
-							gtk_dialog_run(GTK_DIALOG(dialog));
-							gtk_widget_destroy(dialog);
-							ERRDATA debugFree(&kkeditupdatemessage);
-							ERRDATA debugFree(&plugupdatemessage);
-							lastUpdate=thisupdate;
-						}
-				}
-			ERRDATA debugFree(&command);
-		}
-
-	if((nagScreen==false))
-		doNagScreen();
-
-	sinkReturn=asprintf(&control,"echo \"quit\" > %s/updatecontrol",tmpFolderName);
-	sinkReturn=system(control);
-	ERRDATA debugFree(&control);
 }
 
 void activate(GApplication *application,gpointer data)
@@ -473,7 +359,6 @@ void appStart(GApplication  *application,gpointer data)
 
 	init();
 	buildMainGui();
-
 	if((onExitSaveSession==true) && (safeMode==false) && (overRideLoadSession==false))
 		restoreSession(NULL,NULL);
 
@@ -508,22 +393,6 @@ void appStart(GApplication  *application,gpointer data)
 			gtk_window_set_icon_name((GtkWindow*)mainWindow,PACKAGE "Root");
 		}
 
-	if((timeToNag==true) &&(autoCheck==true))
-		doNagStuff();
-
-
-//	char	*tabcss=NULL;
-//
-//	provider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
-//	sinkReturn=asprintf(&tabcss,"* {\n \
-//  font-family: mono;\n \
-//  font-size: 8px;\n \
-//  border: 0px solid;\n \
-//  padding: 4px; \n \
-//}\n");
-//
-//
-
 #ifdef _USEGTK3_
 	char	*tabcss=NULL;
 
@@ -547,7 +416,6 @@ gint commandLine(GApplication *application,GApplicationCommandLine *command_line
 	int		argc=0;
 	char	*linenum=NULL;
 	int		line=0;
-
 	gchar **args=g_application_command_line_get_arguments(command_line,&argc);
 
 	for(int j=1;j<argc;j++)
@@ -566,6 +434,7 @@ gint commandLine(GApplication *application,GApplicationCommandLine *command_line
 				}
 		}
 	g_strfreev(args);
+	return(0);
 }
 
 int getWorkspaceNumber(void)
@@ -578,7 +447,6 @@ int getWorkspaceNumber(void)
 	unsigned long	n_items, bytes_after;
 	unsigned char	*data_return=0;
 	int				retnum=0;
-
 	display=gdk_screen_get_display(gdk_screen_get_default());
 	root_win=gdk_screen_get_root_window(gdk_screen_get_default());
 
@@ -597,6 +465,7 @@ int getWorkspaceNumber(void)
 int main(int argc, char **argv)
 {
 	ERRDATA
+
 	int				status;
 	char			*dbusname;
 	GOptionContext	*context;

@@ -126,12 +126,6 @@ char				*sinkReturnStr;
 
 //nag
 bool				nagScreen;
-unsigned int		nagTime;
-unsigned int		lastNagTime=0;
-bool				timeToNag=true;
-unsigned int		lastUpdate=0;
-unsigned int		lastPlugUpdate=0;
-unsigned int		updateWait=2678400;
 
 //docview size and position
 int					docWindowWidth;
@@ -415,9 +409,6 @@ args				kkedit_window_rc[]=
 	{"toolouthite",TYPEINT,&toolOutHeight},
 	{"bottomvpanehite",TYPEINT,&bottomVPaneHite},
 	{"topvpanehite",TYPEINT,&topVPaneHite},
-	{"nagtime",TYPEINT,&lastNagTime},
-	{"lastupdate",TYPEINT,&lastUpdate},
-	{"lastplugupdate",TYPEINT,&lastPlugUpdate},
 	//lists
 	{"findlist",TYPELIST,&findList},
 	{"replacelist",TYPELIST,&replaceList},
@@ -680,8 +671,6 @@ VISIBLE void runCommand(char *commandtorun,void *ptr,bool interm,int flags,int u
 							while(fgets(line,1024,fp))
 								{
 									gtk_text_buffer_insert_at_cursor(toolOutputBuffer,line,strlen(line));
-//									while(gtk_events_pending())
-//										gtk_main_iteration();
 									gtk_text_buffer_get_end_iter(toolOutputBuffer,&iter);
 									gtk_text_view_scroll_to_iter((GtkTextView*)toolOutputView,&iter,0,true,0,0);
 								}
