@@ -162,6 +162,8 @@ unsigned int		maxTabChars=20;
 unsigned int		maxBMChars;
 unsigned int		maxJumpHistory;
 unsigned int		maxFuncDefs;
+unsigned int		autoSavePeriod=3;
+int					autoSaveSource;
 
 GtkWidget			*fontButton;
 GtkWidget			*terminalBox;
@@ -293,6 +295,8 @@ VISIBLE char		*thePage=NULL;
 char				*htmlFile=NULL;
 char				*htmlURI=NULL;
 char				*tmpFolderName=NULL;
+char				*thisSessionPath=NULL;
+char				*thisSessionName=NULL;
 
 //runtime deps
 int					gotManEditor;
@@ -455,6 +459,7 @@ args				kkedit_rc[]=
 	{"maxbmchars",TYPEINT,&maxBMChars},
 	{"tabssize",TYPEINT,&tabsSize},
 	{"maxjumphistory",TYPEINT,&maxJumpHistory},
+	{"autosaveperiod",TYPEINT,&autoSavePeriod},
 	{NULL,0,NULL}
 };
 

@@ -462,6 +462,14 @@ int getWorkspaceNumber(void)
 	ERRDATA return retnum+100;
 }
 
+
+//gboolean autoSaveCallBack(gpointer user_data)
+//{
+//	doSaveAll(NULL,NULL);
+//	printf(">>>>\n");
+//	return(true);
+//}
+
 int main(int argc, char **argv)
 {
 	ERRDATA
@@ -528,6 +536,9 @@ int main(int argc, char **argv)
 		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_HANDLES_OPEN));
 
 	createQueue();
+
+//autosave timer
+	autoSaveSource=g_timeout_add_seconds(autoSavePeriod*60,autoSaveCallBack,NULL);
 
 	g_signal_connect(mainApp,"activate",G_CALLBACK(activate),NULL);
 	g_signal_connect(mainApp,"startup",G_CALLBACK(appStart),NULL);

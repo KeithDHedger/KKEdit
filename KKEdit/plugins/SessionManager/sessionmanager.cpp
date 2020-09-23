@@ -18,7 +18,6 @@
  * along with KKEditPlugins.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <glib.h>
@@ -36,7 +35,7 @@
 #include "../kkedit-plugins.h"
 
 #define PLUGVERSION VERSION
-#define	MAXSESSIONS 24
+#define	ABSMAXSESSIONS 256
 #ifdef _USEGTK3_
 #define TEXTDOMAIN "SessionManager-3"
 #define ABOUTICON "KKEditPlug-3"
@@ -57,7 +56,10 @@ char			*sinkReturnStr;
 char			*currentSessionName=NULL;
 char			*currentSessionPath=NULL;
 
-int	(*module_plug_function)(gpointer globaldata);
+int				(*module_plug_function)(gpointer globaldata);
+int				maxSessions=24;
+int				sinkInt;
+char			*sessionNames[ABSMAXSESSIONS]={NULL,};
 
 extern void		saveSession(const char* name,const char* filepath);
 extern void		restoreSession(GtkWidget* widget,gpointer data);
@@ -65,6 +67,12 @@ extern void		closeAllTabs(GtkWidget* widget,gpointer data);
 extern void		toggleBookmark(GtkWidget* widget,GtkTextIter* titer);
 
 extern GList	*newBookMarksList;
+
+args		mydata[]=
+				{
+					{"maxSessions",TYPEINT,&maxSessions},
+					{NULL,0,NULL}
+				};
 
 struct bookMarksNew
 {
@@ -74,8 +82,6 @@ struct bookMarksNew
 	char				*markName;
 	int					line;
 };
-
-char* sessionNames[MAXSESSIONS]= {NULL,};
 
 void setTextDomain(bool plugdomain,plugData* pdata)
 {
@@ -135,7 +141,7 @@ extern "C" const gchar* g_module_check_init(GModule *module)
 
 extern "C" void g_module_unload(GModule *module)
 {
-	for(int j=0; j<MAXSESSIONS; j++)
+	for(int j=0; j<maxSessions; j++)
 		free(sessionNames[j]);
 
 	if(currentSessionName!=NULL)
@@ -225,19 +231,20 @@ void rebuildMainMenu(bool dosavemenu,GtkWidget* menu,plugData*	plugdata,GCallbac
 	submenu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu),submenu);
 
-			if(dosavemenu==true)
-			{
-	menuitem=gtk_menu_item_new_with_label("Current Session");
-	gtk_widget_set_name(menuitem,"Current Session");
-	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(saveCurrrentSession),plugdata);
-	gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuitem);
-	menuitem=gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuitem);
-}
-	for(int j=0; j<MAXSESSIONS; j++)
+	if(dosavemenu==true)
+		{
+			menuitem=gtk_menu_item_new_with_label("Current Session");
+			gtk_widget_set_name(menuitem,"Current Session");
+			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(saveCurrrentSession),plugdata);
+			gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuitem);
+			menuitem=gtk_separator_menu_item_new();
+			gtk_menu_shell_append(GTK_MENU_SHELL(submenu),menuitem);
+		}
+
+	for(int j=0; j<maxSessions; j++)
 		{
 			menuitem=gtk_menu_item_new_with_label(sessionNames[j]);
-			
+
 			if(dosavemenu==true)
 				sinkReturn=asprintf(&sessionname,"%i-SaveSession",j);
 			else
@@ -272,12 +279,35 @@ void saveSessionNum(GtkWidget* widget,gpointer data)
 		}
 }
 
+void updateMenus(gpointer data)
+{
+	char		*sessionfile;
+	FILE		*fd=NULL;
+	plugData	*plugdata=(plugData*)data;
+
+	for(int j=0;j<maxSessions; j++)
+		{
+			sinkReturn=asprintf(&sessionfile,"%s/session-%i",plugdata->lPlugFolder,j);
+			fd=fopen(sessionfile,"r");
+			if(fd!=NULL)
+				{
+					sinkReturn=fscanf(fd,"%m[^\n]s",&sessionNames[j]);
+					fclose(fd);
+				}
+			else
+				sinkReturn=asprintf(&sessionNames[j],gettext("Session %i"),j);
+		}
+	rebuildMainMenu(true,saveSessionMenu,plugdata,(GCallback*)saveSessionNum);
+	rebuildMainMenu(false,restoreSessionMenu,plugdata,(GCallback*)restoreSessionNum);
+}
+
 extern "C" int addToGui(gpointer data)
 {
 
 	GtkWidget*	menuitem;
 	char		*sessionname;
 	GtkWidget*	menu;
+	char		*filename;
 
 	plugData*	plugdata=(plugData*)data;
 
@@ -285,7 +315,10 @@ extern "C" int addToGui(gpointer data)
 	FILE*	fd=NULL;
 
 	setTextDomain(true,plugdata);
-	for(int j=0; j<MAXSESSIONS; j++)
+
+	sinkInt=asprintf(&filename,"%s/sessionmanager.rc",plugdata->lPlugFolder);
+	loadVarsFromFile(filename,mydata);
+	for(int j=0;j<maxSessions; j++)
 		{
 			sinkReturn=asprintf(&sessionfile,"%s/session-%i",plugdata->lPlugFolder,j);
 			fd=fopen(sessionfile,"r");
@@ -302,7 +335,6 @@ extern "C" int addToGui(gpointer data)
 
 	holdWidget=NULL;
 
-
 	findMenu(gtk_menu_item_get_submenu((GtkMenuItem*)plugdata->mlist.menuFile),SAVESESSIONMENUNAME);
 	if(holdWidget!=NULL)
 		{
@@ -317,7 +349,7 @@ extern "C" int addToGui(gpointer data)
 			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 			menuitem=gtk_separator_menu_item_new();
 			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-			for(int j=0; j<MAXSESSIONS; j++)
+			for(int j=0; j<maxSessions;j++)
 				{
 					menuitem=gtk_menu_item_new_with_label(sessionNames[j]);
 					sinkReturn=asprintf(&sessionname,"%i-SaveSession",j);
@@ -339,7 +371,7 @@ extern "C" int addToGui(gpointer data)
 			menu=gtk_menu_new();
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(restoreSessionMenu),menu);
 
-			for(int j=0; j<MAXSESSIONS; j++)
+			for(int j=0; j<maxSessions; j++)
 				{
 					menuitem=gtk_menu_item_new_with_label(sessionNames[j]);
 					sinkReturn=asprintf(&sessionname,"%i-RestoreSession",j);
@@ -387,6 +419,50 @@ extern "C" int doAbout(gpointer data)
 	free(licence);
 	free(licencepath);
 	free(translators);
+	setTextDomain(false,plugdata);
+	return(0);
+}
+
+extern "C" int plugPrefs(gpointer data)
+{
+	GtkWidget*	dialog;
+	GtkWidget*	dialogbox;
+	GtkWidget*	sesioncnt;
+	GtkWidget*	vbox;
+	int			response;
+	char*		filename;
+	char		*cnt;
+	plugData*	plugdata=(plugData*)data;
+
+	setTextDomain(true,plugdata);
+	vbox=createNewBox(NEWVBOX,false,0);
+	dialog=gtk_dialog_new_with_buttons(gettext("Session Prefs"),(GtkWindow*)plugdata->prefsWindow,GTK_DIALOG_MODAL,gettext(GTK_STOCK_APPLY),GTK_RESPONSE_APPLY,gettext(GTK_STOCK_CANCEL),GTK_RESPONSE_CANCEL,NULL);
+	gtk_window_set_default_size((GtkWindow*)dialog,300,120);
+	dialogbox=gtk_dialog_get_content_area((GtkDialog*)dialog);
+	gtk_container_add(GTK_CONTAINER(dialogbox),vbox);
+
+	sesioncnt=gtk_entry_new();
+
+	asprintf(&cnt,"%i",maxSessions);
+	gtk_entry_set_text((GtkEntry*)sesioncnt,cnt);
+	gtk_box_pack_start((GtkBox*)vbox,gtk_label_new(gettext("Max Sessions")),true,true,4);
+	gtk_box_pack_start((GtkBox*)vbox,sesioncnt,true,true,4);
+
+	gtk_window_set_transient_for((GtkWindow*)dialog,(GtkWindow*)plugdata->prefsWindow);
+	gtk_widget_show_all(dialog);
+	response=gtk_dialog_run(GTK_DIALOG(dialog));
+	if(response==GTK_RESPONSE_APPLY)
+		{
+			maxSessions=atoi(gtk_entry_get_text((GtkEntry*)sesioncnt));
+			if((maxSessions>ABSMAXSESSIONS) || (maxSessions<1))
+				maxSessions=24; 
+			sinkInt=asprintf(&filename,"%s/sessionmanager.rc",plugdata->lPlugFolder);
+			saveVarsToFile(filename,mydata);
+			debugFree(&filename);
+			updateMenus(data);
+		}
+	gtk_widget_destroy((GtkWidget*)dialog);
+	debugFree(&cnt);
 	setTextDomain(false,plugdata);
 	return(0);
 }

@@ -72,6 +72,8 @@
 #define MAXTEXTWIDTH 500
 #define MAXBFHISTORY 100
 
+#define MAXSAVEPERIOD	100
+
 #define MARK_TYPE_1		"bookmark"
 #define MARK_TYPE_2		"user1"
 #define MARK_TYPE_3		"user2"
@@ -276,6 +278,8 @@ extern unsigned int		autoShowMinChars;
 extern unsigned int		maxBMChars;
 extern unsigned int		maxJumpHistory;
 extern unsigned int		maxFuncDefs;
+extern unsigned int		autoSavePeriod;
+extern int				autoSaveSource;
 
 extern GtkWidget		*fontButton;
 extern GtkWidget		*terminalBox;
@@ -408,6 +412,8 @@ extern char				*thePage;
 extern char				*htmlFile;
 extern char				*htmlURI;
 extern char				*tmpFolderName;
+extern char				*thisSessionPath;
+extern char				*thisSessionName;
 
 //runtime deps
 extern int				gotManEditor;

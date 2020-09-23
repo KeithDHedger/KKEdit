@@ -1,4 +1,6 @@
 0.4.4
+Added prefs to session manager plugin to set number of available sessions.
+Added auto save to prefs(Admin tab, in minutes).
 Minor bug fixes for latest glib etc.
 Removed nag screen.
 No longer doing releases, so removed update check.

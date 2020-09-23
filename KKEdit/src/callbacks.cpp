@@ -1313,12 +1313,23 @@ void clearToolButtons(void)
 	globalHistory->setHistForwardMenu(NULL);
 }
 
+gboolean autoSaveCallBack(gpointer user_data)
+{
+	if(autoSavePeriod>0)
+		{
+			doSaveAll(NULL,NULL);
+			saveSession(thisSessionName,thisSessionPath);
+			return(true);
+		}
+	return(false);
+}
+
 void setPrefs(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	pageStruct	*tpage=getPageStructByIDFromPage(-1);
 	bool		*bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen,&useGlobalPlugMenu,&autoSearchDocs,&showWhiteSpace,&inWindow,&showMenuIcons};
-	unsigned	*ints[MAXPREFSINTWIDGETS]={&maxTabChars,&maxFRHistory,&depth,&autoShowMinChars,&tabWidth,&maxFuncDefs,&maxBMChars,&tabsSize,&maxJumpHistory};
+	unsigned	*ints[MAXPREFSINTWIDGETS]={&maxTabChars,&maxFRHistory,&depth,&autoShowMinChars,&tabWidth,&maxFuncDefs,&maxBMChars,&tabsSize,&maxJumpHistory,&autoSavePeriod};
 
 	if(strcmp(gtk_widget_get_name(widget),"style")==0)
 		{
@@ -1419,6 +1430,9 @@ void setPrefs(GtkWidget *widget,gpointer data)
 			showHideDocviewer=false;
 			toggleDocviewer(NULL,NULL);
 #endif
+
+			g_source_remove(autoSaveSource);
+			autoSaveSource=g_timeout_add_seconds(autoSavePeriod*60,autoSaveCallBack,NULL);
 
 			gtk_widget_destroy(prefswin);
 			resetAllFilePrefs();

@@ -1531,6 +1531,10 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 //max history
 	makePrefBox(true,false);
 	makePrefsDial(MAXJUMPHISTORY,PREFS_MAX_JUMP_HISTORY_LABEL,"maxjumphistory",maxJumpHistory,10,MAXBFHISTORY);
+//autosave period
+//makePrefsDial(int widgnum,const char *label,const char *name,int value,int minvalue,int maxvalue)
+	makePrefBox(true,false);
+	makePrefsDial(SAVEPERIOD,PREFS_SAVE_PERIOD_LABEL,"autosaveperiod",autoSavePeriod,0,MAXSAVEPERIOD);
 
 //check for update
 	makePrefBox(true,true);

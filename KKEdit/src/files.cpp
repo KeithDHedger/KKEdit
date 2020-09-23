@@ -632,6 +632,7 @@ VISIBLE void saveSession(const char *filename,const char *path)
 	else
 		{
 			sinkReturn=asprintf(&filepath,"%s",path);
+			asprintf(&thisSessionName,"%s",filename);
 			name=filename;
 		}
 
@@ -678,6 +679,10 @@ VISIBLE void saveSession(const char *filename,const char *path)
 
 			ERRDATA
 			fclose(fd);
+			freeAndNull(&thisSessionName);
+			thisSessionName=strdup(name);
+			freeAndNull(&thisSessionPath);
+			thisSessionPath=strdup(filepath);
 			ERRDATA debugFree(&filepath);
 		}
 	ERRDATA
@@ -712,15 +717,25 @@ VISIBLE void restoreSession(GtkWidget *widget,gpointer data)
 
 	usleep(500000);
 	if(data==NULL)
-		sinkReturn=asprintf(&filename,"%s/%s/session",getenv("HOME"),APPFOLDENAME);
+		{
+			sinkReturn=asprintf(&filename,"%s/%s/session",getenv("HOME"),APPFOLDENAME);
+		}
 	else
-		sinkReturn=asprintf(&filename,"%s",(char*)data);
+		{
+			sinkReturn=asprintf(&filename,"%s",(char*)data);
+		}
+
+	freeAndNull(&thisSessionName);
+	freeAndNull(&thisSessionPath);
+	thisSessionPath=strdup(filename);
 
 	fd=fopen(filename,"r");
 	if(fd!=NULL)
 		{
 			closeAllTabs(NULL,NULL);
 			sinkReturnStr=fgets(buffer,2048,fd);
+			buffer[strlen(buffer)-1]=0;
+			thisSessionName=strdup(buffer);
 			sinkReturn=fscanf(fd,"%i %i %i %i\n",&width,&hite,&winx,&winy);
 			gtk_window_resize((GtkWindow*)mainWindow,width,hite);
 			if(winx!=-1 && winy!=-1)

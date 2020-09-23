@@ -20,3 +20,7 @@ config.h
 TODO
 *.o
 *.so
+
+KKEdit/app/KKEditProgressBar
+KKEdit/app/kkedit
+KKEdit/app/kkeditmsg

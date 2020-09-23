@@ -84,5 +84,6 @@ void realCloseTab(GtkNotebook *notebook,GtkWidget *child,guint page_num,gpointer
 void doTabMenu(GtkWidget *widget,gpointer user_data);
 
 GtkWidget* findMenu(GtkWidget *parent,const gchar *name);
+gboolean autoSaveCallBack(gpointer user_data);
 
 #endif
