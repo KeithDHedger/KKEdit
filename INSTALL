@@ -54,7 +54,7 @@ sudo apt-get install libvte-2.91-dev or sudo apt-get install libvte-2.90-dev
 
 Optional installs:
 sudo apt-get install aspell aspell-en libaspell-dev
-sudo apt-get install libwebkitgtk-3.0-dev
+sudo apt-get install libwebkit2gtk-4.0-dev
 sudo apt-get install man2html-base
 sudo apt-get install xterm
 
