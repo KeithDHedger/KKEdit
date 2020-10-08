@@ -1,0 +1,10 @@
+Package: kkedit-3
+Priority: extra
+Section: Accessories
+Installed-Size: 
+Maintainer: keithdhedger@gmail.com
+Architecture: amd64
+Version: 
+Depends: libwebkitgtk-3.0-0,libgtksourceview-3.0-1,exuberant-ctags,libvte-2.91-0,aspell,aspell-en,libaspell15,man2html-base,xterm
+Provides: kkedit
+Description: KKEdit Code Text Editor

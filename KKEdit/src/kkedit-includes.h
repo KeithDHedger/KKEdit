@@ -352,7 +352,6 @@
 #define PREFS_MAX_CHARS_IN_BMS_LABEL gettext("Max Characters In Bookmarks:")
 #define PREFS_MAX_JUMP_HISTORY_LABEL gettext("Max Back/Forward History:")
 #define PREFS_SAVE_PERIOD_LABEL gettext("Auto Save Period (mins):")
-#define PREFS_UPDATE_CHECK_LABEL gettext("Check For Updates")
 #define PREFS_GLOBAL_PLUG_MENU_LABEL gettext("Use Global Plugins Menu( Requires Restart )")
 #define PREFS_ADMIN_LABEL gettext("Administration")
 #define PREFS_BE_KIND_LABEL gettext("<b>Be Kind To Poor Programmers</b>")
@@ -493,11 +492,7 @@
 #endif
 
 #ifdef _BUILDDOCVIEWER_
-#ifndef _USEGTK3_
 #include <webkit/webkit.h>
-#else
-#include <webkit2/webkit2.h>
-#endif
 #endif
 
 #include "globals.h"

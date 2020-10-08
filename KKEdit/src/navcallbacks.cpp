@@ -559,6 +559,7 @@ char *getPathFromXML(char *xml)
 	ERRDATA return(buffer);
 }
 
+#if 1
 gboolean docLinkTrap(WebKitWebView *web_view,WebKitWebFrame *frame,WebKitNetworkRequest *request,WebKitWebNavigationAction *navigationAction,WebKitWebPolicyDecision *policy_decision, gpointer user_data)
 {
 	int				mod=-1;
@@ -643,6 +644,7 @@ gboolean docLinkTrap(WebKitWebView *web_view,WebKitWebFrame *frame,WebKitNetwork
 	return(false);
 
 }
+#endif
 #endif
 
 //jump to tab

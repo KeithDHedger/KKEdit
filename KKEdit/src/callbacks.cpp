@@ -1328,7 +1328,7 @@ void setPrefs(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
 	pageStruct	*tpage=getPageStructByIDFromPage(-1);
-	bool		*bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&autoCheck,&nagScreen,&useGlobalPlugMenu,&autoSearchDocs,&showWhiteSpace,&inWindow,&showMenuIcons};
+	bool		*bools[MAXPREFSWIDGETS]={&indent,&lineNumbers,&lineWrap,&highLight,&noSyntax,&singleUse,&onExitSaveSession,&noDuplicates,&noWarnings,&readLinkFirst,&autoShowComps,&nagScreen,&useGlobalPlugMenu,&autoSearchDocs,&showWhiteSpace,&inWindow,&showMenuIcons};
 	unsigned	*ints[MAXPREFSINTWIDGETS]={&maxTabChars,&maxFRHistory,&depth,&autoShowMinChars,&tabWidth,&maxFuncDefs,&maxBMChars,&tabsSize,&maxJumpHistory,&autoSavePeriod};
 
 	if(strcmp(gtk_widget_get_name(widget),"style")==0)

@@ -125,7 +125,6 @@ void init(void)
 	rootCommand=strdup(GTKSUPATH);
 	autoShowMinChars=4;
 	autoShowComps=false;
-	autoCheck=true;
 	useGlobalPlugMenu=true;
 	maxTabChars=20;
 	maxJumpHistory=10;
@@ -276,7 +275,7 @@ void init(void)
 	ERRDATA
 }
 
-void doNagScreen(void)
+void doNagScreenxxx(void)
 {
 	ERRDATA
 	GtkWidget *dialog;

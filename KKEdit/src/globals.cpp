@@ -155,7 +155,6 @@ bool				noWarnings;
 bool				readLinkFirst;
 bool				autoShowComps;
 bool				autoSearchDocs;
-bool				autoCheck;
 unsigned int		autoShowMinChars;
 bool				useGlobalPlugMenu;
 unsigned int		maxTabChars=20;
@@ -436,7 +435,6 @@ args				kkedit_rc[]=
 	{"readlink",TYPEBOOL,&readLinkFirst},
 	{"autocomp",TYPEBOOL,&autoShowComps},
 	{"autosearchdocs",TYPEBOOL,&autoSearchDocs},
-	{"updatecheck",TYPEBOOL,&autoCheck},
 	{"useplugmenu",TYPEBOOL,&useGlobalPlugMenu},
 	{"showmenuicons",TYPEBOOL,&showMenuIcons},
 	{"docinwindow",TYPEBOOL,&inWindow},

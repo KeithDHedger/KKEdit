@@ -1,3 +1,9 @@
+0.4.5
+Added make-deb to makefile to create simple installable deb package.
+Fixed gtk3 docviewer,
+Code clean.
+Removed redundant checkboxes from prefs.
+
 0.4.4
 Added prefs to session manager plugin to set number of available sessions.
 Added auto save to prefs(Admin tab, in minutes).

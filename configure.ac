@@ -1,6 +1,6 @@
 #
 #
-AC_INIT([KKEdit],[0.4.4],[PROJ],[KKEdit])
+AC_INIT([KKEdit],[0.4.5],[PROJ],[KKEdit])
 
 AC_CONFIG_HEADER([config.h])
 AC_PROG_CXX
@@ -111,9 +111,9 @@ AC_ARG_ENABLE(docviewer,AS_HELP_STRING([--enable-docviewer],[Build the Gtk-Doc v
 AC_MSG_RESULT($enable_docviewer)
 if test "$enable_docviewer" = "yes"; then
 if test "$enable_gtk3" = "yes"; then
-	WEBKIT_MODULES="webkit2gtk-4.0 >= 2.4.0"
+	WEBKIT_MODULES="webkitgtk-3.0 >= 2.4.0"
 else
-	WEBKIT_MODULES="webkit-1.0 >= 1.6.1"
+	WEBKIT_MODULES="webkit-1.0 >= 2.4.11"
 fi
 	PKG_CHECK_MODULES(WEBKIT, $WEBKIT_MODULES)
 	AC_SUBST(WEBKIT_CFLAGS)
@@ -151,7 +151,6 @@ case $host_os in
 		ICONV_LIBS=-liconv
 		SEDCOMMAND="sed -i ''"
 		;;
-
 	*)
 		AC_DEFINE([_INLINUX_], [], [compiling for linux])
 		AC_CHECK_PROG(CTAGS, ctags ,true,false)
@@ -194,5 +193,6 @@ AC_SUBST(with_debug_level)
 AC_MSG_RESULT([Setting debug level to $with_debug_level])
 
 AC_OUTPUT(Makefile KKEdit/app/Makefile KKEdit/plugins/TerminalPane/Makefile KKEdit/plugins/SessionManager/Makefile KKEdit/plugins/FileBrowser/Makefile KKEdit/plugins/ClipboardPlugin/Makefile  KKEdit/plugins/SymbolMenuPlugin/Makefile)
+
 
 

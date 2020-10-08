@@ -1434,7 +1434,7 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 	gtk_box_pack_start((GtkBox*)prefHBox2,fontButton,false,true,0);
 	gtk_box_pack_start((GtkBox*)pagevbox,prefHBox,false,false,0);
 
-////bm highlight colour
+//bm highlight colour
 	makePrefBox(true,false);
 	gtk_container_add(GTK_CONTAINER(prefHBox1),gtk_label_new(PREFS_BM_COLOUR_LABEL));
 
@@ -1485,9 +1485,9 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 //page 3
 	pagevbox=createNewBox(NEWVBOX,false,0);
 //admin
-//function search depth
-	makePrefBox(true,false);
-	makePrefsDial(MAXFUNCDEPTH,PREFS_TAG_SEARCH_DEPTH_LABEL,"depth",depth,0,20);
+////function search depth
+//	makePrefBox(true,false);
+//	makePrefsDial(MAXFUNCDEPTH,PREFS_TAG_SEARCH_DEPTH_LABEL,"depth",depth,0,20);
 
 //terminalcommand
 	makePrefBox(true,false);
@@ -1516,6 +1516,9 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 	gtk_container_add(GTK_CONTAINER(prefHBox2),defaultBrowserBox);
 	gtk_container_add(GTK_CONTAINER(pagevbox),prefHBox);
 
+//function search depth
+	makePrefBox(true,false);
+	makePrefsDial(MAXFUNCDEPTH,PREFS_TAG_SEARCH_DEPTH_LABEL,"depth",depth,0,20);
 //find replace history max
 	makePrefBox(true,false);
 	makePrefsDial(MAXHISTORY,PREFS_MAX_FIND_HISTORY_LABEL,"maxfrhistory",maxFRHistory,0,MAXTEXTWIDTH);
@@ -1532,13 +1535,8 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 	makePrefBox(true,false);
 	makePrefsDial(MAXJUMPHISTORY,PREFS_MAX_JUMP_HISTORY_LABEL,"maxjumphistory",maxJumpHistory,10,MAXBFHISTORY);
 //autosave period
-//makePrefsDial(int widgnum,const char *label,const char *name,int value,int minvalue,int maxvalue)
 	makePrefBox(true,false);
 	makePrefsDial(SAVEPERIOD,PREFS_SAVE_PERIOD_LABEL,"autosaveperiod",autoSavePeriod,0,MAXSAVEPERIOD);
-
-//check for update
-	makePrefBox(true,true);
-	makePrefsCheck(UPDATECHECK,PREFS_UPDATE_CHECK_LABEL,"updatecheck",autoCheck,true,true);
 //use global plug menu
 	makePrefBox(true,true);
 	makePrefsCheck(GLOBALPLUGMENU,PREFS_GLOBAL_PLUG_MENU_LABEL,"useplugmenu",useGlobalPlugMenu,true,true);
@@ -1549,9 +1547,8 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 	label=gtk_label_new(PREFS_BE_KIND_LABEL);
 	gtk_label_set_use_markup((GtkLabel*)label,true);
 	gtk_box_pack_start(GTK_BOX(vbox),label,true,true,0);
-
 	prefsWidgets[BEKIND]=gtk_check_button_new_with_label(PREFS_I_DONATED_LABEL);
-	gtk_widget_set_name(prefsWidgets[BEKIND],"useplugmenu");
+	gtk_widget_set_name(prefsWidgets[BEKIND],"bekindcheck");
 	gtk_toggle_button_set_active((GtkToggleButton*)prefsWidgets[BEKIND],nagScreen);
 
 	hbox=createNewBox(NEWHBOX,true,0);
@@ -1583,45 +1580,6 @@ VISIBLE void doPrefs(GtkWidget *widget,gpointer data)
 //show it
 	gtk_container_add(GTK_CONTAINER(prefswin),(GtkWidget*)vbox);
 	gtk_widget_show_all(prefswin);
-	ERRDATA
-}
-
-//TODO//
-//not working properly
-void addRecentToMenuXXX(GtkRecentChooser *chooser,GtkWidget *menu)
-{
-	ERRDATA
-	GList		*itemlist=NULL;
-	GList		*l=NULL;
-	GtkWidget	*menuitem;
-	const char	*uri=NULL;
-	char		*filename=NULL;
-	int			i=0;
-
-	itemlist=gtk_recent_chooser_get_items(chooser);
-
-	for(l=itemlist;l !=NULL;l=l->next)
-		{
-			const gchar *menuname;
-			GtkRecentInfo *info =(GtkRecentInfo*)l->data;
-			if(i >= MAXRECENT)
-				break;
-			i++;
-
-			menuname=gtk_recent_info_get_display_name(info);
-			uri=gtk_recent_info_get_uri(info);
-			menuData[MENUBLANK].cb=(void*)recentFileMenu;
-			menuData[MENUBLANK].stockID=NULL;
-			menuData[MENUBLANK].key=0;
-			if(uri!=NULL)
-				{
-					filename=g_filename_from_uri((const gchar*)uri,NULL,NULL);
-					menuData[MENUBLANK].userData=(void*)filename;
-					menuData[MENUBLANK].menuLabel=menuname;
-					menuData[MENUBLANK].widgetName=menuname;
-					menuitem=newMenuItem(MENUBLANK,menu);
-				}
-		}
 	ERRDATA
 }
 
@@ -1683,7 +1641,6 @@ void buildMenus(void)
 
 //open recent menu
 	menuitem=gtk_menu_item_new_with_mnemonic("_Recent");
-//	setupRecent();
 	gtk_menu_item_set_submenu((GtkMenuItem*)menuitem,recentMenu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
@@ -2362,6 +2319,7 @@ void buildGtkDocViewer(void)
 	hbox=createNewBox(NEWHBOX,false,4);
 
 	webView=WEBKIT_WEB_VIEW(webkit_web_view_new());
+	
 	g_signal_connect(G_OBJECT(webView),"navigation-policy-decision-requested",G_CALLBACK(docLinkTrap),NULL);
 
 	settings=webkit_web_view_get_settings(webView);

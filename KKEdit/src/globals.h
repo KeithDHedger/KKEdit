@@ -229,7 +229,6 @@ extern unsigned			pageID;
 extern char				*toolBarLayout;
 extern GtkWidget		*toolBarBox;
 
-
 extern GtkWidget		*lineNumberWidget;
 extern GtkWidget		*findApiWidget;
 extern GtkWidget		*findQtApiWidget;
@@ -271,7 +270,6 @@ extern bool				noWarnings;
 extern bool				readLinkFirst;
 extern bool				autoShowComps;
 extern bool				autoSearchDocs;
-extern bool				autoCheck;
 extern bool				useGlobalPlugMenu;
 extern unsigned int		maxTabChars;
 extern unsigned int		autoShowMinChars;
