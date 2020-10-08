@@ -432,7 +432,8 @@ extern "C" int doAbout(gpointer data)
 	gtk_about_dialog_set_comments(about,aboutboxstring);
 	gtk_about_dialog_set_copyright(about,COPYRITE);
 	gtk_about_dialog_set_version(about,PLUGVERSION);
-	gtk_about_dialog_set_website(about,MYWEBSITE);
+	gtk_about_dialog_set_website(about,KKEDITPAGE);
+	gtk_about_dialog_set_website_label(about,"KKEdit Homepage");
 	gtk_about_dialog_set_logo_icon_name(about,ABOUTICON);
 	gtk_about_dialog_set_license(about,licence);
 	gtk_about_dialog_set_translator_credits(about,(const gchar*)translators);

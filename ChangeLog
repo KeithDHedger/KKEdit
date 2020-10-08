@@ -1,4 +1,6 @@
 0.4.5
+Fixed URI's in plugin about boxes.
+Fixed debian deps in gtk2 deb.
 Added make-deb to makefile to create simple installable deb package.
 Fixed gtk3 docviewer,
 Code clean.

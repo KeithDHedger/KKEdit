@@ -20,7 +20,7 @@
 #define _INTERNET_
 
 #define MYEMAIL "keithdhedger@gmail.com"
-#define MYWEBSITE "http://khapplications.freeddns.org/index.html"
+#define MYWEBSITE "http://keithhedger.freeddns.org"
 #define GLOBALWEBSITE "http://khapplications.freeddns.org"
 #define ASPELLPAGE GLOBALWEBSITE "/pages/aspellgui/aspelgui.html"
 #define MANPAGEPAGE GLOBALWEBSITE "/pages/manpageeditor/help.html"
