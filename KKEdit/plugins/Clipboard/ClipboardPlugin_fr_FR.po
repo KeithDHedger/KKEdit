@@ -1,0 +1,74 @@
+# French translations for ClipboardPlugin package
+# Traductions françaises du paquet ClipboardPlugin.
+# Copyright (C) 2014 THE ClipboardPlugin'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the ClipboardPlugin package.
+# Automatically generated, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ClipboardPlugin 1.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-23 12:44+0100\n"
+"PO-Revision-Date: 2016-08-23 12:46-0000\n"
+"Last-Translator: K. D. Hedger <kdhedger68713@gmail.com>\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.6.11\n"
+
+#: clipboardplugin.cpp:166
+msgid "C_lipboard"
+msgstr "P_resse-papier"
+
+#: clipboardplugin.cpp:173
+#, c-format
+msgid "Clip Number. %i"
+msgstr "Emplacement %i"
+
+#: clipboardplugin.cpp:200
+msgid "Clipboard Plugin - Add's multiple clips"
+msgstr ""
+"Greffon presse-papier - Un presse-papier pour KKEdit avec 10 emplacements"
+
+#: clipboardplugin.cpp:201
+msgid "French Translation"
+msgstr "Traduction française"
+
+#: ../common.h:28
+msgid "Apply"
+msgstr "_Appliquer"
+
+#: ../common.h:29
+msgid "Cancel"
+msgstr "_Annuler"
+
+#: ../common.h:30
+msgid "New"
+msgstr "Nouveau"
+
+#: ../common.h:31
+msgid "Help"
+msgstr "Aide"
+
+#: ../common.h:32
+msgid "Open"
+msgstr "Ouvrir"
+
+#: ../common.h:33
+msgid "Connect"
+msgstr "Relier"
+
+#: ../common.h:34
+msgid "OK"
+msgstr "OK"
+
+#: ../common.h:43
+msgid ""
+"\n"
+"More by the same author\n"
+msgstr ""
+"\n"
+"Plus du même auteur\n"
