@@ -188,18 +188,8 @@ GtkWidget *makeNewTab(char *name,char *tooltip,pageStruct *page)
 
 
 #ifdef _USEGTK3_
-	char	*notebookcss=NULL;
-	GtkStyleProvider	*nbprovider;
-
-	nbprovider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
-	sinkReturn=asprintf(&notebookcss,"*  {\n \
-    padding: 0px 10px 0px 10px;\n \
-}\n");
-
-	gtk_css_provider_load_from_data((GtkCssProvider*)nbprovider,notebookcss,-1,NULL);
-	applyCSS((GtkWidget*)evbox,nbprovider);
-	gtk_style_context_reset_widgets(gdk_screen_get_default());
-	debugFree(&notebookcss);
+	setGtk3NBTabSize();
+	applyCSS((GtkWidget*)evbox,tabBoxProvider);
 #endif
 
 	gtk_widget_show_all(evbox);

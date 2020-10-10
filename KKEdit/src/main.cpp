@@ -393,16 +393,8 @@ void appStart(GApplication  *application,gpointer data)
 		}
 
 #ifdef _USEGTK3_
-	char	*tabcss=NULL;
-
-	provider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
-	sinkReturn=asprintf(&tabcss,"* {\n \
-  padding: %ipx %ipx;\n  margin: 0px 0px; \n \
-}\n",tabsSize,tabsSize);
-
 	tabBoxProvider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
-	gtk_css_provider_load_from_data((GtkCssProvider*)tabBoxProvider,tabcss,-1,NULL);
-	debugFree(&tabcss);
+	provider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
 #endif
 
 	setPageSensitive();

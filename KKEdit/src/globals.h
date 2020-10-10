@@ -523,6 +523,7 @@ int gerrorMessage(GError **err);
 
 #ifdef _USEGTK3_
 void applyCSS (GtkWidget *widget, GtkStyleProvider *widgprovider);
+void setGtk3NBTabSize(void);
 #endif
 
 functionData* allocFStrings(unsigned what,char *string);

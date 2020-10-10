@@ -28,9 +28,13 @@ update-icons:
 	gtk-update-icon-cache -q -t -f ${prefix}/share/icons/hicolor
 
 make-deb:
+	@rm -f /tmp/kkedit$(GTK3SUFFIX)-$(VERSION).deb || true
 	@mkdir -vp /tmp/deb/
 	@mkdir -vp /tmp/deb/control
 	@make install DESTDIR=/tmp/deb/data
+	@mkdir -p /tmp/deb/data/usr/share/polkit-1/actions
+	@cp packages/debian/org.freedesktop.policykit.kkedit.policy /tmp/deb/data/usr/share/polkit-1/actions/org.freedesktop.policykit.kkedit$(GTK3SUFFIX).policy
+	@sed -i 's@<<APP>>@kkedit$(GTK3SUFFIX)@g' /tmp/deb/data/usr/share/polkit-1/actions/org.freedesktop.policykit.kkedit$(GTK3SUFFIX).policy
 	@cp packages/debian/control$(GTK3SUFFIX) /tmp/deb/control/control
 	@/bin/sed -i "s/Installed-Size: /Installed-Size: `du -s "/tmp/deb/data"|awk '{print $$1}'`/" "/tmp/deb/control/control"
 	@/bin/sed -i "s/Version: /Version: $(VERSION)/" "/tmp/deb/control/control"

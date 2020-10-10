@@ -25,15 +25,15 @@
 const char	*moreapps[]={
 								"\nMore by the same author\n",
 								"KKEdit\nhttp://kkedit.freeddns.org/\n",
-								"KKTerminal\nhttp://khapplications.freeddns.org/pages/kkterminal/kkterminal.html\n",
-								"KKFileManager\nhttps://github.com/KeithDHedger/KKFileManager\n",
-								"XDecorations\nhttp://khapplications.freeddns.org/pages/xdecorations/xdecorations.html\n",
-								"Xfce-Theme-Manager\nhttp://khapplications.freeddns.org/pages/apps.html#themeed\n",
-								"Xfce4-Composite-Editor\nhttp://khapplications.freeddns.org/pages/apps.html#xfcecomp\n",
-								"Manpage Editor\nhttp://khapplications.freeddns.org/pages/manpageeditor/help.html\n",
-								"GtkSu\nhttp://khapplications.freeddns.org/pages/gtksu/gtksu.html\n",
-								"ASpell GUI\nhttp://khapplications.freeddns.org/pages/aspellgui/aspelgui.html\n",
-								"Clipboard Viewer\nhttp://khapplications.freeddns.org/pages/clipviewer/clip.html",
+								"KKTerminal\nhttp://keithhedger.freeddns.org/pages/kkterminal/kkterminal.html\n",
+								"KKFileManager\nhttp://github.com/KeithDHedger/KKFileManager\n",
+								"XDecorations\nhttp://keithhedger.freeddns.org/pages/xdecorations/xdecorations.html\n",
+								"Xfce-Theme-Manager\nhttp://keithhedger.freeddns.org/pages/apps1.html#themeed\n",
+								"Xfce4-Composite-Editor\nhttp://keithhedger.freeddns.org/pages/apps1.html#xfcecomp\n",
+								"Manpage Editor\nhttp://keithhedger.freeddns.org/pages/manpageeditor/help.html\n",
+								"GtkSu\nhttp://keithhedger.freeddns.org/pages/gtksu/gtksu.html\n",
+								"ASpell GUI\nhttp://keithhedger.freeddns.org/pages/aspellgui/aspelgui.html\n",
+								"Clipboard Viewer\nhttp://keithhedger.freeddns.org/pages/clipviewer/clip.html",
 								"\nDevelopment versions can be found here:\nhttp://github.com/KeithDHedger"
 							};
 

@@ -4696,7 +4696,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_plugs" >&5
 $as_echo "$enable_plugs" >&6; }
 if test "$enable_plugs" = "yes"; then
-	PLUGDIRS="KKEdit/plugins/TerminalPane KKEdit/plugins/SessionManager KKEdit/plugins/FileBrowser KKEdit/plugins/ClipboardPlugin KKEdit/plugins/SymbolMenuPlugin"
+	PLUGDIRS="KKEdit/plugins/TerminalPane KKEdit/plugins/SessionManager KKEdit/plugins/FileBrowser KKEdit/plugins/Clipboard KKEdit/plugins/SymbolMenu"
 	if test "$enable_gtk3" = "yes"; then
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Finding vte version" >&5
 $as_echo_n "checking Finding vte version... " >&6; }
@@ -7019,7 +7019,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting debug level to $with_debug_level" >&5
 $as_echo "Setting debug level to $with_debug_level" >&6; }
 
-ac_config_files="$ac_config_files Makefile KKEdit/app/Makefile KKEdit/plugins/TerminalPane/Makefile KKEdit/plugins/SessionManager/Makefile KKEdit/plugins/FileBrowser/Makefile KKEdit/plugins/ClipboardPlugin/Makefile KKEdit/plugins/SymbolMenuPlugin/Makefile"
+ac_config_files="$ac_config_files Makefile KKEdit/app/Makefile KKEdit/plugins/TerminalPane/Makefile KKEdit/plugins/SessionManager/Makefile KKEdit/plugins/FileBrowser/Makefile KKEdit/plugins/Clipboard/Makefile KKEdit/plugins/SymbolMenu/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -7762,8 +7762,8 @@ do
     "KKEdit/plugins/TerminalPane/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/plugins/TerminalPane/Makefile" ;;
     "KKEdit/plugins/SessionManager/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/plugins/SessionManager/Makefile" ;;
     "KKEdit/plugins/FileBrowser/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/plugins/FileBrowser/Makefile" ;;
-    "KKEdit/plugins/ClipboardPlugin/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/plugins/ClipboardPlugin/Makefile" ;;
-    "KKEdit/plugins/SymbolMenuPlugin/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/plugins/SymbolMenuPlugin/Makefile" ;;
+    "KKEdit/plugins/Clipboard/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/plugins/Clipboard/Makefile" ;;
+    "KKEdit/plugins/SymbolMenu/Makefile") CONFIG_FILES="$CONFIG_FILES KKEdit/plugins/SymbolMenu/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

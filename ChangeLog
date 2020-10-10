@@ -1,4 +1,7 @@
 0.4.5
+Deb package fixes.
+Standardized plugins.
+Fixed notebook tab sizing in gtk3 again!
 Fixed URI's in plugin about boxes.
 Fixed debian deps in gtk2 deb.
 Added make-deb to makefile to create simple installable deb package.

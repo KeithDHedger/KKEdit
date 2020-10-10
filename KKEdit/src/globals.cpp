@@ -1794,8 +1794,17 @@ int getCharacterPos(unsigned what,GtkTextBuffer *buf)
 	return(gtk_text_iter_get_offset(&iter));
 }
 
+#ifdef _USEGTK3_
+void setGtk3NBTabSize(void)
+{
+	char	*notebookcss=NULL;
 
-
+	sinkReturn=asprintf(&notebookcss,"*  {\n padding: %ipx %ipx %ipx %ipx;\n }\n",tabsSize,tabsSize,tabsSize,tabsSize);
+	gtk_css_provider_load_from_data((GtkCssProvider*)tabBoxProvider,notebookcss,-1,NULL);
+	gtk_style_context_reset_widgets(gdk_screen_get_default());
+	debugFree(&notebookcss);
+}
+#endif
 
 
 

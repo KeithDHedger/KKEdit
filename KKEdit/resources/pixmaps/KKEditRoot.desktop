@@ -6,5 +6,5 @@ GenericName=Advanced Text Editor - Root Mode
 Comment=A GTK2/3 text editor inspired by ( but not based on ) BBEdit.
 Terminal=false
 Type=Application
-Categories=System;GTK;FileTools;
+Categories=System;GTK;Utility;TextEditor;
 MimeType=text/plain;
