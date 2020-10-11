@@ -1,8 +1,8 @@
 Package: kkedit
 Priority: extra
-Section: Accessories
+Section: editors
 Installed-Size: 
-Maintainer: keithdhedger@gmail.com
+Maintainer: K. D. Hedger <keithdhedger@gmail.com>
 Architecture: amd64
 Version: 
 Depends: libwebkitgtk-1.0-0,libgtksourceview2.0-0,exuberant-ctags,libvte9,aspell,aspell-en,libaspell15,man2html-base,xterm
