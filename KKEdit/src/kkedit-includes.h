@@ -451,8 +451,8 @@
 #define USERMARK2PNG DATADIR _EXECSUFFIX_ "/pixmaps/UserMark2.png"
 #define USERMARK3PNG DATADIR _EXECSUFFIX_ "/pixmaps/UserMark3.png"
 #define USERMARK4PNG DATADIR _EXECSUFFIX_ "/pixmaps/UserMark4.png"
-#define ROOTEDITPNG DATADIR _EXECSUFFIX_ "/pixmaps/ROOTKKEdit.png"
-#define MENUKKEDITPNG DATADIR _EXECSUFFIX_  "/pixmaps/MenuKKEdit.png"
+#define ROOTEDITPNG DATADIR _EXECSUFFIX_ "/pixmaps/ROOTKKEdit" _EXECSUFFIX_ ".png"
+#define MENUKKEDITPNG DATADIR _EXECSUFFIX_  "/pixmaps/MenuKKEdit" _EXECSUFFIX_ ".png"
 #define MANPAGEEDITPNG DATADIR _EXECSUFFIX_  "/pixmaps/ManPageEditor.png"
 #define PLUGMENUPNG DATADIR _EXECSUFFIX_  "/pixmaps/KKEditPlugMenu.png"
 
