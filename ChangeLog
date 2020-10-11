@@ -1,4 +1,5 @@
 0.4.5
+Fixed wrong gtk3 editor menu image.
 Deb package fixes.
 Standardized plugins.
 Fixed notebook tab sizing in gtk3 again!
