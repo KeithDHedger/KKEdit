@@ -70,12 +70,12 @@ AC_MSG_CHECKING(Build/Install unstable/new plugins)
 AC_ARG_ENABLE(unstable-plugins,AS_HELP_STRING([--disable-unstable-plugins],[Build/Install unstable/new plugins]),[enable_new_plugs=$enableval],[enable_new_plugs="no"])
 AC_MSG_RESULT($enable_new_plugs)
 if test "$enable_new_plugs" = "yes"; then
-#	NEWPLUGINCLUDES=KKEdit/unstable-plugins/*Plugin
-	NEWPLUGINCLUDES=KKEdit/unstable-plugins/DebuggerPlugin
+	NEWPLUGINCLUDES=KKEdit/unstable-plugins/*Plugin
+#	NEWPLUGINCLUDES=KKEdit/unstable-plugins/DebuggerPlugin
 
 	
-#	AC_OUTPUT(KKEdit/unstable-plugins/BrowserPlugin/Makefile KKEdit/unstable-plugins/DebuggerPlugin/Makefile)
-	AC_OUTPUT(KKEdit/unstable-plugins/DebuggerPlugin/Makefile)
+	AC_OUTPUT(KKEdit/unstable-plugins/BrowserPlugin/Makefile KKEdit/unstable-plugins/DebuggerPlugin/Makefile)
+#	AC_OUTPUT(KKEdit/unstable-plugins/DebuggerPlugin/Makefile)
 #	AC_OUTPUT($(INCLUDEUNSTABLE))
 
 else
