@@ -161,7 +161,7 @@ unsigned int		maxTabChars=20;
 unsigned int		maxBMChars;
 unsigned int		maxJumpHistory;
 unsigned int		maxFuncDefs;
-unsigned int		autoSavePeriod=3;
+unsigned int		autoSavePeriod=10;
 int					autoSaveSource;
 
 GtkWidget			*fontButton;

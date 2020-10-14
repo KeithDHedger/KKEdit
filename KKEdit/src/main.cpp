@@ -529,7 +529,8 @@ int main(int argc, char **argv)
 	createQueue();
 
 //autosave timer
-	autoSaveSource=g_timeout_add_seconds(autoSavePeriod*60,autoSaveCallBack,NULL);
+	if(autoSavePeriod>0)
+		autoSaveSource=g_timeout_add_seconds(autoSavePeriod*60,autoSaveCallBack,NULL);
 
 	g_signal_connect(mainApp,"activate",G_CALLBACK(activate),NULL);
 	g_signal_connect(mainApp,"startup",G_CALLBACK(appStart),NULL);

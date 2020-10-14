@@ -1428,7 +1428,8 @@ void setPrefs(GtkWidget *widget,gpointer data)
 #endif
 
 			g_source_remove(autoSaveSource);
-			autoSaveSource=g_timeout_add_seconds(autoSavePeriod*60,autoSaveCallBack,NULL);
+			if(autoSavePeriod>0)
+				autoSaveSource=g_timeout_add_seconds(autoSavePeriod*60,autoSaveCallBack,NULL);
 
 			gtk_widget_destroy(prefswin);
 			resetAllFilePrefs();
