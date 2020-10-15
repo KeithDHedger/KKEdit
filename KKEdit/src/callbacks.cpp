@@ -801,7 +801,8 @@ VISIBLE void openHelp(GtkWidget *widget,gpointer data)
 		sinkReturn=asprintf(&thePage,"file://%s/help.%s.html",GHELPFOLDER,lang);
 	else
 //		sinkReturn=asprintf(&thePage,"http://kkedit.freeddns.org/");
-		sinkReturn=asprintf(&thePage,"http://keithdhedger.github.io/KKEdit/");
+		//sinkReturn=asprintf(&thePage,"http://keithdhedger.github.io/KKEdit/");
+		sinkReturn=asprintf(&thePage,"http://keithdhedger.github.io/KKEdit/help.%s.html",lang);
 	showDocView(USEURI,(char*)"KKEdit",DOCVIEW_KKEDIT_HELP_LABEL);
 #else
 	if((long)data==0)
