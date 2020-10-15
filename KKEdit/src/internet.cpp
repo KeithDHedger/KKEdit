@@ -24,7 +24,7 @@
 #ifndef _USEQT5_
 const char	*moreapps[]={
 								"\nMore by the same author\n",
-								"KKEdit\nhttp://kkedit.freeddns.org/\n",
+								"KKEdit\nhttp://keithdhedger.github.io/KKEdit/\n",
 								"KKTerminal\nhttp://keithhedger.freeddns.org/pages/kkterminal/kkterminal.html\n",
 								"KKFileManager\nhttp://github.com/KeithDHedger/KKFileManager\n",
 								"XDecorations\nhttp://keithhedger.freeddns.org/pages/xdecorations/xdecorations.html\n",
@@ -43,7 +43,7 @@ const char	*authors="K.D.Hedger ©2013-2014<br><a href=\"mailto:" MYEMAIL "\">Em
 				"<a href=\"" GLOBALWEBSITE "\">Homepage</a>" \
 				"<br><br>More by the same author<br>" \
 				
-				"<a href=\"http://kkedit.freeddns.org\">KKEdit<br>" \
+				"<a href=\"http://keithdhedger.github.io/KKEdit/\">KKEdit<br>" \
 				"<a href=\"http://khapplications.freeddns.org/pages/xdecorations/xdecorations.html\">XDecorations<br>" \
 				"<a href=\"http://khapplications.freeddns.org/pages/apps.html#themeed\">Xfce-Theme-Manager<br>" \
 				"<a href=\"http://khapplications.freeddns.org/pages/apps.html#xfcecomp\">Xfce4-Composite-Editor<br>" \

@@ -1252,8 +1252,7 @@ VISIBLE bool doSaveAll(GtkWidget *widget,gpointer data)
 								}
 							else
 								{
-									gtk_notebook_set_current_page(mainNotebook,loop);
-									saveFile(NULL,NULL);
+									saveFile(NULL,(void*)loop+1);
 								}
 						}
 				}
@@ -1317,7 +1316,7 @@ gboolean autoSaveCallBack(gpointer user_data)
 {
 	if(autoSavePeriod>0)
 		{
-			doSaveAll(NULL,NULL);
+			doSaveAll(NULL,(void*)0);
 			saveSession(thisSessionName,thisSessionPath);
 			return(true);
 		}
@@ -1541,11 +1540,15 @@ VISIBLE void doAbout(GtkWidget *widget,gpointer data)
 	char		*licence;
 	char		*translators;
 	const char	*artists[]={DIALOG_ABOUT_ARTISTS_LABEL,"David Reimer","http://github.com/dajare",NULL};
+	const char	*kkeditpage=KKEDITPAGE;
 
 	sinkReturn=asprintf(&translators,"%s:\nNguyen Thanh Tung <thngtong@gmail.com>",DIALOG_ABOUT_FRENCH_LABEL);
 	g_file_get_contents(GDOCSFOLDER "/gpl-3.0.txt",&licence,NULL,NULL);
 
-	gtk_show_about_dialog((GtkWindow*)mainWindow,"authors",authors,"translator-credits",translators,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",KKEDITPAGE,"website-label","KKEdit Homepage","program-name","KKEdit","logo-icon-name",ABOUTICON,"license",licence,"artists",artists,NULL);
+	if(strncmp(localeLang,"fr",2)==0)
+		kkeditpage=KKEDITPAGEFR;
+
+	gtk_show_about_dialog((GtkWindow*)mainWindow,"authors",authors,"translator-credits",translators,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",kkeditpage,"website-label","KKEdit Homepage","program-name","KKEdit","logo-icon-name",ABOUTICON,"license",licence,"artists",artists,NULL);
 
 	ERRDATA debugFree(&licence);
 	ERRDATA debugFree(&translators);

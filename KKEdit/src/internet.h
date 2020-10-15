@@ -27,7 +27,8 @@
 #define CLIPVIEW GLOBALWEBSITE "/pages/clipviewer/clip.html"
 #define THEMEMANAGER GLOBALWEBSITE "/pages/apps.html#themeed"
 #define COMPMANAGER GLOBALWEBSITE "/pages/apps.html#xfcecomp"
-#define KKEDITPAGE "http://kkedit.freeddns.org"
+#define KKEDITPAGE "http://keithdhedger.github.io/KKEdit/"
+#define KKEDITPAGEFR "http://keithdhedger.github.io/KKEdit/help.fr.html"
 #define KKTERMINALPAGE "http://khapplications.freeddns.org/pages/kkterminal/kkterminal.html"
 
 #define COPYRITE "Copyright \xc2\xa9 2013-2016 K.D.Hedger"

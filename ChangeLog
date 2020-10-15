@@ -1,4 +1,7 @@
 0.4.6
+Removed redundant code.
+Fixed autosave/save all switching tabs.
+Fixed homepage link in about box.
 Fixed french help page.
 Fixed setting autosave=0 to disable autosave.
 Added github website to repo.

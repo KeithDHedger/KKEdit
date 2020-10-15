@@ -275,19 +275,6 @@ void init(void)
 	ERRDATA
 }
 
-void doNagScreenxxx(void)
-{
-	ERRDATA
-	GtkWidget *dialog;
-
-	dialog=gtk_message_dialog_new((GtkWindow*)mainWindow,GTK_DIALOG_MODAL,GTK_MESSAGE_INFO,GTK_BUTTONS_CLOSE,"%s",DIALOG_PLEASE_DONATE_LABEL);
-	gtk_message_dialog_format_secondary_markup((GtkMessageDialog*)dialog,"%s\n<b>%s</b>\n%s\n\n%s",DIALOG_PAYPAL_LABEL,MYEMAIL,DIALOG_SEND_IT_LABEL,DIALOG_THANKS_LABEL);
-
-	gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
-	ERRDATA
-}
-
 void activate(GApplication *application,gpointer data)
 {
 	ERRDATA
@@ -399,6 +386,11 @@ void appStart(GApplication  *application,gpointer data)
 
 	setPageSensitive();
 	gtk_widget_set_size_request(mainWindow,800,400);
+
+//autosave timer
+	if(autoSavePeriod>0)
+		autoSaveSource=g_timeout_add_seconds(autoSavePeriod*60,autoSaveCallBack,NULL);
+
 	ERRDATA
 }
 
@@ -452,14 +444,6 @@ int getWorkspaceNumber(void)
 		}
 	ERRDATA return retnum+100;
 }
-
-
-//gboolean autoSaveCallBack(gpointer user_data)
-//{
-//	doSaveAll(NULL,NULL);
-//	printf(">>>>\n");
-//	return(true);
-//}
 
 int main(int argc, char **argv)
 {
@@ -527,10 +511,6 @@ int main(int argc, char **argv)
 		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_HANDLES_OPEN));
 
 	createQueue();
-
-//autosave timer
-	if(autoSavePeriod>0)
-		autoSaveSource=g_timeout_add_seconds(autoSavePeriod*60,autoSaveCallBack,NULL);
 
 	g_signal_connect(mainApp,"activate",G_CALLBACK(activate),NULL);
 	g_signal_connect(mainApp,"startup",G_CALLBACK(appStart),NULL);

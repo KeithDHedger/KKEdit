@@ -411,6 +411,8 @@ bool getSaveFile(void)
 	ERRDATA return(retval);
 }
 
+enum {SAVEFROMCURRENTPAGE=0,SAVEASPAGE=-1};
+
 VISIBLE bool saveFile(GtkWidget *widget,gpointer data)
 {
 	ERRDATA
@@ -419,6 +421,17 @@ VISIBLE bool saveFile(GtkWidget *widget,gpointer data)
 	gchar		*text;
 	FILE		*fd=NULL;
 	GtkWidget	*dialog;
+	long		dowhat=0;
+
+	dowhat=(long)data;
+	if(dowhat==0)
+		page=getPageStructByIDFromPage(-1);
+
+	if(dowhat==-1)
+		page=getPageStructByIDFromPage(-1);
+
+	if(dowhat>0)
+		page=getPageStructByIDFromPage(dowhat-1);
 
 	if(page==NULL)
 		return(true);
@@ -428,7 +441,7 @@ VISIBLE bool saveFile(GtkWidget *widget,gpointer data)
 	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
 	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,FALSE);
 
-	if(page->filePath!=NULL && data==NULL)
+	if(page->filePath!=NULL && (dowhat==0 || dowhat>0))
 		{
 			fd=fopen(page->filePath,"w");
 			if(fd!=NULL)
@@ -447,16 +460,13 @@ VISIBLE bool saveFile(GtkWidget *widget,gpointer data)
 		}
 	else
 		{
-			if(data!=NULL)
+			saveFilePath=page->filePath;
+			saveFileName=page->fileName;
+			if(page->dirName!=NULL)
 				{
-					saveFilePath=page->filePath;
-					saveFileName=page->fileName;
-					if(page->dirName!=NULL)
-						{
-							ERRDATA debugFree(&page->dirName);
-						}
-					page->dirName=g_path_get_dirname(page->filePath);
+					ERRDATA debugFree(&page->dirName);
 				}
+			page->dirName=g_path_get_dirname(page->filePath);
 
 			saveFileName=page->fileName;
 			if(getSaveFile()==false)
