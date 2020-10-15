@@ -1,3 +1,7 @@
+0.4.6
+Fixed setting autosave=0 to disable autosave.
+Added github website to repo.
+
 0.4.5
 Added make-rpm* to make file.
 Fixed wrong gtk3 editor menu image.
