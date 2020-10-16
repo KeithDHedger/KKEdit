@@ -20,8 +20,8 @@
 #define _INTERNET_
 
 #define MYEMAIL "keithdhedger@gmail.com"
-#define MYWEBSITE "http://keithhedger.freeddns.org"
-#define GLOBALWEBSITE "http://khapplications.freeddns.org"
+#define MYWEBSITE "http://keithdhedger.github.io/"
+#define GLOBALWEBSITE "http://keithdhedger.github.io"
 #define ASPELLPAGE GLOBALWEBSITE "/pages/aspellgui/aspelgui.html"
 #define MANPAGEPAGE GLOBALWEBSITE "/pages/manpageeditor/help.html"
 #define CLIPVIEW GLOBALWEBSITE "/pages/clipviewer/clip.html"
@@ -29,9 +29,9 @@
 #define COMPMANAGER GLOBALWEBSITE "/pages/apps.html#xfcecomp"
 #define KKEDITPAGE "http://keithdhedger.github.io/KKEdit/"
 #define KKEDITPAGEFR "http://keithdhedger.github.io/KKEdit/help.fr.html"
-#define KKTERMINALPAGE "http://khapplications.freeddns.org/pages/kkterminal/kkterminal.html"
+#define KKTERMINALPAGE GLOBALWEBSITE "/pages/kkterminal/kkterminal.html"
 
-#define COPYRITE "Copyright \xc2\xa9 2013-2016 K.D.Hedger"
+#define COPYRITE "Copyright © 2013-2016 K.D.Hedger"
 
 #ifndef _USEQT5_
 extern const char	*moreapps[];

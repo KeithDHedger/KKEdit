@@ -54,8 +54,8 @@
 #endif
 #endif
 
-#define PLUGINSLINK "https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins#getplugs"
-#define NAGTIMELINK "https://dl.dropboxusercontent.com/s/xcvp8af3qp7ffxg/NAGTIME"
+//#define PLUGINSLINK "https://sites.google.com/site/kkeditlinuxtexteditor/kkedit-plugins#getplugs"
+#define PLUGINSLINK "https://github.com/KeithDHedger/KKEditPlugins"
 
 #define TOOL_ASYNC 8
 #define TOOL_IGNORE_OP 0
