@@ -52,7 +52,7 @@ make-rpm-fedora:
 	@mkdir -p /tmp/rpm/usr/share/polkit-1/actions
 	@cp packages/debian/org.freedesktop.policykit.kkedit.policy /tmp/rpm/usr/share/polkit-1/actions/org.freedesktop.policykit.kkedit$(GTK3SUFFIX).policy
 	@sed -i 's@<<APP>>@kkedit$(GTK3SUFFIX)@g' /tmp/rpm/usr/share/polkit-1/actions/org.freedesktop.policykit.kkedit$(GTK3SUFFIX).policy
-	@fpm -s dir -t rpm -C /tmp/rpm --name kkedit-3 --version 0.4.5 --iteration 1 --depends  gtksourceview3 --depends ctags --depends vte291  --depends aspell --depends aspell-en --description "KKEdit Code Text Editor" --maintainer  "K. D. Hedger. <keithdhedger@gmail.com>" --rpm-dist "fedora" .
+	@fpm -s dir -t rpm -C /tmp/rpm --name kkedit-3 --version $(VERSION) --iteration 1 --depends  gtksourceview3 --depends ctags --depends vte291  --depends aspell --depends aspell-en --description "KKEdit Code Text Editor" --maintainer  "K. D. Hedger. <keithdhedger@gmail.com>" --rpm-dist "fedora" .
 
 	mv kkedit-3-*.rpm /tmp
 	@rm -rf /tmp/rpm
@@ -63,7 +63,7 @@ make-rpm-opensuse:
 	@mkdir -p /tmp/rpm/usr/share/polkit-1/actions
 	@cp packages/debian/org.freedesktop.policykit.kkedit.policy /tmp/rpm/usr/share/polkit-1/actions/org.freedesktop.policykit.kkedit$(GTK3SUFFIX).policy
 	@sed -i 's@<<APP>>@kkedit$(GTK3SUFFIX)@g' /tmp/rpm/usr/share/polkit-1/actions/org.freedesktop.policykit.kkedit$(GTK3SUFFIX).policy
-	@fpm -s dir -t rpm -C /tmp/rpm --name kkedit-3 --version 0.4.5 --iteration 1 --depends  libgtksourceview-3_0-1 --depends ctags --depends libvte-2_91-0   --depends aspell --depends aspell-en --description "KKEdit Code Text Editor" --maintainer  "K. D. Hedger. <keithdhedger@gmail.com>" --rpm-dist "opensuse" .
+	@fpm -s dir -t rpm -C /tmp/rpm --name kkedit-3 --version $(VERSION) --iteration 1 --depends  libgtksourceview-3_0-1 --depends ctags --depends libvte-2_91-0   --depends aspell --depends aspell-en --description "KKEdit Code Text Editor" --maintainer  "K. D. Hedger. <keithdhedger@gmail.com>" --rpm-dist "opensuse" .
 	mv kkedit-3-*.rpm /tmp
 	@rm -rf /tmp/rpm
 
