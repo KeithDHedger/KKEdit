@@ -31,7 +31,7 @@
 #define KKEDITPAGEFR "http://keithdhedger.github.io/KKEdit/help.fr.html"
 #define KKTERMINALPAGE GLOBALWEBSITE "/pages/kkterminal/kkterminal.html"
 
-#define COPYRITE "Copyright © 2013-2016 K.D.Hedger"
+#define COPYRITE "Copyright © 2013-2020 K.D.Hedger"
 
 #ifndef _USEQT5_
 extern const char	*moreapps[];
