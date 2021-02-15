@@ -202,11 +202,17 @@ void restoreSessionNum(GtkWidget* widget,gpointer data)
 	plugData	*plugdata=(plugData*)data;
 
 	widgetname=gtk_widget_get_name(widget);
-	sinkReturn=asprintf(&sessionfile,"%s/session-%i",plugdata->lPlugFolder,atoi(widgetname));
+	if(strcmp(widgetname,"autosavedsession")==0)
+		sinkReturn=asprintf(&sessionfile,"%s/.KKEdit/session",getenv("HOME"));
+	else
+		sinkReturn=asprintf(&sessionfile,"%s/session-%i",plugdata->lPlugFolder,atoi(widgetname));
 	restoreSession(NULL,sessionfile);
 	if(currentSessionName!=NULL)
 		free(currentSessionName);
-	currentSessionName=strdup(sessionNames[atoi(widgetname)]);
+	if(strcmp(widgetname,"autosavedsession")==0)
+		currentSessionName=strdup("session");
+	else
+		currentSessionName=strdup(sessionNames[atoi(widgetname)]);
 	if(currentSessionPath!=NULL)
 		free(currentSessionPath);
 	currentSessionPath=strdup(sessionfile);
@@ -370,6 +376,12 @@ extern "C" int addToGui(gpointer data)
 			g_signal_handlers_disconnect_by_func(restoreSessionMenu,(void*)restoreSession,NULL);
 			menu=gtk_menu_new();
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(restoreSessionMenu),menu);
+			menuitem=gtk_menu_item_new_with_label("Auto Session");
+			gtk_widget_set_name(menuitem,"autosavedsession");
+			g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(restoreSessionNum),plugdata);
+			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+			menuitem=gtk_separator_menu_item_new();
+			gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 			for(int j=0; j<maxSessions; j++)
 				{

@@ -99,6 +99,7 @@ void init(void)
 			exit(0);
 		}
 	filename=NULL;
+	
 	sinkReturn=asprintf(&logFile,"%s.log",tmpFolderName);
 
 #ifdef _ASPELL_

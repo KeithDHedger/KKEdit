@@ -1,4 +1,6 @@
 0.4.6
+Added loading auto saved session to session manager.
+Fixed 'Save As'.
 Fixed more links.
 Removed redundant code.
 Fixed autosave/save all switching tabs.

@@ -1314,7 +1314,9 @@ void catchSignal(int signal)
 	fprintf(fp,"File: %s, Function: %s, Line: %i\n",errFile,errFunc,errLine);
 	fprintf(stderr,"Traped signal %s\n",strsignal(signal));
 	fprintf(stderr,"File: %s, Function: %s, Line: %i\n",errFile,errFunc,errLine);
-	if((_DEBUGLEVEL_ == DBG2) || (_DEBUGLEVEL_ == DBG5))
+//	if((_DEBUGLEVEL_ == DBG2) || (_DEBUGLEVEL_ == DBG5))
+//	if((_DEBUGLEVEL_ == DBG2) || (_DEBUGLEVEL_ == DBG5))
+	if((_DEBUGLEVEL_ == DBG2) ||(_DEBUGLEVEL_ == DBG3) ||(_DEBUGLEVEL_ == DBG5))
 		fclose(fp);
     exit(EXIT_FAILURE);
 }

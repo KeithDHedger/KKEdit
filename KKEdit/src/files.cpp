@@ -441,7 +441,8 @@ VISIBLE bool saveFile(GtkWidget *widget,gpointer data)
 	gtk_text_buffer_get_end_iter((GtkTextBuffer*)page->buffer,&end);
 	text=gtk_text_buffer_get_text((GtkTextBuffer*)page->buffer,&start,&end,FALSE);
 
-	if(page->filePath!=NULL && (dowhat==0 || dowhat>0))
+
+	if(page->filePath!=NULL && (dowhat>=0))
 		{
 			fd=fopen(page->filePath,"w");
 			if(fd!=NULL)
@@ -460,6 +461,7 @@ VISIBLE bool saveFile(GtkWidget *widget,gpointer data)
 		}
 	else
 		{
+		
 			saveFilePath=page->filePath;
 			saveFileName=page->fileName;
 			if(page->dirName!=NULL)

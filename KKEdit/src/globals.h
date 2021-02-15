@@ -48,6 +48,16 @@
 #define _ENTER_
 #define _LEAVE_
 #endif
+
+//#if _DEBUGLEVEL_ == DBG2
+//#undef ERRDATA
+//#undef _ENTER_
+//#undef _LEAVE_
+//#define ERRDATA errLine=__LINE__,errFile=__FILE__,errFunc=__func__;printf("File: %s,Func: %s,Line: %i\n",errFile,errFunc,errLine);
+//#define _ENTER_
+//#define _LEAVE_
+//#endif
+
 #if _DEBUGLEVEL_ == DBG6
 #define _ENTER_ struct timeval then;struct timeval now;gettimeofday(&then,NULL);printf("Entered %s\n",__func__);
 #define _LEAVE_ gettimeofday(&now,NULL);double diff=(double)((((now.tv_sec-then.tv_sec)*1000000L+now.tv_usec)-then.tv_usec))/1000000L;printf("Time spent in function=%.3f\n",diff);
