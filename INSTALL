@@ -9,7 +9,7 @@ gktsu
 Although webkit is an optional install for the internal docviewer which is enabled by default, if you don't wish to build the docviewer you MUST explicitly disable it using the option '--disable-docviewer' to configure otherwise the configure script will fail.
 
 Source based distros (slackware etc):
-./configure --prefix=/usr --enable-aspell
+./autogen.sh --prefix=/usr --enable-aspell
 make
 sudo make install --prefix=/usr
 
@@ -56,7 +56,7 @@ sudo apt-get install libwebkitgtk-3.0-dev
 sudo apt-get install man2html-base
 sudo apt-get install xterm
 
-./configure --prefix=/usr
+./autogen.sh --prefix=/usr
 make
 sudo make install
 
