@@ -1,6 +1,7 @@
 PLUGNAME = debugger
 SONAME = libdebugger
 SRCFILES = $(PLUGNAME).cpp
+USERDIR=~/.KKEdit$(GTK3SUFFIX)/plugins-gtk
 
 AUTOMAKE_OPTIONS = subdir-objects
 
@@ -18,4 +19,9 @@ install: all
 	mkdir -vp $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk/$(PLUGNAME)/resources
 	cp $(SONAME).so $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk
 	cp po/fr_FR/LC_MESSAGES/Debugger.mo  $(DESTDIR)${localedir}/fr_FR/LC_MESSAGES
-	cp -r resources $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk/$(PLUGNAME)/resources
+	cp -r resources $(DESTDIR)$(pkgdatadir)$(GTK3SUFFIX)/plugins-gtk/$(PLUGNAME)
+
+install-user:
+	mkdir -vp $(USERDIR) $(USERDIR)/locale/fr_FR/LC_MESSAGES $(USERDIR)/$(PLUGNAME)/resources
+	cp po/fr_FR/LC_MESSAGES/Debugger.mo $(USERDIR)/locale/fr_FR/LC_MESSAGES
+	cp -r resources $(USERDIR)/$(PLUGNAME)/

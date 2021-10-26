@@ -424,8 +424,8 @@ VISIBLE bool searchQT5Docs(GtkWidget *widget,gpointer data)
 			str=g_string_new(selection);
 			str=g_string_ascii_down(str);
 
-			sinkReturn=asprintf(&command,"find %s -maxdepth 2 -iname \"%s*.html\"|sed 's/.html$//'|sort",QT5DOCSDIR,str->str);
-
+			sinkReturn=asprintf(&command,"find %s -iname \"%s*.html\"|sed 's/.html$//'|sort",QT5DOCSDIR,str->str);
+fprintf(stderr,command);
 			fd=fopen(htmlFile,"w");
 			if(fd!=NULL)
 				{								

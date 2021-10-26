@@ -16,10 +16,14 @@ config.log
 config.status
 stamp-h1
 Makefile
+Makefile.in
+configure
 config.h
 TODO
 *.o
 *.so
+aclocal.m4
+config.h.in
 
 KKEdit/app/KKEditProgressBar
 KKEdit/app/kkedit
