@@ -83,7 +83,7 @@ PROTECTED void showDocView(int howtodisplay,char *text,const char *title)
 							if(inWindow==true)
 								gtk_window_set_title((GtkWindow*)docView,DOCVIEW_SEARCHING_GOOGLE_LABEL);
 							ERRDATA debugFree(&thePage);
-							sinkReturn=asprintf(&thePage,"https://www.google.co.uk/search?q=%s",text);
+							sinkReturn=asprintf(&thePage,"https://duckduckgo.com/?q=%s&ia=web",text);
 						}
 					else
 						return;

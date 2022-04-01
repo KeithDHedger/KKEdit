@@ -1,4 +1,5 @@
 0.4.6
+Changed web search to duckduckgo from google ( google to aggressive about cookies ).
 Added loading auto saved session to session manager.
 Fixed 'Save As'.
 Fixed more links.
